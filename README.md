@@ -12,3 +12,4 @@ React + Typescript + Next.js
 ## Development
 1. Edit copy example.env.local to .env.local
 2. Add postgres and auth variables
+3. npm run dev
