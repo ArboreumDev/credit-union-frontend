@@ -1,0 +1,34 @@
+{
+  "name": "with-mobx-state-tree-typescript",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "db:seed": "knex seed:run "
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.10.1",
+    "@material-ui/icons": "^4.9.1",
+    "apollo-server-micro": "^2.14.4",
+    "dataloader": "^2.0.0",
+    "knex": "^0.21.1",
+    "micro-cors": "^0.1.1",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
+    "mobx-state-tree": "^3.11.0",
+    "next": "9.4",
+    "next-auth": "^2.0.0",
+    "pg": "^8.2.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "swr": "^0.2.3",
+    "typescript": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@types/node": "^14.0.13",
+    "@types/react": "^16.4.12"
+  },
+  "license": "ISC"
+}
