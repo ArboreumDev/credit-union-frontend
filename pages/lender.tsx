@@ -2,19 +2,35 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Button from "@material-ui/core/Button";
-import { LinearProgress, Paper } from '@material-ui/core';
+import { LinearProgress, Paper, createStyles, Theme, makeStyles, Typography } from '@material-ui/core';
 
 interface Values {
     email: string;
     password: string;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexGrow: 1,
+            marginBottom: theme.spacing(2)
+        },
+        menuButton: {
+            marginRight: theme.spacing(2),
+        },
+        title: {
+            flexGrow: 1,
+            // color: '#FFF'
+        },
+    }),
+);
+
 export default function NewProject() {
+    const classes = useStyles();
+
     return (<div>
         <Paper>
-            
-
-         
+            <Typography variant="h6" className={classes.title}>Create Lender</Typography>
         <Formik
             initialValues={{
                 email: '',
