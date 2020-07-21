@@ -3,9 +3,10 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Link from '@material-ui/core/Link';
+import { observer } from 'mobx-react-lite';
 
 import { InputLabel, Input, FormHelperText, makeStyles, createStyles, Theme, FormControl } from '@material-ui/core';
-import NewProject from '../pages/project/new';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,11 +32,14 @@ function Copyright() {
   );
 }
 
-export default function App() {
+const Demo = observer(() => {
   const classes = useStyles();
+  
   return (
     <Container maxWidth="lg">
-      <NewProject />
+      <div></div>
     </Container>
   );
-}
+})
+
+export default Demo;

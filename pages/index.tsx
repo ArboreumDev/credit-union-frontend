@@ -3,7 +3,6 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../components/theme';
 import App from '../components/app';
 import ButtonAppBar from '../components/AppBar';
-import NewProject from './project/new';
 import { Typography } from '@material-ui/core';
 import Link from 'next/link';
 import useSWR from 'swr'
