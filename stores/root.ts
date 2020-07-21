@@ -8,7 +8,7 @@ const RootModel = types.model({
     .actions((self) => ({
        setUser(user, email){
            self.email = email
-           self.name = name
+           self.name = user
        }
     }))
 

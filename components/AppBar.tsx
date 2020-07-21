@@ -18,8 +18,9 @@ const MountTest = () => {
     const [showButton, toggleShow] = useState(true)
 
     const success = response => {
+        let profile = response.profileObj
         console.log(response) // eslint-disable-line
-        store.setUser("gaurav", "g@p.com")
+        store.setUser(profile.givenName, profile.email)
     }
 
     const error = response => {
@@ -33,6 +34,7 @@ const MountTest = () => {
     const logout = () => {
         console.log('logout') // eslint-disable-line
         toggleShow(false)
+        store.setUser("aaa","bbb")
     }
 
     if (showButton) {
@@ -46,7 +48,7 @@ const MountTest = () => {
                 clientId={clientId}
                 isSignedIn={true}
             >
-                Auth then Hide button {store.name}
+                Login
             </GoogleLogin>
         )
     }

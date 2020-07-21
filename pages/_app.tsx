@@ -1,9 +1,15 @@
-import { rootStore, Provider } from '../stores/root'
 
-export default function App({ Component, pageProps }) {
+import * as React from 'react';
+import { Provider, rootStore } from '../stores/root';
+
+import { AppProps } from 'next/app';
+
+function App({ Component, pageProps }: AppProps) {
   return (
-      <Provider value={rootStore}>
-        <Component {...pageProps} />
-      </Provider>
-  )
+    <Provider value={rootStore}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
+
+export default App;
