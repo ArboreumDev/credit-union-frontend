@@ -1,13 +1,8 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { TextField } from 'formik-material-ui';
+// import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import { TextField } from 'formik-material-ui';
 import Button from "@material-ui/core/Button";
-import { LinearProgress, Paper, createStyles, Theme, makeStyles, Typography } from '@material-ui/core';
-
-interface Values {
-    email: string;
-    password: string;
-}
+import { LinearProgress, Paper, createStyles, Theme, makeStyles, Typography, Grid, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,63 +20,68 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
 export default function NewProject() {
     const classes = useStyles();
 
     return (<div>
-        <Paper>
-            <Typography variant="h6" className={classes.title}>Create Lender</Typography>
-        <Formik
-            initialValues={{
-                email: '',
-                password: '',
-            }}
-            validate={values => {
-                const errors: Partial<Values> = {};
-                if (!values.email) {
-                    errors.email = 'Required';
-                } else if (
-                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-                ) {
-                    errors.email = 'Invalid email address';
-                }
-                return errors;
-            }}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                    setSubmitting(false);
-                    alert(JSON.stringify(values, null, 2));
-                }, 500);
-            }}
-        >
-            {({ submitForm, isSubmitting }) => (
-                <Form>
-                    <Field
-                        component={TextField}
-                        name="email"
-                        type="email"
-                        label="Email"
-                    />
-                    <br />
-                    <Field
-                        component={TextField}
-                        type="password"
-                        label="Password"
-                        name="password"
-                    />
-                    {isSubmitting && <LinearProgress />}
-                    <br />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={isSubmitting}
-                        onClick={submitForm}
+        <Paper style={{ padding: 16 }}>
+            
+            <Typography align="center" variant="h3" className={classes.title}>Lender</Typography>
+            <Grid item xs={12}>
+                <FormControl>
+                    <FormLabel>Project Type</FormLabel>
+                    <RadioGroup
+                        style={{ flexDirection: "row" }}
                     >
-                        Submit
-          </Button>
-                </Form>
-            )}
-        </Formik>
+                        <FormControlLabel
+                            control={<Radio />}
+                            label="coding"
+                            value="code"
+                        />
+                        <FormControlLabel
+                            control={<Radio />}
+                            label="qualitative"
+                            value="qual"
+                        />
+                        <FormControlLabel
+                            control={<Radio />}
+                            label="quantitative"
+                            value="quant"
+                        />
+                    </RadioGroup>
+                </FormControl>
+            </Grid>
+            <Grid container alignItems="stretch" spacing={2}>
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        required
+                        name="projectName"
+                        type="text"
+                        label="Name"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        name="githubLink"
+                        type="text"
+                        label="Github Link"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        required
+                        name="description"
+                        type="text"
+                        label="Description"
+                        multiline
+                        rows={6}
+                    />
+                </Grid>
+            </Grid>
         </Paper>
              
             </div>
