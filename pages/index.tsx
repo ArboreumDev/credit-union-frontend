@@ -14,12 +14,12 @@ import { useSession } from 'next-auth/client'
 export default function Home() {
   const [session, loading] = useSession()
 
-  const { data, error } = useSWR('{ users { name } }', fetcher)
+  // const { data, error } = useSWR('{ users { name } }', fetcher)
 
-  if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
+  // if (error) return <div>Failed to load</div>
+  // if (!data) return <div>Loading...</div>
 
-  const { users } = data
+  // const { users } = data
 
   return <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
@@ -37,11 +37,11 @@ export default function Home() {
       </>}
     </p>
     
-    <div>
+    {/* <div>
       {users.map((user, i) => (
         <div key={i}>{user.name}</div>
       ))}
-    </div>
+    </div> */}
 
   </ThemeProvider>
   

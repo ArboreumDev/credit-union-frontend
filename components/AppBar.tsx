@@ -35,8 +35,8 @@ export default function ButtonAppBar() {
                         <MenuIcon />
                     </IconButton> */}
                     
-                    <Link href='/'><Typography variant="h6" className={classes.title}>Vicara</Typography></Link> 
-                    <Button href='/project/new' color="inherit">Create</Button>
+                    <Link href='/'><Typography variant="h6" className={classes.title}>Arboreum</Typography></Link> 
+                    <Button href='/lender' color="inherit">Lender</Button>
                     <Button href='/project/search' color="inherit">Search</Button>
                 </Toolbar>
             </AppBar>
