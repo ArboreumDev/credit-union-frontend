@@ -11,6 +11,7 @@ import { useStore } from '../stores/root';
 import { TextField, Grid, Icon, Button, Paper } from '@material-ui/core';
 
 import TrustedUsers from './TrustedUsersTable';
+import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default () => {
+export default observer(() => {
     const store = useStore()
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -122,7 +123,7 @@ export default () => {
                             <Grid item>
                                 <TextField required name="amount" type="text" label="amount" />
                             </Grid>
-                            <Grid item alignContent={"center"}>
+                            <Grid item>
                                 <Paper className={classes.paper}><Button >Add</Button></Paper>
                                 
                             </Grid>
@@ -135,4 +136,4 @@ export default () => {
 
     </div>
 
-}
+})
