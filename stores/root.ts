@@ -24,9 +24,21 @@ const SessionModel = types.model({
     expires: types.string
 })
 
+const BorrowerModel = types.model({
+    name: types.string,
+    email: types.string,
+    amount: types.number
+})
+
+const FinancialParameters = types.model({
+    max_exposure: types.number,
+    min_interest_rate: types.number,
+    borrowers: types.array(BorrowerModel)
+})
 
 const RootModel = types.model({
     session: types.maybeNull(SessionModel),
+    fin_params: types.maybeNull(FinancialParameters),
     loading: types.boolean
 }).actions((self) => ({
     setSession(session: Session) {
@@ -36,11 +48,20 @@ const RootModel = types.model({
 
 
 export const rootStore = RootModel.create({
-    loading: false
+    loading: false,
+    fin_params: {
+        max_exposure: 100,
+        min_interest_rate: 10,
+        borrowers: [
+            {name:"Gaurav", email:"gparuthi@gmail.com", amount: 200},
+            { name: "atest", email: "atest@gmail.com", amount: 100}
+        ]
+    }
 });
 
 onSnapshot(rootStore, () => null);
 
+export type BorrowerInstance = Instance<typeof BorrowerModel>;
 export type RootInstance = Instance<typeof RootModel>;
 const RootStoreContext = React.createContext<null | RootInstance>(null);
 
