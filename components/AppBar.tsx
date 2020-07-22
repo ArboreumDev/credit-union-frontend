@@ -51,7 +51,7 @@ export default observer (()=>{
                         {/* <a href="/api/auth/signin">Sign in</a> */}
                     </>}
                     {session && <>
-                        Signed in as {store.session.user.email} <br />
+                        {/* Signed in as {store.session.user.email} <br /> */}
                         {/* <a href="/api/auth/signout">Sign out</a> */}
                         <Button href='/api/auth/signout' color="inherit">Logout</Button>
                     </>}

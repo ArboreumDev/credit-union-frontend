@@ -49,6 +49,15 @@ const RootModel = types.model({
 
 export const rootStore = RootModel.create({
     loading: false,
+    session: {
+        user: {
+            name: "Jhon Smith",
+            email: "Dummy@dd.com",
+            image: ""
+        },
+        accessToken: "",
+        expires: ""
+    },
     fin_params: {
         max_exposure: 100,
         min_interest_rate: 10,

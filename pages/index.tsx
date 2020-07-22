@@ -7,7 +7,7 @@ import { Typography } from '@material-ui/core';
 import Link from 'next/link';
 import useSWR from 'swr'
 import { fetcher } from '../utils/api';
-
+import { ReactTypeformEmbed } from 'react-typeform-embed'
 
 
 export default function Home() {
@@ -23,14 +23,10 @@ export default function Home() {
   return <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />
-    <ButtonAppBar />
+    {/* <ButtonAppBar /> */}
     <Typography variant="h4" align="left" component="h1" gutterBottom />
 
-    {/* <div>
-      {users.map((user, i) => (
-        <div key={i}>{user.name}</div>
-      ))}
-    </div> */}
+    <ReactTypeformEmbed url="https://demo.typeform.com/to/njdbt5" />
 
   </ThemeProvider>
 
