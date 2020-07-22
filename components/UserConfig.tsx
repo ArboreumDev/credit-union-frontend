@@ -42,11 +42,11 @@ export default () => {
         setExpanded(isExpanded ? panel : false);
     };
     return <div className={classes.root}>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <Accordion expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+                aria-controls="panel0bh-content"
+                id="panel0bh-header"
             >
                 <Typography className={classes.heading}>Profile</Typography>
                 <Typography className={classes.secondaryHeading}>
