@@ -26,7 +26,15 @@ export default function Home() {
     {/* <ButtonAppBar /> */}
     <Typography variant="h4" align="left" component="h1" gutterBottom />
 
-    <ReactTypeformEmbed url="https://demo.typeform.com/to/njdbt5" />
+    <Link href='/lender'><a>Lender Config</a></Link> 
+
+    <ReactTypeformEmbed popup
+      autoOpen={true}
+      url="https://arboreum.typeform.com/to/CavmR9xd"
+      hideHeaders
+      hideFooter
+      buttonText="Go!"
+      style={{ top: 100 }} />
 
   </ThemeProvider>
 
