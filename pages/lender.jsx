@@ -12,9 +12,12 @@ export default observer(() => {
 
     return <div>
         <ButtonAppBar />
-        Hi {store.session.user.name} {store.session.user.email}
-        <br />
-        <br />
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeI7HkDCLcfS4XYAHgOeUAsA2pRqU4evlgSMOxFEwJikOP-CA/viewform?embedded=true" width="640" height="642" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        {store.session && <>
+            Hi {store.session.user.name} {store.session.user.email}
+            <br />
+            <br />
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeI7HkDCLcfS4XYAHgOeUAsA2pRqU4evlgSMOxFEwJikOP-CA/viewform?embedded=true" width="640" height="642" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </>}
+        
     </div>
 })
