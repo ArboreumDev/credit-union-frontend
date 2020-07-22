@@ -1,21 +1,42 @@
 import * as React from 'react';
 import { types, Instance, onSnapshot } from 'mobx-state-tree';
 
-const RootModel = types.model({
+
+interface Session {
+    user: {
+        name: string;
+        email: string;
+        image: string;
+    };
+    accessToken: string;
+    expires: string;
+}
+
+const UserModel = types.model({
+    name: types.string,
     email: types.string,
-    name: types.string
+    image: types.string
 })
-    .actions((self) => ({
-       setUser(user, email){
-           self.email = email
-           self.name = user
-       }
-    }))
+
+const SessionModel = types.model({
+    user: UserModel,
+    accessToken: types.string,
+    expires: types.string
+})
+
+
+const RootModel = types.model({
+    session: types.maybeNull(SessionModel),
+    loading: types.boolean
+}).actions((self) => ({
+    setSession(session: Session) {
+        self.session = session
+    }
+}))
 
 
 export const rootStore = RootModel.create({
-    name: "gptest",
-    email: ""
+    loading: false
 });
 
 onSnapshot(rootStore, () => null);
