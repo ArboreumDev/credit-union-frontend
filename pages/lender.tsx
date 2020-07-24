@@ -29,13 +29,25 @@ class ProfileModel {
 
 interface Params {
     session: Session,
-    model: ProfileModel
+    model: ProfileModel,
+    newBorrower: BorrowerModel
 }
+
 
 const Page = (params:Params) => {
     
     const session = params.session
     const [state, setState] = useState(params.model);
+    const [newBorrower, setNB] = useState(params.newBorrower);
+
+    const onChange = event => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        setNB(prevNB => ({ ...prevNB, [name]: value }))
+    }
+
     
     // console.log(params.session)
     return (<div className='container'>
@@ -64,10 +76,7 @@ const Page = (params:Params) => {
            
                 <NumericInput
                     value={state.max_exposure}
-                    onValueChange={(value)=> setState(prevState =>{
-                            return { ...prevState, max_exposure: value }
-                        })
-                    }
+                    onValueChange={(value)=> setState(prevState =>({...prevState, max_exposure: value }))}
                     stepSize={100}
                     majorStepSize={1000}
                     minorStepSize={10}
@@ -85,10 +94,7 @@ const Page = (params:Params) => {
             
                 <NumericInput 
                     value={state.min_interest_rate} 
-                    onValueChange={(value) => setState(prevState => {
-                        return { ...prevState, min_interest_rate: value }
-                    })
-                    }
+                    onValueChange={(value) => setState(prevState => ({ ...prevState, min_interest_rate: value }))}
                     stepSize={1}
                     large />
         </Card>
@@ -100,18 +106,19 @@ const Page = (params:Params) => {
                 <table>
                     <thead>
                         <tr>
-                            <td></td>
-                            <td></td>
+                            <td>name</td>
+                            <td>email</td>
+                            <td>amount</td>
                         </tr>
                     </thead>
                     <tbody>
                         {
-
                             state.borrowers.map((borrower, idx) => (
 
                                 <tr key={'b_td_'+idx}>
                                     <td>{borrower.name}</td>
                                     <td>{borrower.email}</td>
+                                    <td>{borrower.amount}</td>
                                 </tr>
                             ))
                         }
@@ -127,12 +134,21 @@ const Page = (params:Params) => {
                     labelFor="text-input"
                     labelInfo=""
                 >
-                    <InputGroup id="text-input" width={200} placeholder={"name"} />
-                    <InputGroup id="text-input" width={200} placeholder={"email"} />
+                    
+                        <InputGroup id="text-input" name="name" width={200} value={newBorrower.name} placeholder={"name"} onChange={onChange}/>
+                        <InputGroup id="text-input" name="email" width={200} value={newBorrower.email} placeholder={"email"} onChange={onChange}/>
+
+                        <NumericInput
+                            value={newBorrower.amount}
+                            onValueChange={(value) => setNB(prevState => ({ ...prevState, amount: value }))}
+                            stepSize={1}
+                            large />
+                    
                     <Button onClick={
                             () => setState(prevState => {
                                 let b = prevState.borrowers
-                                b.push({name: 'gag', email:'emaa', amount: 100})
+                                b.push(newBorrower)
+                                setNB({ name: "", email: "", amount: 100 })
                                 return { ...prevState, borrowers: b }
                             })
                         }>
@@ -140,10 +156,10 @@ const Page = (params:Params) => {
                 </FormGroup>
 
             </Card>
-            
-            
+            <Button intent="primary">Save</Button>
         </Card>
         <style jsx>{`
+
        .center {
                 margin: auto;
                 width: 50%;
@@ -151,6 +167,11 @@ const Page = (params:Params) => {
             }
             .profile_card {
                 margin: "10px";
+            }
+            thead {font-weight: bold;}
+            table, th, td {
+            border: 1px solid black;
+            }
             `
             }
         </style>
@@ -162,7 +183,8 @@ const Page = (params:Params) => {
 Page.getInitialProps = async (context) => {
     return {
         session: await getSession(context),
-        model: new ProfileModel(100, 200, [{ name: "a", email: "b", amount: 10 }])
+        model: new ProfileModel(100, 200, [{ name: "a", email: "b", amount: 10 }]),
+        newBorrower: { name: "ba", email: "ee", amount: "123" }
     }
 }
 

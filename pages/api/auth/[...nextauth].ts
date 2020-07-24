@@ -1,16 +1,16 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { rootStore } from '../../../stores/root';
+
 
 const options = {
     site: process.env.SITE || 'http://mywebsite.com:3000',
 
     // Configure one or more authentication providers
     providers: [
-        Providers.GitHub({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET
-        }),
+        // Providers.GitHub({
+        //     clientId: process.env.GITHUB_ID,
+        //     clientSecret: process.env.GITHUB_SECRET
+        // }),
         Providers.Google({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
@@ -27,10 +27,7 @@ const options = {
         //         ? Promise.resolve(url)
         //         : Promise.resolve(baseUrl)
         //  },
-        session: async (session, token) => {
-             rootStore.setSession(JSON.parse(JSON.stringify(session)))
-             return Promise.resolve(session)
-            },
+        
         // jwt: async (token) => { }
     },
     events: {
