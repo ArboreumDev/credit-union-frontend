@@ -19,7 +19,7 @@ const AppBar = ({ session }) => (
 <Navbar className={Classes.DARK}>
 
     <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading><Link href="/" >Arboreum</Link></NavbarHeading>
+            <Link href='/'><NavbarHeading>Arboreum</NavbarHeading></Link>
         <NavbarDivider />
         {!session && <>
             {/* <a href="/api/auth/signin">Sign in</a> */}
