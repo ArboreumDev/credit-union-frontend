@@ -8,8 +8,8 @@
         "db:seed": "knex seed:run "
     },
     "dependencies": {
-        "@material-ui/core": "^4.11.0",
-        "@material-ui/icons": "^4.9.1",
+        "@blueprintjs/core": "3.30.0",
+        "@blueprintjs/icons": "3.19.0",
         "apollo-server-micro": "^2.14.4",
         "dataloader": "^2.0.0",
         "knex": "^0.21.1",
@@ -19,6 +19,7 @@
         "mobx-state-tree": "^3.11.0",
         "next": "9.4",
         "next-auth": "^2.0.0",
+        "normalize.css": "^8.0.1",
         "pg": "^8.2.1",
         "react": "16.13.1",
         "react-dom": "16.13.1",

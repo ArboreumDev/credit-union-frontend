@@ -1,9 +1,8 @@
 import React from 'react'
-import ButtonAppBar from '../components/AppBar';
 import UserConfig from '../components/UserConfig';
 import { useStore } from '../stores/root';
 import { observer } from 'mobx-react-lite';
-import { Paper, Typography } from '@material-ui/core';
+import { Card, FormGroup, InputGroup, H5, NumericInput } from '@blueprintjs/core';
 
 // import GoogleLogin, { GoogleLogout } from '../dist/google-login'
 // import FontAwesome from 'react-fontawesome';
@@ -12,20 +11,65 @@ import { Paper, Typography } from '@material-ui/core';
 export default observer(() => {
     const store = useStore()
 
-    return <div>
-        <ButtonAppBar />
-
-
-        {/* {store.session && <> */}
-
-                {/* <Typography> Hi {store.session.user.name} {store.session.user.email}</Typography> */}
-                <UserConfig/>
-            <br />
-            <br />
+    return <div className="profile-container">
+        <Card className="profile-card">
+            <H5>
+                Total Exposure
+            </H5>
+            <p>
+                Maximum amount you wish to loan out, in INR? This will be your total exposure across corpus and guarantee investments.
+                
+            </p>
+            <p>(For the trial period of this program, this is a minimum 2-month commitment)</p>
             
+            <FormGroup
+                helperText=""
+                label=""
+                labelFor="total-exposure-input"
+                labelInfo="(required)"
+            >
+                <NumericInput />
+            </FormGroup>
+        </Card>
+        <Card className="profile-card">
+            <H5>
+                Minimum Interest Rate
+            </H5>
+            <p>
+                What is the minimum interest rate you desire for your portfolio, on a % per annum basis?
+                Higher interest expectation will correspond to riskier investments
+                 
+            </p>
+            <FormGroup
+                helperText=""
+                label=""
+                labelFor="total-exposure-input"
+                labelInfo="(required)"
+            >
+                <NumericInput />
+            </FormGroup>
+        </Card>
+        <Card className="profile-card">
+            <H5>
+                Trusted Borrowers
+            </H5>
             
-            {/* <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeI7HkDCLcfS4XYAHgOeUAsA2pRqU4evlgSMOxFEwJikOP-CA/viewform?embedded=true" width="640" height="642" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe> */}
-        {/* </>} */}
+            <FormGroup
+                helperText=""
+                label=""
+                labelFor="total-exposure-input"
+                labelInfo="(required)"
+            >
+            </FormGroup>
+        </Card>
+        <style jsx>{`
+            .profile-container {
 
-    </div>
+            }
+            .profile_card {
+                margin: "10px";
+            `
+            }
+        </style>
+        </div>
 })

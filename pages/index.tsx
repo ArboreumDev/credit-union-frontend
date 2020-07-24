@@ -1,13 +1,9 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from '../components/theme';
 import App from '../components/app';
-import ButtonAppBar from '../components/AppBar';
-import { Typography } from '@material-ui/core';
+
 import Link from 'next/link';
 import useSWR from 'swr'
 import { fetcher } from '../utils/api';
-import { ReactTypeformEmbed } from 'react-typeform-embed'
+import { Classes } from '@blueprintjs/core';
 
 
 export default function Home() {
@@ -20,22 +16,10 @@ export default function Home() {
 
   // const { users } = data
 
-  return <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    {/* <ButtonAppBar /> */}
-    <Typography variant="h4" align="left" component="h1" gutterBottom />
-
-    <Link href='/lender'><a>Lender Config</a></Link> 
-
-    <ReactTypeformEmbed popup
-      autoOpen={true}
-      url="https://arboreum.typeform.com/to/CavmR9xd"
-      hideHeaders
-      hideFooter
-      buttonText="Go!"
-      style={{ top: 100 }} />
-
-  </ThemeProvider>
-
+  return (
+    
+          <Link href='/lender'><a>Lender Config</a></Link> 
+    
+    
+)
 }

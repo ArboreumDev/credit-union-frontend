@@ -1,0 +1,27 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    /* overflow: hidden;   */
+    /* position: fixed; */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: black;
+}
+
+.content {
+    /* max-width: 300px; */
+    /* justify-content: center; */
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    min-width: 900px;
+    min-height: 80vh;
+}
