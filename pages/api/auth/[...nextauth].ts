@@ -19,6 +19,15 @@ const options = {
 
     // A database is optional, but required to persist accounts in a database
     database: process.env.DATABASE_URL,
+    callbacks: {
+        // signin: async (profile, account, metadata) => { console.log(profile, account, metadata)},
+        // redirect: async (url, baseUrl) => { },
+        session: async (session, token) => {
+             rootStore.setSession(JSON.parse(JSON.stringify(session)))
+             return Promise.resolve(session)
+            },
+        // jwt: async (token) => { }
+    },
     events: {
         signin: async(message) => {},
         signout: async(message) => { console.log('sign out successful') },

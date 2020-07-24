@@ -22,10 +22,6 @@ export default observer (()=>{
     const [session, loading] = useSession()
     const store = useStore()
 
-    if (session){
-        store.setSession(session)
-    }
-
     return (
         <Navbar className={Classes.DARK}>
             
