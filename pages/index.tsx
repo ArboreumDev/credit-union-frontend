@@ -1,41 +1,89 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from '../components/theme';
-import App from '../components/app';
-import ButtonAppBar from '../components/AppBar';
-import { Typography } from '@material-ui/core';
 import Link from 'next/link';
 import useSWR from 'swr'
 import { fetcher } from '../utils/api';
-import { ReactTypeformEmbed } from 'react-typeform-embed'
+import { Classes } from '@blueprintjs/core';
+
+import { getSession } from 'next-auth/client'
+import AppBar from '../components/AppBar';
+
+const Video = () => (
+  <div className='Container'>
+  <video autoPlay={true} loop={true} muted className='Video' >
+    <source src={"/videos/network2.mp4"} type="video/mp4" />
+                Your browser does not support the video tag.
+        </video>
 
 
-export default function Home() {
+  <style jsx>{`
+      .Container {
+    position: relative;
+    min-height: 300px;
+    max-height: 100%;
+    overflow: hidden;
+    text-align: center;
 
+                margin: auto;
+                width: 640;
+                padding: 10px;
+            }
+       .Video {
+    width: 100%;
+    height: 100%;
+  }
+            `
+  }
+  </style>
 
-  // const { data, error } = useSWR('{ users { name } }', fetcher)
+</div>)
 
-  // if (error) return <div>Failed to load</div>
-  // if (!data) return <div>Loading...</div>
+const Dashboard = ()=>(
+  <div>Dashboard</div>
+)
 
-  // const { users } = data
+const Page = ({ session }) => (
+<div className='container'>
+  <AppBar session={session}/>
+  <div className='container'>
+    {!session && <>
+      <Video />
+    </>}
+    {session && <>
+      <Dashboard />
+    </>
+    }
+  </div>
+  
+</div>)
 
-  return <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    {/* <ButtonAppBar /> */}
-    <Typography variant="h4" align="left" component="h1" gutterBottom />
-
-    <Link href='/lender'><a>Lender Config</a></Link> 
-
-    <ReactTypeformEmbed popup
-      autoOpen={true}
-      url="https://arboreum.typeform.com/to/CavmR9xd"
-      hideHeaders
-      hideFooter
-      buttonText="Go!"
-      style={{ top: 100 }} />
-
-  </ThemeProvider>
-
+Page.getInitialProps = async (context) => {
+  return {
+    session: await getSession(context)
+  }
 }
+
+export default Page
+
+// export default function Home() {
+//   const [session, loading] = useSession()
+
+
+//   // const { data, error } = useSWR('{ users { name } }', fetcher)
+
+//   // if (error) return <div>Failed to load</div>
+//   // if (!data) return <div>Loading...</div>
+
+//   // const { users } = data
+  
+//   return (
+    // <div>
+    //   {!session && <>
+    //     <Video/>
+    //   </>}
+    //   {session && <>
+    //     <Dashboard />
+    //   </>
+    //   }
+    // </div>
+    
+// )
+// }
