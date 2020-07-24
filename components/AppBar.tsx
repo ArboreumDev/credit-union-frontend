@@ -6,7 +6,8 @@ import {
     Navbar,
     NavbarGroup,
     NavbarHeading,
-    NavbarDivider
+    NavbarDivider,
+    Button
 } from "@blueprintjs/core";
 
 import Link from 'next/link';
@@ -27,23 +28,40 @@ export default observer (()=>{
 
     return (
         <Navbar className={Classes.DARK}>
+            
             <NavbarGroup align={Alignment.LEFT}>
-                <NavbarHeading>Blueprint Sandbox</NavbarHeading>
+                <NavbarHeading>Arboreum</NavbarHeading>
                 <NavbarDivider />
-                <Link href="/" >
+                {!session && <>
+                    {/* <a href="/api/auth/signin">Sign in</a> */}
+                        <AnchorButton
+                            href='/api/auth/signin'
+                            text="Login"
+                            minimal
+                        />
+                </>}
+                {session && <>
+                    <Link href="/" >
+                        <AnchorButton
+                            text=""
+                            minimal
+                            rightIcon="home"
+                        />
+                    </Link>
+                    <Link href="/lender" >
+                        <AnchorButton
+                            text=""
+                            minimal
+                            rightIcon="user"
+                        />
+                    </Link>
                     <AnchorButton
-                        text=""
+                        href='/api/auth/signout'
+                        text="Logout"
                         minimal
-                        rightIcon="home"
                     />
-                </Link>
-                <Link href="/lender" >
-                    <AnchorButton   
-                        text=""
-                        minimal
-                        rightIcon="user"
-                    />
-                </Link>
+                </>}
+                
             </NavbarGroup>
         </Navbar>
     );
