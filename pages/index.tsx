@@ -1,5 +1,3 @@
-import App from '../components/app';
-
 import Link from 'next/link';
 import useSWR from 'swr'
 import { fetcher } from '../utils/api';

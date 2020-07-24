@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import UserConfig from '../components/UserConfig';
-import { useStore } from '../stores/root';
-import { observer } from 'mobx-react-lite';
 import { Card, FormGroup, InputGroup, H5, NumericInput, Button } from '@blueprintjs/core';
 import AppBar from '../components/AppBar';
 import { getSession } from 'next-auth/client'

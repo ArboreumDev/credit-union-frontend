@@ -12,8 +12,6 @@ import {
 
 import Link from 'next/link';
 import { getSession } from 'next-auth/client'
-import { useStore } from '../stores/root';
-import { observer } from 'mobx-react-lite';
 
 export interface NavigationProps { }
 
