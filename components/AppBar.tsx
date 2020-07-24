@@ -30,20 +30,20 @@ export default observer (()=>{
             <NavbarGroup align={Alignment.LEFT}>
                 <NavbarHeading>Blueprint Sandbox</NavbarHeading>
                 <NavbarDivider />
-                <AnchorButton
-                    href="http://blueprintjs.com/docs"
-                    text="Docs"
-                    target="_blank"
-                    minimal
-                    rightIcon="user"
-                />
-                <AnchorButton
-                    href="http://github.com/palantir/blueprint"
-                    text="Github"
-                    target="_blank"
-                    minimal
-                    rightIcon="code"
-                />
+                <Link href="/" >
+                    <AnchorButton
+                        text=""
+                        minimal
+                        rightIcon="home"
+                    />
+                </Link>
+                <Link href="/lender" >
+                    <AnchorButton   
+                        text=""
+                        minimal
+                        rightIcon="user"
+                    />
+                </Link>
             </NavbarGroup>
         </Navbar>
     );

@@ -2,7 +2,7 @@ import React from 'react'
 import UserConfig from '../components/UserConfig';
 import { useStore } from '../stores/root';
 import { observer } from 'mobx-react-lite';
-import { Card, FormGroup, InputGroup, H5, NumericInput } from '@blueprintjs/core';
+import { Card, FormGroup, InputGroup, H5, NumericInput, Button } from '@blueprintjs/core';
 
 // import GoogleLogin, { GoogleLogout } from '../dist/google-login'
 // import FontAwesome from 'react-fontawesome';
@@ -11,7 +11,17 @@ import { Card, FormGroup, InputGroup, H5, NumericInput } from '@blueprintjs/core
 export default observer(() => {
     const store = useStore()
 
-    return <div className="profile-container">
+    return <div className="center">
+        <Card className="profile-card">
+            <H5>
+                Profile
+            </H5>
+            <p>
+               {store.session.user.name}
+            </p>
+            <p> {store.session.user.email}</p>
+            
+        </Card>
         <Card className="profile-card">
             <H5>
                 Total Exposure
@@ -22,14 +32,12 @@ export default observer(() => {
             </p>
             <p>(For the trial period of this program, this is a minimum 2-month commitment)</p>
             
-            <FormGroup
-                helperText=""
-                label=""
-                labelFor="total-exposure-input"
-                labelInfo="(required)"
-            >
-                <NumericInput />
-            </FormGroup>
+           
+                <NumericInput
+                    value={store.fin_params.min_interest_rate}
+                    onValueChange={store.fin_params.updateMinInterestRate}
+                    stepSize={1}
+                    large />
         </Card>
         <Card className="profile-card">
             <H5>
@@ -40,31 +48,64 @@ export default observer(() => {
                 Higher interest expectation will correspond to riskier investments
                  
             </p>
-            <FormGroup
-                helperText=""
-                label=""
-                labelFor="total-exposure-input"
-                labelInfo="(required)"
-            >
-                <NumericInput />
-            </FormGroup>
+            
+                <NumericInput 
+                    value={store.fin_params.max_exposure} 
+                    onValueChange={store.fin_params.updateMaxExposure}
+                    stepSize={100}
+                    majorStepSize={1000}
+                    minorStepSize={10}
+                    large />
         </Card>
         <Card className="profile-card">
-            <H5>
-                Trusted Borrowers
+            <Card>
+                <H5>
+                    Trusted Borrowers
             </H5>
+                <table>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+
+                            store.fin_params.borrowers.map((borrower) => (
+
+                                <tr key={borrower.email}>
+                                    <td>{borrower.name}</td>
+                                    <td>{borrower.email}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </Card>
             
-            <FormGroup
-                helperText=""
-                label=""
-                labelFor="total-exposure-input"
-                labelInfo="(required)"
-            >
-            </FormGroup>
+            <Card>
+                
+                <FormGroup
+                    helperText=""
+                    label=""
+                    labelFor="text-input"
+                    labelInfo=""
+                >
+                    <InputGroup id="text-input" width={200} placeholder={"name"} />
+                    <InputGroup id="text-input" width={200} placeholder={"email"} />
+                    <Button>Add</Button>
+                </FormGroup>
+
+            </Card>
+            
+            
         </Card>
         <style jsx>{`
-            .profile-container {
-
+       .center {
+                margin: auto;
+                width: 50%;
+                padding: 10px;
             }
             .profile_card {
                 margin: "10px";

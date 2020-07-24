@@ -10,6 +10,7 @@
     "dependencies": {
         "@blueprintjs/core": "3.30.0",
         "@blueprintjs/icons": "3.19.0",
+        "@blueprintjs/table": "^3.8.11",
         "apollo-server-micro": "^2.14.4",
         "dataloader": "^2.0.0",
         "knex": "^0.21.1",

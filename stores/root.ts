@@ -34,7 +34,14 @@ const FinancialParameters = types.model({
     max_exposure: types.number,
     min_interest_rate: types.number,
     borrowers: types.array(BorrowerModel)
-})
+}).actions((self) => ({
+    updateMaxExposure(value: number) {
+        self.max_exposure = value
+    },
+    updateMinInterestRate(value: number) {
+        self.min_interest_rate = value
+    }
+}))
 
 const RootModel = types.model({
     session: types.maybeNull(SessionModel),
