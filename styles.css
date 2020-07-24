@@ -20,7 +20,7 @@ body {
 }
 
 .container {
-    display: flex;
+    display: block;
     flex-direction: row;
     min-width: 900px;
     min-height: 80vh;

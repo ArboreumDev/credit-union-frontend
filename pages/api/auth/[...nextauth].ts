@@ -21,7 +21,12 @@ const options = {
     database: process.env.DATABASE_URL,
     callbacks: {
         // signin: async (profile, account, metadata) => { console.log(profile, account, metadata)},
-        // redirect: async (url, baseUrl) => { },
+        // redirect: async (url, baseUrl) => {
+        //     console.log(url, baseUrl)
+        //     url.startsWith(baseUrl)
+        //         ? Promise.resolve(url)
+        //         : Promise.resolve(baseUrl)
+        //  },
         session: async (session, token) => {
              rootStore.setSession(JSON.parse(JSON.stringify(session)))
              return Promise.resolve(session)
