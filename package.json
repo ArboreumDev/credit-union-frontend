@@ -5,9 +5,12 @@
         "dev": "next",
         "build": "next build",
         "start": "next start",
-        "db:seed": "knex seed:run "
+        "db:seed": "knex seed:run ",
+        "test": "jest --watch",
+        "test:ci": "jest --ci"
     },
     "dependencies": {
+        "@apollo/client": "^3.0.2",
         "@blueprintjs/core": "3.30.0",
         "@blueprintjs/icons": "3.19.0",
         "@blueprintjs/table": "^3.8.11",
@@ -26,8 +29,12 @@
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "^7.3.0",
+        "@testing-library/jest-dom": "^5.11.1",
+        "@types/jest": "^26.0.5",
         "@types/node": "^14.0.13",
-        "@types/react": "^16.4.12"
+        "@types/react": "^16.4.12",
+        "babel-jest": "^26.1.0",
+        "jest": "^26.1.0"
     },
     "license": "ISC"
 }
