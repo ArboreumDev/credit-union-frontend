@@ -36,7 +36,7 @@ test('Found 3 nodes in initGraph', async () => {
 
     `
     })
-    .then(result => console.log(result));
+    .then(result => console.log(result.data.users[0].edges));
 
   // expect(rootStore.graph.nodes.length == 3).toBe(true);
 });
