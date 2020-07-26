@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import fetch from 'node-fetch'
 
 import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
-import { client } from '../utils/graphql_client';
+import { client } from './utils/graphql_client';
 
 
 test('Found 3 nodes in initGraph', async () => {
