@@ -1,37 +1,28 @@
 import { gql, useQuery } from '@apollo/client';
-import withData from '../config';
 
-
-const query = gql`
-	query {
-	  users {
-	    id
-	    name
-	  }
-	}
-`
-
-const Index = ({ users } ) => {
-  return (
-    <Query    // <- Wrapping the main component with Query component from react-apollo
-      query={ query }
-      fetchPolicy={ 'cache-and-network' }
-    >
-      {({ loading, data, error }) => {
-        if(error) {
-          return (<div>Error..</div>);
+const GET_GREETING = gql`
+      query MyQuery {
+      users {
+        name
+        email
+        edges {
+          user {
+            name
+          }
         }
-        return (
-          <div>
-            <h1>My users </h1>
-            {
-                users.map(user => (<p>user.name</p>))
-            }
-          </div>
-        );
-      }}
-    </Query>
-  );
-};
+      }
+    }
 
-export default withData(Index)
+    `;
+
+export default function Hello() {
+  const { loading, error, data } = useQuery(GET_GREETING);
+  console.log(data.users)
+  if (loading) return <p>Loading ...</p>;
+  if (error) {
+    console.log(error)
+    return <p> Error :(</p>;}
+  return <div>
+    {data.users.map((user)=>(<p>{user.name}</p>))}
+  </div>
+}

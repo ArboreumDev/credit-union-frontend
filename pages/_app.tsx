@@ -9,12 +9,8 @@ import ButtonAppBar from '../components/AppBar';
 
 import { AppProps } from 'next/app';
 import { Classes } from '@blueprintjs/core';
-import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-
-const client = new ApolloClient({
-  uri: 'https://right-thrush-43.hasura.app/v1/graphql',
-  cache: new InMemoryCache()
-});
+import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
+import { client } from '../utils/graphql_client';
 
 function App({ Component, pageProps }: AppProps) {
   return (
