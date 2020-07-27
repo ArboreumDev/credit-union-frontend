@@ -39,11 +39,16 @@ const AppBar = ({ session }) => (
             </Link>
             <Link href="/lender" >
                 <AnchorButton
-                    text=""
+                    text="Lend"
                     minimal
-                    rightIcon="user"
                 />
             </Link>
+                <Link href="/borrower" >
+                    <AnchorButton
+                        text="Borrow"
+                        minimal
+                    />
+                </Link>
             <AnchorButton
                 href='/api/auth/signout'
                 text="Logout"

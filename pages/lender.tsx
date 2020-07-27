@@ -83,22 +83,6 @@ const Page = (params:Params) => {
                     large />
         </Card>
         <Card className="profile-card">
-            <H5>
-                Minimum Interest Rate
-            </H5>
-            <p>
-                What is the minimum interest rate you desire for your portfolio, on a % per annum basis?
-                Higher interest expectation will correspond to riskier investments
-                 
-            </p>
-            
-                <NumericInput 
-                    value={state.min_interest_rate} 
-                    onValueChange={(value) => setState(prevState => ({ ...prevState, min_interest_rate: value }))}
-                    stepSize={1}
-                    large />
-        </Card>
-        <Card className="profile-card">
             <Card>
                 <H5>
                     Trusted Borrowers
