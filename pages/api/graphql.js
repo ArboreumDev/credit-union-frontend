@@ -7,21 +7,23 @@ const db = knex({
     client: "pg",
     connection: process.env.DATABASE_URL
 });
-const typeDefs = gql`
+const typeDefs = gql `
   type Query {
     users: [User!]!
     projects: [Project!]!
   }
-  type User {
-    name: String
-    id: Int
-    email: String
-  }
-  type Project {
-    name: String
-    description: String
-    created_by: User!
-  }
+  query MyQuery {
+  users {
+    name
+    email
+    edges {
+      user {
+        name
+        }
+        }
+    }
+    }
+
 `
 
 const resolvers = {
@@ -43,10 +45,10 @@ const resolvers = {
 const loader = {
     user: new DataLoader(ids =>
         db
-            .select("*")
-            .from("users")
-            .whereIn("id", ids)
-            .then(rows => ids.map(id => rows.find(row => row.id === id)))
+        .select("*")
+        .from("users")
+        .whereIn("id", ids)
+        .then(rows => ids.map(id => rows.find(row => row.id === id)))
     )
 };
 

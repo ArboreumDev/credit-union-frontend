@@ -83,27 +83,11 @@ const Page = (params:Params) => {
                     large />
         </Card>
         <Card className="profile-card">
-            <H5>
-                Minimum Interest Rate
-            </H5>
-            <p>
-                What is the minimum interest rate you desire for your portfolio, on a % per annum basis?
-                Higher interest expectation will correspond to riskier investments
-                 
-            </p>
-            
-                <NumericInput 
-                    value={state.min_interest_rate} 
-                    onValueChange={(value) => setState(prevState => ({ ...prevState, min_interest_rate: value }))}
-                    stepSize={1}
-                    large />
-        </Card>
-        <Card className="profile-card">
             <Card>
                 <H5>
                     Trusted Borrowers
             </H5>
-                <table>
+                <table className="bp3-html-table">
                     <thead>
                         <tr>
                             <td>name</td>
@@ -168,10 +152,7 @@ const Page = (params:Params) => {
             .profile_card {
                 margin: "10px";
             }
-            thead {font-weight: bold;}
-            table, th, td {
-            border: 1px solid black;
-            }
+            
             `
             }
         </style>
@@ -183,8 +164,8 @@ const Page = (params:Params) => {
 Page.getInitialProps = async (context) => {
     return {
         session: await getSession(context),
-        model: new ProfileModel(100, 200, [{ name: "a", email: "b", amount: 10 }]),
-        newBorrower: { name: "ba", email: "ee", amount: "123" }
+        model: new ProfileModel(100, 200, [{ name: "g", email: "gp@arboreum.dev", amount: 10 }]),
+        newBorrower: { name: "", email: "", amount: "100" }
     }
 }
 

@@ -9,15 +9,19 @@ import ButtonAppBar from '../components/AppBar';
 
 import { AppProps } from 'next/app';
 import { Classes } from '@blueprintjs/core';
+import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
+import { client } from '../utils/graphql_client';
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
+      <ApolloProvider client={client}>
         <div className={Classes.DARK}>
           <div className='content'>
               <Component {...pageProps} />
           </div>
         </div>
+      </ApolloProvider>
     </Provider>
   );
 }
