@@ -1,5 +1,3 @@
-import { Scales, Axes, Plots, Dataset, Component} from 'plottable'
-
 export default function Video() {
     return <div className='Container'>
         <video autoPlay={true} loop={true} muted className='Video' >
