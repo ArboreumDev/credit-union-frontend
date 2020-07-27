@@ -112,7 +112,7 @@ const Page = (params: Params) => {
                     <H5>
                         Trusted Guarantors
             </H5>
-                    <table>
+                    <table className="bp3-html-table">
                         <thead>
                             <tr>
                                 <td>name</td>
@@ -201,10 +201,7 @@ const Page = (params: Params) => {
             .profile_card {
                 margin: "10px";
             }
-            thead {font-weight: bold;}
-            table, th, td {
-            border: 1px solid black;
-            }
+            
             `
             }
             </style>
