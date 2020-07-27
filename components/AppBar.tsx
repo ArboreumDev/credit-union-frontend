@@ -32,7 +32,7 @@ const AppBar = ({ session }) => (
         {session && <>
             <Link href="/" >
                 <AnchorButton
-                    text=""
+                    text="Dashboard"
                     minimal
                     rightIcon="home"
                 />
@@ -45,7 +45,7 @@ const AppBar = ({ session }) => (
             </Link>
                 <Link href="/borrower" >
                     <AnchorButton
-                        text="Borrow"
+                        text="New Loan"
                         minimal
                     />
                 </Link>
