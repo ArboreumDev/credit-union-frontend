@@ -164,8 +164,8 @@ const Page = (params:Params) => {
 Page.getInitialProps = async (context) => {
     return {
         session: await getSession(context),
-        model: new ProfileModel(100, 200, [{ name: "gaurav", email: "g@arboreum.dev", amount: 10 }]),
-        newBorrower: { name: "ba", email: "ee", amount: "123" }
+        model: new ProfileModel(100, 200, [{ name: "g", email: "gp@arboreum.dev", amount: 10 }]),
+        newBorrower: { name: "", email: "", amount: "100" }
     }
 }
 

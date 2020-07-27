@@ -7,9 +7,9 @@ function getRandomInt(min, max) {
 
 const getState = () => ({
     labels: [
-        'Red',
-        'Green',
-        'Yellow'
+        'b1',
+        'b2',
+        'b3'
     ],
     datasets: [{
         data: [getRandomInt(50, 200), getRandomInt(100, 150), getRandomInt(150, 250)],
@@ -31,18 +31,19 @@ export default function DynamicDoughnut() {
     const[state, setState] = useState(getState());
     
     useEffect(() => {
-        setInterval(() => {
-            setState(getState());
-        }, 1000);
+        // setInterval(() => {
+        //     setState(getState());
+        // }, 1000);
     });
     return (
             <div>
-                <h2>Dynamicly refreshed Doughnut Example</h2>
+            <h4>Portfolio</h4>
                 <Doughnut
                     data={state}
                     width={400}
                     height={400}
                 />
+            
             </div>
     )
      
