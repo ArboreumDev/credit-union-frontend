@@ -16,13 +16,14 @@ const GET_GREETING = gql`
     `;
 
 export default function Hello() {
-  const { loading, error, data } = useQuery(GET_GREETING);
-  console.log(data.users)
-  if (loading) return <p>Loading ...</p>;
-  if (error) {
-    console.log(error)
-    return <p> Error :(</p>;}
-  return <div>
-    {data.users.map((user)=>(<p>{user.name}</p>))}
-  </div>
+  // const { loading, error, data } = useQuery(GET_GREETING);
+  // console.log(data.users)
+  // if (loading) return <p>Loading ...</p>;
+  // if (error) {
+  //   console.log(error)
+  //   return <p> Error :(</p>;}
+  // return <div>
+  //   {data.users.map((user)=>(<p>{user.name}</p>))}
+  // </div>
+  return <div></div>
 }
