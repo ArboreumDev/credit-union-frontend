@@ -32,18 +32,23 @@ const AppBar = ({ session }) => (
         {session && <>
             <Link href="/" >
                 <AnchorButton
-                    text=""
+                    text="Dashboard"
                     minimal
                     rightIcon="home"
                 />
             </Link>
             <Link href="/lender" >
                 <AnchorButton
-                    text=""
+                    text="Lend"
                     minimal
-                    rightIcon="user"
                 />
             </Link>
+                <Link href="/borrower" >
+                    <AnchorButton
+                        text="New Loan"
+                        minimal
+                    />
+                </Link>
             <AnchorButton
                 href='/api/auth/signout'
                 text="Logout"
