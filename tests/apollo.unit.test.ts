@@ -5,7 +5,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, cre
 import { client } from '../utils/graphql_client'; 
 
 
-test('Found 3 nodes in initGraph', async () => {
+test('user query', async () => {
   const data = await client
     .query({
       query: gql`
