@@ -8,9 +8,15 @@ const options = {
   // Configure one or more authentication providers
   providers: [
     Providers.Email({
-      server: process.env.EMAIL_SERVER,
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: encodeURIComponent(process.env.EMAIL_SERVER_PASSWORD),
+        },
+      },
       from: process.env.EMAIL_FROM,
-      // maxAge: 24 * 60 * 60, // How long email links are valid for (default 24h)
     }),
     Providers.Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
