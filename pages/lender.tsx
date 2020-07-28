@@ -83,8 +83,8 @@ const Page = (params:Params) => {
                     large />
         </Card>
         <Card className="profile-card">
-            <Card>
-                <H5>
+            
+            <H5>
                     Trusted Borrowers
             </H5>
                 <table className="bp3-html-table">
@@ -108,38 +108,9 @@ const Page = (params:Params) => {
                         }
                     </tbody>
                 </table>
-            </Card>
-            
-            <Card>
-                
-                <FormGroup
-                    helperText=""
-                    label=""
-                    labelFor="text-input"
-                    labelInfo=""
-                >
-                    
-                        <InputGroup id="text-input" name="name" width={200} value={newBorrower.name} placeholder={"name"} onChange={onChange}/>
-                        <InputGroup id="text-input" name="email" width={200} value={newBorrower.email} placeholder={"email"} onChange={onChange}/>
 
-                        <NumericInput
-                            value={newBorrower.amount}
-                            onValueChange={(value) => setNB(prevState => ({ ...prevState, amount: value }))}
-                            stepSize={1}
-                            large />
-                    
-                    <Button onClick={
-                            () => setState(prevState => {
-                                let b = prevState.borrowers
-                                b.push(newBorrower)
-                                setNB({ name: "", email: "", amount: 100 })
-                                return { ...prevState, borrowers: b }
-                            })
-                        }>
-                            Add</Button>
-                </FormGroup>
-
-            </Card>
+        </Card>
+        <Card className="profile-card">
             <Button intent="primary">Save</Button>
         </Card>
         <style jsx>{`
