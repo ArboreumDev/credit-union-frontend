@@ -19,7 +19,8 @@ export default function Video() {
               text-align: center;
 
               margin: auto;
-              width: 640;
+            //   width: 873px;
+            //   height: 482px;
               padding: 10px;
             }
             .Video {
