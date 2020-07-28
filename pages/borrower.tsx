@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6 } from '@blueprintjs/core';
 import AppBar from '../components/AppBar';
 import { getSession } from 'next-auth/client'
-import Mailto from '../components/mailto';
+import Mailto from '../components/contact';
 
 interface Session {
     user: {
