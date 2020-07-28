@@ -22,7 +22,7 @@
         "next": "9.4",
         "next-auth": "^2.0.0",
         "normalize.css": "^8.0.1",
-
+        "pg": "^8.3.0",
         "react": "16.13.1",
         "react-chartjs-2": "^2.9.0",
         "react-dom": "16.13.1",

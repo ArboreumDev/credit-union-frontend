@@ -5,7 +5,8 @@ const data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
         {
-            label: 'APY',
+            label: 'interest',
+            legend: false,
             fill: false,
             lineTension: 0.1,
             backgroundColor: 'rgba(75,192,192,0.4)',
@@ -31,7 +32,7 @@ const data = {
 
 const LineChart = () => (
     <div>
-        <h4>Line Example</h4>
+        <h4>APY</h4>
         <Line
             data={data}
             width={400}
