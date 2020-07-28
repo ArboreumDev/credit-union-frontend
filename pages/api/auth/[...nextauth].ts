@@ -3,7 +3,7 @@ import Providers from 'next-auth/providers'
 
 
 const options = {
-    site: process.env.SITE || 'http://mywebsite.com:3000',
+    site: process.env.VERCEL_URL || 'http://mywebsite.com:3000',
 
     // Configure one or more authentication providers
     providers: [
