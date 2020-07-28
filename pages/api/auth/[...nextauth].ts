@@ -4,10 +4,9 @@ import Providers from 'next-auth/providers'
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",
-
   // Configure one or more authentication providers
   providers: [
-    Providers.Email({
+    // Providers.Email({
     //   server: {
     //     host: process.env.EMAIL_SERVER_HOST,
     //     port: process.env.EMAIL_SERVER_PORT,
