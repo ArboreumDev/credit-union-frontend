@@ -1,8 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { useApollo, initializeApollo } from '../utils/graphql_client';
+import { getApolloDataSS } from '../utils/ssr';
 
-const GET_GREETING = gql`
-      query MyQuery {
+const GET_USERS = gql`
+      query UsersQuery {
       users {
         id
         name
@@ -18,9 +19,8 @@ const GET_GREETING = gql`
     `;
 
 export default function Hello() {
-  const { loading, error, data } = useQuery(GET_GREETING);
+  const { loading, error, data } = useQuery(GET_USERS);
   
-  console.log(data.users);
   return <div>
     {data.users.map((user)=>(<p key={user.id}>{user.name}</p>))}
   </div>
@@ -28,16 +28,5 @@ export default function Hello() {
 }
 
 export async function getServerSideProps() {
-  const apolloClient = initializeApollo()
-
-  await apolloClient.query({
-    query: GET_GREETING,
-  })
-
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  }
-
+  return getApolloDataSS(GET_USERS)
 }
