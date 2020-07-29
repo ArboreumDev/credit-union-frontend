@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6 } from '@blueprintjs/core';
+import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6, TextArea } from '@blueprintjs/core';
 import AppBar from '../components/AppBar';
 import { getSession } from 'next-auth/client'
 import { Contactus, Mailto } from "../components/contact";
@@ -144,52 +144,17 @@ const Page = (params: Params) => {
                   ))}
                 </tbody>
               </table>
-
-              <FormGroup
-                helperText=""
-                label=""
-                labelFor="text-input"
-                labelInfo=""
-              >
-                <InputGroup
-                  id="text-input"
-                  name="name"
-                  width={200}
-                  value={newBorrower.name}
-                  placeholder={"name"}
-                  onChange={onChange}
-                />
-                <InputGroup
-                  id="text-input"
-                  name="email"
-                  width={200}
-                  value={newBorrower.email}
-                  placeholder={"email"}
-                  onChange={onChange}
-                />
-
-                <NumericInput
-                  value={newBorrower.amount}
-                  onValueChange={(value) =>
-                    setNB((prevState) => ({ ...prevState, amount: value }))
-                  }
-                  stepSize={1}
-                  large
-                />
-
-                <Button
-                  onClick={() =>
-                    setState((prevState) => {
-                      let b = prevState.guarantors;
-                      b.push(newBorrower);
-                      setNB({ name: "", email: "", amount: 100 });
-                      return { ...prevState, guarantors: b };
-                    })
-                  }
+              <p>
+                
+                <Mailto
+                  email="contact@arboreum.dev"
+                  subject="Please add my guarantors"
+                  body="name, email, amount"
                 >
-                  Add
-                </Button>
-              </FormGroup>
+                  Email
+                </Mailto>{" "}
+                us the name, email and amounts of your guarantors.
+              </p>
             </Card>
           </div>
           <div>
@@ -200,12 +165,13 @@ const Page = (params: Params) => {
                 Please{" "}
                 <Mailto
                   email="contact@arboreum.dev"
-                  subject="New Loan KYC "
+                  subject="New Loan | KYC "
                   body="Docements are attached!"
                 >
                   email
                 </Mailto>{" "}
-                us the copies of the following documents for KYC as soon as possible after you submit this form.
+                us the copies of the following documents for KYC as soon as
+                possible after you submit this form.
               </p>
 
               <div>
