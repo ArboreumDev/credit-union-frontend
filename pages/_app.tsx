@@ -10,15 +10,17 @@ import ButtonAppBar from '../components/AppBar';
 import { AppProps } from 'next/app';
 import { Classes } from '@blueprintjs/core';
 import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
-import { client } from '../utils/graphql_client';
+import { useApollo } from "../utils/graphql_client";
 
 function App({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
+
   return (
     <Provider>
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         <div className={Classes.DARK}>
-          <div className='content'>
-              <Component {...pageProps} />
+          <div className="content">
+            <Component {...pageProps} />
           </div>
         </div>
       </ApolloProvider>

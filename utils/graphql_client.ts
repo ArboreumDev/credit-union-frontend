@@ -1,17 +1,45 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
-import fetch from 'cross-fetch'
+import { useMemo } from "react";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
-const API_URL = 'https://right-thrush-43.hasura.app/v1/graphql'
+const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
 
-export const client = new ApolloClient({
-    link: createHttpLink({
-        uri: API_URL,
-        fetch,
-        headers: {
-            'Content-Type': 'application/json',
-            'Hasura-Client-Name': 'hasura-console',
-            'hasura-collaborator-token': 'IDToken eyJhbGciOiJSUzI1NiIsImtpZCI6InB1YmxpYzoyMzIyM2JiNi1lODQ3LTRhMTAtOThhNS02Yzk1YjZlYWUxOGEiLCJ0eXAiOiJKV1QifQ.eyJhbGxvd2VkX3NjaGVtYXMiOltdLCJhbGxvd2VkX3RhYmxlcyI6e30sImF0X2hhc2giOiJ1bDZZcEFLM3NjWW82Wnp5SU5iTUx3IiwiYXVkIjpbImU5ZTY0ZTZjLWIxZTktNGQwYy05MmFhLTcxOGNjYjgxZmI0Zl9jb25zb2xlIl0sImF1dGhfdGltZSI6MTU5NTcyNDEzNiwiY29sbGFib3JhdG9yX3ByaXZpbGVnZXMiOlsiYWRtaW4iLCJncmFwaHFsX2FkbWluIiwidmlld19tZXRyaWNzIl0sImV4cCI6MTU5NTcyNzc0MiwiaWF0IjoxNTk1NzI0MTQyLCJpc3MiOiJodHRwczovL29hdXRoLnByby5oYXN1cmEuaW8vIiwianRpIjoiYjdkYWI5ZDItYmZhOC00N2IwLTgzMTMtNmNkYzUyYjMwZTE3IiwibWV0cmljc19mcWRuIjoidXMtZWFzdC0yLWF3cy1tZXRyaWNzLWNsb3VkLmhhc3VyYS1hcHAuaW8iLCJub25jZSI6IiIsInByb2plY3QiOnsiaWQiOiI3NTE0YjhhYS03NTFiLTQ0ZTctODViZi02NTE1NmU4ZmNlN2IiLCJuYW1lIjoicmlnaHQtdGhydXNoLTQzIn0sInJhdCI6MTU5NTcyNDEzNiwic2lkIjoiYTVjYTY2MGYtNjk2MC00ZjY4LWE4MzgtYTlmYzkyMjM2NGU4Iiwic3ViIjoiY2U2NmJjMzMtNzI2YS00YjA0LTkwNDktNjkyN2ZhYjc3ODZiIn0.X9_Fc7o6g099viZs3ox3Fsr4yfTuYWHKAgnQxXaweOAlEllKMSmjkntORR7Au3nO3E5ijfUO2xZuUdXQig2bvZhe6xeyRBwwMQ9692KPZoMgxzWjo8w0tDKVZo9ub1aLNl-3kA9ZR7elueacdAL9FGXLZUZt6X_D_L_1juWZFTWvy0JmLo-vkIetB65EV760A9ruVk2MdRMQiTAL7aQwHHFlHKC7ppENL6AcvVHKp25hVx9SS0erj2FJ8pG7-sq2mKB2Efymz0YOPzkrLAQqllCOxLKSTQZN-Mr2_baE7vSW1iT2j3v2gtb9lZJEu4vrGsV1rEdgbjEdXFKBN7gjIWsSB9wDHvHgXNJLj3j0ACoCg-gxJs363loYW6Pt4H6ndwOh9JvB5jVKhqHxPdFj11h_FosCBfQuf9j3msQ_bSXdRg91QA6rQeoHHMdouVXI5vvGYehAvieFRVjvl66WbeBRGGE-4J1Na0c7rFbSnEEz-4ewIcv6Uc-a7YxyB3gqHRgP8N99_t27129LUXDyUwH7MsIeIgZlk0n4hlaMUT-FsTekekimto-HkxAf_yr7SM4WZPQlCJmb-ha0KxpHSwF8hoy-wfo_v-XdmnenKlEdxjqNNrvNfzsSp_NtnoJAspGH9gKt_KkgkQbF5LiTrClnUWjNPQvxRLrWMaasOdw'
-        }
-    }),
-    cache: new InMemoryCache()
-});
+console.log(process.env.HASURA_ADMIN_SECRET);
+
+let apolloClient;
+
+function createApolloClient() {
+  return new ApolloClient(new ApolloClient({
+         link: createHttpLink({
+           uri: API_URL,
+           fetch,
+           headers: {
+             "Content-Type": "application/json",
+             "X-Hasura-Admin-Secret": process.env.HASURA_ADMIN_SECRET,
+           },
+         }),
+         cache: new InMemoryCache(),
+         ssrMode: true
+       }))
+}
+
+export function initializeApollo(initialState = null) {
+  const _apolloClient = apolloClient ?? createApolloClient();
+
+  // If your page has Next.js data fetching methods that use Apollo Client, the initial state
+  // get hydrated here
+  if (initialState) {
+    _apolloClient.cache.restore(initialState);
+  }
+  // For SSG and SSR always create a new Apollo Client
+  if (typeof window === "undefined") return _apolloClient;
+  // Create the Apollo Client once in the client
+  if (!apolloClient) apolloClient = _apolloClient;
+
+  return _apolloClient;
+}
+
+export function useApollo(initialState) {
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+  return store;
+}
+

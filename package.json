@@ -5,19 +5,16 @@
         "dev": "next",
         "build": "next build",
         "start": "next start",
-        "db:seed": "knex seed:run ",
         "test": "jest --watch",
         "test:ci": "jest --ci"
     },
     "dependencies": {
-        "@apollo/client": "^3.0.2",
+        "@apollo/client": "^3.1.1",
         "@blueprintjs/core": "3.30.0",
         "@blueprintjs/icons": "3.19.0",
         "@blueprintjs/table": "^3.8.11",
-        "apollo-server-micro": "^2.14.4",
         "chart.js": "^2.9.3",
         "dataloader": "^2.0.0",
-        "knex": "^0.21.1",
         "micro-cors": "^0.1.1",
         "next": "9.4",
         "next-auth": "^2.0.0",
@@ -36,6 +33,7 @@
         "@types/node": "^14.0.13",
         "@types/react": "^16.4.12",
         "babel-jest": "^26.1.0",
+        "graphql": "^15.3.0",
         "jest": "^26.1.0"
     },
     "license": "ISC"
