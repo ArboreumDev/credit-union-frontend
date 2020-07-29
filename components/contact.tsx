@@ -4,12 +4,12 @@ export function Mailto({ email, subject, body, ...props }) {
   );
 }
 
-export function ContactUs({ subject="", body="", ...props }) {
+export function Contactus({ subject="", body="", text="Contact Us", ...props }) {
   return (
-    <p>
+
       <Mailto email="contact@arboreum.dev" subject={subject} body={body}>
-        Contact us
+        {text}
       </Mailto>
-    </p>
+
   );
 }

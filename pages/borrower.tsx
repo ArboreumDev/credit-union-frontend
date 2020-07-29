@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6 } from '@blueprintjs/core';
 import AppBar from '../components/AppBar';
 import { getSession } from 'next-auth/client'
-import Mailto from '../components/contact';
+import { Contactus, Mailto } from "../components/contact";
 
 interface Session {
     user: {
@@ -205,7 +205,7 @@ const Page = (params: Params) => {
                 >
                   email
                 </Mailto>{" "}
-                us the copies of the following documents for KYC
+                us the copies of the following documents for KYC as soon as possible after you submit this form.
               </p>
 
               <div>

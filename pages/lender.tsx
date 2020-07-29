@@ -9,7 +9,7 @@ import {
 } from "@blueprintjs/core";
 import AppBar from "../components/AppBar";
 import { getSession } from "next-auth/client";
-import { ContactUs } from "../components/contact";
+import { Contactus } from "../components/contact";
 
 interface Session {
   user: {
@@ -107,7 +107,9 @@ const Page = (params: Params) => {
             </tbody>
           </table>
         </Card>
-        <Card><ContactUs></ContactUs></Card>
+        <Card>
+          <Contactus /> to make any changes.
+        </Card>
         <Card className="profile-card">
           <Button intent="primary">Save</Button>
         </Card>
