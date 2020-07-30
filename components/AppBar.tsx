@@ -45,7 +45,7 @@ const AppBar = ({ session }) => (
             </Link>
                 <Link href="/borrower" >
                     <AnchorButton
-                        text="New Loan"
+                        text="Borrow"
                         minimal
                     />
                 </Link>

@@ -67,12 +67,13 @@ const Page = (params: Params) => {
         <Card className="profile-card">
           <H5>Total Exposure</H5>
           <p>
-            Maximum amount you wish to loan out, in INR? This will be your total
-            exposure across corpus and guarantee investments.
+            What is the maximum amount you wish to lend (in INR)?
           </p>
           <p>
-            (For the trial period of this program, this is a minimum 2-month
-            commitment)
+            This will be your total exposure across corpus and guarantee investments.
+          </p>
+          <p>
+            <i>For this program trial, these funds will be unavailable for withdrawal for a minimum of 2 months.</i>
           </p>
 
           <NumericInput
@@ -91,9 +92,9 @@ const Page = (params: Params) => {
           <table className="bp3-html-table">
             <thead>
               <tr>
-                <td>name</td>
-                <td>email</td>
-                <td>amount</td>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Amount</td>
               </tr>
             </thead>
             <tbody>
@@ -134,7 +135,9 @@ Page.getInitialProps = async (context) => {
   return {
     session: await getSession(context),
     model: new ProfileModel(100, 200, [
-      { name: "g", email: "gp@arboreum.dev", amount: 10 },
+      { name: "Laurence Day", email: "laurence@arboreum.dev", amount: 50 },
+      { name: "Gaurav Paruthi", email: "gp@arboreum.dev", amount: 10 },
+      { name: "Deepika Padukone", email: "deepika@gmail.com", amount: 35 },
     ]),
     newBorrower: { name: "", email: "", amount: "100" },
   };

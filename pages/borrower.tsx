@@ -55,16 +55,14 @@ const Page = (params: Params) => {
         <AppBar session={session} />
         <div className="grid-container">
           <div>
-            <H3>Create a new loan!</H3>
+            <H3>Request A New Loan</H3>
           </div>
           <div>
             <Card className="profile-card">
-              <H4>What loan amount do you wish to borrow (INR)?</H4>
+              <H4>Amount You Wish To Borrow (In INR)?</H4>
               <p></p>
               <p>
-                Loan must be paid back fully in 6 monthly instalments. If you do
-                not repay an instalment on time, it will be deducted from your
-                salary
+                Loan must be paid back fully (with interest) in 6 monthly instalments. If you miss a repayment, it will be deducted from your salary.
               </p>
 
               <NumericInput
@@ -85,21 +83,21 @@ const Page = (params: Params) => {
           <div>
             <Card className="profile-card">
               <H4>
-                What is the reason for the loan? This question is required. *
+                Reason For Loan
               </H4>
-
               <p>
-                Please note we may ensure loan is being used for the stated
-                purpose
+                Please note we may run checks to ensure that the loan is being used for the stated purpose.
               </p>
-
+			  <p>
+			  * This question is required.
+			  </p>
               <div>
                 <select>
-                  <option value="Home">Home repair or renovation</option>
-                  <option value="Education">Education expense in family</option>
-                  <option value="Medical">Medical expense in family</option>
-                  <option value="Business">Business activity related</option>
-                  <option value="Wedding">Wedding in family</option>
+                  <option value="Home">Home Repair/Renovation</option>
+                  <option value="Education">Education Expense</option>
+                  <option value="Medical">Medical Expense</option>
+                  <option value="Business">Business Activity</option>
+                  <option value="Wedding">Wedding</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
@@ -107,11 +105,11 @@ const Page = (params: Params) => {
           </div>
           <div>
             <Card className="profile-card">
-              <H4>List the guarantors that support you</H4>
+              <H4>List Of Guarantors Supporting Your Loan</H4>
 
               <p>
-                To improve the interest rate, loan size, etc available for you,
-                you should bring at least one guarantor from inside the company.{" "}
+                To improve the interest rate, loan size, etc. that is available to you,
+                you should bring <b>at least</b> one guarantor from inside the company.{" "}
               </p>
 
               <p>
@@ -122,9 +120,11 @@ const Page = (params: Params) => {
               <p>
                 Please enter email addresses of your guarantors and amount they
                 will guarantee for your loan. We will cross-check this
-                information with themThis question is required. *
+                information with them.
               </p>
-
+			  <p>
+			  This question is required.*
+			  </p>
               <H6>Trusted Guarantors</H6>
               <table className="bp3-html-table">
                 <thead>
@@ -148,7 +148,7 @@ const Page = (params: Params) => {
                 
                 <Mailto
                   email="contact@arboreum.dev"
-                  subject="Please add my guarantors"
+                  subject="Please add these guarantors to my profile"
                   body="name, email, amount"
                 >
                   Email
@@ -159,20 +159,23 @@ const Page = (params: Params) => {
           </div>
           <div>
             <Card className="">
-              <H4>KYC</H4>
+              <H4>KYC (Know Your Customer)</H4>
 
               <p>
                 Please{" "}
                 <Mailto
                   email="contact@arboreum.dev"
                   subject="New Loan | KYC "
-                  body="Docements are attached!"
+                  body="Documents are attached."
                 >
                   email
                 </Mailto>{" "}
                 us the copies of the following documents for KYC as soon as
                 possible after you submit this form.
               </p>
+			  <p>
+			  The sooner you do this, the sooner we can process your application.
+			  </p>
 
               <div>
                 <ul>
@@ -187,9 +190,12 @@ const Page = (params: Params) => {
             <Card>
               <p>
                 I understand that I am expected to return the loan in 6 monthly
-                installments. I understand that if I am unable to repay for
-                reasons beyond my control, I need to inform HR, failing which
-                the installment will be automatically deducted from my salary.
+                instalments.
+              </p>
+              <p>
+			   I understand that if I am unable to repay any instalment for
+                any reason, I need to inform HR in advance, failing which
+                the instalment will be automatically deducted from my salary.
               </p>
               <Button intent="primary">Save</Button>
             </Card>
@@ -218,7 +224,7 @@ const Page = (params: Params) => {
 Page.getInitialProps = async (context) => {
     return {
         session: await getSession(context),
-        model: new BorrowerProfileModel(100, [{ name: "amitabh", email: "bachan", amount: 100 }]),
+        model: new BorrowerProfileModel(100, [{ name: "Amitabh Bachchan", email: "bachchan@amitabh.net", amount: 10000 }]),
         newBorrower: { name: "", email: "", amount: "123" }
     }
 }
