@@ -2,7 +2,7 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 
 const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['August', 'September', 'October', 'November', 'December', 'January', 'February'],
     datasets: [
         {
             label: 'interest',
@@ -32,7 +32,7 @@ const data = {
 
 const LineChart = () => (
     <div>
-        <h4>APY</h4>
+        <h4>Your Returns (APY)</h4>
         <Line
             data={data}
             width={400}

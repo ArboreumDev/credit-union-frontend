@@ -7,9 +7,9 @@ function getRandomInt(min, max) {
 
 const getState = () => ({
     labels: [
-        'b1',
-        'b2',
-        'b3'
+        'Funds In Active Loans',
+        'Funds Acting As Guarantees',
+        'Uninvested Funds'
     ],
     datasets: [{
         data: [getRandomInt(50, 200), getRandomInt(100, 150), getRandomInt(150, 250)],
@@ -37,7 +37,7 @@ export default function DynamicDoughnut() {
     });
     return (
             <div>
-            <h4>Portfolio</h4>
+            <h4>Your Lending Portfolio</h4>
                 <Doughnut
                     data={state}
                     width={400}
