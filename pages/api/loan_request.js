@@ -1,4 +1,4 @@
-CONST BUCKET = 'swarmai-loanrequests';
+let BUCKET = 'swarmai-loanrequests';
 
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
                 res.status(200).json({ 'error': err })
             }
             if (data) {
-                console.log("Upload Success", data.Location);
+                console.log("New Loan Request Upload Success", data.Location);
                 res.status(200).json({ 'status': 'success' })
             }
         });
