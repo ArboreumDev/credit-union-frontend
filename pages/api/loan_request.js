@@ -1,4 +1,5 @@
-// Load the AWS SDK for Node.js
+CONST BUCKET = 'swarmai-loanrequests'
+    // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 // Set the region 
 AWS.config.update({ region: 'eu-west-2' });
@@ -17,7 +18,7 @@ AWS.config.setPromisesDependency(null)
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
 // call S3 to retrieve upload file to specified bucket
-var uploadParams = { Bucket: 'swarmai-loanrequests', Key: '', Body: '' };
+var uploadParams = { Bucket: BUCKET, Key: '', Body: '' };
 
 const loan_request_fixture = {
     "borrower_id": 4,
