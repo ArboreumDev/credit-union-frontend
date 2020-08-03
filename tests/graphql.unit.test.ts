@@ -1,8 +1,8 @@
 import { initializeGQL } from "../utils/graphql_client";
 
 global.fetch = require("node-fetch");
-require("dotenv").config();
-console.log(process.env.HASURA_ADMIN_SECRET);
+
+require("dotenv").config({ path: ".env.local" });
 
 const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
 
