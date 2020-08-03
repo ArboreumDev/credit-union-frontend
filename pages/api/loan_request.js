@@ -1,4 +1,4 @@
-let BUCKET = 'swarmai-loanrequests';
+const BUCKET = 'swarmai-loanrequests';
 
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
@@ -45,8 +45,6 @@ export default async function handler(req, res) {
 
     var path = require('path');
     uploadParams.Key = path.basename(Date.now() + ".json");
-
-
 
     const result = await new Promise((resolve, reject) => {
         // call S3 to retrieve upload file to specified bucket
