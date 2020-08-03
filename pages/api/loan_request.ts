@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 const BUCKET = 'swarmai-loanrequests';
 
 // Load the AWS SDK for Node.js
@@ -39,27 +41,32 @@ const loan_request_fixture = {
     "central_source_info": []
 }
 
-export default async function handler(req, res) {
-    // Get data from your database
-    uploadParams.Body = JSON.stringify(loan_request_fixture);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'POST') {
+        // Process a POST request
+        // Get data from your database
+        // console.log(req)
+        uploadParams.Body = JSON.stringify(req.body);
 
-    var path = require('path');
-    uploadParams.Key = path.basename(Date.now() + ".json");
+        var path = require('path');
+        uploadParams.Key = path.basename(Date.now() + ".json");
 
-    const result = await new Promise((resolve, reject) => {
-        // call S3 to retrieve upload file to specified bucket
-        s3.upload(uploadParams, function(err, data) {
-            if (err) {
-                console.log("Error", err);
-                res.status(200).json({ 'error': err })
-            }
-            if (data) {
-                console.log("New Loan Request Upload Success", data.Location);
-                res.status(200).json({ 'status': 'success' })
-            }
+        const result = await new Promise((resolve, reject) => {
+            // call S3 to retrieve upload file to specified bucket
+            s3.upload(uploadParams, function (err, data) {
+                if (err) {
+                    console.log("Error", err);
+                    res.status(200).json({ 'error': err })
+                }
+                if (data) {
+                    console.log("New Loan Request Upload Success", data.Location);
+                    res.status(200).json({ 
+                        'status': 'success',
+                        [uploadParams.Key]: JSON.parse(uploadParams.Body)
+                    })
+                }
+            });
         });
-    });
-
-
+    }
     res.status(200).json({ 'status': 'not sure' })
 }
