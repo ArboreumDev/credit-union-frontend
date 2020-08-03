@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { useApollo, initializeApollo } from '../utils/graphql_client';
+import { useGQLClient, initializeGQL } from '../utils/graphql_client';
 import { getApolloDataSS } from '../utils/ssr';
 
 const GET_USERS = gql`

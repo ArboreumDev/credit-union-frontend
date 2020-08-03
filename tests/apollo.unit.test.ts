@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 import fetch from 'node-fetch'
 
 import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
-import { initializeApollo } from '../utils/graphql_client'; 
+import { initializeGQL } from '../utils/graphql_client'; 
 
 
 test('user query', async () => {
-  const data = await initializeApollo()
+  const data = await initializeGQL()
     .query({
       query: gql`
         query MyQuery {
