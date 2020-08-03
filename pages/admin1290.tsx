@@ -1,25 +1,23 @@
-import { gql, useQuery } from '@apollo/client';
-import { useGQLClient, initializeGQL } from '../utils/graphql_client';
-import { getApolloDataSS } from '../utils/ssr';
+import useSWR from 'swr';
+import { getGQLDataSS } from '../utils/ssr';
 
-const GET_USERS = gql`
-      query UsersQuery {
-      users {
-        id
-        name
-        email
-        edges {
-          user {
-            name
-          }
+const GET_USERS = `
+  query MyQuery {
+    users {
+      email
+      edges {
+        toUser {
+          email
         }
       }
     }
-
-    `;
+  }
+`;
 
 export default function Hello() {
-  const { loading, error, data } = useQuery(GET_USERS);
+  const initialData = props.data;
+  const { data } = useSWR("/api/data", fetcher, { initialData });
+  console.log(data)
   
   return <div>
     {data.users.map((user)=>(<p key={user.id}>{user.name}</p>))}
@@ -27,6 +25,6 @@ export default function Hello() {
   return <div></div>
 }
 
-export async function getServerSideProps() {
-  return getApolloDataSS(GET_USERS)
-}
+// export async function getServerSideProps() {
+//   return getGQLDataSS(GET_USERS)
+// }

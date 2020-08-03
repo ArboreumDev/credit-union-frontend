@@ -9,7 +9,6 @@
         "test:ci": "jest --ci"
     },
     "dependencies": {
-        "@apollo/client": "^3.1.1",
         "@blueprintjs/core": "3.30.0",
         "@blueprintjs/icons": "3.19.0",
         "@blueprintjs/table": "^3.8.11",

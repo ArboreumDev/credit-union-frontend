@@ -1,16 +1,11 @@
 import { initializeGQL } from "./graphql_client";
 
-export async function getApolloDataSS(query) {
-    const apolloClient = initializeGQL();
+export async function getGQLDataSS(query) {
+         const gqlClient = initializeGQL();
+         console.log(query)
 
-    await apolloClient.query({
-    query: query,
-    });
-    console.log(apolloClient.cache.extract());
-
-    return {
-    props: {
-        initialApolloState: apolloClient.cache.extract(),
-    },
-    };
-}
+         var data = await gqlClient.request(query);
+         
+         console.log(data)
+         return data
+       }
