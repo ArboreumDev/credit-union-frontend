@@ -12,6 +12,7 @@
         "@blueprintjs/core": "3.30.0",
         "@blueprintjs/icons": "3.19.0",
         "@blueprintjs/table": "^3.8.11",
+        "aws-sdk": "^2.725.0",
         "chart.js": "^2.9.3",
         "dataloader": "^2.0.0",
         "graphql-request": "^2.0.0",
