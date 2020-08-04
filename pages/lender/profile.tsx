@@ -7,19 +7,11 @@ import {
   NumericInput,
   Button,
 } from "@blueprintjs/core";
-import AppBar from "../components/AppBar";
+import { AppBarSignedIn } from "../../components/AppBar";
 import { getSession } from "next-auth/client";
-import { Contactus } from "../components/contact";
+import { Contactus } from "../../components/contact";
+import { User, UserType, Session } from "../../utils/interfaces";
 
-interface Session {
-  user: {
-    name: string;
-    email: string;
-    image: string;
-  };
-  accessToken: string;
-  expires: string;
-}
 
 interface BorrowerModel {
   name: string;
@@ -45,6 +37,10 @@ const Page = (params: Params) => {
   const session = params.session;
   const [state, setState] = useState(params.model);
   const [newBorrower, setNB] = useState(params.newBorrower);
+  const user: User = {
+    name: session.user.name,
+    type: UserType.Lender,
+  };
 
   const onChange = (event) => {
     const target = event.target;
@@ -57,7 +53,7 @@ const Page = (params: Params) => {
   // console.log(params.session)
   return (
     <div className="container">
-      <AppBar session={session} />
+      <AppBarSignedIn user={user} />
       <div className="center">
         <Card className="profile-card">
           <H5>Profile</H5>
@@ -66,14 +62,16 @@ const Page = (params: Params) => {
         </Card>
         <Card className="profile-card">
           <H5>Total Exposure</H5>
+          <p>What is the maximum amount you wish to lend (in INR)?</p>
           <p>
-            What is the maximum amount you wish to lend (in INR)?
+            This will be your total exposure across corpus and guarantee
+            investments.
           </p>
           <p>
-            This will be your total exposure across corpus and guarantee investments.
-          </p>
-          <p>
-            <i>For this program trial, these funds will be unavailable for withdrawal for a minimum of 2 months.</i>
+            <i>
+              For this program trial, these funds will be unavailable for
+              withdrawal for a minimum of 2 months.
+            </i>
           </p>
 
           <NumericInput

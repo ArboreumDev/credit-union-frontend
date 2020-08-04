@@ -1,18 +1,9 @@
 import React, { useState } from 'react'
 import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6, TextArea } from '@blueprintjs/core';
-import AppBar from '../components/AppBar';
+import {AppBarSignedIn} from '../../components/AppBar';
 import { getSession } from 'next-auth/client'
-import { Contactus, Mailto } from "../components/contact";
-
-interface Session {
-    user: {
-        name: string;
-        email: string;
-        image: string;
-    };
-    accessToken: string;
-    expires: string;
-}
+import { Contactus, Mailto } from "../../components/contact";
+import { User, Session, UserType } from '../../utils/interfaces';
 
 interface GuarantorModel {
     name: string
@@ -40,6 +31,11 @@ const Page = (params: Params) => {
     const [state, setState] = useState(params.model);
     const [newBorrower, setNB] = useState(params.newBorrower);
 
+    const user: User = {
+      name: session.user.name,
+      type: UserType.Borrower
+    }
+
     const onChange = event => {
         const target = event.target;
         const value = target.value;
@@ -52,7 +48,7 @@ const Page = (params: Params) => {
     // console.log(params.session)
     return (
       <div className="container">
-        <AppBar session={session} />
+        <AppBarSignedIn user={user} />
         <div className="grid-container">
           <div>
             <H3>Request A New Loan</H3>

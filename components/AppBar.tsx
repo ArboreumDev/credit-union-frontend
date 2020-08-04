@@ -6,57 +6,51 @@ import {
     Navbar,
     NavbarGroup,
     NavbarHeading,
-    NavbarDivider,
-    Button
+    NavbarDivider
 } from "@blueprintjs/core";
 
 import Link from 'next/link';
-import { getSession } from 'next-auth/client'
+import {User, UserType} from '../utils/interfaces'
 
 export interface NavigationProps { }
 
-const AppBar = ({ session }) => (
-<Navbar className={Classes.DARK}>
+export const AppBarSignedOut = () => (
+    <Navbar className={Classes.DARK}>
 
     <NavbarGroup align={Alignment.LEFT}>
             <Link href='/'><NavbarHeading>Arboreum</NavbarHeading></Link>
-        <NavbarDivider />
-        {!session && <>
-            {/* <a href="/api/auth/signin">Sign in</a> */}
+            <NavbarDivider />
             <AnchorButton
                 href='/api/auth/signin'
                 text="Login"
                 minimal
             />
-        </>}
-        {session && <>
-            <Link href="/" >
-                <AnchorButton
-                    text="Dashboard"
-                    minimal
-                    rightIcon="home"
-                />
-            </Link>
-            <Link href="/lender" >
-                <AnchorButton
-                    text="Lend"
-                    minimal
-                />
-            </Link>
-                <Link href="/borrower" >
-                    <AnchorButton
-                        text="Borrow"
-                        minimal
-                    />
-                </Link>
-            <AnchorButton
-                href='/api/auth/signout'
-                text="Logout"
-                minimal
-            />
-        </>}
+            </NavbarGroup>
+</Navbar>
+)
 
-    </NavbarGroup>
-</Navbar>)
+export const AppBarSignedIn = (props: { user: User }) => (
+         <Navbar className={Classes.DARK}>
+           <NavbarGroup align={Alignment.LEFT}>
+             <Link href="/">
+               <NavbarHeading>Arboreum</NavbarHeading>
+             </Link>
+             <NavbarDivider />
+             <Link href="/">
+               <AnchorButton text="Dashboard" minimal rightIcon="home" />
+             </Link>
 
-export default AppBar
+             {props.user.type == UserType.Lender && (
+               <>
+                 <AnchorButton href="/lender" text="Profile" minimal />
+               </>
+             )}
+             {props.user.type == UserType.Borrower && (
+               <>
+                 <AnchorButton href="/borrower" text="Borrow" minimal />
+               </>
+             )}
+             <AnchorButton href="/api/auth/signout" text="Logout" minimal />
+           </NavbarGroup>
+         </Navbar>
+       );
