@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getGQLDataSS } from '../utils/ssr';
+import { fetcher } from '../utils/api';
 
 const GET_USERS = `
   query MyQuery {
@@ -16,20 +16,21 @@ const GET_USERS = `
   }
 `;
 
-// TODO: Make the fetcher call /api/
-// so frontend can also receive
+export default function Hello(props: {data}) {
+  const initialData = props.data;
+  const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
 
-const fetcher = getGQLDataSS 
-
-export default function Hello(data) {
   console.log(data)
+  const users = data.users
 
   return <div>
-    {data.users.map((user)=>(<p key={user.id}>{user.name}</p>))}
+    {users.map((user)=>(<p key={user.id}>{user.name}</p>))}
   </div>
 }
 
 export async function getServerSideProps() {
   const data = await fetcher(GET_USERS);
-  return { props: data };
+  return { props: {data}};
 }
