@@ -1,3 +1,3 @@
 export function BorrowerDashboard() {
-  return <div>Dashboard Borrower</div>;
+  return <div>Dashboard Borrower</div>
 }
