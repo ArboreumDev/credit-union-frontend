@@ -18,7 +18,7 @@ AWS.config.setPromisesDependency(null)
 
 
 // Create S3 service object
-const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+const s3 = new AWS.S3();
 
 // call S3 to retrieve upload file to specified bucket
 var uploadParams = { Bucket: BUCKET, Key: '', Body: '' };
