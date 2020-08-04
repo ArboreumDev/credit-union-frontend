@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import Video from '../components/video';
 import { User, UserType } from '../utils/interfaces';
 import { useRouter } from 'next/dist/client/router';
-import { Onboarding } from './onboarding';
+import Onboarding from './onboarding';
 
 const Page = (props: {session, user?: User}) => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const Page = (props: {session, user?: User}) => {
     
       if (!props.user) {
         // if Onboarding
-        return <Onboarding/>
+        return <Onboarding />
       } else {
         // if user is lender, show lender dashboard
         if (props.user.type == UserType.Lender) router.push("/lender");

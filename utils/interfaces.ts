@@ -1,9 +1,11 @@
-export interface Session {
-    user: {
+export interface SessionUser {
         name: string;
         email: string;
         image: string;
-    };
+    }
+
+export interface Session {
+    user: SessionUser;
     accessToken: string;
     expires: string;
 }
