@@ -1,3 +1,3 @@
-export function BorrowerDashboard() {
+export default function BorrowerDashboard() {
   return <div>Dashboard Borrower</div>
 }

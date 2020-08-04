@@ -198,7 +198,24 @@ const Page = (params: Params) => {
               reason, I need to inform HR in advance, failing which the
               instalment will be automatically deducted from my salary.
             </p>
-            <Button intent="primary">Save</Button>
+            <Button
+              intent="primary"
+              onClick={() => {
+                fetch("/api/loan_request", {
+                  method: "POST",
+                  body: `{
+                    'loan_request': {
+                      user: "test"
+                    }
+                  }`,
+                }).then((res) => {
+                  console.log(res.json())
+                  Router.push("/borrower/loan_success")
+                })
+              }}
+            >
+              Save
+            </Button>
           </Card>
         </div>
         <style jsx>
