@@ -3,7 +3,7 @@
 React + Typescript + Next.js
 
 ## Features
-- Graphql API using Apollo and Hasura
+- Graphql API using Hasura
 - Auth using NextAuth
     - It creates all the necessary tables and schema for you.
 
