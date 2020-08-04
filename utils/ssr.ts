@@ -1,11 +1,14 @@
 import { initializeGQL } from "./graphql_client";
 
-export async function getGQLDataSS(query) {
-         const gqlClient = initializeGQL();
-         console.log(query)
+export const fetcher = (q) => {
+  let base_url = process.env.SITE || "";
+  let url = base_url + "/api/gql";
+  console.log(url);
 
-         var data = await gqlClient.request(query);
-         
-         console.log(data)
-         return data
-       }
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      query: q,
+    }),
+  }).then((r) => r.json());
+};
