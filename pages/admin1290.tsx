@@ -16,19 +16,21 @@ const GET_USERS = `
   }
 `;
 
-export default function Hello(props) {
-  const initialData = props.data;
+export default function Hello(props: {users}) {
+  const initialData = props.users;
   const { data, error } = useSWR(GET_USERS, fetcher, { initialData });
+  
+  const users = data
 
   if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (!users) return <div>loading...</div>;
 
   return <div>
-    {data.users.map((user)=>(<p key={user.id}>{user.name}</p>))}
+    {users.map((user)=>(<p key={user.id}>{user.name}</p>))}
   </div>
 }
 
 export async function getServerSideProps() {
   const data = await fetcher(GET_USERS);
-  return { props: data };
+  return { props: {users: data.users} };
 }
