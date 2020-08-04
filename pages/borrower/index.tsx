@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6, TextArea } from '@blueprintjs/core';
-import AppBar from '../components/AppBar';
+import AppBar from '../../components/AppBar';
 import { getSession } from 'next-auth/client'
-import { Contactus, Mailto } from "../components/contact";
+import { Contactus, Mailto } from "../../components/contact";
+import Router from "next/router";
 
 interface Session {
     user: {
@@ -197,7 +198,19 @@ const Page = (params: Params) => {
                 any reason, I need to inform HR in advance, failing which
                 the instalment will be automatically deducted from my salary.
               </p>
-              <Button intent="primary">Save</Button>
+              <Button intent="primary" onClick={()=>{
+                fetch('/api/loan_request', {
+                  method: 'POST',
+                  'body': `{
+                    'loan_request': {
+                      user: "test"
+                    }
+                  }`
+                }).then((res)=> {
+                  console.log(res.json())
+                  Router.push('/borrower/loan_success')
+                })
+              }}>Save</Button>
             </Card>
           </div>
           <style jsx>
