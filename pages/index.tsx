@@ -34,6 +34,7 @@ const Page = (props: {session, user?: User}) => {
 Page.getInitialProps = async (context) => {
   return {
     session: await getSession(context),
+    // TOOD: Fetch user here
 
   }
 }
