@@ -1,10 +1,12 @@
-export const fetcher = (query) =>
-    fetch('/api/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-    })
-        .then((res) => res.json())
-        .then((json) => json.data)
+export const fetcher = (q) => {
+  let base_url = process.env.SITE || "";
+  let url = base_url + "/api/gql";
+  console.log(url);
+
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      query: q,
+    }),
+  }).then((r) => r.json());
+};
