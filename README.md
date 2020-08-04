@@ -8,6 +8,6 @@ React + Typescript + Next.js
     - It creates all the necessary tables and schema for you.
 
 ## Development
-1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars.
-2. For local dev, Make sure to edit `hosts` file http://mywebsite.com/ to point to 127.0.0.1
-4. npm run dev
+1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars. Atleast one authentication provider is needed.
+2. For local dev, edit [hosts](https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls) file
+3. `yarn dev`
