@@ -1,3 +1,9 @@
+import { AppBarSignedOut, AppBarSignedIn } from "../../components/AppBar";
+
 export default function LenderDashboard() {
-  return <div>Dashboard Lender</div>;
+  return (
+    <div>
+      <div>Dashboard Lender</div>
+    </div>
+  )
 }
