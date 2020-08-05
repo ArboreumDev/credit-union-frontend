@@ -1,38 +1,40 @@
-import Link from 'next/link';
-import useSWR from 'swr'
-import { fetcher } from '../utils/api';
-import { Classes } from '@blueprintjs/core';
-
-import { getSession, useSession } from 'next-auth/client'
-import {AppBarSignedIn, AppBarSignedOut} from '../components/AppBar';
-import Dashboard from '../components/dashboard/dashboard';
-import dynamic from "next/dynamic";
+import { getSession } from 'next-auth/client'
+import AppBar from '../components/AppBar';
 import Video from '../components/video';
-import { User, UserType, Session } from '../utils/types';
+import {UserType, Session } from '../utils/types';
 import { useRouter } from 'next/dist/client/router';
-import Onboarding from './onboarding';
-import { initializeGQL } from '../utils/graphql_client';
 import { useEffect } from 'react';
+import { getSessionAsProps } from '../utils/ssr';
+import Onboarding from './onboarding';
+import LenderDashboard from '../components/dashboard/lender'
+import BorrowerDashboard from "../components/dashboard/borrower"
 
 
-const Page = (props: {session: Session}) => {
-  const router = useRouter();
-  
-  useEffect(() => {
-    console.log(props)
+const Page = (props: { session: Session }) => {
+  const router = useRouter()
+  if (!props.session)
+    return (
+      <div>
+        <AppBar />
+        <Video />
+      </div>
+    )
+  else {
     if (!props.session.user.user_type) {
-      router.push("/onboarding")
+      // if Onboarding
+      return <Onboarding />
     } else {
-      // if user is lender, show lender dashboard
-      if (props.session.user.user_type == UserType.Lender) router.push("/lender")
-      // if user is borrower, show borrower dashboard
-      if (props.session.user.user_type == UserType.Borrower) router.push("/borrower")
-    }
-  })
-
-  return <div><AppBarSignedOut/><Video /></div>
+      return (
+        <div>
+          <AppBar {...props} />
+          {(props.session.user.user_type == UserType.Lender) && <LenderDashboard/>}
+          {(props.session.user.user_type == UserType.Borrower) && <BorrowerDashboard/>}
+        </div>
+      )
+  }
+}
 }
 
-Page.getInitialProps = async (context) => ({session: await getSession(context) as Session})
+Page.getInitialProps = (context) => getSessionAsProps(context)
 
 export default Page

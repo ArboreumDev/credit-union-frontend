@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useSession } from "next-auth/client"
-import { SessionUser, User } from "../utils/types";
+import { User } from "../utils/types";
 import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox, Radio } from "@blueprintjs/core";
 import Axios from "axios";
 import { initializeGQL } from "../utils/graphql_client";
@@ -35,7 +35,7 @@ export default function Onboarding() {
   const gqlClient = initializeGQL()
 
   if (loading) return <div>Loading...</div>
-  const user = session.user as SessionUser
+  const user = session.user as User
 
   const handleSubmit = (event)=>{
     event.preventDefault()

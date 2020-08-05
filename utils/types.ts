@@ -2,7 +2,6 @@ export type Session = {
     user: User
     accessToken: string
     expires: string
-    profile?: User
 }
 
 export enum UserType {
