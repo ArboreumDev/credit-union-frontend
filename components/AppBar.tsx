@@ -10,7 +10,7 @@ import {
 } from "@blueprintjs/core";
 
 import Link from 'next/link';
-import {User, UserType} from '../utils/interfaces'
+import {User, UserType} from '../utils/types'
 
 export interface NavigationProps { }
 

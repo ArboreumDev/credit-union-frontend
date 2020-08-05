@@ -13,7 +13,7 @@ import {
 import { AppBarSignedIn } from "../../components/AppBar"
 import { getSession } from "next-auth/client"
 import { Contactus, Mailto } from "../../components/contact"
-import { User, Session, UserType } from "../../utils/interfaces"
+import { User, Session, UserType } from "../../utils/types"
 
 interface GuarantorModel {
   name: string
