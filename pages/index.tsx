@@ -20,19 +20,19 @@ const Page = (props: {session: Session}) => {
   
   useEffect(() => {
     console.log(props)
-    if (!props.session.profile) {
+    if (!props.session.user.user_type) {
       router.push("/onboarding")
     } else {
       // if user is lender, show lender dashboard
-      if (props.session.profile.user_type == UserType.Lender) router.push("/lender")
+      if (props.session.user.user_type == UserType.Lender) router.push("/lender")
       // if user is borrower, show borrower dashboard
-      if (props.session.profile.user_type == UserType.Borrower) router.push("/borrower")
+      if (props.session.user.user_type == UserType.Borrower) router.push("/borrower")
     }
   })
 
   return <div><AppBarSignedOut/><Video /></div>
 }
 
-Page.getInitialProps = async (context) => (await getSession(context) as Session)
+Page.getInitialProps = async (context) => ({session: await getSession(context) as Session})
 
 export default Page

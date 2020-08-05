@@ -1,11 +1,5 @@
-export type SessionUser = {
-        name: string
-        email: string
-        image: string
-    }
-
 export type Session = {
-    user: SessionUser
+    user: User
     accessToken: string
     expires: string
     profile?: User
@@ -19,6 +13,7 @@ export enum UserType {
 export type User = {
     name: string
     email: string
+    image: string
     phone: string
     user_type: UserType
 }

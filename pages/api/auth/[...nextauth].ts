@@ -51,10 +51,10 @@ const options = {
       const data = await gqlClient.request(GET_USER_BY_EMAIL, {
         email: session.user.email,
       })
-      const profile = data.user[0] as User
-      
+      const profile = data.user[0]
+
       if (data)
-        session = {...session, profile: profile as User}
+        session = {...session, user: {...session.user, ...profile}}
 
       return Promise.resolve(session)
     },
