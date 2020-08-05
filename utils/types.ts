@@ -1,21 +1,23 @@
-export interface SessionUser {
+export type SessionUser = {
         name: string;
         email: string;
         image: string;
     }
 
-export interface Session {
+export type Session = {
     user: SessionUser;
     accessToken: string;
     expires: string;
 }
 
 export enum UserType {
-    Borrower,
-    Lender
+    Borrower="borrower",
+    Lender="lender"
 }
 
-export interface User {
+export type User = {
     name: string
-    type: UserType
+    email: string
+    phone: string
+    user_type: UserType
 }
