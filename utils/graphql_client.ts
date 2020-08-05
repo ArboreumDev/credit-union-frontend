@@ -9,9 +9,9 @@ const createGQLClient = () =>
   new GraphQLClient(API_URL, {
     headers: {
       "content-type": "application/json",
-      "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET,
+      "x-hasura-admin-secret": "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
     },
-  });
+  })
 
 export function initializeGQL(initialState = null) {
   const _gqlClient = gqlClient ?? createGQLClient();
@@ -23,7 +23,7 @@ export function initializeGQL(initialState = null) {
   return _gqlClient;
 }
 
-export function useGQLClient(initialState) {
+export function useGQLClient(initialState=null) {
   const store = useMemo(() => initializeGQL(initialState), [initialState]);
   return store;
 }
