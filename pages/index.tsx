@@ -1,59 +1,40 @@
-import Link from 'next/link';
-import useSWR from 'swr'
-import { fetcher } from '../utils/api';
-import { Classes } from '@blueprintjs/core';
-
 import { getSession } from 'next-auth/client'
 import AppBar from '../components/AppBar';
-import Dashboard from '../components/dashboard/dashboard';
-import dynamic from "next/dynamic";
 import Video from '../components/video';
+import {UserType, Session } from '../utils/types';
+import { useRouter } from 'next/dist/client/router';
+import { useEffect } from 'react';
+import { getSessionAsProps } from '../utils/ssr';
+import Onboarding from './onboarding';
+import LenderDashboard from '../components/dashboard/lender'
+import BorrowerDashboard from "../components/dashboard/borrower"
 
 
-const Page = ({ session }) => (
-<div className='container'>
-  <AppBar session={session}/>
-  <div className='container'>
-    {!session && <>
-      <Video />
-    </>}
-    {session && <>
-      <Dashboard />
-    </>
-    }
-  </div>
-  
-</div>)
-
-Page.getInitialProps = async (context) => {
-  return {
-    session: await getSession(context)
+const Page = (props: { session: Session }) => {
+  const router = useRouter()
+  if (!props.session)
+    return (
+      <div>
+        <AppBar />
+        <Video />
+      </div>
+    )
+  else {
+    if (!props.session.user.user_type) {
+      // if Onboarding
+      return <Onboarding />
+    } else {
+      return (
+        <div>
+          <AppBar {...props} />
+          {(props.session.user.user_type == UserType.Lender) && <LenderDashboard/>}
+          {(props.session.user.user_type == UserType.Borrower) && <BorrowerDashboard/>}
+        </div>
+      )
   }
 }
+}
+
+Page.getInitialProps = (context) => getSessionAsProps(context)
 
 export default Page
-
-// export default function Home() {
-//   const [session, loading] = useSession()
-
-
-//   // const { data, error } = useSWR('{ users { name } }', fetcher)
-
-//   // if (error) return <div>Failed to load</div>
-//   // if (!data) return <div>Loading...</div>
-
-//   // const { users } = data
-  
-//   return (
-    // <div>
-    //   {!session && <>
-    //     <Video/>
-    //   </>}
-    //   {session && <>
-    //     <Dashboard />
-    //   </>
-    //   }
-    // </div>
-    
-// )
-// }

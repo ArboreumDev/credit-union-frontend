@@ -1,62 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react"
+import { useSession } from "next-auth/client"
 import {
-    Alignment,
-    AnchorButton,
-    Classes,
-    Navbar,
-    NavbarGroup,
-    NavbarHeading,
-    NavbarDivider,
-    Button
-} from "@blueprintjs/core";
+  Alignment,
+  AnchorButton,
+  Classes,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  NavbarDivider,
+} from "@blueprintjs/core"
 
-import Link from 'next/link';
-import { getSession } from 'next-auth/client'
+import Link from "next/link"
+import { User, UserType, Session } from "../utils/types"
 
-export interface NavigationProps { }
+export interface NavigationProps {}
 
-const AppBar = ({ session }) => (
-<Navbar className={Classes.DARK}>
-
+export default (props: { session?: Session }) => (
+  <Navbar className={Classes.DARK}>
     <NavbarGroup align={Alignment.LEFT}>
-            <Link href='/'><NavbarHeading>Arboreum</NavbarHeading></Link>
-        <NavbarDivider />
-        {!session && <>
-            {/* <a href="/api/auth/signin">Sign in</a> */}
-            <AnchorButton
-                href='/api/auth/signin'
-                text="Login"
-                minimal
-            />
-        </>}
-        {session && <>
-            <Link href="/" >
-                <AnchorButton
-                    text="Dashboard"
-                    minimal
-                    rightIcon="home"
-                />
-            </Link>
-            <Link href="/lender" >
-                <AnchorButton
-                    text="Lend"
-                    minimal
-                />
-            </Link>
-                <Link href="/borrower" >
-                    <AnchorButton
-                        text="Borrow"
-                        minimal
-                    />
-                </Link>
-            <AnchorButton
-                href='/api/auth/signout'
-                text="Logout"
-                minimal
-            />
-        </>}
-
+      <Link href="/">
+        <NavbarHeading>Arboreum</NavbarHeading>
+      </Link>
+      <NavbarDivider />
+      {!props.session && (
+        <AnchorButton href="/api/auth/signin" text="Login" minimal />
+      )}
+      {props.session && (
+        <div>
+          <AnchorButton href="/" text="Dashboard" minimal rightIcon="home" />
+          <AnchorButton href="/profile" text="Profile" minimal />
+        </div>
+      )}
     </NavbarGroup>
-</Navbar>)
-
-export default AppBar
+  </Navbar>
+)
