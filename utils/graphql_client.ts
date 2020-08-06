@@ -23,8 +23,3 @@ export function initializeGQL(initialState = null) {
   return _gqlClient;
 }
 
-export function useGQLClient(initialState=null) {
-  const store = useMemo(() => initializeGQL(initialState), [initialState]);
-  return store;
-}
-
