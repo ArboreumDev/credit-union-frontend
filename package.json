@@ -25,6 +25,7 @@
         "react": "16.13.1",
         "react-chartjs-2": "^2.9.0",
         "react-dom": "16.13.1",
+        "react-hook-form": "^6.3.0",
         "swr": "^0.2.3",
         "typescript": "^3.0.1"
     },
