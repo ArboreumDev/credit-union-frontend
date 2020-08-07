@@ -45,19 +45,14 @@ export default function Onboarding() {
   const user = session.user as User
 
   const onSubmit = (data)=>{
-    // event.preventDefault()
-    console.log(data)
+    const variables = { ...data, name: user.name, email: user.email } as User
 
-    // const formData = new FormData(event.target)
-    // const formDataObject = Object.fromEntries(formData.entries())
-    // const variables = { ...formDataObject, name: user.name, email: user.email } as User
-
-    // // Call mutation
-    // gqlClient.request(CREATE_USER_MUTATION, variables).then((res) => {
-    //   console.log(res)
-    //   // return to home
-    //   router.push("/")
-    // })
+    // Call mutation
+    gqlClient.request(CREATE_USER_MUTATION, variables).then((res) => {
+      console.log(res)
+      // return to home
+      router.push("/")
+    })
   }
 
   return (
