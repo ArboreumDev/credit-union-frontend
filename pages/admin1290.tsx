@@ -1,29 +1,27 @@
 import useSWR from 'swr';
 import { fetcher } from '../utils/api';
+import { initializeGQL } from '../utils/graphql_client';
 
 const GET_USERS = `
   query MyQuery {
-    users {
+    user {
       id
       email
       name
-      edges {
-        toUser {
-          email
-        }
-      }
+     
     }
   }
 `;
 
 export default function Hello(props: {data}) {
-  const initialData = props.data;
-  const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  const data = props.data;
+  // Only use code like this when UI needs to refresh
+  // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
+  // if (error) return <div>failed to load</div>;
+  // if (!data) return <div>loading...</div>;
 
   console.log(data)
-  const users = data.users
+  const users = data.user
 
   return <div>
     {users.map((user)=>(<p key={user.id}>{user.name}</p>))}
@@ -31,6 +29,7 @@ export default function Hello(props: {data}) {
 }
 
 export async function getServerSideProps() {
-  const data = await fetcher(GET_USERS);
+  const gqlClient = initializeGQL()
+  const data = await gqlClient.request(GET_USERS)
   return { props: {data}};
 }
