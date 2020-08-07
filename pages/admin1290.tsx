@@ -29,6 +29,9 @@ export default function Hello(props: {data}) {
 }
 
 export async function getServerSideProps() {
+  // TODO after JWT is implemented
+  // check for session and if the user is one of the admin users
+  
   const gqlClient = initializeGQL()
   const data = await gqlClient.request(GET_USERS)
   return { props: {data}};
