@@ -1,6 +1,7 @@
 - table:
     schema: public
     name: edge_status
+  is_enum: true
   array_relationships:
   - name: edges
     using:
@@ -16,12 +17,12 @@
   - name: edge_status
     using:
       foreign_key_constraint_on: status
-  - name: user
-    using:
-      foreign_key_constraint_on: borrower_id
-  - name: userByLenderId
+  - name: from_user
     using:
       foreign_key_constraint_on: lender_id
+  - name: to_user
+    using:
+      foreign_key_constraint_on: borrower_id
 - table:
     schema: public
     name: encumbrance_participants
