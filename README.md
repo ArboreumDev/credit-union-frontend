@@ -25,8 +25,11 @@ hasura init
 # Test create first empty migration
 hasura migrate create "init" --from-server 
 
-# To get schemas from a remote hasura (we are using hasura cloud to design the schema and queries)
+# To get postgres schema from a remote hasura (we are using hasura cloud to design the schema and queries)
 hasura migrate create "first" --from-server --endpoint $HASURA_ENDPOINT --admin-secret $HASURA_ADMIN_SECRET
+
+# To get hasura metadata
+hasura metadata export --endpoint $HASURA_ENDPOINT --admin-secret $HASURA_ADMIN_SECRET
 ```
 Since the free Hasura cloud only supports 1 req/s. It's best to use free Heroku as it can handle around 1000 requests/s. See [comment thread](https://www.reddit.com/r/graphql/comments/a84s22/graphile_vs_hasura/ec80n52/). 
 
