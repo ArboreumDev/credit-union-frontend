@@ -5,32 +5,8 @@ import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox
 import Axios from "axios";
 import { initializeGQL } from "../utils/graphql_client";
 import { useRouter } from "next/dist/client/router";
-import { useCallback } from "react";
-import DropzoneS3Uploader from "react-dropzone-s3-uploader"
+import Dropzone from "../components/Dropzone";
 
-export class S3Uploader extends React.Component {
-  handleFinishedUpload = (info) => {
-    console.log("File uploaded with filename", info.filename)
-    console.log("Access it on s3 at", info.fileUrl)
-  }
-
-  render() {
-    const uploadOptions = {
-      server: "/api/upload_files",
-      signingUrlQueryParams: { uploadType: "kyc" },
-    }
-    const s3Url = "https://kyc-arboreum.s3.amazonaws.com"
-
-    return (
-      <DropzoneS3Uploader
-        onFinish={this.handleFinishedUpload}
-        s3Url={s3Url}
-        maxSize={1024 * 1024 * 5}
-        upload={uploadOptions}
-      />
-    )
-  }
-}
 const CREATE_USER_MUTATION = /* GraphQL */ `
   mutation CreateUser(
     $name: String!
@@ -52,7 +28,6 @@ const CREATE_USER_MUTATION = /* GraphQL */ `
     }
   }
 `
-
 export default function Onboarding() {
   const router = useRouter()
   const [session, loading] = useSession()
@@ -87,10 +62,13 @@ export default function Onboarding() {
           </FormGroup>
           <div>
             <H4>Do you plan to lend or borrow?</H4>
-            <Radio name="user_type" value="lender" label="Lend" inline defaultChecked />
+            <Radio name="user_type" value="lender" label="Lend" inline />
             <Radio name="user_type" value="borrower" label="Borrow" inline />
           </div>
-          <S3Uploader/>
+          <div>
+            <H4>KYC Documents:</H4>
+            <Dropzone />
+          </div>
           <Button type="submit" intent="primary">
             Submit
           </Button>{" "}
