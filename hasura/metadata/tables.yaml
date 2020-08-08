@@ -1,16 +1,27 @@
 - table:
     schema: public
     name: edge_status
+  array_relationships:
+  - name: edges
+    using:
+      foreign_key_constraint_on:
+        column: status
+        table:
+          schema: public
+          name: edges
 - table:
     schema: public
     name: edges
   object_relationships:
-  - name: from_user
+  - name: edge_status
     using:
-      foreign_key_constraint_on: lender_id
-  - name: to_user
+      foreign_key_constraint_on: status
+  - name: user
     using:
       foreign_key_constraint_on: borrower_id
+  - name: userByLenderId
+    using:
+      foreign_key_constraint_on: lender_id
 - table:
     schema: public
     name: encumbrance_participants
@@ -29,7 +40,7 @@
     using:
       foreign_key_constraint_on: guarantor_id
   array_relationships:
-  - name: dissolve_to
+  - name: encumbrance_participants
     using:
       foreign_key_constraint_on:
         column: encumbrance_id
@@ -50,21 +61,15 @@
     schema: public
     name: loan_participants
   object_relationships:
-  - name: payable
+  - name: loan_request
     using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: payables
-        column_mapping:
-          loan_id: loan_id
+      foreign_key_constraint_on: loan_id
   - name: user
     using:
       foreign_key_constraint_on: lender_id
 - table:
     schema: public
     name: loan_request_status
-  is_enum: true
   array_relationships:
   - name: loan_requests
     using:
@@ -86,12 +91,11 @@
   array_relationships:
   - name: encumbrances
     using:
-      manual_configuration:
-        remote_table:
+      foreign_key_constraint_on:
+        column: loan_id
+        table:
           schema: public
           name: encumbrances
-        column_mapping:
-          request_id: loan_id
   - name: guarantors
     using:
       foreign_key_constraint_on:
@@ -158,15 +162,6 @@
   - name: payableTypeByPayableType
     using:
       foreign_key_constraint_on: payable_type
-  array_relationships:
-  - name: pay_to
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: loan_participants
-        column_mapping:
-          loan_id: loan_id
 - table:
     schema: public
     name: receivables
@@ -250,14 +245,14 @@
   - name: recommendation_risks
     using:
       foreign_key_constraint_on:
-        column: neighbor_id
+        column: agent_id
         table:
           schema: public
           name: recommendation_risk
-  - name: risks
+  - name: recommendationRisksByNeighborId
     using:
       foreign_key_constraint_on:
-        column: agent_id
+        column: neighbor_id
         table:
           schema: public
           name: recommendation_risk
