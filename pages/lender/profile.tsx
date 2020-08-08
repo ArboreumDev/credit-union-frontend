@@ -9,7 +9,7 @@ import {
 } from "@blueprintjs/core";
 import { AppBarSignedIn } from "../../components/AppBar";
 import { getSession } from "next-auth/client";
-import { Contactus } from "../../components/contact";
+import { Contactus } from "../../components/ContactUs";
 import { User, UserType, Session } from "../../utils/types";
 
 

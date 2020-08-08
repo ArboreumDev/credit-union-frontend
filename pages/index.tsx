@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/client'
 import AppBar from '../components/AppBar';
-import Video from '../components/video';
+import Video from '../components/Video';
 import {UserType, Session } from '../utils/types';
 import { useRouter } from 'next/dist/client/router';
 import { useEffect } from 'react';
