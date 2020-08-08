@@ -30,6 +30,10 @@ hasura migrate create "first" --from-server --endpoint $HASURA_ENDPOINT --admin-
 
 # To get hasura metadata
 hasura metadata export --endpoint $HASURA_ENDPOINT --admin-secret $HASURA_ADMIN_SECRET
+
+# To autmomatically generate schema migrations for updates to db (See [this](https://hasura.io/docs/1.0/graphql/manual/migrations/migrations-setup.html#step-4-use-the-console-from-the-cli))
+hasura console
+
 ```
 Since the free Hasura cloud only supports 1 req/s. It's best to use free Heroku as it can handle around 1000 requests/s. See [comment thread](https://www.reddit.com/r/graphql/comments/a84s22/graphile_vs_hasura/ec80n52/). 
 
