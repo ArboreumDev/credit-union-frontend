@@ -34,4 +34,9 @@ Since the free Hasura cloud only supports 1 req/s. It's best to use free Heroku 
 
     Use this endpoint for production: https://hasura-prod.herokuapp.com/
 
-- [ ] Deploy the schemas from hasura directory by using env file. See [documentation.](https://hasura.io/docs/1.0/graphql/manual/hasura-cli/config-reference.html#environment-variables)
+- [ ] Deploy the schemas to production from hasura directory by using env file. See [documentation.](https://hasura.io/docs/1.0/graphql/manual/hasura-cli/config-reference.html#environment-variables)
+
+```
+    hasura migrate apply --endpoint <server-endpoint>
+    hasura metadata apply --endpoint <server-endpoint>
+```
