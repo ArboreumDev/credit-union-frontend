@@ -1,3 +1,7 @@
+up:
+	cd ./tests; \
+	docker-compose up 
+
 setup_test_db:
 	./scripts/test_db_up.sh
 
