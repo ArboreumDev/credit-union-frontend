@@ -15,7 +15,7 @@ BEGIN
 END;
 $$;
 
-CREATE TYPE public.edge_status AS ENUM (`'active','awaiting_lender_confirmation','awaiting_lender_signup','awaiting_borrower_signup','historic');
+CREATE TYPE public.edge_status AS ENUM ('active','awaiting_lender_confirmation','awaiting_lender_signup','awaiting_borrower_signup','historic');
 CREATE TABLE public.edges (
     edge_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     trust_amount integer DEFAULT 0,
