@@ -14,14 +14,12 @@ BEGIN
   RETURN _new;
 END;
 $$;
-CREATE TABLE public.edge_status (
-    value text NOT NULL,
-    comment text NOT NULL
-);
+
+CREATE TYPE public.edge_status AS ENUM ('active','awaiting_lender_confirmation','awaiting_lender_signup','awaiting_borrower_signup','historic');
 CREATE TABLE public.edges (
     edge_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     trust_amount integer DEFAULT 0,
-    status text,
+    status edge_status,
     borrower_id uuid,
     lender_id uuid,
     other_user_email text
@@ -61,14 +59,13 @@ CREATE TABLE public.loan_participants (
     lender_amount integer NOT NULL,
     percentage integer
 );
-CREATE TABLE public.loan_request_status (
-    status text DEFAULT 'processing'::text NOT NULL
-);
+CREATE TYPE public.loan_request_status AS ENUM ( 'processing', 'done');
+
 CREATE TABLE public.loan_requests (
     borrower_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     amount integer NOT NULL,
-    status text NOT NULL,
+    status loan_request_status DEFAULT 'processing',
     request_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     purpose text,
     risk_calc_result jsonb,
@@ -141,8 +138,6 @@ CREATE SEQUENCE public.user_user_number_seq
     NO MAXVALUE
     CACHE 1;
 ALTER SEQUENCE public.user_user_number_seq OWNED BY public."user".user_number;
-ALTER TABLE ONLY public.edge_status
-    ADD CONSTRAINT edge_status_pkey PRIMARY KEY (value);
 ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_pkey PRIMARY KEY (edge_id);
 ALTER TABLE ONLY public.encumbrances
@@ -153,8 +148,6 @@ ALTER TABLE ONLY public.guarantors
     ADD CONSTRAINT guarantors_pkey PRIMARY KEY (request_id, guarantor_id);
 ALTER TABLE ONLY public.loan_participants
     ADD CONSTRAINT loan_participants_pkey PRIMARY KEY (loan_id, lender_id);
-ALTER TABLE ONLY public.loan_request_status
-    ADD CONSTRAINT loan_request_status_pkey PRIMARY KEY (status);
 ALTER TABLE ONLY public.loan_requests
     ADD CONSTRAINT loan_requests_pkey PRIMARY KEY (request_id);
 ALTER TABLE ONLY public.loan_risk
@@ -189,8 +182,6 @@ ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_borrower_id_fkey FOREIGN KEY (borrower_id) REFERENCES public."user"(id);
 ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_lender_id_fkey FOREIGN KEY (lender_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE ONLY public.edges
-    ADD CONSTRAINT edges_status_fkey FOREIGN KEY (status) REFERENCES public.edge_status(value) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_guarantor_id_fkey FOREIGN KEY (guarantor_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrances
@@ -207,8 +198,6 @@ ALTER TABLE ONLY public.loan_participants
     ADD CONSTRAINT loan_participants_loan_id_fkey FOREIGN KEY (loan_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.loan_requests
     ADD CONSTRAINT loan_requests_borrower_id_fkey FOREIGN KEY (borrower_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE ONLY public.loan_requests
-    ADD CONSTRAINT loan_requests_status_fkey FOREIGN KEY (status) REFERENCES public.loan_request_status(status) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.loan_risk
     ADD CONSTRAINT loan_risk_agent_id_fkey FOREIGN KEY (agent_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.loan_risk

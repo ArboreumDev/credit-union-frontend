@@ -13,17 +13,11 @@ React + Typescript + Next.js
 3. `yarn dev`
 
 ## Testing
-Something like:
 
-1. `cd tests; docker-compose up`
-2. Set env vars
+- Install hasura : `npm install --global hasura-cli`
+- CI like: `cd tests; make test`
+- Watch/ Interactive tests: `yarn test`
 ```
-HASURA_ENDPOINT=http://localhost:8080
-HASURA_ADMIN_SECRET=myadminsecretkey
-```
-3. `cd hasura; hasura migration apply; hasura metadata apply; `
-3. `yarn test`
-
 
 ## Production
 

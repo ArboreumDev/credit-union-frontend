@@ -1,28 +1,20 @@
 - table:
     schema: public
-    name: edge_status
-  is_enum: true
-  array_relationships:
-  - name: edges
-    using:
-      foreign_key_constraint_on:
-        column: status
-        table:
-          schema: public
-          name: edges
-- table:
-    schema: public
     name: edges
   object_relationships:
-  - name: edge_status
-    using:
-      foreign_key_constraint_on: status
   - name: from_user
     using:
       foreign_key_constraint_on: lender_id
   - name: to_user
     using:
       foreign_key_constraint_on: borrower_id
+  - name: userByBorrowerId
+    using:
+      foreign_key_constraint_on: borrower_id
+  - name: userByLenderId
+    using:
+      foreign_key_constraint_on: lender_id
+      
 - table:
     schema: public
     name: encumbrance_participants
@@ -70,22 +62,8 @@
       foreign_key_constraint_on: lender_id
 - table:
     schema: public
-    name: loan_request_status
-  array_relationships:
-  - name: loan_requests
-    using:
-      foreign_key_constraint_on:
-        column: status
-        table:
-          schema: public
-          name: loan_requests
-- table:
-    schema: public
     name: loan_requests
   object_relationships:
-  - name: loan_request_status
-    using:
-      foreign_key_constraint_on: status
   - name: user
     using:
       foreign_key_constraint_on: borrower_id
