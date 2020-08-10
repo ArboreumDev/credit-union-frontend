@@ -20,23 +20,24 @@ let user1 = {
 }
 
 let user2 = {
-    // 'id': uuids[2],
     "user_number": 2,
-    "name": "morty",
-    "email": "morty@galaxy.io",
-    "user_type": "borrower",
-    "balance": 3,
-    "demographic_info": {"country": "spaceland", education: 'little'}
-}
-
-let user3 = {
-    "user_number": 3,
     "name": "summer",
     "email": "summer@highschool.io",
     "user_type": "borrower",
-    "balance": 0,
+    "balance": 100,
     "demographic_info": {"country": "spaceland"}
 }
+
+let user3 = {
+    // 'id': uuids[2],
+    "user_number": 3,
+    "name": "morty",
+    "email": "morty@galaxy.io",
+    "user_type": "borrower",
+    "balance": 10,
+    "demographic_info": {"country": "spaceland", education: 'little'}
+}
+
 
 export const USER4 = {
     "user_number": 4,
@@ -52,6 +53,6 @@ export const USER4 = {
 // export const users = {1: user1, 2: user2, 3:user3}
 export const USERS = {1: user1, 2: user2, 3: user3}
 
-const basic_connections = [[1, 2, 10], [2, 3, 10]]
+const basic_connections = [[1, 2, 100], [2, 3, 50]]
 const basic_nodes = [1,2,3]
 export const basic_network = {nodes: basic_nodes, edges: basic_connections}

@@ -199,6 +199,7 @@ const Page = (params: Params) => {
                 the instalment will be automatically deducted from my salary.
               </p>
               <Button intent="primary" onClick={()=>{
+                // trigger collectDataForLoanRequestMessage() here
                 fetch('/api/loan_request', {
                   method: 'POST',
                   'body': `{

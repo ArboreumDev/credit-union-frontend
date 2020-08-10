@@ -1,6 +1,6 @@
 import { initializeGQL } from "../utils/graphql_client";
 import { users, basic_connections } from './fixtures'
-import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
+import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS, CREATE_USER } from "../utils/queries";
 import { get } from "http";
 
 // # REFACTOR make this a type
@@ -32,11 +32,6 @@ function create_edge_insert_input_from_fixture (edge, users) {
   return input
 }
 
-const getNodesFromEdgeList = (edgeList) => {
-  let nodes = edgeList.map(x => x.slice(0,2)).flat()
-  return [...new Set(nodes)]
-}
-
 const distinct = (value, index, self) => {
   return self.indexOf(value) === index
 }
@@ -51,7 +46,7 @@ const distinct = (value, index, self) => {
 export async function addUsers (gqlclient, users) {
   let added_users = []
   for (var userId of Object.keys(users)) {
-    let data = await gqlclient.executeGQL(INSERT_USER, {"user": users[userId]})
+    let data = await gqlclient.request(CREATE_USER, {"user": users[userId]})
     let new_user = data.insert_user.returning[0] 
     added_users.push(new_user)
   }
@@ -67,7 +62,7 @@ export async function addEdgesFromList(gqlclient, users, edges) {
   let e = []
     for (var edge of edges) {
       var insert_edge_input = create_edge_insert_input_from_fixture(edge, users)
-      let data = await gqlclient.executeGQL(INSERT_EDGE, {"edge": insert_edge_input})
+      let data = await gqlclient.request(INSERT_EDGE, {"edge": insert_edge_input})
     }
   return e
 }
@@ -85,21 +80,8 @@ export async function addNetwork(gqlclient, users, edges) {
 }
 
 
-/**
- * get the network and edges of a given edge_status
- * @param {} gqlclient 
- * @param {*} status 
- * @returns {} an object {nodes: [user_number1, ...], edges: [[ffrom, to, credit], ...]}
- */
-export const getNetwork = async (gqlclient, status = EDGE_STATUS.active) => {
-  const data = await gqlclient.executeGQL(GET_EDGES_BY_STATUS, {"status": status})
-  const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
-  const nodes = getNodesFromEdgeList(edges)
-  return { nodes, edges }
-}
-
 export const getAllUsers = async (gqlclient) => {
-    let data = await gqlclient.executeGQL(GET_USERS)
+    let data = await gqlclient.request(GET_USERS)
     return data.user
 }
 

@@ -1,8 +1,11 @@
 import { initializeGQL, DbClient } from "../utils/graphql_client";
-import {INSERT_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
+
+import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
 import {USERS, USER4, basic_network} from "../utils/fixtures";
-import { addNetwork, getAllUsers, getNetwork } from "../utils/fixture_helpers";
+import { addNetwork, getAllUsers } from "../utils/fixture_helpers";
+import { getNetwork } from "../utils/network_helpers";
 import { RESET } from "@blueprintjs/icons/lib/esm/generated/iconContents";
+import { LoanRequestStatus, EdgeStatus } from "../utils/types";
 
 // require("dotenv").config({ path: ".env.local" });
 global.fetch = require("node-fetch");
@@ -15,54 +18,78 @@ const TEST_API_URL = "http://localhost:8080/v1/graphql"
 const TEST_ADMIN_SECRET = "myadminsecretkey"
 
 let client;
+let borrower1;
+let lender1;
+// lender 2 is farther away from 
+let lender2;
+// let guarantor1;
 
 beforeAll( async () => {
-  // console.log('res', res)
+  // clear the DB and add basic network from fixture
   client = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
-  await client.executeGQL(DELETE_NETWORK)
-  // await client.executeGQL(RESET_DB)
-  let res = await addNetwork(client, USERS, basic_network.edges)
+  // await client.executeGQL(DELETE_NETWORK)
+  await client.executeGQL(RESET_DB)
+  let res = await addNetwork(client.fetcher, USERS, basic_network.edges)
+
+  // set borrower and level1 and level2 lenders for basic network
+  // i am using user_numbers here to make this understandable...alternatively we coudl user.name
+  const active_users = await getAllUsers(client.fetcher)
+  borrower1 = active_users.filter(x => x.user_type = "borrower")[0]
+  lender1 = active_users.filter(x => x.user_number = 2)[0]
+  lender2 = active_users.filter(x => x.user_number = 1)[0]
 })
 
 afterAll( async () => {
   // await client.executeGQL(DELETE_NETWORK)
-  // await client.executeGQL(RESET_DB)
+  await client.executeGQL(RESET_DB)
 })
 
 describe("setting up the network from fixtures", () =>{
   test('fixture users have been added', async () => {
-    let data = await getAllUsers(client)
-    expect(data.length).toBe(nInitialUsers)
+    let data = await getAllUsers(client.fetcher)
+    let usermails = data.map(x => x.email)
+    Object.values(USERS).forEach(user => {
+      expect(usermails).toContain(user.email)
+    })
   });
 
+  // TODO check only for existing network
   test('the active network can be queried', async () => {
-    let network = await getNetwork(client, 'active')
+    let network = await getNetwork(client.fetcher, 'active')
     expect(network.edges).toStrictEqual(basic_network.edges)
     expect(network.nodes).toStrictEqual(basic_network.nodes)
   })
 })
 
-describe("Adding users and connections from frontend", () => {
-  test.skip('user can add a trusted borrower', async () => {
-    // TODO addEdge
-    // await addEdges(data, basic_network.edges)
-    // let data = await getUsers()
+describe("Adding connections and users from frontend", () => {
+  test.skip("A borrower save emails of lenders that are not signed up yet", async () =>{
+    const new_connection = USER4.email
+    // TODO this could be a place to test subscriptions
   })
-  
-  test.skip('a new user can be onboarded', async () => {
-    let data = await client.executeGQL(INSERT_USER, {user: USER4});
+
+  test('a new lender-user can be onboarded', async () => {
+    // TODO define input type in types.ts
+    let data = await client.executeGQL(CREATE_USER, {user: USER4}); // << TODO define helper function in client!!!
     const created_user = data.insert_user.returning[0]
     Object.keys(USER4).forEach((key) => {
       expect(created_user[key]).toStrictEqual(USER4[key])
     })
-    data = await client.getUsers()
+    data = await getAllUsers(client.fetcher)
     expect(data.length).toBe(nInitialUsers + 1)
   })  
+
+  test.skip('borrower-users can add a trusted borrower', async () => {
+    // TODO addEdge
+    // await addEdges(data, basic_network.edges)
+    // let data = await getUsers()
+  })
+  // test.skip('the  ')
+ 
 })  
 
 // describe.skip("When user is onboarded as lender", () => {
 //   test("they are asked to confirm existing borrower requests", async () =>{})
-//   // TODO add way more cases
+//   // TODO write a mutation that the frontend can subscribe too
 // })
 
 // describe.skip("When user is onboarded as borrower", () => {
@@ -70,6 +97,45 @@ describe("Adding users and connections from frontend", () => {
 //   test.skip("they can add their trusted borrowers", async () =>{})
 //   // TODO add way more cases
 // })
+
+
+describe("A borrower user request a loan...", () => {
+  const amount = 20
+  const purpose = "go see the movies"
+  var request;
+  var testVars;
+
+  test("A loan request with status 'initiated' is created", async () =>{
+    let data = await client.calculateLoanRequestOffer(borrower1.id, amount, purpose)
+    request = data.request
+    testVars = data.testing
+    // console.log(request)
+
+    expect(data.testing.pre_ai.status).toBe(LoanRequestStatus.initiated)
+    // TODO verify other auto-generated fields
+    expect(data.testing.pre_ai.amount).toBe(amount) // <- we could assume that those are there
+    expect(data.testing.pre_ai.purpose).toBe(purpose)
+  })
+
+  test("A loan offer is saved by the AI", async () => {
+    expect(request.status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
+    
+    // we could verify the input to the optimizer like this:
+    // console.log(testVars.ai_input)
+    expect(testVars.ai_input).toHaveProperty("potential_lenders")
+    // expect(testVars.ai_input.potential_lenders.includes(lender1.id)).toBeTruthy() // <-- not sure why this fails
+    
+    // the optimizer output would be checked like this:
+    expect(request.risk_calc_result).toHaveProperty("latestOffer") // OR
+    expect(testVars.post_ai.risk_calc_result).toHaveProperty("latestOffer")
+  })
+
+  test("Approving a loan offer triggers creation of payables, receivables", async () => {
+    const res = await client.acceptLoanOffer(borrower1.id, request.request_id, "latestOffer")
+    // TODO verify payables, encumbrances, receivables, ....
+  })
+})
+
 
 // describe.skip("When a loan request is created ...", () => {
 //   test("network risk is updated", async () =>{})

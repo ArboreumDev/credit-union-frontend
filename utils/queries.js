@@ -39,9 +39,9 @@ export const GET_USERS = `
       email
       }
     }
-`;
+`
 
-export const INSERT_USER = `
+export const CREATE_USER = `
   mutation ($user: user_insert_input!) {
     insert_user(objects: [$user]) {
       returning {
@@ -97,10 +97,6 @@ export const DELETE_NETWORK = `
 
 export const RESET_DB = `
   mutation {
-    delete_edges (
-    where: {}) { affected_rows },
-    delete_user (
-      where: {}) { affected_rows },
     delete_receivables (
       where: {}) { affected_rows },
     delete_payables (
@@ -119,18 +115,259 @@ export const RESET_DB = `
       where: {}) { affected_rows },
     delete_loan_requests (
       where: {}) { affected_rows },
+    delete_edges (
+    where: {}) { affected_rows },
+    delete_user (
+      where: {}) { affected_rows }
+    }
 `
 
 // -------------------------------------------------------------
 // -------------------- LOANS ----------------------------------
 // -------------------------------------------------------------
 
+export const INITIATE_LOAN_REQUEST = `
+  mutation createLoanRequest ($request_object: loan_requests_insert_input!) {
+    insert_loan_requests_one (object: $request_object) {
+        request_id
+        amount
+        purpose
+        status
+        risk_calc_result
+    }
+  }
+  `
+// {
+//   "request_object": {
+//   	"borrower_id": "c56583f4-1c9f-4dd9-98a1-64267437691d",
+//     "amount": 12,
+//     "purpose": "go to the movies"
+//   }
+// }
+
+
+
+export const ADD_GUARANTORS_TO_LOAN_REQUEST = `
+  mutation addGuarantors ($guarantors: [guarantors_insert_input!]!) {
+    insert_guarantors (objects: $guarantors) {
+        returning {
+          amount,
+          participation_request_time
+          status
+          guarantee_division
+        }
+      affected_rows
+    }
+  }
+`
+
+// {
+//   "guarantors": [
+//    	 {
+//       "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//       "guarantor_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
+//     	"amount": 5,
+//     	"invest_in_corpus": true,
+//     	"status": "unknown"   
+//   	}
+//   ]
+// }
+
+
+// HERE is a way to do this in one single query. 
+// TODO1 test whether the current client can execute such a 'hard-coded query`
+// TODO2 one would have to write a helper to create the string manually
+
+
+// mutation createLoanRequest {
+//   insert_loan_requests ( objects: [
+//     {
+//       borrower_id: "c56583f4-1c9f-4dd9-98a1-64267437691d",
+//       amount: 12,
+//       purpose: "go to the movies",
+//       guarantors: {
+//       	data: [
+//                	{
+//                   guarantor_id: "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
+//                   amount: 5,
+//                   invest_in_corpus: true,
+//                   status: "unknown"   
+//                 }
+//               ]
+//     	}
+//     }
+//   ]
+//   ) {
+//     affected_rows
+//   }
+// }
+
+export const UPDATE_GUARANTOR = `
+  mutation recordGuarantorParticipation (
+    $request_id: uuid!,
+    $guarantor_id: uuid!
+    $status: String!,
+    $amount: Int
+  ) {
+    update_guarantors_by_pk (
+      pk_columns: { request_id: $request_id, guarantor_id: $guarantor_id}
+      _set: { status: $status, amount: $amount }
+    ) {
+      guarantor_id
+      status
+      amount
+    }
+  }
+`
+
+// {
+//   "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//   "guarantor_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
+//   "status": "confirmed",
+//   "amount": 7
+// }
+
+
+export const UPDATE_LOAN_REQUEST_WITH_OFFER = `
+  mutation update_loan_request_with_offer (
+    $request_id: uuid!
+    $new_offer: jsonb!,
+  ) {
+    update_loan_requests_by_pk (
+      pk_columns: {request_id: $request_id}
+      _set: { status: "awaiting_borrower_confirmation" }
+      _append: {risk_calc_result: $new_offer}
+    ) {
+      request_id
+      status
+      risk_calc_result
+    }
+  }
+`
+// {
+//   "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//   "new_offer": {"latest": {"interest": 3, "lenders": "lenderbreakdown"} }
+// }
+
+
+export const START_LOAN = `
+  mutation startLoan (
+    $request_id: uuid!,
+    $payable: payables_insert_input!,
+    # $borrower: borrowerLoanInputs!,
+    # $lenders: [lenderInput!]!,
+    $lenders: [loan_participants_insert_input!]!,
+    $lender_receivables: [receivables_insert_input!]!
+    # $guarantors: [guarantorDetailsInput!]!
+  ) {
+    update_loan_requests_by_pk (
+      pk_columns: {request_id: $request_id}
+      _set: {status: "live"}
+    ) 
+    {
+      request_id
+    }
+    insert_payables_one (object: $payable) {
+      amount_total
+      amount_paid
+    }
+
+    insert_loan_participants(objects: $lenders) {
+      returning {
+        lender_id
+        lender_amount
+      }
+    }
+    insert_receivables(objects: $lender_receivables) {
+      affected_rows
+    }
+  }
+`
+
+// {
+//   "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//   "payable": {
+//     "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//     "amount_total": 14,
+//     "amount_remain": 14,
+//     "pay_priority": 0
+//   },
+//   "lenders": [
+//     {
+//       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//       "lender_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
+//       "lender_amount": 7,
+//       "percentage": 50
+//     },
+//         {
+//       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//       "lender_id": "943452f9-93bd-404b-807d-f9e6618df78a",
+//       "lender_amount": 7,
+//       "percentage": 50
+//     }
+//   ],
+//   "lender_receivables": [
+//     {
+//       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//       "receiver_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
+//       "amount_total": 7,
+//       "amount_remain": 7
+//     },
+//     {
+//       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+//       "receiver_id": "943452f9-93bd-404b-807d-f9e6618df78a",
+//       "amount_total": 7,
+//       "amount_remain": 7
+//     }
+//   ]
+// }
+
+// TODO add option to choose other but the latestOffer
+export const GET_LOAN_OFFER = `
+  query getOffer ($request_id: uuid!) {
+    loan_requests_by_pk (request_id: $request_id) {
+      request_id
+      risk_calc_result
+      amount
+    }
+  }
+`
+
 
 // -------------------------------------------------------------
 // -------------------- USER -----------------------------------
 // -------------------------------------------------------------
 
-// export const GET_
+// TODO adjust this one to take different status
+export const GET_ACTIVE_LOANS_BY_LENDER = `
+  query activeLoanRequestsByLender ($lender_id: uuid!) {
+    loan_participants (where: {
+      _and: [
+        {lender_id: {_eq: $lender_id}},
+        {loan_request: {status: {_in: ["granted", "in_payback"] }}}
+      ]
+    }
+    ){
+      loan_id
+      lender_amount
+    }
+  }
+`
+
+export const GET_LOANS_BY_BORROWER_AND_STATUS = `
+  query loansByBorrowerAndStatus ($borrower_id: uuid!, $statusList:[String!]!) {
+    loan_requests (where: {
+      _and: [
+        {borrower_id: {_eq: $borrower_id}},
+        {status: {_in: $statusList}}
+        ]
+      }
+    ) {
+      request_id
+      amount
+    }
+  }
+`
 
 export const EXAMPLE_INPUTS = {
     insert_edge: {

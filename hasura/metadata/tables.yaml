@@ -14,7 +14,6 @@
   - name: userByLenderId
     using:
       foreign_key_constraint_on: lender_id
-      
 - table:
     schema: public
     name: encumbrance_participants
@@ -122,25 +121,11 @@
       foreign_key_constraint_on: agent_id
 - table:
     schema: public
-    name: payable_type
-  array_relationships:
-  - name: payables
-    using:
-      foreign_key_constraint_on:
-        column: payable_type
-        table:
-          schema: public
-          name: payables
-- table:
-    schema: public
     name: payables
   object_relationships:
   - name: loan_request
     using:
       foreign_key_constraint_on: loan_id
-  - name: payableTypeByPayableType
-    using:
-      foreign_key_constraint_on: payable_type
 - table:
     schema: public
     name: receivables
