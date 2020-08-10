@@ -1,0 +1,237 @@
+- table:
+    schema: public
+    name: edges
+  object_relationships:
+  - name: from_user
+    using:
+      foreign_key_constraint_on: lender_id
+  - name: to_user
+    using:
+      foreign_key_constraint_on: borrower_id
+  - name: userByBorrowerId
+    using:
+      foreign_key_constraint_on: borrower_id
+  - name: userByLenderId
+    using:
+      foreign_key_constraint_on: lender_id
+      
+- table:
+    schema: public
+    name: encumbrance_participants
+  object_relationships:
+  - name: encumbrance
+    using:
+      foreign_key_constraint_on: encumbrance_id
+- table:
+    schema: public
+    name: encumbrances
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: loan_id
+  - name: user
+    using:
+      foreign_key_constraint_on: guarantor_id
+  array_relationships:
+  - name: encumbrance_participants
+    using:
+      foreign_key_constraint_on:
+        column: encumbrance_id
+        table:
+          schema: public
+          name: encumbrance_participants
+- table:
+    schema: public
+    name: guarantors
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: request_id
+  - name: user
+    using:
+      foreign_key_constraint_on: guarantor_id
+- table:
+    schema: public
+    name: loan_participants
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: loan_id
+  - name: user
+    using:
+      foreign_key_constraint_on: lender_id
+- table:
+    schema: public
+    name: loan_requests
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: borrower_id
+  array_relationships:
+  - name: encumbrances
+    using:
+      foreign_key_constraint_on:
+        column: loan_id
+        table:
+          schema: public
+          name: encumbrances
+  - name: guarantors
+    using:
+      foreign_key_constraint_on:
+        column: request_id
+        table:
+          schema: public
+          name: guarantors
+  - name: loan_participants
+    using:
+      foreign_key_constraint_on:
+        column: loan_id
+        table:
+          schema: public
+          name: loan_participants
+  - name: loan_risks
+    using:
+      foreign_key_constraint_on:
+        column: request_id
+        table:
+          schema: public
+          name: loan_risk
+  - name: payables
+    using:
+      foreign_key_constraint_on:
+        column: loan_id
+        table:
+          schema: public
+          name: payables
+  - name: receivables
+    using:
+      foreign_key_constraint_on:
+        column: loan_id
+        table:
+          schema: public
+          name: receivables
+- table:
+    schema: public
+    name: loan_risk
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: request_id
+  - name: user
+    using:
+      foreign_key_constraint_on: agent_id
+- table:
+    schema: public
+    name: payable_type
+  array_relationships:
+  - name: payables
+    using:
+      foreign_key_constraint_on:
+        column: payable_type
+        table:
+          schema: public
+          name: payables
+- table:
+    schema: public
+    name: payables
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: loan_id
+  - name: payableTypeByPayableType
+    using:
+      foreign_key_constraint_on: payable_type
+- table:
+    schema: public
+    name: receivables
+  object_relationships:
+  - name: loan_request
+    using:
+      foreign_key_constraint_on: loan_id
+  - name: user
+    using:
+      foreign_key_constraint_on: receiver_id
+- table:
+    schema: public
+    name: recommendation_risk
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: agent_id
+  - name: userByNeighborId
+    using:
+      foreign_key_constraint_on: neighbor_id
+- table:
+    schema: public
+    name: user
+  array_relationships:
+  - name: edges
+    using:
+      foreign_key_constraint_on:
+        column: borrower_id
+        table:
+          schema: public
+          name: edges
+  - name: edgesByLenderId
+    using:
+      foreign_key_constraint_on:
+        column: lender_id
+        table:
+          schema: public
+          name: edges
+  - name: encumbrances
+    using:
+      foreign_key_constraint_on:
+        column: guarantor_id
+        table:
+          schema: public
+          name: encumbrances
+  - name: guarantors
+    using:
+      foreign_key_constraint_on:
+        column: guarantor_id
+        table:
+          schema: public
+          name: guarantors
+  - name: loan_participants
+    using:
+      foreign_key_constraint_on:
+        column: lender_id
+        table:
+          schema: public
+          name: loan_participants
+  - name: loan_requests
+    using:
+      foreign_key_constraint_on:
+        column: borrower_id
+        table:
+          schema: public
+          name: loan_requests
+  - name: loan_risks
+    using:
+      foreign_key_constraint_on:
+        column: agent_id
+        table:
+          schema: public
+          name: loan_risk
+  - name: receivables
+    using:
+      foreign_key_constraint_on:
+        column: receiver_id
+        table:
+          schema: public
+          name: receivables
+  - name: recommendation_risks
+    using:
+      foreign_key_constraint_on:
+        column: agent_id
+        table:
+          schema: public
+          name: recommendation_risk
+  - name: recommendationRisksByNeighborId
+    using:
+      foreign_key_constraint_on:
+        column: neighbor_id
+        table:
+          schema: public
+          name: recommendation_risk
