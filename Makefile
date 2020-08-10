@@ -1,6 +1,12 @@
+test:
+	cd ./tests; docker-compose up -d; cd ..
+	./scripts/test_db_up.sh
+	# yarn test:ci
+	cd ./tests; docker-compose down --remove-orphans
+
 up:
 	cd ./tests; \
-	docker-compose up 
+	docker-compose up -d
 
 setup_test_db:
 	./scripts/test_db_up.sh
