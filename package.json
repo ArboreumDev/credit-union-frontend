@@ -6,7 +6,9 @@
         "build": "next build",
         "start": "next start",
         "test": "jest --watch",
-        "test:ci": "jest --ci"
+        "test:ci": "jest --ci",
+        "lint": "standard --verbose | snazzy",
+        "lint-fix": "standard --fix"
     },
     "dependencies": {
         "@blueprintjs/core": "3.30.0",
@@ -37,7 +39,9 @@
         "@types/react": "^16.4.12",
         "babel-jest": "^26.1.0",
         "graphql": "^15.3.0",
-        "jest": "^26.1.0"
+        "jest": "^26.1.0",
+        "snazzy": "8.0.0",
+        "standard": "14.3.4"
     },
     "license": "ISC"
 }

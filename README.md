@@ -12,6 +12,13 @@ React + Typescript + Next.js
 2. For local dev, edit [hosts](https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls) file
 3. `yarn dev`
 
+### Lint
+
+use ```yarn lint``` and ```yarn lint-fix``` comply with the Standard JS style guide: 
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard) 
+
+
+
 ## Testing
 
 - Install hasura : `npm install --global hasura-cli`
@@ -53,3 +60,4 @@ Since the free Hasura cloud only supports 1 req/s. It's best to use free Heroku 
     hasura migrate apply --endpoint <server-endpoint>
     hasura metadata apply --endpoint <server-endpoint>
 ```
+
