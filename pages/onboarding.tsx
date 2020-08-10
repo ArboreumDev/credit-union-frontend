@@ -67,7 +67,7 @@ export default function Onboarding() {
           </div>
           <div>
             <H4>KYC Documents:</H4>
-            <Dropzone />
+            <Dropzone email={user.email} />
           </div>
           <Button type="submit" intent="primary">
             Submit
