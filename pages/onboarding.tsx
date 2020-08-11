@@ -4,7 +4,7 @@ import { User } from "../utils/types";
 import { useForm } from "react-hook-form"
 import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox, Radio } from "@blueprintjs/core";
 
-import { DbClient } from "../utils/db/graphql_client";
+import { DbClient } from "../utils/db/GQLClient";
 import { useRouter } from "next/dist/client/router";
 
 type FormData = {

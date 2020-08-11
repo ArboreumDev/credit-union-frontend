@@ -1,4 +1,4 @@
-import { initializeGQL, DbClient } from "../utils/db/graphql_client";
+import { initializeGQL, DbClient } from "../utils/db/GQLClient";
 
 import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
 import {USERS, USER4, basic_network} from "./fixtures/fixtures";

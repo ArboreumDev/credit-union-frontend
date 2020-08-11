@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { initializeGQL, DbClient } from "../../../utils/db/graphql_client"
+import { initializeGQL, DbClient } from "../../../utils/db/GQLClient"
 import { User } from "../../../utils/types"
 
 const options = {
