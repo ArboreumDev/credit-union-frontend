@@ -41,13 +41,7 @@ export const initializeGQL = (
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-         _fetcher: any
-
-         /** this should not be used except for testing */
-         _executeGQL = async (query, variables = null) => {
-           let data = await this._fetcher.request(query, variables)
-           return data
-         }
+         private _fetcher: GraphQLClient
 
          constructor(admin_secret: string, gql_url: string) {
            this._fetcher = initializeGQL(admin_secret, gql_url)
@@ -72,7 +66,7 @@ export class DbClient {
          ) => {
            // NOTE: this assumes that the borrower has no other active request
            // create loan_request in initial state
-           const initiateLoanRequestResult = await this._executeGQL(
+           const initiateLoanRequestResult = await this._fetcher.request(
              INITIATE_LOAN_REQUEST,
              {
                request_object: {
@@ -83,6 +77,7 @@ export class DbClient {
                },
              }
            )
+
            let request = initiateLoanRequestResult.insert_loan_requests_one
            const ai_input = await this.fetchDataForLoanRequestCalculation(
              borrower_id,
@@ -134,7 +129,7 @@ export class DbClient {
                },
              ],
            }
-           const addGuarantorResult = this._executeGQL(
+           const addGuarantorResult = this._fetcher.request(
              ADD_GUARANTORS_TO_LOAN_REQUEST,
              variables
            )
@@ -157,7 +152,7 @@ export class DbClient {
          ) => {
            // it is assumed the guarantor exists and the loan request too
            const variables = { guarantor_id, request_id, status, amount }
-           const updateResult = this._executeGQL(UPDATE_GUARANTOR, variables)
+           const updateResult = this._fetcher.request(UPDATE_GUARANTOR, variables)
 
            // check if all guarantors are confirmed and if so, trigger loanCalculation
 
@@ -174,7 +169,7 @@ export class DbClient {
            request_id,
            offer_key = "latestOffer"
          ) => {
-           const offer_params = await this._executeGQL(GET_LOAN_OFFER, {
+           const offer_params = await this._fetcher.request(GET_LOAN_OFFER, {
              request_id,
            })
            console.log("offer parameters fetched", offer_params)
