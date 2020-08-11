@@ -4,31 +4,8 @@ import { User } from "../utils/types";
 import { useForm } from "react-hook-form"
 import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox, Radio } from "@blueprintjs/core";
 
-import { initializeGQL } from "../utils/graphql_client";
+import { DbClient } from "../utils/db/graphql_client";
 import { useRouter } from "next/dist/client/router";
-
-
-const CREATE_USER_MUTATION = /* GraphQL */ `
-  mutation CreateUser(
-    $name: String!
-    $email: String!
-    $user_type: user_t!
-    $phone: String!
-  ) {
-    insert_user_one(
-      object: {
-        email: $email
-        user_type: $user_type
-        name: $name
-        phone: $phone
-      }
-    ) {
-      id
-      created_at
-      email
-    }
-  }
-`
 
 type FormData = {
   phone: string;
@@ -39,16 +16,16 @@ export default function Onboarding() {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const router = useRouter()
   const [session, loading] = useSession()
-  const gqlClient = initializeGQL()
+  const dbClient = DbClient.fromEnv()
 
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
-  const onSubmit = (data)=>{
+  const onSubmit = (data: FormData)=>{
     const variables = { ...data, name: user.name, email: user.email } as User
 
     // Call mutation
-    gqlClient.request(CREATE_USER_MUTATION, variables).then((res) => {
+    dbClient.createUser(variables).then((res) => {
       console.log(res)
       // return to home
       router.push("/")

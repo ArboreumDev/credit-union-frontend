@@ -1,4 +1,4 @@
-import { initializeGQL, DbClient } from "../utils/graphql_client";
+import { initializeGQL, DbClient } from "../utils/db/graphql_client";
 
 import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
 import {USERS, USER4, basic_network} from "./fixtures/fixtures";
@@ -26,7 +26,7 @@ let lender2;
 
 beforeAll( async () => {
   // clear the DB and add basic network from fixture
-  client = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = new DbClient(initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET))
   // await client.executeGQL(DELETE_NETWORK)
   await client.executeGQL(RESET_DB)
   let res = await addNetwork(client.fetcher, USERS, basic_network.edges)
@@ -69,7 +69,7 @@ describe("Adding connections and users from frontend", () => {
 
   test('a new lender-user can be onboarded', async () => {
     // TODO define input type in types.ts
-    let data = await client.executeGQL(CREATE_USER, {user: USER4}); // << TODO define helper function in client!!!
+    let data = await client.(CREATE_USER, {user: USER4}); // << TODO define helper function in client!!!
     const created_user = data.insert_user.returning[0]
     Object.keys(USER4).forEach((key) => {
       expect(created_user[key]).toStrictEqual(USER4[key])

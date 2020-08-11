@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from '../utils/api';
-import { initializeGQL } from '../utils/graphql_client';
+import { initializeGQL } from '../utils/db/graphql_client';
 
 const GET_USERS = `
   query MyQuery {

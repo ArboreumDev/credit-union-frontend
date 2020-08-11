@@ -1,7 +1,13 @@
 import { tryGetPreviewData } from "next/dist/next-server/server/api-utils"
 
+export type SessionUser = {
+  name: string
+  email: string
+  image?: string
+}
+
 export type Session = {
-    user: User
+    user: SessionUser
     accessToken: string
     expires: string
 }
@@ -12,11 +18,13 @@ export enum UserType {
 }
 
 export type User = {
-    name: string
-    email: string
-    image: string
-    phone: string
-    user_type: UserType
+  name: string
+  email: string
+  phone: string
+  user_type: UserType
+  user_number: number
+  balance: number
+  demographic_info: any
 }
 
 // export type UserInsertInput = {
