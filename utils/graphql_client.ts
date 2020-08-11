@@ -1,10 +1,8 @@
-import { useMemo } from "react";
-import request, { GraphQLClient } from "graphql-request";
-import {GET_USERS, INITIATE_LOAN_REQUEST, ADD_GUARANTORS_TO_LOAN_REQUEST, UPDATE_GUARANTOR, GET_LOAN_OFFER, START_LOAN} from "./queries"
-import { getNetwork } from "../utils/network_helpers";
+import { GraphQLClient } from "graphql-request";
+import {INITIATE_LOAN_REQUEST, ADD_GUARANTORS_TO_LOAN_REQUEST, UPDATE_GUARANTOR, GET_LOAN_OFFER, START_LOAN} from "./queries"
+
 import { storeAiResultToDB } from "../utils/loan_helpers";
 import { mockedLoanOffer } from "../tests/mock/swarmai";
-import {EdgeStatus} from "../utils/types"
 import { getAllUsers } from "../tests/fixtures/fixture_helpers";
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
@@ -22,15 +20,19 @@ const createGQLClient = (api_url, admin_secret) =>
     },
   })
 
-export function initializeGQL(adminSecret = ADMIN_SECRET, apiUrl = API_URL, initialState = null) {
-  const _gqlClient = gqlClient ?? createGQLClient(apiUrl, adminSecret);
-  // For SSG and SSR always create a new Client
-  if (typeof window === "undefined") return _gqlClient;
-  // Create the  Client once in the client
-  if (!gqlClient) gqlClient = _gqlClient;
+export const initializeGQL = (
+         adminSecret = ADMIN_SECRET,
+         apiUrl = API_URL,
+         initialState = null
+       ): GraphQLClient => {
+         const _gqlClient = gqlClient ?? createGQLClient(apiUrl, adminSecret)
+         // For SSG and SSR always create a new Client
+         if (typeof window === "undefined") return _gqlClient
+         // Create the  Client once in the client
+         if (!gqlClient) gqlClient = _gqlClient
 
-  return _gqlClient;
-}
+         return _gqlClient
+       }
 
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
@@ -39,16 +41,16 @@ export function initializeGQL(adminSecret = ADMIN_SECRET, apiUrl = API_URL, init
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-         fetcher: any
+         _fetcher: any
 
          /** this should not be used except for testing */
          _executeGQL = async (query, variables = null) => {
-           let data = await this.fetcher.request(query, variables)
+           let data = await this._fetcher.request(query, variables)
            return data
          }
 
          constructor(admin_secret: string, gql_url: string) {
-           this.fetcher = initializeGQL(admin_secret, gql_url)
+           this._fetcher = initializeGQL(admin_secret, gql_url)
          }
 
          // ================ CALLED BY FRONTEND ================
@@ -97,7 +99,7 @@ export class DbClient {
            )
            // console.log('prep', ai_input, 'mocked', mockedAiResult)
            const ai_result = await storeAiResultToDB(
-             this.fetcher,
+             this._fetcher,
              request.request_id,
              { latestOffer: mockedAiResult }
            )
@@ -244,7 +246,7 @@ export class DbClient {
            // const network = await getNetwork(this.fetcher , EdgeStatus.active)
            // let potential_lenders = network.nodes
            // delete potential_lenders[borrower_id]
-           const all_users = await getAllUsers(this.fetcher)
+           const all_users = await getAllUsers(this._fetcher)
            const potential_lenders = all_users
              .filter((x) => x.id !== borrower_id)
              .map((x) => x.id)
