@@ -5,7 +5,7 @@ import { getNetwork } from "../utils/network_helpers";
 import { storeAiResultToDB } from "../utils/loan_helpers";
 import { mockedLoanOffer } from "../tests/mock/swarmai";
 import {EdgeStatus} from "../utils/types"
-import { getAllUsers } from "./fixture_helpers";
+import { getAllUsers } from "../tests/fixtures/fixture_helpers";
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
 const API_URL = "http://localhost:8080/v1/graphql"

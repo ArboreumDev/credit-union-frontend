@@ -1,8 +1,8 @@
 import { initializeGQL, DbClient } from "../utils/graphql_client";
 
 import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
-import {USERS, USER4, basic_network} from "../utils/fixtures";
-import { addNetwork, getAllUsers } from "../utils/fixture_helpers";
+import {USERS, USER4, basic_network} from "./fixtures/fixtures";
+import { addNetwork, getAllUsers } from "./fixtures/fixture_helpers";
 import { getNetwork } from "../utils/network_helpers";
 import { RESET } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { LoanRequestStatus, EdgeStatus } from "../utils/types";

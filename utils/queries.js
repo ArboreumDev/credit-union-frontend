@@ -1,5 +1,5 @@
 // import { gql, useQuery, useMutation } from '@apollo/client';
-import { USERS } from './fixtures'
+import { USERS } from '../tests/fixtures/fixtures'
 
 // var user1, user2, user3;
 // var {user1, user2, user3} = users;
@@ -137,13 +137,13 @@ export const INITIATE_LOAN_REQUEST = `
     }
   }
   `
-// {
-//   "request_object": {
-//   	"borrower_id": "c56583f4-1c9f-4dd9-98a1-64267437691d",
-//     "amount": 12,
-//     "purpose": "go to the movies"
-//   }
-// }
+    // {
+    //   "request_object": {
+    //   	"borrower_id": "c56583f4-1c9f-4dd9-98a1-64267437691d",
+    //     "amount": 12,
+    //     "purpose": "go to the movies"
+    //   }
+    // }
 
 
 
@@ -244,10 +244,10 @@ export const UPDATE_LOAN_REQUEST_WITH_OFFER = `
     }
   }
 `
-// {
-//   "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
-//   "new_offer": {"latest": {"interest": 3, "lenders": "lenderbreakdown"} }
-// }
+    // {
+    //   "request_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
+    //   "new_offer": {"latest": {"interest": 3, "lenders": "lenderbreakdown"} }
+    // }
 
 
 export const START_LOAN = `
