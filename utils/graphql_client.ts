@@ -60,7 +60,7 @@ export class DbClient {
   calculateLoanRequestOffer = async (borrower_id: string, amount, purpose: string, msg: any = "TODO") => {
     // NOTE: this assumes that the borrower has no other active request
     // create loan_request in initial state
-    const initiateLoanRequestResult = await this.executeGQL(
+    const initiateLoanRequestResult = await this._executeGQL(
       INITIATE_LOAN_REQUEST, 
       { request_object: 
         {
@@ -92,14 +92,9 @@ export class DbClient {
 
   /**
    * Borrowers can request their trustors (network neighbours) to support them (or not) on a loan-to-loan basis. Therefore
-   * each request can be supported by different guarantors. As a result of this, guarantors need to be asked (somehow) and 
-   * their answer should be put in via recordGuarantorParticipation. Alternatively we can just assume they will be ok with it
-   * @param guarantor_id 
-   * @param request_id 
-   * @param amount 
-   * @param status  unknown, rejected, or confirmed // TODO make this an enum
+   * We assume the guarantors will be ok with it. If not they can reject the request.
    */
-  addGuarantor = async (guarantor_id, request_id, amount, status="unknown") => {
+  addGuarantor = async (guarantor_id: string, request_id: string, amount: number, status="unknown") => {
     const variables = {
       guarantors: [ {
         request_id,
@@ -110,7 +105,7 @@ export class DbClient {
       }
     ]
   }
-  const addGuarantorResult = this.executeGQL(ADD_GUARANTORS_TO_LOAN_REQUEST, variables)
+  const addGuarantorResult = this._executeGQL(ADD_GUARANTORS_TO_LOAN_REQUEST, variables)
   // what to do with the result
   return addGuarantorResult
   }
@@ -125,7 +120,7 @@ export class DbClient {
   recordGuarantorParticipation = async (guarantor_id, request_id, status, amount) => {
     // it is assumed the guarantor exists and the loan request too
     const variables = { guarantor_id, request_id, status, amount }
-    const updateResult = this.executeGQL(UPDATE_GUARANTOR, variables)
+    const updateResult = this._executeGQL(UPDATE_GUARANTOR, variables)
 
     // check if all guarantors are confirmed and if so, trigger loanCalculation
 
@@ -138,7 +133,7 @@ export class DbClient {
    * Also, advances loan_request status to 'live'
    */
   acceptLoanOffer = async (borrower_id, request_id, offer_key='latestOffer') => {
-    const offer_params = await this.executeGQL(GET_LOAN_OFFER, {request_id})
+    const offer_params = await this._executeGQL(GET_LOAN_OFFER, {request_id})
     console.log('offer parameters fetched', offer_params)
     console.log("next step: create START_LOAN mutation variabels from above offer params")
     // const amount = offer_params.amount
@@ -225,7 +220,7 @@ export class DbClient {
   }
   
   /** this should not be used except for testing */
-  executeGQL = async (query, variables=null) => {
+  _executeGQL = async (query, variables=null) => {
     let data = await this.fetcher.request(query, variables);
     return data
   }
