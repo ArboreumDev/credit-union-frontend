@@ -54,7 +54,7 @@ export default (props: {email: string}) => {
         <ul>
           {Object.keys(uploadedFiles).map((file, id) => (
             <li key={"uliload_" + id}>
-              {!uploadedFiles[file] && "Uploading"} {file}{" "}
+              {!uploadedFiles[file] && "[Uploading]"} {file}{" "}
             </li>
           ))}
         </ul>
