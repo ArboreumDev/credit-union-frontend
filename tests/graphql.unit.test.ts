@@ -1,11 +1,12 @@
-import { initializeGQL, DbClient } from "../utils/db/GQLClient";
+import { initializeGQL } from "../utils/db/GQLClient";
 
-import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
+import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/db/queries";
 import {USERS, USER4, basic_network} from "./fixtures/fixtures";
 import { addNetwork, getAllUsers } from "./fixtures/fixture_helpers";
-import { getNetwork } from "../utils/network_helpers";
+import { getNetwork } from "../utils/db/network_helpers";
 import { RESET } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { LoanRequestStatus, EdgeStatus } from "../utils/types";
+import { DbClient } from "../utils/db/DBClient";
 
 // require("dotenv").config({ path: ".env.local" });
 global.fetch = require("node-fetch");
@@ -69,7 +70,7 @@ describe("Adding connections and users from frontend", () => {
 
   test('a new lender-user can be onboarded', async () => {
     // TODO define input type in types.ts
-    let data = await client.(CREATE_USER, {user: USER4}); // << TODO define helper function in client!!!
+    let data = await client.executeGQL(CREATE_USER, {user: USER4}); // << TODO define helper function in client!!!
     const created_user = data.insert_user.returning[0]
     Object.keys(USER4).forEach((key) => {
       expect(created_user[key]).toStrictEqual(USER4[key])

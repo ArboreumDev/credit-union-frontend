@@ -2,7 +2,10 @@ import { initializeGQL } from "./GQLClient"
 import { GraphQLClient } from "graphql-request"
 import Accounts from "../queries/accounts"
 import { User } from "../types"
-
+import { INITIATE_LOAN_REQUEST, ADD_GUARANTORS_TO_LOAN_REQUEST, UPDATE_GUARANTOR, GET_LOAN_OFFER } from "./queries"
+import { storeAiResultToDB } from "./loan_helpers"
+import { mockedLoanOffer } from "../../tests/mock/swarmai"
+import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
  * only "pre-cooked" functions should be used to do any needed input formatting,
@@ -14,6 +17,10 @@ export class DbClient {
 
   static fromEnv() {
     return new DbClient(initializeGQL())
+  }
+
+  executeGQL(query: string, variables: any){
+      return this._fetcher.request(query, variables)
   }
 
   // ================ Accounts ================
