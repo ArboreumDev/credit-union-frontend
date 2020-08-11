@@ -1,17 +1,4 @@
 import { GraphQLClient } from "graphql-request"
-import {
-  INITIATE_LOAN_REQUEST,
-  ADD_GUARANTORS_TO_LOAN_REQUEST,
-  UPDATE_GUARANTOR,
-  GET_LOAN_OFFER,
-  START_LOAN,
-} from "./queries"
-
-import { storeAiResultToDB } from "../utils/loan_helpers"
-import { mockedLoanOffer } from "../../tests/mock/swarmai"
-import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
-import Accounts from "../queries/accounts"
-import { User } from "../types"
 
 const API_URL = "http://localhost:8080/v1/graphql"
 const ADMIN_SECRET = "myadminsecretkey"
