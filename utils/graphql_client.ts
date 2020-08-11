@@ -49,8 +49,12 @@ export const initializeGQL = (
 export class DbClient {
   private _fetcher: GraphQLClient
 
-  constructor(admin_secret: string, gql_url: string) {
-    this._fetcher = initializeGQL(admin_secret, gql_url)
+  constructor(admingSecret: string, gqlURL: string) {
+    const _gqlClient = gqlClient ?? createGQLClient(gqlURL, admingSecret)
+    // For SSG and SSR always create a new Client
+    if (typeof window === "undefined") this._fetcher = _gqlClient
+    // Create the  Client once in the client
+    if (!gqlClient) gqlClient = this
   }
 
   // ================ CALLED BY FRONTEND ================
@@ -142,16 +146,13 @@ export class DbClient {
 
   /**
    * Guarantors are to be asked to support a loan on case by case basis, this is how we record what they say
-   * @param guarantor_id
-   * @param request_id
    * @param status should be confirmed, rejected (theoretically possible: unknown)
-   * @param amount
    */
   recordGuarantorParticipation = async (
-    guarantor_id,
-    request_id,
-    status,
-    amount
+    guarantor_id: string,
+    request_id: string,
+    status: string,
+    amount: number
   ) => {
     // it is assumed the guarantor exists and the loan request too
     const variables = { guarantor_id, request_id, status, amount }
@@ -231,7 +232,7 @@ export class DbClient {
    * @param borrower_id
    * @param amount
    */
-  fetchDataForLoanRequestCalculation = async (borrower_id: string, amount) => {
+  fetchDataForLoanRequestCalculation = async (borrower_id: string, amount: number) => {
     // get latest Info on borrower
     // network-risk-param info:
     // potential_lenders: everyone except borrower themselves
@@ -246,7 +247,7 @@ export class DbClient {
     // TODO fetch all guarantors
     const guarantors = {}
 
-    // TODO fetch risk modele input: For all potential lenders:
+    // TODO fetch risk model input: For all potential lenders:
     //    get latest repayments
     //    get portfolio-size
     //    get recommendation risks VERIFY with GAURAV that we eeven need that for CORPUS
