@@ -1,6 +1,7 @@
 import Dropzone from "react-dropzone"
 import Axios from "axios"
 import { useState } from "react"
+import { UploadRequest } from "../pages/api/upload"
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -11,16 +12,16 @@ const toBase64 = (file) =>
   })
 
 export default (props: {email: string}) => {
-  const [uploadedFiles, setFiles] = useState([])
+  const [uploadedFiles, setFiles] = useState<{[filname: string]: boolean}>({})
   console.log(uploadedFiles)
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {
-        console.log(file)
+        setFiles(files => ({...files, [file.name]: false}))
         const fdata = await toBase64(file) as string
         const ctype = fdata.split(',')[0]
         const b64data = fdata.split(",")[1]
-        const data = {
+        const data: UploadRequest = {
             email: props.email,
             file_name: file.name,
             ctype: ctype,
@@ -32,7 +33,7 @@ export default (props: {email: string}) => {
         })
           .then((res) => {
             console.log(res.data)
-            setFiles(files => [...files, file.name])
+            setFiles(files => ({...files, [file.name]: true}))
           })
           .catch((error) => console.log(error))
 
@@ -50,8 +51,13 @@ export default (props: {email: string}) => {
         )}
       </Dropzone>
       <div>
-        Uploaded: 
-        {uploadedFiles.map(file => <p>{file}</p>)}
+        <ul>
+          {Object.keys(uploadedFiles).map((file, id) => (
+            <li key={"uliload_" + id}>
+              {!uploadedFiles[file] && "Uploading"} {file}{" "}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <style jsx>
