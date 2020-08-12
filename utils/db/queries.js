@@ -41,24 +41,6 @@ export const GET_USERS = `
     }
 `
 
-export const CREATE_USER = `
-  mutation ($user: user_insert_input!) {
-    insert_user(objects: [$user]) {
-      returning {
-        id
-        user_number
-        name
-        user_type
-        email
-        phone
-        max_exposure
-        min_interest_rate
-        balance
-        demographic_info
-      }
-    }
-  }`
-
 export const GET_EDGES_BY_STATUS = `
 query getNetworkEdgesByStatus ($status: edge_status!) {
   edges(where: {status: {_eq: $status} }) {
@@ -321,17 +303,6 @@ export const START_LOAN = `
 //     }
 //   ]
 // }
-
-// TODO add option to choose other but the latestOffer
-export const GET_LOAN_OFFER = `
-  query getOffer ($request_id: uuid!) {
-    loan_requests_by_pk (request_id: $request_id) {
-      request_id
-      risk_calc_result
-      amount
-    }
-  }
-`
 
 
 // -------------------------------------------------------------

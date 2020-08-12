@@ -12,6 +12,7 @@ const uuids = [
 let user1 = {
     // 'id': uuids[1],
     "user_number": 1,
+    "phone": "1234",
     "name": "rick",
     "email": "rick@galaxy.io",
     "user_type": "lender",
@@ -22,6 +23,7 @@ let user1 = {
 let user2 = {
     "user_number": 2,
     "name": "summer",
+    "phone": "1234",
     "email": "summer@highschool.io",
     "user_type": "borrower",
     "balance": 100,
@@ -31,6 +33,7 @@ let user2 = {
 let user3 = {
     // 'id': uuids[2],
     "user_number": 3,
+    "phone": "1234",
     "name": "morty",
     "email": "morty@galaxy.io",
     "user_type": "borrower",
@@ -40,10 +43,11 @@ let user3 = {
 
 
 export const USER4 = {
-    "user_number": 4,
     "name": "noobnoob",
     "email": "noob@galaxy.io",
+    "phone": "1234",
     "user_type": "lender",
+    "user_number": 4,
     "balance": 2000,
     "demographic_info": {"country": "spaceland"}
 }

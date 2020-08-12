@@ -1,6 +1,7 @@
 import { initializeGQL } from "../../utils/db/GQLClient";
 import { users, basic_connections } from './fixtures'
 import { INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS, CREATE_USER } from "../../utils/db/queries";
+import Accounts from '../../utils/queries/accounts'
 import {get } from "http";
 
 // # REFACTOR make this a type
@@ -46,8 +47,8 @@ const distinct = (value, index, self) => {
 export async function addUsers(gqlclient, users) {
     let added_users = []
     for (var userId of Object.keys(users)) {
-        let data = await gqlclient.request(CREATE_USER, { "user": users[userId] })
-        let new_user = data.insert_user.returning[0]
+        const data = await gqlclient.request(Accounts.CREATE_USER_MUTATION, { "user": users[userId] })
+        const new_user = data.insert_user_one
         added_users.push(new_user)
     }
     return added_users

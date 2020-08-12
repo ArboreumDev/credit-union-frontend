@@ -1,19 +1,9 @@
 export default {
   CREATE_USER_MUTATION: /* GraphQL */ `
   mutation CreateUser(
-    $name: String!
-    $email: String!
-    $user_type: user_t!
-    $phone: String!
+    $user: user_insert_input!
   ) {
-    insert_user_one(
-      object: {
-        email: $email
-        user_type: $user_type
-        name: $name
-        phone: $phone
-      }
-    ) {
+    insert_user_one(object: $user) {
       id
       user_number
       name

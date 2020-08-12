@@ -1,6 +1,7 @@
 import { initializeGQL } from "./GQLClient"
-import { GraphQLClient } from "graphql-request"
+import request, { GraphQLClient } from "graphql-request"
 import Accounts from "../queries/accounts"
+import Loans from "../queries/loans"
 import { User } from "../types"
 import {
   INITIATE_LOAN_REQUEST,
@@ -12,6 +13,8 @@ import {
 import { storeAiResultToDB } from "./loan_helpers"
 import { mockedLoanOffer } from "../../tests/mock/swarmai"
 import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
+import { transform_to_start_loan_input } from "./loan_helpers"
+import borrower from "../../components/dashboard/borrower"
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
  * only "pre-cooked" functions should be used to do any needed input formatting,
@@ -36,8 +39,10 @@ export class DbClient {
   getUser = async (props: { email: string }) =>
     this._fetcher.request(Accounts.GET_USER_BY_EMAIL, props)
 
-  createUser = async (props: User) =>
-    this._fetcher.request(Accounts.CREATE_USER_MUTATION, props)
+  createUser = async (props: User) => {
+    const data = await this._fetcher.request(Accounts.CREATE_USER_MUTATION, {'user': props})
+    return data.insert_user_one
+  }
 
   getAllUsers = async () =>
     this._fetcher.request(`query MyQuery {
@@ -59,7 +64,15 @@ export class DbClient {
   }
 
   // ================ Loans ================
-  calculateLoanRequestOffer = async (
+  /**
+   * called with borrower Id to create loan-request also create entries for guarantor requests
+   * (mark those confirmed for now, later this would then require an extra step)
+   * @param borrower_id go
+   * @param amount 
+   * @param purpose 
+   * @param msg 
+   */
+  createLoanRequest = async (
     borrower_id: string,
     amount,
     purpose: string,
@@ -74,81 +87,47 @@ export class DbClient {
           borrower_id,
           amount,
           purpose,
-          risk_calc_result: { offers: [] },
+          risk_calc_result: {},
         },
       }
     )
-
+  
     let request = initiateLoanRequestResult.insert_loan_requests_one
-    const ai_input = await this.fetchDataForLoanRequestCalculation(
-      borrower_id,
-      amount
-    )
+    return {
+      request
+    }
+    // TODO create guarantor entries with cofirmed-status
+  }
 
+  /**
+   * for a given request, create an offer (using params + guarantors)
+   * @param request_id 
+   */
+  calculateLoanRequestOffer = async (
+    request_id: string
+  ) => {
+    const data = await this._fetcher.request(Loans.GET_REQUEST_BY_ID, {request_id})
+    const req = data.loan_requests_by_pk
+    const ai_input = await this.fetchDataForLoanRequestCalculation(req.borrower_id,  req.amount)
+    
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
-
+    
     // Once done, the AI will then call back into into our api and eventually trigger a function that for simplicity will
     // now be mocked up like this:
-    const mockedAiResult = mockedLoanOffer(ai_input.potential_lenders, amount)
-    // console.log('prep', ai_input, 'mocked', mockedAiResult)
+    const mockedAiResult = mockedLoanOffer(ai_input.potential_lenders, req.amount)
     const ai_result = await storeAiResultToDB(
       this._fetcher,
-      request.request_id,
+      request_id,
       { latestOffer: mockedAiResult }
     )
     return {
       request: ai_result.update_loan_requests_by_pk,
       testing: {
-        pre_ai: request,
+        pre_ai: req,
         post_ai: ai_result.update_loan_requests_by_pk,
         ai_input,
       },
     }
-  }
-
-  /**
-   * Borrowers can request their trustors (network neighbours) to support them (or not) on a loan-to-loan basis. Therefore
-   * We assume the guarantors will be ok with it. If not they can reject the request.
-   */
-  addGuarantor = async (
-    guarantor_id: string,
-    request_id: string,
-    amount: number,
-    status = "unknown"
-  ) => {
-    const variables = {
-      guarantors: [
-        {
-          request_id,
-          guarantor_id,
-          amount,
-          status,
-          invest_in_corpus: true,
-        },
-      ],
-    }
-    const addGuarantorResult = this._fetcher.request(
-      ADD_GUARANTORS_TO_LOAN_REQUEST,
-      variables
-    )
-    // what to do with the result
-    return addGuarantorResult
-  }
-
-  /**
-   * Guarantors are to be asked to support a loan on case by case basis, this is how we record what they say
-   * @param status should be confirmed, rejected (theoretically possible: unknown)
-   */
-  recordGuarantorParticipation = async (
-    guarantor_id: string,
-    request_id: string,
-    status: string,
-    amount: number
-  ) => {
-    // it is assumed the guarantor exists and the loan request too
-    const variables = { guarantor_id, request_id, status, amount }
-    const updateResult = this._fetcher.request(UPDATE_GUARANTOR, variables)
-    return updateResult
   }
 
   /**
@@ -157,69 +136,22 @@ export class DbClient {
    * Also, advances loan_request status to 'live'
    */
   acceptLoanOffer = async (
-    borrower_id,
-    request_id,
-    offer_key = "latestOffer"
+    request_id: string,
+    offer_key: string  = "latestOffer"
   ) => {
-    const offer_params = await this._fetcher.request(GET_LOAN_OFFER, {
+    const data = await this._fetcher.request(Loans.GET_LOAN_OFFER, {
       request_id,
     })
-    console.log("offer parameters fetched", offer_params)
-    console.log(
-      "next step: create START_LOAN mutation variabels from above offer params"
-    )
-    // const amount = offer_params.amount
-
-    // TODO create lenders, lender_receivables, payables as described by the example object below:
-    // let lenders = offer_params.risk_calc_result.latestOffer.lenders.map(x => { ...x, loan_id: request_id})
-    // console.log('lenders', lenders)
-    // let lender_receivables = {} // process args to be looking right
-
-    // const variables = {
-    //   request_id,
-    //   payable: {
-    //     "loan_id": request_id,
-    //     "amount_total": amount,
-    //     "amount_remain": amount,
-    //     "pay_priority": 0 // TODO when was this different to zero?
-    //   },
-    //   lenders: [
-    //     {
-    //       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
-    //       "lender_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
-    //       "lender_amount": 7,
-    //       "percentage": 50
-    //     },
-    //         {
-    //       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
-    //       "lender_id": "943452f9-93bd-404b-807d-f9e6618df78a",
-    //       "lender_amount": 7,
-    //       "percentage": 50
-    //     }
-    //   ],
-    //   "lender_receivables": [
-    //     {
-    //       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
-    //       "receiver_id": "0f3fa6a4-7796-4e38-991a-c05f1086aacd",
-    //       "amount_total": 7,
-    //       "amount_remain": 7
-    //     },
-    //     {
-    //       "loan_id": "4f1df87a-0274-442f-9d1a-8b6b301e5073",
-    //       "receiver_id": "943452f9-93bd-404b-807d-f9e6618df78a",
-    //       "amount_total": 7,
-    //       "amount_remain": 7
-    //     }
-    //   ]
-    // }
-    // // const startLoanResult = this.client.executeGQL(START_LOAN, variables)
-    // return startLoanResult
+    const offer_params = data.loan_requests_by_pk
+    const variables = transform_to_start_loan_input(request_id, offer_params)
+    const started_loan = await this._fetcher.request(Loans.START_LOAN, variables )
+    return started_loan
   }
 
   // ================= HELPERS =======================
 
   /**
-   * creates the message that will be sent to the swarmAI module the loan offer based on the borrowers risk
+   * TODO creates the message that will be sent to the swarmAI module the loan offer based on the borrowers risk
    * @param borrower_id
    * @param amount
    */
@@ -249,9 +181,56 @@ export class DbClient {
     // TODO get network parameters
     const mockReturn = {
       // network,
+      amount,
       potential_lenders,
       guarantors,
     }
     return mockReturn
   }
 }
+
+
+  // /**
+  //  * Borrowers can request their trustors (network neighbours) to support them (or not) on a loan-to-loan basis. Therefore
+  //  * We assume the guarantors will be ok with it. If not they can reject the request.
+  //  */
+  // addGuarantor = async (
+  //   guarantor_id: string,
+  //   request_id: string,
+  //   amount: number,
+  //   status = "unknown"
+  // ) => {
+  //   const variables = {
+  //     guarantors: [
+  //       {
+  //         request_id,
+  //         guarantor_id,
+  //         amount,
+  //         status,
+  //         invest_in_corpus: true,
+  //       },
+  //     ],
+  //   }
+  //   const addGuarantorResult = this._fetcher.request(
+  //     ADD_GUARANTORS_TO_LOAN_REQUEST,
+  //     variables
+  //   )
+  //   // what to do with the result
+  //   return addGuarantorResult
+  // }
+
+  // /**
+  //  * Guarantors are to be asked to support a loan on case by case basis, this is how we record what they say
+  //  * @param status should be confirmed, rejected (theoretically possible: unknown)
+  //  */
+  // recordGuarantorParticipation = async (
+  //   guarantor_id: string,
+  //   request_id: string,
+  //   status: string,
+  //   amount: number
+  // ) => {
+  //   // it is assumed the guarantor exists and the loan request too
+  //   const variables = { guarantor_id, request_id, status, amount }
+  //   const updateResult = this._fetcher.request(UPDATE_GUARANTOR, variables)
+  //   return updateResult
+  // }

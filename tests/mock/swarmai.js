@@ -14,8 +14,9 @@ export const mockedLoanOffer = (potential_lenders, amount) => {
     for (var i=0; i<potential_lenders.length; i++) {
         let lender = {
             "lender_id": potential_lenders[i],
-            "amount": lender_amount,
-            "interest_rate": 1
+            "lender_amount": lender_amount,
+            "percentage": Math.floor((lender_amount * 100) / amount ),
+            "lender_interest_rate": 10
         }
         lenders.push(lender)
     }

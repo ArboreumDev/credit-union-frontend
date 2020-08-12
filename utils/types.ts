@@ -60,6 +60,15 @@ type LenderInfo = {
     interest_rate: number
 }
 
+// same as 
+type LenderInput = {
+    request_id: string
+    lender_id: string
+    amount: number
+    interest_rate: number
+
+}
+
 export type AiResult = {
     borrower: any
     lenders: [LenderInfo]
