@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { initializeGQL, DbClient } from "../../../utils/db/GQLClient"
-import { User } from "../../../utils/types"
+import { DbClient } from "../../../utils/db/DBClient"
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",

@@ -1,5 +1,4 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/api';
 import { DbClient } from '../utils/db/DBClient';
 
 export default function Hello(props: {data}) {
