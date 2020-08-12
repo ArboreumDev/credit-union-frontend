@@ -1,17 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from '../utils/api';
-import { initializeGQL } from '../utils/db/GQLClient';
-
-const GET_USERS = `
-  query MyQuery {
-    user {
-      id
-      email
-      name
-     
-    }
-  }
-`;
+import { DbClient } from '../utils/db/DBClient';
 
 export default function Hello(props: {data}) {
   const data = props.data;
@@ -32,7 +21,7 @@ export async function getServerSideProps() {
   // TODO after JWT is implemented
   // check for session and if the user is one of the admin users
   
-  const gqlClient = initializeGQL()
-  const data = await gqlClient.request(GET_USERS)
+  const dbClient = DbClient.fromEnv()
+  const data = await dbClient.getAllUsers()
   return { props: {data}};
 }

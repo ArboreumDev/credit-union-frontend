@@ -39,6 +39,15 @@ export class DbClient {
   createUser = async (props: User) =>
     this._fetcher.request(Accounts.CREATE_USER_MUTATION, props)
 
+  getAllUsers = async () =>
+    this._fetcher.request(`query MyQuery {
+    user {
+      id
+      email
+      name
+    }
+  }`)
+
   getUserPortfolio = async () => {
     // TODO
     // let data = await this.client.request(GET_USERS)
