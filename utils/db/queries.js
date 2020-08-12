@@ -1,5 +1,5 @@
 // import { gql, useQuery, useMutation } from '@apollo/client';
-import { USERS } from './fixtures'
+import { USERS } from '../../tests/fixtures/fixtures'
 
 // var user1, user2, user3;
 // var {user1, user2, user3} = users;
@@ -8,9 +8,9 @@ import { USERS } from './fixtures'
 var user1 = USERS[1]
 var user2 = USERS[2]
 var user3 = USERS[3]
-    // -------------------------------------------------------------
-    // -------------------- NETWORK --------------------------------
-    // -------------------------------------------------------------
+// -------------------------------------------------------------
+// -------------------- NETWORK --------------------------------
+// -------------------------------------------------------------
 export const INSERT_EDGE = `
 mutation ($edge: edges_insert_input!) {
     insert_edges(objects: [$edge]) {
@@ -370,32 +370,32 @@ export const GET_LOANS_BY_BORROWER_AND_STATUS = `
 `
 
 export const EXAMPLE_INPUTS = {
-    insert_edge: {
-        "known_edge": {
-            // lender adds edge to existing borrower
-            trust_amount: 10,
-            status: "active",
-            borrower_id: user1.id,
-            lender_id: user2.id,
-            other_user_email: "rick@galaxy.io"
-        },
-        "unconfirmed_edge": {
-            // when borrower adds edge to existing lender, it needs to be confirmed by lender first
-            trust_amount: 30,
-            status: "awaiting_lender_confirmation",
-            borrower_id: user3.id,
-            lender_id: user2.id,
-            other_user_email: "rick@galaxy.io"
-        },
-        "potential_edge_to_lender": {
-            // borrower adds edge to lender who still needs to sign up
-            trust_amount: 20,
-            status: 'awaiting_lender_signup',
-            borrower_id: user3.id,
-            other_user_email: 'mum@galaxy.io'
-        }
+  insert_edge: {
+    "known_edge": {
+      // lender adds edge to existing borrower
+      trust_amount: 10,
+      status: "active",
+      borrower_id: user1.id,
+      lender_id: user2.id,
+      other_user_email: "rick@galaxy.io"
     },
-    insert_user: { user: user1 },
+    "unconfirmed_edge": {
+      // when borrower adds edge to existing lender, it needs to be confirmed by lender first
+      trust_amount: 30,
+      status: "awaiting_lender_confirmation",
+      borrower_id: user3.id,
+      lender_id: user2.id,
+      other_user_email: "rick@galaxy.io"
+    },
+    "potential_edge_to_lender": {
+      // borrower adds edge to lender who still needs to sign up
+      trust_amount: 20,
+      status: 'awaiting_lender_signup',
+      borrower_id: user3.id,
+      other_user_email: 'mum@galaxy.io'
+    }
+  },
+  insert_user: { user: user1 },
 }
 
 // export queries = {

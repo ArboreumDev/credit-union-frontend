@@ -1,11 +1,12 @@
-import { initializeGQL, DbClient } from "../utils/graphql_client";
+import { initializeGQL } from "../utils/db/GQLClient";
 
-import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/queries";
-import {USERS, USER4, basic_network} from "../utils/fixtures";
-import { addNetwork, getAllUsers } from "../utils/fixture_helpers";
-import { getNetwork } from "../utils/network_helpers";
+import {CREATE_USER, DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/db/queries";
+import {USERS, USER4, basic_network} from "./fixtures/fixtures";
+import { addNetwork, getAllUsers } from "./fixtures/fixture_helpers";
+import { getNetwork } from "../utils/db/network_helpers";
 import { RESET } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { LoanRequestStatus, EdgeStatus } from "../utils/types";
+import { DbClient } from "../utils/db/DBClient";
 
 // require("dotenv").config({ path: ".env.local" });
 global.fetch = require("node-fetch");
@@ -17,7 +18,7 @@ const nInitialUsers = Object.keys(USERS).length
 const TEST_API_URL = "http://localhost:8080/v1/graphql"
 const TEST_ADMIN_SECRET = "myadminsecretkey"
 
-let client;
+let client: DbClient;
 let borrower1;
 let lender1;
 // lender 2 is farther away from 
@@ -26,14 +27,14 @@ let lender2;
 
 beforeAll( async () => {
   // clear the DB and add basic network from fixture
-  client = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = new DbClient(initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL))
   // await client.executeGQL(DELETE_NETWORK)
   await client.executeGQL(RESET_DB)
-  let res = await addNetwork(client.fetcher, USERS, basic_network.edges)
+  let res = await addNetwork(client._fetcher, USERS, basic_network.edges)
 
   // set borrower and level1 and level2 lenders for basic network
   // i am using user_numbers here to make this understandable...alternatively we coudl user.name
-  const active_users = await getAllUsers(client.fetcher)
+  const active_users = await getAllUsers(client._fetcher)
   borrower1 = active_users.filter(x => x.user_type = "borrower")[0]
   lender1 = active_users.filter(x => x.user_number = 2)[0]
   lender2 = active_users.filter(x => x.user_number = 1)[0]
@@ -46,7 +47,7 @@ afterAll( async () => {
 
 describe("setting up the network from fixtures", () =>{
   test('fixture users have been added', async () => {
-    let data = await getAllUsers(client.fetcher)
+    let data = await getAllUsers(client._fetcher)
     let usermails = data.map(x => x.email)
     Object.values(USERS).forEach(user => {
       expect(usermails).toContain(user.email)
@@ -55,7 +56,7 @@ describe("setting up the network from fixtures", () =>{
 
   // TODO check only for existing network
   test('the active network can be queried', async () => {
-    let network = await getNetwork(client.fetcher, 'active')
+    let network = await getNetwork(client._fetcher, 'active')
     expect(network.edges).toStrictEqual(basic_network.edges)
     expect(network.nodes).toStrictEqual(basic_network.nodes)
   })
@@ -74,7 +75,7 @@ describe("Adding connections and users from frontend", () => {
     Object.keys(USER4).forEach((key) => {
       expect(created_user[key]).toStrictEqual(USER4[key])
     })
-    data = await getAllUsers(client.fetcher)
+    data = await getAllUsers(client._fetcher)
     expect(data.length).toBe(nInitialUsers + 1)
   })  
 

@@ -1,8 +1,6 @@
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../utils/graphql_client'
-import { User } from '../../../utils/types'
-
+import NextAuth from "next-auth"
+import Providers from "next-auth/providers"
+import { DbClient } from "../../../utils/db/DBClient"
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",
@@ -36,25 +34,13 @@ const options = {
     //  },
     // jwt: async (token) => { },
     session: async (session, user) => {
-      const GET_USER_BY_EMAIL = /* GraphQL */ `
-        query GetUserByEmail($email: String!) {
-          user(where: { email: { _eq: $email } }) {
-            name
-            phone
-            email
-            user_type
-          }
-        }
-      `
-
-      const gqlClient = initializeGQL()
-      const data = await gqlClient.request(GET_USER_BY_EMAIL, {
+      const dbClient = DbClient.fromEnv()
+      const data = await dbClient.getUser({
         email: session.user.email,
       })
       const profile = data.user[0]
 
-      if (data)
-        session = {...session, user: {...session.user, ...profile}}
+      if (data) session = { ...session, user: { ...session.user, ...profile } }
 
       return Promise.resolve(session)
     },

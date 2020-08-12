@@ -1,5 +1,5 @@
-import {GET_EDGES_BY_STATUS} from "../utils/queries";
-import {EdgeStatus} from "../utils/types"
+import {GET_EDGES_BY_STATUS} from "./queries";
+import {EdgeStatus} from "../types"
 
 const getNodesFromEdgeList = (edgeList) => {
   let nodes = edgeList.map(x => x.slice(0,2)).flat()
