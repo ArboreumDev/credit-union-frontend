@@ -2,7 +2,13 @@ import { initializeGQL } from "./GQLClient"
 import { GraphQLClient } from "graphql-request"
 import Accounts from "../queries/accounts"
 import { User } from "../types"
-import { INITIATE_LOAN_REQUEST, ADD_GUARANTORS_TO_LOAN_REQUEST, UPDATE_GUARANTOR, GET_LOAN_OFFER } from "./queries"
+import {
+  INITIATE_LOAN_REQUEST,
+  ADD_GUARANTORS_TO_LOAN_REQUEST,
+  UPDATE_GUARANTOR,
+  GET_LOAN_OFFER,
+  RESET_DB,
+} from "./queries"
 import { storeAiResultToDB } from "./loan_helpers"
 import { mockedLoanOffer } from "../../tests/mock/swarmai"
 import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
@@ -13,25 +19,25 @@ import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-  constructor(private _fetcher: GraphQLClient) {}
+  _fetcher: GraphQLClient
+  constructor(fetcher: GraphQLClient) {
+    this._fetcher = fetcher
+  } // TODO: Make _fetcher private
 
   static fromEnv() {
     return new DbClient(initializeGQL())
   }
 
-  executeGQL(query: string, variables: any){
-      return this._fetcher.request(query, variables)
-  }
+  executeGQL = async (query: string, variables = {}) =>
+    this._fetcher.request(query, variables)
 
   // ================ Accounts ================
 
-  getUser = async (props: { email: string }) => {
-    return this._fetcher.request(Accounts.GET_USER_BY_EMAIL, props)
-  }
+  getUser = async (props: { email: string }) =>
+    this._fetcher.request(Accounts.GET_USER_BY_EMAIL, props)
 
-  createUser = async (props: User) => {
-    return this._fetcher.request(Accounts.CREATE_USER_MUTATION, props)
-  }
+  createUser = async (props: User) =>
+    this._fetcher.request(Accounts.CREATE_USER_MUTATION, props)
 
   getUserPortfolio = async () => {
     // TODO

@@ -22,9 +22,9 @@ export type User = {
   email: string
   phone: string
   user_type: UserType
-  user_number: number
-  balance: number
-  demographic_info: any
+  user_number?: number
+  balance?: number
+  demographic_info?: any
 }
 
 // export type UserInsertInput = {

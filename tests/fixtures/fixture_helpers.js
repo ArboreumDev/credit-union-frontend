@@ -1,6 +1,6 @@
 import { initializeGQL } from "../../utils/db/GQLClient";
 import { users, basic_connections } from './fixtures'
-import { INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS, CREATE_USER } from "../../utils/queries";
+import { INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS, CREATE_USER } from "../../utils/db/queries";
 import {get } from "http";
 
 // # REFACTOR make this a type
