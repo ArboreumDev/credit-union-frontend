@@ -1,0 +1,10 @@
+Hi {{name}},
+
+Good news! Your KYC checks have passed, and you're now fully onboarded onto the {{company}} Credit Program.
+
+You can now log in and start lending, borrowing or supporting your colleagues.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev

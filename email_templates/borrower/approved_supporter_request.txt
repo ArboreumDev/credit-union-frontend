@@ -1,0 +1,12 @@
+Hi {{name}},
+
+Good news! {{supporter}} has agreed to act as your supporter in the {{company}} Credit Program.
+
+They have pledged a maximum of {{amount}} to support any loan application you make.
+
+Please log in to the Credit Program portal if you wish to add more supporters or make a loan application.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev

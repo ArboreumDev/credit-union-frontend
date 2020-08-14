@@ -1,0 +1,8 @@
+Hi {{name}},
+
+We confirm that we have received your deposit of {{amount}} into the {{company}} Credit Program corpus.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev

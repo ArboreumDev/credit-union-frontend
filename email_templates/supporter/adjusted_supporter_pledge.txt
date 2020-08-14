@@ -1,0 +1,12 @@
+Hi {{name}},
+
+You have adjusted your maximum pledge amount for {{borrower}} in the {{company}} Credit Program.
+
+Your new maximum pledge amount is {{amount}}.
+
+Please log in to the Credit Program portal if you wish to further adjust your maximum pledge.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev

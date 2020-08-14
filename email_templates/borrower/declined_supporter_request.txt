@@ -1,0 +1,8 @@
+Hi {{name}},
+
+We're sorry to have to tell you that {{supporter}} has declined to act as your supporter in the {{company}} Credit Program.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev

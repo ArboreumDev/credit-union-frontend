@@ -1,0 +1,8 @@
+{
+  "Template": {
+    "TemplateName": "AccountRegistration",
+    "SubjectPart": "Welcome To The {{company}} Credit Program, {{name}}!",
+    "HtmlPart": "Hi {{name}},<p>Welcome to the {{company}} Credit Program!</p><p>We've received your application, and are currently processing the documents you provided to us as part of our KYC process.</p><p>Once we've done our checks, we'll send you another email confirming that your registration is complete. If we need any additional documents, we'll let you know.</p><p>We look forward to helping you!</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+    "TextPart": "Hi {{name}},\r\n\r\n<p>Welcome to the {{company}} Credit Program!\r\n\r\n<p>We've received your application, and are currently processing the documents you provided to us as part of our KYC process.\r\n\r\n<p>Once we've done our checks, we'll send you another email confirming that your registration is complete. If we need any additional documents, we'll let you know.\r\n\r\n<p>We look forward to helping you!\r\n\r\nBest wishes,\r\n\r\nArboreum, on behalf of {{company}}."
+  }
+}

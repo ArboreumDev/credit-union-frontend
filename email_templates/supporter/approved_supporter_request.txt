@@ -1,0 +1,12 @@
+Hi {{name}},
+
+You have agreed to act as a supporter for {{borrower}} in the {{company}} Credit Program.
+
+You have pledged {{amount}} as a maximum amount to support any loan application that {{borrower}} makes through the Program.
+
+Please log in to the Credit Program portal if you wish to adjust your maximum pledge.
+
+Best wishes,
+
+Arboreum, on behalf of {{company}}
+https://www.arboreum.dev
