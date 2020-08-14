@@ -1,0 +1,8 @@
+{
+  "Template": {
+    "TemplateName": "Investor_WithdrawalConfirmation",
+    "SubjectPart": "Withdrawal Request Received",
+    "HtmlPart": "Hi {{name}},<p>We confirm that we have received your request to withdraw {{amount}} from the {{company}} Credit Program corpus.</p><p>Your funds will be transferred to your bank account within the next 2-3 working days.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}

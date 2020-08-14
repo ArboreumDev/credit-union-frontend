@@ -1,0 +1,9 @@
+{
+  "Template": {
+    "TemplateName": "Investor_FundUtilisation",
+    "SubjectPart": "Fund Utilisation Notification",
+    "HtmlPart": "Hi {{name}},<p>We wish to inform you that a loan has been taken out from the {{company}} Credit Program corpus.</p><p>The loan is for a total of {{loan_total}}, with an interest rate of {{loan_rate}}.</p><p>Your contribution to this loan is {{loan_contribution}}, which will be returned to you with interest in six monthly payments of {{loan_repayments}}.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}
+

@@ -1,8 +1,0 @@
-Hi {{name}},
-
-We confirm that we have received your deposit of {{amount}} as a maximum pledge amount for {{borrower}} in the {{company}} Credit Program corpus.
-
-Best wishes,
-
-Arboreum, on behalf of {{company}}
-https://www.arboreum.dev
