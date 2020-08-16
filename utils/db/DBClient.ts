@@ -2,7 +2,7 @@ import { initializeGQL } from "./GQLClient"
 import request, { GraphQLClient } from "graphql-request"
 import Accounts from "../queries/accounts"
 import Loans from "../queries/loans"
-import { User } from "../types"
+import { User, LoanRequestStatus } from "../types"
 import {
   INITIATE_LOAN_REQUEST,
   ADD_GUARANTORS_TO_LOAN_REQUEST,
@@ -15,6 +15,10 @@ import { mockedLoanOffer } from "../../tests/mock/swarmai"
 import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
 import { transform_to_start_loan_input } from "./loan_helpers"
 import borrower from "../../components/dashboard/borrower"
+import { setupMaster } from "cluster"
+import lender from "../../components/dashboard/lender"
+
+
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
  * only "pre-cooked" functions should be used to do any needed input formatting,
@@ -59,8 +63,88 @@ export class DbClient {
     // return data.user
   }
 
-  getProfileInfo = async () => {
+  getProfileInfo = async (user_id) => {
     // TODO
+  }
+
+
+  getLoanHistory = async (borrower_id: string) => {
+    // we can query for all loans with that whose status is in that list
+    const relevantStatusOptions = [LoanRequestStatus.live, LoanRequestStatus.settled]
+    const data = await this._fetcher.request(Accounts.GET_LOANS_BY_BORROWER_AND_STATUS, {borrower_id, statusList: ["live"]})
+    const active_loans  = data.loan_requests.filter(x => x.status == LoanRequestStatus.live)
+    const settled_loans  = data.loan_requests.filter(x => x.status == LoanRequestStatus.live)
+  }
+
+  getBorrowerDashboardInfo = async (borrower_id) => {
+    const data = await this._fetcher.request(
+      Accounts.GET_LOANS_BY_BORROWER_AND_STATUS, 
+      {borrower_id, statusList: [LoanRequestStatus.live]}
+    )
+    if (data == undefined) return {}
+
+    const active_request = data.loan_requests.filter(x => x.status == LoanRequestStatus.live)[0]
+    return {
+      loanId: active_request.request_id,
+      status: active_request.status,
+      loanAmount: active_request.amount,
+      outstanding: {
+        principal: "TODO how do we calculate that?",
+        interest: "TODO how do we calculate that?",
+        total: active_request.payables[0].amount_remain,
+      },
+      amountRepaid: active_request.payables[0].amount_paid,
+      nextPayment: {
+        nextDate: "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
+        nextAmount: "TODO remainAmount / # of remaining payments"
+      },
+      lastPaid: active_request.payables[0].lastPaid
+    }
+
+    // get active loan 
+    // status
+    // nextPayment
+    // outstanding principal
+    // outstanding interest
+    //last repayment date
+    // next payment data
+    // next payment amount
+
+
+  }
+
+  getLenderDashboadInfo = async (lender_id: string) => {
+    const data = await this._fetcher.request(Accounts.GET_LENDER_DASHBOARD_INFO, {user_id: lender_id})
+    let lenderInfo = data["user_by_pk"]
+    
+    return { 
+      // money the user brought
+      invested: lenderInfo.loan_participants_aggregate.aggregate.sum.lender_amount,
+      idle: lenderInfo.balance,
+      encumbered: lenderInfo.encumbrances_aggregate.aggregate.sum.amount_remain || 0,
+      // interest that is earned from the money brought
+      interest: {
+        expected: lenderInfo.receivables_aggregate.aggregate.sum.amount_total || 0,
+        received: lenderInfo.receivables_aggregate.aggregate.sum.amount_received || 0,
+        outstanding: lenderInfo.receivables_aggregate.aggregate.sum.amount_remain || 0,
+      },
+      guarantor_requests: [
+        {
+          borrower_info: {email: "a@b.com", name: "ashish"},
+          purpose: "education",
+          amount: 200
+        },
+        {
+          borrower_info: {email: "g@mail.com", name: "gaurav"},
+          purpose: "business",
+          amount: 500
+        }
+      ]
+    }
+  }
+
+  confirm_guarantor_participation = async (guarantor_id, loan_id) => {
+    // await this._fetcher.request()
   }
 
   // ================ Loans ================

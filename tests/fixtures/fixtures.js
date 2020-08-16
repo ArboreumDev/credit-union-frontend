@@ -25,7 +25,7 @@ let user2 = {
     "name": "summer",
     "phone": "1234",
     "email": "summer@highschool.io",
-    "user_type": "borrower",
+    "user_type": "lender",
     "balance": 100,
     "demographic_info": {"country": "spaceland"}
 }

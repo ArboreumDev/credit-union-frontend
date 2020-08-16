@@ -37,9 +37,10 @@ beforeAll( async () => {
   // set borrower and level1 and level2 lenders for basic network
   // i am using user_numbers here to make this understandable...alternatively we coudl user.name
   const active_users = await getAllUsers(client._fetcher)
-  borrower1 = active_users.filter(x => x.user_type = "borrower")[0]
-  lender1 = active_users.filter(x => x.user_number = 2)[0]
-  lender2 = active_users.filter(x => x.user_number = 1)[0]
+  borrower1 = active_users.filter(x => x.user_type == "borrower")[0]
+  const lenders = active_users.filter(x => x.user_type == "lender")
+  lender1 = lenders[0]
+  lender2 = lenders[1]
 })
 
 afterAll( async () => {
@@ -111,6 +112,28 @@ describe("A borrower user request a loan...", () => {
     const res = await client.acceptLoanOffer(request.request_id, "latestOffer")
     // TODO verify payables, encumbrances, receivables, ....
   })
+
+  describe("Viewing loan-info", () => {
+    test("The borrower user can see their repayment plan in the frontend", async () => {
+      const dashboard = await client.getBorrowerDashboardInfo(borrower1.id)
+      expect(dashboard.amountRepaid).toBe(0)
+      expect(dashboard.loanAmount).toBe(amount)
+      // expect(dashboard.outstanding.total).toBeGreaterThan(amount) // TODO
+     })
+
+    test.skip("Both lender and borrrower see the loan appearing in their loan history", async () => { })
+
+    test("The lender sees an updated breakdown of their portfolio ", async () => { 
+      console.log(borrower1, lender1, lender2)
+      const dashboard = await client.getLenderDashboadInfo(lender1.id)
+      console.log('dash', dashboard.idle, lender1)
+      expect(dashboard.invested).toBeGreaterThan(0)
+      expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
+      // expect(dashboard.idle).toBeLessThan(lender1.balance) // TODO 
+      // TODO check receivable
+    })
+
+  })
 })
 
 // describe.skip("When user is onboarded as lender", () => {
@@ -152,4 +175,3 @@ describe("A borrower user request a loan...", () => {
 // test.skip('if a user extends credit to an existing agent, an edge is added to the network', async () => {
 
 // })
-

@@ -49,6 +49,7 @@ export enum LoanRequestStatus {
     // awaiting_guarantor_confirmation="awaiting_guarantor_confirmation",
     awaiting_borrower_confirmation="awaiting_borrower_confirmation",
     live="live",
+    settled="settled"
     // TODO add more
 }
 

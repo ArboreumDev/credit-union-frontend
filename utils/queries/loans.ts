@@ -49,6 +49,7 @@ GET_REQUEST_BY_ID: /* GraphQL */ `
         lender_amount
       }
     }
+    # TODO decrease lender-balances
     insert_receivables(objects: $lender_receivables) {
       affected_rows
     }

@@ -82,7 +82,7 @@ export async function addNetwork(gqlclient, users, edges) {
 
 
 export const getAllUsers = async(gqlclient) => {
-    let data = await gqlclient.request(GET_USERS)
+    let data = await gqlclient.request(Accounts.GET_USERS)
     return data.user
 }
 

@@ -30,17 +30,6 @@ mutation ($edge: edges_insert_input!) {
     }
   }`
 
-export const GET_USERS = `
-  query getUsers {
-    user {
-      id
-      name
-      user_number
-      email
-      }
-    }
-`
-
 export const GET_EDGES_BY_STATUS = `
 query getNetworkEdgesByStatus ($status: edge_status!) {
   edges(where: {status: {_eq: $status} }) {
@@ -309,36 +298,7 @@ export const START_LOAN = `
 // -------------------- USER -----------------------------------
 // -------------------------------------------------------------
 
-// TODO adjust this one to take different status
-export const GET_ACTIVE_LOANS_BY_LENDER = `
-  query activeLoanRequestsByLender ($lender_id: uuid!) {
-    loan_participants (where: {
-      _and: [
-        {lender_id: {_eq: $lender_id}},
-        {loan_request: {status: {_in: ["granted", "in_payback"] }}}
-      ]
-    }
-    ){
-      loan_id
-      lender_amount
-    }
-  }
-`
 
-export const GET_LOANS_BY_BORROWER_AND_STATUS = `
-  query loansByBorrowerAndStatus ($borrower_id: uuid!, $statusList:[String!]!) {
-    loan_requests (where: {
-      _and: [
-        {borrower_id: {_eq: $borrower_id}},
-        {status: {_in: $statusList}}
-        ]
-      }
-    ) {
-      request_id
-      amount
-    }
-  }
-`
 
 export const EXAMPLE_INPUTS = {
   insert_edge: {
