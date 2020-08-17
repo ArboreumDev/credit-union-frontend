@@ -27,16 +27,8 @@ export type User = {
   demographic_info?: any
 }
 
-// export type UserInsertInput = {
-//     name: string
-//     email: string
-//     image: string
-//     phone: string
-//     user_type: UserType
-// }
 // TYPES FROM GRAPHQL
 // TODO @PARUTHI, maybe those can be generated with: https://graphql-code-generator.com/docs/plugins/typescript
-
 export enum EdgeStatus {
     active="active",
     awaiting_lender_confirmation="awaiting_lender_confirmation",
@@ -61,7 +53,6 @@ type LenderInfo = {
     interest_rate: number
 }
 
-// same as 
 type LenderInput = {
     request_id: string
     lender_id: string

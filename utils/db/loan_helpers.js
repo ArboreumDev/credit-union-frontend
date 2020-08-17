@@ -1,10 +1,5 @@
-import {UPDATE_LOAN_REQUEST_WITH_OFFER} from "./queries"
-// const getDashboardInfo = async () => {
-// }
+import Loans from "../queries/loans";
 
-
-// const demandFunctionToLoanParticipantInfo = async () => {
-// }
 
  /**
   * When the ai is done, this function should be called to save stuff into the DB
@@ -19,7 +14,7 @@ export const storeAiResultToDB = async (graphqlClient, request_id, bestOffer, ot
         request_id,
         new_offer: bestOffer
     }
-    const res = graphqlClient.request(UPDATE_LOAN_REQUEST_WITH_OFFER, variables)
+    const res = graphqlClient.request(Loans.UPDATE_LOAN_REQUEST_WITH_OFFER, variables)
     return res
 }
 

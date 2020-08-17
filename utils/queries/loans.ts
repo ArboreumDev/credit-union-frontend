@@ -1,4 +1,14 @@
 export default {
+INITIATE_LOAN_REQUEST: `
+  mutation createLoanRequest ($request_object: loan_requests_insert_input!) {
+    insert_loan_requests_one (object: $request_object) {
+        request_id
+        amount
+        purpose
+        status
+        risk_calc_result
+    }
+  }`,
 GET_REQUEST_BY_ID: /* GraphQL */ `
   query GetRequestById($request_id: uuid!) {
     loan_requests_by_pk(request_id: $request_id) {
@@ -11,6 +21,21 @@ GET_REQUEST_BY_ID: /* GraphQL */ `
         payback_status
         }
     }`,
+UPDATE_LOAN_REQUEST_WITH_OFFER: `
+  mutation update_loan_request_with_offer (
+    $request_id: uuid!
+    $new_offer: jsonb!,
+  ) {
+    update_loan_requests_by_pk (
+      pk_columns: {request_id: $request_id}
+      _set: { status: "awaiting_borrower_confirmation" }
+      _append: {risk_calc_result: $new_offer}
+    ) {
+      request_id
+      status
+      risk_calc_result
+    }
+  }`,
   /* TODO add option to choose other but the latestOffer */
   GET_LOAN_OFFER: /* GraphQL */ `
   query getOffer ($request_id: uuid!) {

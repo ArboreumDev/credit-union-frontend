@@ -1,8 +1,8 @@
 import { initializeGQL } from "../../utils/db/GQLClient";
 import { users, basic_connections } from './fixtures'
-import { INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS, CREATE_USER } from "../../utils/db/queries";
+import Network from "../../utils/queries/network"
 import Accounts from '../../utils/queries/accounts'
-import {get } from "http";
+// import {get } from "http";
 
 // # REFACTOR make this a type
 const EDGE_STATUS = {
@@ -63,7 +63,7 @@ export async function addEdgesFromList(gqlclient, users, edges) {
     let e = []
     for (var edge of edges) {
         var insert_edge_input = create_edge_insert_input_from_fixture(edge, users)
-        let data = await gqlclient.request(INSERT_EDGE, { "edge": insert_edge_input })
+        let data = await gqlclient.request(Network.INSERT_EDGE, { "edge": insert_edge_input })
     }
     return e
 }
@@ -85,35 +85,3 @@ export const getAllUsers = async(gqlclient) => {
     let data = await gqlclient.request(Accounts.GET_USERS)
     return data.user
 }
-
-
-// export create_edge_insert_input_from_user_input(user_input, existing_users, other_user_email=None) => {
-//     /** create an edge insert input given the edge 
-//      * @param edge [from, to, credit_line] 
-//      * @param users dict of users existing in the system that can be indexed by the user-number
-//      * @param inserted_by user who creates the edge, used to addthe 
-//      * */
-
-//     // set edge_status dependent creator being lender or borrower 
-//     let edge_status = "active"
-//     if (inserted_by !== "TEST") {
-//       if (borrower in Object.keys(users)) {
-//         if (lender in Object.keys(users)) {
-//           if (inserted_by === lender) {
-//             edge_status = EDGE_STATUS.active
-//           } else { edge_status = EDGE_STATUS.awaiting_lender_confirmation }
-//         } else { edge_status = EDGE_STATUS.awaiting_lender_signup }
-//       } else { edge_status = EDGE_STATUS.awaiting_borrower_signup }
-//     }
-
-//     // set other user email dependant on inserted_by //TODO use email as foreign key
-//     let other_user_email = other_user_email
-
-//     return {
-//         trust_amount: edge[2],
-//         status: 'active',
-//         borrower_id: users[borrower][id],
-//         lender_id: users[lender][id],
-//         other_user_email:
-//     }
-// }

@@ -8,9 +8,7 @@ const uuids = [
 
 
 // REFACTOR to user-input type
-
 let user1 = {
-    // 'id': uuids[1],
     "user_number": 1,
     "phone": "1234",
     "name": "rick",
@@ -31,7 +29,6 @@ let user2 = {
 }
 
 let user3 = {
-    // 'id': uuids[2],
     "user_number": 3,
     "phone": "1234",
     "name": "morty",
@@ -52,9 +49,6 @@ export const USER4 = {
     "demographic_info": {"country": "spaceland"}
 }
 
-
-
-// export const users = {1: user1, 2: user2, 3:user3}
 export const USERS = {1: user1, 2: user2, 3: user3}
 
 const basic_connections = [[1, 2, 100], [2, 3, 50]]

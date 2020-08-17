@@ -1,14 +1,13 @@
 import { initializeGQL } from "../utils/db/GQLClient";
-
-import {DELETE_NETWORK, INSERT_EDGE, RESET_DB } from "../utils/db/queries";
-// import Accounts from "../utils/queries/accounts"
 import {USERS, USER4, basic_network} from "./fixtures/fixtures";
 import { addNetwork, getAllUsers } from "./fixtures/fixture_helpers";
 import { getNetwork } from "../utils/db/network_helpers";
-import { RESET } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { LoanRequestStatus, EdgeStatus } from "../utils/types";
 import { DbClient } from "../utils/db/DBClient";
 import {User} from "../utils/types"
+import Helpers from "../utils/queries/helpers"
+// import Accounts from "../utils/queries/accounts"
+// import Network from "../utils/queries/network"
 
 // require("dotenv").config({ path: ".env.local" });
 global.fetch = require("node-fetch");
@@ -23,15 +22,15 @@ const TEST_ADMIN_SECRET = "myadminsecretkey"
 let client: DbClient;
 let borrower1;
 let lender1;
-// lender 2 is farther away from 
+// lender 2 is farther away from borrower
 let lender2;
 // let guarantor1;
 
 beforeAll( async () => {
   // clear the DB and add basic network from fixture
   client = new DbClient(initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL))
-  // await client.executeGQL(DELETE_NETWORK)
-  await client.executeGQL(RESET_DB)
+  // await client.executeGQL(Network.DELETE_NETWORK)
+  await client.executeGQL(Helpers.RESET_DB)
   let res = await addNetwork(client._fetcher, USERS, basic_network.edges)
 
   // set borrower and level1 and level2 lenders for basic network
@@ -45,7 +44,7 @@ beforeAll( async () => {
 
 afterAll( async () => {
   // await client.executeGQL(DELETE_NETWORK)
-  // await client.executeGQL(RESET_DB)
+  // await client.executeGQL(Helpers.RESET_DB)
 })
 
 describe("setting up the network from fixtures", () =>{
@@ -124,9 +123,7 @@ describe("A borrower user request a loan...", () => {
     test.skip("Both lender and borrrower see the loan appearing in their loan history", async () => { })
 
     test("The lender sees an updated breakdown of their portfolio ", async () => { 
-      console.log(borrower1, lender1, lender2)
       const dashboard = await client.getLenderDashboadInfo(lender1.id)
-      console.log('dash', dashboard.idle, lender1)
       expect(dashboard.invested).toBeGreaterThan(0)
       expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
       // expect(dashboard.idle).toBeLessThan(lender1.balance) // TODO 
@@ -135,43 +132,3 @@ describe("A borrower user request a loan...", () => {
 
   })
 })
-
-// describe.skip("When user is onboarded as lender", () => {
-//   test("they are asked to confirm existing borrower requests", async () =>{})
-//   // TODO write a mutation that the frontend can subscribe too
-// })
-
-// describe.skip("When user is onboarded as borrower", () => {
-//   test("they are extended credit from lenders that trust them", async () =>{})
-//   test.skip("they can add their trusted borrowers", async () =>{})
-//   // TODO add way more cases
-// })
-
-// describe.skip("When a loan request is created ...", () => {
-//   test("network risk is updated", async () =>{})
-//   test("demand functions are generated", async () =>{})
-//   test("An offer is being made to them", async () =>{})
-//   // TODO add way more cases
-// })
-
-// describe.skip("When a loan request is accepted ...", () => {
-//   test("Lenders are associated with the loan", async () =>{})
-//   test.skip("Loan request is marked as confirmed", async () =>{})
-//   test.skip("Lenders balances are reduced", async () =>{})
-//   test.skip("Borrower balances is increased", async () =>{})
-//   test.skip("payables and receivables are created", async () =>{})
-//   test.skip("supporters cash is encumbered", async () =>{})
-//   test.skip("Borrowers can query how much they owe ", async () =>{})
-//   test.skip("Lenders can see how much have invested", async () =>{})
-//   test.skip("Lenders can see how much they are likely to earn", async () =>{})
-//   test.skip("Supporters can see how much money they are guaranteeing", async () =>{})
-// })
-
-
-// describe.skip("When a loan request is paid back ...", () => {
-// })
-
-
-// test.skip('if a user extends credit to an existing agent, an edge is added to the network', async () => {
-
-// })
