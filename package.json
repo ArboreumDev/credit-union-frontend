@@ -6,7 +6,9 @@
         "build": "next build",
         "start": "next start",
         "test": "jest --watch",
-        "test:ci": "jest --ci"
+        "test:ci": "jest --ci",
+        "migrate": "cd hasura && hasura migrate apply",
+        "metadata": "cd hasura && hasura metadata apply"
     },
     "dependencies": {
         "@blueprintjs/core": "3.30.0",
