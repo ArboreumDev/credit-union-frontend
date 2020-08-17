@@ -26,6 +26,8 @@ jobs:
         node-version: '12.x'
     - name: Install dependencies
       run: yarn --frozen-lockfile
+    - name: Install hasura
+      run: yarn add hasura-cli
     - name: Test with jest
       run: |
-        yarn test:ci
+        cd tests; make test
