@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import formidable from "formidable"
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "5mb",
+    },
+  },
+}
 const BUCKET = "kyc-arboreum"
 
 // Load the AWS SDK for Node.js
 var AWS = require("aws-sdk")
 // Set the region
-AWS.config.update({ region: "eu-west-2" })
+AWS.config.update({ region: "ap-south-1" })
 
 // configure the keys for accessing AWS
 AWS.config.update({
