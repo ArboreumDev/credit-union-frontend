@@ -1,7 +1,6 @@
 import { initializeGQL } from "../utils/db/GQLClient";
 import {USERS, USER4, basic_network} from "./fixtures/fixtures";
 import { addNetwork, getAllUsers } from "./fixtures/fixture_helpers";
-import { getNetwork } from "../utils/db/network_helpers";
 import { LoanRequestStatus, EdgeStatus } from "../utils/types";
 import { DbClient } from "../utils/db/DBClient";
 import {User} from "../utils/types"
@@ -57,7 +56,7 @@ describe("setting up the network from fixtures", () =>{
   });
 
   test('the active network can be queried', async () => {
-    let network = await getNetwork(client._fetcher, 'active')
+    let network = await client.getNetwork('active')
     expect(network.edges).toStrictEqual(basic_network.edges)
     expect(network.nodes).toStrictEqual(basic_network.nodes)
   })
@@ -101,7 +100,7 @@ describe("A borrower user request a loan...", () => {
     // verify the creation of input to the optimizer:
     testOutput = data.testing
     expect(testOutput.ai_input).toHaveProperty("potential_lenders")
-    // expect(testOutput.ai_input.potential_lenders.includes(lender1.id)).toBeTruthy() // <-- not sure why this fails
+    expect(testOutput.ai_input.potential_lenders.includes(lender1.id)).toBeTruthy()
     
     // verify how the output of the optimizer is stored in DB:
     expect(request.risk_calc_result).toHaveProperty("latestOffer") // OR
@@ -117,7 +116,7 @@ describe("A borrower user request a loan...", () => {
       const dashboard = await client.getBorrowerDashboardInfo(borrower1.id)
       expect(dashboard.amountRepaid).toBe(0)
       expect(dashboard.loanAmount).toBe(amount)
-      // expect(dashboard.outstanding.total).toBeGreaterThan(amount) // TODO
+      expect(dashboard.outstanding.total).toBeGreaterThan(amount)
      })
 
     test.skip("Both lender and borrrower see the loan appearing in their loan history", async () => { })

@@ -24,7 +24,7 @@ export const mockedLoanOffer = (potential_lenders, amount) => {
   // return {lender_id: x, amount: lender_amount, interest_rate: 1 }
   // })
   const mockResult = {
-    borrower: { amount: amount, interest: 2 },
+    borrower: { amount: amount, interest: 10 },
     lenders
   }
   return mockResult

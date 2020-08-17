@@ -2,11 +2,13 @@ import { initializeGQL } from "./GQLClient"
 import request, { GraphQLClient } from "graphql-request"
 import Accounts from "../queries/accounts"
 import Loans from "../queries/loans"
+import { getNodesFromEdgeList } from "../db/network_helpers"
 import { User, LoanRequestStatus } from "../types"
-import { storeAiResultToDB } from "./loan_helpers"
 import { mockedLoanOffer } from "../../tests/mock/swarmai"
 import { getAllUsers } from "../../tests/fixtures/fixture_helpers"
 import { transform_to_start_loan_input } from "./loan_helpers"
+import Network from '../queries/network'
+import { EdgeStatus } from '../types'
 // import borrower from "../../components/dashboard/borrower"
 // import { setupMaster } from "cluster"
 // import lender from "../../components/dashboard/lender"
@@ -159,8 +161,7 @@ export class DbClient {
     // Once done, the AI will then call back into into our api and eventually trigger a function that for simplicity will
     // now be mocked up like this:
     const mockedAiResult = mockedLoanOffer(ai_input.potential_lenders, req.amount)
-    const ai_result = await storeAiResultToDB(
-      this._fetcher,
+    const ai_result = await this.storeAiResultToDB(
       request_id,
       { latestOffer: mockedAiResult }
     )
@@ -231,5 +232,35 @@ export class DbClient {
       guarantors,
     }
     return mockReturn
+  }
+  
+  /**
+   * When the ai is done, this function should be called to save stuff into the DB
+   * Currently, stores best offer-params in loan_requests.risk_calc_result
+   * and updates status of loan_request to 'awaiting_borrower_confirmation`
+   * @param {} graphqlClient
+   * @param {} bestOffer {interest_rate: int, lenders: [{lender_id, lender_amount, interest_rate}]} <the latter is lender_insert_input
+   * @param {*} otherParams whatever things we need to store too (demand functions, risk result,...)
+   */
+  storeAiResultToDB = async (request_id, bestOffer, otherParams = null) => {
+    const variables = {
+      request_id,
+      new_offer: bestOffer
+    }
+    const res = this._fetcher.request(Loans.UPDATE_LOAN_REQUEST_WITH_OFFER, variables)
+    return res
+  }
+  
+  /**
+   * get the network and edges of a given edge_status
+   * @param {} gqlclient
+   * @param {*} status
+   * @returns {} an object {nodes: [user_number1, ...], edges: [[from, to, credit], ...]}
+   */
+  getNetwork = async (status: EdgeStatus = EdgeStatus.active) => {
+    const data = await this._fetcher.request(Network.GET_EDGES_BY_STATUS, { status: status })
+    const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
+    const nodes = getNodesFromEdgeList(edges)
+    return { nodes, edges }
   }
 }
