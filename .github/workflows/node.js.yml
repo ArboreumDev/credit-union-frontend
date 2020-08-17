@@ -24,10 +24,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+    - name: Install hasura
+      run: |
+        yarn add --dev hasura-cli
+        hasura
     - name: Install dependencies
       run: yarn --frozen-lockfile
-    - name: Install hasura
-      run: yarn global add hasura-cli
     - name: Test with jest
       run: |
         cd tests; make test
