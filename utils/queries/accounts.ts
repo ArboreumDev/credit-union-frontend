@@ -53,6 +53,7 @@ GET_LOANS_BY_BORROWER_AND_STATUS: `
         request_id
         amount
         status
+        risk_calc_result
         payables {
           pay_frequency
           due_date

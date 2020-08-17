@@ -62,6 +62,7 @@ UPDATE_LOAN_REQUEST_WITH_OFFER: `
     ) 
     {
       request_id
+      status
     }
     insert_payables_one (object: $payable) {
       amount_total

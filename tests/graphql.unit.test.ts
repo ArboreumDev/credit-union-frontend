@@ -105,9 +105,17 @@ describe("A borrower user request a loan...", () => {
     // verify how the output of the optimizer is stored in DB:
     expect(request.risk_calc_result).toHaveProperty("latestOffer") // OR
   })
+  
+  test("the borrower can see the parameters of the offer in their dashboard", async () => {
+    const dashboard = await client.getBorrowerDashboardInfo(borrower1.id)
+    expect(dashboard.status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
+    expect(dashboard.principal).toBe(amount)
+
+  })
 
   test("Approving a loan offer triggers creation of payables, receivables", async () => {
     const res = await client.acceptLoanOffer(request.request_id, "latestOffer")
+    expect(res.update_loan_requests_by_pk.status).toBe(LoanRequestStatus.live)
     // TODO verify payables, encumbrances, receivables, ....
   })
 

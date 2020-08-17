@@ -13,7 +13,7 @@ export const transform_to_start_loan_input = (request_id, offer_params) => {
       percentage: x.percentage
     }
   })
-  
+
   const lender_receivables = offer_params.risk_calc_result.latestOffer.lenders.map(x => {
     var owedAmount = lenderAmountToAmountWithInterest(x.lender_amount, x.lender_interest_rate)
     return {

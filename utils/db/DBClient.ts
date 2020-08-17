@@ -57,31 +57,53 @@ export class DbClient {
     // TODO
   }
 
+  /**
+   * return {status: null} if the borrower has neither a request, nor an accepted loan
+   * {status: 'initiated',...} if the user has requested an offer, but the AI is still processing
+   * {status: 'awaiting_borrower_confirmation',...} if there is an offer and the user needs to accept/reject
+   * {status: 'live', ... } if there is an active loan request (that requires payback)
+   * @param borrower_id 
+   */
   getBorrowerDashboardInfo = async (borrower_id) => {
     const data = await this._fetcher.request(
       Accounts.GET_LOANS_BY_BORROWER_AND_STATUS, 
-      {borrower_id, statusList: [LoanRequestStatus.live]}
+      {borrower_id, statusList: [LoanRequestStatus.live, LoanRequestStatus.awaiting_borrower_confirmation, LoanRequestStatus.initiated]}
     )
-    if (data == undefined) return {}
+    if (data == undefined) return {status: null}
 
-    const active_request = data.loan_requests.filter(x => x.status == LoanRequestStatus.live)[0]
-    return {
-      loanId: active_request.request_id,
-      status: active_request.status,
-      loanAmount: active_request.amount,
-      outstanding: {
-        principal: "TODO how do we calculate that?",
-        interest: "TODO how do we calculate that?",
-        total: active_request.payables[0].amount_remain,
-      },
-      amountRepaid: active_request.payables[0].amount_paid,
-      nextPayment: {
-        nextDate: "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
-        nextAmount: "TODO remainAmount / # of remaining payments"
-      },
-      lastPaid: active_request.payables[0].lastPaid
+    const active_request = data.loan_requests[0]
+    if (active_request.status === LoanRequestStatus.live) {
+      return {
+        loanId: active_request.request_id,
+        status: active_request.status,
+        loanAmount: active_request.amount,
+        outstanding: {
+          principal: "TODO how do we calculate that?",
+          interest: "TODO how do we calculate that?",
+          total: active_request.payables[0].amount_remain,
+        },
+        amountRepaid: active_request.payables[0].amount_paid,
+        nextPayment: {
+          nextDate: "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
+          nextAmount: "TODO remainAmount / # of remaining payments"
+        },
+        lastPaid: active_request.payables[0].lastPaid
+      }
+    } else if (active_request.status === LoanRequestStatus.awaiting_borrower_confirmation) {
+      return {
+        loanId: active_request.request_id,
+        status: active_request.status,
+        principal: active_request.amount,
+        offerParams: {
+          raw: active_request.risk_calc_result.latestOffer,
+          interest: "TODO",
+          totalAmount: "TODO loanAmount + interest",
+          monthly: "TODO",
+          dueDate: "TDODO always in 6 months?"
+      }
     }
   }
+}
 
   getLenderDashboadInfo = async (lender_id: string) => {
     const data = await this._fetcher.request(Accounts.GET_LENDER_DASHBOARD_INFO, {user_id: lender_id})
