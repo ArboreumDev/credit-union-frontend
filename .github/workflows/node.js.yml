@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: yarn --frozen-lockfile
     - name: Install hasura
-      run: yarn add hasura-cli
+      run: yarn global add hasura-cli
     - name: Test with jest
       run: |
         cd tests; make test
