@@ -6,7 +6,7 @@ import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox
 
 import { initializeGQL } from "../utils/graphql_client";
 import { useRouter } from "next/dist/client/router";
-
+import Dropzone from "../components/Dropzone";
 
 const CREATE_USER_MUTATION = /* GraphQL */ `
   mutation CreateUser(
@@ -68,6 +68,10 @@ export default function Onboarding() {
             <H4>Do you plan to lend or borrow?</H4>
             <Radio name="user_type" value="lender" label="Lend" inline defaultChecked inputRef={register({ required: true })} />
             <Radio name="user_type" value="borrower" label="Borrow" inline inputRef={register({ required: true })} />
+          </div>
+          <div>
+            <H4>KYC Documents:</H4>
+            <Dropzone email={user.email} />
           </div>
           <Button type="submit" intent="primary">
             Submit
