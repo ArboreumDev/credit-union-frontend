@@ -5519,7 +5519,7 @@ export type User = {
   /** An aggregated array relationship */
   recommendation_risks_aggregate: Recommendation_Risk_Aggregate;
   updated_at: Scalars['timestamptz'];
-  user_number?: Maybe<Scalars['Int']>;
+  user_number: Scalars['Int'];
   user_type: Scalars['user_t'];
 };
 
@@ -6226,10 +6226,7 @@ export type Uuid_Comparison_Exp = {
 };
 
 export type CreateUserMutationVariables = Exact<{
-  name: Scalars['String'];
-  email: Scalars['String'];
-  user_type: Scalars['user_t'];
-  phone: Scalars['String'];
+  user: User_Insert_Input;
 }>;
 
 
@@ -6237,7 +6234,7 @@ export type CreateUserMutation = (
   { __typename?: 'mutation_root' }
   & { insert_user_one?: Maybe<(
     { __typename?: 'user' }
-    & Pick<User, 'id' | 'created_at' | 'email'>
+    & Pick<User, 'id' | 'created_at' | 'email' | 'user_type' | 'name' | 'phone' | 'demographic_info'>
   )> }
 );
 
@@ -6266,13 +6263,110 @@ export type DeleteNetworkMutation = (
   )> }
 );
 
+export type InsertEdgeMutationVariables = Exact<{
+  edge: Edges_Insert_Input;
+}>;
+
+
+export type InsertEdgeMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_edges?: Maybe<(
+    { __typename?: 'edges_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'edges' }
+      & Pick<Edges, 'edge_id' | 'status' | 'other_user_email' | 'trust_amount'>
+      & { from_user?: Maybe<(
+        { __typename?: 'user' }
+        & Pick<User, 'name' | 'balance'>
+      )>, to_user?: Maybe<(
+        { __typename?: 'user' }
+        & Pick<User, 'name'>
+      )> }
+    )> }
+  )> }
+);
+
+export type CreateTestUserMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  email: Scalars['String'];
+  user_type: Scalars['user_t'];
+  phone: Scalars['String'];
+  demographic_info: Scalars['jsonb'];
+}>;
+
+
+export type CreateTestUserMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_user_one?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'id' | 'created_at' | 'email' | 'user_type' | 'name' | 'phone' | 'demographic_info'>
+  )> }
+);
+
+export type DeleteAllUsersMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteAllUsersMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_user?: Maybe<(
+    { __typename?: 'user_mutation_response' }
+    & Pick<User_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
+export type ResetDbMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResetDbMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_receivables?: Maybe<(
+    { __typename?: 'receivables_mutation_response' }
+    & Pick<Receivables_Mutation_Response, 'affected_rows'>
+  )>, delete_payables?: Maybe<(
+    { __typename?: 'payables_mutation_response' }
+    & Pick<Payables_Mutation_Response, 'affected_rows'>
+  )>, delete_encumbrances?: Maybe<(
+    { __typename?: 'encumbrances_mutation_response' }
+    & Pick<Encumbrances_Mutation_Response, 'affected_rows'>
+  )>, delete_guarantors?: Maybe<(
+    { __typename?: 'guarantors_mutation_response' }
+    & Pick<Guarantors_Mutation_Response, 'affected_rows'>
+  )>, delete_recommendation_risk?: Maybe<(
+    { __typename?: 'recommendation_risk_mutation_response' }
+    & Pick<Recommendation_Risk_Mutation_Response, 'affected_rows'>
+  )>, delete_loan_risk?: Maybe<(
+    { __typename?: 'loan_risk_mutation_response' }
+    & Pick<Loan_Risk_Mutation_Response, 'affected_rows'>
+  )>, delete_loan_participants?: Maybe<(
+    { __typename?: 'loan_participants_mutation_response' }
+    & Pick<Loan_Participants_Mutation_Response, 'affected_rows'>
+  )>, delete_encumbrance_participants?: Maybe<(
+    { __typename?: 'encumbrance_participants_mutation_response' }
+    & Pick<Encumbrance_Participants_Mutation_Response, 'affected_rows'>
+  )>, delete_loan_requests?: Maybe<(
+    { __typename?: 'loan_requests_mutation_response' }
+    & Pick<Loan_Requests_Mutation_Response, 'affected_rows'>
+  )>, delete_edges?: Maybe<(
+    { __typename?: 'edges_mutation_response' }
+    & Pick<Edges_Mutation_Response, 'affected_rows'>
+  )>, delete_user?: Maybe<(
+    { __typename?: 'user_mutation_response' }
+    & Pick<User_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 
 export const CreateUserDocument = gql`
-    mutation CreateUser($name: String!, $email: String!, $user_type: user_t!, $phone: String!) {
-  insert_user_one(object: {email: $email, user_type: $user_type, name: $name, phone: $phone}) {
+    mutation CreateUser($user: user_insert_input!) {
+  insert_user_one(object: $user) {
     id
     created_at
     email
+    user_type
+    name
+    phone
+    demographic_info
   }
 }
     `;
@@ -6287,6 +6381,82 @@ export const AllUsersDocument = gql`
     `;
 export const DeleteNetworkDocument = gql`
     mutation DeleteNetwork {
+  delete_edges(where: {}) {
+    affected_rows
+  }
+  delete_user(where: {}) {
+    affected_rows
+  }
+}
+    `;
+export const InsertEdgeDocument = gql`
+    mutation InsertEdge($edge: edges_insert_input!) {
+  insert_edges(objects: [$edge]) {
+    returning {
+      edge_id
+      status
+      other_user_email
+      trust_amount
+      from_user {
+        name
+        balance
+      }
+      to_user {
+        name
+      }
+    }
+  }
+}
+    `;
+export const CreateTestUserDocument = gql`
+    mutation CreateTestUser($id: uuid!, $name: String!, $email: String!, $user_type: user_t!, $phone: String!, $demographic_info: jsonb!) {
+  insert_user_one(object: {id: $id, email: $email, user_type: $user_type, name: $name, phone: $phone, demographic_info: $demographic_info}) {
+    id
+    created_at
+    email
+    user_type
+    name
+    phone
+    demographic_info
+  }
+}
+    `;
+export const DeleteAllUsersDocument = gql`
+    mutation DeleteAllUsers {
+  delete_user(where: {}) {
+    affected_rows
+  }
+}
+    `;
+export const ResetDbDocument = gql`
+    mutation ResetDB {
+  delete_receivables(where: {}) {
+    affected_rows
+  }
+  delete_payables(where: {}) {
+    affected_rows
+  }
+  delete_encumbrances(where: {}) {
+    affected_rows
+  }
+  delete_guarantors(where: {}) {
+    affected_rows
+  }
+  delete_recommendation_risk(where: {}) {
+    affected_rows
+  }
+  delete_loan_risk(where: {}) {
+    affected_rows
+  }
+  delete_loan_participants(where: {}) {
+    affected_rows
+  }
+  delete_encumbrance_participants(where: {}) {
+    affected_rows
+  }
+  delete_loan_requests(where: {}) {
+    affected_rows
+  }
   delete_edges(where: {}) {
     affected_rows
   }
@@ -6310,6 +6480,18 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     DeleteNetwork(variables?: DeleteNetworkMutationVariables): Promise<DeleteNetworkMutation> {
       return withWrapper(() => client.request<DeleteNetworkMutation>(print(DeleteNetworkDocument), variables));
+    },
+    InsertEdge(variables: InsertEdgeMutationVariables): Promise<InsertEdgeMutation> {
+      return withWrapper(() => client.request<InsertEdgeMutation>(print(InsertEdgeDocument), variables));
+    },
+    CreateTestUser(variables: CreateTestUserMutationVariables): Promise<CreateTestUserMutation> {
+      return withWrapper(() => client.request<CreateTestUserMutation>(print(CreateTestUserDocument), variables));
+    },
+    DeleteAllUsers(variables?: DeleteAllUsersMutationVariables): Promise<DeleteAllUsersMutation> {
+      return withWrapper(() => client.request<DeleteAllUsersMutation>(print(DeleteAllUsersDocument), variables));
+    },
+    ResetDB(variables?: ResetDbMutationVariables): Promise<ResetDbMutation> {
+      return withWrapper(() => client.request<ResetDbMutation>(print(ResetDbDocument), variables));
     }
   };
 }
