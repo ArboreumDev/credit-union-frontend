@@ -11,11 +11,11 @@ import {
 } from "@blueprintjs/core"
 
 import Link from "next/link"
-import { User, UserType, Session } from "../utils/types"
+import { Session } from "../utils/types"
 
 export interface NavigationProps {}
 
-export default (props: { session?: Session }) => (
+const AppBar = (props: { session?: Session }) => (
   <Navbar className={Classes.DARK}>
     <NavbarGroup align={Alignment.LEFT}>
       <Link href="/">
@@ -34,3 +34,5 @@ export default (props: { session?: Session }) => (
     </NavbarGroup>
   </Navbar>
 )
+
+export default AppBar
