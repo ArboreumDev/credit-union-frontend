@@ -1,24 +1,22 @@
 import { getSession } from 'next-auth/client'
 import AppBar from '../components/AppBar';
+import {Navbar} from '../src/Components/Navbar';
 import Video from '../components/video';
 import {UserType, Session } from '../utils/types';
 import { useRouter } from 'next/dist/client/router';
 import { useEffect } from 'react';
 import { getSessionAsProps } from '../utils/ssr';
 import Onboarding from './onboarding';
-import LenderDashboard from '../components/dashboard/lender'
-import BorrowerDashboard from "../components/dashboard/borrower"
+import LenderDashboard from '../components/dashboard/lender';
+import BorrowerDashboard from "../components/dashboard/borrower";
 
 
 const Page = (props: { session: Session }) => {
-  const router = useRouter()
+  const router = useRouter();
   if (!props.session)
     return (
-      <div>
-        <AppBar />
-        <Video />
-      </div>
-    )
+        <Navbar />
+    );
   else {
     if (!props.session.user.user_type) {
       // if Onboarding
@@ -33,8 +31,8 @@ const Page = (props: { session: Session }) => {
       )
   }
 }
-}
+};
 
-Page.getInitialProps = (context) => getSessionAsProps(context)
+Page.getInitialProps = (context) => getSessionAsProps(context);
 
 export default Page
