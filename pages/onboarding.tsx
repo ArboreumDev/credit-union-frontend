@@ -22,16 +22,18 @@ export default function Onboarding() {
   const gqlClient = initializeGQL()
 
   const sdk = getSdk(gqlClient)
-  sdk.AllUsers
   
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
   const onSubmit = (data)=>{
-    const variables = { ...data, name: user.name, email: user.email } as User
-
     // Call mutation
-    gqlClient.request(CREATE_USER_MUTATION, variables).then((res) => {
+    sdk.CreateUser({
+      name: user.name,
+      email: user.email,
+      user_type: data.user_type,
+      phone: data.user_type
+    }).then((res) => {
       console.log(res)
       // return to home
       router.push("/")
