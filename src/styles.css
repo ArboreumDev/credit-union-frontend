@@ -1,3 +1,164 @@
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/0622e9/00000000000000003b9b195e/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/0622e9/00000000000000003b9b195e/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/0622e9/00000000000000003b9b195e/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/f2973f/00000000000000003b9b195f/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/f2973f/00000000000000003b9b195f/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/f2973f/00000000000000003b9b195f/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/b238e9/00000000000000003b9b1960/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/b238e9/00000000000000003b9b1960/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/b238e9/00000000000000003b9b1960/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n3&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/fb00c9/00000000000000003b9b1962/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/fb00c9/00000000000000003b9b1962/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/fb00c9/00000000000000003b9b1962/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i3&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: italic;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/7bab4f/00000000000000003b9b1965/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/7bab4f/00000000000000003b9b1965/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/7bab4f/00000000000000003b9b1965/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "upgrade";
+    src: url("https://use.typekit.net/af/03ffb0/00000000000000003b9b1987/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/03ffb0/00000000000000003b9b1987/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/03ffb0/00000000000000003b9b1987/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: italic;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/7ffdff/00000000000000003b9b189e/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/7ffdff/00000000000000003b9b189e/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/7ffdff/00000000000000003b9b189e/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n5&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/f4d475/00000000000000003b9b1969/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/f4d475/00000000000000003b9b1969/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/f4d475/00000000000000003b9b1969/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i5&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: italic;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/e9b0b2/00000000000000003b9b18a2/27/l?subset_id=2&fvd=n3&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/e9b0b2/00000000000000003b9b18a2/27/d?subset_id=2&fvd=n3&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/e9b0b2/00000000000000003b9b18a2/27/a?subset_id=2&fvd=n3&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/e86726/00000000000000003b9b196e/27/l?subset_id=2&fvd=i4&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/e86726/00000000000000003b9b196e/27/d?subset_id=2&fvd=i4&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/e86726/00000000000000003b9b196e/27/a?subset_id=2&fvd=i4&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/3efa2e/00000000000000003b9b196f/27/l?subset_id=2&fvd=n4&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/3efa2e/00000000000000003b9b196f/27/d?subset_id=2&fvd=n4&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/3efa2e/00000000000000003b9b196f/27/a?subset_id=2&fvd=n4&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "upgrade-lights";
+    src: url("https://use.typekit.net/af/afb54a/00000000000000003b9b1970/27/l?subset_id=2&fvd=n2&v=3")
+    format("woff2"),
+    url("https://use.typekit.net/af/afb54a/00000000000000003b9b1970/27/d?subset_id=2&fvd=n2&v=3")
+    format("woff"),
+    url("https://use.typekit.net/af/afb54a/00000000000000003b9b1970/27/a?subset_id=2&fvd=n2&v=3")
+    format("opentype");
+    font-display: auto;
+    font-style: normal;
+    font-weight: 200;
+}
+
+/** {
+    font-family: "upgrade", sans-serif !important;
+    font-weight: 300;
+}*/
+
 html,
 body {
     margin: 0;
