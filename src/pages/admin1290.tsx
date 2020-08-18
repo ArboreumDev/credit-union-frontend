@@ -1,17 +1,6 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/api';
-import { initializeGQL } from '../utils/graphql_client';
-
-const GET_USERS = `
-  query MyQuery {
-    user {
-      id
-      email
-      name
-     
-    }
-  }
-`;
+import { initializeGQL } from '../gql/graphql_client';
+import { getSdk } from '../gql/sdk';
 
 export default function Hello(props: {data}) {
   const data = props.data;
@@ -19,8 +8,6 @@ export default function Hello(props: {data}) {
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
-
-  console.log(data)
   const users = data.user
 
   return <div>
@@ -32,7 +19,8 @@ export async function getServerSideProps() {
   // TODO after JWT is implemented
   // check for session and if the user is one of the admin users
   
-  const gqlClient = initializeGQL()
-  const data = await gqlClient.request(GET_USERS)
+  const sdk = getSdk(initializeGQL())
+  const data = await sdk.AllUsers()
+
   return { props: {data}};
 }

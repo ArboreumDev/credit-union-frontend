@@ -53,7 +53,7 @@ const Page = (params: Params) => {
     // console.log(params.session)
     return (
       <div className="container">
-        <AppBar session={session} />
+        <AppBar />
         <div className="grid-container">
           <div>
             <H3>Request A New Loan</H3>
