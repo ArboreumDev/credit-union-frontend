@@ -2,6 +2,10 @@ schema:
   - http://localhost:8080/v1/graphql:
       headers:
         X-Hasura-Admin-Secret: myadminsecretkey
+documents: 'src/gql/queries/*.graphql'
 generates:
-  utils/gql_types.ts:
+  src/gql/types.ts:
     - typescript
+  src/gql/sdk.ts:
+    - typescript-operations
+    - typescript-graphql-request

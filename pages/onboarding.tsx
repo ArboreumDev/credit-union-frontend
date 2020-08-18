@@ -7,28 +7,8 @@ import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox
 import { initializeGQL } from "../utils/graphql_client";
 import { useRouter } from "next/dist/client/router";
 import Dropzone from "../components/Dropzone";
+import { getSdk } from "../src/gql/sdk";
 
-const CREATE_USER_MUTATION = /* GraphQL */ `
-  mutation CreateUser(
-    $name: String!
-    $email: String!
-    $user_type: user_t!
-    $phone: String!
-  ) {
-    insert_user_one(
-      object: {
-        email: $email
-        user_type: $user_type
-        name: $name
-        phone: $phone
-      }
-    ) {
-      id
-      created_at
-      email
-    }
-  }
-`
 
 type FormData = {
   phone: string;
@@ -41,6 +21,9 @@ export default function Onboarding() {
   const [session, loading] = useSession()
   const gqlClient = initializeGQL()
 
+  const sdk = getSdk(gqlClient)
+  sdk.AllUsers
+  
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
