@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { initializeGQL } from "../../utils/graphql_client";
+import { initializeGQL } from "../../gql/graphql_client";
 
 export default async function handler(
   req: NextApiRequest,
