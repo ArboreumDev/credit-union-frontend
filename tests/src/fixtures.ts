@@ -5,7 +5,7 @@ type User = User_Insert_Input
 
 // REFACTOR to user-input type
 export const USER1: User = {
-  id: "970dca39-f591-4ad4-b5fd-d1ba4fe55951",
+  id: "170dca39-f591-4ad4-b5fd-d1ba4fe55954",
   phone: "1234",
   name: "rick",
   email: "rick@galaxy.io",
@@ -14,7 +14,7 @@ export const USER1: User = {
 }
 
 export const USER2: User = {
-  id: "970dca39-f591-4ad4-b5fd-d1ba4fe55952",
+  id: "270dca39-f591-4ad4-b5fd-d1ba4fe55954",
   name: "summer",
   phone: "1234",
   email: "summer@highschool.io",
@@ -23,7 +23,7 @@ export const USER2: User = {
 }
 
 export const USER3: User = {
-  id: "970dca39-f591-4ad4-b5fd-d1ba4fe55953",
+  id: "370dca39-f591-4ad4-b5fd-d1ba4fe55954",
   phone: "1234",
   name: "morty",
   email: "morty@galaxy.io",
