@@ -33,7 +33,7 @@ describe("setting up the network from fixtures", () => {
     await sdk.CreateUser({user: USER3})
 
     const { user } = await sdk.AllUsers()
-    console.log(user)
+
     expect(user.length).toBe(3)
   })
   test("fixture add edges", async () => {
