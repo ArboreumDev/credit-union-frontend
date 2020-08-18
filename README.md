@@ -10,13 +10,17 @@ React + Typescript + Next.js
 ## Development
 1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars. Atleast one authentication provider is needed.
 2. For local dev, edit [hosts](https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls) file
-3. `yarn dev`
+3. `yarn dev` to start server
+
+### Add graphql queries
+- Add queries to `/src/gql/queries/<query_type>/<query_name>.graphql`
+- To automatically generate the sdk: `yarn graphql-codegen`
+
 
 ## Testing
 
-- Install hasura : `npm install --global hasura-cli`
 - CI like: `cd tests; make test`
-- Watch/ Interactive tests: `yarn test`
+- Watch/ Interactive tests: `cd tests; make test-watch`
 
 
 ## Production

@@ -128,16 +128,9 @@ CREATE TABLE public."user" (
     balance integer DEFAULT 0,
     demographic_info jsonb DEFAULT jsonb_build_object(),
     phone character varying DEFAULT '+91-1231345432'::character varying NOT NULL,
-    user_number integer DEFAULT 0
+    user_number SERIAL
 );
-CREATE SEQUENCE public.user_user_number_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-ALTER SEQUENCE public.user_user_number_seq OWNED BY public."user".user_number;
+
 ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_pkey PRIMARY KEY (edge_id);
 ALTER TABLE ONLY public.encumbrances

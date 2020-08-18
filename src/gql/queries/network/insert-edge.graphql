@@ -1,0 +1,17 @@
+mutation InsertEdge($edge: edges_insert_input!) {
+  insert_edges(objects: [$edge]) {
+    returning {
+      edge_id
+      status
+      other_user_email
+      trust_amount
+      from_user {
+        name
+        balance
+      }
+      to_user {
+        name
+      }
+    }
+  }
+}
