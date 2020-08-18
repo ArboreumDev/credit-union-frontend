@@ -14,6 +14,7 @@ import AppBar from "../../components/AppBar"
 import { getSession } from "next-auth/client"
 import { Contactus, Mailto } from "../../components/ContactUs"
 import { User, Session, UserType } from "../../utils/types"
+import Router from "next/router"
 
 interface GuarantorModel {
   name: string

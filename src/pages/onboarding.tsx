@@ -1,19 +1,29 @@
 import { useSession } from "next-auth/client"
-import { User } from "../utils/types";
+import { User } from "../utils/types"
 
 import { useForm } from "react-hook-form"
-import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox, Radio } from "@blueprintjs/core";
+import {
+  Card,
+  H4,
+  Button,
+  H5,
+  NumericInput,
+  InputGroup,
+  FormGroup,
+  H1,
+  Checkbox,
+  Radio,
+} from "@blueprintjs/core"
 
-import { initializeGQL } from "../gql/graphql_client";
-import { useRouter } from "next/dist/client/router";
-import Dropzone from "../components/Dropzone";
-import { getSdk } from "../gql/sdk";
-
+import { initializeGQL } from "../gql/graphql_client"
+import { useRouter } from "next/dist/client/router"
+import Dropzone from "../components/Dropzone"
+import { getSdk } from "../gql/sdk"
 
 type FormData = {
-  phone: string;
+  phone: string
   user_type: string
-};
+}
 
 export default function Onboarding() {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
@@ -22,22 +32,26 @@ export default function Onboarding() {
   const gqlClient = initializeGQL()
 
   const sdk = getSdk(gqlClient)
-  
+
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
-  const onSubmit = (data)=>{
+  const onSubmit = (data) => {
     // Call mutation
-    sdk.CreateUser({
-      name: user.name,
-      email: user.email,
-      user_type: data.user_type,
-      phone: data.user_type
-    }).then((res) => {
-      console.log(res)
-      // return to home
-      router.push("/")
-    })
+    sdk
+      .CreateUser({
+        user: {
+          name: user.name,
+          email: user.email,
+          user_type: data.user_type,
+          phone: data.user_type,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        // return to home
+        router.push("/")
+      })
   }
 
   return (
@@ -51,8 +65,21 @@ export default function Onboarding() {
           </FormGroup>
           <div>
             <H4>Do you plan to lend or borrow?</H4>
-            <Radio name="user_type" value="lender" label="Lend" inline defaultChecked inputRef={register({ required: true })} />
-            <Radio name="user_type" value="borrower" label="Borrow" inline inputRef={register({ required: true })} />
+            <Radio
+              name="user_type"
+              value="lender"
+              label="Lend"
+              inline
+              defaultChecked
+              inputRef={register({ required: true })}
+            />
+            <Radio
+              name="user_type"
+              value="borrower"
+              label="Borrow"
+              inline
+              inputRef={register({ required: true })}
+            />
           </div>
           <div>
             <H4>KYC Documents:</H4>
