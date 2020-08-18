@@ -14,7 +14,7 @@ setup-db:
 jest-test:
 	yarn test:ci
 
-test: docker-up	setup-db jest-test docker-down
+test: docker-down docker-up setup-db jest-test docker-down
 
 test-watch: docker-up setup-db
 	yarn test
