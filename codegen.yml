@@ -4,8 +4,7 @@ schema:
         X-Hasura-Admin-Secret: myadminsecretkey
 documents: 'src/gql/queries/*.graphql'
 generates:
-  src/gql/types.ts:
-    - typescript
   src/gql/sdk.ts:
+    - typescript
     - typescript-operations
     - typescript-graphql-request
