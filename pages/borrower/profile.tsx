@@ -12,7 +12,7 @@ import {
 } from "@blueprintjs/core"
 import { AppBarSignedIn } from "../../components/AppBar"
 import { getSession } from "next-auth/client"
-import { Contactus, Mailto } from "../../components/contact"
+import { Contactus, Mailto } from "../../components/ContactUs"
 import { User, Session, UserType } from "../../utils/types"
 
 interface GuarantorModel {
