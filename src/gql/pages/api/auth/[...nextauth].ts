@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../gql/graphql_client'
-import { User } from '../../../utils/types'
-
+import { initializeGQL } from '../../../graphql_client'
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",

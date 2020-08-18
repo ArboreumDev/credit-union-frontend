@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { initializeGQL } from '../utils/graphql_client';
+import { initializeGQL } from '../gql/graphql_client';
 import { getSdk } from '../gql/sdk';
 
 export default function Hello(props: {data}) {
