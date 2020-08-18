@@ -1,7 +1,6 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/api';
-import { initializeGQL } from '../utils/graphql_client';
-import { getSdk } from '../src/gql/sdk';
+import { initializeGQL } from '../gql/graphql_client';
+import { getSdk } from '../gql/sdk';
 
 export default function Hello(props: {data}) {
   const data = props.data;
