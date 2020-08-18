@@ -1,9 +1,9 @@
 import { getSession } from 'next-auth/client'
 import AppBar from '../components/AppBar';
-import {UserType, Session } from '../../../utils/types';
+import {UserType, Session } from '../utils/types';
 import { useRouter } from 'next/dist/client/router';
 import { useEffect } from 'react';
-import { getSessionAsProps } from '../../../utils/ssr';
+import { getSessionAsProps } from '../utils/ssr';
 import Onboarding from './onboarding';
 import LenderDashboard from '../components/dashboard/lender'
 import BorrowerDashboard from "../components/dashboard/borrower"
