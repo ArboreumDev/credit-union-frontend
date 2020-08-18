@@ -1,0 +1,8 @@
+mutation DeleteNetwork{
+  delete_edges(where: {}) {
+    affected_rows
+  }
+  delete_user(where: {}) {
+    affected_rows
+  }
+}

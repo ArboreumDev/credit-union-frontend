@@ -20,6 +20,7 @@ beforeAll( async () => {
   sdk = getSdk(client)
 
   // delete network
+  
 
   // add network
 

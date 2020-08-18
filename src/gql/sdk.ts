@@ -6252,6 +6252,20 @@ export type AllUsersQuery = (
   )> }
 );
 
+export type DeleteNetworkMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteNetworkMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_edges?: Maybe<(
+    { __typename?: 'edges_mutation_response' }
+    & Pick<Edges_Mutation_Response, 'affected_rows'>
+  )>, delete_user?: Maybe<(
+    { __typename?: 'user_mutation_response' }
+    & Pick<User_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 
 export const CreateUserDocument = gql`
     mutation CreateUser($name: String!, $email: String!, $user_type: user_t!, $phone: String!) {
@@ -6271,6 +6285,16 @@ export const AllUsersDocument = gql`
   }
 }
     `;
+export const DeleteNetworkDocument = gql`
+    mutation DeleteNetwork {
+  delete_edges(where: {}) {
+    affected_rows
+  }
+  delete_user(where: {}) {
+    affected_rows
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -6283,6 +6307,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     AllUsers(variables?: AllUsersQueryVariables): Promise<AllUsersQuery> {
       return withWrapper(() => client.request<AllUsersQuery>(print(AllUsersDocument), variables));
+    },
+    DeleteNetwork(variables?: DeleteNetworkMutationVariables): Promise<DeleteNetworkMutation> {
+      return withWrapper(() => client.request<DeleteNetworkMutation>(print(DeleteNetworkDocument), variables));
     }
   };
 }
