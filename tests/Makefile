@@ -7,9 +7,8 @@ docker-down:
 setup-db:
 	@sleep 5 && echo "setting up hasura"
 	# TODO: handle this within a docker container, so hasura command works without any setup
-	cd ../hasura; \
-	hasura migrate apply; \
-	hasura metadata apply
+	yarn migrate
+	yarn metadata
 
 jest-test:
 	yarn test:ci
