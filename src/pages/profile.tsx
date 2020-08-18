@@ -1,7 +1,7 @@
 import { AnchorButton } from "@blueprintjs/core"
-import { Session } from "../utils/types"
-import { getSessionAsProps } from "../utils/ssr"
-import AppBar  from "../components/AppBar"
+import { Session } from "../../../utils/types"
+import { getSessionAsProps } from "../../../utils/ssr"
+import AppBar  from "../../components/AppBar"
 
 const Page = (props: { session: Session }) => {
   return (

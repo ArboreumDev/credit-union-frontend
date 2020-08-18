@@ -10,7 +10,7 @@ import {
 import { AppBarSignedIn } from "../../components/AppBar";
 import { getSession } from "next-auth/client";
 import { Contactus } from "../../components/ContactUs";
-import { User, UserType, Session } from "../../utils/types";
+import { User, UserType, Session } from "../../../../utils/types";
 
 
 interface BorrowerModel {

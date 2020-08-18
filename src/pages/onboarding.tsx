@@ -1,13 +1,13 @@
 import { useSession } from "next-auth/client"
-import { User } from "../utils/types";
+import { User } from "../../../utils/types";
 
 import { useForm } from "react-hook-form"
 import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox, Radio } from "@blueprintjs/core";
 
-import { initializeGQL } from "../utils/graphql_client";
+import { initializeGQL } from "../../../utils/graphql_client";
 import { useRouter } from "next/dist/client/router";
 import Dropzone from "../components/Dropzone";
-import { getSdk } from "../src/gql/sdk";
+import { getSdk } from "../gql/sdk";
 
 
 type FormData = {
