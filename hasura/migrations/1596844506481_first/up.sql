@@ -59,13 +59,13 @@ CREATE TABLE public.loan_participants (
     lender_amount integer NOT NULL,
     percentage integer
 );
-CREATE TYPE public.loan_request_status AS ENUM ( 'processing', 'done');
+CREATE TYPE public.loan_request_status AS ENUM ( 'initiated', 'awaiting_borrower_confirmation','live', 'in_payback', 'defaulted', 'settled');
 
 CREATE TABLE public.loan_requests (
     borrower_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     amount integer NOT NULL,
-    status loan_request_status DEFAULT 'processing',
+    status loan_request_status DEFAULT 'initiated',
     request_id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     purpose text,
     risk_calc_result jsonb,

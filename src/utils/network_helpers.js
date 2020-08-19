@@ -1,16 +1,7 @@
-import { initializeGQL } from "../utils/graphql_client";
-import { users, basic_connections } from './fixtures'
-import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
-import { get } from "http";
-
-// # REFACTOR make this a type
-const EDGE_STATUS = {
-  active: "active",
-  awaiting_lender_confirmation: "awaiting_lender_confirmation",
-  awaiting_lender_signup: "awaiting_lender_signup",
-  awaiting_borrower_signup: "awaiting_borrower_signup",
-  historic: "historic"
-}
+// import { users, basic_connections } from './fixtures'
+// import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
+import { Sdk, getSdk } from "../../src/gql/sdk"
+import { EDGE_STATUS } from "../../src/utils/types"
 
  // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
@@ -32,7 +23,7 @@ function create_edge_insert_input_from_fixture (edge, users) {
   return input
 }
 
-const getNodesFromEdgeList = (edgeList) => {
+export const getNodesFromEdgeList = (edgeList) => {
   let nodes = edgeList.map(x => x.slice(0,2)).flat()
   return [...new Set(nodes)]
 }
@@ -48,11 +39,11 @@ const distinct = (value, index, self) => {
  * @param users a dict of users to be added to the DB (see fixtures to see the format)
  * @returns added_users {user_number: added_user_object}
 */
-export async function addUsers (gqlclient, users) {
+export async function addUsers (sdk, userList) {
   let added_users = []
-  for (var userId of Object.keys(users)) {
-    let data = await gqlclient.executeGQL(INSERT_USER, {"user": users[userId]})
-    let new_user = data.insert_user.returning[0] 
+  for (var user of userList) {
+    let data = await sdk.CreateUser({user})
+    let new_user = data.insert_user_one 
     added_users.push(new_user)
   }
   return added_users
@@ -63,25 +54,26 @@ export async function addUsers (gqlclient, users) {
  * @param users a list of the users in the DB (e.g. output as of addUsers or getUsers)
  * @returns added_edges [added_edge_object1, ...]
 */
-export async function addEdgesFromList(gqlclient, users, edges) {
+export async function addEdgesFromList(sdk, users, edges) {
   let e = []
     for (var edge of edges) {
       var insert_edge_input = create_edge_insert_input_from_fixture(edge, users)
-      let data = await gqlclient.executeGQL(INSERT_EDGE, {"edge": insert_edge_input})
+      const data = await sdk.InsertEdge({edge: insert_edge_input})
+      e.push(data.insert_edges.returning[0])
     }
   return e
 }
 
 /**
  * add a network to the DB, user_numbers should be unique (will not be guaranteed by DB)
- * @param {} gqlclient pointing to the DB into which the nodes and edges should be inserted
+ * @param {} sdk pointing to the DB into which the nodes and edges should be inserted
  * @param {*} users {user_number: UserInput,... } see fixtures for details
  * @param {*} edges edgeList
  */
-export async function addNetwork(gqlclient, users, edges) {
-  let added_users = await addUsers(gqlclient, users)
-  let added_edges =  await addEdgesFromList(gqlclient, added_users, edges)
-  return added_users, added_edges
+export async function addNetwork(sdk, users, edges) {
+  let added_users = await addUsers(sdk, users)
+  let added_edges =  await addEdgesFromList(sdk, added_users, edges)
+  return {users: added_users, edges: added_edges}
 }
 
 
@@ -96,11 +88,6 @@ export const getNetwork = async (gqlclient, status = EDGE_STATUS.active) => {
   const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
   const nodes = getNodesFromEdgeList(edges)
   return { nodes, edges }
-}
-
-export const getAllUsers = async (gqlclient) => {
-    let data = await gqlclient.executeGQL(GET_USERS)
-    return data.user
 }
 
 

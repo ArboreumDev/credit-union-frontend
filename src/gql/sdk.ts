@@ -6234,32 +6234,91 @@ export type CreateUserMutation = (
   { __typename?: 'mutation_root' }
   & { insert_user_one?: Maybe<(
     { __typename?: 'user' }
-    & Pick<User, 'id' | 'created_at' | 'email' | 'user_type' | 'name' | 'phone' | 'demographic_info'>
+    & Pick<User, 'id' | 'created_at' | 'email' | 'user_type' | 'name' | 'phone' | 'demographic_info' | 'user_number'>
   )> }
 );
 
-export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllUsersQuery = (
+export type GetAllUsersQuery = (
   { __typename?: 'query_root' }
   & { user: Array<(
     { __typename?: 'user' }
-    & Pick<User, 'id' | 'email' | 'name'>
+    & Pick<User, 'id' | 'email' | 'name' | 'user_type' | 'balance' | 'user_number'>
   )> }
 );
 
-export type DeleteNetworkMutationVariables = Exact<{ [key: string]: never; }>;
+export type CreateLoanRequestMutationVariables = Exact<{
+  request: Loan_Requests_Insert_Input;
+}>;
 
 
-export type DeleteNetworkMutation = (
+export type CreateLoanRequestMutation = (
   { __typename?: 'mutation_root' }
-  & { delete_edges?: Maybe<(
-    { __typename?: 'edges_mutation_response' }
-    & Pick<Edges_Mutation_Response, 'affected_rows'>
-  )>, delete_user?: Maybe<(
-    { __typename?: 'user_mutation_response' }
-    & Pick<User_Mutation_Response, 'affected_rows'>
+  & { insert_loan_requests_one?: Maybe<(
+    { __typename?: 'loan_requests' }
+    & Pick<Loan_Requests, 'request_id' | 'amount' | 'purpose' | 'status' | 'risk_calc_result'>
+  )> }
+);
+
+export type GetLoanOfferQueryVariables = Exact<{
+  request_id: Scalars['uuid'];
+}>;
+
+
+export type GetLoanOfferQuery = (
+  { __typename?: 'query_root' }
+  & { loan_requests_by_pk?: Maybe<(
+    { __typename?: 'loan_requests' }
+    & Pick<Loan_Requests, 'request_id' | 'borrower_id' | 'risk_calc_result' | 'amount'>
+  )> }
+);
+
+export type GetLoanRequestQueryVariables = Exact<{
+  requestId: Scalars['uuid'];
+}>;
+
+
+export type GetLoanRequestQuery = (
+  { __typename?: 'query_root' }
+  & { loan_requests_by_pk?: Maybe<(
+    { __typename?: 'loan_requests' }
+    & Pick<Loan_Requests, 'request_id' | 'borrower_id' | 'purpose' | 'amount' | 'status' | 'risk_calc_result' | 'payback_status'>
+  )> }
+);
+
+export type UpdateLoanRequestWithOfferMutationVariables = Exact<{
+  requestId: Scalars['uuid'];
+  newOffer: Scalars['jsonb'];
+}>;
+
+
+export type UpdateLoanRequestWithOfferMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_loan_requests_by_pk?: Maybe<(
+    { __typename?: 'loan_requests' }
+    & Pick<Loan_Requests, 'request_id' | 'status' | 'risk_calc_result'>
+  )> }
+);
+
+export type GetEdgesByStatusQueryVariables = Exact<{
+  status: Scalars['edge_status'];
+}>;
+
+
+export type GetEdgesByStatusQuery = (
+  { __typename?: 'query_root' }
+  & { edges: Array<(
+    { __typename?: 'edges' }
+    & Pick<Edges, 'trust_amount'>
+    & { from_user?: Maybe<(
+      { __typename?: 'user' }
+      & Pick<User, 'id' | 'user_number' | 'name'>
+    )>, to_user?: Maybe<(
+      { __typename?: 'user' }
+      & Pick<User, 'id' | 'user_number' | 'name'>
+    )> }
   )> }
 );
 
@@ -6283,24 +6342,6 @@ export type InsertEdgeMutation = (
         & Pick<User, 'name'>
       )> }
     )> }
-  )> }
-);
-
-export type CreateTestUserMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  name: Scalars['String'];
-  email: Scalars['String'];
-  user_type: Scalars['user_t'];
-  phone: Scalars['String'];
-  demographic_info: Scalars['jsonb'];
-}>;
-
-
-export type CreateTestUserMutation = (
-  { __typename?: 'mutation_root' }
-  & { insert_user_one?: Maybe<(
-    { __typename?: 'user' }
-    & Pick<User, 'id' | 'created_at' | 'email' | 'user_type' | 'name' | 'phone' | 'demographic_info'>
   )> }
 );
 
@@ -6367,25 +6408,79 @@ export const CreateUserDocument = gql`
     name
     phone
     demographic_info
+    user_number
   }
 }
     `;
-export const AllUsersDocument = gql`
-    query AllUsers {
+export const GetAllUsersDocument = gql`
+    query GetAllUsers {
   user {
     id
     email
     name
+    user_type
+    balance
+    user_number
   }
 }
     `;
-export const DeleteNetworkDocument = gql`
-    mutation DeleteNetwork {
-  delete_edges(where: {}) {
-    affected_rows
+export const CreateLoanRequestDocument = gql`
+    mutation CreateLoanRequest($request: loan_requests_insert_input!) {
+  insert_loan_requests_one(object: $request) {
+    request_id
+    amount
+    purpose
+    status
+    risk_calc_result
   }
-  delete_user(where: {}) {
-    affected_rows
+}
+    `;
+export const GetLoanOfferDocument = gql`
+    query GetLoanOffer($request_id: uuid!) {
+  loan_requests_by_pk(request_id: $request_id) {
+    request_id
+    borrower_id
+    risk_calc_result
+    amount
+  }
+}
+    `;
+export const GetLoanRequestDocument = gql`
+    query GetLoanRequest($requestId: uuid!) {
+  loan_requests_by_pk(request_id: $requestId) {
+    request_id
+    borrower_id
+    purpose
+    amount
+    status
+    risk_calc_result
+    payback_status
+  }
+}
+    `;
+export const UpdateLoanRequestWithOfferDocument = gql`
+    mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
+  update_loan_requests_by_pk(pk_columns: {request_id: $requestId}, _set: {status: "awaiting_borrower_confirmation"}, _append: {risk_calc_result: $newOffer}) {
+    request_id
+    status
+    risk_calc_result
+  }
+}
+    `;
+export const GetEdgesByStatusDocument = gql`
+    query GetEdgesByStatus($status: edge_status!) {
+  edges(where: {status: {_eq: $status}}) {
+    from_user {
+      id
+      user_number
+      name
+    }
+    to_user {
+      id
+      user_number
+      name
+    }
+    trust_amount
   }
 }
     `;
@@ -6405,19 +6500,6 @@ export const InsertEdgeDocument = gql`
         name
       }
     }
-  }
-}
-    `;
-export const CreateTestUserDocument = gql`
-    mutation CreateTestUser($id: uuid!, $name: String!, $email: String!, $user_type: user_t!, $phone: String!, $demographic_info: jsonb!) {
-  insert_user_one(object: {id: $id, email: $email, user_type: $user_type, name: $name, phone: $phone, demographic_info: $demographic_info}) {
-    id
-    created_at
-    email
-    user_type
-    name
-    phone
-    demographic_info
   }
 }
     `;
@@ -6475,17 +6557,26 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     CreateUser(variables: CreateUserMutationVariables): Promise<CreateUserMutation> {
       return withWrapper(() => client.request<CreateUserMutation>(print(CreateUserDocument), variables));
     },
-    AllUsers(variables?: AllUsersQueryVariables): Promise<AllUsersQuery> {
-      return withWrapper(() => client.request<AllUsersQuery>(print(AllUsersDocument), variables));
+    GetAllUsers(variables?: GetAllUsersQueryVariables): Promise<GetAllUsersQuery> {
+      return withWrapper(() => client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables));
     },
-    DeleteNetwork(variables?: DeleteNetworkMutationVariables): Promise<DeleteNetworkMutation> {
-      return withWrapper(() => client.request<DeleteNetworkMutation>(print(DeleteNetworkDocument), variables));
+    CreateLoanRequest(variables: CreateLoanRequestMutationVariables): Promise<CreateLoanRequestMutation> {
+      return withWrapper(() => client.request<CreateLoanRequestMutation>(print(CreateLoanRequestDocument), variables));
+    },
+    GetLoanOffer(variables: GetLoanOfferQueryVariables): Promise<GetLoanOfferQuery> {
+      return withWrapper(() => client.request<GetLoanOfferQuery>(print(GetLoanOfferDocument), variables));
+    },
+    GetLoanRequest(variables: GetLoanRequestQueryVariables): Promise<GetLoanRequestQuery> {
+      return withWrapper(() => client.request<GetLoanRequestQuery>(print(GetLoanRequestDocument), variables));
+    },
+    UpdateLoanRequestWithOffer(variables: UpdateLoanRequestWithOfferMutationVariables): Promise<UpdateLoanRequestWithOfferMutation> {
+      return withWrapper(() => client.request<UpdateLoanRequestWithOfferMutation>(print(UpdateLoanRequestWithOfferDocument), variables));
+    },
+    GetEdgesByStatus(variables: GetEdgesByStatusQueryVariables): Promise<GetEdgesByStatusQuery> {
+      return withWrapper(() => client.request<GetEdgesByStatusQuery>(print(GetEdgesByStatusDocument), variables));
     },
     InsertEdge(variables: InsertEdgeMutationVariables): Promise<InsertEdgeMutation> {
       return withWrapper(() => client.request<InsertEdgeMutation>(print(InsertEdgeDocument), variables));
-    },
-    CreateTestUser(variables: CreateTestUserMutationVariables): Promise<CreateTestUserMutation> {
-      return withWrapper(() => client.request<CreateTestUserMutation>(print(CreateTestUserDocument), variables));
     },
     DeleteAllUsers(variables?: DeleteAllUsersMutationVariables): Promise<DeleteAllUsersMutation> {
       return withWrapper(() => client.request<DeleteAllUsersMutation>(print(DeleteAllUsersDocument), variables));
