@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { INavbar } from "./Navbar";
-import {Session} from "../../../utils/types";
+import {Session} from "../../utils/types";
 import {Container, Content, Tab, TabPrimary, BoxRow, LogoImg, LogoTab, TabLink, TabActiveLink} from "./styles";
 import {Images, Colors, Fonts} from "../../Themes";
 
