@@ -11,7 +11,8 @@ export const USER1: User = {
   email: "rick@galaxy.io",
   user_type: "lender",
   demographic_info: { country: "spaceland", education: "genius" },
-  user_number: 1
+  user_number: 1,
+  balance: 1000
 }
 
 export const USER2: User = {
@@ -21,7 +22,8 @@ export const USER2: User = {
   email: "summer@highschool.io",
   user_type: "lender",
   demographic_info: { country: "spaceland" },
-  user_number: 2
+  user_number: 2,
+  balance: 200
 }
 
 export const USER3: User = {
@@ -31,7 +33,8 @@ export const USER3: User = {
   email: "morty@galaxy.io",
   user_type: "borrower",
   demographic_info: { country: "spaceland", education: "little" },
-  user_number: 3
+  user_number: 3,
+  balance: 10
 }
 
 export const USERS = [USER1, USER2, USER3]
@@ -43,7 +46,8 @@ export const USER4: User = {
   phone: "1234",
   user_type: "lender",
   demographic_info: { country: "spaceland" },
-  user_number: 4
+  user_number: 4,
+  balance: 2000
 }
 
 export const EDGE1 = {

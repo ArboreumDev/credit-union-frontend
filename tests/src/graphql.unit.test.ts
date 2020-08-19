@@ -29,7 +29,7 @@ afterAll(async () => {
   // await sdk.ResetDB()
 })
 
-describe("Loan request with basic network", () => {
+describe("Fullfilled loan request in a basic network", () => {
   const amount = 100
   const purpose = "go see the movies"
   let request_id;
@@ -82,20 +82,20 @@ describe("Loan request with basic network", () => {
       expect(updatedRequest.risk_calc_result.latestOffer.amount).toBe(amount)
     })
       
-      // test.skip("the borrower can see the parameters of the offer in their dashboard", async () => {
-      //   const dashboard = await client.getBorrowerDashboardInfo(borrower1.id)
-      //   expect(dashboard.status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
-      //   expect(dashboard.principal).toBe(amount)
-      // })
+      test("the borrower can see the parameters of the offer in their dashboard", async () => {
+        const dashboard = await dbClient.getBorrowerDashboardInfo(borrower1.id)
+        expect(dashboard.status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
+        expect(dashboard.desired_principal).toBe(amount)
+      })
     })
     
-    // describe("Approving a loan offer...", () => {
+    describe("Approving a loan offer...", () => {
       
-    //   test("triggers creation of payables, receivables", async () => {
-    //     const res = await client.acceptLoanOffer(request.request_id, "latestOffer")
-    //     // expect(res.update_loan_requests_by_pk.status).toBe(LoanRequestStatus.live)
-    //     // TODO verify payables, encumbrances, receivables, ....
-    //   })
+      test("triggers creation of payables, receivables", async () => {
+        const res = await dbClient.acceptLoanOffer(request_id, "latestOffer")
+        // expect(res.update_loan_requests_by_pk.status).toBe(LoanRequestStatus.live)
+        // TODO verify payables, encumbrances, receivables, ....
+      })
       
     //   test("the users balances are updated accordingly", async () => {
     //     // const res = await client.updateBalancesAndCorpusShares()
@@ -119,5 +119,5 @@ describe("Loan request with basic network", () => {
     //     // expect(dashboard.idle).toBeLessThan(lender1.balance) // TODO 
     //     // TODO check receivable
     //   })
-    // })
+    })
 })

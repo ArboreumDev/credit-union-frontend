@@ -12,6 +12,7 @@ export type Scalars = {
   Float: number;
   date: any;
   edge_status: any;
+  float8: any;
   jsonb: any;
   loan_request_status: any;
   numeric: any;
@@ -1199,6 +1200,20 @@ export type Encumbrances_Variance_Order_By = {
   amount_total?: Maybe<Order_By>;
   expected_dissolve_amount?: Maybe<Order_By>;
   pay_frequency?: Maybe<Order_By>;
+};
+
+
+/** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
+export type Float8_Comparison_Exp = {
+  _eq?: Maybe<Scalars['float8']>;
+  _gt?: Maybe<Scalars['float8']>;
+  _gte?: Maybe<Scalars['float8']>;
+  _in?: Maybe<Array<Scalars['float8']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['float8']>;
+  _lte?: Maybe<Scalars['float8']>;
+  _neq?: Maybe<Scalars['float8']>;
+  _nin?: Maybe<Array<Scalars['float8']>>;
 };
 
 /** columns and relationships of "guarantors" */
@@ -3589,6 +3604,7 @@ export type Payables = {
   loan_id: Scalars['uuid'];
   /** An object relationship */
   loan_request: Loan_Requests;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority: Scalars['Int'];
   /** An object relationship */
   payableTypeByPayableType: Payable_Type;
@@ -3653,6 +3669,7 @@ export type Payables_Avg_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3661,6 +3678,7 @@ export type Payables_Avg_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3677,6 +3695,7 @@ export type Payables_Bool_Exp = {
   last_paid?: Maybe<Timetz_Comparison_Exp>;
   loan_id?: Maybe<Uuid_Comparison_Exp>;
   loan_request?: Maybe<Loan_Requests_Bool_Exp>;
+  pay_frequency?: Maybe<Int_Comparison_Exp>;
   pay_priority?: Maybe<Int_Comparison_Exp>;
   payableTypeByPayableType?: Maybe<Payable_Type_Bool_Exp>;
   payable_type?: Maybe<String_Comparison_Exp>;
@@ -3694,6 +3713,7 @@ export type Payables_Inc_Input = {
   amount_paid?: Maybe<Scalars['Int']>;
   amount_remain?: Maybe<Scalars['Int']>;
   amount_total?: Maybe<Scalars['Int']>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
 };
 
@@ -3707,6 +3727,7 @@ export type Payables_Insert_Input = {
   last_paid?: Maybe<Scalars['timetz']>;
   loan_id?: Maybe<Scalars['uuid']>;
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
   payableTypeByPayableType?: Maybe<Payable_Type_Obj_Rel_Insert_Input>;
   payable_type?: Maybe<Scalars['String']>;
@@ -3723,6 +3744,7 @@ export type Payables_Max_Fields = {
   due_date?: Maybe<Scalars['timetz']>;
   last_paid?: Maybe<Scalars['timetz']>;
   loan_id?: Maybe<Scalars['uuid']>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
   payable_type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -3737,6 +3759,7 @@ export type Payables_Max_Order_By = {
   due_date?: Maybe<Order_By>;
   last_paid?: Maybe<Order_By>;
   loan_id?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
   payable_type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -3752,6 +3775,7 @@ export type Payables_Min_Fields = {
   due_date?: Maybe<Scalars['timetz']>;
   last_paid?: Maybe<Scalars['timetz']>;
   loan_id?: Maybe<Scalars['uuid']>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
   payable_type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -3766,6 +3790,7 @@ export type Payables_Min_Order_By = {
   due_date?: Maybe<Order_By>;
   last_paid?: Maybe<Order_By>;
   loan_id?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
   payable_type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -3803,6 +3828,7 @@ export type Payables_Order_By = {
   last_paid?: Maybe<Order_By>;
   loan_id?: Maybe<Order_By>;
   loan_request?: Maybe<Loan_Requests_Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
   payableTypeByPayableType?: Maybe<Payable_Type_Order_By>;
   payable_type?: Maybe<Order_By>;
@@ -3831,6 +3857,8 @@ export enum Payables_Select_Column {
   /** column name */
   LoanId = 'loan_id',
   /** column name */
+  PayFrequency = 'pay_frequency',
+  /** column name */
   PayPriority = 'pay_priority',
   /** column name */
   PayableType = 'payable_type',
@@ -3847,6 +3875,7 @@ export type Payables_Set_Input = {
   due_date?: Maybe<Scalars['timetz']>;
   last_paid?: Maybe<Scalars['timetz']>;
   loan_id?: Maybe<Scalars['uuid']>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
   payable_type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -3858,6 +3887,7 @@ export type Payables_Stddev_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3866,6 +3896,7 @@ export type Payables_Stddev_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3875,6 +3906,7 @@ export type Payables_Stddev_Pop_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3883,6 +3915,7 @@ export type Payables_Stddev_Pop_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3892,6 +3925,7 @@ export type Payables_Stddev_Samp_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3900,6 +3934,7 @@ export type Payables_Stddev_Samp_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3909,6 +3944,7 @@ export type Payables_Sum_Fields = {
   amount_paid?: Maybe<Scalars['Int']>;
   amount_remain?: Maybe<Scalars['Int']>;
   amount_total?: Maybe<Scalars['Int']>;
+  pay_frequency?: Maybe<Scalars['Int']>;
   pay_priority?: Maybe<Scalars['Int']>;
 };
 
@@ -3917,6 +3953,7 @@ export type Payables_Sum_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3937,6 +3974,8 @@ export enum Payables_Update_Column {
   /** column name */
   LoanId = 'loan_id',
   /** column name */
+  PayFrequency = 'pay_frequency',
+  /** column name */
   PayPriority = 'pay_priority',
   /** column name */
   PayableType = 'payable_type',
@@ -3950,6 +3989,7 @@ export type Payables_Var_Pop_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3958,6 +3998,7 @@ export type Payables_Var_Pop_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3967,6 +4008,7 @@ export type Payables_Var_Samp_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3975,6 +4017,7 @@ export type Payables_Var_Samp_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -3984,6 +4027,7 @@ export type Payables_Variance_Fields = {
   amount_paid?: Maybe<Scalars['Float']>;
   amount_remain?: Maybe<Scalars['Float']>;
   amount_total?: Maybe<Scalars['Float']>;
+  pay_frequency?: Maybe<Scalars['Float']>;
   pay_priority?: Maybe<Scalars['Float']>;
 };
 
@@ -3992,6 +4036,7 @@ export type Payables_Variance_Order_By = {
   amount_paid?: Maybe<Order_By>;
   amount_remain?: Maybe<Order_By>;
   amount_total?: Maybe<Order_By>;
+  pay_frequency?: Maybe<Order_By>;
   pay_priority?: Maybe<Order_By>;
 };
 
@@ -5470,6 +5515,7 @@ export type Timetz_Comparison_Exp = {
 export type User = {
   __typename?: 'user';
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   created_at: Scalars['timestamptz'];
   demographic_info?: Maybe<Scalars['jsonb']>;
   /** An array relationship */
@@ -5789,6 +5835,7 @@ export type User_Arr_Rel_Insert_Input = {
 export type User_Avg_Fields = {
   __typename?: 'user_avg_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -5797,6 +5844,7 @@ export type User_Avg_Fields = {
 /** order by avg() on columns of table "user" */
 export type User_Avg_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -5808,6 +5856,7 @@ export type User_Bool_Exp = {
   _not?: Maybe<User_Bool_Exp>;
   _or?: Maybe<Array<Maybe<User_Bool_Exp>>>;
   balance?: Maybe<Int_Comparison_Exp>;
+  corpus_share?: Maybe<Float8_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   demographic_info?: Maybe<Jsonb_Comparison_Exp>;
   edges?: Maybe<Edges_Bool_Exp>;
@@ -5859,6 +5908,7 @@ export type User_Delete_Key_Input = {
 /** input type for incrementing integer column in table "user" */
 export type User_Inc_Input = {
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Int']>;
@@ -5867,6 +5917,7 @@ export type User_Inc_Input = {
 /** input type for inserting data into table "user" */
 export type User_Insert_Input = {
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   demographic_info?: Maybe<Scalars['jsonb']>;
   edges?: Maybe<Edges_Arr_Rel_Insert_Input>;
@@ -5894,6 +5945,7 @@ export type User_Insert_Input = {
 export type User_Max_Fields = {
   __typename?: 'user_max_fields';
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -5908,6 +5960,7 @@ export type User_Max_Fields = {
 /** order by max() on columns of table "user" */
 export type User_Max_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -5923,6 +5976,7 @@ export type User_Max_Order_By = {
 export type User_Min_Fields = {
   __typename?: 'user_min_fields';
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -5937,6 +5991,7 @@ export type User_Min_Fields = {
 /** order by min() on columns of table "user" */
 export type User_Min_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -5973,6 +6028,7 @@ export type User_On_Conflict = {
 /** ordering options when selecting data from "user" */
 export type User_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   demographic_info?: Maybe<Order_By>;
   edgesByLenderId_aggregate?: Maybe<Edges_Aggregate_Order_By>;
@@ -6011,6 +6067,8 @@ export enum User_Select_Column {
   /** column name */
   Balance = 'balance',
   /** column name */
+  CorpusShare = 'corpus_share',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   DemographicInfo = 'demographic_info',
@@ -6037,6 +6095,7 @@ export enum User_Select_Column {
 /** input type for updating data in table "user" */
 export type User_Set_Input = {
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   demographic_info?: Maybe<Scalars['jsonb']>;
   email?: Maybe<Scalars['String']>;
@@ -6054,6 +6113,7 @@ export type User_Set_Input = {
 export type User_Stddev_Fields = {
   __typename?: 'user_stddev_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6062,6 +6122,7 @@ export type User_Stddev_Fields = {
 /** order by stddev() on columns of table "user" */
 export type User_Stddev_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6071,6 +6132,7 @@ export type User_Stddev_Order_By = {
 export type User_Stddev_Pop_Fields = {
   __typename?: 'user_stddev_pop_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6079,6 +6141,7 @@ export type User_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "user" */
 export type User_Stddev_Pop_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6088,6 +6151,7 @@ export type User_Stddev_Pop_Order_By = {
 export type User_Stddev_Samp_Fields = {
   __typename?: 'user_stddev_samp_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6096,6 +6160,7 @@ export type User_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "user" */
 export type User_Stddev_Samp_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6105,6 +6170,7 @@ export type User_Stddev_Samp_Order_By = {
 export type User_Sum_Fields = {
   __typename?: 'user_sum_fields';
   balance?: Maybe<Scalars['Int']>;
+  corpus_share?: Maybe<Scalars['float8']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Int']>;
@@ -6113,6 +6179,7 @@ export type User_Sum_Fields = {
 /** order by sum() on columns of table "user" */
 export type User_Sum_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6136,6 +6203,8 @@ export type User_T_Comparison_Exp = {
 export enum User_Update_Column {
   /** column name */
   Balance = 'balance',
+  /** column name */
+  CorpusShare = 'corpus_share',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -6164,6 +6233,7 @@ export enum User_Update_Column {
 export type User_Var_Pop_Fields = {
   __typename?: 'user_var_pop_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6172,6 +6242,7 @@ export type User_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "user" */
 export type User_Var_Pop_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6181,6 +6252,7 @@ export type User_Var_Pop_Order_By = {
 export type User_Var_Samp_Fields = {
   __typename?: 'user_var_samp_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6189,6 +6261,7 @@ export type User_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "user" */
 export type User_Var_Samp_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6198,6 +6271,7 @@ export type User_Var_Samp_Order_By = {
 export type User_Variance_Fields = {
   __typename?: 'user_variance_fields';
   balance?: Maybe<Scalars['Float']>;
+  corpus_share?: Maybe<Scalars['Float']>;
   max_exposure?: Maybe<Scalars['Float']>;
   min_interest_rate?: Maybe<Scalars['Float']>;
   user_number?: Maybe<Scalars['Float']>;
@@ -6206,6 +6280,7 @@ export type User_Variance_Fields = {
 /** order by variance() on columns of table "user" */
 export type User_Variance_Order_By = {
   balance?: Maybe<Order_By>;
+  corpus_share?: Maybe<Order_By>;
   max_exposure?: Maybe<Order_By>;
   min_interest_rate?: Maybe<Order_By>;
   user_number?: Maybe<Order_By>;
@@ -6262,6 +6337,26 @@ export type CreateLoanRequestMutation = (
   )> }
 );
 
+export type GetLenderAllocationInputQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetLenderAllocationInputQuery = (
+  { __typename?: 'query_root' }
+  & { lenders: Array<(
+    { __typename?: 'user' }
+    & Pick<User, 'name' | 'user_number' | 'id' | 'balance' | 'corpus_share'>
+  )>, corpusCash: (
+    { __typename?: 'user_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'user_aggregate_fields' }
+      & { sum?: Maybe<(
+        { __typename?: 'user_sum_fields' }
+        & Pick<User_Sum_Fields, 'balance'>
+      )> }
+    )> }
+  ) }
+);
+
 export type GetLoanOfferQueryVariables = Exact<{
   request_id: Scalars['uuid'];
 }>;
@@ -6285,6 +6380,24 @@ export type GetLoanRequestQuery = (
   & { loan_requests_by_pk?: Maybe<(
     { __typename?: 'loan_requests' }
     & Pick<Loan_Requests, 'request_id' | 'borrower_id' | 'purpose' | 'amount' | 'status' | 'risk_calc_result' | 'payback_status'>
+  )> }
+);
+
+export type GetLoansByBorrowerAndStatusQueryVariables = Exact<{
+  borrower_id: Scalars['uuid'];
+  statusList: Array<Scalars['loan_request_status']>;
+}>;
+
+
+export type GetLoansByBorrowerAndStatusQuery = (
+  { __typename?: 'query_root' }
+  & { loan_requests: Array<(
+    { __typename?: 'loan_requests' }
+    & Pick<Loan_Requests, 'request_id' | 'amount' | 'status' | 'risk_calc_result'>
+    & { payables: Array<(
+      { __typename?: 'payables' }
+      & Pick<Payables, 'pay_frequency' | 'due_date' | 'last_paid' | 'amount_total' | 'amount_paid' | 'amount_remain'>
+    )> }
   )> }
 );
 
@@ -6435,6 +6548,24 @@ export const CreateLoanRequestDocument = gql`
   }
 }
     `;
+export const GetLenderAllocationInputDocument = gql`
+    query GetLenderAllocationInput {
+  lenders: user(where: {user_type: {_eq: "lender"}}) {
+    name
+    user_number
+    id
+    balance
+    corpus_share
+  }
+  corpusCash: user_aggregate(where: {user_type: {_eq: "lender"}}) {
+    aggregate {
+      sum {
+        balance
+      }
+    }
+  }
+}
+    `;
 export const GetLoanOfferDocument = gql`
     query GetLoanOffer($request_id: uuid!) {
   loan_requests_by_pk(request_id: $request_id) {
@@ -6455,6 +6586,24 @@ export const GetLoanRequestDocument = gql`
     status
     risk_calc_result
     payback_status
+  }
+}
+    `;
+export const GetLoansByBorrowerAndStatusDocument = gql`
+    query GetLoansByBorrowerAndStatus($borrower_id: uuid!, $statusList: [loan_request_status!]!) {
+  loan_requests(where: {_and: [{borrower_id: {_eq: $borrower_id}}, {status: {_in: $statusList}}]}) {
+    request_id
+    amount
+    status
+    risk_calc_result
+    payables {
+      pay_frequency
+      due_date
+      last_paid
+      amount_total
+      amount_paid
+      amount_remain
+    }
   }
 }
     `;
@@ -6563,11 +6712,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     CreateLoanRequest(variables: CreateLoanRequestMutationVariables): Promise<CreateLoanRequestMutation> {
       return withWrapper(() => client.request<CreateLoanRequestMutation>(print(CreateLoanRequestDocument), variables));
     },
+    GetLenderAllocationInput(variables?: GetLenderAllocationInputQueryVariables): Promise<GetLenderAllocationInputQuery> {
+      return withWrapper(() => client.request<GetLenderAllocationInputQuery>(print(GetLenderAllocationInputDocument), variables));
+    },
     GetLoanOffer(variables: GetLoanOfferQueryVariables): Promise<GetLoanOfferQuery> {
       return withWrapper(() => client.request<GetLoanOfferQuery>(print(GetLoanOfferDocument), variables));
     },
     GetLoanRequest(variables: GetLoanRequestQueryVariables): Promise<GetLoanRequestQuery> {
       return withWrapper(() => client.request<GetLoanRequestQuery>(print(GetLoanRequestDocument), variables));
+    },
+    GetLoansByBorrowerAndStatus(variables: GetLoansByBorrowerAndStatusQueryVariables): Promise<GetLoansByBorrowerAndStatusQuery> {
+      return withWrapper(() => client.request<GetLoansByBorrowerAndStatusQuery>(print(GetLoansByBorrowerAndStatusDocument), variables));
     },
     UpdateLoanRequestWithOffer(variables: UpdateLoanRequestWithOfferMutationVariables): Promise<UpdateLoanRequestWithOfferMutation> {
       return withWrapper(() => client.request<UpdateLoanRequestWithOfferMutation>(print(UpdateLoanRequestWithOfferDocument), variables));

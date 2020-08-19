@@ -14,7 +14,6 @@
   - name: userByLenderId
     using:
       foreign_key_constraint_on: lender_id
-      
 - table:
     schema: public
     name: encumbrance_participants

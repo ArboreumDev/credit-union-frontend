@@ -1,7 +1,8 @@
 import { initializeGQL } from "./graphql_client"
-import { EDGE_STATUS } from "../../src/utils/types"
+import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
+
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
 const API_URL = "http://localhost:8080/v1/graphql"
@@ -31,6 +32,56 @@ export class DbClient {
   getProfileInfo = async () => {
     // TODO
   }
+
+  /**
+   * return {status: null} if the borrower has neither a request, nor an accepted loan
+   * {status: 'initiated',...} if the user has requested an offer, but the AI is still processing
+   * {status: 'awaiting_borrower_confirmation',...} if there is an offer and the user needs to accept/reject
+   * {status: 'live', ... } if there is an active loan request (that requires payback)
+   * @param borrower_id 
+   */
+  getBorrowerDashboardInfo = async (borrower_id) => {
+    const data = await this.sdk.GetLoansByBorrowerAndStatus(
+      {borrower_id, statusList: [LoanRequestStatus.live, LoanRequestStatus.awaiting_borrower_confirmation, LoanRequestStatus.initiated]}
+    )
+    if (data == undefined) return {status: null}
+
+    const active_request = data.loan_requests[0]
+    if (active_request.status === LoanRequestStatus.live) {
+      return {
+        loanId: active_request.request_id,
+        status: active_request.status,
+        loanAmount: active_request.amount,
+        outstanding: {
+          principal: "TODO how do we calculate that?",
+          interest: "TODO how do we calculate that?",
+          total: active_request.payables[0].amount_remain,
+        },
+        amountRepaid: active_request.payables[0].amount_paid,
+        nextPayment: {
+          nextDate: "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
+          nextAmount: "TODO remainAmount / # of remaining payments"
+        },
+        lastPaid: active_request.payables[0].lastPaid
+      }
+    } else if (active_request.status === LoanRequestStatus.awaiting_borrower_confirmation) {
+      const offer = active_request.risk_calc_result.latestOffer
+      return {
+        loanId: active_request.request_id,
+        status: active_request.status,
+        desired_principal: active_request.amount,
+        offerParams: {
+          raw: active_request.risk_calc_result.latestOffer,
+          offered_principal: offer.amount,
+          interest: offer.interest,
+          totalAmount: offer.amount + offer.interest,
+          monthly: "TODO",
+          dueDate: "TDODO always in 6 months?"
+      }
+    }
+  }
+}
+
 
   /**
    * get the network and edges of a given edge_status in network-X format
@@ -102,5 +153,4 @@ export class DbClient {
     const res = await this.sdk.UpdateLoanRequestWithOffer({requestId, newOffer})
     return res.update_loan_requests_by_pk
   }
-
 }
