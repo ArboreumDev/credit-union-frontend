@@ -35,6 +35,12 @@ An example of the personalised JSON required is:
   "TemplateData": "{ \"name\":\"Alejandro\", \"favoriteanimal\": \"alligator\" }"
 }
 
+## Sending Template Emails Via JS
+
+Here's a link to the AWS Javascript SDK page on doing the above directly in JS rather than using the CLI.
+
+[https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/ses-examples-sending-email.html](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/ses-examples-sending-email.html)
+
 # Notes
 
 In order for these emails to be sent, the recipient domain has to be verified by AWS SES.
