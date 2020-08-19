@@ -27,7 +27,7 @@ React + Typescript + Next.js
 
 The hasura folder should contain postgres migrations and hasura schema. I used the following commands:
 
-First time, probably don't need these again
+First time commands: (probably don't need these again)
 
 ```
 ### To create the hasura folder with default config
