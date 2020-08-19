@@ -12,7 +12,7 @@ import { Classes } from '@blueprintjs/core';
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
-      <div className={Classes.DARK}>
+      <div>
         <div className="content">
           <div className="container">
             <Component {...pageProps} />
