@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../utils/graphql_client'
+import { initializeGQL } from '../../../gql/graphql_client'
 import { User } from '../../../utils/types'
 
 

@@ -10,10 +10,11 @@ import {
   H6,
   TextArea,
 } from "@blueprintjs/core"
-import { AppBarSignedIn } from "../../components/AppBar"
+import AppBar from "../../components/AppBar"
 import { getSession } from "next-auth/client"
-import { Contactus, Mailto } from "../../components/contact"
+import { Contactus, Mailto } from "../../components/ContactUs"
 import { User, Session, UserType } from "../../utils/types"
+import Router from "next/router"
 
 interface GuarantorModel {
   name: string
@@ -39,10 +40,6 @@ const Page = (params: Params) => {
   const [state, setState] = useState(params.model)
   const [newBorrower, setNB] = useState(params.newBorrower)
 
-  const user: User = {
-    name: session.user.name,
-    type: UserType.Borrower,
-  }
 
   const onChange = (event) => {
     const target = event.target
@@ -55,7 +52,7 @@ const Page = (params: Params) => {
   // console.log(params.session)
   return (
     <div className="container">
-      <AppBarSignedIn user={user} />
+      <AppBar />
       <div className="grid-container">
         <div>
           <H3>Request A New Loan</H3>

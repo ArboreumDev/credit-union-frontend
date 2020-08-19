@@ -1,6 +1,4 @@
-import { useMemo } from "react";
 import { GraphQLClient } from "graphql-request";
-import {GET_USERS} from "./queries"
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
 const API_URL = "http://localhost:8080/v1/graphql"

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card, FormGroup, InputGroup, H4, NumericInput, Button, H3, H6, TextArea } from '@blueprintjs/core';
 import AppBar from '../../components/AppBar';
 import { getSession } from 'next-auth/client'
-import { Contactus, Mailto } from "../../components/contact";
+import { Contactus, Mailto } from "../../components/ContactUs";
 import Router from "next/router";
 
 interface Session {
@@ -53,7 +53,7 @@ const Page = (params: Params) => {
     // console.log(params.session)
     return (
       <div className="container">
-        <AppBar session={session} />
+        <AppBar />
         <div className="grid-container">
           <div>
             <H3>Request A New Loan</H3>
