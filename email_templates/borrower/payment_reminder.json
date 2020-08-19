@@ -1,0 +1,9 @@
+{
+  "Template": {
+    "TemplateName": "Borrower_PaymentReminder",
+    "SubjectPart": "Reminder: Upcoming Loan Repayment",
+    "HtmlPart": "Hi {{name}},<p>Recently, you took out a loan of {{loan_amount}} through the {{company}} Credit Program.</p><p>This is a friendly reminder that your next repayment of {{loan_repayments}} is due on the {{loan_repaydate}}.</p><p>Please ensure that you have sufficient funds in your Credit Program wallet to make this repayment.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}
+

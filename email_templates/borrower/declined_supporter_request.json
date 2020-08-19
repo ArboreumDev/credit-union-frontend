@@ -1,0 +1,9 @@
+{
+  "Template": {
+    "TemplateName": "Borrower_DeclinedSupporter",
+    "SubjectPart": "A Supporter Has Declined",
+    "HtmlPart": "Hi {{name}},<p>We're sorry to have to tell you that {{supporter}} has declined to act as your supporter in the {{company}} Credit Program.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}
+

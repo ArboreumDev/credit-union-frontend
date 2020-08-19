@@ -1,0 +1,8 @@
+{
+  "Template": {
+    "TemplateName": "General_KYCDocumentReceipt",
+    "SubjectPart": "Documents Received",
+    "HtmlPart": "Hi {{name}},<p>We're sending you a confirmation that we have received your {{required_document}}, and can now continue our KYC checks as part of your onboarding into the {{company}} Credit Program.</p><p>Thank for your patience!</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}
