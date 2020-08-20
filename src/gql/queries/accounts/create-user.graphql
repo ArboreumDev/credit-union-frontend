@@ -7,5 +7,6 @@ mutation CreateUser($user: user_insert_input!) {
     name
     phone
     demographic_info
+    user_number
   }
 }

@@ -24,3 +24,13 @@ export enum EDGE_STATUS {
   awaiting_borrower_signup="awaiting_borrower_signup",
   historic="historic"
 }
+
+// TODO even though I adjusted the codegen config, I cant get it to generate those for me...
+export enum LoanRequestStatus {
+    initiated="initiated",
+    // awaiting_guarantor_confirmation="awaiting_guarantor_confirmation",
+    awaiting_borrower_confirmation="awaiting_borrower_confirmation",
+    live="live",
+    settled="settled"
+}
+
