@@ -1,8 +1,7 @@
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../gql/graphql_client'
-import { User } from '../../../utils/types'
-
+import NextAuth from "next-auth";
+import Providers from "next-auth/providers";
+import { initializeGQL } from "../../../gql/graphql_client";
+import { User } from "../../../utils/types";
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",
@@ -45,24 +44,23 @@ const options = {
             user_type
           }
         }
-      `
+      `;
 
-      const gqlClient = initializeGQL()
+      const gqlClient = initializeGQL();
       const data = await gqlClient.request(GET_USER_BY_EMAIL, {
         email: session.user.email,
-      })
-      const profile = data.user[0]
+      });
+      const profile = data.user[0];
 
-      if (data)
-        session = {...session, user: {...session.user, ...profile}}
+      if (data) session = { ...session, user: { ...session.user, ...profile } };
 
-      return Promise.resolve(session)
+      return Promise.resolve(session);
     },
   },
   events: {
     signin: async (message) => {},
     signout: async (message) => {
-      console.log("sign out successful")
+      console.log("sign out successful");
     },
     createUser: async (message) => {
       /* user created */
@@ -77,6 +75,6 @@ const options = {
       /* error in authentication flow */
     },
   },
-}
+};
 
-export default (req, res) => NextAuth(req, res, options)
+export default (req, res) => NextAuth(req, res, options);

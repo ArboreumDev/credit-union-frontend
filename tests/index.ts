@@ -1,1 +1,1 @@
-export {render} from "./utils";
+export { render } from "./utils";

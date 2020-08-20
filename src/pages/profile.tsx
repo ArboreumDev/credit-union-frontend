@@ -1,7 +1,7 @@
-import { AnchorButton } from "@blueprintjs/core"
-import { Session } from "../utils/types"
-import { getSessionAsProps } from "../utils/ssr"
-import AppBar  from "../components/AppBar"
+import { AnchorButton } from "@blueprintjs/core";
+import { Session } from "../utils/types";
+import { getSessionAsProps } from "../utils/ssr";
+import AppBar from "../components/AppBar";
 
 const Page = (props: { session: Session }) => {
   return (
@@ -9,8 +9,8 @@ const Page = (props: { session: Session }) => {
       <AppBar {...props} />
       <AnchorButton href="/api/auth/signout" text="Logout" minimal />
     </div>
-  )
-}
-Page.getInitialProps = (context) => getSessionAsProps(context)
+  );
+};
+Page.getInitialProps = (context) => getSessionAsProps(context);
 
-export default Page
+export default Page;

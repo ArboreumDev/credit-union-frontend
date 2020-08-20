@@ -1,6 +1,13 @@
 import { initializeGQL } from "../utils/graphql_client";
-import { users, basic_connections } from './fixtures'
-import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
+import { users, basic_connections } from "./fixtures";
+import {
+  INSERT_USER,
+  INSERT_EDGE,
+  GET_EDGES_BY_STATUS,
+  EXAMPLE_INPUTS,
+  RESET_DB,
+  GET_USERS,
+} from "../utils/queries";
 import { get } from "http";
 
 // # REFACTOR make this a type
@@ -9,67 +16,68 @@ const EDGE_STATUS = {
   awaiting_lender_confirmation: "awaiting_lender_confirmation",
   awaiting_lender_signup: "awaiting_lender_signup",
   awaiting_borrower_signup: "awaiting_borrower_signup",
-  historic: "historic"
-}
+  historic: "historic",
+};
 
- // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
+// ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
 /**
  * create the db-insert input from the fixture
  * @param edge  [from_number, to_number, trust]
  * @param  users [{userObject1}, {userObject2}, ... ]
  */
-function create_edge_insert_input_from_fixture (edge, users) {
-  let lender = users.filter(x => x.user_number === edge[0])[0]
-  let borrower = users.filter(x => x.user_number === edge[1])[0] 
+function create_edge_insert_input_from_fixture(edge, users) {
+  let lender = users.filter((x) => x.user_number === edge[0])[0];
+  let borrower = users.filter((x) => x.user_number === edge[1])[0];
   let input = {
     trust_amount: edge[2],
     status: EDGE_STATUS.active,
     borrower_id: borrower.id,
     lender_id: lender.id,
-    other_user_email: lender.name + "@mail.com"
-  }
-  return input
+    other_user_email: lender.name + "@mail.com",
+  };
+  return input;
 }
 
 const getNodesFromEdgeList = (edgeList) => {
-  let nodes = edgeList.map(x => x.slice(0,2)).flat()
-  return [...new Set(nodes)]
-}
+  let nodes = edgeList.map((x) => x.slice(0, 2)).flat();
+  return [...new Set(nodes)];
+};
 
 const distinct = (value, index, self) => {
-  return self.indexOf(value) === index
-}
+  return self.indexOf(value) === index;
+};
 
+// =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
 
- // =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
-
-/** will insert all users and the basic connections into the db 
+/** will insert all users and the basic connections into the db
  * @param users a dict of users to be added to the DB (see fixtures to see the format)
  * @returns added_users {user_number: added_user_object}
-*/
-export async function addUsers (gqlclient, users) {
-  let added_users = []
+ */
+export async function addUsers(gqlclient, users) {
+  let added_users = [];
   for (var userId of Object.keys(users)) {
-    let data = await gqlclient.executeGQL(INSERT_USER, {"user": users[userId]})
-    let new_user = data.insert_user.returning[0] 
-    added_users.push(new_user)
+    let data = await gqlclient.executeGQL(INSERT_USER, { user: users[userId] });
+    let new_user = data.insert_user.returning[0];
+    added_users.push(new_user);
   }
-  return added_users
-};
+  return added_users;
+}
 
 /** will insert edges into the DB
  * @param edges an edge list [[1,2,10], [2,3,30]] (user)
  * @param users a list of the users in the DB (e.g. output as of addUsers or getUsers)
  * @returns added_edges [added_edge_object1, ...]
-*/
+ */
 export async function addEdgesFromList(gqlclient, users, edges) {
-  let e = []
-    for (var edge of edges) {
-      var insert_edge_input = create_edge_insert_input_from_fixture(edge, users)
-      let data = await gqlclient.executeGQL(INSERT_EDGE, {"edge": insert_edge_input})
-    }
-  return e
+  let e = [];
+  for (var edge of edges) {
+    var insert_edge_input = create_edge_insert_input_from_fixture(edge, users);
+    let data = await gqlclient.executeGQL(INSERT_EDGE, {
+      edge: insert_edge_input,
+    });
+  }
+  return e;
 }
 
 /**
@@ -79,39 +87,43 @@ export async function addEdgesFromList(gqlclient, users, edges) {
  * @param {*} edges edgeList
  */
 export async function addNetwork(gqlclient, users, edges) {
-  let added_users = await addUsers(gqlclient, users)
-  let added_edges =  await addEdgesFromList(gqlclient, added_users, edges)
-  return added_users, added_edges
+  let added_users = await addUsers(gqlclient, users);
+  let added_edges = await addEdgesFromList(gqlclient, added_users, edges);
+  return added_users, added_edges;
 }
-
 
 /**
  * get the network and edges of a given edge_status
- * @param {} gqlclient 
- * @param {*} status 
+ * @param {} gqlclient
+ * @param {*} status
  * @returns {} an object {nodes: [user_number1, ...], edges: [[ffrom, to, credit], ...]}
  */
 export const getNetwork = async (gqlclient, status = EDGE_STATUS.active) => {
-  const data = await gqlclient.executeGQL(GET_EDGES_BY_STATUS, {"status": status})
-  const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
-  const nodes = getNodesFromEdgeList(edges)
-  return { nodes, edges }
-}
+  const data = await gqlclient.executeGQL(GET_EDGES_BY_STATUS, {
+    status: status,
+  });
+  const edges = data.edges.map((x) => [
+    x.from_user.user_number,
+    x.to_user.user_number,
+    x.trust_amount,
+  ]);
+  const nodes = getNodesFromEdgeList(edges);
+  return { nodes, edges };
+};
 
 export const getAllUsers = async (gqlclient) => {
-    let data = await gqlclient.executeGQL(GET_USERS)
-    return data.user
-}
-
+  let data = await gqlclient.executeGQL(GET_USERS);
+  return data.user;
+};
 
 // export create_edge_insert_input_from_user_input(user_input, existing_users, other_user_email=None) => {
-//     /** create an edge insert input given the edge 
-//      * @param edge [from, to, credit_line] 
+//     /** create an edge insert input given the edge
+//      * @param edge [from, to, credit_line]
 //      * @param users dict of users existing in the system that can be indexed by the user-number
-//      * @param inserted_by user who creates the edge, used to addthe 
+//      * @param inserted_by user who creates the edge, used to addthe
 //      * */
 
-//     // set edge_status dependent creator being lender or borrower 
+//     // set edge_status dependent creator being lender or borrower
 //     let edge_status = "active"
 //     if (inserted_by !== "TEST") {
 //       if (borrower in Object.keys(users)) {
@@ -134,4 +146,3 @@ export const getAllUsers = async (gqlclient) => {
 //         other_user_email:
 //     }
 // }
-

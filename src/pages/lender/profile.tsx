@@ -13,7 +13,6 @@ import { Contactus } from "../../components/ContactUs";
 import { User, UserType, Session } from "../../utils/types";
 import AppBar from "../../components/AppBar";
 
-
 interface BorrowerModel {
   name: string;
   email: string;

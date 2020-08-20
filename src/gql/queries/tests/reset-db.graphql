@@ -1,4 +1,4 @@
-mutation ResetDB{
+mutation ResetDB {
   delete_receivables(where: {}) {
     affected_rows
   }

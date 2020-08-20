@@ -1,45 +1,46 @@
-import Dropzone from "react-dropzone"
-import Axios from "axios"
-import { useState } from "react"
-import { UploadRequest } from "../pages/api/upload"
+import Dropzone from "react-dropzone";
+import Axios from "axios";
+import { useState } from "react";
+import { UploadRequest } from "../pages/api/upload";
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
-export default (props: {email: string}) => {
-  const [uploadedFiles, setFiles] = useState<{[filname: string]: boolean}>({})
-  console.log(uploadedFiles)
+export default (props: { email: string }) => {
+  const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>(
+    {}
+  );
+  console.log(uploadedFiles);
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {
-        setFiles(files => ({...files, [file.name]: false}))
-        const fdata = await toBase64(file) as string
-        const ctype = fdata.split(',')[0]
-        const b64data = fdata.split(",")[1]
+        setFiles((files) => ({ ...files, [file.name]: false }));
+        const fdata = (await toBase64(file)) as string;
+        const ctype = fdata.split(",")[0];
+        const b64data = fdata.split(",")[1];
         const data: UploadRequest = {
-            email: props.email,
-            file_name: file.name,
-            ctype: ctype,
-            data: b64data
-        }
+          email: props.email,
+          file_name: file.name,
+          ctype: ctype,
+          data: b64data,
+        };
 
         await Axios.post("/api/upload", data, {
           method: "POST",
         })
           .then((res) => {
-            console.log(res.data)
-            setFiles(files => ({...files, [file.name]: true}))
+            console.log(res.data);
+            setFiles((files) => ({ ...files, [file.name]: true }));
           })
-          .catch((error) => console.log(error))
-
-      })
+          .catch((error) => console.log(error));
+      });
     }
-  }
+  };
   return (
     <div>
       <Dropzone onDrop={onDrop}>
@@ -71,5 +72,5 @@ export default (props: {email: string}) => {
         `}
       </style>
     </div>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Card,
   FormGroup,
@@ -9,16 +9,16 @@ import {
   H3,
   H6,
   TextArea,
-} from "@blueprintjs/core"
-import AppBar from "../../components/AppBar"
-import { getSession } from "next-auth/client"
-import { Contactus, Mailto } from "../../components/ContactUs"
-import { User, Session, UserType } from "../../utils/types"
+} from "@blueprintjs/core";
+import AppBar from "../../components/AppBar";
+import { getSession } from "next-auth/client";
+import { Contactus, Mailto } from "../../components/ContactUs";
+import { User, Session, UserType } from "../../utils/types";
 
 interface GuarantorModel {
-  name: string
-  email: string
-  amount: number
+  name: string;
+  email: string;
+  amount: number;
 }
 
 class BorrowerProfileModel {
@@ -29,24 +29,23 @@ class BorrowerProfileModel {
 }
 
 interface Params {
-  session: Session
-  model: BorrowerProfileModel
-  newBorrower: GuarantorModel
+  session: Session;
+  model: BorrowerProfileModel;
+  newBorrower: GuarantorModel;
 }
 
 const Page = (params: Params) => {
-  const session = params.session
-  const [state, setState] = useState(params.model)
-  const [newBorrower, setNB] = useState(params.newBorrower)
-
+  const session = params.session;
+  const [state, setState] = useState(params.model);
+  const [newBorrower, setNB] = useState(params.newBorrower);
 
   const onChange = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-    setNB((prevNB) => ({ ...prevNB, [name]: value }))
-  }
+    setNB((prevNB) => ({ ...prevNB, [name]: value }));
+  };
 
   // console.log(params.session)
   return (
@@ -205,9 +204,9 @@ const Page = (params: Params) => {
                     }
                   }`,
                 }).then((res) => {
-                  console.log(res.json())
-                  Router.push("/borrower/loan_success")
-                })
+                  console.log(res.json());
+                  Router.push("/borrower/loan_success");
+                });
               }}
             >
               Save
@@ -232,8 +231,8 @@ const Page = (params: Params) => {
         </style>
       </div>
     </div>
-  )
-}
+  );
+};
 
 Page.getInitialProps = async (context) => {
   return {
@@ -246,7 +245,7 @@ Page.getInitialProps = async (context) => {
       },
     ]),
     newBorrower: { name: "", email: "", amount: "123" },
-  }
-}
+  };
+};
 
-export default Page
+export default Page;

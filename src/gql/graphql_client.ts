@@ -1,8 +1,8 @@
 import { GraphQLClient } from "graphql-request";
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
-const API_URL = "http://localhost:8080/v1/graphql"
-const ADMIN_SECRET = "myadminsecretkey"
+const API_URL = "http://localhost:8080/v1/graphql";
+const ADMIN_SECRET = "myadminsecretkey";
 // const ADMIN_SECRET = "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
 
 let gqlClient;
@@ -11,11 +11,15 @@ const createGQLClient = (api_url, admin_secret) =>
   new GraphQLClient(api_url, {
     headers: {
       "content-type": "application/json",
-      "x-hasura-admin-secret": admin_secret 
+      "x-hasura-admin-secret": admin_secret,
     },
-  })
+  });
 
-export function initializeGQL(adminSecret = ADMIN_SECRET, apiUrl = API_URL, initialState = null) {
+export function initializeGQL(
+  adminSecret = ADMIN_SECRET,
+  apiUrl = API_URL,
+  initialState = null
+) {
   const _gqlClient = gqlClient ?? createGQLClient(apiUrl, adminSecret);
   // For SSG and SSR always create a new Client
   if (typeof window === "undefined") return _gqlClient;
