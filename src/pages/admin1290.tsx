@@ -20,7 +20,7 @@ export async function getServerSideProps() {
   // check for session and if the user is one of the admin users
   
   const sdk = getSdk(initializeGQL())
-  const data = await sdk.AllUsers()
+  const data = await sdk.GetAllUsers()
 
   return { props: {data}};
 }

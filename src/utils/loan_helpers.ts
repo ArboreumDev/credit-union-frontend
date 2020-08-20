@@ -1,5 +1,5 @@
 function toFloat8(x: number) {
-    return parseFloat(Number.parseFloat(x).toFixed(8));
+    return parseFloat(x.toFixed(8));
   }
   
   /**
