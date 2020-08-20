@@ -16,8 +16,8 @@ AWS.config.update({ region: "ap-south-1" })
 
 // configure the keys for accessing AWS
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID_APP,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_APP,
 })
 
 // configure AWS to work with promises

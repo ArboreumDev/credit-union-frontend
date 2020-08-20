@@ -16,7 +16,7 @@ import { Session } from "../utils/types"
 export interface NavigationProps {}
 
 const AppBar = (props: { session?: Session }) => (
-  <Navbar className={Classes.DARK}>
+  <Navbar>
     <NavbarGroup align={Alignment.LEFT}>
       <Link href="/">
         <NavbarHeading>Arboreum</NavbarHeading>
