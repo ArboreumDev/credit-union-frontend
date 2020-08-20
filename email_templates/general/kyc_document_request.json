@@ -1,0 +1,9 @@
+{
+  "Template": {
+    "TemplateName": "General_KYCDocumentRequest",
+    "SubjectPart": "Request For Additional Documentation",
+    "HtmlPart": "Hi {{name}},<p>You recently registered for the {{company}} Credit Program.</p><p>We've been trying to perform our KYC checks to onboard you to our system, but we need a bit more information.</p><p>In order to proceed, please send a copy of your {{required_document}} to {{onboarding_email}}.</p><p>Once we've got that we can finish our checks, after which we'll send you another email confirming that your registration is complete.</p><p>Apologies for the inconvenience, and thank you in advance!</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
+	"TextPart": ""
+  }
+}
+

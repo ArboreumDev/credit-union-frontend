@@ -1,0 +1,10 @@
+query GetAllUsers {
+  user {
+    id
+    email
+    name
+    user_type
+    balance
+    user_number
+  }
+}
