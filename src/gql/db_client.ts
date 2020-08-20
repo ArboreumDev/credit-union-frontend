@@ -1,7 +1,7 @@
 import { initializeGQL } from "./graphql_client"
 import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
 import { Sdk, getSdk } from "../../src/gql/sdk"
-import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
+// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
@@ -62,7 +62,7 @@ export class DbClient {
           nextDate: "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
           nextAmount: "TODO remainAmount / # of remaining payments"
         },
-        lastPaid: active_request.payables[0].lastPaid
+        lastPaid: "TODO" // active_request.payables[0].lastPaid
       }
     } else if (active_request.status === LoanRequestStatus.awaiting_borrower_confirmation) {
       const offer = active_request.risk_calc_result.latestOffer
@@ -77,24 +77,11 @@ export class DbClient {
           totalAmount: offer.amount + offer.interest,
           monthly: "TODO",
           dueDate: "TDODO always in 6 months?"
+        }
       }
     }
   }
-}
 
-
-  /**
-   * get the network and edges of a given edge_status in network-X format
-  * @param {} gqlclient
-  * @param {*} status
-  * @returns {} an object {nodes: [user_number1, ...], edges: [[from, to, credit], ...]}
-  */
-  getNetwork = async (status: EDGE_STATUS = EDGE_STATUS.active) => {
-    const data = await this.sdk.GetEdgesByStatus({status})
-    const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
-    const nodes = getNodesFromEdgeList(edges)
-    return { nodes, edges }
-  }
 
   /**
    * called with borrower Id to create loan-request also create entries for guarantor requests
@@ -126,7 +113,7 @@ export class DbClient {
   }
 
   /**
-   * for a given request, create an offer
+   * for a given request, create an offer by calling the swarmai-optimizer
    * @param request_id 
    */
   calculateLoanRequestOffer = async ( requestId: string) => {
@@ -135,8 +122,9 @@ export class DbClient {
 
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
     // const ai_input = await this.fetchDataForLoanRequestCalculation(req.borrower_id,  req.amount)
-    // Once done, the AI will then call back into into our api and eventually trigger a function that for simplicity will
-    // now be mocked up like this:
+    // Once done, the AI will then call back into into our api and write to the DB 
+    
+    // for simplicity will this is now be mocked up like this:
     const mockedAiResult = {amount: request.amount, interest: 10}
     const aiResult = await this.storeAiResult( requestId, { latestOffer: mockedAiResult })
     return { updatedRequest: aiResult }

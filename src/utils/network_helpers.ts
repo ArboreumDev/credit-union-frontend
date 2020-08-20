@@ -2,7 +2,7 @@
 // import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
 import { Sdk, getSdk } from "../gql/sdk"
 import { EDGE_STATUS } from "./types"
-import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
+import { User_Insert_Input} from "../../src/gql/sdk"
 import {generateEdgeInputFromTupleNotation} from "../../tests/src/fixtures"
 
 
@@ -76,9 +76,9 @@ type Network = {[index:string]: any}
  * @param {*} network {nodes: UserList, edges: [edgeTuples]}
  */
 export async function addNetwork(sdk: Sdk, network: Network) {
-  let added_users = await addUsers(sdk, network.nodes)
-  let added_edges =  await addEdgesFromList(sdk, network.edges)
-  return {users: added_users, edges: added_edges}
+  let addedUsers = await addUsers(sdk, network.nodes)
+  let addedEdges =  await addEdgesFromList(sdk, network.edges)
+  return {addedUsers, addedEdges}
 }
 
 
