@@ -16,7 +16,7 @@ let client: GraphQLClient
 let sdk: Sdk
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   // reset
   await sdk.ResetDB()
@@ -39,7 +39,7 @@ describe("Basic loan request flow for an accepted loan", () => {
   
   beforeAll(async () =>{
     // connect the client that manages user interactions to the test-DB
-    dbClient = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+    dbClient = new DbClient(sdk)
 
     // add a basic network from a fixture and initialize pointers to
     // an exisiting borrower and two lenders

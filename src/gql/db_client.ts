@@ -2,13 +2,8 @@ import { initializeGQL } from "./graphql_client"
 import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
 import { lenderBalanceToShareInLoan, createStartLoanInputVariables } from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
+import { GraphQLClient } from "graphql-request";
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
-
-
-// const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
-const API_URL = "http://localhost:8080/v1/graphql"
-const ADMIN_SECRET = "myadminsecretkey"
-// const ADMIN_SECRET = "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
 
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
@@ -17,12 +12,8 @@ const ADMIN_SECRET = "myadminsecretkey"
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-  _sdk: Sdk;
-
-  constructor(admin_secret: string, gql_url: string) {
-    let client = initializeGQL(admin_secret, gql_url)
-    this._sdk = getSdk(client)
-  }
+  
+  constructor(private _sdk: Sdk){}
 
   getUserPortfolio = async () => {
     // TODO

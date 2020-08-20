@@ -15,7 +15,7 @@ const createGQLClient = (api_url, admin_secret) =>
     },
   })
 
-export function initializeGQL(adminSecret = ADMIN_SECRET, apiUrl = API_URL, initialState = null) {
+export function initializeGQL(apiUrl = API_URL, adminSecret = ADMIN_SECRET, initialState = null) {
   const _gqlClient = gqlClient ?? createGQLClient(apiUrl, adminSecret);
   // For SSG and SSR always create a new Client
   if (typeof window === "undefined") return _gqlClient;

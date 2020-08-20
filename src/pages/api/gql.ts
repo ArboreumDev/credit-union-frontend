@@ -2,10 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { initializeGQL } from "../../gql/graphql_client";
 import { DbClient } from "../../gql/db_client";
 
-const dbClient = new DbClient(
-  process.env.HASURA_ADMIN_SECRET,
-  process.env.GRAPHQL_ENDPOINT
-)
+const dbClient = new DbClient()
 
 export default async function handler(
   req: NextApiRequest,

@@ -13,7 +13,7 @@ let client: GraphQLClient
 let sdk: Sdk
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
 })
