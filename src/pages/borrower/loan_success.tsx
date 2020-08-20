@@ -1,3 +1,1 @@
-export default () => <div>
-        Loan request successful
-    </div>
+export default () => <div>Loan request successful</div>;

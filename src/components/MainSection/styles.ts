@@ -5,12 +5,12 @@ export const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
-  width: "100%";
+  width: 100%;
 `;
 
 export const Content = styled.div`
     padding-left: 35px;
-    width: '100%';
+    width: 50%;
     background-color: ${Colors.snow};
     /*background-image: linear-gradient(${Colors.cyan}, ${Colors.teal});*/
     display: flex;
@@ -27,7 +27,24 @@ export const BoxRow = styled.div`
 export const LeftBox = styled.div`
   display: table-cell;
   margin-top: 2%;
-  margin-left: 12%;
+  margin-left: 2%;
+  padding: 5%;
+  line-height: 60px;
+  font-size: 20px;
+  font-family: ${Fonts.type.upgrage};
+  font-weight: 300;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors.snow};
+`;
+
+export const RightBox = styled.div`
+  display: table-cell;
+  margin-top: 2%;
+  margin-right: 12%;
   line-height: 60px;
   font-size: 20px;
   font-family: ${Fonts.type.upgrage};
@@ -39,21 +56,6 @@ export const LeftBox = styled.div`
   align-items: flex-start;
   text-align: flex-start;
   background: ${Colors.snow};
-`;
-
-export const RightBox = styled.div`
-  display: table-cell;
-  margin-top: 2%;
-  margin-right: 10%;
-  line-height: 60px;
-  font-size: 20px;
-  font-family: ${Fonts.type.upgrage};
-  font-weight: 300;
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const TitleText = styled.p`

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 export const fetcher = (q) => {
   let base_url = process.env.SITE || "";
@@ -6,7 +6,7 @@ export const fetcher = (q) => {
   console.log(url);
 
   return axios
-    .post(url, {query: q})
-    .then(res=> res.data)
-    .catch(error => console.log(error))
+    .post(url, { query: q })
+    .then((res) => res.data)
+    .catch((error) => console.log(error));
 };

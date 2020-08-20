@@ -16,5 +16,11 @@
     "experimentalDecorators": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/gql/pages/profile.tsx", "setupTests.js"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/gql/pages/profile.tsx",
+    "setupTests.js"
+  ]
 }
