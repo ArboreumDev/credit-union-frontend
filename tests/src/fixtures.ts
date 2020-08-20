@@ -64,7 +64,4 @@ export const EDGES =[[LENDER1, BORROWER1, 100], [LENDER2, BORROWER1, 40]]
 export const EDGE1 = generateEdgeInputFromTupleNotation(EDGES[0])
 export const EDGE2 = generateEdgeInputFromTupleNotation(EDGES[1])
 
-// example how the network above would be to network-x format
-// const basic_connections = EDGES
-// const basic_nodes = [1,3,2]
-// export const BASIC_NETWORK = {nodes: basic_nodes, edges: basic_connections}
+export const BASIC_NETWORK = {nodes: USERS, edges: EDGES}

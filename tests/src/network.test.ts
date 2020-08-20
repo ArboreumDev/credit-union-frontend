@@ -1,8 +1,9 @@
 import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2} from "./fixtures"
 import { EDGE_STATUS } from "../../src/utils/types"
+import { BASIC_NETWORK} from "./fixtures"
+import {  addNetwork } from "../../src/utils/network_helpers"
 
 global.fetch = require("node-fetch")
 
@@ -13,37 +14,31 @@ let client: GraphQLClient
 let sdk: Sdk
 
 beforeAll(async () => {
-  // console.log('res', res)
   client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
   sdk = getSdk(client)
-
-  // reset
   await sdk.ResetDB()
 })
 
-afterAll(async () => {
-  // reset
-  await sdk.ResetDB()
-})
-
-describe("Adding users and connections", () => {
-  test("add users", async () => {
-    // add users
-    await sdk.CreateUser({user: LENDER1})
-    await sdk.CreateUser({user: LENDER2})
-    await sdk.CreateUser({user: BORROWER1})
-
-    const { user } = await sdk.GetAllUsers()
-
-    expect(user.length).toBe(3)
+describe("An entire network can be added from a fixture", () => {
+  beforeAll(async () => {
+    await addNetwork(sdk, BASIC_NETWORK)
   })
 
-  test("add edges", async () => {
-    sdk.InsertEdge({ edge: EDGE1 })
-    sdk.InsertEdge({ edge: EDGE2 })
+  afterAll(async () => {
+    await sdk.ResetDB()
+  })
+            
 
+  test("users from fixture have been added", async () => {
+    const { user } = await sdk.GetAllUsers()
+    let usermails = user.map(x => x.email)
+    Object.values(BASIC_NETWORK.nodes).forEach(user => {
+      expect(usermails).toContain(user.email)
+    })
+  })
+
+  test("all edges have been added", async () => {
     const { edges } = await sdk.GetEdgesByStatus({status: EDGE_STATUS.active})
-    expect(edges.length).toBe(2)
-
+    expect(edges.length).toBe(BASIC_NETWORK.edges.length)
   })
 })

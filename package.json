@@ -5,8 +5,8 @@
         "dev": "next",
         "build": "next build",
         "start": "next start",
-        "test": "jest --watch",
-        "test:ci": "jest --ci",
+        "test": "jest --watch --runInBand",
+        "test:ci": "jest --ci --runInBand",
         "migrate": "cd hasura && hasura migrate apply",
         "metadata": "cd hasura && hasura metadata apply"
     },
