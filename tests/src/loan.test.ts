@@ -81,4 +81,43 @@ describe("Basic loan request flow for an accepted loan", () => {
         expect(dashboard.desired_principal).toBe(amount)
       })
     })
+    describe("When the borrower accepts a loan offer...", () => {
+    
+      test("triggers creation of payables, receivables", async () => {
+        const { startedLoan } = await dbClient.acceptLoanOffer(request_id, "latestOffer")
+        expect(startedLoan.update_loan_requests_by_pk.status).toBe(LoanRequestStatus.live)
+
+        // payable should make sense
+        expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(amount)
+        expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
+
+        // receivable should match payable
+        expect(startedLoan.insert_receivables_one.amount_total).toBe(startedLoan.insert_payables_one.amount_total)
+        expect(startedLoan.insert_receivables_one.amount_received).toBe(startedLoan.insert_payables_one.amount_paid)
+      })
+      
+    //   test("the users balances are updated accordingly", async () => {
+    //     // const res = await client.updateBalancesAndCorpusShares()
+    //     // console.log(res)
+    //   })
+      
+    //   test("The borrower user can see their repayment plan in the frontend", async () => {
+    //     const dashboard = await client.getBorrowerDashboardInfo(borrower1.id)
+    //     expect(dashboard.amountRepaid).toBe(0)
+    //     expect(dashboard.loanAmount).toBe(amount)
+    //     expect(dashboard.outstanding.total).toBeGreaterThan(amount)
+    //   })
+      
+    //   test.skip("Both lender and borrrower see the loan appearing in their loan history", async () => { })
+      
+    //   test("The lender sees an updated breakdown of their portfolio ", async () => { 
+    //     const dashboard = await client.getLenderDashboadInfo(lender1.id)
+    //     expect(dashboard.invested).toBeGreaterThan(0)
+    //     expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
+    //     console.log('dash', dashboard)
+    //     // expect(dashboard.idle).toBeLessThan(lender1.balance) // TODO 
+    //     // TODO check receivable
+    //   })
+    })
+
 })
