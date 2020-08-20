@@ -6618,7 +6618,7 @@ export const UpdateLoanRequestWithOfferDocument = gql`
     `;
 export const GetEdgesByStatusDocument = gql`
     query GetEdgesByStatus($status: edge_status!) {
-  edges(where: {status: {_eq: $status}}) {
+  edges: edges(where: {status: {_eq: $status}}) {
     from_user {
       id
       user_number
