@@ -1,5 +1,5 @@
-import HomeScreenData from './homeScreenData';
+import homeScreenData from './homeScreenData';
 
 export {
-    HomeScreenData,
+    homeScreenData
 }

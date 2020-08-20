@@ -3,7 +3,7 @@ class HomeScreenData {
     constructor() {
         this.data = {
             "introSection": {
-                "title": "Quick and easy money solutions no buts, no ifs.",
+                "title": "Societal trust at the heart of our risk assessment approach",
                 "desc": "Finance is complex enough. People and businesses deserve easy, straightforward products that actually work. Arboreum makes it super easy for anyone to borrow, invest and make payments. No excuses.",
                 "storeLink" : {
                     "android" : "https://play.google.com/store/apps/details?id=com.aella.comportal",

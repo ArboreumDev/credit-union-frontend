@@ -6,7 +6,7 @@ import { Card, H4, Button, H5, NumericInput, InputGroup, FormGroup, H1, Checkbox
 
 import { initializeGQL } from "../gql/graphql_client";
 import { useRouter } from "next/dist/client/router";
-import Dropzone from "../components/Dropzone";
+import Dropzone from "../Components/Dropzone";
 import { getSdk } from "../gql/sdk";
 
 
@@ -22,7 +22,7 @@ export default function Onboarding() {
   const gqlClient = initializeGQL()
 
   const sdk = getSdk(gqlClient)
-  
+
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
