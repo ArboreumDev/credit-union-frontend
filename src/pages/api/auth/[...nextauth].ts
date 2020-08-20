@@ -1,8 +1,7 @@
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../gql/graphql_client'
-import { User } from '../../../utils/types'
-
+import NextAuth from "next-auth"
+import Providers from "next-auth/providers"
+import { initializeGQL } from "../../../gql/graphql_client"
+import { User } from "../../../utils/types"
 
 const options = {
   site: process.env.SITE || "http://mywebsite.com:3000",
@@ -53,8 +52,7 @@ const options = {
       })
       const profile = data.user[0]
 
-      if (data)
-        session = {...session, user: {...session.user, ...profile}}
+      if (data) session = { ...session, user: { ...session.user, ...profile } }
 
       return Promise.resolve(session)
     },

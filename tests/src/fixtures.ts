@@ -12,7 +12,7 @@ export const LENDER1: User = {
   user_type: "lender",
   demographic_info: { country: "spaceland", education: "genius" },
   user_number: 1,
-  balance: 1000
+  balance: 1000,
 }
 
 export const LENDER2: User = {
@@ -23,7 +23,7 @@ export const LENDER2: User = {
   user_type: "lender",
   demographic_info: { country: "spaceland" },
   user_number: 2,
-  balance: 200
+  balance: 200,
 }
 
 export const BORROWER1: User = {
@@ -34,7 +34,7 @@ export const BORROWER1: User = {
   user_type: "borrower",
   demographic_info: { country: "spaceland", education: "little" },
   user_number: 3,
-  balance: 10
+  balance: 10,
 }
 
 export const USERS = [LENDER1, LENDER2, BORROWER1]
@@ -47,21 +47,26 @@ export const USER4: User = {
   user_type: "lender",
   demographic_info: { country: "spaceland" },
   user_number: 4,
-  balance: 2000
+  balance: 2000,
 }
 
-export const generateEdgeInputFromTupleNotation = (edgeList: [User, User, number]): Edges_Insert_Input => {
+export const generateEdgeInputFromTupleNotation = (
+  edgeList: [User, User, number]
+): Edges_Insert_Input => {
   return {
     trust_amount: edgeList[2],
     status: EDGE_STATUS.active,
     lender_id: edgeList[0].id,
-    borrower_id: edgeList[1].id
+    borrower_id: edgeList[1].id,
   } as Edges_Insert_Input
 }
 
-export const EDGES =[[LENDER1, BORROWER1, 100], [LENDER2, BORROWER1, 40]]
+export const EDGES = [
+  [LENDER1, BORROWER1, 100],
+  [LENDER2, BORROWER1, 40],
+]
 
 export const EDGE1 = generateEdgeInputFromTupleNotation(EDGES[0])
 export const EDGE2 = generateEdgeInputFromTupleNotation(EDGES[1])
 
-export const BASIC_NETWORK = {nodes: USERS, edges: EDGES}
+export const BASIC_NETWORK = { nodes: USERS, edges: EDGES }

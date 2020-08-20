@@ -1,14 +1,13 @@
-import { getSession } from 'next-auth/client'
-import AppBar from '../components/AppBar';
-import {UserType, Session } from '../utils/types';
-import { useRouter } from 'next/dist/client/router';
-import { useEffect } from 'react';
-import { getSessionAsProps } from '../utils/ssr';
-import Onboarding from './onboarding';
-import LenderDashboard from '../components/dashboard/lender'
+import { getSession } from "next-auth/client"
+import AppBar from "../components/AppBar"
+import { UserType, Session } from "../utils/types"
+import { useRouter } from "next/dist/client/router"
+import { useEffect } from "react"
+import { getSessionAsProps } from "../utils/ssr"
+import Onboarding from "./onboarding"
+import LenderDashboard from "../components/dashboard/lender"
 import BorrowerDashboard from "../components/dashboard/borrower"
-import Video from '../components/video';
-
+import Video from "../components/video"
 
 const Page = (props: { session: Session }) => {
   const router = useRouter()
@@ -27,12 +26,16 @@ const Page = (props: { session: Session }) => {
       return (
         <div>
           <AppBar {...props} />
-          {(props.session.user.user_type == UserType.Lender) && <LenderDashboard/>}
-          {(props.session.user.user_type == UserType.Borrower) && <BorrowerDashboard/>}
+          {props.session.user.user_type == UserType.Lender && (
+            <LenderDashboard />
+          )}
+          {props.session.user.user_type == UserType.Borrower && (
+            <BorrowerDashboard />
+          )}
         </div>
       )
+    }
   }
-}
 }
 
 Page.getInitialProps = (context) => getSessionAsProps(context)

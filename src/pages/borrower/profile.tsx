@@ -40,7 +40,6 @@ const Page = (params: Params) => {
   const [state, setState] = useState(params.model)
   const [newBorrower, setNB] = useState(params.newBorrower)
 
-
   const onChange = (event) => {
     const target = event.target
     const value = target.value

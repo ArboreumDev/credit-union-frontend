@@ -3,7 +3,6 @@
     "TemplateName": "Borrower_ProposedLoanTerms",
     "SubjectPart": "Your Loan Terms Are Ready",
     "HtmlPart": "Hi {{name}},<p>Recently, you applied for a loan of {{loan_amount}} through the {{company}} Credit Program.</p><p>We're pleased to inform you that your application received sufficient support to be processed, and present the terms of the loan below:</p><p>Principal: {{loan_principal}}</p><p>Interest Rate: {{loan_rate}}</p><p>Tenor: Six (6) months</p><p>Monthly Repayment Amounts: {{loan_repayments}}</p><p>Total To Repay: {{loan_totalrepayment}}</p><p>Please log in to the Credit Program portal to accept or reject this loan offer.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-	"TextPart": ""
+    "TextPart": ""
   }
 }
-

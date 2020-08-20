@@ -30,11 +30,11 @@ const s3 = new AWS.S3()
 var uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
 export type UploadRequest = {
-            email: string
-            file_name: string
-            ctype: string
-            data: string
-        }
+  email: string
+  file_name: string
+  ctype: string
+  data: string
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,22 +42,22 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-    const uploadRequest: UploadRequest = req.body
-     const { Location } = await s3
-       .upload({
-         Bucket: BUCKET,
-         Key: uploadRequest.email + '/' + uploadRequest.file_name,
-         Body: Buffer.from(uploadRequest.data, 'base64'),
-         ACL: "public-read",
-         ContentEncoding: "base64",
-         ContentType: uploadRequest.ctype
-       })
-       .promise()
+      const uploadRequest: UploadRequest = req.body
+      const { Location } = await s3
+        .upload({
+          Bucket: BUCKET,
+          Key: uploadRequest.email + "/" + uploadRequest.file_name,
+          Body: Buffer.from(uploadRequest.data, "base64"),
+          ACL: "public-read",
+          ContentEncoding: "base64",
+          ContentType: uploadRequest.ctype,
+        })
+        .promise()
 
       res.statusCode = 200
       res.json({ Location })
     } catch (e) {
-        console.log(e)
+      console.log(e)
       res.statusCode = 500
       res.json({ e })
     }

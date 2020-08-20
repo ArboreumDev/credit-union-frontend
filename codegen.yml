@@ -2,7 +2,7 @@ schema:
   - http://localhost:8080/v1/graphql:
       headers:
         X-Hasura-Admin-Secret: myadminsecretkey
-documents: 'src/gql/queries/**/*.graphql'
+documents: "src/gql/queries/**/*.graphql"
 generates:
   src/gql/sdk.ts:
     plugins:
@@ -10,4 +10,4 @@ generates:
       - typescript-operations
       - typescript-graphql-request
     # config:
-      # enumsAsTypes: true
+    # enumsAsTypes: true
