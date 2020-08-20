@@ -13,7 +13,7 @@ import { GraphQLClient } from "graphql-request";
  */
 export class DbClient {
   
-  constructor(private _sdk: Sdk){}
+  constructor(public sdk: Sdk){}
 
   getUserPortfolio = async () => {
     // TODO
@@ -33,7 +33,7 @@ export class DbClient {
    * @param borrower_id 
    */
   getBorrowerDashboardInfo = async (borrower_id) => {
-    const data = await this._sdk.GetLoansByBorrowerAndStatus(
+    const data = await this.sdk.GetLoansByBorrowerAndStatus(
       {borrower_id, statusList: [LoanRequestStatus.live, LoanRequestStatus.awaiting_borrower_confirmation, LoanRequestStatus.initiated]}
     )
     if (data == undefined) return {status: null}
@@ -89,7 +89,7 @@ export class DbClient {
     amount: number,
     purpose: string,
   ) => {
-    const data = await this._sdk.CreateLoanRequest(
+    const data = await this.sdk.CreateLoanRequest(
       {
         request: {
           borrower_id,
@@ -109,7 +109,7 @@ export class DbClient {
    * @param request_id 
    */
   calculateLoanRequestOffer = async ( requestId: string) => {
-    const data = await this._sdk.GetLoanRequest({requestId})
+    const data = await this.sdk.GetLoanRequest({requestId})
     const request = data.loan_requests_by_pk
 
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
@@ -130,7 +130,7 @@ export class DbClient {
    * @param {} newOffer should be an object {interest_rate: int, lenders: [{lender_id, lender_amount, interest_rate}]} <the latter is lender_insert_input
    */
   storeNewOfferOnLoanRequest = async (requestId: string, newOffer: any) => {
-    const res = await this._sdk.UpdateLoanRequestWithOffer({requestId, newOffer})
+    const res = await this.sdk.UpdateLoanRequestWithOffer({requestId, newOffer})
     return res.update_loan_requests_by_pk
   }
 
@@ -146,17 +146,17 @@ export class DbClient {
     offer_key: string  = "latestOffer"
   ) => {
     // get offer and unpack it
-    const data = await this._sdk.GetLoanOffer({ request_id })
+    const data = await this.sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
     const {amount, interest} = offer_params.risk_calc_result.latestOffer
-    const {corpusCash} = await this._sdk.GetLenderAllocationInput()
+    const {corpusCash} = await this.sdk.GetLenderAllocationInput()
     const totalCorpusCash  = corpusCash.aggregate.sum.balance 
 
     // verify the corpus still has capacity to fulfill the loan offer
     if (totalCorpusCash >= amount ) {
       // -> create payables receivables ...
       const variables = createStartLoanInputVariables(request_id, amount, interest)
-      const startedLoan = await this._sdk.StartLoan(variables)
+      const startedLoan = await this.sdk.StartLoan(variables)
       return {
         startedLoan,
       }

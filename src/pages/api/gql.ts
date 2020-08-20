@@ -1,8 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { initializeGQL } from "../../gql/graphql_client";
 import { DbClient } from "../../gql/db_client";
+import { getSdk } from "../../gql/sdk";
 
-const dbClient = new DbClient()
+const sdk = 
+const dbClient = new DbClient(getSdk(initializeGQL()))
+
+const ACTIONS = {
+  "CreateUser" : dbClient
+}
 
 export default async function handler(
   req: NextApiRequest,
