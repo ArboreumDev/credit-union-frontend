@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { initializeGQL } from "../../../gql/graphql_client"
 import { User } from "../../../utils/types"
+import { getSdk } from "../../../gql/sdk"
 
 const options = {
   database: process.env.DATABASE_URL,
@@ -41,21 +42,10 @@ const options = {
     //  },
     // jwt: async (token) => { },
     session: async (session, user) => {
-      const GET_USER_BY_EMAIL = /* GraphQL */ `
-        query GetUserByEmail($email: String!) {
-          user(where: { email: { _eq: $email } }) {
-            name
-            phone
-            email
-            user_type
-          }
-        }
-      `
+      const db = getSdk(initializeGQL())
 
-      const gqlClient = initializeGQL()
-      const data = await gqlClient.request(GET_USER_BY_EMAIL, {
-        email: session.user.email,
-      })
+      const data = await db.GetUserByEmail({ email: session.user.email })
+
       const profile = data.user[0]
 
       if (data) session = { ...session, user: { ...session.user, ...profile } }
