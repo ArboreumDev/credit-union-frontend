@@ -1,5 +1,5 @@
 function toFloat8(x: number) {
-  return parseFloat(Number.parseFloat(x).toFixed(8))
+  return parseFloat(x.toFixed(8))
 }
 
 /**
@@ -48,7 +48,7 @@ export const createStartLoanInputVariables = (
   amount: number,
   interest: number
 ) => {
-  var owedAmount = proportion(100 + interest, 100, amount)
+  const owedAmount = proportion(100 + interest, 100, amount)
   const receivable = {
     loan_id: request_id,
     amount_total: owedAmount,
