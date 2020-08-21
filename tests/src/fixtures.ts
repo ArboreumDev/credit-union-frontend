@@ -2,6 +2,7 @@ import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
 import { EDGE_STATUS, UserType } from "../../src/utils/types"
 
 type User = User_Insert_Input
+type EdgeTuple = [User, User, number]
 
 // REFACTOR to user-input type
 export const LENDER1: User = {
@@ -51,7 +52,7 @@ export const USER4: User = {
 }
 
 export const generateEdgeInputFromTupleNotation = (
-  edgeList: [User, User, number]
+  edgeList: EdgeTuple
 ): Edges_Insert_Input => {
   return {
     trust_amount: edgeList[2],
@@ -61,7 +62,7 @@ export const generateEdgeInputFromTupleNotation = (
   } as Edges_Insert_Input
 }
 
-export const EDGES = [
+export const EDGES: EdgeTuple[] = [
   [LENDER1, BORROWER1, 100],
   [LENDER2, BORROWER1, 40],
 ]

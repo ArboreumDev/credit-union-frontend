@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import AWS from "aws-sdk"
 
 export const config = {
   api: {
@@ -10,14 +11,14 @@ export const config = {
 const BUCKET = "kyc-arboreum"
 
 // Load the AWS SDK for Node.js
-var AWS = require("aws-sdk")
+
 // Set the region
 AWS.config.update({ region: "ap-south-1" })
 
 // configure the keys for accessing AWS
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID_APP,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_APP,
 })
 
 // configure AWS to work with promises
@@ -27,7 +28,7 @@ AWS.config.setPromisesDependency(null)
 const s3 = new AWS.S3()
 
 // call S3 to retrieve upload file to specified bucket
-var uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
+const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
 export type UploadRequest = {
   email: string
