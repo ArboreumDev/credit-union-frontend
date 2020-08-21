@@ -19,6 +19,7 @@ import { initializeGQL } from "../gql/graphql_client"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "../components/Dropzone"
 import { getSdk } from "../gql/sdk"
+import { fetcher } from "../utils/api"
 
 type FormData = {
   phone: string
@@ -37,21 +38,14 @@ export default function Onboarding() {
   const user = session.user as User
 
   const onSubmit = (data) => {
-    // Call mutation
-    sdk
-      .CreateUser({
-        user: {
-          name: user.name,
+    const payload = {
+          name: user.name || data.name,
           email: user.email,
           user_type: data.user_type,
-          phone: data.user_type,
-        },
-      })
-      .then((res) => {
-        console.log(res)
-        // return to home
-        router.push("/")
-      })
+          phone: data.phone,
+        }
+    // Call mutation
+    fetcher("CreateUser", payload)
   }
 
   return (
@@ -60,6 +54,9 @@ export default function Onboarding() {
       <Card className="profile-card">
         <H4>Hi {user.name}</H4>
         <form onSubmit={handleSubmit(onSubmit)} method="post">
+          <FormGroup label="Please enter your name" labelFor="text-input">
+            <InputGroup name="name" inputRef={register({ required: true })} />
+          </FormGroup>
           <FormGroup label="Please enter your phone" labelFor="text-input">
             <InputGroup name="phone" inputRef={register({ required: true })} />
           </FormGroup>
