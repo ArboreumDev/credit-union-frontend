@@ -40,21 +40,25 @@ export default function Onboarding() {
   const onSubmit = (data) => {
     const payload: CreateUserMutationVariables = {
       user: {
-        name: user.name || data.name,
+        name: data.name,
         email: user.email,
         user_type: data.user_type,
         phone: data.phone,
       },
     }
     // Call mutation
-    fetcher("CreateUser", payload)
+    fetcher("CreateUser", payload).then((res) => {
+      console.log(res)
+      // return to home
+      router.push("/")
+    })
   }
 
   return (
     <div>
       <H1>Sign up</H1>
       <Card className="profile-card">
-        <H4>Hi {user.name}</H4>
+        <H4>email: {user.email}</H4>
         <form onSubmit={handleSubmit(onSubmit)} method="post">
           <FormGroup label="Please enter your name" labelFor="text-input">
             <InputGroup name="name" inputRef={register({ required: true })} />
