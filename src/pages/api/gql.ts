@@ -37,6 +37,7 @@ export default async function handler(
 
     let { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
+    console.log(payload)
 
     if (action) {
       try {
