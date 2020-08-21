@@ -5,7 +5,10 @@ import { User } from '../../../utils/types'
 
 
 const options = {
-  site: process.env.SITE || "http://mywebsite.com:3000",
+  database: process.env.DATABASE_URL,
+  jwt: {
+    secret: process.env.SECRET,
+  },
   // Configure one or more authentication providers
   providers: [
     Providers.Email({
@@ -53,8 +56,7 @@ const options = {
       })
       const profile = data.user[0]
 
-      if (data)
-        session = {...session, user: {...session.user, ...profile}}
+      if (data) session = { ...session, user: { ...session.user, ...profile } }
 
       return Promise.resolve(session)
     },
