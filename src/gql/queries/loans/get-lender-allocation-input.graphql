@@ -1,19 +1,16 @@
 query GetLenderAllocationInput {
-  lenders: user (where: {user_type:{_eq: "lender"}})
-{
-  name
-  user_number
-  id
-  balance
-  corpus_share
+  lenders: user(where: { user_type: { _eq: "lender" } }) {
+    name
+    user_number
+    id
+    balance
+    corpus_share
   }
-corpusCash: user_aggregate (
-    where: {user_type: {_eq: "lender"}})
-    {
-  aggregate {
-    sum {
-      balance
+  corpusCash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
+    aggregate {
+      sum {
+        balance
+      }
     }
   }
-}
 }

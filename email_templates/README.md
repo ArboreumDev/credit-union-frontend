@@ -7,14 +7,13 @@ aws ses create-template --cli-input-json file://template.json
 An example of a template is:
 
 {
-  "Template": {
-    "TemplateName": "MyTemplate",
-    "SubjectPart": "Greetings, {{name}}!",
-    "HtmlPart": "<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>",
-    "TextPart": "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}."
-  }
+"Template": {
+"TemplateName": "MyTemplate",
+"SubjectPart": "Greetings, {{name}}!",
+"HtmlPart": "<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>",
+"TextPart": "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}."
 }
-
+}
 
 # Sending Template Emails
 
@@ -25,14 +24,14 @@ aws ses send-templated-email --cli-input-json file://personalised.json
 An example of the personalised JSON required is:
 
 {
-  "Source":"Mary Major <mary.major@example.com>",
-  "Template": "MyTemplate",
-  "ConfigurationSetName": "ConfigSet",
-  "Destination": {
-    "ToAddresses": [ "alejandro.rosalez@example.com"
-    ]
-  },
-  "TemplateData": "{ \"name\":\"Alejandro\", \"favoriteanimal\": \"alligator\" }"
+"Source":"Mary Major <mary.major@example.com>",
+"Template": "MyTemplate",
+"ConfigurationSetName": "ConfigSet",
+"Destination": {
+"ToAddresses": [ "alejandro.rosalez@example.com"
+]
+},
+"TemplateData": "{ \"name\":\"Alejandro\", \"favoriteanimal\": \"alligator\" }"
 }
 
 ## Sending Template Emails Via JS
