@@ -6,6 +6,9 @@ import { User } from '../../../utils/types'
 
 const options = {
   database: process.env.DATABASE_URL,
+  session:{
+    jwt: true
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
   },
