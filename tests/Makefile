@@ -19,7 +19,8 @@ test-watch: docker-up setup-db
 	yarn test
 
 lint:
-	echo TODO
+	todo
 
 lint-format:
-	echo TODO
+	yarn prettier --write .
+	eslint --cache --fix
