@@ -11,6 +11,18 @@ enum AUTH_TYPE {
   ADMIN,
 }
 
+const ADMINS = ["dev-admin@arboreum.dev"]
+
+const getAuthTypeFromEmail = (email: string) => {
+  if (email == undefined) {
+    return AUTH_TYPE.ANY
+  }
+  if (email in ADMINS) {
+    return AUTH_TYPE.ADMIN
+  }
+  return AUTH_TYPE.USER
+}
+
 const dbClient = new DbClient(getSdk(initializeGQL()))
 
 class Action {
@@ -34,22 +46,28 @@ export default async function handler(
   if (req.method === "POST") {
     const token = await jwt.getToken({ req, secret })
     console.log(token)
+    const authType = getAuthTypeFromEmail(token.email)
 
     const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
-    console.log(payload)
 
-    if (action) {
-      try {
-        const data = await action.getData(payload)
-        res.status(200).json(data)
-      } catch (e) {
-        console.error(e)
-        res.status(400).json({ error: e })
+    if (action.authType === authType) {
+      if (action) {
+        try {
+          const data = await action.getData(payload)
+          res.status(200).json(data)
+        } catch (e) {
+          console.error(e)
+          res.status(400).json({ error: e })
+        }
+      } else {
+        res.status(400).json({ error: "invalid action" })
       }
     } else {
-      res.status(400).json({ error: "invalid action" })
+      res.status(401).json({ error: "Unauthorized" })
     }
+
+    console.log(payload)
   } else {
     res.status(405).json({ error: "invalid method" })
   }
