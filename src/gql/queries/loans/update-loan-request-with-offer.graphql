@@ -1,14 +1,11 @@
-mutation UpdateLoanRequestWithOffer (
-    $requestId: uuid!
-    $newOffer: jsonb!,
+mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
+  update_loan_requests_by_pk(
+    pk_columns: { request_id: $requestId }
+    _set: { status: "awaiting_borrower_confirmation" }
+    _append: { risk_calc_result: $newOffer }
   ) {
-    update_loan_requests_by_pk (
-      pk_columns: {request_id: $requestId}
-      _set: { status: "awaiting_borrower_confirmation" }
-      _append: {risk_calc_result: $newOffer}
-    ) {
-      request_id
-      status
-      risk_calc_result
-    }
+    request_id
+    status
+    risk_calc_result
   }
+}

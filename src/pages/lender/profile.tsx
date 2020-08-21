@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Card,
   FormGroup,
@@ -6,18 +6,17 @@ import {
   H5,
   NumericInput,
   Button,
-} from "@blueprintjs/core";
+} from "@blueprintjs/core"
 
-import { getSession } from "next-auth/client";
-import { Contactus } from "../../components/ContactUs";
-import { User, UserType, Session } from "../../utils/types";
-import AppBar from "../../components/AppBar";
-
+import { getSession } from "next-auth/client"
+import { Contactus } from "../../components/ContactUs"
+import { User, UserType, Session } from "../../utils/types"
+import AppBar from "../../components/AppBar"
 
 interface BorrowerModel {
-  name: string;
-  email: string;
-  amount: number;
+  name: string
+  email: string
+  amount: number
 }
 
 class ProfileModel {
@@ -29,23 +28,23 @@ class ProfileModel {
 }
 
 interface Params {
-  session: Session;
-  model: ProfileModel;
-  newBorrower: BorrowerModel;
+  session: Session
+  model: ProfileModel
+  newBorrower: BorrowerModel
 }
 
 const Page = (params: Params) => {
-  const session = params.session;
-  const [state, setState] = useState(params.model);
-  const [newBorrower, setNB] = useState(params.newBorrower);
+  const session = params.session
+  const [state, setState] = useState(params.model)
+  const [newBorrower, setNB] = useState(params.newBorrower)
 
   const onChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const target = event.target
+    const value = target.value
+    const name = target.name
 
-    setNB((prevNB) => ({ ...prevNB, [name]: value }));
-  };
+    setNB((prevNB) => ({ ...prevNB, [name]: value }))
+  }
 
   // console.log(params.session)
   return (
@@ -123,8 +122,8 @@ const Page = (params: Params) => {
         </style>
       </div>
     </div>
-  );
-};
+  )
+}
 
 Page.getInitialProps = async (context) => {
   return {
@@ -135,7 +134,7 @@ Page.getInitialProps = async (context) => {
       { name: "Deepika Padukone", email: "deepika@gmail.com", amount: 35 },
     ]),
     newBorrower: { name: "", email: "", amount: "100" },
-  };
-};
+  }
+}
 
-export default Page;
+export default Page

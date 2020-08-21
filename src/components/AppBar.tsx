@@ -13,8 +13,6 @@ import {
 import Link from "next/link"
 import { Session } from "../utils/types"
 
-export interface NavigationProps {}
-
 const AppBar = (props: { session?: Session }) => (
   <Navbar>
     <NavbarGroup align={Alignment.LEFT}>

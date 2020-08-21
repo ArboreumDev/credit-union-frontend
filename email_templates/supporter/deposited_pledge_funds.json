@@ -3,7 +3,6 @@
     "TemplateName": "Supporter_DepositedPledgeFunds",
     "SubjectPart": "Pledge Funds Received",
     "HtmlPart": "Hi {{name}},<p>We confirm that we have received your deposit of {{pledge_amount}} as a maximum pledge amount for {{borrower}} in the {{company}} Credit Program corpus.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-	"TextPart": ""
+    "TextPart": ""
   }
 }
-

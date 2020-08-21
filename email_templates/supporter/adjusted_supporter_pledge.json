@@ -3,6 +3,6 @@
     "TemplateName": "Supporter_AdjustedPledgeAmount",
     "SubjectPart": "You Adjusted A Pledge Amount",
     "HtmlPart": "Hi {{name}},<p>You have adjusted your maximum pledge amount for {{borrower}} in the {{company}} Credit Program.</p><p>Your new maximum pledge amount is {{pledge_amount}}.</p><p>Please log in to the Credit Program portal if you wish to further adjust your maximum pledge.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-	"TextPart": ""
+    "TextPart": ""
   }
 }

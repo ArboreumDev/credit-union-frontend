@@ -1,7 +1,5 @@
-mutation DeleteAllUsers{
-    delete_user (
-      where: {}
-      ) {
-        affected_rows
-    }
+mutation DeleteAllUsers {
+  delete_user(where: {}) {
+    affected_rows
   }
+}

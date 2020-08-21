@@ -1,15 +1,24 @@
-export function Mailto({ email, subject, body, ...props }) {
+export const Mailto = (props: {
+  email: string
+  subject: string
+  body: string
+  children?: any
+}) => {
   return (
-    <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{props.children}</a>
-  );
+    <a
+      href={`mailto:${props.email}?subject=${
+        encodeURIComponent(props.subject) || ""
+      }&body=${encodeURIComponent(props.body) || ""}`}
+    >
+      {props.children}
+    </a>
+  )
 }
 
-export function Contactus({ subject="", body="", text="Contact Us", ...props }) {
+export function Contactus(subject = "", body = "", text = "Contact Us") {
   return (
-
-      <Mailto email="contact@arboreum.dev" subject={subject} body={body}>
-        {text}
-      </Mailto>
-
-  );
+    <Mailto email="contact@arboreum.dev" subject={subject} body={body}>
+      {text}
+    </Mailto>
+  )
 }

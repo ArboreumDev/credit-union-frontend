@@ -1,13 +1,12 @@
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
-import { initializeGQL } from '../../../gql/graphql_client'
-import { User } from '../../../utils/types'
-
+import NextAuth from "next-auth"
+import Providers from "next-auth/providers"
+import { initializeGQL } from "../../../gql/graphql_client"
+import { User } from "../../../utils/types"
 
 const options = {
   database: process.env.DATABASE_URL,
-  session:{
-    jwt: true
+  session: {
+    jwt: true,
   },
   jwt: {
     secret: process.env.JWT_SECRET,
@@ -65,7 +64,6 @@ const options = {
     },
   },
   events: {
-    signin: async (message) => {},
     signout: async (message) => {
       console.log("sign out successful")
     },

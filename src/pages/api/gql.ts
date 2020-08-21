@@ -35,13 +35,13 @@ export default async function handler(
     const token = await jwt.getToken({ req, secret })
     console.log(token)
 
-    let { actionType, payload } = req.body as GqlRequest
+    const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
     console.log(payload)
 
     if (action) {
       try {
-        var data = await action.getData(payload)
+        const data = await action.getData(payload)
         res.status(200).json(data)
       } catch (e) {
         console.error(e)
