@@ -102,9 +102,7 @@ const Page = (params: Params) => {
             </tbody>
           </table>
         </Card>
-        <Card>
-          <Contactus /> to make any changes.
-        </Card>
+
         <Card className="profile-card">
           <Button intent="primary">Save</Button>
         </Card>
