@@ -51,7 +51,7 @@ export default async function handler(
     const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
 
-    if (action.authType === authType) {
+    if (authType >= action.authType) {
       if (action) {
         try {
           const data = await action.getData(payload)
