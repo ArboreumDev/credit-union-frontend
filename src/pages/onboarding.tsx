@@ -51,6 +51,7 @@ export default function Onboarding() {
       console.log(res)
       // return to home
       router.push("/")
+      // location.reload()
     })
   }
 
