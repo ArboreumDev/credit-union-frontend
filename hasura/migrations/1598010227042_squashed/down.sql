@@ -1,4 +1,7 @@
 
+ALTER TABLE ONLY "public"."user" ALTER COLUMN "corpus_share" DROP DEFAULT;
+
+
 ALTER TABLE "public"."receivables" ALTER COLUMN "encumbrance_id" SET NOT NULL;
 
 ALTER TABLE "public"."payables" ADD COLUMN "payable_type" text;

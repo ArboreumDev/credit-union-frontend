@@ -6,5 +6,6 @@ query GetAllUsers {
     user_type
     balance
     user_number
+    corpus_share
   }
 }

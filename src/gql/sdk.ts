@@ -5991,6 +5991,20 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['uuid']>>;
 };
 
+export type ChangeUserCashBalanceMutationVariables = Exact<{
+  userId: Scalars['uuid'];
+  delta: Scalars['float8'];
+}>;
+
+
+export type ChangeUserCashBalanceMutation = (
+  { __typename?: 'mutation_root' }
+  & { user?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'balance'>
+  )> }
+);
+
 export type CreateUserMutationVariables = Exact<{
   user: User_Insert_Input;
 }>;
@@ -6011,7 +6025,52 @@ export type GetAllUsersQuery = (
   { __typename?: 'query_root' }
   & { user: Array<(
     { __typename?: 'user' }
-    & Pick<User, 'id' | 'email' | 'name' | 'user_type' | 'balance' | 'user_number'>
+    & Pick<User, 'id' | 'email' | 'name' | 'user_type' | 'balance' | 'user_number' | 'corpus_share'>
+  )> }
+);
+
+export type GetLenderDashboardInfoQueryVariables = Exact<{
+  user_id: Scalars['uuid'];
+}>;
+
+
+export type GetLenderDashboardInfoQuery = (
+  { __typename?: 'query_root' }
+  & { lender?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'balance' | 'corpus_share'>
+  )>, corpusInvestment: (
+    { __typename?: 'receivables_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'receivables_aggregate_fields' }
+      & { sum?: Maybe<(
+        { __typename?: 'receivables_sum_fields' }
+        & Pick<Receivables_Sum_Fields, 'amount_total' | 'amount_remain' | 'amount_received'>
+      )> }
+    )> }
+  ), corpusShares: (
+    { __typename?: 'user_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'user_aggregate_fields' }
+      & { sum?: Maybe<(
+        { __typename?: 'user_sum_fields' }
+        & Pick<User_Sum_Fields, 'corpus_share'>
+      )> }
+    )> }
+  ) }
+);
+
+export type SetUserCashBalanceMutationVariables = Exact<{
+  userId: Scalars['uuid'];
+  amount: Scalars['float8'];
+}>;
+
+
+export type SetUserCashBalanceMutation = (
+  { __typename?: 'mutation_root' }
+  & { user?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'balance'>
   )> }
 );
 
@@ -6223,6 +6282,13 @@ export type ResetDbMutation = (
 );
 
 
+export const ChangeUserCashBalanceDocument = gql`
+    mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
+  user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
+    balance
+  }
+}
+    `;
 export const CreateUserDocument = gql`
     mutation CreateUser($user: user_insert_input!) {
   insert_user_one(object: $user) {
@@ -6246,6 +6312,38 @@ export const GetAllUsersDocument = gql`
     user_type
     balance
     user_number
+    corpus_share
+  }
+}
+    `;
+export const GetLenderDashboardInfoDocument = gql`
+    query GetLenderDashboardInfo($user_id: uuid!) {
+  lender: user_by_pk(id: $user_id) {
+    balance
+    corpus_share
+  }
+  corpusInvestment: receivables_aggregate(where: {loan_request: {status: {_eq: "live"}}}) {
+    aggregate {
+      sum {
+        amount_total
+        amount_remain
+        amount_received
+      }
+    }
+  }
+  corpusShares: user_aggregate {
+    aggregate {
+      sum {
+        corpus_share
+      }
+    }
+  }
+}
+    `;
+export const SetUserCashBalanceDocument = gql`
+    mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {
+  user: update_user_by_pk(pk_columns: {id: $userId}, _set: {balance: $amount}) {
+    balance
   }
 }
     `;
@@ -6432,11 +6530,20 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    ChangeUserCashBalance(variables: ChangeUserCashBalanceMutationVariables): Promise<ChangeUserCashBalanceMutation> {
+      return withWrapper(() => client.request<ChangeUserCashBalanceMutation>(print(ChangeUserCashBalanceDocument), variables));
+    },
     CreateUser(variables: CreateUserMutationVariables): Promise<CreateUserMutation> {
       return withWrapper(() => client.request<CreateUserMutation>(print(CreateUserDocument), variables));
     },
     GetAllUsers(variables?: GetAllUsersQueryVariables): Promise<GetAllUsersQuery> {
       return withWrapper(() => client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables));
+    },
+    GetLenderDashboardInfo(variables: GetLenderDashboardInfoQueryVariables): Promise<GetLenderDashboardInfoQuery> {
+      return withWrapper(() => client.request<GetLenderDashboardInfoQuery>(print(GetLenderDashboardInfoDocument), variables));
+    },
+    SetUserCashBalance(variables: SetUserCashBalanceMutationVariables): Promise<SetUserCashBalanceMutation> {
+      return withWrapper(() => client.request<SetUserCashBalanceMutation>(print(SetUserCashBalanceDocument), variables));
     },
     CreateLoanRequest(variables: CreateLoanRequestMutationVariables): Promise<CreateLoanRequestMutation> {
       return withWrapper(() => client.request<CreateLoanRequestMutation>(print(CreateLoanRequestDocument), variables));

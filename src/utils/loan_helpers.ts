@@ -1,3 +1,5 @@
+import { PortfolioUpdate } from "../../src/utils/types"
+
 function toFloat8(x: number) {
     return parseFloat(x.toFixed(8));
   }
@@ -55,3 +57,29 @@ export const createStartLoanInputVariables = (request_id: string, amount: number
       receivable
     }
   }
+
+/**
+ * generates a mutation that will increase the users balance by amount and decrease share in corpus by same amount 
+ * NOTE: essentially this is a workaround for the fact that one can not do updates to multiple rows
+ * in a single transaction if I want to select the rows via arguments
+ * @param {} userInputList [{userId, balanceUpdate, corpusShareUpdate, alias}]
+ */
+export const generateUpdateAsSingleTransaction = (userInputList: Array<PortfolioUpdate>) : string => {
+  let query = "mutation updateUserBalances {"
+  userInputList.forEach(user => {
+    query = query + generate_balance_update_for_user(user.userId, user.balanceDelta, user.shareDelta, user.alias)
+});
+  query = query + "}"
+  return query
+}
+
+const generate_balance_update_for_user = (userId: string, balanceUpdate: number, corpusShareUpdate: number, alias: string)  => {
+  return `
+    ` + alias + `: update_user_by_pk (
+      pk_columns: {id: "` + userId +`"}
+      _inc: {balance: ` + balanceUpdate + ", corpus_share: " + corpusShareUpdate +`}
+      ) {
+          balance
+          corpus_share
+        },`
+}

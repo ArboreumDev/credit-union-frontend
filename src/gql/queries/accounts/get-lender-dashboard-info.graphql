@@ -1,0 +1,26 @@
+query GetLenderDashboardInfo (
+    $user_id: uuid!
+  ) {
+    lender: user_by_pk(id: $user_id) {
+      balance
+      corpus_share
+    }
+    corpusInvestment: receivables_aggregate (
+      where: {loan_request: {status: {_eq: "live"}}}
+    ) {
+      aggregate {
+        sum {
+          amount_total
+          amount_remain
+          amount_received
+        }
+      }
+    }
+    corpusShares: user_aggregate {
+      aggregate {
+        sum {
+          corpus_share
+        }
+      }
+    }
+  }
