@@ -24,6 +24,13 @@ React + Typescript + Next.js
 - CI like: `cd tests; make test`
 - Watch/ Interactive tests: `cd tests; make test-watch`
 
+## Lint
+
+Linting automatically happen during commits. We use husky and lint-staged to achieve that. Configuration in `package.json`
+
+To run manually:
+`yarn eslint`
+
 ## Production
 
 The hasura folder should contain postgres migrations and hasura schema. I used the following commands:
