@@ -18,7 +18,7 @@ import {
 import { initializeGQL } from "../gql/graphql_client"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "../components/Dropzone"
-import { getSdk, CreateUserMutationVariables } from "../gql/sdk"
+import { CreateUserMutationVariables } from "../gql/sdk"
 import { fetcher } from "../utils/api"
 
 type FormData = {
@@ -31,8 +31,6 @@ export default function Onboarding() {
   const router = useRouter()
   const [session, loading] = useSession()
   const gqlClient = initializeGQL()
-
-  const sdk = getSdk(gqlClient)
 
   if (loading) return <div>Loading...</div>
   const user = session.user as User
@@ -51,7 +49,6 @@ export default function Onboarding() {
       console.log(res)
       // return to home
       router.push("/")
-
     })
   }
 
