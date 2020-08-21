@@ -7,7 +7,7 @@ import { User } from '../../../utils/types'
 const options = {
   database: process.env.DATABASE_URL,
   jwt: {
-    secret: process.env.SECRET,
+    secret: process.env.JWT_SECRET,
   },
   // Configure one or more authentication providers
   providers: [
