@@ -17,10 +17,3 @@ test: docker-down docker-up	setup-db jest-test docker-down
 
 test-watch: docker-up setup-db
 	yarn test
-
-lint:
-	todo
-
-lint-format:
-	yarn prettier --write .
-	eslint --cache --fix
