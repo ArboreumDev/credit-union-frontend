@@ -1,8 +1,8 @@
 import { GraphQLClient } from "graphql-request";
 
 // const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
-const API_URL = "https://hasura-prod.herokuapp.com/v1/graphql"
-const ADMIN_SECRET = "arbo-adm1n-s3cr3t"
+const API_URL = process.env.GRAPHQL_ENDPOINT
+const ADMIN_SECRET = process.env.HASURA_ADMIN_SECRET
 // const ADMIN_SECRET = "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
 
 let gqlClient;
