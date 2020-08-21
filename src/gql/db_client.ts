@@ -169,7 +169,7 @@ export class DbClient {
         startedLoan,
       }
     } else {
-      return "ERROR: Offer is outdated: Not enough balance in corpus"
+      console.log("ERROR: Offer is outdated: Not enough balance in corpus")
     }
   }
 }
