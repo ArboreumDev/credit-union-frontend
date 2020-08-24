@@ -53,10 +53,10 @@ export default function Onboarding() {
   }
 
   return (
-    <div>
+    <div className="wrapper">
       <H1>Sign up</H1>
       <Card className="profile-card">
-        <H4>email: {user.email}</H4>
+        {/* <H4>email: {user.email}</H4> */}
         <form onSubmit={handleSubmit(onSubmit)} method="post">
           <FormGroup label="Please enter your name" labelFor="text-input">
             <InputGroup name="name" inputRef={register({ required: true })} />
@@ -91,6 +91,14 @@ export default function Onboarding() {
           </Button>{" "}
         </form>
       </Card>
+      <style jsx>
+        {`
+          .wrapper {
+            width: 400px;
+            margin: 2rem auto;
+          }
+        `}
+      </style>
     </div>
   )
 }

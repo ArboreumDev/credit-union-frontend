@@ -62,7 +62,7 @@ export default (props: { email: string }) => {
       <style jsx>
         {`
           .dropzone {
-            width: 50%;
+            width: 100%;
             height: 100px;
             border-style: dashed;
             /* margin-bottom: 100px; */
