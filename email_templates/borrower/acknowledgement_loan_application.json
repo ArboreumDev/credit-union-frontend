@@ -3,6 +3,6 @@
     "TemplateName": "Borrower_LoanApplicationAcknowledgement",
     "SubjectPart": "Loan Application Received",
     "HtmlPart": "Hi {{name}},<p>We have received your request to borrow {{loan_amount}} via the {{company}} Credit Program.</p><p>We are currently reaching out to your supporters to ask for their approval.</p><p>If your application receives sufficient support, we will shortly be in contact with a loan proposal, which you can then accept or reject.</p><p>If your application does not receive sufficient support, we will be in contact to propose that you either adjust your maximum loan request amount, or pick from a range of alternative loan terms.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-	"TextPart": ""
+    "TextPart": ""
   }
 }

@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2} from "./fixtures"
+import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2 } from "./fixtures"
 import { EDGE_STATUS } from "../../src/utils/types"
 import {getUserPortfolio} from "./test_helpers"
 import { DbClient } from "../../src/gql/db_client"
@@ -30,9 +30,9 @@ afterAll(async () => {
 describe("Adding users and connections", () => {
   test("add users", async () => {
     // add users
-    await sdk.CreateUser({user: LENDER1})
-    await sdk.CreateUser({user: LENDER2})
-    await sdk.CreateUser({user: BORROWER1})
+    await sdk.CreateUser({ user: LENDER1 })
+    await sdk.CreateUser({ user: LENDER2 })
+    await sdk.CreateUser({ user: BORROWER1 })
 
     const { user } = await sdk.GetAllUsers()
 
@@ -43,7 +43,7 @@ describe("Adding users and connections", () => {
     await sdk.InsertEdge({ edge: EDGE1 })
     await sdk.InsertEdge({ edge: EDGE2 })
 
-    const { edges } = await sdk.GetEdgesByStatus({status: EDGE_STATUS.active})
+    const { edges } = await sdk.GetEdgesByStatus({ status: EDGE_STATUS.active })
     expect(edges.length).toBe(2)
   })
 
