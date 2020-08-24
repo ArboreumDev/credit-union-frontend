@@ -1,4 +1,9 @@
 
+ALTER TABLE "public"."transactions" DROP COLUMN "description";
+
+alter table "public"."transactions" rename column "type" to "description";
+
+
 ALTER TABLE "public"."transactions" DROP COLUMN "total_amount";
 
 DROP TRIGGER IF EXISTS "set_public_transactions_updated_at" ON "public"."transactions";

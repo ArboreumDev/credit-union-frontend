@@ -5,6 +5,9 @@ mutation ResetDB {
   delete_payables(where: {}) {
     affected_rows
   }
+  delete_transactionsw(where: {}) {
+    affected_rows
+  }
   delete_encumbrances(where: {}) {
     affected_rows
   }

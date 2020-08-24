@@ -1,6 +1,6 @@
 import { initializeGQL } from "./graphql_client"
-import { PortfolioUpdate, LoanRequestStatus, TransactionStatus } from "../../src/utils/types"
-import { lenderBalanceToShareInLoan, createStartLoanInputVariables, proportion, generateUpdateAsSingleTransaction} from "../../src/utils/loan_helpers"
+import { PortfolioUpdate, LoanRequestStatus, TransactionStatus} from "../../src/utils/types"
+import { lenderBalanceToShareInLoan, createStartLoanInputVariables, proportion, generateUpdatesAsSingleTransaction} from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
@@ -217,6 +217,7 @@ export class DbClient {
 
       // compute loan-allocation based on lender cash-balances
       let portfolioUpdates: Array<PortfolioUpdate> = []
+      let transactions = []
       lenders.forEach(lender => {
         const shareInLoan = lenderBalanceToShareInLoan(lender.balance, totalCorpusCash, amount)
         portfolioUpdates.push({
@@ -225,37 +226,52 @@ export class DbClient {
           shareDelta: shareInLoan,
           alias: "user" + lender.user_number.toString()
         } as PortfolioUpdate)
+
+        // Note this is the most reduced format I would expect
+        transactions.push({ userId: lender.id, delta: -shareInLoan})
       });
-      // TODO transform PortfolioUpdates into transactions and store them on loan-request entry under the offer-key
 
       // find out whether transactions have gone through, then execute portfolioUpdates
-      await this.updatePortfolios(portfolioUpdates)
-        
-      // -> create payables receivables based on loan offer parameters
-      const variables = createStartLoanInputVariables(request_id, amount, interest)
-      const startedLoan = await this._sdk.StartLoan(variables)
-      return {
-        startedLoan,
+      // TODO call to FP API to confirm that all tx can go through
+      const mockedCallToFPResult = (transactions) => true
+      if (mockedCallToFPResult) {
+        // update balances and create txHistory
+        const res = await this.updatePortfolios(portfolioUpdates, request_id, "lend")
+        if (!res.ERROR) {
+          // -> create payables receivables based on loan offer parameters
+          const variables = createStartLoanInputVariables(request_id, amount, interest)
+          const startedLoan = await this._sdk.StartLoan(variables)
+          return { startedLoan }
+        } else {
+          return {ERROR: {description: "Updates couldnt not be done, despite FP-okay", data: [res.ERROR, mockedCallToFPResult]}}
+        }
+      } else {
+        return { ERROR: {description: "Invalid Updates", data: mockedCallToFPResult}}
       }
-    } else {
-      return "ERROR: Offer is outdated: Not enough balance in corpus"
+    } else { 
+      return {ERROR: {description: "Offer is outdated: Not enough balance in corpus", data: {}}}
     }
   }
 
-  updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
+  /**
+   * updates many portfolios (cash & corpusShare) and creates corresponding entries in the transaction-table
+   * all such entries will have the same type and description and if given, relate to the same loan-id
+   * @param updates 
+   * @param loan_id 
+   * @param tx_type 
+   * @param tx_description 
+   */
+  updatePortfolios = async (updates: Array<PortfolioUpdate>, loan_id: string="", tx_type: string ="", tx_description: string = "") => {
     const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
-    if (dryRunFailures.length == 0 ) {
-      const updateMutation = generateUpdateAsSingleTransaction(updates)
+    if (dryRunFailures.length === 0) {
+      const updateMutation = generateUpdatesAsSingleTransaction(updates, loan_id, tx_type, tx_description)
       const data = await this._fetcher.request(updateMutation)
       return data
-    }
-    else {
-      return {
-        "ERROR": {
-          description: "One update could not be run",
-          data: dryRunFailures
-        }
-      }
+    } else {
+      return  {ERROR: {
+        description: "Dryrun failed",
+        data: dryRunFailures
+      }}
     }
   }
 
@@ -287,7 +303,7 @@ export class DbClient {
    * @param delta 
    * @param type must be "deposit" or "withdraw", 
    */
-  instantBalanceUpdateWithTransaction = async (userId: string, delta: number, type: string, data: Object = {}) => {
+  instantBalanceUpdateWithTransaction = async (userId: string, delta: number, type: string, data: Object = {}, description: string = "") => {
     if (type === "deposit" || type === "withdraw") {
       const {transaction, user} = await this._sdk.UpdateBalanceWithTransaction(
         {
@@ -295,8 +311,9 @@ export class DbClient {
           delta: type === "deposit" ? delta : -delta,
           tx: {
             user_id: userId,
-            description: type,
-            data: data,
+            type: type,
+            description,
+            data,
             total_amount: delta >= 0 ? delta : - delta,
             status: TransactionStatus.confirmed
           }

@@ -1,4 +1,5 @@
 import { PortfolioUpdate } from "../../src/utils/types"
+import { Transactions_Insert_Input } from "../../src/gql/sdk"
 
 function toFloat8(x: number) {
   return parseFloat(x.toFixed(8))
@@ -71,21 +72,34 @@ export const createStartLoanInputVariables = (
 }
 
 /**
- * generates a mutation that will increase the users balance by amount and decrease share in corpus by same amount 
+ * generates a mutation that will 
+ * - increase the users balance by amount and 
+ * - decrease share in corpus by same amount and
+ * - create an entry in the transaction table
  * NOTE: essentially this is a workaround for the fact that one can not do updates to multiple rows
  * in a single transaction if I want to select the rows via arguments
  * @param {} userInputList [{userId, balanceUpdate, corpusShareUpdate, alias}]
+ * @param loan_id if given, all tx
  */
-export const generateUpdateAsSingleTransaction = (userInputList: Array<PortfolioUpdate>) : string => {
+export const generateUpdatesAsSingleTransaction = (
+  userInputList: Array<PortfolioUpdate>,
+  loan_id: string,
+  tx_type: string,
+  tx_description: string,
+  ) : string => {
   let query = "mutation updateUserBalances {"
   userInputList.forEach(user => {
-    query = query + generate_balance_update_for_user(user.userId, user.balanceDelta, user.shareDelta, user.alias)
+    query = query + generate_balance_update_for_user(user.userId, user.balanceDelta, user.shareDelta, user.alias, loan_id, tx_type, tx_description)
 });
   query = query + "}"
   return query
 }
 
-const generate_balance_update_for_user = (userId: string, balanceUpdate: number, corpusShareUpdate: number, alias: string)  => {
+/**
+ * generate a mutation that updates the users balance and creates an entry in the tx-table with the respective amount and the given type of transaction
+ * NOTE: with transactions loan_id can be null (e.g. when the user makes a deposit or withdrawal)
+ */
+const generate_balance_update_for_user = (userId: string, balanceUpdate: number, corpusShareUpdate: number, alias: string, loan_id: string, tx_type: string, tx_description: string)  => {
   return `
     ` + alias + `: update_user_by_pk (
       pk_columns: {id: "` + userId +`"}
@@ -93,5 +107,15 @@ const generate_balance_update_for_user = (userId: string, balanceUpdate: number,
       ) {
           balance
           corpus_share
-        },`
+        },
+    ` + alias + `Tx: insert_transactions_one (object: 
+      {
+        user_id: "`  + userId + `",`+ (loan_id ? ` loan_id: "` + loan_id +`",` : '') + `
+        total_amount:` + balanceUpdate + `, 
+        type: "` + tx_type +`",
+        description: "` + tx_description +`",
+        status: "confirmed"
+       }) { 
+         tx_nonce 
+      },`
 }

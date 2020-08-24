@@ -50,6 +50,7 @@ describe("Adding users and connections", () => {
   describe("Setting and updating user balances", () => {
     let balancesAfter
     let balancesBefore
+
     test("setting the balance of one account", async () => {
       await sdk.SetUserCashBalance({userId: LENDER1.id, amount:42000})
       const {user} = await sdk.GetAllUsers()
@@ -61,6 +62,7 @@ describe("Adding users and connections", () => {
       const {user} = await sdk.GetAllUsers()
       expect(user.filter(x => x.id === LENDER1.id)[0].balance).toBe(42042)
     })
+
     test("batch updates to multiple accounts", async () => {
       // moving 41 from lender1 to lender lender2
       const VALID_UPDATES1 = [
@@ -85,8 +87,8 @@ describe("Adding users and connections", () => {
         {userId: LENDER2.id, balanceDelta: 41, shareDelta: 0, alias: "lender2"}
       ]
       
-      const result = await dbClient.updatePortfolios(INVALID_UPDATES)
-      expect(result).toHaveProperty("ERROR")
+      const result = await dbClient.dryRunPortfolioUpdates(INVALID_UPDATES)
+      expect(result.length).toBe(1)
       
       // all balances should be the same as before
       let balancesAfter = getUserPortfolio(user)

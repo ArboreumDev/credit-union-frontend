@@ -1,6 +1,7 @@
 
 
 
+
 ALTER TABLE "public"."payables" ADD COLUMN "pay_frequency" integer NULL DEFAULT 1;
 
 ALTER TABLE "public"."user" ADD COLUMN "corpus_share" float8 NULL;
@@ -77,3 +78,7 @@ COMMENT ON TRIGGER "set_public_transactions_updated_at" ON "public"."transaction
 IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
 ALTER TABLE "public"."transactions" ADD COLUMN "total_amount" float8 NOT NULL;
+
+alter table "public"."transactions" rename column "description" to "type";
+
+ALTER TABLE "public"."transactions" ADD COLUMN "description" text NULL;

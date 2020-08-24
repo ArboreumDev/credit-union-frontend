@@ -1,0 +1,16 @@
+mutation UpdateTransactionStatus (
+  $txNonce: Int!
+  $txStatus: transaction_status!
+) {
+  update_transactions_by_pk(
+    pk_columns: {tx_nonce: $txNonce}
+    _set: {status: $txStatus}
+  ) {
+    description
+    loan_id
+    user_id
+    status
+    type
+    total_amount
+  }
+}

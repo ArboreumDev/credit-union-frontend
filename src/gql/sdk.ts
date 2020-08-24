@@ -5355,6 +5355,7 @@ export type Transactions = {
   status: Scalars['transaction_status'];
   total_amount: Scalars['float8'];
   tx_nonce: Scalars['Int'];
+  type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
 };
@@ -5446,6 +5447,7 @@ export type Transactions_Bool_Exp = {
   status?: Maybe<Transaction_Status_Comparison_Exp>;
   total_amount?: Maybe<Float8_Comparison_Exp>;
   tx_nonce?: Maybe<Int_Comparison_Exp>;
+  type?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<Uuid_Comparison_Exp>;
 };
@@ -5488,6 +5490,7 @@ export type Transactions_Insert_Input = {
   status?: Maybe<Scalars['transaction_status']>;
   total_amount?: Maybe<Scalars['float8']>;
   tx_nonce?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
 };
@@ -5500,6 +5503,7 @@ export type Transactions_Max_Fields = {
   loan_id?: Maybe<Scalars['uuid']>;
   total_amount?: Maybe<Scalars['float8']>;
   tx_nonce?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
 };
@@ -5511,6 +5515,7 @@ export type Transactions_Max_Order_By = {
   loan_id?: Maybe<Order_By>;
   total_amount?: Maybe<Order_By>;
   tx_nonce?: Maybe<Order_By>;
+  type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -5523,6 +5528,7 @@ export type Transactions_Min_Fields = {
   loan_id?: Maybe<Scalars['uuid']>;
   total_amount?: Maybe<Scalars['float8']>;
   tx_nonce?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
 };
@@ -5534,6 +5540,7 @@ export type Transactions_Min_Order_By = {
   loan_id?: Maybe<Order_By>;
   total_amount?: Maybe<Order_By>;
   tx_nonce?: Maybe<Order_By>;
+  type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -5569,6 +5576,7 @@ export type Transactions_Order_By = {
   status?: Maybe<Order_By>;
   total_amount?: Maybe<Order_By>;
   tx_nonce?: Maybe<Order_By>;
+  type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -5600,6 +5608,8 @@ export enum Transactions_Select_Column {
   /** column name */
   TxNonce = 'tx_nonce',
   /** column name */
+  Type = 'type',
+  /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
   UserId = 'user_id'
@@ -5614,6 +5624,7 @@ export type Transactions_Set_Input = {
   status?: Maybe<Scalars['transaction_status']>;
   total_amount?: Maybe<Scalars['float8']>;
   tx_nonce?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
 };
@@ -5686,6 +5697,8 @@ export enum Transactions_Update_Column {
   TotalAmount = 'total_amount',
   /** column name */
   TxNonce = 'tx_nonce',
+  /** column name */
+  Type = 'type',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -6547,24 +6560,6 @@ export type CreateUserMutation = (
   )> }
 );
 
-export type UpdateBalanceWithTransactionMutationVariables = Exact<{
-  userId: Scalars['uuid'];
-  delta: Scalars['float8'];
-  tx: Transactions_Insert_Input;
-}>;
-
-
-export type UpdateBalanceWithTransactionMutation = (
-  { __typename?: 'mutation_root' }
-  & { user?: Maybe<(
-    { __typename?: 'user' }
-    & Pick<User, 'balance'>
-  )>, transaction?: Maybe<(
-    { __typename?: 'transactions' }
-    & Pick<Transactions, 'data' | 'tx_nonce' | 'status' | 'total_amount'>
-  )> }
-);
-
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -6798,6 +6793,9 @@ export type ResetDbMutation = (
   )>, delete_payables?: Maybe<(
     { __typename?: 'payables_mutation_response' }
     & Pick<Payables_Mutation_Response, 'affected_rows'>
+  )>, delete_transactions?: Maybe<(
+    { __typename?: 'transactions_mutation_response' }
+    & Pick<Transactions_Mutation_Response, 'affected_rows'>
   )>, delete_encumbrances?: Maybe<(
     { __typename?: 'encumbrances_mutation_response' }
     & Pick<Encumbrances_Mutation_Response, 'affected_rows'>
@@ -6828,6 +6826,51 @@ export type ResetDbMutation = (
   )> }
 );
 
+export type UpdateBalanceWithTransactionMutationVariables = Exact<{
+  userId: Scalars['uuid'];
+  delta: Scalars['float8'];
+  tx: Transactions_Insert_Input;
+}>;
+
+
+export type UpdateBalanceWithTransactionMutation = (
+  { __typename?: 'mutation_root' }
+  & { user?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'balance'>
+  )>, transaction?: Maybe<(
+    { __typename?: 'transactions' }
+    & Pick<Transactions, 'data' | 'tx_nonce' | 'status' | 'total_amount'>
+  )> }
+);
+
+export type GetTransactionQueryVariables = Exact<{
+  nonce: Scalars['Int'];
+}>;
+
+
+export type GetTransactionQuery = (
+  { __typename?: 'query_root' }
+  & { transactions_by_pk?: Maybe<(
+    { __typename?: 'transactions' }
+    & Pick<Transactions, 'data' | 'status' | 'total_amount' | 'tx_nonce'>
+  )> }
+);
+
+export type UpdateTransactionStatusMutationVariables = Exact<{
+  txNonce: Scalars['Int'];
+  txStatus: Scalars['transaction_status'];
+}>;
+
+
+export type UpdateTransactionStatusMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_transactions_by_pk?: Maybe<(
+    { __typename?: 'transactions' }
+    & Pick<Transactions, 'description' | 'loan_id' | 'user_id' | 'status' | 'type' | 'total_amount'>
+  )> }
+);
+
 
 export const ChangeUserCashBalanceDocument = gql`
     mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
@@ -6847,19 +6890,6 @@ export const CreateUserDocument = gql`
     phone
     demographic_info
     user_number
-  }
-}
-    `;
-export const UpdateBalanceWithTransactionDocument = gql`
-    mutation UpdateBalanceWithTransaction($userId: uuid!, $delta: float8!, $tx: transactions_insert_input!) {
-  user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
-    balance
-  }
-  transaction: insert_transactions_one(object: $tx) {
-    data
-    tx_nonce
-    status
-    total_amount
   }
 }
     `;
@@ -7054,6 +7084,9 @@ export const ResetDbDocument = gql`
   delete_payables(where: {}) {
     affected_rows
   }
+  delete_transactions(where: {}) {
+    affected_rows
+  }
   delete_encumbrances(where: {}) {
     affected_rows
   }
@@ -7083,6 +7116,41 @@ export const ResetDbDocument = gql`
   }
 }
     `;
+export const UpdateBalanceWithTransactionDocument = gql`
+    mutation UpdateBalanceWithTransaction($userId: uuid!, $delta: float8!, $tx: transactions_insert_input!) {
+  user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
+    balance
+  }
+  transaction: insert_transactions_one(object: $tx) {
+    data
+    tx_nonce
+    status
+    total_amount
+  }
+}
+    `;
+export const GetTransactionDocument = gql`
+    query GetTransaction($nonce: Int!) {
+  transactions_by_pk(tx_nonce: $nonce) {
+    data
+    status
+    total_amount
+    tx_nonce
+  }
+}
+    `;
+export const UpdateTransactionStatusDocument = gql`
+    mutation UpdateTransactionStatus($txNonce: Int!, $txStatus: transaction_status!) {
+  update_transactions_by_pk(pk_columns: {tx_nonce: $txNonce}, _set: {status: $txStatus}) {
+    description
+    loan_id
+    user_id
+    status
+    type
+    total_amount
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -7095,9 +7163,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateUser(variables: CreateUserMutationVariables): Promise<CreateUserMutation> {
       return withWrapper(() => client.request<CreateUserMutation>(print(CreateUserDocument), variables));
-    },
-    UpdateBalanceWithTransaction(variables: UpdateBalanceWithTransactionMutationVariables): Promise<UpdateBalanceWithTransactionMutation> {
-      return withWrapper(() => client.request<UpdateBalanceWithTransactionMutation>(print(UpdateBalanceWithTransactionDocument), variables));
     },
     GetAllUsers(variables?: GetAllUsersQueryVariables): Promise<GetAllUsersQuery> {
       return withWrapper(() => client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables));
@@ -7140,6 +7205,15 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     ResetDB(variables?: ResetDbMutationVariables): Promise<ResetDbMutation> {
       return withWrapper(() => client.request<ResetDbMutation>(print(ResetDbDocument), variables));
+    },
+    UpdateBalanceWithTransaction(variables: UpdateBalanceWithTransactionMutationVariables): Promise<UpdateBalanceWithTransactionMutation> {
+      return withWrapper(() => client.request<UpdateBalanceWithTransactionMutation>(print(UpdateBalanceWithTransactionDocument), variables));
+    },
+    GetTransaction(variables: GetTransactionQueryVariables): Promise<GetTransactionQuery> {
+      return withWrapper(() => client.request<GetTransactionQuery>(print(GetTransactionDocument), variables));
+    },
+    UpdateTransactionStatus(variables: UpdateTransactionStatusMutationVariables): Promise<UpdateTransactionStatusMutation> {
+      return withWrapper(() => client.request<UpdateTransactionStatusMutation>(print(UpdateTransactionStatusDocument), variables));
     }
   };
 }
