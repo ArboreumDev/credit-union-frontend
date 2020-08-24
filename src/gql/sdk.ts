@@ -5178,6 +5178,7 @@ export type Transaction_Status_Comparison_Exp = {
 /** columns and relationships of "transactions" */
 export type Transactions = {
   __typename?: "transactions"
+  amount: Scalars["float8"]
   created_at?: Maybe<Scalars["timestamptz"]>
   data: Scalars["jsonb"]
   description?: Maybe<Scalars["String"]>
@@ -5185,7 +5186,6 @@ export type Transactions = {
   /** An object relationship */
   loan_request?: Maybe<Loan_Requests>
   status: Scalars["transaction_status"]
-  total_amount: Scalars["float8"]
   tx_nonce: Scalars["Int"]
   type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -5255,13 +5255,13 @@ export type Transactions_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Transactions_Avg_Fields = {
   __typename?: "transactions_avg_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by avg() on columns of table "transactions" */
 export type Transactions_Avg_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
@@ -5270,13 +5270,13 @@ export type Transactions_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Transactions_Bool_Exp>>>
   _not?: Maybe<Transactions_Bool_Exp>
   _or?: Maybe<Array<Maybe<Transactions_Bool_Exp>>>
+  amount?: Maybe<Float8_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   data?: Maybe<Jsonb_Comparison_Exp>
   description?: Maybe<String_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   status?: Maybe<Transaction_Status_Comparison_Exp>
-  total_amount?: Maybe<Float8_Comparison_Exp>
   tx_nonce?: Maybe<Int_Comparison_Exp>
   type?: Maybe<String_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
@@ -5308,19 +5308,19 @@ export type Transactions_Delete_Key_Input = {
 
 /** input type for incrementing integer column in table "transactions" */
 export type Transactions_Inc_Input = {
-  total_amount?: Maybe<Scalars["float8"]>
+  amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
 }
 
 /** input type for inserting data into table "transactions" */
 export type Transactions_Insert_Input = {
+  amount?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   data?: Maybe<Scalars["jsonb"]>
   description?: Maybe<Scalars["String"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   status?: Maybe<Scalars["transaction_status"]>
-  total_amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
   type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -5330,10 +5330,10 @@ export type Transactions_Insert_Input = {
 /** aggregate max on columns */
 export type Transactions_Max_Fields = {
   __typename?: "transactions_max_fields"
+  amount?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   description?: Maybe<Scalars["String"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  total_amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
   type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -5342,10 +5342,10 @@ export type Transactions_Max_Fields = {
 
 /** order by max() on columns of table "transactions" */
 export type Transactions_Max_Order_By = {
+  amount?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   description?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
-  total_amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
   type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
@@ -5355,10 +5355,10 @@ export type Transactions_Max_Order_By = {
 /** aggregate min on columns */
 export type Transactions_Min_Fields = {
   __typename?: "transactions_min_fields"
+  amount?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   description?: Maybe<Scalars["String"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  total_amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
   type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -5367,10 +5367,10 @@ export type Transactions_Min_Fields = {
 
 /** order by min() on columns of table "transactions" */
 export type Transactions_Min_Order_By = {
+  amount?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   description?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
-  total_amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
   type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
@@ -5401,13 +5401,13 @@ export type Transactions_On_Conflict = {
 
 /** ordering options when selecting data from "transactions" */
 export type Transactions_Order_By = {
+  amount?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   data?: Maybe<Order_By>
   description?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   status?: Maybe<Order_By>
-  total_amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
   type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
@@ -5427,6 +5427,8 @@ export type Transactions_Prepend_Input = {
 /** select columns of table "transactions" */
 export enum Transactions_Select_Column {
   /** column name */
+  Amount = "amount",
+  /** column name */
   CreatedAt = "created_at",
   /** column name */
   Data = "data",
@@ -5436,8 +5438,6 @@ export enum Transactions_Select_Column {
   LoanId = "loan_id",
   /** column name */
   Status = "status",
-  /** column name */
-  TotalAmount = "total_amount",
   /** column name */
   TxNonce = "tx_nonce",
   /** column name */
@@ -5450,12 +5450,12 @@ export enum Transactions_Select_Column {
 
 /** input type for updating data in table "transactions" */
 export type Transactions_Set_Input = {
+  amount?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   data?: Maybe<Scalars["jsonb"]>
   description?: Maybe<Scalars["String"]>
   loan_id?: Maybe<Scalars["uuid"]>
   status?: Maybe<Scalars["transaction_status"]>
-  total_amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
   type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -5465,57 +5465,59 @@ export type Transactions_Set_Input = {
 /** aggregate stddev on columns */
 export type Transactions_Stddev_Fields = {
   __typename?: "transactions_stddev_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev() on columns of table "transactions" */
 export type Transactions_Stddev_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** aggregate stddev_pop on columns */
 export type Transactions_Stddev_Pop_Fields = {
   __typename?: "transactions_stddev_pop_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_pop() on columns of table "transactions" */
 export type Transactions_Stddev_Pop_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** aggregate stddev_samp on columns */
 export type Transactions_Stddev_Samp_Fields = {
   __typename?: "transactions_stddev_samp_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_samp() on columns of table "transactions" */
 export type Transactions_Stddev_Samp_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** aggregate sum on columns */
 export type Transactions_Sum_Fields = {
   __typename?: "transactions_sum_fields"
-  total_amount?: Maybe<Scalars["float8"]>
+  amount?: Maybe<Scalars["float8"]>
   tx_nonce?: Maybe<Scalars["Int"]>
 }
 
 /** order by sum() on columns of table "transactions" */
 export type Transactions_Sum_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** update columns of table "transactions" */
 export enum Transactions_Update_Column {
+  /** column name */
+  Amount = "amount",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -5526,8 +5528,6 @@ export enum Transactions_Update_Column {
   LoanId = "loan_id",
   /** column name */
   Status = "status",
-  /** column name */
-  TotalAmount = "total_amount",
   /** column name */
   TxNonce = "tx_nonce",
   /** column name */
@@ -5541,39 +5541,39 @@ export enum Transactions_Update_Column {
 /** aggregate var_pop on columns */
 export type Transactions_Var_Pop_Fields = {
   __typename?: "transactions_var_pop_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_pop() on columns of table "transactions" */
 export type Transactions_Var_Pop_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** aggregate var_samp on columns */
 export type Transactions_Var_Samp_Fields = {
   __typename?: "transactions_var_samp_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_samp() on columns of table "transactions" */
 export type Transactions_Var_Samp_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
 /** aggregate variance on columns */
 export type Transactions_Variance_Fields = {
   __typename?: "transactions_variance_fields"
-  total_amount?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
   tx_nonce?: Maybe<Scalars["Float"]>
 }
 
 /** order by variance() on columns of table "transactions" */
 export type Transactions_Variance_Order_By = {
-  total_amount?: Maybe<Order_By>
+  amount?: Maybe<Order_By>
   tx_nonce?: Maybe<Order_By>
 }
 
@@ -6427,7 +6427,7 @@ export type GetLenderDashboardInfoQuery = { __typename?: "query_root" } & {
         transactions: Array<
           { __typename?: "transactions" } & Pick<
             Transactions,
-            "total_amount" | "loan_id" | "created_at" | "type" | "description"
+            "amount" | "loan_id" | "created_at" | "type" | "description"
           > & {
               loan_request?: Maybe<
                 { __typename?: "loan_requests" } & Pick<
@@ -6747,7 +6747,7 @@ export type UpdateBalanceWithTransactionMutation = {
   transaction?: Maybe<
     { __typename?: "transactions" } & Pick<
       Transactions,
-      "data" | "tx_nonce" | "status" | "total_amount"
+      "data" | "tx_nonce" | "status" | "amount"
     >
   >
 }
@@ -6760,7 +6760,7 @@ export type GetTransactionHistoryQuery = { __typename?: "query_root" } & {
   transactions: Array<
     { __typename?: "transactions" } & Pick<
       Transactions,
-      "type" | "total_amount" | "created_at" | "description"
+      "type" | "amount" | "created_at" | "description"
     >
   >
 }
@@ -6773,7 +6773,7 @@ export type GetTransactionQuery = { __typename?: "query_root" } & {
   transactions_by_pk?: Maybe<
     { __typename?: "transactions" } & Pick<
       Transactions,
-      "data" | "status" | "total_amount" | "tx_nonce"
+      "data" | "status" | "amount" | "tx_nonce"
     >
   >
 }
@@ -6789,7 +6789,7 @@ export type UpdateTransactionStatusMutation = {
   update_transactions_by_pk?: Maybe<
     { __typename?: "transactions" } & Pick<
       Transactions,
-      "description" | "loan_id" | "user_id" | "status" | "type" | "total_amount"
+      "description" | "loan_id" | "user_id" | "status" | "type" | "amount"
     >
   >
 }
@@ -6837,7 +6837,7 @@ export const GetLenderDashboardInfoDocument = gql`
       balance
       corpus_share
       transactions {
-        total_amount
+        amount
         loan_id
         created_at
         type
@@ -7096,15 +7096,15 @@ export const UpdateBalanceWithTransactionDocument = gql`
       data
       tx_nonce
       status
-      total_amount
+      amount
     }
   }
 `
 export const GetTransactionHistoryDocument = gql`
   query GetTransactionHistory($userId: uuid!) {
-    transactions(where: { user_id: { _eq: $userId } }) {
+    transactions: transactions(where: { user_id: { _eq: $userId } }) {
       type
-      total_amount
+      amount
       created_at
       description
     }
@@ -7115,7 +7115,7 @@ export const GetTransactionDocument = gql`
     transactions_by_pk(tx_nonce: $nonce) {
       data
       status
-      total_amount
+      amount
       tx_nonce
     }
   }
@@ -7134,7 +7134,7 @@ export const UpdateTransactionStatusDocument = gql`
       user_id
       status
       type
-      total_amount
+      amount
     }
   }
 `

@@ -14,6 +14,6 @@ mutation UpdateBalanceWithTransaction (
     data
     tx_nonce
     status
-    total_amount
+    amount
   }
 }

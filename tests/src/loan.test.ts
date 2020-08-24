@@ -26,7 +26,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -135,7 +135,7 @@ describe("Basic loan request flow for an accepted loan", () => {
         const txEntry = dashboard.transactions.filter(
           (x) => x.loan_id === request_id
         )[0]
-        expect(txEntry.total_amount).toBe(dashboard.invested * -1)
+        expect(txEntry.amount).toBe(dashboard.invested * -1)
         expect(txEntry.loan_request.purpose).toBe(purpose)
         expect(txEntry.loan_request.user.name).toBe(BORROWER1.name)
       })

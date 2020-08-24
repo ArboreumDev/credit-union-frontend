@@ -5,7 +5,7 @@ query GetTransactionHistory (
       where: {user_id: {_eq: $userId}}
     ) {
       type
-      total_amount
+      amount
       created_at
       description
     }

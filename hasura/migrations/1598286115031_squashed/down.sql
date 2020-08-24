@@ -1,4 +1,9 @@
 
+alter table "public"."transactions" rename column "amount" to "total_amount";
+
+alter table "public"."transactions" drop constraint "transactions_user_id_fkey";
+
+
 ALTER TABLE "public"."transactions" DROP COLUMN "description";
 
 alter table "public"."transactions" rename column "type" to "description";

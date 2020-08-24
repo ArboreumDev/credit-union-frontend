@@ -5,7 +5,7 @@ query GetLenderDashboardInfo (
       balance
       corpus_share
       transactions {
-        total_amount
+        amount
         loan_id
         created_at
         type

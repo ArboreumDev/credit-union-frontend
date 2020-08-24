@@ -222,10 +222,7 @@ export class DbClient {
    * It updates the balances of the lenders
    * @param offer_key which of the possible different offers on the request should be executed
    */
-  acceptLoanOffer = async (
-    request_id: string,
-    offer_key = "latestOffer"
-  ) => {
+  acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
     // get offer and unpack it
     const data = await this._sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
@@ -379,7 +376,7 @@ export class DbClient {
           type: type,
           description,
           data,
-          total_amount: delta >= 0 ? delta : -delta,
+          amount: type === "deposit" ? delta : -delta,
           status: TransactionStatus.confirmed,
         },
       })

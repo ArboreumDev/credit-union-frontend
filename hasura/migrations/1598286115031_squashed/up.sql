@@ -2,6 +2,7 @@
 
 
 
+
 ALTER TABLE "public"."payables" ADD COLUMN "pay_frequency" integer NULL DEFAULT 1;
 
 ALTER TABLE "public"."user" ADD COLUMN "corpus_share" float8 NULL;
@@ -82,3 +83,11 @@ ALTER TABLE "public"."transactions" ADD COLUMN "total_amount" float8 NOT NULL;
 alter table "public"."transactions" rename column "description" to "type";
 
 ALTER TABLE "public"."transactions" ADD COLUMN "description" text NULL;
+
+alter table "public"."transactions"
+           add constraint "transactions_user_id_fkey"
+           foreign key ("user_id")
+           references "public"."user"
+           ("id") on update restrict on delete restrict;
+
+alter table "public"."transactions" rename column "total_amount" to "amount";

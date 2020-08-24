@@ -4,7 +4,7 @@ query GetTransaction (
   transactions_by_pk(tx_nonce: $nonce) {
     data
     status
-    total_amount
+    amount
     tx_nonce
   }
 }

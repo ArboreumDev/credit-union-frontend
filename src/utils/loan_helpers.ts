@@ -72,8 +72,8 @@ export const createStartLoanInputVariables = (
 }
 
 /**
- * generates a mutation that will 
- * - increase the users balance by amount and 
+ * generates a mutation that will
+ * - increase the users balance by amount and
  * - decrease share in corpus by same amount and
  * - create an entry in the transaction table
  * NOTE: essentially this is a workaround for the fact that one can not do updates to multiple rows
@@ -85,12 +85,22 @@ export const generateUpdatesAsSingleTransaction = (
   userInputList: Array<PortfolioUpdate>,
   loan_id: string,
   tx_type: string,
-  tx_description: string,
-  ) : string => {
+  tx_description: string
+): string => {
   let query = "mutation updateUserBalances {"
-  userInputList.forEach(user => {
-    query = query + generate_balance_update_for_user(user.userId, user.balanceDelta, user.shareDelta, user.alias, loan_id, tx_type, tx_description)
-});
+  userInputList.forEach((user) => {
+    query =
+      query +
+      generate_balance_update_for_user(
+        user.userId,
+        user.balanceDelta,
+        user.shareDelta,
+        user.alias,
+        loan_id,
+        tx_type,
+        tx_description
+      )
+  })
   query = query + "}"
   return query
 }
@@ -99,23 +109,53 @@ export const generateUpdatesAsSingleTransaction = (
  * generate a mutation that updates the users balance and creates an entry in the tx-table with the respective amount and the given type of transaction
  * NOTE: with transactions loan_id can be null (e.g. when the user makes a deposit or withdrawal)
  */
-const generate_balance_update_for_user = (userId: string, balanceUpdate: number, corpusShareUpdate: number, alias: string, loan_id: string, tx_type: string, tx_description: string)  => {
-  return `
-    ` + alias + `: update_user_by_pk (
-      pk_columns: {id: "` + userId +`"}
-      _inc: {balance: ` + balanceUpdate + ", corpus_share: " + corpusShareUpdate +`}
+const generate_balance_update_for_user = (
+  userId: string,
+  balanceUpdate: number,
+  corpusShareUpdate: number,
+  alias: string,
+  loan_id: string,
+  tx_type: string,
+  tx_description: string
+) => {
+  return (
+    `
+    ` +
+    alias +
+    `: update_user_by_pk (
+      pk_columns: {id: "` +
+    userId +
+    `"}
+      _inc: {balance: ` +
+    balanceUpdate +
+    ", corpus_share: " +
+    corpusShareUpdate +
+    `}
       ) {
           balance
           corpus_share
         },
-    ` + alias + `Tx: insert_transactions_one (object: 
+    ` +
+    alias +
+    `Tx: insert_transactions_one (object: 
       {
-        user_id: "`  + userId + `",`+ (loan_id ? ` loan_id: "` + loan_id +`",` : '') + `
-        total_amount:` + balanceUpdate + `, 
-        type: "` + tx_type +`",
-        description: "` + tx_description +`",
+        user_id: "` +
+    userId +
+    `",` +
+    (loan_id ? ` loan_id: "` + loan_id + `",` : "") +
+    `
+        amount:` +
+    balanceUpdate +
+    `, 
+        type: "` +
+    tx_type +
+    `",
+        description: "` +
+    tx_description +
+    `",
         status: "confirmed"
        }) { 
          tx_nonce 
       },`
+  )
 }

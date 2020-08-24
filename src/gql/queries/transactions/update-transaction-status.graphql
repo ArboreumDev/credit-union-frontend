@@ -11,6 +11,6 @@ mutation UpdateTransactionStatus (
     user_id
     status
     type
-    total_amount
+    amount
   }
 }

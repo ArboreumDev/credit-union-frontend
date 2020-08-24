@@ -3,7 +3,7 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2 } from "./fixtures"
 import { TransactionStatus } from "../../src/utils/types"
-import {getUserPortfolio} from "./test_helpers"
+import { getUserPortfolio } from "./test_helpers"
 import { DbClient } from "../../src/gql/db_client"
 
 global.fetch = require("node-fetch")
@@ -14,7 +14,6 @@ const TEST_ADMIN_SECRET = "myadminsecretkey"
 let client: GraphQLClient
 let sdk: Sdk
 let dbClient: DbClient
-
 
 beforeAll(async () => {
   client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
@@ -35,20 +34,30 @@ describe("User initiated balance-updates (transaction comes first)", () => {
   // money or because the user deposited some money
   test("deposit cash", async () => {
     const amount = 10
-    const {transaction} = await dbClient.instantBalanceUpdateWithTransaction(LENDER1.id, amount, "deposit")
+    const { transaction } = await dbClient.instantBalanceUpdateWithTransaction(
+      LENDER1.id,
+      amount,
+      "deposit"
+    )
 
     expect(transaction.status).toBe(TransactionStatus.confirmed)
-    const {user} = await sdk.GetAllUsers()
-    expect(user.filter(x => x.id === LENDER1.id)[0].balance).toBe(LENDER1.balance + amount)
+    const { user } = await sdk.GetAllUsers()
+    expect(user.filter((x) => x.id === LENDER1.id)[0].balance).toBe(
+      LENDER1.balance + amount
+    )
   })
 
   test("withdrawing cash", async () => {
-    const {transaction} = await dbClient.instantBalanceUpdateWithTransaction(BORROWER1.id, BORROWER1.balance, "withdraw")
+    const { transaction } = await dbClient.instantBalanceUpdateWithTransaction(
+      BORROWER1.id,
+      BORROWER1.balance,
+      "withdraw"
+    )
 
     expect(transaction.status).toBe(TransactionStatus.confirmed)
-    expect(transaction.total_amount).toBe(BORROWER1.balance)
-    const {user} = await sdk.GetAllUsers()
-    expect(user.filter(x => x.id === BORROWER1.id)[0].balance).toBe(0)
+    expect(transaction.amount).toBe(BORROWER1.balance * -1)
+    const { user } = await sdk.GetAllUsers()
+    expect(user.filter((x) => x.id === BORROWER1.id)[0].balance).toBe(0)
   })
 })
 
