@@ -26,7 +26,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -94,29 +94,6 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
   })
   describe("When the borrower accepts a loan offer...", () => {
-    test("triggers creation of payables, receivables", async () => {
-      const { startedLoan } = await dbClient.acceptLoanOffer(
-        request_id,
-        "latestOffer"
-      )
-      expect(startedLoan.update_loan_requests_by_pk.status).toBe(
-        LoanRequestStatus.live
-      )
-
-      // payable should make sense
-      expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
-        amount
-      )
-      expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
-
-      // receivable should match payable
-      expect(startedLoan.insert_receivables_one.amount_total).toBe(
-        startedLoan.insert_payables_one.amount_total
-      )
-      expect(startedLoan.insert_receivables_one.amount_received).toBe(
-        startedLoan.insert_payables_one.amount_paid
-      )
-    })
     describe("When the borrower accepts a loan offer...", () => {
     
       test("triggers creation of payables, receivables", async () => {

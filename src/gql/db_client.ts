@@ -197,6 +197,8 @@ export class DbClient {
    * After seeing an offer, the borrower can accept it (or change it by adding guarantors, or adjusting the amount)
    * Calling this function takes offer from loan_request.risk_calc_result and translates it to payables, receivables, encumbrances,...
    * Also, advances loan_request status to 'live'
+   * It creates a batch of transactions to be fulfilled TODO
+   * It updates the balances of the lenders
    * @param offer_key which of the possible different offers on the request should be executed
    */
   acceptLoanOffer = async (
