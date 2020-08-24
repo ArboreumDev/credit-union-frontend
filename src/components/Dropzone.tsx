@@ -13,7 +13,6 @@ const toBase64 = (file) =>
 
 export default (props: { email: string }) => {
   const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
-  console.log(uploadedFiles)
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {

@@ -11,9 +11,7 @@ function App({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={theme}>
         <div>
           <div className="content">
-            <div className="container">
-              <Component {...pageProps} />
-            </div>
+            <Component {...pageProps} />
           </div>
         </div>
       </ChakraProvider>
