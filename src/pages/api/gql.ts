@@ -51,6 +51,8 @@ export default async function handler(
     const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
 
+    console.log(payload)
+
     if (authType >= action.authType) {
       if (action) {
         try {
@@ -66,8 +68,6 @@ export default async function handler(
     } else {
       res.status(401).json({ error: "Unauthorized" })
     }
-
-    console.log(payload)
   } else {
     res.status(405).json({ error: "invalid method" })
   }

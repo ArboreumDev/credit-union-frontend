@@ -2,26 +2,25 @@ import { useSession } from "next-auth/client"
 import { User } from "../utils/types"
 
 import { useForm } from "react-hook-form"
-import {
-  Card,
-  H4,
-  Button,
-  H5,
-  NumericInput,
-  InputGroup,
-  FormGroup,
-  H1,
-  Checkbox,
-  Radio,
-} from "@blueprintjs/core"
-
 import { initializeGQL } from "../gql/graphql_client"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "../components/Dropzone"
 import { CreateUserMutationVariables } from "../gql/sdk"
 import { fetcher } from "../utils/api"
+import {
+  Stack,
+  Input,
+  Radio,
+  RadioGroup,
+  Button,
+  Center,
+  Box,
+  VStack,
+  Container,
+} from "@chakra-ui/core"
 
 type FormData = {
+  name: string
   phone: string
   user_type: string
 }
@@ -35,7 +34,8 @@ export default function Onboarding() {
   if (loading) return <div>Loading...</div>
   const user = session.user as User
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormData) => {
+    console.log(data)
     const payload: CreateUserMutationVariables = {
       user: {
         name: data.name,
@@ -53,51 +53,61 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="wrapper">
-      <H1>Sign up</H1>
-      <Card className="profile-card">
-        <form onSubmit={handleSubmit(onSubmit)} method="post">
-          <FormGroup label="Please enter your name" labelFor="text-input">
-            <InputGroup name="name" inputRef={register({ required: true })} />
-          </FormGroup>
-          <FormGroup label="Please enter your phone" labelFor="text-input">
-            <InputGroup name="phone" inputRef={register({ required: true })} />
-          </FormGroup>
-          <div>
-            <H4>Do you plan to lend or borrow?</H4>
-            <Radio
-              name="user_type"
-              value="lender"
-              label="Lend"
-              inline
-              defaultChecked
-              inputRef={register({ required: true })}
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)} method="post">
+        <Container maxW="400px" bg="white">
+          <Stack spacing={3}>
+            <Center>
+              <Box h="40px">
+                <img width="150px" src="/images/logo.svg" alt="logo" />
+              </Box>
+            </Center>
+            <h2>Signup</h2>
+            <Input
+              placeholder="Name"
+              name="name"
+              size="lg"
+              ref={register({ required: true })}
             />
-            <Radio
-              name="user_type"
-              value="borrower"
-              label="Borrow"
-              inline
-              inputRef={register({ required: true })}
+            <Input
+              placeholder="Phone"
+              name="phone"
+              size="lg"
+              ref={register({ required: true })}
             />
-          </div>
-          <div>
-            <H4>KYC Documents:</H4>
-            <Dropzone email={user.email} />
-          </div>
-          <Button type="submit" intent="primary">
-            Submit
-          </Button>{" "}
-        </form>
-      </Card>
-      <style jsx>
-        {`
-          .wrapper {
-            width: 400px;
-            margin: 2rem auto;
-          }
-        `}
-      </style>
+            <Box>
+              <h4>Do you plan to lend or borrow?</h4>
+              <RadioGroup>
+                <Stack direction="row">
+                  <Radio
+                    name="user_type"
+                    value="borrower"
+                    ref={register({ required: true })}
+                  >
+                    Borrow
+                  </Radio>
+                  <Radio
+                    name="user_type"
+                    value="lender"
+                    ref={register({ required: true })}
+                  >
+                    Lend
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+            </Box>
+            <div>
+              <h4>KYC Documents:</h4>
+              <Dropzone email={user.email} />
+            </div>
+            <Center>
+              <Button type="submit" intent="primary">
+                Submit
+              </Button>
+            </Center>
+          </Stack>
+        </Container>
+      </form>
     </div>
   )
 }
