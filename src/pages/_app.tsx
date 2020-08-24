@@ -1,24 +1,22 @@
 import * as React from "react"
-
-import "@blueprintjs/core/lib/css/blueprint.css"
-import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import "../styles.css"
-import "normalize.css"
 import { Provider } from "next-auth/client"
-
 import { AppProps } from "next/app"
-import { Classes } from "@blueprintjs/core"
+
+import { ChakraProvider, CSSReset } from "@chakra-ui/core"
+import theme from "@chakra-ui/theme"
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
-      <div>
-        <div className="content">
-          <div className="container">
-            <Component {...pageProps} />
+      <ChakraProvider theme={theme}>
+        <div>
+          <div className="content">
+            <div className="container">
+              <Component {...pageProps} />
+            </div>
           </div>
         </div>
-      </div>
+      </ChakraProvider>
     </Provider>
   )
 }

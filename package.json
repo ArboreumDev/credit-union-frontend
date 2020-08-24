@@ -14,6 +14,8 @@
     "@blueprintjs/core": "3.30.0",
     "@blueprintjs/icons": "3.19.0",
     "@blueprintjs/table": "^3.8.11",
+    "@chakra-ui/core": "^1.0.0-rc.2",
+    "@chakra-ui/theme": "^1.0.0-rc.2",
     "aws-sdk": "^2.725.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
@@ -31,7 +33,7 @@
     "react-dropzone": "^11.0.2",
     "react-hook-form": "^6.3.0",
     "swr": "^0.2.3",
-    "typescript": "^3.0.1"
+    "typescript": "^4.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.3.0",
