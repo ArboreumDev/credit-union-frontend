@@ -56,7 +56,6 @@ export default function Onboarding() {
     <div className="wrapper">
       <H1>Sign up</H1>
       <Card className="profile-card">
-        {/* <H4>email: {user.email}</H4> */}
         <form onSubmit={handleSubmit(onSubmit)} method="post">
           <FormGroup label="Please enter your name" labelFor="text-input">
             <InputGroup name="name" inputRef={register({ required: true })} />
