@@ -1,0 +1,12 @@
+query GetTransactionHistory (
+    $userId: uuid!
+  ) {
+    transactions: transactions(
+      where: {user_id: {_eq: $userId}}
+    ) {
+      type
+      total_amount
+      created_at
+      description
+    }
+  }

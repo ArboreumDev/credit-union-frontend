@@ -4,6 +4,19 @@ query GetLenderDashboardInfo (
     lender: user_by_pk(id: $user_id) {
       balance
       corpus_share
+      transactions {
+        total_amount
+        loan_id
+        created_at
+        type
+        description
+        loan_request {
+          purpose
+          user {
+            name
+          }
+        }
+      }
     }
     corpusInvestment: receivables_aggregate (
       where: {loan_request: {status: {_eq: "live"}}}

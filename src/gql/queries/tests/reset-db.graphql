@@ -1,11 +1,11 @@
 mutation ResetDB {
+  delete_transactions(where: {}) {
+    affected_rows
+  }
   delete_receivables(where: {}) {
     affected_rows
   }
   delete_payables(where: {}) {
-    affected_rows
-  }
-  delete_transactionsw(where: {}) {
     affected_rows
   }
   delete_encumbrances(where: {}) {

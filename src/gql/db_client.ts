@@ -1,6 +1,15 @@
 import { initializeGQL } from "./graphql_client"
-import { PortfolioUpdate, LoanRequestStatus, TransactionStatus} from "../../src/utils/types"
-import { lenderBalanceToShareInLoan, createStartLoanInputVariables, proportion, generateUpdatesAsSingleTransaction} from "../../src/utils/loan_helpers"
+import {
+  PortfolioUpdate,
+  LoanRequestStatus,
+  TransactionStatus,
+} from "../../src/utils/types"
+import {
+  lenderBalanceToShareInLoan,
+  createStartLoanInputVariables,
+  proportion,
+  generateUpdatesAsSingleTransaction,
+} from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
@@ -18,14 +27,13 @@ const ADMIN_SECRET = "myadminsecretkey"
  */
 export class DbClient {
   // to run queries from *.graphql-files with codegen
-  _sdk: Sdk;
+  _sdk: Sdk
   // to run self-constructed graphql-requests in string format
   _fetcher: GraphQLClient
 
   constructor(admin_secret: string, gql_url: string) {
     this._fetcher = initializeGQL(admin_secret, gql_url)
     this._sdk = getSdk(this._fetcher)
-
   }
 
   getProfileInfo = async (user_id: string) => {
@@ -48,11 +56,16 @@ export class DbClient {
         LoanRequestStatus.initiated,
       ],
     })
-    if (data == undefined) return { status: null }
+    const { transactions } = await this._sdk.GetTransactionHistory({
+      userId: borrower_id,
+    })
+
+    if (data == undefined) return { status: null, transactions }
 
     const active_request = data.loan_requests[0]
     if (active_request.status === LoanRequestStatus.live) {
       return {
+        transactions,
         loanId: active_request.request_id,
         status: active_request.status,
         loanAmount: active_request.amount,
@@ -67,13 +80,14 @@ export class DbClient {
             "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
           nextAmount: "TODO remainAmount / # of remaining payments",
         },
-        lastPaid: active_request.payables[0].last_paid || "no payment yet"
+        lastPaid: active_request.payables[0].last_paid || "no payment yet",
       }
     } else if (
       active_request.status === LoanRequestStatus.awaiting_borrower_confirmation
     ) {
       const offer = active_request.risk_calc_result.latestOffer
       return {
+        transactions,
         loanId: active_request.request_id,
         status: active_request.status,
         desired_principal: active_request.amount,
@@ -90,46 +104,53 @@ export class DbClient {
   }
 
   getLenderDashboadInfo = async (lender_id: string) => {
-    const {lender, corpusInvestment, corpusShares} = await this._sdk.GetLenderDashboardInfo({user_id: lender_id})
+    const {
+      lender,
+      corpusInvestment,
+      corpusShares,
+    } = await this._sdk.GetLenderDashboardInfo({ user_id: lender_id })
     const totalCorpusShares = corpusShares.aggregate.sum.corpus_share
-    return { 
+    return {
       // money the user brought
       invested: lender.corpus_share,
       idle: lender.balance,
       encumbered: "TODO", //lenderInfo.encumbrances_aggregate.aggregate.sum.amount_remain || 0,
       // interest that is earned from the money brought
       interest: {
-        expected: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_total
+        expected:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_total
           ) || 0,
-        received: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_received
+        received:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_received
           ) || 0,
-        outstanding: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_remain
-          ) || 0
+        outstanding:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_remain
+          ) || 0,
       },
+      transactions: lender.transactions,
       guarantor_requests: [
         {
-          borrower_info: {email: "example1@b.com", name: "ashish"},
+          borrower_info: { email: "example1@b.com", name: "ashish" },
           purpose: "education",
-          amount: 200
+          amount: 200,
         },
         {
-          borrower_info: {email: "example2@mail.com", name: "gaurav"},
+          borrower_info: { email: "example2@mail.com", name: "gaurav" },
           purpose: "business",
-          amount: 500
-        }
-      ]
+          amount: 500,
+        },
+      ],
     }
   }
-
 
   /**
    * called with borrower Id to create loan-request also create entries for guarantor requests
@@ -203,75 +224,110 @@ export class DbClient {
    */
   acceptLoanOffer = async (
     request_id: string,
-    offer_key: string = "latestOffer"
+    offer_key = "latestOffer"
   ) => {
     // get offer and unpack it
     const data = await this._sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
-    const {amount, interest} = offer_params.risk_calc_result.latestOffer
-    const {lenders, corpusCash} = await this._sdk.GetLenderAllocationInput()
-    const totalCorpusCash  = corpusCash.aggregate.sum.balance 
+    const { amount, interest } = offer_params.risk_calc_result.latestOffer
+    const { lenders, corpusCash } = await this._sdk.GetLenderAllocationInput()
+    const totalCorpusCash = corpusCash.aggregate.sum.balance
 
     // verify the corpus still has capacity to fulfill the loan offer
-    if (totalCorpusCash >= amount ) {
-
+    if (totalCorpusCash >= amount) {
       // compute loan-allocation based on lender cash-balances
-      let portfolioUpdates: Array<PortfolioUpdate> = []
-      let transactions = []
-      lenders.forEach(lender => {
-        const shareInLoan = lenderBalanceToShareInLoan(lender.balance, totalCorpusCash, amount)
+      const portfolioUpdates: Array<PortfolioUpdate> = []
+      const transactions = []
+      lenders.forEach((lender) => {
+        const shareInLoan = lenderBalanceToShareInLoan(
+          lender.balance,
+          totalCorpusCash,
+          amount
+        )
         portfolioUpdates.push({
           userId: lender.id,
           balanceDelta: -shareInLoan,
           shareDelta: shareInLoan,
-          alias: "user" + lender.user_number.toString()
+          alias: "user" + lender.user_number.toString(),
         } as PortfolioUpdate)
 
         // Note this is the most reduced format I would expect
-        transactions.push({ userId: lender.id, delta: -shareInLoan})
-      });
+        transactions.push({ userId: lender.id, delta: -shareInLoan })
+      })
 
       // find out whether transactions have gone through, then execute portfolioUpdates
       // TODO call to FP API to confirm that all tx can go through
       const mockedCallToFPResult = (transactions) => true
       if (mockedCallToFPResult) {
         // update balances and create txHistory
-        const res = await this.updatePortfolios(portfolioUpdates, request_id, "lend")
+        const res = await this.updatePortfolios(
+          portfolioUpdates,
+          request_id,
+          "lend"
+        )
         if (!res.ERROR) {
           // -> create payables receivables based on loan offer parameters
-          const variables = createStartLoanInputVariables(request_id, amount, interest)
+          const variables = createStartLoanInputVariables(
+            request_id,
+            amount,
+            interest
+          )
           const startedLoan = await this._sdk.StartLoan(variables)
           return { startedLoan }
         } else {
-          return {ERROR: {description: "Updates couldnt not be done, despite FP-okay", data: [res.ERROR, mockedCallToFPResult]}}
+          return {
+            ERROR: {
+              description: "Updates couldnt not be done, despite FP-okay",
+              data: [res.ERROR, mockedCallToFPResult],
+            },
+          }
         }
       } else {
-        return { ERROR: {description: "Invalid Updates", data: mockedCallToFPResult}}
+        return {
+          ERROR: { description: "Invalid Updates", data: mockedCallToFPResult },
+        }
       }
-    } else { 
-      return {ERROR: {description: "Offer is outdated: Not enough balance in corpus", data: {}}}
+    } else {
+      return {
+        ERROR: {
+          description: "Offer is outdated: Not enough balance in corpus",
+          data: {},
+        },
+      }
     }
   }
 
   /**
    * updates many portfolios (cash & corpusShare) and creates corresponding entries in the transaction-table
    * all such entries will have the same type and description and if given, relate to the same loan-id
-   * @param updates 
-   * @param loan_id 
-   * @param tx_type 
-   * @param tx_description 
+   * @param updates
+   * @param loan_id
+   * @param tx_type
+   * @param tx_description
    */
-  updatePortfolios = async (updates: Array<PortfolioUpdate>, loan_id: string="", tx_type: string ="", tx_description: string = "") => {
+  updatePortfolios = async (
+    updates: Array<PortfolioUpdate>,
+    loan_id = "",
+    tx_type = "",
+    tx_description = ""
+  ) => {
     const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
     if (dryRunFailures.length === 0) {
-      const updateMutation = generateUpdatesAsSingleTransaction(updates, loan_id, tx_type, tx_description)
+      const updateMutation = generateUpdatesAsSingleTransaction(
+        updates,
+        loan_id,
+        tx_type,
+        tx_description
+      )
       const data = await this._fetcher.request(updateMutation)
       return data
     } else {
-      return  {ERROR: {
-        description: "Dryrun failed",
-        data: dryRunFailures
-      }}
+      return {
+        ERROR: {
+          description: "Dryrun failed",
+          data: dryRunFailures,
+        },
+      }
     }
   }
 
@@ -279,49 +335,57 @@ export class DbClient {
    * Checks whether the net result of set of updates can be applied in one transaction
    * - that no balance will be negative
    * - that all given userIds are in the database (TODO)
-   * @param updates 
+   * @param updates
    */
   dryRunPortfolioUpdates = async (updates: Array<PortfolioUpdate>) => {
-    let failures = []
-    const {user} = await this._sdk.GetAllUsers()
-    user.forEach(user => {
-      let userUpdates = updates.filter(u => u.userId == user.id)
+    const failures = []
+    const { user } = await this._sdk.GetAllUsers()
+    user.forEach((user) => {
+      const userUpdates = updates.filter((u) => u.userId == user.id)
       if (userUpdates.length) {
-        let totalCashUpdate = userUpdates.map(u => u.balanceDelta).reduce((a,b) => a + b) || 0
-        if ( user.balance + totalCashUpdate < 0) {
-          failures.push({userId: user.id, updates: userUpdates})
+        const totalCashUpdate =
+          userUpdates.map((u) => u.balanceDelta).reduce((a, b) => a + b) || 0
+        if (user.balance + totalCashUpdate < 0) {
+          failures.push({ userId: user.id, updates: userUpdates })
         }
       }
-    });
+    })
     return failures
   }
-  
+
   /**
    * change a users balance and create an entry with status confirmed in the tx-table in the process
    * NOTE: in the future we might want to do other kinds of updates
-   * @param userId 
-   * @param delta 
-   * @param type must be "deposit" or "withdraw", 
+   * @param userId
+   * @param delta
+   * @param type must be "deposit" or "withdraw",
    */
-  instantBalanceUpdateWithTransaction = async (userId: string, delta: number, type: string, data: Object = {}, description: string = "") => {
+  instantBalanceUpdateWithTransaction = async (
+    userId: string,
+    delta: number,
+    type: string,
+    data: any = {},
+    description = ""
+  ) => {
     if (type === "deposit" || type === "withdraw") {
-      const {transaction, user} = await this._sdk.UpdateBalanceWithTransaction(
-        {
-          userId,
-          delta: type === "deposit" ? delta : -delta,
-          tx: {
-            user_id: userId,
-            type: type,
-            description,
-            data,
-            total_amount: delta >= 0 ? delta : - delta,
-            status: TransactionStatus.confirmed
-          }
-        }
-      )
-      return {user, transaction}
+      const {
+        transaction,
+        user,
+      } = await this._sdk.UpdateBalanceWithTransaction({
+        userId,
+        delta: type === "deposit" ? delta : -delta,
+        tx: {
+          user_id: userId,
+          type: type,
+          description,
+          data,
+          total_amount: delta >= 0 ? delta : -delta,
+          status: TransactionStatus.confirmed,
+        },
+      })
+      return { user, transaction }
     } else {
-      return { "ERROR": "unknown type of update" }
+      return { ERROR: "unknown type of update" }
     }
   }
 }
