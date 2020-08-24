@@ -1,15 +1,13 @@
 import axios from "axios"
 import { Fragment } from "react"
 
-const FrontPage = (props: { html: string }) => {
-  console.log(props)
+const FrontPage = () => {
   return (
     <div className="Container">
       <div>
         <div>
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: props.html }} />
       </div>
 
       <style jsx>
@@ -27,19 +25,6 @@ const FrontPage = (props: { html: string }) => {
       </style>
     </div>
   )
-}
-
-FrontPage.getInitialProps = async (context) => {
-  const base_url = process.env.SITE || ""
-  const url = base_url + "/api/auth/signin"
-  console.log(url)
-
-  const data = await axios
-    .get(url)
-    .then((res) => res.data)
-    .catch((error) => console.log(error))
-  console.log("here", data)
-  return { html: data }
 }
 
 export default FrontPage
