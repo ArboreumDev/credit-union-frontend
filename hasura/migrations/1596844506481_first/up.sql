@@ -131,6 +131,17 @@ CREATE TABLE public."user" (
     user_number SERIAL
 );
 
+CREATE TYPE public.transaction_status AS ENUM ( 'initiated', 'confirmed','rejected');
+
+CREATE TABLE public."transactions"(
+    loan_id uuid NOT NULL,
+    tx_nonce SERIAL NOT NULL,
+    data jsonb NOT NULL DEFAULT jsonb_build_object(),
+    description text, 
+    status transaction_status NOT NULL DEFAULT 'initiated'
+);
+
+
 ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_pkey PRIMARY KEY (edge_id);
 ALTER TABLE ONLY public.encumbrances
@@ -159,6 +170,10 @@ ALTER TABLE ONLY public."user"
     ADD CONSTRAINT user_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public."user"
     ADD CONSTRAINT user_user_number_key UNIQUE (user_number);
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (loan_id, tx_nonce);
+ALTER TABLE ONLY public."transactions"
+    ADD CONSTRAINT transactions_tx_nonce_key UNIQUE (tx_nonce);
 CREATE TRIGGER set_public_encumbrances_updated_at BEFORE UPDATE ON public.encumbrances FOR EACH ROW EXECUTE PROCEDURE public.set_current_timestamp_updated_at();
 COMMENT ON TRIGGER set_public_encumbrances_updated_at ON public.encumbrances IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 CREATE TRIGGER set_public_loan_risk_updated_at BEFORE UPDATE ON public.loan_risk FOR EACH ROW EXECUTE PROCEDURE public.set_current_timestamp_updated_at();
@@ -203,6 +218,8 @@ ALTER TABLE ONLY public.receivables
     ADD CONSTRAINT receivables_loan_id_fkey FOREIGN KEY (loan_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.receivables
     ADD CONSTRAINT receivables_receiver_id_fkey FOREIGN KEY (receiver_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_loan_id_fkey FOREIGN KEY (loan_id) REFERENCES public."loan_requests"(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.recommendation_risk
     ADD CONSTRAINT risk_agent_id_fkey FOREIGN KEY (agent_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.recommendation_risk
