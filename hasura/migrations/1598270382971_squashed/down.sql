@@ -1,4 +1,21 @@
 
+ALTER TABLE "public"."transactions" DROP COLUMN "total_amount";
+
+DROP TRIGGER IF EXISTS "set_public_transactions_updated_at" ON "public"."transactions";
+ALTER TABLE "public"."transactions" DROP COLUMN "updated_at";
+
+ALTER TABLE "public"."transactions" DROP COLUMN "created_at";
+
+ALTER TABLE "public"."transactions" ALTER COLUMN "loan_id" SET NOT NULL;
+
+ALTER TABLE "public"."transactions" DROP COLUMN "user_id";
+
+alter table "public"."transactions" drop constraint "transactions_pkey";
+alter table "public"."transactions"
+    add constraint "transactions_pkey" 
+    primary key ( "loan_id", "tx_nonce" );
+
+
 ALTER TABLE ONLY "public"."user" ALTER COLUMN "corpus_share" DROP DEFAULT;
 
 

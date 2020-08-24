@@ -1,0 +1,19 @@
+mutation UpdateBalanceWithTransaction (
+  $userId: uuid!
+  $delta: float8!
+  $tx: transactions_insert_input!
+) {
+  user: update_user_by_pk (
+    pk_columns: {id: $userId}
+    _inc: {balance: $delta}
+  )
+  {
+    balance
+  }
+  transaction: insert_transactions_one(object: $tx) {
+    data
+    tx_nonce
+    status
+    total_amount
+  }
+}

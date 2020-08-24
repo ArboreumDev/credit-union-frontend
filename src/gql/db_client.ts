@@ -1,5 +1,5 @@
 import { initializeGQL } from "./graphql_client"
-import { PortfolioUpdate, LoanRequestStatus } from "../../src/utils/types"
+import { PortfolioUpdate, LoanRequestStatus, TransactionStatus } from "../../src/utils/types"
 import { lenderBalanceToShareInLoan, createStartLoanInputVariables, proportion, generateUpdateAsSingleTransaction} from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
@@ -278,5 +278,33 @@ export class DbClient {
       }
     });
     return failures
+  }
+  
+  /**
+   * change a users balance and create an entry with status confirmed in the tx-table in the process
+   * NOTE: in the future we might want to do other kinds of updates
+   * @param userId 
+   * @param delta 
+   * @param type must be "deposit" or "withdraw", 
+   */
+  instantBalanceUpdateWithTransaction = async (userId: string, delta: number, type: string, data: Object = {}) => {
+    if (type === "deposit" || type === "withdraw") {
+      const {transaction, user} = await this._sdk.UpdateBalanceWithTransaction(
+        {
+          userId,
+          delta: type === "deposit" ? delta : -delta,
+          tx: {
+            user_id: userId,
+            description: type,
+            data: data,
+            total_amount: delta >= 0 ? delta : - delta,
+            status: TransactionStatus.confirmed
+          }
+        }
+      )
+      return {user, transaction}
+    } else {
+      return { "ERROR": "unknown type of update" }
+    }
   }
 }

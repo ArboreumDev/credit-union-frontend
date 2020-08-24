@@ -41,3 +41,9 @@ export type PortfolioUpdate = {
     shareDelta: number
     alias?: string
 }
+
+export enum TransactionStatus {
+  initiated = "initiated",
+  confirmed = "confirmed",
+  rejected = "rejected"
+}

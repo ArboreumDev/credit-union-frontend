@@ -18,6 +18,7 @@ export type Scalars = {
   numeric: any;
   timestamptz: any;
   timetz: any;
+  transaction_status: any;
   user_t: any;
   uuid: any;
 };
@@ -2731,6 +2732,10 @@ export type Mutation_Root = {
   delete_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>;
   /** delete single row from the table: "recommendation_risk" */
   delete_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>;
+  /** delete data from the table: "transactions" */
+  delete_transactions?: Maybe<Transactions_Mutation_Response>;
+  /** delete single row from the table: "transactions" */
+  delete_transactions_by_pk?: Maybe<Transactions>;
   /** delete data from the table: "user" */
   delete_user?: Maybe<User_Mutation_Response>;
   /** delete single row from the table: "user" */
@@ -2775,6 +2780,10 @@ export type Mutation_Root = {
   insert_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>;
   /** insert a single row into the table: "recommendation_risk" */
   insert_recommendation_risk_one?: Maybe<Recommendation_Risk>;
+  /** insert data into the table: "transactions" */
+  insert_transactions?: Maybe<Transactions_Mutation_Response>;
+  /** insert a single row into the table: "transactions" */
+  insert_transactions_one?: Maybe<Transactions>;
   /** insert data into the table: "user" */
   insert_user?: Maybe<User_Mutation_Response>;
   /** insert a single row into the table: "user" */
@@ -2819,6 +2828,10 @@ export type Mutation_Root = {
   update_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>;
   /** update single row of the table: "recommendation_risk" */
   update_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>;
+  /** update data of the table: "transactions" */
+  update_transactions?: Maybe<Transactions_Mutation_Response>;
+  /** update single row of the table: "transactions" */
+  update_transactions_by_pk?: Maybe<Transactions>;
   /** update data of the table: "user" */
   update_user?: Maybe<User_Mutation_Response>;
   /** update single row of the table: "user" */
@@ -2948,6 +2961,18 @@ export type Mutation_RootDelete_Recommendation_RiskArgs = {
 export type Mutation_RootDelete_Recommendation_Risk_By_PkArgs = {
   agent_id: Scalars['uuid'];
   neighbor_id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_TransactionsArgs = {
+  where: Transactions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Transactions_By_PkArgs = {
+  tx_nonce: Scalars['Int'];
 };
 
 
@@ -3100,6 +3125,20 @@ export type Mutation_RootInsert_Recommendation_RiskArgs = {
 export type Mutation_RootInsert_Recommendation_Risk_OneArgs = {
   object: Recommendation_Risk_Insert_Input;
   on_conflict?: Maybe<Recommendation_Risk_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_TransactionsArgs = {
+  objects: Array<Transactions_Insert_Input>;
+  on_conflict?: Maybe<Transactions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Transactions_OneArgs = {
+  object: Transactions_Insert_Input;
+  on_conflict?: Maybe<Transactions_On_Conflict>;
 };
 
 
@@ -3310,6 +3349,32 @@ export type Mutation_RootUpdate_Recommendation_Risk_By_PkArgs = {
   _prepend?: Maybe<Recommendation_Risk_Prepend_Input>;
   _set?: Maybe<Recommendation_Risk_Set_Input>;
   pk_columns: Recommendation_Risk_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_TransactionsArgs = {
+  _append?: Maybe<Transactions_Append_Input>;
+  _delete_at_path?: Maybe<Transactions_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<Transactions_Delete_Elem_Input>;
+  _delete_key?: Maybe<Transactions_Delete_Key_Input>;
+  _inc?: Maybe<Transactions_Inc_Input>;
+  _prepend?: Maybe<Transactions_Prepend_Input>;
+  _set?: Maybe<Transactions_Set_Input>;
+  where: Transactions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Transactions_By_PkArgs = {
+  _append?: Maybe<Transactions_Append_Input>;
+  _delete_at_path?: Maybe<Transactions_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<Transactions_Delete_Elem_Input>;
+  _delete_key?: Maybe<Transactions_Delete_Key_Input>;
+  _inc?: Maybe<Transactions_Inc_Input>;
+  _prepend?: Maybe<Transactions_Prepend_Input>;
+  _set?: Maybe<Transactions_Set_Input>;
+  pk_columns: Transactions_Pk_Columns_Input;
 };
 
 
@@ -3861,6 +3926,12 @@ export type Query_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate;
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>;
+  /** fetch data from the table: "transactions" */
+  transactions: Array<Transactions>;
+  /** fetch aggregated fields from the table: "transactions" */
+  transactions_aggregate: Transactions_Aggregate;
+  /** fetch data from the table: "transactions" using primary key columns */
+  transactions_by_pk?: Maybe<Transactions>;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch aggregated fields from the table: "user" */
@@ -4132,6 +4203,32 @@ export type Query_RootRecommendation_Risk_AggregateArgs = {
 export type Query_RootRecommendation_Risk_By_PkArgs = {
   agent_id: Scalars['uuid'];
   neighbor_id: Scalars['uuid'];
+};
+
+
+/** query root */
+export type Query_RootTransactionsArgs = {
+  distinct_on?: Maybe<Array<Transactions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Transactions_Order_By>>;
+  where?: Maybe<Transactions_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootTransactions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Transactions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Transactions_Order_By>>;
+  where?: Maybe<Transactions_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootTransactions_By_PkArgs = {
+  tx_nonce: Scalars['Int'];
 };
 
 
@@ -4875,6 +4972,12 @@ export type Subscription_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate;
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>;
+  /** fetch data from the table: "transactions" */
+  transactions: Array<Transactions>;
+  /** fetch aggregated fields from the table: "transactions" */
+  transactions_aggregate: Transactions_Aggregate;
+  /** fetch data from the table: "transactions" using primary key columns */
+  transactions_by_pk?: Maybe<Transactions>;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch aggregated fields from the table: "user" */
@@ -5150,6 +5253,32 @@ export type Subscription_RootRecommendation_Risk_By_PkArgs = {
 
 
 /** subscription root */
+export type Subscription_RootTransactionsArgs = {
+  distinct_on?: Maybe<Array<Transactions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Transactions_Order_By>>;
+  where?: Maybe<Transactions_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootTransactions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Transactions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Transactions_Order_By>>;
+  where?: Maybe<Transactions_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootTransactions_By_PkArgs = {
+  tx_nonce: Scalars['Int'];
+};
+
+
+/** subscription root */
 export type Subscription_RootUserArgs = {
   distinct_on?: Maybe<Array<User_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -5200,6 +5329,406 @@ export type Timetz_Comparison_Exp = {
   _lte?: Maybe<Scalars['timetz']>;
   _neq?: Maybe<Scalars['timetz']>;
   _nin?: Maybe<Array<Scalars['timetz']>>;
+};
+
+
+/** expression to compare columns of type transaction_status. All fields are combined with logical 'AND'. */
+export type Transaction_Status_Comparison_Exp = {
+  _eq?: Maybe<Scalars['transaction_status']>;
+  _gt?: Maybe<Scalars['transaction_status']>;
+  _gte?: Maybe<Scalars['transaction_status']>;
+  _in?: Maybe<Array<Scalars['transaction_status']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['transaction_status']>;
+  _lte?: Maybe<Scalars['transaction_status']>;
+  _neq?: Maybe<Scalars['transaction_status']>;
+  _nin?: Maybe<Array<Scalars['transaction_status']>>;
+};
+
+/** columns and relationships of "transactions" */
+export type Transactions = {
+  __typename?: 'transactions';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  data: Scalars['jsonb'];
+  description?: Maybe<Scalars['String']>;
+  loan_id?: Maybe<Scalars['uuid']>;
+  status: Scalars['transaction_status'];
+  total_amount: Scalars['float8'];
+  tx_nonce: Scalars['Int'];
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+
+/** columns and relationships of "transactions" */
+export type TransactionsDataArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "transactions" */
+export type Transactions_Aggregate = {
+  __typename?: 'transactions_aggregate';
+  aggregate?: Maybe<Transactions_Aggregate_Fields>;
+  nodes: Array<Transactions>;
+};
+
+/** aggregate fields of "transactions" */
+export type Transactions_Aggregate_Fields = {
+  __typename?: 'transactions_aggregate_fields';
+  avg?: Maybe<Transactions_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Transactions_Max_Fields>;
+  min?: Maybe<Transactions_Min_Fields>;
+  stddev?: Maybe<Transactions_Stddev_Fields>;
+  stddev_pop?: Maybe<Transactions_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Transactions_Stddev_Samp_Fields>;
+  sum?: Maybe<Transactions_Sum_Fields>;
+  var_pop?: Maybe<Transactions_Var_Pop_Fields>;
+  var_samp?: Maybe<Transactions_Var_Samp_Fields>;
+  variance?: Maybe<Transactions_Variance_Fields>;
+};
+
+
+/** aggregate fields of "transactions" */
+export type Transactions_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Transactions_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "transactions" */
+export type Transactions_Aggregate_Order_By = {
+  avg?: Maybe<Transactions_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Transactions_Max_Order_By>;
+  min?: Maybe<Transactions_Min_Order_By>;
+  stddev?: Maybe<Transactions_Stddev_Order_By>;
+  stddev_pop?: Maybe<Transactions_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Transactions_Stddev_Samp_Order_By>;
+  sum?: Maybe<Transactions_Sum_Order_By>;
+  var_pop?: Maybe<Transactions_Var_Pop_Order_By>;
+  var_samp?: Maybe<Transactions_Var_Samp_Order_By>;
+  variance?: Maybe<Transactions_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Transactions_Append_Input = {
+  data?: Maybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "transactions" */
+export type Transactions_Arr_Rel_Insert_Input = {
+  data: Array<Transactions_Insert_Input>;
+  on_conflict?: Maybe<Transactions_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Transactions_Avg_Fields = {
+  __typename?: 'transactions_avg_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "transactions" */
+export type Transactions_Avg_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "transactions". All fields are combined with a logical 'AND'. */
+export type Transactions_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Transactions_Bool_Exp>>>;
+  _not?: Maybe<Transactions_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Transactions_Bool_Exp>>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  data?: Maybe<Jsonb_Comparison_Exp>;
+  description?: Maybe<String_Comparison_Exp>;
+  loan_id?: Maybe<Uuid_Comparison_Exp>;
+  status?: Maybe<Transaction_Status_Comparison_Exp>;
+  total_amount?: Maybe<Float8_Comparison_Exp>;
+  tx_nonce?: Maybe<Int_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "transactions" */
+export enum Transactions_Constraint {
+  /** unique or primary key constraint */
+  TransactionsPkey = 'transactions_pkey',
+  /** unique or primary key constraint */
+  TransactionsTxNonceKey = 'transactions_tx_nonce_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Transactions_Delete_At_Path_Input = {
+  data?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Transactions_Delete_Elem_Input = {
+  data?: Maybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Transactions_Delete_Key_Input = {
+  data?: Maybe<Scalars['String']>;
+};
+
+/** input type for incrementing integer column in table "transactions" */
+export type Transactions_Inc_Input = {
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "transactions" */
+export type Transactions_Insert_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  data?: Maybe<Scalars['jsonb']>;
+  description?: Maybe<Scalars['String']>;
+  loan_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['transaction_status']>;
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Transactions_Max_Fields = {
+  __typename?: 'transactions_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
+  loan_id?: Maybe<Scalars['uuid']>;
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "transactions" */
+export type Transactions_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
+  loan_id?: Maybe<Order_By>;
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Transactions_Min_Fields = {
+  __typename?: 'transactions_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
+  loan_id?: Maybe<Scalars['uuid']>;
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "transactions" */
+export type Transactions_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
+  loan_id?: Maybe<Order_By>;
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "transactions" */
+export type Transactions_Mutation_Response = {
+  __typename?: 'transactions_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Transactions>;
+};
+
+/** input type for inserting object relation for remote table "transactions" */
+export type Transactions_Obj_Rel_Insert_Input = {
+  data: Transactions_Insert_Input;
+  on_conflict?: Maybe<Transactions_On_Conflict>;
+};
+
+/** on conflict condition type for table "transactions" */
+export type Transactions_On_Conflict = {
+  constraint: Transactions_Constraint;
+  update_columns: Array<Transactions_Update_Column>;
+  where?: Maybe<Transactions_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "transactions" */
+export type Transactions_Order_By = {
+  created_at?: Maybe<Order_By>;
+  data?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
+  loan_id?: Maybe<Order_By>;
+  status?: Maybe<Order_By>;
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "transactions" */
+export type Transactions_Pk_Columns_Input = {
+  tx_nonce: Scalars['Int'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Transactions_Prepend_Input = {
+  data?: Maybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "transactions" */
+export enum Transactions_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  LoanId = 'loan_id',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  TotalAmount = 'total_amount',
+  /** column name */
+  TxNonce = 'tx_nonce',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "transactions" */
+export type Transactions_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  data?: Maybe<Scalars['jsonb']>;
+  description?: Maybe<Scalars['String']>;
+  loan_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['transaction_status']>;
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Transactions_Stddev_Fields = {
+  __typename?: 'transactions_stddev_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "transactions" */
+export type Transactions_Stddev_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Transactions_Stddev_Pop_Fields = {
+  __typename?: 'transactions_stddev_pop_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "transactions" */
+export type Transactions_Stddev_Pop_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Transactions_Stddev_Samp_Fields = {
+  __typename?: 'transactions_stddev_samp_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "transactions" */
+export type Transactions_Stddev_Samp_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Transactions_Sum_Fields = {
+  __typename?: 'transactions_sum_fields';
+  total_amount?: Maybe<Scalars['float8']>;
+  tx_nonce?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "transactions" */
+export type Transactions_Sum_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** update columns of table "transactions" */
+export enum Transactions_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  LoanId = 'loan_id',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  TotalAmount = 'total_amount',
+  /** column name */
+  TxNonce = 'tx_nonce',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** aggregate var_pop on columns */
+export type Transactions_Var_Pop_Fields = {
+  __typename?: 'transactions_var_pop_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "transactions" */
+export type Transactions_Var_Pop_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Transactions_Var_Samp_Fields = {
+  __typename?: 'transactions_var_samp_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "transactions" */
+export type Transactions_Var_Samp_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Transactions_Variance_Fields = {
+  __typename?: 'transactions_variance_fields';
+  total_amount?: Maybe<Scalars['Float']>;
+  tx_nonce?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "transactions" */
+export type Transactions_Variance_Order_By = {
+  total_amount?: Maybe<Order_By>;
+  tx_nonce?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "user" */
@@ -6018,6 +6547,24 @@ export type CreateUserMutation = (
   )> }
 );
 
+export type UpdateBalanceWithTransactionMutationVariables = Exact<{
+  userId: Scalars['uuid'];
+  delta: Scalars['float8'];
+  tx: Transactions_Insert_Input;
+}>;
+
+
+export type UpdateBalanceWithTransactionMutation = (
+  { __typename?: 'mutation_root' }
+  & { user?: Maybe<(
+    { __typename?: 'user' }
+    & Pick<User, 'balance'>
+  )>, transaction?: Maybe<(
+    { __typename?: 'transactions' }
+    & Pick<Transactions, 'data' | 'tx_nonce' | 'status' | 'total_amount'>
+  )> }
+);
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -6303,6 +6850,19 @@ export const CreateUserDocument = gql`
   }
 }
     `;
+export const UpdateBalanceWithTransactionDocument = gql`
+    mutation UpdateBalanceWithTransaction($userId: uuid!, $delta: float8!, $tx: transactions_insert_input!) {
+  user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
+    balance
+  }
+  transaction: insert_transactions_one(object: $tx) {
+    data
+    tx_nonce
+    status
+    total_amount
+  }
+}
+    `;
 export const GetAllUsersDocument = gql`
     query GetAllUsers {
   user {
@@ -6535,6 +7095,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateUser(variables: CreateUserMutationVariables): Promise<CreateUserMutation> {
       return withWrapper(() => client.request<CreateUserMutation>(print(CreateUserDocument), variables));
+    },
+    UpdateBalanceWithTransaction(variables: UpdateBalanceWithTransactionMutationVariables): Promise<UpdateBalanceWithTransactionMutation> {
+      return withWrapper(() => client.request<UpdateBalanceWithTransactionMutation>(print(UpdateBalanceWithTransactionDocument), variables));
     },
     GetAllUsers(variables?: GetAllUsersQueryVariables): Promise<GetAllUsersQuery> {
       return withWrapper(() => client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables));
