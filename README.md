@@ -29,7 +29,7 @@ React + Typescript + Next.js
 Linting automatically happen during commits. We use husky and lint-staged to achieve that. Configuration in `package.json`
 
 To run manually:
-`yarn eslint`
+`yarn eslint .`
 
 ## Production
 

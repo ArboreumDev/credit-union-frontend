@@ -1,12 +1,12 @@
 import axios from "axios"
 
-export const fetcher = (q) => {
-  let base_url = process.env.SITE || ""
-  let url = base_url + "/api/gql"
+export const fetcher = (action, payload) => {
+  const base_url = process.env.SITE || ""
+  const url = base_url + "/api/gql"
   console.log(url)
 
   return axios
-    .post(url, { query: q })
+    .post(url, { actionType: action, payload: payload })
     .then((res) => res.data)
     .catch((error) => console.log(error))
 }

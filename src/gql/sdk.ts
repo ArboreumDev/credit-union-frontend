@@ -5845,6 +5845,19 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
   >
 }
 
+export type GetUserByEmailQueryVariables = Exact<{
+  email: Scalars["String"]
+}>
+
+export type GetUserByEmailQuery = { __typename?: "query_root" } & {
+  user: Array<
+    { __typename?: "user" } & Pick<
+      User,
+      "name" | "phone" | "email" | "user_type"
+    >
+  >
+}
+
 export type CreateLoanRequestMutationVariables = Exact<{
   request: Loan_Requests_Insert_Input
 }>
@@ -6125,6 +6138,16 @@ export const GetAllUsersDocument = gql`
     }
   }
 `
+export const GetUserByEmailDocument = gql`
+  query GetUserByEmail($email: String!) {
+    user(where: { email: { _eq: $email } }) {
+      name
+      phone
+      email
+      user_type
+    }
+  }
+`
 export const CreateLoanRequestDocument = gql`
   mutation CreateLoanRequest($request: loan_requests_insert_input!) {
     insert_loan_requests_one(object: $request) {
@@ -6343,6 +6366,16 @@ export function getSdk(
     ): Promise<GetAllUsersQuery> {
       return withWrapper(() =>
         client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables)
+      )
+    },
+    GetUserByEmail(
+      variables: GetUserByEmailQueryVariables
+    ): Promise<GetUserByEmailQuery> {
+      return withWrapper(() =>
+        client.request<GetUserByEmailQuery>(
+          print(GetUserByEmailDocument),
+          variables
+        )
       )
     },
     CreateLoanRequest(
