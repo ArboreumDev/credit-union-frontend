@@ -8,16 +8,11 @@ import Onboarding from "./onboarding"
 import LenderDashboard from "../components/dashboard/lender"
 import BorrowerDashboard from "../components/dashboard/borrower"
 import Video from "../components/video"
+import FrontPage from "./frontpage"
 
 const Page = (props: { session: Session }) => {
   const router = useRouter()
-  if (!props.session)
-    return (
-      <div>
-        <AppBar />
-        <Video />
-      </div>
-    )
+  if (!props.session) return <FrontPage />
   else {
     if (!props.session.user.user_type) {
       // if Onboarding

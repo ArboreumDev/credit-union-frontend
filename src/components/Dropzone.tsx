@@ -13,7 +13,6 @@ const toBase64 = (file) =>
 
 export default (props: { email: string }) => {
   const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
-  console.log(uploadedFiles)
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {
@@ -45,7 +44,7 @@ export default (props: { email: string }) => {
         {({ getRootProps, getInputProps }) => (
           <div className="dropzone" {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Drop ID card here. </p>
+            <p>Drop KYC documents here. </p>
           </div>
         )}
       </Dropzone>
@@ -62,7 +61,7 @@ export default (props: { email: string }) => {
       <style jsx>
         {`
           .dropzone {
-            width: 50%;
+            width: 100%;
             height: 100px;
             border-style: dashed;
             /* margin-bottom: 100px; */
