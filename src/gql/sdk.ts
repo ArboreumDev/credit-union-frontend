@@ -5902,7 +5902,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
   user: Array<
     { __typename?: "user" } & Pick<
       User,
-      "name" | "phone" | "email" | "user_type"
+      "name" | "id" | "phone" | "email" | "user_type"
     >
   >
 }
@@ -5989,7 +5989,7 @@ export type GetLoansByBorrowerAndStatusQueryVariables = Exact<{
 }>
 
 export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
-  loan_requests: Array<
+  loanRequests: Array<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "amount" | "status" | "risk_calc_result"
@@ -6237,6 +6237,7 @@ export const GetUserByEmailDocument = gql`
   query GetUserByEmail($email: String!) {
     user(where: { email: { _eq: $email } }) {
       name
+      id
       phone
       email
       user_type
@@ -6310,7 +6311,7 @@ export const GetLoansByBorrowerAndStatusDocument = gql`
     $borrower_id: uuid!
     $statusList: [loan_request_status!]!
   ) {
-    loan_requests(
+    loanRequests: loan_requests(
       where: {
         _and: [
           { borrower_id: { _eq: $borrower_id } }
