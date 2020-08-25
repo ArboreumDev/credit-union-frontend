@@ -16,7 +16,9 @@ const AppBar = (props: { session?: Session }) => (
     paddingBottom="0.8rem"
     paddingTop="1rem"
     as="nav"
-    margin="-10px"
+    marginTop="-10px"
+    marginLeft="-10px"
+    marginRight="-10px"
     minH="40px"
     minW="420px"
   >
