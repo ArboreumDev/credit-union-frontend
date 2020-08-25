@@ -67,16 +67,14 @@ export class DbClient {
         loanHistory: "todo",
       }
     }
-    console.log("data", loanRequests)
     // there can only be one at the moment
     const activeRequest = loanRequests[0]
-    // we could define a type or interface for this somewhere. you got any suggestions?
+    // NOTE REFACTOR this could define a type or interface for this somewhere
     const dashboardInfo = {
       status: activeRequest.status,
       loanRequest: transformRequestToDashboardFormat(activeRequest),
       loanHistory: "todo",
     }
-    console.log("info after", dashboardInfo)
     return dashboardInfo
   }
 

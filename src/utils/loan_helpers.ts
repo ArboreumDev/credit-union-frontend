@@ -133,7 +133,6 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
   // const liveRequest = loanRequests.filter(x => x.status == LoanRequestStatus.live)[0]
   if (loanRequest.status === LoanRequestStatus.live) {
     // there can only be one request at the moment
-    console.log("active", loanRequest)
     return {
       loanId: loanRequest.request_id,
       status: loanRequest.status,
@@ -143,7 +142,7 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
         interest: "TODO how do we calculate that?",
         total: loanRequest.payables[0].amount_remain || "todo",
       },
-      amountRepaid: loanRequest.payables[0].amount_paid || "todo",
+      amountRepaid: loanRequest.payables[0].amount_paid || 0,
       nextPayment: {
         nextDate:
           "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
@@ -155,7 +154,6 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
     loanRequest.status === LoanRequestStatus.awaiting_borrower_confirmation
   ) {
     const offer = loanRequest.risk_calc_result.latestOffer
-    console.log("offer", offer)
     return {
       loanId: loanRequest.request_id,
       status: loanRequest.status,

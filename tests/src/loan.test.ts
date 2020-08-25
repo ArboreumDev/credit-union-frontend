@@ -86,80 +86,80 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the borrower can see the parameters of the offer in their dashboard", async () => {
-      const dashboard = await dbClient.getBorrowerDashboardInfo(borrower1.id)
-      expect(dashboard.status).toBe(
-        LoanRequestStatus.awaiting_borrower_confirmation
+      const { loanRequest, status } = await dbClient.getBorrowerDashboardInfo(
+        borrower1.id
       )
-      expect(dashboard.desired_principal).toBe(amount)
+      expect(status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
+      expect(loanRequest.desired_principal).toBe(amount)
     })
   })
   describe("When the borrower accepts a loan offer...", () => {
-    describe("When the borrower accepts a loan offer...", () => {
-      test("triggers creation of payables, receivables", async () => {
-        const { startedLoan } = await dbClient.acceptLoanOffer(
-          request_id,
-          "latestOffer"
-        )
-        expect(startedLoan.update_loan_requests_by_pk.status).toBe(
-          LoanRequestStatus.live
-        )
+    test("triggers creation of payables, receivables", async () => {
+      const { startedLoan } = await dbClient.acceptLoanOffer(
+        request_id,
+        "latestOffer"
+      )
+      expect(startedLoan.update_loan_requests_by_pk.status).toBe(
+        LoanRequestStatus.live
+      )
 
-        // payable should make sense
-        expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
-          amount
-        )
-        expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
+      // payable should make sense
+      expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
+        amount
+      )
+      expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
 
-        // receivable should match payable
-        expect(startedLoan.insert_receivables_one.amount_total).toBe(
-          startedLoan.insert_payables_one.amount_total
-        )
-        expect(startedLoan.insert_receivables_one.amount_received).toBe(
-          startedLoan.insert_payables_one.amount_paid
-        )
-      })
+      // receivable should match payable
+      expect(startedLoan.insert_receivables_one.amount_total).toBe(
+        startedLoan.insert_payables_one.amount_total
+      )
+      expect(startedLoan.insert_receivables_one.amount_received).toBe(
+        startedLoan.insert_payables_one.amount_paid
+      )
+    })
 
-      test("The borrower user can see their repayment plan in the frontend", async () => {
-        const dashboard = await dbClient.getBorrowerDashboardInfo(borrower1.id)
-        expect(dashboard.amountRepaid).toBe(0)
-        expect(dashboard.loanAmount).toBe(amount)
-        expect(dashboard.outstanding.total).toBeGreaterThan(amount)
-      })
+    test("The borrower user can see their repayment plan in the frontend", async () => {
+      const { loanRequest } = await dbClient.getBorrowerDashboardInfo(
+        borrower1.id
+      )
+      expect(loanRequest.amountRepaid).toBe(0)
+      expect(loanRequest.loanAmount).toBe(amount)
+      expect(loanRequest.outstanding.total).toBeGreaterThan(amount)
+    })
 
-      test("The lender sees an updated breakdown of their portfolio ", async () => {
-        const dashboard = await dbClient.getLenderDashboadInfo(lender1.id)
-        expect(dashboard.invested).toBeGreaterThan(0)
-        expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
-        expect(dashboard.idle).toBeLessThan(lender1.balance)
-      })
+    test("The lender sees an updated breakdown of their portfolio ", async () => {
+      const dashboard = await dbClient.getLenderDashboadInfo(lender1.id)
+      expect(dashboard.invested).toBeGreaterThan(0)
+      expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
+      expect(dashboard.idle).toBeLessThan(lender1.balance)
+    })
 
-      test("the users balances are updated accordingly", async () => {
-        const { user } = await sdk.GetAllUsers()
-        balancesAfter = getUserPortfolio(user)
+    test("the users balances are updated accordingly", async () => {
+      const { user } = await sdk.GetAllUsers()
+      balancesAfter = getUserPortfolio(user)
 
-        // sanity-check that lender 2 has brought more than lender 1
-        expect(lender1.balance).toBeGreaterThan(lender2.balance)
+      // sanity-check that lender 2 has brought more than lender 1
+      expect(lender1.balance).toBeGreaterThan(lender2.balance)
 
-        // verify balances have been reduced
-        expect(balancesBefore[lender1.id].cash).toBeGreaterThan(
-          balancesAfter[lender1.id].cash
-        )
-        expect(balancesBefore[lender2.id].cash).toBeGreaterThan(
-          balancesAfter[lender2.id].cash
-        )
+      // verify balances have been reduced
+      expect(balancesBefore[lender1.id].cash).toBeGreaterThan(
+        balancesAfter[lender1.id].cash
+      )
+      expect(balancesBefore[lender2.id].cash).toBeGreaterThan(
+        balancesAfter[lender2.id].cash
+      )
 
-        // verify lender 1 has received a bigger share than lender 2, as they brought more cash
-        expect(balancesAfter[lender1.id].share).toBeGreaterThan(
-          balancesAfter[lender2.id].share
-        )
+      // verify lender 1 has received a bigger share than lender 2, as they brought more cash
+      expect(balancesAfter[lender1.id].share).toBeGreaterThan(
+        balancesAfter[lender2.id].share
+      )
 
-        // verify that more cash has been taken from lender 1 than from lender 2
-        const diffLender1 =
-          balancesBefore[lender1.id].cash - balancesAfter[lender1.id].cash
-        const diffLender2 =
-          balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash
-        expect(diffLender1).toBeGreaterThan(diffLender2)
-      })
+      // verify that more cash has been taken from lender 1 than from lender 2
+      const diffLender1 =
+        balancesBefore[lender1.id].cash - balancesAfter[lender1.id].cash
+      const diffLender2 =
+        balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash
+      expect(diffLender1).toBeGreaterThan(diffLender2)
     })
   })
 })
