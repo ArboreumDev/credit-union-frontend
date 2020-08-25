@@ -25,11 +25,17 @@ const FrontPage = () => {
         <Box h="40px">
           <Button
             onClick={() => Router.push("/api/auth/signin")}
-            rightIcon={<FiLogIn />}
             colorScheme="blue"
             variant="outline"
           >
-            Login
+            Borrow
+          </Button>
+          <Button
+            onClick={() => Router.push("/api/auth/signin")}
+            colorScheme="blue"
+            variant="outline"
+          >
+            Invest
           </Button>
         </Box>
       </VStack>

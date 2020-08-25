@@ -44,7 +44,7 @@ export default (props: { email: string }) => {
         {({ getRootProps, getInputProps }) => (
           <div className="dropzone" {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Drop ID card here. </p>
+            <p>Drop KYC documents here. </p>
           </div>
         )}
       </Dropzone>

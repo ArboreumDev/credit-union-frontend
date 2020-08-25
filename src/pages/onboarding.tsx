@@ -45,11 +45,11 @@ export default function Onboarding() {
       },
     }
     // Call mutation
-    fetcher("CreateUser", payload).then((res) => {
-      console.log(res)
-      // return to home
-      router.push("/")
-    })
+    // fetcher("CreateUser", payload).then((res) => {
+    //   console.log(res)
+    //   // return to home
+    //   router.push("/")
+    // })
   }
 
   return (
@@ -79,20 +79,24 @@ export default function Onboarding() {
               <h4>Do you plan to lend or borrow?</h4>
               <RadioGroup>
                 <Stack direction="row">
-                  <Radio
-                    name="user_type"
-                    value="borrower"
-                    ref={register({ required: true })}
-                  >
+                  <label>
+                    <input
+                      type="radio"
+                      name="user_type"
+                      value="borrower"
+                      ref={register({ required: true })}
+                    />
                     Borrow
-                  </Radio>
-                  <Radio
-                    name="user_type"
-                    value="lender"
-                    ref={register({ required: true })}
-                  >
-                    Lend
-                  </Radio>
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="user_type"
+                      value="lender"
+                      ref={register({ required: true })}
+                    />
+                    Invest
+                  </label>
                 </Stack>
               </RadioGroup>
             </Box>
