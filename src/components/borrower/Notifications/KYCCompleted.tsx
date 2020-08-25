@@ -11,6 +11,8 @@ export default function KYCCompleted() {
         textAlign="center"
         height="200px"
         width="inherit"
+        marginTop="20px"
+        marginBottom="20px"
       >
         <AlertIcon boxSize="40px" mr={0} />
         <AlertTitle mt={4} mb={1} fontSize="lg">
