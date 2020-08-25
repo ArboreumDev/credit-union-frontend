@@ -47,8 +47,8 @@ describe("Adding users and connections", () => {
   })
 
   test("users can query their dashboard by email-address", async () => {
-    const dashboard = await dbClient.getProfileInfo(BORROWER1.email)
-    expect(dashboard.status).toBe("readyForLoanRequest")
+    const { status } = await dbClient.getDashboardInfo(BORROWER1.email)
+    expect(status).toBe("readyForLoanRequest")
   })
 
   describe("Setting and updating user balances", () => {

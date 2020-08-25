@@ -31,7 +31,7 @@ export class DbClient {
    */
   constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
 
-  getProfileInfo = async (user_email: string) => {
+  getDashboardInfo = async (user_email: string) => {
     const data = await this.sdk.GetUserByEmail({ email: user_email })
     // check user_type, then return borrower or dashboardInfo plus loan-history
     const user = data.user[0]
@@ -63,7 +63,7 @@ export class DbClient {
     if (loanRequests.length === 0) {
       return {
         loanRequest: null,
-        status: "readyForLoanRequest",
+        status: "readyForLoanRequest", // REFACTOR
         loanHistory: "todo",
       }
     }
