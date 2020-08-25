@@ -33,3 +33,11 @@ export enum LoanRequestStatus {
   live = "live",
   settled = "settled",
 }
+
+ 
+export type PortfolioUpdate = {
+    userId: string
+    balanceDelta: number
+    shareDelta: number
+    alias?: string
+}

@@ -1,4 +1,5 @@
 
+
 ALTER TABLE "public"."payables" ADD COLUMN "pay_frequency" integer NULL DEFAULT 1;
 
 ALTER TABLE "public"."user" ADD COLUMN "corpus_share" float8 NULL;
@@ -41,3 +42,5 @@ alter table "public"."payables" drop constraint "payables_payable_type_fkey";
 ALTER TABLE "public"."payables" DROP COLUMN "payable_type" CASCADE;
 
 ALTER TABLE "public"."receivables" ALTER COLUMN "encumbrance_id" DROP NOT NULL;
+
+ALTER TABLE ONLY "public"."user" ALTER COLUMN "corpus_share" SET DEFAULT 0;
