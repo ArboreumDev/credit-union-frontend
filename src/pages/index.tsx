@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/client"
 import AppBar from "../components/AppBar"
-import { Session } from "../utils/types"
+import { Session, LoanRequestStatus } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
 import Onboarding from "./onboarding"
 import FrontPage from "./frontpage"
@@ -8,6 +8,7 @@ import ApplicationSubmitted from "../components/borrower/Notifications/Applicati
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import { fetcher } from "../utils/api"
 
 enum UIState {
   Landing,
@@ -21,7 +22,20 @@ enum UIState {
 const getUIState = (session: Session) => {
   if (!session) return UIState.Landing
 
-  return UIState.BLoanDashboard
+  const payload = { user_email: session.user.email }
+  fetcher("GetDashboardInfo", payload).then((dashboardInfo) => {
+    console.log("dashboardInfo", dashboardInfo)
+    if (dashboardInfo.status === "readyForLoanRequest") {
+      return UIState.BReadyToMakeNewLoan
+    } else if (
+      dashboardInfo.status === LoanRequestStatus.awaiting_borrower_confirmation
+    ) {
+      // or is this state to be used when the ai-is running?
+      return UIState.BLoanRequestInProgress
+    } else if (dashboardInfo.status === LoanRequestStatus.live) {
+      return UIState.BLoanDashboard
+    }
+  })
 }
 
 const Page = (props: { state: UIState }) => {

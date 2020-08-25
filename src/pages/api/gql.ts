@@ -32,6 +32,7 @@ class Action {
 // TODO Add dynamic type validation
 const ACTIONS = {
   CreateUser: new Action(dbClient.sdk.CreateUser, AUTH_TYPE.ANY),
+  GetDashboardInfo: new Action(dbClient.getDashboardInfo, AUTH_TYPE.USER),
 }
 
 type GqlRequest = {
