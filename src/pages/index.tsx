@@ -1,17 +1,10 @@
 import { getSession } from "next-auth/client"
 import AppBar from "../components/AppBar"
-import { UserType, Session } from "../utils/types"
+import { Session } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
-import { useEffect } from "react"
-import { getSessionAsProps } from "../utils/ssr"
 import Onboarding from "./onboarding"
-import LenderDashboard from "../components/dashboard/lender"
-import BorrowerDashboard from "../components/dashboard/borrower"
-import Video from "../components/video"
 import FrontPage from "./frontpage"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import KYCCompleted from "../components/borrower/Notifications/KYCCompleted"
-import { Center } from "@chakra-ui/core"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
@@ -50,7 +43,8 @@ const Page = (props: { state: UIState }) => {
 }
 
 Page.getInitialProps = async (context) => {
-  return { state: getUIState(await getSessionAsProps(context)) }
+  const session = (await getSession(context)) as Session
+  return { state: getUIState(session) }
 }
 
 export default Page
