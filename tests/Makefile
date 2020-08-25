@@ -20,7 +20,7 @@ jest-test:
 dev: docker-down docker-up sleep setup-db 
 	yarn dev
 
-test: dev jest-test docker-down
+test: docker-down docker-up sleep setup-db jest-test docker-down
 
 test-watch: docker-up setup-db
 	yarn test
