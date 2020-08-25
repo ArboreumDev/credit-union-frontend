@@ -45,11 +45,11 @@ export default function Onboarding() {
       },
     }
     // Call mutation
-    // fetcher("CreateUser", payload).then((res) => {
-    //   console.log(res)
-    //   // return to home
-    //   router.push("/")
-    // })
+    fetcher("CreateUser", payload).then((res) => {
+      console.log(res)
+      // return to home
+      router.push("/")
+    })
   }
 
   return (
