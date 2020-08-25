@@ -3,7 +3,7 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2 } from "./fixtures"
 import { EDGE_STATUS } from "../../src/utils/types"
-import {getUserPortfolio} from "./test_helpers"
+import { getUserPortfolio } from "./test_helpers"
 import { DbClient } from "../../src/gql/db_client"
 
 global.fetch = require("node-fetch")
@@ -15,12 +15,11 @@ let client: GraphQLClient
 let sdk: Sdk
 let dbClient: DbClient
 
-
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
-  dbClient = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+  dbClient = new DbClient(sdk, client)
 })
 
 afterAll(async () => {
@@ -51,62 +50,95 @@ describe("Adding users and connections", () => {
     let balancesAfter
     let balancesBefore
     test("setting the balance of one account", async () => {
-      await sdk.SetUserCashBalance({userId: LENDER1.id, amount:42000})
-      const {user} = await sdk.GetAllUsers()
-      expect(user.filter(x => x.id === LENDER1.id)[0].balance).toBe(42000)
+      await sdk.SetUserCashBalance({ userId: LENDER1.id, amount: 42000 })
+      const { user } = await sdk.GetAllUsers()
+      expect(user.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42000)
     })
-    
+
     test("changing the balance of one account", async () => {
-      await sdk.ChangeUserCashBalance({userId: LENDER1.id, delta:42})
-      const {user} = await sdk.GetAllUsers()
-      expect(user.filter(x => x.id === LENDER1.id)[0].balance).toBe(42042)
+      await sdk.ChangeUserCashBalance({ userId: LENDER1.id, delta: 42 })
+      const { user } = await sdk.GetAllUsers()
+      expect(user.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42042)
     })
     test("batch updates to multiple accounts", async () => {
       // moving 41 from lender1 to lender lender2
       const VALID_UPDATES1 = [
-        {userId: LENDER1.id, balanceDelta: -41, shareDelta: 0, alias: "lender1"},
-        {userId: LENDER2.id, balanceDelta: 41, shareDelta: 0, alias: "lender2"}
+        {
+          userId: LENDER1.id,
+          balanceDelta: -41,
+          shareDelta: 0,
+          alias: "lender1",
+        },
+        {
+          userId: LENDER2.id,
+          balanceDelta: 41,
+          shareDelta: 0,
+          alias: "lender2",
+        },
       ]
       await dbClient.updatePortfolios(VALID_UPDATES1)
-      
-      const {user} = await sdk.GetAllUsers()
-      expect(user.filter(x => x.id === LENDER1.id)[0].balance).toBe(42001)
-      expect(user.filter(x => x.id === LENDER2.id)[0].balance).toBe(LENDER2.balance + 41)
-      
+
+      const { user } = await sdk.GetAllUsers()
+      expect(user.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42001)
+      expect(user.filter((x) => x.id === LENDER2.id)[0].balance).toBe(
+        LENDER2.balance + 41
+      )
     })
-    
+
     test("batch updates fail if one update is invalid", async () => {
-      const {user} = await sdk.GetAllUsers()
+      const { user } = await sdk.GetAllUsers()
       balancesBefore = getUserPortfolio(user)
-      
+
       // all tx's fail if one update woudl reduce the user balance below 0
       const INVALID_UPDATES = [
-        {userId: LENDER1.id, balanceDelta: -100000, shareDelta: 0, alias: "lender1"},
-        {userId: LENDER2.id, balanceDelta: 41, shareDelta: 0, alias: "lender2"}
+        {
+          userId: LENDER1.id,
+          balanceDelta: -100000,
+          shareDelta: 0,
+          alias: "lender1",
+        },
+        {
+          userId: LENDER2.id,
+          balanceDelta: 41,
+          shareDelta: 0,
+          alias: "lender2",
+        },
       ]
-      
+
       const result = await dbClient.updatePortfolios(INVALID_UPDATES)
       expect(result).toHaveProperty("ERROR")
-      
+
       // all balances should be the same as before
-      let balancesAfter = getUserPortfolio(user)
+      const balancesAfter = getUserPortfolio(user)
       expect(balancesBefore).toStrictEqual(balancesAfter)
     })
 
     test("multiple updates to the same account are taken together", async () => {
-      const {user} = await sdk.GetAllUsers()
+      const { user } = await sdk.GetAllUsers()
       balancesBefore = getUserPortfolio(user)
       const VALID_UPDATES2 = [
-        {userId: LENDER1.id, balanceDelta: -100010, shareDelta: 0, alias: "firstTx"},
-        {userId: LENDER1.id, balanceDelta: +100000, shareDelta: 0, alias: "secondTx"},
+        {
+          userId: LENDER1.id,
+          balanceDelta: -100010,
+          shareDelta: 0,
+          alias: "firstTx",
+        },
+        {
+          userId: LENDER1.id,
+          balanceDelta: +100000,
+          shareDelta: 0,
+          alias: "secondTx",
+        },
       ]
       // even though the first updates reduces the user balance below 0, the tx go trough
       // because the second add enough to be net positive
       await dbClient.updatePortfolios(VALID_UPDATES2)
-      
+
       const after = await sdk.GetAllUsers()
       balancesAfter = getUserPortfolio(after.user)
-      expect(balancesAfter[LENDER1.id].cash).toBe(balancesBefore[LENDER1.id].cash - 10)
+      expect(balancesAfter[LENDER1.id].cash).toBe(
+        balancesBefore[LENDER1.id].cash - 10
+      )
     })
   })
 })

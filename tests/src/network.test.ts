@@ -14,7 +14,7 @@ let client: GraphQLClient
 let sdk: Sdk
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
 })
@@ -30,7 +30,7 @@ describe("An entire network can be added from a fixture", () => {
 
   test("users from fixture have been added", async () => {
     const { user } = await sdk.GetAllUsers()
-    let usermails = user.map((x) => x.email)
+    const usermails = user.map((x) => x.email)
     Object.values(BASIC_NETWORK.nodes).forEach((user) => {
       expect(usermails).toContain(user.email)
     })

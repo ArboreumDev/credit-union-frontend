@@ -1,14 +1,16 @@
 import { initializeGQL } from "./graphql_client"
 import { PortfolioUpdate, LoanRequestStatus } from "../../src/utils/types"
-import { lenderBalanceToShareInLoan, createStartLoanInputVariables, proportion, generateUpdateAsSingleTransaction} from "../../src/utils/loan_helpers"
+import {
+  lenderBalanceToShareInLoan,
+  createStartLoanInputVariables,
+  proportion,
+  generateUpdateAsSingleTransaction,
+} from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
-// const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
-const API_URL = "http://localhost:8080/v1/graphql"
-const ADMIN_SECRET = "myadminsecretkey"
-// const ADMIN_SECRET = "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
+// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
@@ -17,16 +19,12 @@ const ADMIN_SECRET = "myadminsecretkey"
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-  // to run queries from *.graphql-files with codegen
-  _sdk: Sdk;
-  // to run self-constructed graphql-requests in string format
-  _fetcher: GraphQLClient
-
-  constructor(admin_secret: string, gql_url: string) {
-    this._fetcher = initializeGQL(admin_secret, gql_url)
-    this._sdk = getSdk(this._fetcher)
-
-  }
+  /**
+   *
+   * @param sdk to run queries from *.graphql-files with codegen
+   * @param fetcher to run self-constructed graphql-requests in string format
+   */
+  constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
 
   getProfileInfo = async (user_id: string) => {
     // check user_type, then return borrower or dashboardInfo plus loan-history
@@ -40,7 +38,7 @@ export class DbClient {
    * @param borrower_id
    */
   getBorrowerDashboardInfo = async (borrower_id) => {
-    const data = await this._sdk.GetLoansByBorrowerAndStatus({
+    const data = await this.sdk.GetLoansByBorrowerAndStatus({
       borrower_id,
       statusList: [
         LoanRequestStatus.live,
@@ -67,7 +65,7 @@ export class DbClient {
             "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
           nextAmount: "TODO remainAmount / # of remaining payments",
         },
-        lastPaid: active_request.payables[0].last_paid || "no payment yet"
+        lastPaid: active_request.payables[0].last_paid || "no payment yet",
       }
     } else if (
       active_request.status === LoanRequestStatus.awaiting_borrower_confirmation
@@ -90,46 +88,52 @@ export class DbClient {
   }
 
   getLenderDashboadInfo = async (lender_id: string) => {
-    const {lender, corpusInvestment, corpusShares} = await this._sdk.GetLenderDashboardInfo({user_id: lender_id})
+    const {
+      lender,
+      corpusInvestment,
+      corpusShares,
+    } = await this.sdk.GetLenderDashboardInfo({ user_id: lender_id })
     const totalCorpusShares = corpusShares.aggregate.sum.corpus_share
-    return { 
+    return {
       // money the user brought
       invested: lender.corpus_share,
       idle: lender.balance,
       encumbered: "TODO", //lenderInfo.encumbrances_aggregate.aggregate.sum.amount_remain || 0,
       // interest that is earned from the money brought
       interest: {
-        expected: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_total
+        expected:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_total
           ) || 0,
-        received: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_received
+        received:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_received
           ) || 0,
-        outstanding: proportion(
-          lender.corpus_share,
-          totalCorpusShares,
-          corpusInvestment.aggregate.sum.amount_remain
-          ) || 0
+        outstanding:
+          proportion(
+            lender.corpus_share,
+            totalCorpusShares,
+            corpusInvestment.aggregate.sum.amount_remain
+          ) || 0,
       },
       guarantor_requests: [
         {
-          borrower_info: {email: "example1@b.com", name: "ashish"},
+          borrower_info: { email: "example1@b.com", name: "ashish" },
           purpose: "education",
-          amount: 200
+          amount: 200,
         },
         {
-          borrower_info: {email: "example2@mail.com", name: "gaurav"},
+          borrower_info: { email: "example2@mail.com", name: "gaurav" },
           purpose: "business",
-          amount: 500
-        }
-      ]
+          amount: 500,
+        },
+      ],
     }
   }
-
 
   /**
    * called with borrower Id to create loan-request also create entries for guarantor requests
@@ -145,7 +149,7 @@ export class DbClient {
     amount: number,
     purpose: string
   ) => {
-    const data = await this._sdk.CreateLoanRequest({
+    const data = await this.sdk.CreateLoanRequest({
       request: {
         borrower_id,
         amount,
@@ -163,7 +167,7 @@ export class DbClient {
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const data = await this._sdk.GetLoanRequest({ requestId })
+    const data = await this.sdk.GetLoanRequest({ requestId })
     const request = data.loan_requests_by_pk
 
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
@@ -186,7 +190,7 @@ export class DbClient {
    * @param {} newOffer should be an object {interest_rate: int, lenders: [{lender_id, lender_amount, interest_rate}]} <the latter is lender_insert_input
    */
   storeNewOfferOnLoanRequest = async (requestId: string, newOffer: any) => {
-    const res = await this._sdk.UpdateLoanRequestWithOffer({
+    const res = await this.sdk.UpdateLoanRequestWithOffer({
       requestId,
       newOffer,
     })
@@ -201,60 +205,63 @@ export class DbClient {
    * It updates the balances of the lenders
    * @param offer_key which of the possible different offers on the request should be executed
    */
-  acceptLoanOffer = async (
-    request_id: string,
-    offer_key: string = "latestOffer"
-  ) => {
+  acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
     // get offer and unpack it
-    const data = await this._sdk.GetLoanOffer({ request_id })
+    const data = await this.sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
-    const {amount, interest} = offer_params.risk_calc_result.latestOffer
-    const {lenders, corpusCash} = await this._sdk.GetLenderAllocationInput()
-    const totalCorpusCash  = corpusCash.aggregate.sum.balance 
+    const { amount, interest } = offer_params.risk_calc_result.latestOffer
+    const { lenders, corpusCash } = await this.sdk.GetLenderAllocationInput()
+    const totalCorpusCash = corpusCash.aggregate.sum.balance
 
     // verify the corpus still has capacity to fulfill the loan offer
-    if (totalCorpusCash >= amount ) {
-
+    if (totalCorpusCash >= amount) {
       // compute loan-allocation based on lender cash-balances
-      let portfolioUpdates: Array<PortfolioUpdate> = []
-      lenders.forEach(lender => {
-        const shareInLoan = lenderBalanceToShareInLoan(lender.balance, totalCorpusCash, amount)
+      const portfolioUpdates: Array<PortfolioUpdate> = []
+      lenders.forEach((lender) => {
+        const shareInLoan = lenderBalanceToShareInLoan(
+          lender.balance,
+          totalCorpusCash,
+          amount
+        )
         portfolioUpdates.push({
           userId: lender.id,
           balanceDelta: -shareInLoan,
           shareDelta: shareInLoan,
-          alias: "user" + lender.user_number.toString()
+          alias: "user" + lender.user_number.toString(),
         } as PortfolioUpdate)
-      });
+      })
       // TODO transform PortfolioUpdates into transactions and store them on loan-request entry under the offer-key
 
       // find out whether transactions have gone through, then execute portfolioUpdates
       await this.updatePortfolios(portfolioUpdates)
-        
+
       // -> create payables receivables based on loan offer parameters
-      const variables = createStartLoanInputVariables(request_id, amount, interest)
-      const startedLoan = await this._sdk.StartLoan(variables)
+      const variables = createStartLoanInputVariables(
+        request_id,
+        amount,
+        interest
+      )
+      const startedLoan = await this.sdk.StartLoan(variables)
       return {
         startedLoan,
       }
     } else {
-      return "ERROR: Offer is outdated: Not enough balance in corpus"
+      console.log("ERROR: Offer is outdated: Not enough balance in corpus")
     }
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
     const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
-    if (dryRunFailures.length == 0 ) {
+    if (dryRunFailures.length == 0) {
       const updateMutation = generateUpdateAsSingleTransaction(updates)
-      const data = await this._fetcher.request(updateMutation)
+      const data = await this.fetcher.request(updateMutation)
       return data
-    }
-    else {
+    } else {
       return {
-        "ERROR": {
+        ERROR: {
           description: "One update could not be run",
-          data: dryRunFailures
-        }
+          data: dryRunFailures,
+        },
       }
     }
   }
@@ -263,20 +270,21 @@ export class DbClient {
    * Checks whether the net result of set of updates can be applied in one transaction
    * - that no balance will be negative
    * - that all given userIds are in the database (TODO)
-   * @param updates 
+   * @param updates
    */
   dryRunPortfolioUpdates = async (updates: Array<PortfolioUpdate>) => {
-    let failures = []
-    const {user} = await this._sdk.GetAllUsers()
-    user.forEach(user => {
-      let userUpdates = updates.filter(u => u.userId == user.id)
+    const failures = []
+    const { user } = await this.sdk.GetAllUsers()
+    user.forEach((user) => {
+      const userUpdates = updates.filter((u) => u.userId == user.id)
       if (userUpdates.length) {
-        let totalCashUpdate = userUpdates.map(u => u.balanceDelta).reduce((a,b) => a + b) || 0
-        if ( user.balance + totalCashUpdate < 0) {
-          failures.push({userId: user.id, updates: userUpdates})
+        const totalCashUpdate =
+          userUpdates.map((u) => u.balanceDelta).reduce((a, b) => a + b) || 0
+        if (user.balance + totalCashUpdate < 0) {
+          failures.push({ userId: user.id, updates: userUpdates })
         }
       }
-    });
+    })
     return failures
   }
 }

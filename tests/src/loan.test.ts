@@ -3,8 +3,8 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
 import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
-import { BASIC_NETWORK, LENDER1, LENDER2, BORROWER1} from "./fixtures"
-import { addNetwork} from "../../src/utils/network_helpers"
+import { BASIC_NETWORK, LENDER1, LENDER2, BORROWER1 } from "./fixtures"
+import { addNetwork } from "../../src/utils/network_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
 import lender from "../../src/components/dashboard/lender"
@@ -18,7 +18,7 @@ let client: GraphQLClient
 let sdk: Sdk
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   // reset
   await sdk.ResetDB()
@@ -35,21 +35,21 @@ describe("Basic loan request flow for an accepted loan", () => {
   const purpose = "go see the movies"
   let request_id: string
   // var testOutput;
-  let borrower1: User_Insert_Input = BORROWER1;
-  let lender1: User_Insert_Input = LENDER1;
-  let lender2: User_Insert_Input = LENDER2;
-  let balancesBefore;
-  let balancesAfter;
-  
-  beforeAll(async () =>{
+  const borrower1: User_Insert_Input = BORROWER1
+  const lender1: User_Insert_Input = LENDER1
+  const lender2: User_Insert_Input = LENDER2
+  let balancesBefore
+  let balancesAfter
+
+  beforeAll(async () => {
     // connect the client that manages user interactions to the test-DB
-    dbClient = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+    dbClient = new DbClient(sdk, client)
 
     // add a basic network from a fixture and initialize pointers to
     // an exisiting borrower and two lenders
-    let { addedUsers } = await addNetwork(sdk, BASIC_NETWORK)
-    const {user} = await sdk.GetAllUsers()
-    balancesBefore = getUserPortfolio(user) 
+    await addNetwork(sdk, BASIC_NETWORK)
+    const { user } = await sdk.GetAllUsers()
+    balancesBefore = getUserPortfolio(user)
   })
 
   describe("A borrower user requests a loan...", () => {
@@ -95,28 +95,38 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
   describe("When the borrower accepts a loan offer...", () => {
     describe("When the borrower accepts a loan offer...", () => {
-    
       test("triggers creation of payables, receivables", async () => {
-        const { startedLoan } = await dbClient.acceptLoanOffer(request_id, "latestOffer")
-        expect(startedLoan.update_loan_requests_by_pk.status).toBe(LoanRequestStatus.live)
+        const { startedLoan } = await dbClient.acceptLoanOffer(
+          request_id,
+          "latestOffer"
+        )
+        expect(startedLoan.update_loan_requests_by_pk.status).toBe(
+          LoanRequestStatus.live
+        )
 
         // payable should make sense
-        expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(amount)
+        expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
+          amount
+        )
         expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
 
         // receivable should match payable
-        expect(startedLoan.insert_receivables_one.amount_total).toBe(startedLoan.insert_payables_one.amount_total)
-        expect(startedLoan.insert_receivables_one.amount_received).toBe(startedLoan.insert_payables_one.amount_paid)
+        expect(startedLoan.insert_receivables_one.amount_total).toBe(
+          startedLoan.insert_payables_one.amount_total
+        )
+        expect(startedLoan.insert_receivables_one.amount_received).toBe(
+          startedLoan.insert_payables_one.amount_paid
+        )
       })
-      
+
       test("The borrower user can see their repayment plan in the frontend", async () => {
         const dashboard = await dbClient.getBorrowerDashboardInfo(borrower1.id)
         expect(dashboard.amountRepaid).toBe(0)
         expect(dashboard.loanAmount).toBe(amount)
         expect(dashboard.outstanding.total).toBeGreaterThan(amount)
       })
-      
-      test("The lender sees an updated breakdown of their portfolio ", async () => { 
+
+      test("The lender sees an updated breakdown of their portfolio ", async () => {
         const dashboard = await dbClient.getLenderDashboadInfo(lender1.id)
         expect(dashboard.invested).toBeGreaterThan(0)
         expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
@@ -124,22 +134,30 @@ describe("Basic loan request flow for an accepted loan", () => {
       })
 
       test("the users balances are updated accordingly", async () => {
-        const {user} = await sdk.GetAllUsers()
-        balancesAfter = getUserPortfolio(user) 
+        const { user } = await sdk.GetAllUsers()
+        balancesAfter = getUserPortfolio(user)
 
         // sanity-check that lender 2 has brought more than lender 1
         expect(lender1.balance).toBeGreaterThan(lender2.balance)
 
         // verify balances have been reduced
-        expect(balancesBefore[lender1.id].cash).toBeGreaterThan(balancesAfter[lender1.id].cash)
-        expect(balancesBefore[lender2.id].cash).toBeGreaterThan(balancesAfter[lender2.id].cash)
+        expect(balancesBefore[lender1.id].cash).toBeGreaterThan(
+          balancesAfter[lender1.id].cash
+        )
+        expect(balancesBefore[lender2.id].cash).toBeGreaterThan(
+          balancesAfter[lender2.id].cash
+        )
 
         // verify lender 1 has received a bigger share than lender 2, as they brought more cash
-        expect(balancesAfter[lender1.id].share).toBeGreaterThan(balancesAfter[lender2.id].share)
+        expect(balancesAfter[lender1.id].share).toBeGreaterThan(
+          balancesAfter[lender2.id].share
+        )
 
         // verify that more cash has been taken from lender 1 than from lender 2
-        const diffLender1 = balancesBefore[lender1.id].cash - balancesAfter[lender1.id].cash 
-        const diffLender2 = balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash 
+        const diffLender1 =
+          balancesBefore[lender1.id].cash - balancesAfter[lender1.id].cash
+        const diffLender2 =
+          balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash
         expect(diffLender1).toBeGreaterThan(diffLender2)
       })
     })

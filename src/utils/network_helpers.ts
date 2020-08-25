@@ -14,9 +14,9 @@ type User = User_Insert_Input
 //  * @param  users [{userObject1}, {userObject2}, ... ]
 //  */
 // function create_edge_insert_input_from_fixture (edge, users) {
-//   let lender = users.filter(x => x.user_number === edge[0])[0]
-//   let borrower = users.filter(x => x.user_number === edge[1])[0]
-//   let input = {
+//   const lender = users.filter(x => x.user_number === edge[0])[0]
+//   const borrower = users.filter(x => x.user_number === edge[1])[0]
+//   const input = {
 //     trust_amount: edge[2],
 //     status: EDGE_STATUS.active,
 //     borrower_id: borrower.id,
@@ -27,7 +27,7 @@ type User = User_Insert_Input
 // }
 
 // export const getNodesFromEdgeList = (edgeList) => {
-//   let nodes = edgeList.map(x => x.slice(0,2)).flat()
+//   const nodes = edgeList.map(x => x.slice(0,2)).flat()
 //   return [...new Set(nodes)]
 // }
 
@@ -42,10 +42,10 @@ type User = User_Insert_Input
  * @returns added_users {user_number: added_user_object}
  */
 export async function addUsers(sdk: Sdk, userList: [User]) {
-  let added_users = []
-  for (var user of userList) {
-    let data = await sdk.CreateUser({ user })
-    let new_user = data.insert_user_one
+  const added_users = []
+  for (const user of userList) {
+    const data = await sdk.CreateUser({ user })
+    const new_user = data.insert_user_one
     added_users.push(new_user)
   }
   return added_users
@@ -56,9 +56,9 @@ export async function addUsers(sdk: Sdk, userList: [User]) {
  * @returns added_edges [added_edge_object1, ...]
  */
 export async function addEdgesFromList(sdk: Sdk, edgeTuples: [any]) {
-  let addedEdges = []
-  for (var e of edgeTuples) {
-    var insert_edge_input = generateEdgeInputFromTupleNotation(e)
+  const addedEdges = []
+  for (const e of edgeTuples) {
+    const insert_edge_input = generateEdgeInputFromTupleNotation(e)
     const data = await sdk.InsertEdge({ edge: insert_edge_input })
     addedEdges.push(data.insert_edges.returning[0])
   }
@@ -73,8 +73,8 @@ type Network = { [index: string]: any }
  * @param {*} network {nodes: UserList, edges: [edgeTuples]}
  */
 export async function addNetwork(sdk: Sdk, network: Network) {
-  let addedUsers = await addUsers(sdk, network.nodes)
-  let addedEdges = await addEdgesFromList(sdk, network.edges)
+  const addedUsers = await addUsers(sdk, network.nodes)
+  const addedEdges = await addEdgesFromList(sdk, network.edges)
   return { addedUsers, addedEdges }
 }
 
@@ -99,7 +99,7 @@ export async function addNetwork(sdk: Sdk, network: Network) {
 //      * */
 
 //     // set edge_status dependent creator being lender or borrower
-//     let edge_status = "active"
+//     const edge_status = "active"
 //     if (inserted_by !== "TEST") {
 //       if (borrower in Object.keys(users)) {
 //         if (lender in Object.keys(users)) {
@@ -111,7 +111,7 @@ export async function addNetwork(sdk: Sdk, network: Network) {
 //     }
 
 //     // set other user email dependant on inserted_by //TODO use email as foreign key
-//     let other_user_email = other_user_email
+//     const other_user_email = other_user_email
 
 //     return {
 //         trust_amount: edge[2],
