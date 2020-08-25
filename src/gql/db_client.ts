@@ -1,5 +1,9 @@
 import { initializeGQL } from "./graphql_client"
-import { PortfolioUpdate, LoanRequestStatus } from "../../src/utils/types"
+import {
+  PortfolioUpdate,
+  LoanRequestStatus,
+  UserType,
+} from "../../src/utils/types"
 import {
   lenderBalanceToShareInLoan,
   createStartLoanInputVariables,
@@ -26,8 +30,17 @@ export class DbClient {
    */
   constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
 
-  getProfileInfo = async (user_id: string) => {
+  getProfileInfo = async (user_email: string) => {
+    const data = await this.sdk.GetUserByEmail({ email: user_email })
     // check user_type, then return borrower or dashboardInfo plus loan-history
+    const user = data.user[0]
+    if (user.user_type == UserType.Borrower)
+      return await this.getBorrowerDashboardInfo(user.id)
+    if (user.user_type == UserType.Lender)
+      return await this.getLenderDashboadInfo(user.id)
+    else {
+      console.log("Error unknown user type", user)
+    }
   }
 
   /**
