@@ -9,6 +9,7 @@ import {
   createStartLoanInputVariables,
   proportion,
   generateUpdateAsSingleTransaction,
+  transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
@@ -51,7 +52,7 @@ export class DbClient {
    * @param borrower_id
    */
   getBorrowerDashboardInfo = async (borrower_id) => {
-    const data = await this.sdk.GetLoansByBorrowerAndStatus({
+    const { loanRequests } = await this.sdk.GetLoansByBorrowerAndStatus({
       borrower_id,
       statusList: [
         LoanRequestStatus.live,
@@ -59,45 +60,24 @@ export class DbClient {
         LoanRequestStatus.initiated,
       ],
     })
-    if (data == undefined) return { status: null }
-
-    const active_request = data.loan_requests[0]
-    if (active_request.status === LoanRequestStatus.live) {
+    if (loanRequests.length === 0) {
       return {
-        loanId: active_request.request_id,
-        status: active_request.status,
-        loanAmount: active_request.amount,
-        outstanding: {
-          principal: "TODO how do we calculate that?",
-          interest: "TODO how do we calculate that?",
-          total: active_request.payables[0].amount_remain,
-        },
-        amountRepaid: active_request.payables[0].amount_paid,
-        nextPayment: {
-          nextDate:
-            "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
-          nextAmount: "TODO remainAmount / # of remaining payments",
-        },
-        lastPaid: active_request.payables[0].last_paid || "no payment yet",
-      }
-    } else if (
-      active_request.status === LoanRequestStatus.awaiting_borrower_confirmation
-    ) {
-      const offer = active_request.risk_calc_result.latestOffer
-      return {
-        loanId: active_request.request_id,
-        status: active_request.status,
-        desired_principal: active_request.amount,
-        offerParams: {
-          raw: active_request.risk_calc_result.latestOffer,
-          offered_principal: offer.amount,
-          interest: offer.interest,
-          totalAmount: offer.amount + offer.interest,
-          monthly: "TODO",
-          dueDate: "TDODO always in 6 months?",
-        },
+        loanRequest: null,
+        status: "readyForLoanRequest",
+        loanHistory: "todo",
       }
     }
+    console.log("data", loanRequests)
+    // there can only be one at the moment
+    const activeRequest = loanRequests[0]
+    // we could define a type or interface for this somewhere. you got any suggestions?
+    const dashboardInfo = {
+      status: activeRequest.status,
+      loanRequest: transformRequestToDashboardFormat(activeRequest),
+      loanHistory: "todo",
+    }
+    console.log("info after", dashboardInfo)
+    return dashboardInfo
   }
 
   getLenderDashboadInfo = async (lender_id: string) => {
