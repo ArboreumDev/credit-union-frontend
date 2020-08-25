@@ -17,6 +17,7 @@ import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgres
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
 
 enum UIState {
+  Landing,
   Onboarding,
   KYCNotApprovedYet,
   BReadyToMakeNewLoan,
@@ -24,16 +25,22 @@ enum UIState {
   BLoanDashboard,
 }
 
-const Page = (props: { session: Session; state: UIState }) => {
-  const router = useRouter()
-  const { session, state } = props
+const getUIState = (session: Session) => {
+  if (!session) return UIState.Landing
 
-  if (!session) return <FrontPage />
+  return UIState.BLoanDashboard
+}
+
+const Page = (props: { state: UIState }) => {
+  const router = useRouter()
+  const { state } = props
+
+  if (state === UIState.Landing) return <FrontPage />
   if (state === UIState.Onboarding) return <Onboarding />
 
   return (
     <div>
-      <AppBar {...props} />
+      <AppBar />
       {state == UIState.KYCNotApprovedYet && <ApplicationSubmitted />}
       {state == UIState.BReadyToMakeNewLoan && <BReadyToMakeNewLoan />}
       {state == UIState.BLoanRequestInProgress && <BLoanRequestInProgress />}
@@ -43,9 +50,7 @@ const Page = (props: { session: Session; state: UIState }) => {
 }
 
 Page.getInitialProps = async (context) => {
-  const home_ui_state = UIState.BLoanDashboard
-  const session = await getSessionAsProps(context)
-  return { ...session, state: home_ui_state }
+  return { state: getUIState(await getSessionAsProps(context)) }
 }
 
 export default Page

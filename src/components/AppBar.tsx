@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { Session } from "../utils/types"
 
 import React from "react"
 import { Box, Heading, Flex, Text, Button, Center } from "@chakra-ui/core"
@@ -7,7 +6,7 @@ import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
-const AppBar = (props: { session?: Session }) => (
+const AppBar = () => (
   <Flex
     bg="gray.300"
     color="black"
@@ -19,6 +18,7 @@ const AppBar = (props: { session?: Session }) => (
     marginTop="-10px"
     marginLeft="-10px"
     marginRight="-10px"
+    marginBottom="20px"
     minH="40px"
     minW="420px"
   >
