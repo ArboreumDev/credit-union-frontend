@@ -118,6 +118,7 @@ const generate_balance_update_for_user = (
   tx_type: string,
   tx_description: string
 ) => {
+  /* eslint-disable */
   return (
     `
     ` +
@@ -138,16 +139,15 @@ const generate_balance_update_for_user = (
     ` +
     alias +
     `Tx: insert_transactions_one (object: 
-      {
-        user_id: "` +
+      { user_id: "` +
     userId +
     `",` +
     (loan_id ? ` loan_id: "` + loan_id + `",` : "") +
     `
-        amount:` +
+       amount:` +
     balanceUpdate +
     `, 
-        type: "` +
+       type: "` +
     tx_type +
     `",
         description: "` +
@@ -158,4 +158,5 @@ const generate_balance_update_for_user = (
          tx_nonce 
       },`
   )
+  /* eslint-enable */
 }

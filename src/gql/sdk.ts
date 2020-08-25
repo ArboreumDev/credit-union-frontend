@@ -6465,6 +6465,19 @@ export type GetLenderDashboardInfoQuery = { __typename?: "query_root" } & {
   }
 }
 
+export type GetUserByEmailQueryVariables = Exact<{
+  email: Scalars["String"]
+}>
+
+export type GetUserByEmailQuery = { __typename?: "query_root" } & {
+  user: Array<
+    { __typename?: "user" } & Pick<
+      User,
+      "name" | "phone" | "email" | "user_type"
+    >
+  >
+}
+
 export type SetUserCashBalanceMutationVariables = Exact<{
   userId: Scalars["uuid"]
   amount: Scalars["float8"]
@@ -6870,6 +6883,16 @@ export const GetLenderDashboardInfoDocument = gql`
     }
   }
 `
+export const GetUserByEmailDocument = gql`
+  query GetUserByEmail($email: String!) {
+    user(where: { email: { _eq: $email } }) {
+      name
+      phone
+      email
+      user_type
+    }
+  }
+`
 export const SetUserCashBalanceDocument = gql`
   mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {
     user: update_user_by_pk(
@@ -7177,6 +7200,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetLenderDashboardInfoQuery>(
           print(GetLenderDashboardInfoDocument),
+          variables
+        )
+      )
+    },
+    GetUserByEmail(
+      variables: GetUserByEmailQueryVariables
+    ): Promise<GetUserByEmailQuery> {
+      return withWrapper(() =>
+        client.request<GetUserByEmailQuery>(
+          print(GetUserByEmailDocument),
           variables
         )
       )

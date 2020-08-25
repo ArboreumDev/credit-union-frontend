@@ -14,10 +14,7 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
-// const API_URL = "https://right-thrush-43.hasura.app/v1/graphql";
-const API_URL = "http://localhost:8080/v1/graphql"
-const ADMIN_SECRET = "myadminsecretkey"
-// const ADMIN_SECRET = "nhvmvvsrsiyfypsejugcnprtqxqgfbqe"
+// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 /**
  * A class to be used in the frontend to send queries to the DB. As a general rule
@@ -26,15 +23,12 @@ const ADMIN_SECRET = "myadminsecretkey"
  * the pre-cooked functions. The executeGQL should only be used to test things during development
  */
 export class DbClient {
-  // to run queries from *.graphql-files with codegen
-  _sdk: Sdk
-  // to run self-constructed graphql-requests in string format
-  _fetcher: GraphQLClient
-
-  constructor(admin_secret: string, gql_url: string) {
-    this._fetcher = initializeGQL(admin_secret, gql_url)
-    this._sdk = getSdk(this._fetcher)
-  }
+  /**
+   *
+   * @param _sdk to run queries from *.graphql-files with codegen
+   * @param _fetcher to run self-constructed graphql-requests in string format
+   */
+  constructor(public _sdk: Sdk, private _fetcher?: GraphQLClient) {}
 
   getProfileInfo = async (user_id: string) => {
     // check user_type, then return borrower or dashboardInfo plus loan-history
@@ -319,12 +313,7 @@ export class DbClient {
       const data = await this._fetcher.request(updateMutation)
       return data
     } else {
-      return {
-        ERROR: {
-          description: "Dryrun failed",
-          data: dryRunFailures,
-        },
-      }
+      console.log("ERROR: Dryrun failed", dryRunFailures)
     }
   }
 
@@ -382,7 +371,7 @@ export class DbClient {
       })
       return { user, transaction }
     } else {
-      return { ERROR: "unknown type of update" }
+      console.log("ERROR: Offer is outdated: Not enough balance in corpus")
     }
   }
 }

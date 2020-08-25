@@ -16,10 +16,10 @@ let sdk: Sdk
 let dbClient: DbClient
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_ADMIN_SECRET, TEST_API_URL)
+  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
-  dbClient = new DbClient(TEST_ADMIN_SECRET, TEST_API_URL)
+  dbClient = new DbClient(sdk, client)
   await sdk.CreateUser({ user: LENDER1 })
   await sdk.CreateUser({ user: BORROWER1 })
 })

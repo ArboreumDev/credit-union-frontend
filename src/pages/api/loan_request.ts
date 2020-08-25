@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import AWS from "aws-sdk"
 
 const BUCKET = "swarmai-loanrequests"
 
-// Load the AWS SDK for Node.js
-var AWS = require("aws-sdk")
 // Set the region
 AWS.config.update({ region: "eu-west-2" })
 
@@ -20,7 +19,7 @@ AWS.config.setPromisesDependency(null)
 const s3 = new AWS.S3()
 
 // call S3 to retrieve upload file to specified bucket
-var uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
+const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
 const loan_request_fixture = {
   borrower_id: 4,
@@ -72,7 +71,7 @@ export default async function handler(
     // console.log(req)
     uploadParams.Body = JSON.stringify(req.body)
 
-    var path = require("path")
+    const path = require("path")
     uploadParams.Key = path.basename(Date.now() + ".json")
 
     const result = await new Promise((resolve, reject) => {
