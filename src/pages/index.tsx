@@ -46,7 +46,8 @@ const getUIState = async (session: Session) => {
   }
 }
 
-const Page = (state: UIState, dashboardInfo?: any) => {
+const Page = (params: { state: UIState }) => {
+  const { state } = params
   const router = useRouter()
 
   if (state === UIState.Landing) return <FrontPage />
