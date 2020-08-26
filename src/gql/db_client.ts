@@ -19,18 +19,20 @@ import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 /**
- * A class to be used in the frontend to send queries to the DB. As a general rule
- * only "pre-cooked" functions should be used to do any needed input formatting,
- * processing or checking for consistency should be done inside
- * the pre-cooked functions. The executeGQL should only be used to test things during development
+ * A class to be used in the frontend to send queries to the DB.
  */
 export class DbClient {
   /**
    *
-   * @param sdk to run queries from *.graphql-files with codegen
-   * @param fetcher to run self-constructed graphql-requests in string format
+   * @param client graphql client to run self-constructed graphql-requests in string format
    */
-  constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
+  public sdk: Sdk
+  public client: GraphQLClient
+
+  constructor(_client?: GraphQLClient) {
+    this.client = _client && initializeGQL()
+    this.sdk = getSdk(this.client)
+  }
 
   getUserByEmail = async (email: string) => {
     const data = await this.sdk.GetUserByEmail({ email })
@@ -239,7 +241,7 @@ export class DbClient {
     const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
     if (dryRunFailures.length == 0) {
       const updateMutation = generateUpdateAsSingleTransaction(updates)
-      const data = await this.fetcher.request(updateMutation)
+      const data = await this.client.request(updateMutation)
       return data
     } else {
       return {

@@ -43,7 +43,7 @@ describe("Basic loan request flow for an accepted loan", () => {
 
   beforeAll(async () => {
     // connect the client that manages user interactions to the test-DB
-    dbClient = new DbClient(sdk, client)
+    dbClient = new DbClient(client)
 
     // add a basic network from a fixture and initialize pointers to
     // an exisiting borrower and two lenders

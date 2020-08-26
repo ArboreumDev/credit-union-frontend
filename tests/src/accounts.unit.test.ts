@@ -19,7 +19,7 @@ beforeAll(async () => {
   client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
-  dbClient = new DbClient(sdk, client)
+  dbClient = new DbClient(client)
 })
 
 afterAll(async () => {
