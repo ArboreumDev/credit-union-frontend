@@ -3,6 +3,7 @@ import {
   PortfolioUpdate,
   LoanRequestStatus,
   UserType,
+  User,
 } from "../../src/utils/types"
 import {
   lenderBalanceToShareInLoan,
@@ -30,19 +31,6 @@ export class DbClient {
    * @param fetcher to run self-constructed graphql-requests in string format
    */
   constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
-
-  getDashboardInfo = async (user_email: string) => {
-    const data = await this.sdk.GetUserByEmail({ email: user_email })
-    // check user_type, then return borrower or dashboardInfo plus loan-history
-    const user = data.user[0]
-    if (user.user_type == UserType.Borrower)
-      return await this.getBorrowerDashboardInfo(user.id)
-    if (user.user_type == UserType.Lender)
-      return await this.getLenderDashboadInfo(user.id)
-    else {
-      console.log("Error unknown user type", user)
-    }
-  }
 
   /**
    * return {status: null} if the borrower has neither a request, nor an accepted loan

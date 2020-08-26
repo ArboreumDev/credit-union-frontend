@@ -10,6 +10,7 @@ export enum UserType {
 }
 
 export type User = {
+  id: string
   name: string
   email: string
   image: string
@@ -34,10 +35,9 @@ export enum LoanRequestStatus {
   settled = "settled",
 }
 
- 
 export type PortfolioUpdate = {
-    userId: string
-    balanceDelta: number
-    shareDelta: number
-    alias?: string
+  userId: string
+  balanceDelta: number
+  shareDelta: number
+  alias?: string
 }
