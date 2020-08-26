@@ -5070,6 +5070,7 @@ export type User = {
   /** An aggregated array relationship */
   guarantors_aggregate: Guarantors_Aggregate
   id: Scalars["uuid"]
+  kyc_approved?: Maybe<Scalars["Boolean"]>
   /** An array relationship */
   loan_participants: Array<Loan_Participants>
   /** An aggregated array relationship */
@@ -5377,6 +5378,7 @@ export type User_Bool_Exp = {
   encumbrances?: Maybe<Encumbrances_Bool_Exp>
   guarantors?: Maybe<Guarantors_Bool_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
+  kyc_approved?: Maybe<Boolean_Comparison_Exp>
   loan_participants?: Maybe<Loan_Participants_Bool_Exp>
   loan_requests?: Maybe<Loan_Requests_Bool_Exp>
   loan_risks?: Maybe<Loan_Risk_Bool_Exp>
@@ -5438,6 +5440,7 @@ export type User_Insert_Input = {
   encumbrances?: Maybe<Encumbrances_Arr_Rel_Insert_Input>
   guarantors?: Maybe<Guarantors_Arr_Rel_Insert_Input>
   id?: Maybe<Scalars["uuid"]>
+  kyc_approved?: Maybe<Scalars["Boolean"]>
   loan_participants?: Maybe<Loan_Participants_Arr_Rel_Insert_Input>
   loan_requests?: Maybe<Loan_Requests_Arr_Rel_Insert_Input>
   loan_risks?: Maybe<Loan_Risk_Arr_Rel_Insert_Input>
@@ -5551,6 +5554,7 @@ export type User_Order_By = {
   encumbrances_aggregate?: Maybe<Encumbrances_Aggregate_Order_By>
   guarantors_aggregate?: Maybe<Guarantors_Aggregate_Order_By>
   id?: Maybe<Order_By>
+  kyc_approved?: Maybe<Order_By>
   loan_participants_aggregate?: Maybe<Loan_Participants_Aggregate_Order_By>
   loan_requests_aggregate?: Maybe<Loan_Requests_Aggregate_Order_By>
   loan_risks_aggregate?: Maybe<Loan_Risk_Aggregate_Order_By>
@@ -5593,6 +5597,8 @@ export enum User_Select_Column {
   /** column name */
   Id = "id",
   /** column name */
+  KycApproved = "kyc_approved",
+  /** column name */
   MaxExposure = "max_exposure",
   /** column name */
   MinInterestRate = "min_interest_rate",
@@ -5616,6 +5622,7 @@ export type User_Set_Input = {
   demographic_info?: Maybe<Scalars["jsonb"]>
   email?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
+  kyc_approved?: Maybe<Scalars["Boolean"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
@@ -5728,6 +5735,8 @@ export enum User_Update_Column {
   Email = "email",
   /** column name */
   Id = "id",
+  /** column name */
+  KycApproved = "kyc_approved",
   /** column name */
   MaxExposure = "max_exposure",
   /** column name */
@@ -5910,6 +5919,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "balance"
       | "corpus_share"
       | "created_at"
+      | "kyc_approved"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -6262,6 +6272,7 @@ export const GetUserByEmailDocument = gql`
       balance
       corpus_share
       created_at
+      kyc_approved
       loan_requests {
         confirmation_date
         payback_status
