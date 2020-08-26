@@ -38,6 +38,12 @@ describe("Adding users and connections", () => {
     expect(user.length).toBe(3)
   })
 
+  test("get user by email", async () => {
+    // add users
+    const user = await dbClient.getUserByEmail(LENDER1.email)
+    expect(user.id === LENDER1.id)
+  })
+
   test("add edges", async () => {
     await sdk.InsertEdge({ edge: EDGE1 })
     await sdk.InsertEdge({ edge: EDGE2 })

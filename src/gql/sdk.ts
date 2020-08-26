@@ -5902,8 +5902,26 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
   user: Array<
     { __typename?: "user" } & Pick<
       User,
-      "name" | "id" | "phone" | "email" | "user_type"
-    >
+      | "id"
+      | "name"
+      | "email"
+      | "phone"
+      | "user_type"
+      | "balance"
+      | "corpus_share"
+      | "created_at"
+    > & {
+        loan_requests: Array<
+          { __typename?: "loan_requests" } & Pick<
+            Loan_Requests,
+            | "confirmation_date"
+            | "payback_status"
+            | "purpose"
+            | "risk_calc_result"
+            | "status"
+          >
+        >
+      }
   >
 }
 
@@ -6236,11 +6254,21 @@ export const GetLenderDashboardInfoDocument = gql`
 export const GetUserByEmailDocument = gql`
   query GetUserByEmail($email: String!) {
     user(where: { email: { _eq: $email } }) {
-      name
       id
-      phone
+      name
       email
+      phone
       user_type
+      balance
+      corpus_share
+      created_at
+      loan_requests {
+        confirmation_date
+        payback_status
+        purpose
+        risk_calc_result
+        status
+      }
     }
   }
 `

@@ -32,6 +32,12 @@ export class DbClient {
    */
   constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
 
+  getUserByEmail = async (email: string) => {
+    const data = await this.sdk.GetUserByEmail({ email })
+    const user = data.user[0]
+    return user
+  }
+
   /**
    * return {status: null} if the borrower has neither a request, nor an accepted loan
    * {status: 'initiated',...} if the user has requested an offer, but the AI is still processing
