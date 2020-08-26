@@ -3,6 +3,7 @@ import Providers from "next-auth/providers"
 import { initializeGQL } from "../../../gql/graphql_client"
 import { User } from "../../../utils/types"
 import { getSdk } from "../../../gql/sdk"
+import { DbClient } from "../../../gql/db_client"
 
 const options = {
   database: process.env.DATABASE_URL,
@@ -41,14 +42,10 @@ const options = {
     //         : Promise.resolve(baseUrl)
     //  },
     // jwt: async (token) => { },
-    session: async (session, user) => {
-      const db = getSdk(initializeGQL())
-
-      const data = await db.GetUserByEmail({ email: session.user.email })
-
-      const profile = data.user[0]
-
-      if (data) session = { ...session, user: { ...session.user, ...profile } }
+    session: async (session) => {
+      const dbClient = new DbClient()
+      const _user = await dbClient.getUserByEmail(session.user.email)
+      if (_user) session = { ...session, user: _user }
 
       return Promise.resolve(session)
     },
