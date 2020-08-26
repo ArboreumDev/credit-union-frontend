@@ -30,7 +30,7 @@ export class DbClient {
   public client: GraphQLClient
 
   constructor(_client?: GraphQLClient) {
-    this.client = _client && initializeGQL()
+    this.client = _client || initializeGQL()
     this.sdk = getSdk(this.client)
   }
 
