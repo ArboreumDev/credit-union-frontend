@@ -14,6 +14,12 @@ export enum UserType {
 
 export type User = GetUserByEmailQuery["user"][0]
 
+export type JWTToken = {
+  name: string
+  email: string
+  user?: User
+}
+
 export enum EDGE_STATUS {
   active = "active",
   awaiting_lender_confirmation = "awaiting_lender_confirmation",
