@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/client"
 import AppBar from "../components/AppBar"
-import { Session } from "../utils/types"
+import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
 import Onboarding from "./onboarding"
 import FrontPage from "./frontpage"
@@ -8,6 +8,10 @@ import ApplicationSubmitted from "../components/borrower/Notifications/Applicati
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import { fetcher } from "../utils/api"
+import { getSdk } from "../gql/sdk"
+import { initializeGQL } from "../gql/graphql_client"
+import { DbClient } from "../gql/db_client"
 
 enum UIState {
   Landing,
@@ -18,15 +22,37 @@ enum UIState {
   BLoanDashboard,
 }
 
-const getUIState = (session: Session) => {
+const checkForOngoingLoanRequests = (user: User) =>
+  user.loan_requests.some(
+    (lr) =>
+      lr.status in
+      [
+        LoanRequestStatus.initiated,
+        LoanRequestStatus.awaiting_borrower_confirmation,
+      ]
+  )
+
+const getUIState = async (session: Session) => {
   if (!session) return UIState.Landing
 
-  return UIState.BLoanDashboard
+  const user = session.user
+
+  if (!user.user_type) return UIState.Onboarding
+  if (!user.kyc_approved) return UIState.KYCNotApprovedYet
+  if (user.kyc_approved) {
+    if (user.user_type === UserType.Borrower) {
+      if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
+      if (checkForOngoingLoanRequests(user))
+        return UIState.BLoanRequestInProgress
+    }
+  }
+
+  return UIState.Landing
 }
 
-const Page = (props: { state: UIState }) => {
+const Page = (params: { state: UIState }) => {
+  const { state } = params
   const router = useRouter()
-  const { state } = props
 
   if (state === UIState.Landing) return <FrontPage />
   if (state === UIState.Onboarding) return <Onboarding />
@@ -44,7 +70,8 @@ const Page = (props: { state: UIState }) => {
 
 Page.getInitialProps = async (context) => {
   const session = (await getSession(context)) as Session
-  return { state: getUIState(session) }
+  const state = await getUIState(session)
+  return { state }
 }
 
 export default Page

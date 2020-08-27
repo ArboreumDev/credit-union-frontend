@@ -1,10 +1,16 @@
 import { initializeGQL } from "./graphql_client"
-import { PortfolioUpdate, LoanRequestStatus } from "../../src/utils/types"
+import {
+  PortfolioUpdate,
+  LoanRequestStatus,
+  UserType,
+  User,
+} from "../../src/utils/types"
 import {
   lenderBalanceToShareInLoan,
   createStartLoanInputVariables,
   proportion,
   generateUpdateAsSingleTransaction,
+  transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
@@ -13,126 +19,25 @@ import { GraphQLClient } from "graphql-request"
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 /**
- * A class to be used in the frontend to send queries to the DB. As a general rule
- * only "pre-cooked" functions should be used to do any needed input formatting,
- * processing or checking for consistency should be done inside
- * the pre-cooked functions. The executeGQL should only be used to test things during development
+ * A class to be used in the frontend to send queries to the DB.
  */
 export class DbClient {
   /**
    *
-   * @param sdk to run queries from *.graphql-files with codegen
-   * @param fetcher to run self-constructed graphql-requests in string format
+   * @param client graphql client to run self-constructed graphql-requests in string format
    */
-  constructor(public sdk: Sdk, private fetcher?: GraphQLClient) {}
+  public sdk: Sdk
+  public client: GraphQLClient
 
-  getProfileInfo = async (user_id: string) => {
-    // check user_type, then return borrower or dashboardInfo plus loan-history
+  constructor(_client?: GraphQLClient) {
+    this.client = _client || initializeGQL()
+    this.sdk = getSdk(this.client)
   }
 
-  /**
-   * return {status: null} if the borrower has neither a request, nor an accepted loan
-   * {status: 'initiated',...} if the user has requested an offer, but the AI is still processing
-   * {status: 'awaiting_borrower_confirmation',...} if there is an offer and the user needs to accept/reject
-   * {status: 'live', ... } if there is an active loan request (that requires payback)
-   * @param borrower_id
-   */
-  getBorrowerDashboardInfo = async (borrower_id) => {
-    const data = await this.sdk.GetLoansByBorrowerAndStatus({
-      borrower_id,
-      statusList: [
-        LoanRequestStatus.live,
-        LoanRequestStatus.awaiting_borrower_confirmation,
-        LoanRequestStatus.initiated,
-      ],
-    })
-    if (data == undefined) return { status: null }
-
-    const active_request = data.loan_requests[0]
-    if (active_request.status === LoanRequestStatus.live) {
-      return {
-        loanId: active_request.request_id,
-        status: active_request.status,
-        loanAmount: active_request.amount,
-        outstanding: {
-          principal: "TODO how do we calculate that?",
-          interest: "TODO how do we calculate that?",
-          total: active_request.payables[0].amount_remain,
-        },
-        amountRepaid: active_request.payables[0].amount_paid,
-        nextPayment: {
-          nextDate:
-            "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
-          nextAmount: "TODO remainAmount / # of remaining payments",
-        },
-        lastPaid: active_request.payables[0].last_paid || "no payment yet",
-      }
-    } else if (
-      active_request.status === LoanRequestStatus.awaiting_borrower_confirmation
-    ) {
-      const offer = active_request.risk_calc_result.latestOffer
-      return {
-        loanId: active_request.request_id,
-        status: active_request.status,
-        desired_principal: active_request.amount,
-        offerParams: {
-          raw: active_request.risk_calc_result.latestOffer,
-          offered_principal: offer.amount,
-          interest: offer.interest,
-          totalAmount: offer.amount + offer.interest,
-          monthly: "TODO",
-          dueDate: "TDODO always in 6 months?",
-        },
-      }
-    }
-  }
-
-  getLenderDashboadInfo = async (lender_id: string) => {
-    const {
-      lender,
-      corpusInvestment,
-      corpusShares,
-    } = await this.sdk.GetLenderDashboardInfo({ user_id: lender_id })
-    const totalCorpusShares = corpusShares.aggregate.sum.corpus_share
-    return {
-      // money the user brought
-      invested: lender.corpus_share,
-      idle: lender.balance,
-      encumbered: "TODO", //lenderInfo.encumbrances_aggregate.aggregate.sum.amount_remain || 0,
-      // interest that is earned from the money brought
-      interest: {
-        expected:
-          proportion(
-            lender.corpus_share,
-            totalCorpusShares,
-            corpusInvestment.aggregate.sum.amount_total
-          ) || 0,
-        received:
-          proportion(
-            lender.corpus_share,
-            totalCorpusShares,
-            corpusInvestment.aggregate.sum.amount_received
-          ) || 0,
-        outstanding:
-          proportion(
-            lender.corpus_share,
-            totalCorpusShares,
-            corpusInvestment.aggregate.sum.amount_remain
-          ) || 0,
-      },
-      guarantor_requests: [
-        {
-          borrower_info: { email: "example1@b.com", name: "ashish" },
-          purpose: "education",
-          amount: 200,
-        },
-        {
-          borrower_info: { email: "example2@mail.com", name: "gaurav" },
-          purpose: "business",
-          amount: 500,
-        },
-      ],
-    }
+  getUserByEmail = async (email: string) => {
+    const data = await this.sdk.GetUserByEmail({ email })
+    const user = data.user[0]
+    return user
   }
 
   /**
@@ -254,7 +159,7 @@ export class DbClient {
     const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
     if (dryRunFailures.length == 0) {
       const updateMutation = generateUpdateAsSingleTransaction(updates)
-      const data = await this.fetcher.request(updateMutation)
+      const data = await this.client.request(updateMutation)
       return data
     } else {
       return {

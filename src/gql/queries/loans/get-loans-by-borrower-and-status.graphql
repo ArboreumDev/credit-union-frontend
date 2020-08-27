@@ -2,7 +2,7 @@ query GetLoansByBorrowerAndStatus(
   $borrower_id: uuid!
   $statusList: [loan_request_status!]!
 ) {
-  loan_requests(
+  loanRequests: loan_requests(
     where: {
       _and: [
         { borrower_id: { _eq: $borrower_id } }

@@ -19,7 +19,7 @@ beforeAll(async () => {
   client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
   sdk = getSdk(client)
   await sdk.ResetDB()
-  dbClient = new DbClient(sdk, client)
+  dbClient = new DbClient(client)
 })
 
 afterAll(async () => {
@@ -36,6 +36,12 @@ describe("Adding users and connections", () => {
     const { user } = await sdk.GetAllUsers()
 
     expect(user.length).toBe(3)
+  })
+
+  test("get user by email", async () => {
+    // add users
+    const user = await dbClient.getUserByEmail(LENDER1.email)
+    expect(user.id === LENDER1.id)
   })
 
   test("add edges", async () => {
