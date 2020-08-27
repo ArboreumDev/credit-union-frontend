@@ -8,10 +8,6 @@ import ApplicationSubmitted from "../components/borrower/Notifications/Applicati
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
-import { fetcher } from "../utils/api"
-import { getSdk } from "../gql/sdk"
-import { initializeGQL } from "../gql/graphql_client"
-import { DbClient } from "../gql/db_client"
 
 enum UIState {
   Landing,
