@@ -4,8 +4,11 @@ SHELL := /bin/bash
 
 db:
 	echo "setting up hasura"
-	yarn migrate apply --envfile ../production/.env
-	yarn metadata apply --envfile ../production/.env
+	yarn migrate --envfile ../production/.env
+	yarn metadata --envfile ../production/.env
 
 status:
-	hasura migrate status --envfile ../production/.env
+	yarn run hasura migrate status --envfile ../production/.env
+
+hasura:
+	docker-compose up

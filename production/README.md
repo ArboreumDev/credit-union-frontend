@@ -1,15 +1,17 @@
-### To create the hasura folder with default config
+# Steps to run a fresh production
+
+- Create pg db
+- Create a new hasura project in the cloud
+- Apply migrations:
 
 ```
-hasura init
-# Now update config (endpoint, adminsecret)
+yarn migrate --endpoint <HASURA_ENDPOINT> --admin-secret <admin_secret>
+yarn metadata --endpoint <HASURA_ENDPOINT> --admin-secret <admin_secret>
+```
 
+- (optional) To squash:
+
+```
 hasura migrate create "init" --from-server --endpoint http://localhost:8080 --admin-secret myadminsecretkey
-
 hasura metadata export --endpoint http://localhost:8080 --admin-secret myadminsecretkey
-```
-
-```
-hasura migrate apply
-hasura metadata apply
 ```
