@@ -1,38 +1,77 @@
 import { getSession } from "next-auth/client"
 import AppBar from "../components/AppBar"
-import { UserType, Session } from "../utils/types"
+import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
-import { useEffect } from "react"
-import { getSessionAsProps } from "../utils/ssr"
 import Onboarding from "./onboarding"
-import LenderDashboard from "../components/dashboard/lender"
-import BorrowerDashboard from "../components/dashboard/borrower"
-import Video from "../components/video"
 import FrontPage from "./frontpage"
+import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
+import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
+import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
+import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import { fetcher } from "../utils/api"
+import { getSdk } from "../gql/sdk"
+import { initializeGQL } from "../gql/graphql_client"
+import { DbClient } from "../gql/db_client"
 
-const Page = (props: { session: Session }) => {
-  const router = useRouter()
-  if (!props.session) return <FrontPage />
-  else {
-    if (!props.session.user.user_type) {
-      // if Onboarding
-      return <Onboarding />
-    } else {
-      return (
-        <div>
-          <AppBar {...props} />
-          {props.session.user.user_type == UserType.Lender && (
-            <LenderDashboard />
-          )}
-          {props.session.user.user_type == UserType.Borrower && (
-            <BorrowerDashboard />
-          )}
-        </div>
-      )
-    }
-  }
+enum UIState {
+  Landing,
+  Onboarding,
+  KYCNotApprovedYet,
+  BReadyToMakeNewLoan,
+  BLoanRequestInProgress,
+  BLoanDashboard,
 }
 
-Page.getInitialProps = (context) => getSessionAsProps(context)
+const checkForOngoingLoanRequests = (user: User) =>
+  user.loan_requests.some(
+    (lr) =>
+      lr.status in
+      [
+        LoanRequestStatus.initiated,
+        LoanRequestStatus.awaiting_borrower_confirmation,
+      ]
+  )
+
+const getUIState = async (session: Session) => {
+  if (!session) return UIState.Landing
+
+  const user = session.user
+
+  if (!user.user_type) return UIState.Onboarding
+  if (!user.kyc_approved) return UIState.KYCNotApprovedYet
+  if (user.kyc_approved) {
+    if (user.user_type === UserType.Borrower) {
+      if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
+      if (checkForOngoingLoanRequests(user))
+        return UIState.BLoanRequestInProgress
+    }
+  }
+
+  return UIState.Landing
+}
+
+const Page = (params: { state: UIState }) => {
+  const { state } = params
+  const router = useRouter()
+
+  if (state === UIState.Landing) return <FrontPage />
+  if (state === UIState.Onboarding) return <Onboarding />
+
+  return (
+    <div>
+      <AppBar />
+      {state == UIState.KYCNotApprovedYet && <ApplicationSubmitted />}
+      {state == UIState.BReadyToMakeNewLoan && <BReadyToMakeNewLoan />}
+      {state == UIState.BLoanRequestInProgress && <BLoanRequestInProgress />}
+      {state == UIState.BLoanDashboard && <BLoanDashboard />}
+    </div>
+  )
+}
+
+Page.getInitialProps = async (context) => {
+  const session = (await getSession(context)) as Session
+  const state = await getUIState(session)
+  return { state }
+}
 
 export default Page

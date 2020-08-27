@@ -23,7 +23,7 @@ const getAuthTypeFromEmail = (email: string) => {
   return AUTH_TYPE.USER
 }
 
-const dbClient = new DbClient(getSdk(initializeGQL()))
+const dbClient = new DbClient()
 
 class Action {
   constructor(public getData, public authType: AUTH_TYPE) {}
@@ -45,14 +45,10 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const token = await jwt.getToken({ req, secret })
-    console.log(token)
     const authType = getAuthTypeFromEmail(token.email)
 
     const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
-
-    console.log(payload)
-
     if (authType >= action.authType) {
       if (action) {
         try {

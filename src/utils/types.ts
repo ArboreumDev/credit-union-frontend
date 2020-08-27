@@ -1,3 +1,6 @@
+import { DbClient } from "../gql/db_client"
+import { GetUserByEmailQuery } from "../../src/gql/sdk"
+
 export type Session = {
   user: User
   accessToken: string
@@ -9,13 +12,7 @@ export enum UserType {
   Lender = "lender",
 }
 
-export type User = {
-  name: string
-  email: string
-  image: string
-  phone: string
-  user_type: UserType
-}
+export type User = GetUserByEmailQuery["user"][0]
 
 export enum EDGE_STATUS {
   active = "active",
@@ -34,10 +31,9 @@ export enum LoanRequestStatus {
   settled = "settled",
 }
 
- 
 export type PortfolioUpdate = {
-    userId: string
-    balanceDelta: number
-    shareDelta: number
-    alias?: string
+  userId: string
+  balanceDelta: number
+  shareDelta: number
+  alias?: string
 }

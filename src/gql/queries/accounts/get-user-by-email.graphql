@@ -1,8 +1,20 @@
 query GetUserByEmail($email: String!) {
   user(where: { email: { _eq: $email } }) {
+    id
     name
-    phone
     email
+    phone
     user_type
+    balance
+    corpus_share
+    created_at
+    kyc_approved
+    loan_requests {
+      confirmation_date
+      payback_status
+      purpose
+      risk_calc_result
+      status
+    }
   }
 }
