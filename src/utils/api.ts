@@ -8,5 +8,4 @@ export const fetcher = (action, payload) => {
   return axios
     .post(url, { actionType: action, payload: payload })
     .then((res) => res.data)
-    .catch((error) => console.log(error))
 }

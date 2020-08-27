@@ -1,9 +1,11 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { initializeGQL } from "../../../gql/graphql_client"
-import { User } from "../../../utils/types"
+import { User, JWTToken } from "../../../utils/types"
 import { getSdk } from "../../../gql/sdk"
 import { DbClient } from "../../../gql/db_client"
+
+const dbClient = new DbClient()
 
 const options = {
   database: process.env.DATABASE_URL,
@@ -41,9 +43,13 @@ const options = {
     //         ? Promise.resolve(url)
     //         : Promise.resolve(baseUrl)
     //  },
-    // jwt: async (token) => { },
+    jwt: async (token: JWTToken) => {
+      const _user = await dbClient.getUserByEmail(token.email)
+      if (_user) token = { ...token, user: _user }
+
+      return Promise.resolve(token)
+    },
     session: async (session) => {
-      const dbClient = new DbClient()
       const _user = await dbClient.getUserByEmail(session.user.email)
       if (_user) session = { ...session, user: _user }
 

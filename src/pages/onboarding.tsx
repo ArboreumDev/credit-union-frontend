@@ -2,7 +2,6 @@ import { useSession } from "next-auth/client"
 import { User } from "../utils/types"
 
 import { useForm } from "react-hook-form"
-import { initializeGQL } from "../gql/graphql_client"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "../components/Dropzone"
 import { CreateUserMutationVariables } from "../gql/sdk"
@@ -29,7 +28,6 @@ export default function Onboarding() {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const router = useRouter()
   const [session, loading] = useSession()
-  const gqlClient = initializeGQL()
 
   if (loading) return <div>Loading...</div>
   const user = session.user as User
@@ -45,11 +43,11 @@ export default function Onboarding() {
       },
     }
     // Call mutation
-    fetcher("CreateUser", payload).then((res) => {
-      console.log(res)
-      // return to home
-      router.push("/")
-    })
+    fetcher("CreateUser", payload)
+      .then((res) => {
+        router.push("/")
+      })
+      .catch((err) => console.error(err))
   }
 
   return (

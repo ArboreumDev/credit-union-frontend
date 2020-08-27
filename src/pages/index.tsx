@@ -8,10 +8,6 @@ import ApplicationSubmitted from "../components/borrower/Notifications/Applicati
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
-import { fetcher } from "../utils/api"
-import { getSdk } from "../gql/sdk"
-import { initializeGQL } from "../gql/graphql_client"
-import { DbClient } from "../gql/db_client"
 
 enum UIState {
   Landing,
@@ -23,19 +19,19 @@ enum UIState {
 }
 
 const checkForOngoingLoanRequests = (user: User) =>
-  user.loan_requests.some(
-    (lr) =>
-      lr.status in
-      [
-        LoanRequestStatus.initiated,
-        LoanRequestStatus.awaiting_borrower_confirmation,
-      ]
+  user.loan_requests.some((lr) =>
+    [
+      LoanRequestStatus.initiated,
+      LoanRequestStatus.awaiting_borrower_confirmation,
+    ].includes(lr.status)
   )
 
 const getUIState = async (session: Session) => {
   if (!session) return UIState.Landing
 
   const user = session.user
+
+  console.log("index user", user)
 
   if (!user.user_type) return UIState.Onboarding
   if (!user.kyc_approved) return UIState.KYCNotApprovedYet
@@ -44,6 +40,7 @@ const getUIState = async (session: Session) => {
       if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
       if (checkForOngoingLoanRequests(user))
         return UIState.BLoanRequestInProgress
+      else return UIState.BLoanDashboard
     }
   }
 
