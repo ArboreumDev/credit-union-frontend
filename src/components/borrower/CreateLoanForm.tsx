@@ -60,9 +60,8 @@ export default function CreateLoanForm() {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Container maxW="400px" bg="white">
+        <Container maxW="300px" bg="white">
           <Stack spacing={3}>
-            <h2>New Loan Request</h2>
             <Input
               placeholder="Amount in INR"
               name="amount"
