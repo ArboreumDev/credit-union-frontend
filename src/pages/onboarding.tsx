@@ -28,7 +28,6 @@ export default function Onboarding() {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const router = useRouter()
   const [session, loading] = useSession()
-  const gqlClient = initializeGQL()
 
   if (loading) return <div>Loading...</div>
   const user = session.user as User
