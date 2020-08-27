@@ -2,10 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { initializeGQL } from "../../gql/graphql_client"
 import { DbClient } from "../../gql/db_client"
 import {
-  getSdk,
-  User_Insert_Input,
   CreateUserMutationVariables,
-  CreateLoanRequestMutationVariables,
+  Loan_Requests_Insert_Input,
 } from "../../gql/sdk"
 import jwt from "next-auth/jwt"
 import { JWTToken } from "../../utils/types"
@@ -32,22 +30,25 @@ const getAuthTypeFromEmail = (email: string) => {
 const dbClient = new DbClient()
 
 class Action {
-  constructor(public getData, public authType: AUTH_TYPE) {}
+  constructor(
+    public getData: (payload: any, token: JWTToken) => Promise<any>,
+    public authType: AUTH_TYPE
+  ) {}
 }
 
 function createUser(payload: CreateUserMutationVariables, token: JWTToken) {
-  // if (payload.user.id === token.user.id) {
-  //   return dbClient.sdk.CreateUser(payload)
-  // }
+  if (payload.user.id === token.user.id) {
+    return dbClient.sdk.CreateUser(payload)
+  }
   return Promise.reject()
 }
 function createLoanRequest(
-  payload: CreateLoanRequestMutationVariables,
+  payload: Loan_Requests_Insert_Input,
   token: JWTToken
 ) {
-  // if (payload.user.id === token.user.id) {
-  //   return dbClient.sdk.CreateUser(payload)
-  // }
+  if (payload.borrower_id === token.user.id) {
+    return dbClient.sdk.CreateLoanRequest({ request: payload })
+  }
   return Promise.reject()
 }
 
@@ -76,7 +77,7 @@ export default async function handler(
     if (authType >= action.authType) {
       if (action) {
         try {
-          const data = await action.getData(payload)
+          const data = await action.getData(payload, token)
           res.status(200).json(data)
         } catch (e) {
           console.error(e)
