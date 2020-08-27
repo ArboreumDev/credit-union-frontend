@@ -23,10 +23,10 @@ export default function CreateLoanModal() {
         <ModalOverlay>
           <ModalContent>
             <ModalHeader>Request Loan</ModalHeader>
-            <ModalCloseButton />
             <ModalBody>
               <CreateLoanForm />
             </ModalBody>
+            <ModalCloseButton />
           </ModalContent>
         </ModalOverlay>
       </Modal>
