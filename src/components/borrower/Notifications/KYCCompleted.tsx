@@ -19,8 +19,10 @@ export default function KYCCompleted() {
           Congrats!
         </AlertTitle>
         <AlertDescription maxWidth="sm">
-          KYC has been completed successfully on 12 September 2020. You can now
-          requests a loan.
+          KYC has been completed successfully
+        </AlertDescription>
+        <AlertDescription maxWidth="sm">
+          You can now request a loan
         </AlertDescription>
       </Alert>
     </div>

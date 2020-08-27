@@ -55,6 +55,7 @@ export default function CreateLoanForm() {
     //   console.log(res)
     //   router.push("/")
     // })
+    location.reload()
   }
 
   return (
