@@ -37,11 +37,9 @@ class Action {
 }
 
 function createUser(payload: CreateUserMutationVariables, token: JWTToken) {
-  if (payload.user.id === token.user.id) {
-    return dbClient.sdk.CreateUser(payload)
-  }
-  return Promise.reject()
+  return dbClient.sdk.CreateUser(payload)
 }
+
 function createLoanRequest(
   payload: Loan_Requests_Insert_Input,
   token: JWTToken
