@@ -51,11 +51,11 @@ export default function CreateLoanForm() {
       purpose: data.purpose,
     }
     // Call mutation
-    // fetcher("CreateLoanRequestMutation", payload).then((res) => {
-    //   console.log(res)
-    //   router.push("/")
-    // })
-    location.reload()
+    fetcher("CreateLoanRequestMutation", payload)
+      .then((res) => {
+        location.reload()
+      })
+      .catch((err) => console.error(err))
   }
 
   return (
@@ -72,7 +72,7 @@ export default function CreateLoanForm() {
             <Select
               name="purpose"
               placeholder="Choose loan purpose"
-              ref={register({ required: true })}
+              ref={register({ required: false })}
             >
               <option value="option1">School</option>
               <option value="option2">Auto</option>
@@ -81,7 +81,7 @@ export default function CreateLoanForm() {
             <Textarea
               name="loanSupporters"
               placeholder="Supporters (name, amount)"
-              ref={register({ required: true })}
+              ref={register({ required: false })}
             />
 
             <Center>

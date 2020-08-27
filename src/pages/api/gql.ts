@@ -1,8 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { initializeGQL } from "../../gql/graphql_client"
 import { DbClient } from "../../gql/db_client"
-import { getSdk } from "../../gql/sdk"
+import {
+  getSdk,
+  User_Insert_Input,
+  CreateUserMutationVariables,
+  CreateLoanRequestMutationVariables,
+} from "../../gql/sdk"
 import jwt from "next-auth/jwt"
+import { JWTToken } from "../../utils/types"
 
 const secret = process.env.JWT_SECRET
 enum AUTH_TYPE {
@@ -29,9 +35,26 @@ class Action {
   constructor(public getData, public authType: AUTH_TYPE) {}
 }
 
+function createUser(payload: CreateUserMutationVariables, token: JWTToken) {
+  // if (payload.user.id === token.user.id) {
+  //   return dbClient.sdk.CreateUser(payload)
+  // }
+  return Promise.reject()
+}
+function createLoanRequest(
+  payload: CreateLoanRequestMutationVariables,
+  token: JWTToken
+) {
+  // if (payload.user.id === token.user.id) {
+  //   return dbClient.sdk.CreateUser(payload)
+  // }
+  return Promise.reject()
+}
+
 // TODO Add dynamic type validation
 const ACTIONS = {
-  CreateUser: new Action(dbClient.sdk.CreateUser, AUTH_TYPE.ANY),
+  CreateUser: new Action(createUser, AUTH_TYPE.ANY),
+  CreateLoanRequestMutation: new Action(createLoanRequest, AUTH_TYPE.USER),
 }
 
 type GqlRequest = {
@@ -44,7 +67,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const token = await jwt.getToken({ req, secret })
+    const token = (await jwt.getToken({ req, secret })) as JWTToken
+
     const authType = getAuthTypeFromEmail(token.email)
 
     const { actionType, payload } = req.body as GqlRequest
