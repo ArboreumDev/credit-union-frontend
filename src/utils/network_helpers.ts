@@ -1,12 +1,22 @@
 // import { users, basic_connections } from './fixtures'
 // import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
-import { Sdk, getSdk } from "../gql/sdk"
+import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
 import { EDGE_STATUS } from "./types"
-import { User_Insert_Input } from "../../src/gql/sdk"
-import { generateEdgeInputFromTupleNotation } from "../../tests/src/fixtures"
 
 type User = User_Insert_Input
+type EdgeTuple = [User, User, number]
 // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
+
+export const generateEdgeInputFromUserTupleNotation = (
+  edgeList: EdgeTuple
+): Edges_Insert_Input => {
+  return {
+    trust_amount: edgeList[2],
+    status: EDGE_STATUS.active,
+    lender_id: edgeList[0].id,
+    borrower_id: edgeList[1].id,
+  } as Edges_Insert_Input
+}
 
 // /**
 //  * create the db-insert input from the fixture
@@ -52,13 +62,13 @@ export async function addUsers(sdk: Sdk, userList: [User]) {
 }
 
 /** will insert edges into the DB
- * @param edgeTuples edge list [[1,2,10], [2,3,30]] (user)
+ * @param edgeTuples edge with list of entire users
  * @returns added_edges [added_edge_object1, ...]
  */
 export async function addEdgesFromList(sdk: Sdk, edgeTuples: [any]) {
   const addedEdges = []
   for (const e of edgeTuples) {
-    const insert_edge_input = generateEdgeInputFromTupleNotation(e)
+    const insert_edge_input = generateEdgeInputFromUserTupleNotation(e)
     const data = await sdk.InsertEdge({ edge: insert_edge_input })
     addedEdges.push(data.insert_edges.returning[0])
   }

@@ -2,7 +2,7 @@ import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { EDGE_STATUS } from "../../src/utils/types"
-import { BASIC_NETWORK } from "./fixtures"
+import { BASIC_NETWORK } from "../fixtures/basic_network"
 import { addNetwork } from "../../src/utils/network_helpers"
 
 global.fetch = require("node-fetch")

@@ -1,7 +1,13 @@
 import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { LENDER1, BORROWER1, LENDER2, EDGE1, EDGE2 } from "./fixtures"
+import {
+  LENDER1,
+  BORROWER1,
+  LENDER2,
+  EDGE1,
+  EDGE2,
+} from "../fixtures/basic_network"
 import { EDGE_STATUS } from "../../src/utils/types"
 import { getUserPortfolio } from "./test_helpers"
 import { DbClient } from "../../src/gql/db_client"

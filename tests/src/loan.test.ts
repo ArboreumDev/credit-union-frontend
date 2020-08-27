@@ -3,7 +3,12 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
 import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
-import { BASIC_NETWORK, LENDER1, LENDER2, BORROWER1 } from "./fixtures"
+import {
+  BASIC_NETWORK,
+  LENDER1,
+  LENDER2,
+  BORROWER1,
+} from "../fixtures/basic_network"
 import { addNetwork } from "../../src/utils/network_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
