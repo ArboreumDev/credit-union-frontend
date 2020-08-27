@@ -84,14 +84,6 @@ describe("Basic loan request flow for an accepted loan", () => {
       expect(updatedRequest.risk_calc_result).toHaveProperty("latestOffer")
       expect(updatedRequest.risk_calc_result.latestOffer.amount).toBe(amount)
     })
-
-    test("the borrower can see the parameters of the offer in their dashboard", async () => {
-      const { loanRequest, status } = await dbClient.getBorrowerDashboardInfo(
-        borrower1.id
-      )
-      expect(status).toBe(LoanRequestStatus.awaiting_borrower_confirmation)
-      expect(loanRequest.desired_principal).toBe(amount)
-    })
   })
   describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
@@ -119,19 +111,15 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("The borrower user can see their repayment plan in the frontend", async () => {
-      const { loanRequest } = await dbClient.getBorrowerDashboardInfo(
-        borrower1.id
-      )
-      expect(loanRequest.amountRepaid).toBe(0)
-      expect(loanRequest.loanAmount).toBe(amount)
-      expect(loanRequest.outstanding.total).toBeGreaterThan(amount)
+      const user = await dbClient.getUserByEmail(borrower1.email)
+      const loanRequest = user.loan_requests[0]
+      // TODO check lr payables
     })
 
     test("The lender sees an updated breakdown of their portfolio ", async () => {
-      const dashboard = await dbClient.getLenderDashboadInfo(lender1.id)
-      expect(dashboard.invested).toBeGreaterThan(0)
-      expect(dashboard.interest.expected).toBeGreaterThan(dashboard.invested)
-      expect(dashboard.idle).toBeLessThan(lender1.balance)
+      const user = await dbClient.getUserByEmail(lender1.email)
+      const loanRequest = user.loan_requests[0]
+      // TODO check lr investments
     })
 
     test("the users balances are updated accordingly", async () => {
