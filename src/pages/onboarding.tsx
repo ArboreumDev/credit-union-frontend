@@ -2,7 +2,6 @@ import { useSession } from "next-auth/client"
 import { User } from "../utils/types"
 
 import { useForm } from "react-hook-form"
-import { initializeGQL } from "../gql/graphql_client"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "../components/Dropzone"
 import { CreateUserMutationVariables } from "../gql/sdk"
