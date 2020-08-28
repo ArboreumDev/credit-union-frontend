@@ -5865,6 +5865,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "balance"
       | "user_number"
       | "corpus_share"
+      | "kyc_approved"
     >
   >
 }
@@ -5942,6 +5943,15 @@ export type SetUserCashBalanceMutationVariables = Exact<{
 
 export type SetUserCashBalanceMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
+}
+
+export type ApproveKycMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  kycApproved: Scalars["Boolean"]
+}>
+
+export type ApproveKycMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
 }
 
 export type CreateLoanRequestMutationVariables = Exact<{
@@ -6232,6 +6242,7 @@ export const GetAllUsersDocument = gql`
       balance
       user_number
       corpus_share
+      kyc_approved
     }
   }
 `
@@ -6290,6 +6301,17 @@ export const SetUserCashBalanceDocument = gql`
       _set: { balance: $amount }
     ) {
       balance
+    }
+  }
+`
+export const ApproveKycDocument = gql`
+  mutation ApproveKYC($userId: uuid!, $kycApproved: Boolean!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { kyc_approved: $kycApproved }
+    ) {
+      id
+      kyc_approved
     }
   }
 `
@@ -6551,6 +6573,13 @@ export function getSdk(
           print(SetUserCashBalanceDocument),
           variables
         )
+      )
+    },
+    ApproveKYC(
+      variables: ApproveKycMutationVariables
+    ): Promise<ApproveKycMutation> {
+      return withWrapper(() =>
+        client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
       )
     },
     CreateLoanRequest(

@@ -1,19 +1,20 @@
 import * as React from "react"
-import { initializeGQL } from "../gql/graphql_client"
-import { getSdk } from "../gql/sdk"
+import { initializeGQL } from "../../gql/graphql_client"
+import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 
-export default function Hello(props: { data }) {
-  const data = props.data
+export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   // Only use code like this when UI needs to refresh
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
-  const users = data.user
-
+  const users = props.user
   return (
     <div>
       {users.map((user) => (
-        <p key={user.id}>{user.name}</p>
+        <p key={user.id}>
+          {user.name} | KYC={"" + user.kyc_approved} |{" "}
+          <a href={"/admin/toggle_kyc/" + user.email}>toggle kyc </a>
+        </p>
       ))}
     </div>
   )
@@ -24,7 +25,7 @@ export async function getServerSideProps() {
   // check for session and if the user is one of the admin users
 
   const sdk = getSdk(initializeGQL())
-  const data = await sdk.GetAllUsers()
+  const { user } = await sdk.GetAllUsers()
 
-  return { props: { data } }
+  return { props: { user } }
 }

@@ -7,5 +7,6 @@ query GetAllUsers {
     balance
     user_number
     corpus_share
+    kyc_approved
   }
 }
