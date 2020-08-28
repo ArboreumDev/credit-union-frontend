@@ -5,7 +5,7 @@ import { DbClient } from "../../../gql/db_client"
 import { Session } from "../../../utils/types"
 
 const Page = (props: { session: Session }) => {
-  return <div>Approved kyc</div>
+  return <div>Toggled kyc</div>
 }
 Page.getInitialProps = async (context: NextPageContext) => {
   const session = (await getSession(context)) as Session

@@ -10,10 +10,10 @@ export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   const users = props.user
   return (
     <div>
-      {users.map((user: User) => (
+      {users.map((user) => (
         <p key={user.id}>
-          {user.name} | KYC={user.kyc_approved} |{" "}
-          <a href={"/admin/approve/" + user.email}>toggle kyc </a>
+          {user.name} | KYC={"" + user.kyc_approved} |{" "}
+          <a href={"/admin/toggle_kyc/" + user.email}>toggle kyc </a>
         </p>
       ))}
     </div>
