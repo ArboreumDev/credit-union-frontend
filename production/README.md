@@ -18,9 +18,11 @@ hasura metadata export --endpoint http://localhost:8080 --admin-secret myadminse
 
 # Vercel
 
-## Update all env vars to vercel
+Make env files
+
+- `production/.env.production`
+- `production/.env.preview`
 
 ```
-source .env.production
-sh setup_vercel.sh
+ENVIRONMENT=production sh production/setup_vercel.sh
 ```

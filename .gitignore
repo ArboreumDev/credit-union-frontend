@@ -36,3 +36,4 @@ yarn-error.log*
 production/hasura/
 
 .vercel
+production/.env.*
