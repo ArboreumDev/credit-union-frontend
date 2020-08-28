@@ -2,39 +2,24 @@
 // import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
 import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
 import { EDGE_STATUS } from "./types"
+const fs = require("fs")
 
 type User = User_Insert_Input
-type EdgeTuple = [User, User, number]
+type EdgeTuple = [string, string, number]
+type Network = { [index: string]: any }
+// type Scenario = { [index: string]: any }
 // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
-export const generateEdgeInputFromUserTupleNotation = (
+export const generateEdgeInputFromTupleNotation = (
   edgeList: EdgeTuple
 ): Edges_Insert_Input => {
   return {
     trust_amount: edgeList[2],
     status: EDGE_STATUS.active,
-    lender_id: edgeList[0].id,
-    borrower_id: edgeList[1].id,
+    lender_id: edgeList[0],
+    borrower_id: edgeList[1],
   } as Edges_Insert_Input
 }
-
-// /**
-//  * create the db-insert input from the fixture
-//  * @param edge  [from_number, to_number, trust]
-//  * @param  users [{userObject1}, {userObject2}, ... ]
-//  */
-// function create_edge_insert_input_from_fixture (edge, users) {
-//   const lender = users.filter(x => x.user_number === edge[0])[0]
-//   const borrower = users.filter(x => x.user_number === edge[1])[0]
-//   const input = {
-//     trust_amount: edge[2],
-//     status: EDGE_STATUS.active,
-//     borrower_id: borrower.id,
-//     lender_id: lender.id,
-//     other_user_email: lender.name + "@mail.com"
-//   }
-//   return input
-// }
 
 // export const getNodesFromEdgeList = (edgeList) => {
 //   const nodes = edgeList.map(x => x.slice(0,2)).flat()
@@ -65,17 +50,15 @@ export async function addUsers(sdk: Sdk, userList: [User]) {
  * @param edgeTuples edge with list of entire users
  * @returns added_edges [added_edge_object1, ...]
  */
-export async function addEdgesFromList(sdk: Sdk, edgeTuples: [any]) {
+export async function addEdgesFromList(sdk: Sdk, edgeTuples: [EdgeTuple]) {
   const addedEdges = []
   for (const e of edgeTuples) {
-    const insert_edge_input = generateEdgeInputFromUserTupleNotation(e)
+    const insert_edge_input = generateEdgeInputFromTupleNotation(e)
     const data = await sdk.InsertEdge({ edge: insert_edge_input })
     addedEdges.push(data.insert_edges.returning[0])
   }
   return addedEdges
 }
-
-type Network = { [index: string]: any }
 
 /**
  * add a network to the DB, user_numbers should be unique (will not be guaranteed by DB)
