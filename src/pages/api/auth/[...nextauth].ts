@@ -5,9 +5,6 @@ import { User, JWTToken } from "../../../utils/types"
 import { getSdk } from "../../../gql/sdk"
 import { DbClient } from "../../../gql/db_client"
 
-console.log(process.env.DATABASE_URL)
-console.log(process.env.NEXTAUTH_URL)
-
 const dbClient = new DbClient()
 
 const options = {
