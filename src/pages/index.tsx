@@ -16,6 +16,7 @@ enum UIState {
   BReadyToMakeNewLoan,
   BLoanRequestInProgress,
   BLoanDashboard,
+  LDashboard,
 }
 
 const checkForOngoingLoanRequests = (user: User) =>
@@ -31,7 +32,7 @@ const getUIState = async (session: Session) => {
 
   const user = session.user
 
-  console.log("index user", user)
+  console.log("in index", user)
 
   if (!user.user_type) return UIState.Onboarding
   if (!user.kyc_approved) return UIState.KYCNotApprovedYet
@@ -41,6 +42,9 @@ const getUIState = async (session: Session) => {
       if (checkForOngoingLoanRequests(user))
         return UIState.BLoanRequestInProgress
       else return UIState.BLoanDashboard
+    }
+    if (user.user_type === UserType.Lender) {
+      return UIState.LDashboard
     }
   }
 
@@ -61,6 +65,7 @@ const Page = (params: { state: UIState }) => {
       {state == UIState.BReadyToMakeNewLoan && <BReadyToMakeNewLoan />}
       {state == UIState.BLoanRequestInProgress && <BLoanRequestInProgress />}
       {state == UIState.BLoanDashboard && <BLoanDashboard />}
+      {state == UIState.LDashboard && <div>Lender dashboard</div>}
     </div>
   )
 }

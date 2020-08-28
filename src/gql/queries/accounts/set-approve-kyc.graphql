@@ -1,9 +1,0 @@
-mutation ApproveKYC($userId: uuid!) {
-  user: update_user_by_pk(
-    pk_columns: { id: $userId }
-    _set: { kyc_approved: true }
-  ) {
-    id
-    kyc_approved
-  }
-}
