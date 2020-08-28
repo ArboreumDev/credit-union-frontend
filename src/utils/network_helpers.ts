@@ -88,6 +88,23 @@ export async function addNetwork(sdk: Sdk, network: Network) {
   return { addedUsers, addedEdges }
 }
 
+/**
+ * load and add scenario from fixture folder, expects empty DB
+ * @param {} sdk pointing to the DB into which the nodes and edges should be inserted
+ * @param {*} string name of the scenario to be loaded
+ */
+export async function setupScenario(sdk: Sdk, scenarioName: string) {
+  // const tmp = await fs.readdir('.')
+  // console.log('tmp', tmp.network)
+  const { network, loan_requests } = require("../../tests/fixtures/" +
+    scenarioName +
+    ".json")
+  console.log(network)
+  const addedUsers = await addUsers(sdk, network.nodes)
+  const addedEdges = await addEdgesFromList(sdk, network.edges)
+  // return { addedUsers, addedEdges }
+}
+
 // /**
 //  * get the network and edges of a given edge_status
 //  * @param {} gqlclient
