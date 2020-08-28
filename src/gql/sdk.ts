@@ -5935,6 +5935,14 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
   >
 }
 
+export type ApproveKycMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+}>
+
+export type ApproveKycMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
+}
+
 export type SetUserCashBalanceMutationVariables = Exact<{
   userId: Scalars["uuid"]
   amount: Scalars["float8"]
@@ -6283,6 +6291,17 @@ export const GetUserByEmailDocument = gql`
     }
   }
 `
+export const ApproveKycDocument = gql`
+  mutation ApproveKYC($userId: uuid!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { kyc_approved: true }
+    ) {
+      id
+      kyc_approved
+    }
+  }
+`
 export const SetUserCashBalanceDocument = gql`
   mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {
     user: update_user_by_pk(
@@ -6541,6 +6560,13 @@ export function getSdk(
           print(GetUserByEmailDocument),
           variables
         )
+      )
+    },
+    ApproveKYC(
+      variables: ApproveKycMutationVariables
+    ): Promise<ApproveKycMutation> {
+      return withWrapper(() =>
+        client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
       )
     },
     SetUserCashBalance(
