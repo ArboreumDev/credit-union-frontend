@@ -35,11 +35,11 @@ interface Props {
 
 const Page = ({ state, session }: Props) => {
   const router = useRouter()
+
+  if (state === UIState.Landing) return <FrontPage />
+
   const componentMap = getUIStateComponentMap(session.user)
-
-  if (state === UIState.Landing || state === UIState.Onboarding)
-    return componentMap[state]
-
+  if (state === UIState.Onboarding) return componentMap[state]
   return (
     <div>
       <AppBar />
