@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { initializeGQL } from "../../../gql/graphql_client"
-import { User, JWTToken } from "../../../utils/types"
-import { getSdk } from "../../../gql/sdk"
+import { JWTToken, UserRoles } from "../../../utils/types"
+import { ADMIN_EMAILS, HASURA_CLAIMS_NAMESPACE } from "../../../utils/constants"
 import { DbClient } from "../../../gql/db_client"
 
 const dbClient = new DbClient()
@@ -45,14 +45,33 @@ const options = {
     //  },
     jwt: async (token: JWTToken) => {
       const _user = await dbClient.getUserByEmail(token.email)
-      if (_user) token = { ...token, user: _user }
+      if (_user) {
+        let hasulraAllowedRoles
+        if (ADMIN_EMAILS.includes(_user.email))
+          hasulraAllowedRoles = [UserRoles.Admin]
+        else hasulraAllowedRoles = [UserRoles.User]
+
+        token = {
+          ...token,
+          user: _user,
+          [HASURA_CLAIMS_NAMESPACE]: {
+            "x-hasura-default-role": hasulraAllowedRoles[0],
+            "x-hasura-allowed-roles": hasulraAllowedRoles,
+            "x-hasura-user-id": _user.id,
+          },
+        }
+      }
 
       return Promise.resolve(token)
     },
     session: async (session) => {
       const _user = await dbClient.getUserByEmail(session.user.email)
-      if (_user) session = { ...session, user: _user }
-
+      if (_user) {
+        session = {
+          ...session,
+          user: _user,
+        }
+      }
       return Promise.resolve(session)
     },
   },

@@ -1,5 +1,12 @@
 import { DbClient } from "../gql/db_client"
 import { GetUserByEmailQuery } from "../../src/gql/sdk"
+import { HASURA_CLAIMS_NAMESPACE } from "./constants"
+
+// for hasura jwt auth
+export enum UserRoles {
+  User = "user",
+  Admin = "admin",
+}
 
 export type Session = {
   user: User
@@ -18,6 +25,11 @@ export type JWTToken = {
   name: string
   email: string
   user?: User
+  [HASURA_CLAIMS_NAMESPACE]: {
+    "x-hasura-default-role": string
+    "x-hasura-allowed-roles": string[]
+    "x-hasura-user-id": string
+  }
 }
 
 export enum EDGE_STATUS {
