@@ -3,8 +3,6 @@ import AppBar from "../components/AppBar"
 import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
 import Onboarding from "./onboarding"
-import FrontPage from "./frontpage"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import { UIState, getUIState } from "../utils/UIStateHelpers"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import {
@@ -12,9 +10,11 @@ import {
   BLoanRequestAwaitsConfirmation,
 } from "../components/borrower/BLoanRequests"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import FrontPage from "./frontpage"
 
 export function getUIStateComponentMap(user: User) {
   return {
+    [UIState.Landing]: <FrontPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
     [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
     [UIState.BLoanRequestInitiated]: (

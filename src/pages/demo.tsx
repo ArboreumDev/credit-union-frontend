@@ -1,14 +1,3 @@
-import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
-import { useRouter } from "next/dist/client/router"
-import Onboarding from "./onboarding"
-import FrontPage from "./frontpage"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
-import {
-  BLoanRequestInitiated,
-  BLoanRequestAwaitsConfirmation,
-} from "../components/borrower/BLoanRequests"
-import BLoanDashboard from "../components/borrower/BLoanDashboard"
 import {
   Button,
   Tabs,
@@ -47,7 +36,6 @@ const FIXTURES = {
     ],
   },
 }
-console.log(FIXTURES.USER.loan_requests[0])
 
 const Page = () => {
   const componentMap = getUIStateComponentMap(FIXTURES.USER)
