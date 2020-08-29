@@ -1,6 +1,6 @@
 import KYCCompleted from "./Notifications/KYCCompleted"
 import { Center, Button } from "@chakra-ui/core"
-import CreateLoanModal from "./CreateLoanModal"
+import CreateLoanModal from "./CreateLoan/CreateLoanModal"
 
 export default function BReadyToMakeNewLoan() {
   return (

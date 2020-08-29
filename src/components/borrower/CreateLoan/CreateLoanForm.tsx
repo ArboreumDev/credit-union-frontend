@@ -14,12 +14,12 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/core"
-import { User, Session } from "../../utils/types"
+import { User, Session } from "../../../utils/types"
 import {
   CreateLoanRequestMutation,
   Loan_Requests_Insert_Input,
-} from "../../gql/sdk"
-import { fetcher } from "../../utils/api"
+} from "../../../gql/sdk"
+import { fetcher } from "../../../utils/api"
 import { useRouter } from "next/dist/client/router"
 
 type FormData = {
