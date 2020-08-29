@@ -5,55 +5,37 @@ import { useRouter } from "next/dist/client/router"
 import Onboarding from "./onboarding"
 import FrontPage from "./frontpage"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
+import { UIState, getUIState } from "../utils/UIStateHelpers"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
-import BLoanRequestInProgress from "../components/borrower/BLoanRequestInProgress"
+import {
+  BLoanRequestInitiated,
+  BLoanRequestAwaitsConfirmation,
+} from "../components/borrower/BLoanRequests"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
 
-enum UIState {
-  Landing,
-  Onboarding,
-  KYCNotApprovedYet,
-  BReadyToMakeNewLoan,
-  BLoanRequestInProgress,
-  BLoanDashboard,
-  LDashboard,
-}
-
-const checkForOngoingLoanRequests = (user: User) =>
-  user.loan_requests.some((lr) =>
-    [
-      LoanRequestStatus.initiated,
-      LoanRequestStatus.awaiting_borrower_confirmation,
-    ].includes(lr.status)
-  )
-
-const getUIState = async (session: Session) => {
-  if (!session) return UIState.Landing
-
-  const user = session.user
-
-  console.log("in index", user)
-
-  if (!user.user_type) return UIState.Onboarding
-  if (!user.kyc_approved) return UIState.KYCNotApprovedYet
-  if (user.kyc_approved) {
-    if (user.user_type === UserType.Borrower) {
-      if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
-      if (checkForOngoingLoanRequests(user))
-        return UIState.BLoanRequestInProgress
-      else return UIState.BLoanDashboard
-    }
-    if (user.user_type === UserType.Lender) {
-      return UIState.LDashboard
-    }
+export function getUIStateComponentMap(user: User) {
+  return {
+    [UIState.Onboarding]: <Onboarding />,
+    [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
+    [UIState.BLoanRequestInitiated]: (
+      <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
+    ),
+    [UIState.BLoanRequestAwaitsConfirmation]: (
+      <BLoanRequestAwaitsConfirmation loanRequest={user.loan_requests[0]} />
+    ),
+    [UIState.BLoanDashboard]: <div>Loan Dashboard</div>,
+    [UIState.LDashboard]: <div>Lender Dashboard</div>,
   }
-
-  return UIState.Landing
 }
 
-const Page = (params: { state: UIState }) => {
-  const { state } = params
+interface Props {
+  state: UIState
+  session: Session
+}
+
+const Page = ({ state, session }: Props) => {
   const router = useRouter()
+  const componentMap = getUIStateComponentMap(session.user)
 
   if (state === UIState.Landing) return <FrontPage />
   if (state === UIState.Onboarding) return <Onboarding />
@@ -61,11 +43,7 @@ const Page = (params: { state: UIState }) => {
   return (
     <div>
       <AppBar />
-      {state == UIState.KYCNotApprovedYet && <ApplicationSubmitted />}
-      {state == UIState.BReadyToMakeNewLoan && <BReadyToMakeNewLoan />}
-      {state == UIState.BLoanRequestInProgress && <BLoanRequestInProgress />}
-      {state == UIState.BLoanDashboard && <BLoanDashboard />}
-      {state == UIState.LDashboard && <div>Lender dashboard</div>}
+      {componentMap[state]}
     </div>
   )
 }
@@ -73,7 +51,7 @@ const Page = (params: { state: UIState }) => {
 Page.getInitialProps = async (context) => {
   const session = (await getSession(context)) as Session
   const state = await getUIState(session)
-  return { state }
+  return { state, session }
 }
 
 export default Page
