@@ -26,7 +26,8 @@ import {
 } from "../../utils/types"
 import { bool } from "aws-sdk/clients/signer"
 import { CgFileDocument } from "react-icons/cg"
-import { FaCheckCircle } from "react-icons/fa"
+import { AiOutlineFileDone } from "react-icons/ai"
+import { Contactus } from "../ContactUs"
 
 const LoanRequestInProcess = ({
   loanRequest,
@@ -46,11 +47,11 @@ const LoanRequestInProcess = ({
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
+          <StatNumber>INR 6000</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
+          <StatNumber>Auto Loan</StatNumber>
         </Stat>
       </StatGroup>
     </Box>
@@ -62,10 +63,10 @@ const LoanRequestAwaitingConfirmation = ({
 }: {
   loanRequest: LoanRequest
 }) => (
-  <Stack spacing={1}>
+  <Stack spacing={2}>
     <Center>
-      <Text padding="0px" margin="0px" fontSize="100px">
-        <CgFileDocument />
+      <Text padding="0px" margin="0px" fontSize="100px" color="green.500">
+        <AiOutlineFileDone />
       </Text>
     </Center>
     <Center>
@@ -75,18 +76,43 @@ const LoanRequestAwaitingConfirmation = ({
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
+          <StatNumber>INR 5000</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
+          <StatNumber>Home Loan</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Interest</StatLabel>
+          <StatNumber>5.5%</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Total Due in 6 months</StatLabel>
+          <StatNumber>INR 5,500</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Monthly Installments</StatLabel>
+          <StatNumber>INR 500</StatNumber>
         </Stat>
       </StatGroup>
     </Box>
+
+    <label>
+      <input type="checkbox" name="user_type" value="borrower" />I understand I
+      will have to repay this loan with interest in 6 monthly installments
+    </label>
+    <label>
+      <input type="checkbox" name="user_type" value="borrower" />I understand if
+      I am unable to repay an installment, the amount will be deducted from my
+      monthly salary.
+    </label>
+
     <Center>
       <Button>Confirm</Button>
       <Button>Reject</Button>
-      <Button>Contact</Button>
+    </Center>
+    <Center>
+      <Contactus />
     </Center>
   </Stack>
 )
@@ -101,9 +127,11 @@ export default function BLoanRequestInProgress() {
     (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
   )[0]
   return (
-    <Container maxW="400px" bg="white">
-      <LoanRequestInProcess loanRequest={loanRequest} />
-      <LoanRequestAwaitingConfirmation loanRequest={loanRequest} />
+    <Container minW="s" bg="white">
+      {/* {(loanRequest.status===LoanRequestStatus.initiated) && <LoanRequestInProcess loanRequest={loanRequest} />} */}
+      {loanRequest.status === LoanRequestStatus.initiated && (
+        <LoanRequestAwaitingConfirmation loanRequest={loanRequest} />
+      )}
     </Container>
   )
 }
