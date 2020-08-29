@@ -34,81 +34,89 @@ interface Params {
 }
 
 export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
-  <Stack spacing={1}>
-    <Center>
-      <Text padding="0px" margin="0px" fontSize="100px">
-        <CgFileDocument />
-      </Text>
-    </Center>
-    <Center>
-      <Text>Your loan request is being processed.</Text>
-    </Center>
-    <Box>
-      <StatGroup>
-        <Stat>
-          <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
-        </Stat>
-      </StatGroup>
-    </Box>
-  </Stack>
+  <Container minW="s" bg="white">
+    <Stack spacing={1}>
+      <Center>
+        <Text padding="0px" margin="0px" fontSize="100px">
+          <CgFileDocument />
+        </Text>
+      </Center>
+      <Center>
+        <Text>Your loan request is being processed.</Text>
+      </Center>
+      <Box>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Amount</StatLabel>
+            <StatNumber>INR {loanRequest.amount}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Purpose</StatLabel>
+            <StatNumber>{loanRequest.purpose}</StatNumber>
+          </Stat>
+        </StatGroup>
+      </Box>
+    </Stack>
+  </Container>
 )
 
 export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => (
-  <Stack spacing={2}>
-    <Center>
-      <Text padding="0px" margin="0px" fontSize="100px" color="green.500">
-        <AiOutlineFileDone />
-      </Text>
-    </Center>
-    <Center>
-      <Text>Congratulations, your loan request is processed!</Text>
-    </Center>
-    <Box>
-      <StatGroup>
-        <Stat>
-          <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Interest</StatLabel>
-          <StatNumber>{loanRequest.risk_calc_result.interestRate}%</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Total Due in 6 months</StatLabel>
-          <StatNumber>INR {loanRequest.risk_calc_result.totalDue}</StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Monthly Installments</StatLabel>
-          <StatNumber>INR {loanRequest.risk_calc_result.monthlyDue}</StatNumber>
-        </Stat>
-      </StatGroup>
-    </Box>
+  <Container minW="s" bg="white">
+    <Stack spacing={2}>
+      <Center>
+        <Text padding="0px" margin="0px" fontSize="100px" color="green.500">
+          <AiOutlineFileDone />
+        </Text>
+      </Center>
+      <Center>
+        <Text>Congratulations, your loan request is processed!</Text>
+      </Center>
+      <Box>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Amount</StatLabel>
+            <StatNumber>INR {loanRequest.amount}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Purpose</StatLabel>
+            <StatNumber>{loanRequest.purpose}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Interest</StatLabel>
+            <StatNumber>
+              {loanRequest.risk_calc_result.interestRate}%
+            </StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Total Due in 6 months</StatLabel>
+            <StatNumber>INR {loanRequest.risk_calc_result.totalDue}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Monthly Installments</StatLabel>
+            <StatNumber>
+              INR {loanRequest.risk_calc_result.monthlyDue}
+            </StatNumber>
+          </Stat>
+        </StatGroup>
+      </Box>
 
-    <label>
-      <input type="checkbox" name="user_type" value="borrower" />I understand I
-      will have to repay this loan with interest in 6 monthly installments
-    </label>
-    <label>
-      <input type="checkbox" name="user_type" value="borrower" />I understand if
-      I am unable to repay an installment, the amount will be deducted from my
-      monthly salary.
-    </label>
+      <label>
+        <input type="checkbox" name="user_type" value="borrower" />I understand
+        I will have to repay this loan with interest in 6 monthly installments
+      </label>
+      <label>
+        <input type="checkbox" name="user_type" value="borrower" />I understand
+        if I am unable to repay an installment, the amount will be deducted from
+        my monthly salary.
+      </label>
 
-    <Center>
-      <Button>Confirm</Button>
-      <Button>Reject</Button>
-    </Center>
-    <Center>
-      <Contactus />
-    </Center>
-  </Stack>
+      <Center>
+        <Button>Confirm</Button>
+        <Button>Reject</Button>
+      </Center>
+      <Center>
+        <Contactus />
+      </Center>
+    </Stack>
+  </Container>
 )
