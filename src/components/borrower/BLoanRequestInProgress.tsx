@@ -18,10 +18,78 @@ import {
   StatGroup,
 } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
-import { Session, LoanRequestStatus } from "../../utils/types"
+import {
+  Session,
+  LoanRequestStatus,
+  User,
+  LoanRequest,
+} from "../../utils/types"
 import { bool } from "aws-sdk/clients/signer"
 import { CgFileDocument } from "react-icons/cg"
 import { FaCheckCircle } from "react-icons/fa"
+
+const LoanRequestInProcess = ({
+  loanRequest,
+}: {
+  loanRequest: LoanRequest
+}) => (
+  <Stack spacing={1}>
+    <Center>
+      <Text padding="0px" margin="0px" fontSize="100px">
+        <CgFileDocument />
+      </Text>
+    </Center>
+    <Center>
+      <Text>Your loan request is being processed.</Text>
+    </Center>
+    <Box>
+      <StatGroup>
+        <Stat>
+          <StatLabel>Amount</StatLabel>
+          <StatNumber>INR {loanRequest.amount}</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Purpose</StatLabel>
+          <StatNumber>{loanRequest.purpose}</StatNumber>
+        </Stat>
+      </StatGroup>
+    </Box>
+  </Stack>
+)
+
+const LoanRequestAwaitingConfirmation = ({
+  loanRequest,
+}: {
+  loanRequest: LoanRequest
+}) => (
+  <Stack spacing={1}>
+    <Center>
+      <Text padding="0px" margin="0px" fontSize="100px">
+        <CgFileDocument />
+      </Text>
+    </Center>
+    <Center>
+      <Text>Congratulations, your loan request is processed!</Text>
+    </Center>
+    <Box>
+      <StatGroup>
+        <Stat>
+          <StatLabel>Amount</StatLabel>
+          <StatNumber>INR {loanRequest.amount}</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Purpose</StatLabel>
+          <StatNumber>{loanRequest.purpose}</StatNumber>
+        </Stat>
+      </StatGroup>
+    </Box>
+    <Center>
+      <Button>Confirm</Button>
+      <Button>Reject</Button>
+      <Button>Contact</Button>
+    </Center>
+  </Stack>
+)
 
 export default function BLoanRequestInProgress() {
   const [session, loading]: [Session, bool] = useSession()
@@ -34,28 +102,8 @@ export default function BLoanRequestInProgress() {
   )[0]
   return (
     <Container maxW="400px" bg="white">
-      <Stack spacing={1}>
-        <Center>
-          <Text padding="0px" margin="0px" fontSize="100px">
-            <CgFileDocument />
-          </Text>
-        </Center>
-        <Center>
-          <Text>Your loan request is being processed.</Text>
-        </Center>
-        <Box>
-          <StatGroup>
-            <Stat>
-              <StatLabel>Amount</StatLabel>
-              <StatNumber>INR {loanRequest.amount}</StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Purpose</StatLabel>
-              <StatNumber>{loanRequest.purpose}</StatNumber>
-            </Stat>
-          </StatGroup>
-        </Box>
-      </Stack>
+      <LoanRequestInProcess loanRequest={loanRequest} />
+      <LoanRequestAwaitingConfirmation loanRequest={loanRequest} />
     </Container>
   )
 }
