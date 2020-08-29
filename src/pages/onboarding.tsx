@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/client"
-import { User } from "../utils/types"
+import { User, Session } from "../utils/types"
 
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/dist/client/router"
@@ -24,13 +24,16 @@ type FormData = {
   user_type: string
 }
 
-export default function Onboarding() {
+interface Params {
+  user: {
+    email: string
+    name?: string
+  }
+}
+
+export default function Onboarding({ user }: Params) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const router = useRouter()
-  const [session, loading] = useSession()
-
-  if (loading) return <div>Loading...</div>
-  const user = session.user as User
 
   const onSubmit = (data: FormData) => {
     console.log(data)

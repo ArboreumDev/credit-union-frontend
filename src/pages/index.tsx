@@ -15,7 +15,7 @@ import BLoanDashboard from "../components/borrower/BLoanDashboard"
 
 export function getUIStateComponentMap(user: User) {
   return {
-    [UIState.Onboarding]: <Onboarding />,
+    [UIState.Onboarding]: <Onboarding user={user} />,
     [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
     [UIState.BLoanRequestInitiated]: (
       <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
@@ -37,8 +37,8 @@ const Page = ({ state, session }: Props) => {
   const router = useRouter()
   const componentMap = getUIStateComponentMap(session.user)
 
-  if (state === UIState.Landing) return <FrontPage />
-  if (state === UIState.Onboarding) return <Onboarding />
+  if (state === UIState.Landing || state === UIState.Onboarding)
+    return componentMap[state]
 
   return (
     <div>
