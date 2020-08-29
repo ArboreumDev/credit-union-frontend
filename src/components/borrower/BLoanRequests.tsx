@@ -29,11 +29,11 @@ import { CgFileDocument } from "react-icons/cg"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { Contactus } from "../ContactUs"
 
-const LoanRequestInProcess = ({
-  loanRequest,
-}: {
+interface Params {
   loanRequest: LoanRequest
-}) => (
+}
+
+export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
   <Stack spacing={1}>
     <Center>
       <Text padding="0px" margin="0px" fontSize="100px">
@@ -47,22 +47,18 @@ const LoanRequestInProcess = ({
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR 6000</StatNumber>
+          <StatNumber>INR {loanRequest.amount}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>
-          <StatNumber>Auto Loan</StatNumber>
+          <StatNumber>{loanRequest.purpose}</StatNumber>
         </Stat>
       </StatGroup>
     </Box>
   </Stack>
 )
 
-const LoanRequestAwaitingConfirmation = ({
-  loanRequest,
-}: {
-  loanRequest: LoanRequest
-}) => (
+export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => (
   <Stack spacing={2}>
     <Center>
       <Text padding="0px" margin="0px" fontSize="100px" color="green.500">
@@ -76,23 +72,23 @@ const LoanRequestAwaitingConfirmation = ({
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR 5000</StatNumber>
+          <StatNumber>INR {loanRequest.amount}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>
-          <StatNumber>Home Loan</StatNumber>
+          <StatNumber>{loanRequest.purpose}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Interest</StatLabel>
-          <StatNumber>5.5%</StatNumber>
+          <StatNumber>{loanRequest.risk_calc_result.interestRate}%</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Total Due in 6 months</StatLabel>
-          <StatNumber>INR 5,500</StatNumber>
+          <StatNumber>INR {loanRequest.risk_calc_result.totalDue}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Monthly Installments</StatLabel>
-          <StatNumber>INR 500</StatNumber>
+          <StatNumber>INR {loanRequest.risk_calc_result.monthlyDue}</StatNumber>
         </Stat>
       </StatGroup>
     </Box>
@@ -116,22 +112,3 @@ const LoanRequestAwaitingConfirmation = ({
     </Center>
   </Stack>
 )
-
-export default function BLoanRequestInProgress() {
-  const [session, loading]: [Session, bool] = useSession()
-  if (loading) return <Spinner />
-
-  const user = session.user
-  console.log(user)
-  const loanRequest = session.user.loan_requests.sort(
-    (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
-  )[0]
-  return (
-    <Container minW="s" bg="white">
-      {/* {(loanRequest.status===LoanRequestStatus.initiated) && <LoanRequestInProcess loanRequest={loanRequest} />} */}
-      {loanRequest.status === LoanRequestStatus.initiated && (
-        <LoanRequestAwaitingConfirmation loanRequest={loanRequest} />
-      )}
-    </Container>
-  )
-}
