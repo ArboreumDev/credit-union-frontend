@@ -74,9 +74,9 @@ export default function CreateLoanForm() {
               placeholder="Choose loan purpose"
               ref={register({ required: false })}
             >
-              <option value="option1">School</option>
-              <option value="option2">Auto</option>
-              <option value="option3">Other</option>
+              <option value="School">School</option>
+              <option value="Auto">Auto</option>
+              <option value="Other">Other</option>
             </Select>
             <Textarea
               name="loanSupporters"
