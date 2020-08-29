@@ -3,7 +3,7 @@ import { User, Session } from "../utils/types"
 
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/dist/client/router"
-import Dropzone from "../components/Dropzone"
+import Dropzone from "./Dropzone"
 import { CreateUserMutationVariables } from "../gql/sdk"
 import { fetcher } from "../utils/api"
 import {

@@ -2,7 +2,7 @@ import { getSession } from "next-auth/client"
 import AppBar from "../components/AppBar"
 import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
-import Onboarding from "./onboarding"
+import Onboarding from "../components/onboarding"
 import { UIState, getUIState } from "../utils/UIStateHelpers"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import {
@@ -10,7 +10,7 @@ import {
   BLoanRequestAwaitsConfirmation,
 } from "../components/borrower/BLoanRequests"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
-import FrontPage from "./frontpage"
+import FrontPage from "../components/frontpage"
 
 export function getUIStateComponentMap(user: User) {
   return {
