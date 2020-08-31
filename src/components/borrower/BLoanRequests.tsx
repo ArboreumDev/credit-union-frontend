@@ -18,6 +18,7 @@ import {
   StatGroup,
   Radio,
   Checkbox,
+  HStack,
 } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
 import {
@@ -121,6 +122,7 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
               size="sm"
               name="confirm_1"
               colorScheme="green"
+              // @ts-ignore
               ref={register({ required: "This is required" })}
             >
               I understand I will have to repay this loan with interest in 6
@@ -130,6 +132,7 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
               size="sm"
               name="confirm_2"
               colorScheme="green"
+              // @ts-ignore
               ref={register({ required: "This is required" })}
             >
               I understand if I am unable to repay an installment, the amount
@@ -141,8 +144,10 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
             <p className="error">{errors.example_1.message}</p>
           )}
           <Center>
-            <Button type="submit">Confirm</Button>
-            <Button onClick={rejectLoan}>Reject</Button>
+            <HStack>
+              <Button type="submit">Confirm</Button>
+              <Button onClick={rejectLoan}>Reject</Button>
+            </HStack>
           </Center>
         </form>
         <Box h="30px" />
