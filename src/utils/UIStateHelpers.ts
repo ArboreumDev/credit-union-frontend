@@ -11,13 +11,10 @@ export enum UIState {
   LDashboard = "LDashboard",
 }
 
-const checkForOngoingLoanRequests = (user: User) =>
-  user.loan_requests.some((lr) =>
-    [
-      LoanRequestStatus.initiated,
-      LoanRequestStatus.awaiting_borrower_confirmation,
-    ].includes(lr.status)
-  )
+const getLastLoanRequest = (user: User) =>
+  user.loan_requests.sort(
+    (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
+  )[0]
 
 export const getUIState = async (session: Session) => {
   if (!session) return UIState.Landing
