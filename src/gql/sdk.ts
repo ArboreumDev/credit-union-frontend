@@ -5972,13 +5972,13 @@ export type GetCorpusDataQueryVariables = Exact<{
 }>
 
 export type GetCorpusDataQuery = { __typename?: "query_root" } & {
-  loan_requests: Array<
+  loans: Array<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "risk_calc_result" | "confirmation_date"
     >
   >
-  corpus_cash: { __typename?: "user_aggregate" } & {
+  corpusCash: { __typename?: "user_aggregate" } & {
     aggregate?: Maybe<
       { __typename?: "user_aggregate_fields" } & {
         sum?: Maybe<
@@ -6350,12 +6350,12 @@ export const CreateLoanRequestDocument = gql`
 `
 export const GetCorpusDataDocument = gql`
   query GetCorpusData($statusList: [loan_request_status!]!) {
-    loan_requests(where: { status: { _in: $statusList } }) {
+    loans: loan_requests(where: { status: { _in: $statusList } }) {
       request_id
       risk_calc_result
       confirmation_date
     }
-    corpus_cash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
+    corpusCash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
       aggregate {
         sum {
           balance

@@ -12,8 +12,10 @@ import {
   generateUpdateAsSingleTransaction,
   transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
+import { DEFAULT_LOAN_TENOR } from "../../src/utils/constant.js"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
+
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
@@ -201,15 +203,31 @@ export class DbClient {
   }
 
   getOptimizerInput = async () => {
-    const corpus = await this.sdk.GetCorpusData({
+    const { loans, corpusCash } = await this.sdk.GetCorpusData({
       statusList: [LoanRequestStatus.live],
     })
-    console.log(corpus)
-    console.log(corpus.loan_requests[0].risk_calc_result)
+    console.log(loans)
+    console.log(loans[0].risk_calc_result)
     return {
-      corpus,
-      //   loanData: {},
-      //   cash_corpus: 0,
+      corpus: loans.map((x) => {
+        const terms = x.risk_calc_result.latestOffer
+        return {
+          id: x.request_id,
+          amountInPortfolio: proportion(terms.corpusShare, 1, terms.amount),
+          amountOwnedBySupporters: proportion(
+            1 - terms.corpusShare,
+            1,
+            terms.amount
+          ),
+          apr: terms.interest,
+          tenor: terms.tenor,
+          kumaraA: terms.kumara_a,
+          kumaraB: terms.kumara_b,
+          timeRemaining: 60, // TODO
+        }
+      }),
+      // loanData: {},
+      corpusCash: corpusCash.aggregate.sum.balance,
       //   supporter_portfolio_share: 0,
       //   novation: false
     }

@@ -156,7 +156,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the loan shows up in subsequent queries to the corpus Data", async () => {
-      await dbClient.getOptimizerInput()
+      const input = await dbClient.getOptimizerInput()
+      console.log(input)
     })
   })
 })
