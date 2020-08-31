@@ -29,14 +29,7 @@ const LandingPage = () => {
             colorScheme="blue"
             variant="outline"
           >
-            Borrow
-          </Button>
-          <Button
-            onClick={() => Router.push("/api/auth/signin")}
-            colorScheme="blue"
-            variant="outline"
-          >
-            Invest
+            SignIn
           </Button>
         </Box>
       </VStack>
