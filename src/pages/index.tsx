@@ -1,33 +1,42 @@
 import { getSession } from "next-auth/client"
-import AppBar from "../components/AppBar"
-import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
-import Onboarding from "../components/onboarding"
-import { UIState, getUIState } from "../utils/UIStateHelpers"
-import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
+import AppBar from "../components/AppBar"
+import { BOngoingLoan } from "../components/borrower/BLoan"
 import {
-  BLoanRequestInitiated,
   BLoanRequestAwaitsConfirmation,
+  BLoanRequestInitiated,
 } from "../components/borrower/BLoanRequests"
-import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
-import { BOngoingLoan } from "../components/borrower/BLoan"
+import Onboarding from "../components/onboarding"
+import { Session, User } from "../utils/types"
+import {
+  getMostRecentLoanRequest,
+  getUIState,
+  UIState,
+} from "../utils/UIStateHelpers"
 
-export const getUIStateComponentMap = (user: User) => ({
-  [UIState.Landing]: <LandingPage />,
-  [UIState.Onboarding]: <Onboarding user={user} />,
-  [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
-  [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
-  [UIState.BLoanRequestInitiated]: (
-    <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
-  ),
-  [UIState.BLoanRequestAwaitsConfirmation]: (
-    <BLoanRequestAwaitsConfirmation loanRequest={user.loan_requests[0]} />
-  ),
-  [UIState.BOngoingLoan]: <BOngoingLoan loan={user.loan_requests[0]} />,
-  [UIState.LDashboard]: <div>Lender Dashboard</div>,
-})
+export const getUIStateComponentMap = (user: User) => {
+  const loanRequests = user.loan_requests
+  let loanRequest
+  if (loanRequests) loanRequest = getMostRecentLoanRequest(user)
+
+  return {
+    [UIState.Landing]: <LandingPage />,
+    [UIState.Onboarding]: <Onboarding user={user} />,
+    [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
+    [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
+    [UIState.BLoanRequestInitiated]: loanRequest && (
+      <BLoanRequestInitiated loanRequest={loanRequest} />
+    ),
+    [UIState.BLoanRequestAwaitsConfirmation]: (
+      <BLoanRequestAwaitsConfirmation loanRequest={loanRequest} />
+    ),
+    [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
+    [UIState.LDashboard]: <div>Lender Dashboard</div>,
+  }
+}
 
 interface Props {
   state: UIState

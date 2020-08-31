@@ -11,7 +11,7 @@ export enum UIState {
   LDashboard = "LDashboard",
 }
 
-const getLastLoanRequest = (user: User) =>
+export const getMostRecentLoanRequest = (user: User) =>
   user.loan_requests.sort(
     (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
   )[0]
