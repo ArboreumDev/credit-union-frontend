@@ -36,15 +36,16 @@ interface Params {
 export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
   <Container minW="s" bg="white">
     <Stack spacing={1}>
-      <Center>
-        <Text padding="0px" margin="0px" fontSize="100px">
-          <CgFileDocument />
-        </Text>
-      </Center>
-      <Center>
-        <Text>Your loan request is being processed.</Text>
-      </Center>
-      <Box borderWidth="10px" borderRadius="lg">
+      <Box margin="20px" padding="10px" borderWidth="5px" borderRadius="lg">
+        <Center>
+          <Text padding="0px" margin="0px" fontSize="100px">
+            <CgFileDocument />
+          </Text>
+        </Center>
+        <Center>
+          <Text>Loan request is being processed.</Text>
+        </Center>
+        <Box h="30px" />
         <StatGroup>
           <Stat>
             <StatLabel>Amount</StatLabel>
