@@ -6029,7 +6029,7 @@ export type GetLoanRequestQueryVariables = Exact<{
 }>
 
 export type GetLoanRequestQuery = { __typename?: "query_root" } & {
-  loan_requests_by_pk?: Maybe<
+  loanRequest?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       | "request_id"
@@ -6039,7 +6039,13 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
       | "status"
       | "risk_calc_result"
       | "payback_status"
-    >
+    > & {
+        confirmedGuarantors: Array<
+          { __typename?: "guarantors" } & {
+            user: { __typename?: "user" } & Pick<User, "corpus_share">
+          }
+        >
+      }
   >
 }
 
@@ -6394,7 +6400,7 @@ export const GetLoanOfferDocument = gql`
 `
 export const GetLoanRequestDocument = gql`
   query GetLoanRequest($requestId: uuid!) {
-    loan_requests_by_pk(request_id: $requestId) {
+    loanRequest: loan_requests_by_pk(request_id: $requestId) {
       request_id
       borrower_id
       purpose
@@ -6402,6 +6408,11 @@ export const GetLoanRequestDocument = gql`
       status
       risk_calc_result
       payback_status
+      confirmedGuarantors: guarantors(where: { status: { _eq: "confirmed" } }) {
+        user {
+          corpus_share
+        }
+      }
     }
   }
 `

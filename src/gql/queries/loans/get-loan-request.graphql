@@ -1,5 +1,5 @@
 query GetLoanRequest($requestId: uuid!) {
-  loan_requests_by_pk(request_id: $requestId) {
+  loanRequest: loan_requests_by_pk(request_id: $requestId) {
     request_id
     borrower_id
     purpose
@@ -7,5 +7,12 @@ query GetLoanRequest($requestId: uuid!) {
     status
     risk_calc_result
     payback_status
+    confirmedGuarantors: guarantors (
+      where: {status: {_eq: "confirmed"}}
+    ) {
+      user {
+        corpus_share
+      }
+    }
   }
 }

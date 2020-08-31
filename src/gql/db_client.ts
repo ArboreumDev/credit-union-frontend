@@ -74,8 +74,7 @@ export class DbClient {
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const data = await this.sdk.GetLoanRequest({ requestId })
-    const request = data.loan_requests_by_pk
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
 
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
     // const ai_input = await this.fetchDataForLoanRequestCalculation(req.borrower_id,  req.amount)
@@ -83,7 +82,7 @@ export class DbClient {
 
     // for simplicity will this is now be mocked up like this:
     const mockedAiResult = {
-      amount: request.amount,
+      amount: loanRequest.amount,
       tenor: DEFAULT_LOAN_TENOR,
       interest: 0.1,
       corpusShare: 0.8,
@@ -202,12 +201,14 @@ export class DbClient {
     return failures
   }
 
-  getOptimizerInput = async () => {
+  getOptimizerInput = async (requestId: string) => {
     const { loans, corpusCash } = await this.sdk.GetCorpusData({
       statusList: [LoanRequestStatus.live],
     })
-    console.log(loans)
-    console.log(loans[0].risk_calc_result)
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    // console.log('hi',loanRequest)
+    // console.log(loans)
+    // console.log(loans[0].risk_calc_result)
     return {
       corpus: loans.map((x) => {
         const terms = x.risk_calc_result.latestOffer
@@ -226,10 +227,15 @@ export class DbClient {
           timeRemaining: 60, // TODO
         }
       }),
-      // loanData: {},
       corpusCash: corpusCash.aggregate.sum.balance,
-      //   supporter_portfolio_share: 0,
-      //   novation: false
+      loanRequest: {
+        amount: loanRequest.risk_calc_result.latestOffer.amount,
+        tenor: loanRequest.risk_calc_result.latestOffer.tenor,
+        kumaraA: loanRequest.risk_calc_result.latestOffer.kumaraA,
+        kumaraB: loanRequest.risk_calc_result.latestOffer.kumaraB,
+      },
+      // supporter_portfolio_share: loanRequest.confirmedGuarantors.reduce((a,b) => a + b)
+      novation: false,
     }
   }
 }
