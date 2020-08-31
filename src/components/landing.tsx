@@ -7,6 +7,7 @@ import {
   VStack,
   StackDivider,
   Box,
+  Center,
 } from "@chakra-ui/core"
 import { FiLogIn } from "react-icons/fi"
 import Router from "next/router"
@@ -19,9 +20,9 @@ const LandingPage = () => {
         spacing={4}
         align="stretch"
       >
-        <Box h="40px">
+        <Center h="40px">
           <img width="150px" src="/images/logo.svg" alt="logo" />
-        </Box>
+        </Center>
         <Box h="40px">
           <Button
             onClick={() => Router.push("/api/auth/signin")}
