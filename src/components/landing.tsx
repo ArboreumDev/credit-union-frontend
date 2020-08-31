@@ -23,7 +23,7 @@ const LandingPage = () => {
         <Center h="40px">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Center>
-        <Box h="40px">
+        <Center h="40px">
           <Button
             onClick={() => Router.push("/api/auth/signin")}
             colorScheme="blue"
@@ -31,7 +31,7 @@ const LandingPage = () => {
           >
             SignIn
           </Button>
-        </Box>
+        </Center>
       </VStack>
     </div>
   )
