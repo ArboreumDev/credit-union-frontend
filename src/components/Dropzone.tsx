@@ -2,6 +2,7 @@ import Dropzone from "react-dropzone"
 import Axios from "axios"
 import { useState } from "react"
 import { UploadRequest } from "../pages/api/upload"
+import { UnorderedList, ListItem, Spinner } from "@chakra-ui/core"
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -44,7 +45,13 @@ export default (props: { email: string }) => {
         {({ getRootProps, getInputProps }) => (
           <div className="dropzone" {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Drop KYC documents here. </p>
+            <p>Drop KYC documents here: </p>
+            <UnorderedList>
+              <ListItem>Passport</ListItem>
+              <ListItem>Aadhar Card</ListItem>
+              <ListItem>PAN Card</ListItem>
+              <ListItem>Address Proof</ListItem>
+            </UnorderedList>
           </div>
         )}
       </Dropzone>
@@ -52,7 +59,7 @@ export default (props: { email: string }) => {
         <ul>
           {Object.keys(uploadedFiles).map((file, id) => (
             <li key={"uliload_" + id}>
-              {!uploadedFiles[file] && "[Uploading]"} {file}{" "}
+              {!uploadedFiles[file] && <Spinner />} {file}{" "}
             </li>
           ))}
         </ul>
@@ -61,9 +68,11 @@ export default (props: { email: string }) => {
       <style jsx>
         {`
           .dropzone {
-            width: 100%;
-            height: 100px;
+            margin: 20px;
+            padding: 20px;
+            height: 200px;
             border-style: dashed;
+            border-width: 2px;
             /* margin-bottom: 100px; */
           }
         `}
