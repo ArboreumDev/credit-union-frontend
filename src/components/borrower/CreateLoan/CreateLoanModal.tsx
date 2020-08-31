@@ -1,4 +1,4 @@
-import KYCCompleted from "./Notifications/KYCCompleted"
+import KYCCompleted from "../Notifications/KYCCompleted"
 import {
   Center,
   Button,

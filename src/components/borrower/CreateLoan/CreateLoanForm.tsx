@@ -14,12 +14,12 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/core"
-import { User, Session } from "../../utils/types"
+import { User, Session } from "../../../utils/types"
 import {
   CreateLoanRequestMutation,
   Loan_Requests_Insert_Input,
-} from "../../gql/sdk"
-import { fetcher } from "../../utils/api"
+} from "../../../gql/sdk"
+import { fetcher } from "../../../utils/api"
 import { useRouter } from "next/dist/client/router"
 
 type FormData = {
@@ -74,9 +74,9 @@ export default function CreateLoanForm() {
               placeholder="Choose loan purpose"
               ref={register({ required: false })}
             >
-              <option value="option1">School</option>
-              <option value="option2">Auto</option>
-              <option value="option3">Other</option>
+              <option value="School">School</option>
+              <option value="Auto">Auto</option>
+              <option value="Other">Other</option>
             </Select>
             <Textarea
               name="loanSupporters"

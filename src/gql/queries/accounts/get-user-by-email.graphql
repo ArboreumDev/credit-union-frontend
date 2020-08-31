@@ -15,6 +15,9 @@ query GetUserByEmail($email: String!) {
       purpose
       risk_calc_result
       status
+      created_at
+      amount
+      purpose
     }
   }
 }

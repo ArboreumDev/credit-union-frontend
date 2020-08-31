@@ -17,9 +17,9 @@ export const Mailto = (props: Props) => {
 }
 
 interface ContactProps {
-  subject: string
-  body: string
-  text: string
+  subject?: string
+  body?: string
+  text?: string
 }
 
 export const Contactus = ({

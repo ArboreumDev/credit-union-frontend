@@ -20,7 +20,7 @@ const AppBar = () => (
     marginRight="-10px"
     marginBottom="20px"
     minH="40px"
-    minW="420px"
+    minW="s"
   >
     <Flex align="center">
       <button onClick={() => Router.push("/")}>
