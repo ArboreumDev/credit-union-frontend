@@ -1,3 +1,5 @@
+import { Link } from "@chakra-ui/core"
+
 interface Props {
   email: string
   body: string
@@ -6,13 +8,14 @@ interface Props {
 }
 export const Mailto = (props: Props) => {
   return (
-    <a
+    <Link
+      color="teal.500"
       href={`mailto:${props.email}?subject=${
         encodeURIComponent(props.subject) || ""
       }&body=${encodeURIComponent(props.body) || ""}`}
     >
       {props.children}
-    </a>
+    </Link>
   )
 }
 

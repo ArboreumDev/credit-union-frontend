@@ -41,7 +41,7 @@ const Page = () => {
   const componentMap = getUIStateComponentMap(FIXTURES.USER)
 
   return (
-    <Tabs defaultIndex={4}>
+    <Tabs defaultIndex={5}>
       <TabList>
         {Object.keys(componentMap).map((state) => (
           <Tab key={state}>{state}</Tab>
