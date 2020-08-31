@@ -33,20 +33,6 @@ const LandingPage = () => {
           </Button>
         </Box>
       </VStack>
-
-      <style jsx>
-        {`
-          .Container {
-            // position: relative;
-            // min-height: 300px;
-            // max-height: 100%;
-            // overflow: hidden;
-            text-align: center;
-            margin: 5em auto;
-            padding: 10px;
-          }
-        `}
-      </style>
     </div>
   )
 }
