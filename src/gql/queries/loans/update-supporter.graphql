@@ -1,0 +1,15 @@
+  mutation UpdateSupporter (
+    $request_id: uuid!,
+    $supporter_id: uuid!
+    $status: String!,
+    $amount: Int
+  ) {
+    supporter: update_supporters_by_pk (
+      pk_columns: { request_id: $request_id, supporter_id: $supporter_id}
+      _set: { status: $status, amount: $amount }
+    ) {
+      supporter_id
+      status
+      amount
+    }
+  }

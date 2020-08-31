@@ -7,9 +7,10 @@ query GetLoanRequest($requestId: uuid!) {
     status
     risk_calc_result
     payback_status
-    confirmedSupporters: supporters (
-      where: {status: {_eq: "confirmed"}}
-    ) {
+    supporters {
+      status
+      supporter_id
+      amount
       user {
         corpus_share
       }

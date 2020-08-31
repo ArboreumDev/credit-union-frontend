@@ -2,7 +2,11 @@ import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
-import { EDGE_STATUS, LoanRequestStatus } from "../../src/utils/types"
+import {
+  EDGE_STATUS,
+  LoanRequestStatus,
+  SupporterStatus,
+} from "../../src/utils/types"
 import {
   BASIC_NETWORK,
   LENDER1,
@@ -68,10 +72,6 @@ describe("Basic loan request flow for an accepted loan", () => {
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
       expect(request.status).toBe(LoanRequestStatus.initiated)
-    })
-
-    test("suppporters that exist on the network can be added to the loan", async () => {
-      dbClient
     })
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {

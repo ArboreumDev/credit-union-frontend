@@ -1,0 +1,10 @@
+mutation AddSupporters (
+   $supporters: [supporters_insert_input!]!
+) {
+  supporters: insert_supporters (objects: $supporters) {
+    returning {
+      status
+    	supporter_id
+    }
+  }
+}

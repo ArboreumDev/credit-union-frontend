@@ -61,6 +61,8 @@ CREATE TABLE public.loan_participants (
 );
 CREATE TYPE public.loan_request_status AS ENUM ( 'initiated', 'awaiting_borrower_confirmation','live', 'in_payback', 'defaulted', 'settled');
 
+CREATE TYPE public.supporter_status AS ENUM ( 'unknown', 'rejected','confirmed');
+
 CREATE TABLE public.loan_requests (
     borrower_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
