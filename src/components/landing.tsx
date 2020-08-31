@@ -11,7 +11,7 @@ import {
 import { FiLogIn } from "react-icons/fi"
 import Router from "next/router"
 
-const FrontPage = () => {
+const LandingPage = () => {
   return (
     <div className="Container">
       <VStack
@@ -57,4 +57,4 @@ const FrontPage = () => {
   )
 }
 
-export default FrontPage
+export default LandingPage

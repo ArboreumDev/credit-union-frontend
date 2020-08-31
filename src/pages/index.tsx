@@ -10,11 +10,11 @@ import {
   BLoanRequestAwaitsConfirmation,
 } from "../components/borrower/BLoanRequests"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
-import FrontPage from "../components/frontpage"
+import LandingPage from "../components/landing"
 
 export function getUIStateComponentMap(user: User) {
   return {
-    [UIState.Landing]: <FrontPage />,
+    [UIState.Landing]: <LandingPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
     [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
     [UIState.BLoanRequestInitiated]: (
@@ -36,7 +36,7 @@ interface Props {
 const Page = ({ state, session }: Props) => {
   const router = useRouter()
 
-  if (state === UIState.Landing) return <FrontPage />
+  if (state === UIState.Landing) return <LandingPage />
 
   const componentMap = getUIStateComponentMap(session.user)
   if (state === UIState.Onboarding) return componentMap[state]
