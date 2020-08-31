@@ -85,9 +85,7 @@ export default function CreateLoanForm() {
             />
 
             <Center>
-              <Button type="submit" intent="primary">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             </Center>
           </Stack>
         </Container>

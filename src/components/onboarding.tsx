@@ -106,9 +106,7 @@ export default function Onboarding({ user }: Params) {
               <Dropzone email={user.email} />
             </div>
             <Center>
-              <Button type="submit" intent="primary">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             </Center>
           </Stack>
         </Container>
