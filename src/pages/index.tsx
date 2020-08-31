@@ -10,13 +10,15 @@ import {
   BLoanRequestAwaitsConfirmation,
 } from "../components/borrower/BLoanRequests"
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
+import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
 
 export function getUIStateComponentMap(user: User) {
   return {
     [UIState.Landing]: <LandingPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
-    [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
+    [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
+    [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
     [UIState.BLoanRequestInitiated]: (
       <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
     ),
