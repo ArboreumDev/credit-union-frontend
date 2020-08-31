@@ -12,6 +12,7 @@ import {
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
 import { Details, Row } from "./common/Details"
+import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
 
 interface Params {
   loan: LoanRequest
@@ -34,6 +35,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
 
 export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
   <Container minW="sm" bg="white">
+    <RepaymentNotReceived />
     <Box margin="20px" padding="10px" borderWidth="5px" borderRadius="lg">
       <Center>
         <Text padding="0px" margin="0px" fontSize="30px">
@@ -57,6 +59,7 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
       <Box h="30px" />
       <Details rows={getTableObjectFromLoanRequest(loanRequest)} />
       <Box h="30px" />
+
       <Center>
         <Button>Make Repayment</Button>
       </Center>
