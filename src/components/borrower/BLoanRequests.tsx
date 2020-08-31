@@ -69,7 +69,7 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => (
         </Text>
       </Center>
       <Center>
-        <Text>Congratulations, your loan request is processed!</Text>
+        <Text>Congratulations, your loan request has been processed!</Text>
       </Center>
       <Box>
         <StatGroup>
