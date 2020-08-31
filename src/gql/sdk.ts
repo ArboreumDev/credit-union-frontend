@@ -4672,12 +4672,12 @@ export type Subscription_RootUser_By_PkArgs = {
 /** columns and relationships of "supporters" */
 export type Supporters = {
   __typename?: "supporters"
-  amount: Scalars["Int"]
   guarantee_division?: Maybe<Scalars["jsonb"]>
   invest_in_corpus: Scalars["Boolean"]
   /** An object relationship */
   loan_request: Loan_Requests
   participation_request_time: Scalars["timestamptz"]
+  pledge_amount: Scalars["Int"]
   request_id: Scalars["uuid"]
   status: Scalars["String"]
   supporter_id: Scalars["uuid"]
@@ -4748,12 +4748,12 @@ export type Supporters_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Supporters_Avg_Fields = {
   __typename?: "supporters_avg_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by avg() on columns of table "supporters" */
 export type Supporters_Avg_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** Boolean expression to filter rows from the table "supporters". All fields are combined with a logical 'AND'. */
@@ -4761,11 +4761,11 @@ export type Supporters_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
   _not?: Maybe<Supporters_Bool_Exp>
   _or?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
-  amount?: Maybe<Int_Comparison_Exp>
   guarantee_division?: Maybe<Jsonb_Comparison_Exp>
   invest_in_corpus?: Maybe<Boolean_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   participation_request_time?: Maybe<Timestamptz_Comparison_Exp>
+  pledge_amount?: Maybe<Int_Comparison_Exp>
   request_id?: Maybe<Uuid_Comparison_Exp>
   status?: Maybe<String_Comparison_Exp>
   supporter_id?: Maybe<Uuid_Comparison_Exp>
@@ -4795,16 +4795,16 @@ export type Supporters_Delete_Key_Input = {
 
 /** input type for incrementing integer column in table "supporters" */
 export type Supporters_Inc_Input = {
-  amount?: Maybe<Scalars["Int"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
 }
 
 /** input type for inserting data into table "supporters" */
 export type Supporters_Insert_Input = {
-  amount?: Maybe<Scalars["Int"]>
   guarantee_division?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
   request_id?: Maybe<Scalars["uuid"]>
   status?: Maybe<Scalars["String"]>
   supporter_id?: Maybe<Scalars["uuid"]>
@@ -4814,8 +4814,8 @@ export type Supporters_Insert_Input = {
 /** aggregate max on columns */
 export type Supporters_Max_Fields = {
   __typename?: "supporters_max_fields"
-  amount?: Maybe<Scalars["Int"]>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
   request_id?: Maybe<Scalars["uuid"]>
   status?: Maybe<Scalars["String"]>
   supporter_id?: Maybe<Scalars["uuid"]>
@@ -4823,8 +4823,8 @@ export type Supporters_Max_Fields = {
 
 /** order by max() on columns of table "supporters" */
 export type Supporters_Max_Order_By = {
-  amount?: Maybe<Order_By>
   participation_request_time?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   status?: Maybe<Order_By>
   supporter_id?: Maybe<Order_By>
@@ -4833,8 +4833,8 @@ export type Supporters_Max_Order_By = {
 /** aggregate min on columns */
 export type Supporters_Min_Fields = {
   __typename?: "supporters_min_fields"
-  amount?: Maybe<Scalars["Int"]>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
   request_id?: Maybe<Scalars["uuid"]>
   status?: Maybe<Scalars["String"]>
   supporter_id?: Maybe<Scalars["uuid"]>
@@ -4842,8 +4842,8 @@ export type Supporters_Min_Fields = {
 
 /** order by min() on columns of table "supporters" */
 export type Supporters_Min_Order_By = {
-  amount?: Maybe<Order_By>
   participation_request_time?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   status?: Maybe<Order_By>
   supporter_id?: Maybe<Order_By>
@@ -4873,11 +4873,11 @@ export type Supporters_On_Conflict = {
 
 /** ordering options when selecting data from "supporters" */
 export type Supporters_Order_By = {
-  amount?: Maybe<Order_By>
   guarantee_division?: Maybe<Order_By>
   invest_in_corpus?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   participation_request_time?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   status?: Maybe<Order_By>
   supporter_id?: Maybe<Order_By>
@@ -4898,13 +4898,13 @@ export type Supporters_Prepend_Input = {
 /** select columns of table "supporters" */
 export enum Supporters_Select_Column {
   /** column name */
-  Amount = "amount",
-  /** column name */
   GuaranteeDivision = "guarantee_division",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
   ParticipationRequestTime = "participation_request_time",
+  /** column name */
+  PledgeAmount = "pledge_amount",
   /** column name */
   RequestId = "request_id",
   /** column name */
@@ -4915,10 +4915,10 @@ export enum Supporters_Select_Column {
 
 /** input type for updating data in table "supporters" */
 export type Supporters_Set_Input = {
-  amount?: Maybe<Scalars["Int"]>
   guarantee_division?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
   request_id?: Maybe<Scalars["uuid"]>
   status?: Maybe<Scalars["String"]>
   supporter_id?: Maybe<Scalars["uuid"]>
@@ -4927,57 +4927,57 @@ export type Supporters_Set_Input = {
 /** aggregate stddev on columns */
 export type Supporters_Stddev_Fields = {
   __typename?: "supporters_stddev_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev() on columns of table "supporters" */
 export type Supporters_Stddev_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** aggregate stddev_pop on columns */
 export type Supporters_Stddev_Pop_Fields = {
   __typename?: "supporters_stddev_pop_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_pop() on columns of table "supporters" */
 export type Supporters_Stddev_Pop_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** aggregate stddev_samp on columns */
 export type Supporters_Stddev_Samp_Fields = {
   __typename?: "supporters_stddev_samp_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_samp() on columns of table "supporters" */
 export type Supporters_Stddev_Samp_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** aggregate sum on columns */
 export type Supporters_Sum_Fields = {
   __typename?: "supporters_sum_fields"
-  amount?: Maybe<Scalars["Int"]>
+  pledge_amount?: Maybe<Scalars["Int"]>
 }
 
 /** order by sum() on columns of table "supporters" */
 export type Supporters_Sum_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** update columns of table "supporters" */
 export enum Supporters_Update_Column {
-  /** column name */
-  Amount = "amount",
   /** column name */
   GuaranteeDivision = "guarantee_division",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
   ParticipationRequestTime = "participation_request_time",
+  /** column name */
+  PledgeAmount = "pledge_amount",
   /** column name */
   RequestId = "request_id",
   /** column name */
@@ -4989,34 +4989,34 @@ export enum Supporters_Update_Column {
 /** aggregate var_pop on columns */
 export type Supporters_Var_Pop_Fields = {
   __typename?: "supporters_var_pop_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_pop() on columns of table "supporters" */
 export type Supporters_Var_Pop_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** aggregate var_samp on columns */
 export type Supporters_Var_Samp_Fields = {
   __typename?: "supporters_var_samp_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_samp() on columns of table "supporters" */
 export type Supporters_Var_Samp_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** aggregate variance on columns */
 export type Supporters_Variance_Fields = {
   __typename?: "supporters_variance_fields"
-  amount?: Maybe<Scalars["Float"]>
+  pledge_amount?: Maybe<Scalars["Float"]>
 }
 
 /** order by variance() on columns of table "supporters" */
 export type Supporters_Variance_Order_By = {
-  amount?: Maybe<Order_By>
+  pledge_amount?: Maybe<Order_By>
 }
 
 /** expression to compare columns of type timestamptz. All fields are combined with logical 'AND'. */
@@ -5959,12 +5959,12 @@ export type AddSupportersMutationVariables = Exact<{
 }>
 
 export type AddSupportersMutation = { __typename?: "mutation_root" } & {
-  insert_supporters?: Maybe<
+  supporters?: Maybe<
     { __typename?: "supporters_mutation_response" } & {
       returning: Array<
         { __typename?: "supporters" } & Pick<
           Supporters,
-          "status" | "supporter_id"
+          "status" | "supporter_id" | "pledge_amount"
         >
       >
     }
@@ -5995,11 +5995,26 @@ export type GetCorpusDataQuery = { __typename?: "query_root" } & {
       "request_id" | "risk_calc_result" | "confirmation_date"
     >
   >
-  corpusCash: { __typename?: "user_aggregate" } & {
+  corpus: { __typename?: "user_aggregate" } & {
     aggregate?: Maybe<
       { __typename?: "user_aggregate_fields" } & {
         sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<User_Sum_Fields, "balance">
+          { __typename?: "user_sum_fields" } & Pick<
+            User_Sum_Fields,
+            "balance" | "corpus_share"
+          >
+        >
+      }
+    >
+  }
+  corpusInvestment: { __typename?: "receivables_aggregate" } & {
+    aggregate?: Maybe<
+      { __typename?: "receivables_aggregate_fields" } & {
+        sum?: Maybe<
+          { __typename?: "receivables_sum_fields" } & Pick<
+            Receivables_Sum_Fields,
+            "amount_total" | "amount_remain" | "amount_received"
+          >
         >
       }
     >
@@ -6057,10 +6072,16 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
       | "risk_calc_result"
       | "payback_status"
     > & {
-        confirmedSupporters: Array<
-          { __typename?: "supporters" } & {
-            user: { __typename?: "user" } & Pick<User, "corpus_share">
-          }
+        supporters: Array<
+          { __typename?: "supporters" } & Pick<
+            Supporters,
+            "status" | "supporter_id" | "pledge_amount"
+          > & {
+              user: { __typename?: "user" } & Pick<
+                User,
+                "corpus_share" | "balance"
+              >
+            }
         >
       }
   >
@@ -6140,10 +6161,10 @@ export type UpdateSupporterMutationVariables = Exact<{
 }>
 
 export type UpdateSupporterMutation = { __typename?: "mutation_root" } & {
-  update_supporters_by_pk?: Maybe<
+  supporter?: Maybe<
     { __typename?: "supporters" } & Pick<
       Supporters,
-      "supporter_id" | "status" | "amount"
+      "supporter_id" | "status" | "pledge_amount"
     >
   >
 }
@@ -6378,10 +6399,11 @@ export const ApproveKycDocument = gql`
 `
 export const AddSupportersDocument = gql`
   mutation AddSupporters($supporters: [supporters_insert_input!]!) {
-    insert_supporters(objects: $supporters) {
+    supporters: insert_supporters(objects: $supporters) {
       returning {
         status
         supporter_id
+        pledge_amount
       }
     }
   }
@@ -6404,10 +6426,22 @@ export const GetCorpusDataDocument = gql`
       risk_calc_result
       confirmation_date
     }
-    corpusCash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
+    corpus: user_aggregate(where: { user_type: { _eq: "lender" } }) {
       aggregate {
         sum {
           balance
+          corpus_share
+        }
+      }
+    }
+    corpusInvestment: receivables_aggregate(
+      where: { loan_request: { status: { _eq: "live" } } }
+    ) {
+      aggregate {
+        sum {
+          amount_total
+          amount_remain
+          amount_received
         }
       }
     }
@@ -6451,9 +6485,13 @@ export const GetLoanRequestDocument = gql`
       status
       risk_calc_result
       payback_status
-      confirmedSupporters: supporters(where: { status: { _eq: "confirmed" } }) {
+      supporters {
+        status
+        supporter_id
+        pledge_amount
         user {
           corpus_share
+          balance
         }
       }
     }
@@ -6525,19 +6563,19 @@ export const UpdateLoanRequestWithOfferDocument = gql`
   }
 `
 export const UpdateSupporterDocument = gql`
-  mutation updateSupporter(
+  mutation UpdateSupporter(
     $request_id: uuid!
     $supporter_id: uuid!
     $status: String!
     $amount: Int
   ) {
-    update_supporters_by_pk(
+    supporter: update_supporters_by_pk(
       pk_columns: { request_id: $request_id, supporter_id: $supporter_id }
-      _set: { status: $status, amount: $amount }
+      _set: { status: $status, pledge_amount: $amount }
     ) {
       supporter_id
       status
-      amount
+      pledge_amount
     }
   }
 `
@@ -6778,7 +6816,7 @@ export function getSdk(
         )
       )
     },
-    updateSupporter(
+    UpdateSupporter(
       variables: UpdateSupporterMutationVariables
     ): Promise<UpdateSupporterMutation> {
       return withWrapper(() =>

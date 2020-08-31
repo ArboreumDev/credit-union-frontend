@@ -5,6 +5,7 @@ mutation AddSupporters (
     returning {
       status
     	supporter_id
+      pledge_amount
     }
   }
 }

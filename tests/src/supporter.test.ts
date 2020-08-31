@@ -58,6 +58,11 @@ describe("Basic loan request flow for an accepted loan", () => {
     expect(loanRequest.supporters[0].amount).toBe(amount / 2)
   })
 
+  test.skip("users can register supporters that are not on the network yet", async () => {
+    // those should be put into the system by adding an edge of status unknown with the
+    // other_user_mail field set to the other user
+  })
+
   test.skip("supporters see the request for a pledge in their dashboard", async () => {
     // TODO
   })

@@ -2,6 +2,7 @@ import { PortfolioUpdate } from "../../src/utils/types"
 import {
   GetLoansByBorrowerAndStatusDocument,
   GetLoansByBorrowerAndStatusQuery,
+  Sdk,
 } from "../../src/gql/sdk"
 import { LoanRequestStatus } from "../../src/utils/types"
 
@@ -168,4 +169,21 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
       },
     }
   }
+}
+
+export const addAndConfirmSupporter = async (
+  sdk: Sdk,
+  requestId: string,
+  supporterId: string,
+  amount: number
+) => {
+  await sdk.AddSupporters({
+    supporters: [
+      {
+        request_id: requestId,
+        supporter_id: supporterId,
+        pledge_amount: amount,
+      },
+    ],
+  })
 }

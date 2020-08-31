@@ -6,10 +6,10 @@
   ) {
     supporter: update_supporters_by_pk (
       pk_columns: { request_id: $request_id, supporter_id: $supporter_id}
-      _set: { status: $status, amount: $amount }
+      _set: { status: $status, pledge_amount: $amount }
     ) {
       supporter_id
       status
-      amount
+      pledge_amount
     }
   }

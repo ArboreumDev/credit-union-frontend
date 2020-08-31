@@ -10,9 +10,10 @@ query GetLoanRequest($requestId: uuid!) {
     supporters {
       status
       supporter_id
-      amount
+      pledge_amount
       user {
         corpus_share
+        balance
       }
     }
   }

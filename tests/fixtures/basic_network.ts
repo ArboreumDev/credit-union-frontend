@@ -49,7 +49,7 @@ export const SUPPORTER1: User = {
   user_type: "lender",
   demographic_info: { country: "spaceland" },
   user_number: 4,
-  balance: 2000,
+  balance: 200,
 }
 
 export const EDGES: EdgeTuple[] = [

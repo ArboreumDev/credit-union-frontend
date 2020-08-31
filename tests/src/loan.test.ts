@@ -1,4 +1,4 @@
-import { GraphQLClient } from "graphql-request"
+import request, { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
@@ -12,8 +12,10 @@ import {
   LENDER1,
   LENDER2,
   BORROWER1,
+  SUPPORTER1,
 } from "../fixtures/basic_network"
 import { addNetwork } from "../../src/utils/network_helpers"
+import { addAndConfirmSupporter } from "../../src/utils/loan_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
 import lender from "../../src/components/dashboard/lender"
@@ -41,6 +43,7 @@ afterAll(async () => {
 describe("Basic loan request flow for an accepted loan", () => {
   let dbClient: DbClient
   const amount = 100
+  const pledgeAmount = amount / 2
   const purpose = "go see the movies"
   let request_id: string
   // var testOutput;
@@ -75,6 +78,9 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {
+      // lets add and confirm a supporter so that the loan is more interesting
+      await sdk.CreateUser({ user: SUPPORTER1 })
+      await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
       // upon certain conditions that are currently skipped for this initial version (e.g. when guarantors have confirmed)
       // we trigger the calculation of a loan offer. The flow is as follows:
       // - collecting inputs for the swarm-ai (risk-info, loan-amount, network-state...)
@@ -128,7 +134,6 @@ describe("Basic loan request flow for an accepted loan", () => {
     test("The lender sees an updated breakdown of their portfolio ", async () => {
       const user = await dbClient.getUserByEmail(lender1.email)
       const loanRequest = user.loan_requests[0]
-      // TODO check lr investments
     })
 
     test("the users balances are updated accordingly", async () => {
@@ -162,6 +167,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     test("the loan shows up in subsequent queries to the corpus Data", async () => {
       const input = await dbClient.getOptimizerInput(request_id)
       console.log(input)
+      expect(input.corpus.map((x) => x.loanId).includes(request_id)).toBeTruthy
     })
   })
 })

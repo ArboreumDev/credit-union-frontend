@@ -234,13 +234,39 @@ export class DbClient {
   }
 
   getOptimizerInput = async (requestId: string) => {
-    const { loans, corpusCash } = await this.sdk.GetCorpusData({
+    const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
       statusList: [LoanRequestStatus.live],
     })
+    const totalCorpusShares = corpus.aggregate.sum.corpus_share
+    const totalCorpusCash = corpus.aggregate.sum.balance || 0
+    const totalCorpusInvestmentValue =
+      corpusInvestment.aggregate.sum.amount_total || 0
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
-    // console.log('hi',loanRequest)
-    // console.log(loans)
-    // console.log(loans[0].risk_calc_result)
+
+    // get the total value of guarantee that the supporters have in the form of portfolioshares
+    // "if you have two supporters one with a 40/60 split
+    // and antoerh with 20/80
+    // then you just take 60%*pledgeAmountA+20%pledgeAmountB"
+    const supporterShareValues = []
+    loanRequest.supporters.forEach((s) => {
+      // console.log('22', s.user.corpus_share, totalCorpusShares, totalCorpusInvestmentValue)
+      const shareValue = proportion(
+        s.user.corpus_share,
+        totalCorpusShares,
+        totalCorpusInvestmentValue
+      )
+      const totalValue = shareValue + s.user.balance
+      const shareRatio = shareValue / totalValue
+      supporterShareValues.push(shareRatio * s.pledge_amount)
+      // console.log('value', shareValue)
+      // console.log('user', s.supporter_id,)
+      // console.log('pledges total:', s.pledge_amount, 'has cash', s.user.balance, 'has shares:', s.user.corpus_share , '/', totalCorpusShares)
+      // console.log('total corpus value', totalCorpusInvestmentValue)
+      // console.log('portfolio split:', shareRatio )
+      // console.log('intermediateValues:', shareRatio, shareValue, totalValue, s.pledge_amount)
+    })
+    const supporterCorpusShare = supporterShareValues.reduce((a, b) => a + b)
+
     return {
       corpus: loans.map((x) => {
         const terms = x.risk_calc_result.latestOffer
@@ -254,19 +280,20 @@ export class DbClient {
           ),
           apr: terms.interest,
           tenor: terms.tenor,
-          kumaraA: terms.kumara_a,
-          kumaraB: terms.kumara_b,
-          timeRemaining: 60, // TODO
+          kumaraA: terms.kumaraA,
+          kumaraB: terms.kumaraB,
+          timeRemaining: 5, // TODO
         }
       }),
-      corpusCash: corpusCash.aggregate.sum.balance,
+      corpusCash: totalCorpusCash,
       loanRequest: {
+        loan_request_id: loanRequest.request_id,
         amount: loanRequest.risk_calc_result.latestOffer.amount,
         tenor: loanRequest.risk_calc_result.latestOffer.tenor,
         kumaraA: loanRequest.risk_calc_result.latestOffer.kumaraA,
         kumaraB: loanRequest.risk_calc_result.latestOffer.kumaraB,
       },
-      // supporter_portfolio_share: loanRequest.confirmedGuarantors.reduce((a,b) => a + b)
+      supporterCorpusShare,
       novation: false,
     }
   }
