@@ -55,7 +55,7 @@ export const createStartLoanInputVariables = (
   amount: number,
   interest: number
 ) => {
-  const owedAmount = proportion(100 + interest, 100, amount)
+  const owedAmount = proportion(1 + interest, 1, amount)
   const receivable = {
     loan_id: request_id,
     amount_total: owedAmount,

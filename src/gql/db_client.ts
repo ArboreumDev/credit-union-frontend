@@ -82,10 +82,11 @@ export class DbClient {
     // for simplicity will this is now be mocked up like this:
     const mockedAiResult = {
       amount: request.amount,
-      interest: 10,
-      corpus_share: 80,
-      kumara_a: 20,
-      kumara_b: 10,
+      tenor: DEFAULT_LOAN_TENOR,
+      interest: 0.1,
+      corpusShare: 0.8,
+      kumaraA: 20,
+      kumaraB: 10,
     }
     const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
       latestOffer: mockedAiResult,
