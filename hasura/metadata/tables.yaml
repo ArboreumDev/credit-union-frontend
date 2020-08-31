@@ -41,16 +41,6 @@
             name: encumbrance_participants
 - table:
     schema: public
-    name: guarantors
-  object_relationships:
-    - name: loan_request
-      using:
-        foreign_key_constraint_on: request_id
-    - name: user
-      using:
-        foreign_key_constraint_on: guarantor_id
-- table:
-    schema: public
     name: loan_participants
   object_relationships:
     - name: loan_request
@@ -74,13 +64,6 @@
           table:
             schema: public
             name: encumbrances
-    - name: guarantors
-      using:
-        foreign_key_constraint_on:
-          column: request_id
-          table:
-            schema: public
-            name: guarantors
     - name: loan_participants
       using:
         foreign_key_constraint_on:
@@ -109,6 +92,13 @@
           table:
             schema: public
             name: receivables
+    - name: supporters
+      using:
+        foreign_key_constraint_on:
+          column: request_id
+          table:
+            schema: public
+            name: supporters
 - table:
     schema: public
     name: loan_risk
@@ -148,6 +138,16 @@
         foreign_key_constraint_on: neighbor_id
 - table:
     schema: public
+    name: supporters
+  object_relationships:
+    - name: loan_request
+      using:
+        foreign_key_constraint_on: request_id
+    - name: user
+      using:
+        foreign_key_constraint_on: supporter_id
+- table:
+    schema: public
     name: user
   array_relationships:
     - name: edges
@@ -171,13 +171,6 @@
           table:
             schema: public
             name: encumbrances
-    - name: guarantors
-      using:
-        foreign_key_constraint_on:
-          column: guarantor_id
-          table:
-            schema: public
-            name: guarantors
     - name: loan_participants
       using:
         foreign_key_constraint_on:
@@ -220,3 +213,10 @@
           table:
             schema: public
             name: recommendation_risk
+    - name: supporters
+      using:
+        foreign_key_constraint_on:
+          column: supporter_id
+          table:
+            schema: public
+            name: supporters

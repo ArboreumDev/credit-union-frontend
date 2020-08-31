@@ -70,6 +70,10 @@ describe("Basic loan request flow for an accepted loan", () => {
       expect(request.status).toBe(LoanRequestStatus.initiated)
     })
 
+    test("suppporters that exist on the network can be added to the loan", async () => {
+      dbClient
+    })
+
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {
       // upon certain conditions that are currently skipped for this initial version (e.g. when guarantors have confirmed)
       // we trigger the calculation of a loan offer. The flow is as follows:

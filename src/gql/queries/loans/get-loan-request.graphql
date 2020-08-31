@@ -7,7 +7,7 @@ query GetLoanRequest($requestId: uuid!) {
     status
     risk_calc_result
     payback_status
-    confirmedGuarantors: guarantors (
+    confirmedSupporters: supporters (
       where: {status: {_eq: "confirmed"}}
     ) {
       user {

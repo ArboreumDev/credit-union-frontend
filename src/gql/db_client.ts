@@ -69,6 +69,24 @@ export class DbClient {
     }
   }
 
+  addSupporters = async (
+    requestId: string,
+    guarantorIds: [string],
+    amounts: [number]
+  ) => {
+    const supporters = []
+    for (let i = 0; i < guarantorIds.length; i++) {
+      supporters.push({
+        request_id: requestId,
+        guarantor_id: guarantorIds[i],
+        amount: amounts[i],
+      })
+    }
+    const data = await this.sdk.AddSupporters({ supporters })
+    console.log("data", data)
+    return data
+  }
+
   /**
    * for a given request, create an offer by calling the swarmai-optimizer
    * @param request_id
