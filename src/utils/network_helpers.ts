@@ -1,5 +1,3 @@
-// import { users, basic_connections } from './fixtures'
-// import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
 import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
 import { EDGE_STATUS } from "./types"
 const fs = require("fs")
@@ -7,7 +5,6 @@ const fs = require("fs")
 type User = User_Insert_Input
 type EdgeTuple = [string, string, number]
 type Network = { [index: string]: any }
-// type Scenario = { [index: string]: any }
 // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
 export const generateEdgeInputFromTupleNotation = (
@@ -24,10 +21,6 @@ export const generateEdgeInputFromTupleNotation = (
 // export const getNodesFromEdgeList = (edgeList) => {
 //   const nodes = edgeList.map(x => x.slice(0,2)).flat()
 //   return [...new Set(nodes)]
-// }
-
-// const distinct = (value, index, self) => {
-//   return self.indexOf(value) === index
 // }
 
 // =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
@@ -77,31 +70,14 @@ export async function addNetwork(sdk: Sdk, network: Network) {
  * @param {*} string name of the scenario to be loaded
  */
 export async function setupScenario(sdk: Sdk, scenarioName: string) {
-  // const tmp = await fs.readdir('.')
-  // console.log('tmp', tmp.network)
   const { network, loan_requests } = require("../../tests/fixtures/" +
     scenarioName +
     ".json")
-  console.log(network)
   const addedUsers = await addUsers(sdk, network.nodes)
   const addedEdges = await addEdgesFromList(sdk, network.edges)
-  // return { addedUsers, addedEdges }
+  return { addedUsers, addedEdges }
 }
 
-// /**
-//  * get the network and edges of a given edge_status
-//  * @param {} gqlclient
-//  * @param {*} status
-//  * @returns {} an object {nodes: [user_number1, ...], edges: [[ffrom, to, credit], ...]}
-//  */
-// export const getNetwork = async (gqlclient, status = EDGE_STATUS.active) => {
-//   const data = await gqlclient.executeGQL(GET_EDGES_BY_STATUS, {"status": status})
-//   const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
-//   const nodes = getNodesFromEdgeList(edges)
-//   return { nodes, edges }
-// }
-
-// export create_edge_insert_input_from_user_input(user_input, existing_users, other_user_email=None) => {
 //     /** create an edge insert input given the edge
 //      * @param edge [from, to, credit_line]
 //      * @param users dict of users existing in the system that can be indexed by the user-number

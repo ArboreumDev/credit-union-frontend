@@ -54,5 +54,7 @@ describe("An entire network can be added from a JSON output by the simulator", (
 
   test("add scenraio", async () => {
     await setupScenario(sdk, "basicCorpus")
+    const { user } = await sdk.GetAllUsers()
+    expect(user.length).toBe(30)
   })
 })
