@@ -12,23 +12,22 @@ import {
 import BLoanDashboard from "../components/borrower/BLoanDashboard"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
+import { BOngoingLoan } from "../components/borrower/BLoan"
 
-export function getUIStateComponentMap(user: User) {
-  return {
-    [UIState.Landing]: <LandingPage />,
-    [UIState.Onboarding]: <Onboarding user={user} />,
-    [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
-    [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
-    [UIState.BLoanRequestInitiated]: (
-      <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
-    ),
-    [UIState.BLoanRequestAwaitsConfirmation]: (
-      <BLoanRequestAwaitsConfirmation loanRequest={user.loan_requests[0]} />
-    ),
-    [UIState.BLoanDashboard]: <div>Loan Dashboard</div>,
-    [UIState.LDashboard]: <div>Lender Dashboard</div>,
-  }
-}
+export const getUIStateComponentMap = (user: User) => ({
+  [UIState.Landing]: <LandingPage />,
+  [UIState.Onboarding]: <Onboarding user={user} />,
+  [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
+  [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
+  [UIState.BLoanRequestInitiated]: (
+    <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
+  ),
+  [UIState.BLoanRequestAwaitsConfirmation]: (
+    <BLoanRequestAwaitsConfirmation loanRequest={user.loan_requests[0]} />
+  ),
+  [UIState.BOngoingLoan]: <BOngoingLoan loan={user.loan_requests[0]} />,
+  [UIState.LDashboard]: <div>Lender Dashboard</div>,
+})
 
 interface Props {
   state: UIState

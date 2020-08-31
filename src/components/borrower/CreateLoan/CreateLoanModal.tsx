@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/core"
 import CreateLoanForm from "./CreateLoanForm"
+import { User } from "../../../utils/types"
 
 interface Props {
   user: User

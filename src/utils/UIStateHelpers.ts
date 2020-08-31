@@ -7,7 +7,7 @@ export enum UIState {
   BReadyToMakeNewLoan = "BReadyToMakeNewLoan",
   BLoanRequestInitiated = "BLoanRequestInitiated",
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
-  BLoanDashboard = "BLoanDashboard",
+  BOngoingLoan = "BLoanDashboard",
   LDashboard = "LDashboard",
 }
 
@@ -30,7 +30,7 @@ export const getUIState = async (session: Session) => {
       if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
       if (user.loan_requests[0].status === LoanRequestStatus.initiated)
         return UIState.BLoanRequestInitiated
-      else return UIState.BLoanDashboard
+      else return UIState.BOngoingLoan
     }
     if (user.user_type === UserType.Lender) {
       return UIState.LDashboard
