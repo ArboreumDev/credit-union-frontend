@@ -80,7 +80,13 @@ export class DbClient {
     // Once done, the AI will then call back into into our api and write to the DB
 
     // for simplicity will this is now be mocked up like this:
-    const mockedAiResult = { amount: request.amount, interest: 10 }
+    const mockedAiResult = {
+      amount: request.amount,
+      interest: 10,
+      corpus_share: 80,
+      kumara_a: 20,
+      kumara_b: 10,
+    }
     const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
       latestOffer: mockedAiResult,
     })
