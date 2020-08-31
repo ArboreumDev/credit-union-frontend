@@ -5967,6 +5967,28 @@ export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type GetCorpusDataQueryVariables = Exact<{
+  statusList: Array<Scalars["loan_request_status"]>
+}>
+
+export type GetCorpusDataQuery = { __typename?: "query_root" } & {
+  loan_requests: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "risk_calc_result" | "confirmation_date"
+    >
+  >
+  corpus_cash: { __typename?: "user_aggregate" } & {
+    aggregate?: Maybe<
+      { __typename?: "user_aggregate_fields" } & {
+        sum?: Maybe<
+          { __typename?: "user_sum_fields" } & Pick<User_Sum_Fields, "balance">
+        >
+      }
+    >
+  }
+}
+
 export type GetLenderAllocationInputQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -6326,6 +6348,22 @@ export const CreateLoanRequestDocument = gql`
     }
   }
 `
+export const GetCorpusDataDocument = gql`
+  query GetCorpusData($statusList: [loan_request_status!]!) {
+    loan_requests(where: { status: { _in: $statusList } }) {
+      request_id
+      risk_calc_result
+      confirmation_date
+    }
+    corpus_cash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
+      aggregate {
+        sum {
+          balance
+        }
+      }
+    }
+  }
+`
 export const GetLenderAllocationInputDocument = gql`
   query GetLenderAllocationInput {
     lenders: user(where: { user_type: { _eq: "lender" } }) {
@@ -6588,6 +6626,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<CreateLoanRequestMutation>(
           print(CreateLoanRequestDocument),
+          variables
+        )
+      )
+    },
+    GetCorpusData(
+      variables: GetCorpusDataQueryVariables
+    ): Promise<GetCorpusDataQuery> {
+      return withWrapper(() =>
+        client.request<GetCorpusDataQuery>(
+          print(GetCorpusDataDocument),
           variables
         )
       )

@@ -198,4 +198,19 @@ export class DbClient {
     })
     return failures
   }
+
+  getOptimizerInput = async () => {
+    const corpus = await this.sdk.GetCorpusData({
+      statusList: [LoanRequestStatus.live],
+    })
+    console.log(corpus)
+    console.log(corpus.loan_requests[0].risk_calc_result)
+    return {
+      corpus,
+      //   loanData: {},
+      //   cash_corpus: 0,
+      //   supporter_portfolio_share: 0,
+      //   novation: false
+    }
+  }
 }

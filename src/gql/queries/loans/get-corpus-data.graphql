@@ -1,0 +1,21 @@
+query GetCorpusData (
+  $statusList: [loan_request_status!]!
+) {
+  loans: loan_requests( where: {
+      status: { _in: $statusList }
+  }) {
+		request_id
+    risk_calc_result
+    confirmation_date
+  }
+  corpusCash: user_aggregate (
+    where: {
+      user_type: {_eq: "lender"}
+    }) {
+    aggregate {
+      sum {
+        balance
+      }
+    }
+  }
+}
