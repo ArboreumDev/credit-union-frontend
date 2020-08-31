@@ -1,5 +1,6 @@
 import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
 import { EDGE_STATUS, UserType } from "../../src/utils/types"
+import { generateEdgeInputFromTupleNotation } from "../../src/utils/network_helpers"
 
 type User = User_Insert_Input
 type EdgeTuple = [User, User, number]
@@ -51,20 +52,9 @@ export const USER4: User = {
   balance: 2000,
 }
 
-export const generateEdgeInputFromTupleNotation = (
-  edgeList: EdgeTuple
-): Edges_Insert_Input => {
-  return {
-    trust_amount: edgeList[2],
-    status: EDGE_STATUS.active,
-    lender_id: edgeList[0].id,
-    borrower_id: edgeList[1].id,
-  } as Edges_Insert_Input
-}
-
 export const EDGES: EdgeTuple[] = [
-  [LENDER1, BORROWER1, 100],
-  [LENDER2, BORROWER1, 40],
+  [LENDER1.id, BORROWER1.id, 100],
+  [LENDER2.id, BORROWER1.id, 40],
 ]
 
 export const EDGE1 = generateEdgeInputFromTupleNotation(EDGES[0])

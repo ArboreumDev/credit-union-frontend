@@ -1,38 +1,26 @@
-// import { users, basic_connections } from './fixtures'
-// import {INSERT_USER, INSERT_EDGE, GET_EDGES_BY_STATUS, EXAMPLE_INPUTS, RESET_DB, GET_USERS } from "../utils/queries";
-import { Sdk, getSdk } from "../gql/sdk"
+import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
 import { EDGE_STATUS } from "./types"
-import { User_Insert_Input } from "../../src/gql/sdk"
-import { generateEdgeInputFromTupleNotation } from "../../tests/src/fixtures"
+const fs = require("fs")
 
 type User = User_Insert_Input
+type EdgeTuple = [string, string, number]
+type Network = { [index: string]: any }
 // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
-// /**
-//  * create the db-insert input from the fixture
-//  * @param edge  [from_number, to_number, trust]
-//  * @param  users [{userObject1}, {userObject2}, ... ]
-//  */
-// function create_edge_insert_input_from_fixture (edge, users) {
-//   const lender = users.filter(x => x.user_number === edge[0])[0]
-//   const borrower = users.filter(x => x.user_number === edge[1])[0]
-//   const input = {
-//     trust_amount: edge[2],
-//     status: EDGE_STATUS.active,
-//     borrower_id: borrower.id,
-//     lender_id: lender.id,
-//     other_user_email: lender.name + "@mail.com"
-//   }
-//   return input
-// }
+export const generateEdgeInputFromTupleNotation = (
+  edgeList: EdgeTuple
+): Edges_Insert_Input => {
+  return {
+    trust_amount: edgeList[2],
+    status: EDGE_STATUS.active,
+    lender_id: edgeList[0],
+    borrower_id: edgeList[1],
+  } as Edges_Insert_Input
+}
 
 // export const getNodesFromEdgeList = (edgeList) => {
 //   const nodes = edgeList.map(x => x.slice(0,2)).flat()
 //   return [...new Set(nodes)]
-// }
-
-// const distinct = (value, index, self) => {
-//   return self.indexOf(value) === index
 // }
 
 // =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
@@ -52,10 +40,10 @@ export async function addUsers(sdk: Sdk, userList: [User]) {
 }
 
 /** will insert edges into the DB
- * @param edgeTuples edge list [[1,2,10], [2,3,30]] (user)
+ * @param edgeTuples edge with list of entire users
  * @returns added_edges [added_edge_object1, ...]
  */
-export async function addEdgesFromList(sdk: Sdk, edgeTuples: [any]) {
+export async function addEdgesFromList(sdk: Sdk, edgeTuples: [EdgeTuple]) {
   const addedEdges = []
   for (const e of edgeTuples) {
     const insert_edge_input = generateEdgeInputFromTupleNotation(e)
@@ -64,8 +52,6 @@ export async function addEdgesFromList(sdk: Sdk, edgeTuples: [any]) {
   }
   return addedEdges
 }
-
-type Network = { [index: string]: any }
 
 /**
  * add a network to the DB, user_numbers should be unique (will not be guaranteed by DB)
@@ -78,20 +64,20 @@ export async function addNetwork(sdk: Sdk, network: Network) {
   return { addedUsers, addedEdges }
 }
 
-// /**
-//  * get the network and edges of a given edge_status
-//  * @param {} gqlclient
-//  * @param {*} status
-//  * @returns {} an object {nodes: [user_number1, ...], edges: [[ffrom, to, credit], ...]}
-//  */
-// export const getNetwork = async (gqlclient, status = EDGE_STATUS.active) => {
-//   const data = await gqlclient.executeGQL(GET_EDGES_BY_STATUS, {"status": status})
-//   const edges = data.edges.map(x => [x.from_user.user_number, x.to_user.user_number, x.trust_amount])
-//   const nodes = getNodesFromEdgeList(edges)
-//   return { nodes, edges }
-// }
+/**
+ * load and add scenario from fixture folder, expects empty DB
+ * @param {} sdk pointing to the DB into which the nodes and edges should be inserted
+ * @param {*} string name of the scenario to be loaded
+ */
+export async function setupScenario(sdk: Sdk, scenarioName: string) {
+  const { network, loan_requests } = require("../../tests/fixtures/" +
+    scenarioName +
+    ".json")
+  const addedUsers = await addUsers(sdk, network.nodes)
+  const addedEdges = await addEdgesFromList(sdk, network.edges)
+  return { addedUsers, addedEdges }
+}
 
-// export create_edge_insert_input_from_user_input(user_input, existing_users, other_user_email=None) => {
 //     /** create an edge insert input given the edge
 //      * @param edge [from, to, credit_line]
 //      * @param users dict of users existing in the system that can be indexed by the user-number
