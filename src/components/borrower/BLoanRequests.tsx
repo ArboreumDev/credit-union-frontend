@@ -44,7 +44,7 @@ export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
       <Center>
         <Text>Your loan request is being processed.</Text>
       </Center>
-      <Box>
+      <Box borderWidth="10px" borderRadius="lg">
         <StatGroup>
           <Stat>
             <StatLabel>Amount</StatLabel>
