@@ -15,11 +15,7 @@ import Router from "next/router"
 const LandingPage = () => {
   return (
     <div className="Container">
-      <VStack
-        divider={<StackDivider borderColor="gray.200" />}
-        spacing={4}
-        align="stretch"
-      >
+      <VStack spacing={4} align="stretch">
         <Center h="40px">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Center>
