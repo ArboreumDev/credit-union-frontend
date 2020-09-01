@@ -1,8 +1,14 @@
-import { Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/core"
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Center,
+} from "@chakra-ui/core"
 
 export default function ApplicationSubmitted() {
   return (
-    <div>
+    <Center>
       <Alert
         status="success"
         variant="subtle"
@@ -22,6 +28,6 @@ export default function ApplicationSubmitted() {
           soon.
         </AlertDescription>
       </Alert>
-    </div>
+    </Center>
   )
 }
