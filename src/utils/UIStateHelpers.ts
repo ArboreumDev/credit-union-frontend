@@ -7,17 +7,15 @@ export enum UIState {
   BReadyToMakeNewLoan = "BReadyToMakeNewLoan",
   BLoanRequestInitiated = "BLoanRequestInitiated",
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
-  BLoanDashboard = "BLoanDashboard",
+  BOngoingLoan = "BLoanDashboard",
   LDashboard = "LDashboard",
+  Profile = "Profile",
 }
 
-const checkForOngoingLoanRequests = (user: User) =>
-  user.loan_requests.some((lr) =>
-    [
-      LoanRequestStatus.initiated,
-      LoanRequestStatus.awaiting_borrower_confirmation,
-    ].includes(lr.status)
-  )
+export const getMostRecentLoanRequest = (user: User) =>
+  user.loan_requests.sort(
+    (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
+  )[0]
 
 export const getUIState = async (session: Session) => {
   if (!session) return UIState.Landing
@@ -33,7 +31,7 @@ export const getUIState = async (session: Session) => {
       if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
       if (user.loan_requests[0].status === LoanRequestStatus.initiated)
         return UIState.BLoanRequestInitiated
-      else return UIState.BLoanDashboard
+      else return UIState.BOngoingLoan
     }
     if (user.user_type === UserType.Lender) {
       return UIState.LDashboard

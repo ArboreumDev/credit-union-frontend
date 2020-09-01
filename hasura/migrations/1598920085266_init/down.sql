@@ -9,6 +9,7 @@ DROP TABLE public.payable_type CASCADE;
 DROP TABLE public.payables CASCADE;
 DROP TABLE public.receivables CASCADE;
 DROP TABLE public.recommendation_risk CASCADE;
+DROP TABLE public.user CASCADE;
 
 DROP TYPE public.user_t CASCADE;
 DROP TYPE public.edge_status CASCADE;

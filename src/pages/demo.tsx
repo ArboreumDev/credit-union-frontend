@@ -11,7 +11,7 @@ import { getUIStateComponentMap } from "."
 const FIXTURES = {
   USER: {
     id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
-    name: "arbo",
+    name: "Deepika Padukone",
     email: "dev-admin@arboreum.dev",
     phone: "+91 123-232-1231",
     user_type: "borrower",
@@ -41,7 +41,7 @@ const Page = () => {
   const componentMap = getUIStateComponentMap(FIXTURES.USER)
 
   return (
-    <Tabs>
+    <Tabs width="s" defaultIndex={6}>
       <TabList>
         {Object.keys(componentMap).map((state) => (
           <Tab key={state}>{state}</Tab>

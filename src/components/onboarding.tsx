@@ -1,6 +1,3 @@
-import { useSession } from "next-auth/client"
-import { User, Session } from "../utils/types"
-
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/dist/client/router"
 import Dropzone from "./Dropzone"
@@ -16,6 +13,12 @@ import {
   Box,
   VStack,
   Container,
+  Heading,
+  InputGroup,
+  InputLeftAddon,
+  FormControl,
+  FormLabel,
+  RequiredIndicator,
 } from "@chakra-ui/core"
 
 type FormData = {
@@ -63,52 +66,60 @@ export default function Onboarding({ user }: Params) {
                 <img width="150px" src="/images/logo.svg" alt="logo" />
               </Box>
             </Center>
-            <h2>Signup</h2>
+            <Center>
+              <Heading as="h4" size="md">
+                Signup
+              </Heading>
+            </Center>
+
             <Input
               placeholder="Name"
               name="name"
               size="lg"
               ref={register({ required: true })}
             />
-            <Input
-              placeholder="Phone"
-              name="phone"
-              size="lg"
-              ref={register({ required: true })}
-            />
-            <Box>
-              <h4>Do you plan to lend or borrow?</h4>
+            <InputGroup>
+              <InputLeftAddon>+91</InputLeftAddon>
+              <Input
+                type="phone"
+                name="phone"
+                borderLeftRadius="0"
+                placeholder="Phone"
+                size="lg"
+                ref={register({ required: true })}
+              />
+            </InputGroup>
+            <FormControl id="first-name" isRequired>
+              <FormLabel>
+                What do you plan to do? <RequiredIndicator />
+              </FormLabel>
               <RadioGroup>
                 <Stack direction="row">
-                  <label>
-                    <input
-                      type="radio"
-                      name="user_type"
-                      value="borrower"
-                      ref={register({ required: true })}
-                    />
+                  <Radio
+                    value="borrower"
+                    name="user_type"
+                    // @ts-ignore Throwing compile time error. Hopefully fixed in future chakra version.
+                    ref={register({ required: true })}
+                  >
                     Borrow
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="user_type"
-                      value="lender"
-                      ref={register({ required: true })}
-                    />
-                    Invest
-                  </label>
+                  </Radio>
+                  <Radio
+                    value="lender"
+                    name="user_type"
+                    // @ts-ignore
+                    ref={register({ required: true })}
+                  >
+                    Lend
+                  </Radio>
                 </Stack>
               </RadioGroup>
-            </Box>
-            <div>
-              <h4>KYC Documents:</h4>
+            </FormControl>
+
+            <Box>
               <Dropzone email={user.email} />
-            </div>
+            </Box>
             <Center>
-              <Button type="submit" intent="primary">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             </Center>
           </Stack>
         </Container>

@@ -28,20 +28,13 @@ type FormData = {
   loanSupporters: string
 }
 
-const canUserCreateLoan = (session: Session) =>
-  session.user.user_type &&
-  session.user.kyc_approved &&
-  session.user.loan_requests.length == 0
+interface Props {
+  user: User
+}
 
-export default function CreateLoanForm() {
+export default function CreateLoanForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [session, loading] = useSession()
   const router = useRouter()
-
-  if (loading) return <div>Loading...</div>
-  if (!canUserCreateLoan) return <div>Unauthorised...</div>
-
-  const user = session.user as User
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -85,9 +78,7 @@ export default function CreateLoanForm() {
             />
 
             <Center>
-              <Button type="submit" intent="primary">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             </Center>
           </Stack>
         </Container>

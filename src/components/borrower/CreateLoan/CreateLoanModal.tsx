@@ -12,8 +12,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/core"
 import CreateLoanForm from "./CreateLoanForm"
+import { User } from "../../../utils/types"
 
-export default function CreateLoanModal() {
+interface Props {
+  user: User
+}
+
+export default function CreateLoanModal({ user }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -24,7 +29,7 @@ export default function CreateLoanModal() {
           <ModalContent>
             <ModalHeader>Request Loan</ModalHeader>
             <ModalBody>
-              <CreateLoanForm />
+              <CreateLoanForm user={user} />
             </ModalBody>
             <ModalCloseButton />
           </ModalContent>

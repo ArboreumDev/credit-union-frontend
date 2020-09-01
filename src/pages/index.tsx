@@ -1,30 +1,42 @@
 import { getSession } from "next-auth/client"
-import AppBar from "../components/AppBar"
-import { Session, LoanRequestStatus, UserType, User } from "../utils/types"
 import { useRouter } from "next/dist/client/router"
-import Onboarding from "../components/onboarding"
-import { UIState, getUIState } from "../utils/UIStateHelpers"
-import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
+import AppBar from "../components/AppBar"
+import { BOngoingLoan } from "../components/borrower/BLoan"
 import {
-  BLoanRequestInitiated,
   BLoanRequestAwaitsConfirmation,
+  BLoanRequestInitiated,
 } from "../components/borrower/BLoanRequests"
-import BLoanDashboard from "../components/borrower/BLoanDashboard"
-import FrontPage from "../components/frontpage"
+import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
+import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
+import LandingPage from "../components/landing"
+import Onboarding from "../components/onboarding"
+import { Session, User } from "../utils/types"
+import {
+  getMostRecentLoanRequest,
+  getUIState,
+  UIState,
+} from "../utils/UIStateHelpers"
+import ProfilePage from "./profile"
 
-export function getUIStateComponentMap(user: User) {
+export const getUIStateComponentMap = (user: User) => {
+  const loanRequests = user.loan_requests
+  let loanRequest
+  if (loanRequests) loanRequest = getMostRecentLoanRequest(user)
+
   return {
-    [UIState.Landing]: <FrontPage />,
+    [UIState.Landing]: <LandingPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
-    [UIState.KYCNotApprovedYet]: <BReadyToMakeNewLoan />,
-    [UIState.BLoanRequestInitiated]: (
-      <BLoanRequestInitiated loanRequest={user.loan_requests[0]} />
+    [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
+    [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
+    [UIState.BLoanRequestInitiated]: loanRequest && (
+      <BLoanRequestInitiated loanRequest={loanRequest} />
     ),
     [UIState.BLoanRequestAwaitsConfirmation]: (
-      <BLoanRequestAwaitsConfirmation loanRequest={user.loan_requests[0]} />
+      <BLoanRequestAwaitsConfirmation loanRequest={loanRequest} />
     ),
-    [UIState.BLoanDashboard]: <div>Loan Dashboard</div>,
+    [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
     [UIState.LDashboard]: <div>Lender Dashboard</div>,
+    [UIState.Profile]: <ProfilePage user={user} />,
   }
 }
 
@@ -36,7 +48,7 @@ interface Props {
 const Page = ({ state, session }: Props) => {
   const router = useRouter()
 
-  if (state === UIState.Landing) return <FrontPage />
+  if (state === UIState.Landing) return <LandingPage />
 
   const componentMap = getUIStateComponentMap(session.user)
   if (state === UIState.Onboarding) return componentMap[state]
