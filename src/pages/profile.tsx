@@ -6,6 +6,8 @@ import {
   Box,
   Text,
   Flex,
+  Heading,
+  Divider,
 } from "@chakra-ui/core"
 import { getSession } from "next-auth/client"
 import Router from "next/router"
@@ -32,8 +34,13 @@ const ProfilePage = ({ user }: Props) => {
         <Stack>
           <Center>{user.name}</Center>
           <Center>{user.email}</Center>
+          <Box h="10px" />
+          <Divider />
           <Box>
-            Transactions:
+            <Heading as="h4" size="md">
+              Transactions
+            </Heading>
+            <Box h="10px" />
             <Stack>
               {rows.map((row) => (
                 <Flex key={row.key}>
@@ -50,7 +57,9 @@ const ProfilePage = ({ user }: Props) => {
               ))}
             </Stack>
           </Box>
-          <Box h="60px" />
+
+          <Box h="20px" />
+          <Divider />
           <Button
             onClick={() => Router.push("/api/auth/signout")}
             rightIcon={<CgLogOut />}
