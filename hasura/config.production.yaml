@@ -1,5 +1,5 @@
 version: 2
-endpoint: https://alert-insect-27.hasura.app/
+endpoint: https://fine-finch-84.hasura.app/
 admin_secret: T4AwDcyGfKLakMj
 metadata_directory: metadata
 actions:
