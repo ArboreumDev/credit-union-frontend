@@ -9,6 +9,7 @@ export enum UIState {
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
   BOngoingLoan = "BLoanDashboard",
   LDashboard = "LDashboard",
+  Profile = "Profile",
 }
 
 export const getMostRecentLoanRequest = (user: User) =>

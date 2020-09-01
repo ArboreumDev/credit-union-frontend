@@ -16,6 +16,7 @@ import {
   getUIState,
   UIState,
 } from "../utils/UIStateHelpers"
+import ProfilePage from "./profile"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -35,6 +36,7 @@ export const getUIStateComponentMap = (user: User) => {
     ),
     [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
     [UIState.LDashboard]: <div>Lender Dashboard</div>,
+    [UIState.Profile]: <ProfilePage user={user} />,
   }
 }
 
