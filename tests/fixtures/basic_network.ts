@@ -3,7 +3,7 @@ import { EDGE_STATUS, UserType } from "../../src/utils/types"
 import { generateEdgeInputFromTupleNotation } from "../../src/utils/network_helpers"
 
 type User = User_Insert_Input
-type EdgeTuple = [User, User, number]
+type EdgeTuple = [string, string, number]
 
 // REFACTOR to user-input type
 export const LENDER1: User = {
