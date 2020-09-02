@@ -5930,6 +5930,8 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "purpose"
             | "risk_calc_result"
             | "status"
+            | "created_at"
+            | "amount"
           >
         >
       }
@@ -6372,6 +6374,9 @@ export const GetUserByEmailDocument = gql`
         purpose
         risk_calc_result
         status
+        created_at
+        amount
+        purpose
       }
     }
   }

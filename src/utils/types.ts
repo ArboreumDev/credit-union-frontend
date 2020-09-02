@@ -13,6 +13,7 @@ export enum UserType {
 }
 
 export type User = GetUserByEmailQuery["user"][0]
+export type LoanRequest = User["loan_requests"][0]
 
 export type JWTToken = {
   name: string

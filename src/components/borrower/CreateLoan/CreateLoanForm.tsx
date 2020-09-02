@@ -14,12 +14,12 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/core"
-import { User, Session } from "../../utils/types"
+import { User, Session } from "../../../utils/types"
 import {
   CreateLoanRequestMutation,
   Loan_Requests_Insert_Input,
-} from "../../gql/sdk"
-import { fetcher } from "../../utils/api"
+} from "../../../gql/sdk"
+import { fetcher } from "../../../utils/api"
 import { useRouter } from "next/dist/client/router"
 
 type FormData = {
@@ -28,20 +28,13 @@ type FormData = {
   loanSupporters: string
 }
 
-const canUserCreateLoan = (session: Session) =>
-  session.user.user_type &&
-  session.user.kyc_approved &&
-  session.user.loan_requests.length == 0
+interface Props {
+  user: User
+}
 
-export default function CreateLoanForm() {
+export default function CreateLoanForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [session, loading] = useSession()
   const router = useRouter()
-
-  if (loading) return <div>Loading...</div>
-  if (!canUserCreateLoan) return <div>Unauthorised...</div>
-
-  const user = session.user as User
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -74,9 +67,9 @@ export default function CreateLoanForm() {
               placeholder="Choose loan purpose"
               ref={register({ required: false })}
             >
-              <option value="option1">School</option>
-              <option value="option2">Auto</option>
-              <option value="option3">Other</option>
+              <option value="School">School</option>
+              <option value="Auto">Auto</option>
+              <option value="Other">Other</option>
             </Select>
             <Textarea
               name="loanSupporters"
@@ -85,9 +78,7 @@ export default function CreateLoanForm() {
             />
 
             <Center>
-              <Button type="submit" intent="primary">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             </Center>
           </Stack>
         </Container>

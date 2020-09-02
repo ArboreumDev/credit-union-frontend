@@ -2,13 +2,12 @@ import * as React from "react"
 import { Provider } from "next-auth/client"
 import { AppProps } from "next/app"
 
-import { ChakraProvider, CSSReset } from "@chakra-ui/core"
-import theme from "@chakra-ui/theme"
+import { ChakraProvider } from "@chakra-ui/core"
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider resetCSS>
         <div>
           <div className="content">
             <Component {...pageProps} />
