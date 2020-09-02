@@ -32,17 +32,19 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
   const { register, setValue, handleSubmit, errors } = useForm<any>()
 
   return (
-    <Container minW="md" bg="white">
-      <Box margin="20px" padding="10px" borderWidth="5px" borderRadius="lg">
+    <Container minW="s" bg="white">
+      <Stack padding="10px" borderWidth="3px">
         <Center>
-          <Text padding="0px" margin="0px" fontSize="100px" color="green.500">
+          <Text fontSize="100px" color="green.500">
             <AiOutlineFileDone />
           </Text>
         </Center>
         <Center>
-          <Text>Congratulations, your loan request has been processed!</Text>
+          <Text align="center">
+            Congratulations, your loan request has been processed!
+          </Text>
         </Center>
-        <Box h="30px" />
+        <Box h="10px" />
         <Box>
           <StatGroup>
             <Stat>
@@ -53,6 +55,9 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
               <StatLabel>Purpose</StatLabel>
               <StatNumber>{loanRequest.purpose}</StatNumber>
             </Stat>
+          </StatGroup>
+          <Box h="10px" />
+          <StatGroup>
             <Stat>
               <StatLabel>Interest</StatLabel>
               <StatNumber>
@@ -112,7 +117,7 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
         <Center>
           <Contactus />
         </Center>
-      </Box>
+      </Stack>
     </Container>
   )
 }

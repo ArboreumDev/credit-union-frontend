@@ -17,9 +17,9 @@ interface Params {
 
 export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
   <Container minW="s" bg="white">
-    <Box margin="20px" padding="10px" borderWidth="5px" borderRadius="lg">
+    <Box padding="10px" borderWidth="3px">
       <Center>
-        <Text padding="0px" margin="0px" fontSize="100px">
+        <Text fontSize="100px">
           <CgFileDocument />
         </Text>
       </Center>
