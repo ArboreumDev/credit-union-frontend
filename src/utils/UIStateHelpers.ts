@@ -7,7 +7,7 @@ export enum UIState {
   BReadyToMakeNewLoan = "BReadyToMakeNewLoan",
   BLoanRequestInitiated = "BLoanRequestInitiated",
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
-  BOngoingLoan = "BLoanDashboard",
+  BOngoingLoan = "BOngoingLoan",
   LDashboard = "LDashboard",
   Profile = "Profile",
 }

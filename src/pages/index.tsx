@@ -2,10 +2,6 @@ import { getSession } from "next-auth/client"
 import { useRouter } from "next/dist/client/router"
 import AppBar from "../components/AppBar"
 import { BOngoingLoan } from "../components/borrower/BLoan"
-import {
-  BLoanRequestAwaitsConfirmation,
-  BLoanRequestInitiated,
-} from "../components/borrower/BLoanRequests"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
@@ -17,6 +13,8 @@ import {
   UIState,
 } from "../utils/UIStateHelpers"
 import ProfilePage from "./profile"
+import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/LoanRequestInitiated"
+import { BLoanRequestAwaitsConfirmation } from "../components/borrower/LoanRequests/LoanNeedsConfirmation"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
