@@ -81,11 +81,12 @@ const Page = () => {
           </Slider>
         </Box>
       </Center>
-      <Center marginBottom="20px">
+      <Center>
         <Heading as="h1" size="md">
-          {title}
+          Borrower Journey | {stateIdx + 1}
         </Heading>
       </Center>
+      <Center marginBottom="20px">{title}</Center>
       {component}
     </Box>
   )
