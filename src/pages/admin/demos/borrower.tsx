@@ -60,7 +60,7 @@ const Page = () => {
     [UIState.Profile]: "Profile",
   }
 
-  const [stateIdx, setStateIdx] = useState(1)
+  const [stateIdx, setStateIdx] = useState(0)
   const [state, title] = Object.entries(journeySequence)[stateIdx]
   const component = componentMap[state]
 
