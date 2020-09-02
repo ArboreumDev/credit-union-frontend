@@ -2547,8 +2547,7 @@ export type Mutation_RootDelete_Recommendation_RiskArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Recommendation_Risk_By_PkArgs = {
-  agent_id: Scalars["uuid"]
-  neighbor_id: Scalars["uuid"]
+  recommender_id: Scalars["uuid"]
 }
 
 /** mutation root */
@@ -3640,8 +3639,7 @@ export type Query_RootRecommendation_Risk_AggregateArgs = {
 
 /** query root */
 export type Query_RootRecommendation_Risk_By_PkArgs = {
-  agent_id: Scalars["uuid"]
-  neighbor_id: Scalars["uuid"]
+  recommender_id: Scalars["uuid"]
 }
 
 /** query root */
@@ -4137,18 +4135,18 @@ export type Receivables_Variance_Order_By = {
 /** columns and relationships of "recommendation_risk" */
 export type Recommendation_Risk = {
   __typename?: "recommendation_risk"
-  agent_id: Scalars["uuid"]
-  neighbor_id: Scalars["uuid"]
-  recommendation_risk: Scalars["jsonb"]
+  agent_id?: Maybe<Scalars["uuid"]>
+  recommender_id: Scalars["uuid"]
+  risk_params?: Maybe<Scalars["jsonb"]>
   updated_at: Scalars["timestamptz"]
   /** An object relationship */
-  user: User
+  user?: Maybe<User>
   /** An object relationship */
   userByNeighborId: User
 }
 
 /** columns and relationships of "recommendation_risk" */
-export type Recommendation_RiskRecommendation_RiskArgs = {
+export type Recommendation_RiskRisk_ParamsArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
@@ -4182,7 +4180,7 @@ export type Recommendation_Risk_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Recommendation_Risk_Append_Input = {
-  recommendation_risk?: Maybe<Scalars["jsonb"]>
+  risk_params?: Maybe<Scalars["jsonb"]>
 }
 
 /** input type for inserting array relation for remote table "recommendation_risk" */
@@ -4197,8 +4195,8 @@ export type Recommendation_Risk_Bool_Exp = {
   _not?: Maybe<Recommendation_Risk_Bool_Exp>
   _or?: Maybe<Array<Maybe<Recommendation_Risk_Bool_Exp>>>
   agent_id?: Maybe<Uuid_Comparison_Exp>
-  neighbor_id?: Maybe<Uuid_Comparison_Exp>
-  recommendation_risk?: Maybe<Jsonb_Comparison_Exp>
+  recommender_id?: Maybe<Uuid_Comparison_Exp>
+  risk_params?: Maybe<Jsonb_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
   userByNeighborId?: Maybe<User_Bool_Exp>
@@ -4207,29 +4205,29 @@ export type Recommendation_Risk_Bool_Exp = {
 /** unique or primary key constraints on table "recommendation_risk" */
 export enum Recommendation_Risk_Constraint {
   /** unique or primary key constraint */
-  RiskPkey = "risk_pkey",
+  RecommendationRiskPkey = "recommendation_risk_pkey",
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Recommendation_Risk_Delete_At_Path_Input = {
-  recommendation_risk?: Maybe<Array<Maybe<Scalars["String"]>>>
+  risk_params?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Recommendation_Risk_Delete_Elem_Input = {
-  recommendation_risk?: Maybe<Scalars["Int"]>
+  risk_params?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Recommendation_Risk_Delete_Key_Input = {
-  recommendation_risk?: Maybe<Scalars["String"]>
+  risk_params?: Maybe<Scalars["String"]>
 }
 
 /** input type for inserting data into table "recommendation_risk" */
 export type Recommendation_Risk_Insert_Input = {
   agent_id?: Maybe<Scalars["uuid"]>
-  neighbor_id?: Maybe<Scalars["uuid"]>
-  recommendation_risk?: Maybe<Scalars["jsonb"]>
+  recommender_id?: Maybe<Scalars["uuid"]>
+  risk_params?: Maybe<Scalars["jsonb"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
   userByNeighborId?: Maybe<User_Obj_Rel_Insert_Input>
@@ -4239,14 +4237,14 @@ export type Recommendation_Risk_Insert_Input = {
 export type Recommendation_Risk_Max_Fields = {
   __typename?: "recommendation_risk_max_fields"
   agent_id?: Maybe<Scalars["uuid"]>
-  neighbor_id?: Maybe<Scalars["uuid"]>
+  recommender_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by max() on columns of table "recommendation_risk" */
 export type Recommendation_Risk_Max_Order_By = {
   agent_id?: Maybe<Order_By>
-  neighbor_id?: Maybe<Order_By>
+  recommender_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -4254,14 +4252,14 @@ export type Recommendation_Risk_Max_Order_By = {
 export type Recommendation_Risk_Min_Fields = {
   __typename?: "recommendation_risk_min_fields"
   agent_id?: Maybe<Scalars["uuid"]>
-  neighbor_id?: Maybe<Scalars["uuid"]>
+  recommender_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by min() on columns of table "recommendation_risk" */
 export type Recommendation_Risk_Min_Order_By = {
   agent_id?: Maybe<Order_By>
-  neighbor_id?: Maybe<Order_By>
+  recommender_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -4290,8 +4288,8 @@ export type Recommendation_Risk_On_Conflict = {
 /** ordering options when selecting data from "recommendation_risk" */
 export type Recommendation_Risk_Order_By = {
   agent_id?: Maybe<Order_By>
-  neighbor_id?: Maybe<Order_By>
-  recommendation_risk?: Maybe<Order_By>
+  recommender_id?: Maybe<Order_By>
+  risk_params?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
   userByNeighborId?: Maybe<User_Order_By>
@@ -4299,13 +4297,12 @@ export type Recommendation_Risk_Order_By = {
 
 /** primary key columns input for table: "recommendation_risk" */
 export type Recommendation_Risk_Pk_Columns_Input = {
-  agent_id: Scalars["uuid"]
-  neighbor_id: Scalars["uuid"]
+  recommender_id: Scalars["uuid"]
 }
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Recommendation_Risk_Prepend_Input = {
-  recommendation_risk?: Maybe<Scalars["jsonb"]>
+  risk_params?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "recommendation_risk" */
@@ -4313,9 +4310,9 @@ export enum Recommendation_Risk_Select_Column {
   /** column name */
   AgentId = "agent_id",
   /** column name */
-  NeighborId = "neighbor_id",
+  RecommenderId = "recommender_id",
   /** column name */
-  RecommendationRisk = "recommendation_risk",
+  RiskParams = "risk_params",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -4323,8 +4320,8 @@ export enum Recommendation_Risk_Select_Column {
 /** input type for updating data in table "recommendation_risk" */
 export type Recommendation_Risk_Set_Input = {
   agent_id?: Maybe<Scalars["uuid"]>
-  neighbor_id?: Maybe<Scalars["uuid"]>
-  recommendation_risk?: Maybe<Scalars["jsonb"]>
+  recommender_id?: Maybe<Scalars["uuid"]>
+  risk_params?: Maybe<Scalars["jsonb"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -4333,9 +4330,9 @@ export enum Recommendation_Risk_Update_Column {
   /** column name */
   AgentId = "agent_id",
   /** column name */
-  NeighborId = "neighbor_id",
+  RecommenderId = "recommender_id",
   /** column name */
-  RecommendationRisk = "recommendation_risk",
+  RiskParams = "risk_params",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -4618,8 +4615,7 @@ export type Subscription_RootRecommendation_Risk_AggregateArgs = {
 
 /** subscription root */
 export type Subscription_RootRecommendation_Risk_By_PkArgs = {
-  agent_id: Scalars["uuid"]
-  neighbor_id: Scalars["uuid"]
+  recommender_id: Scalars["uuid"]
 }
 
 /** subscription root */
@@ -5088,9 +5084,9 @@ export type User = {
   /** An aggregated array relationship */
   receivables_aggregate: Receivables_Aggregate
   /** An array relationship */
-  recommendationRisksByNeighborId: Array<Recommendation_Risk>
+  recommendationRisksByRecommenderId: Array<Recommendation_Risk>
   /** An aggregated array relationship */
-  recommendationRisksByNeighborId_aggregate: Recommendation_Risk_Aggregate
+  recommendationRisksByRecommenderId_aggregate: Recommendation_Risk_Aggregate
   /** An array relationship */
   recommendation_risks: Array<Recommendation_Risk>
   /** An aggregated array relationship */
@@ -5236,7 +5232,7 @@ export type UserReceivables_AggregateArgs = {
 }
 
 /** columns and relationships of "user" */
-export type UserRecommendationRisksByNeighborIdArgs = {
+export type UserRecommendationRisksByRecommenderIdArgs = {
   distinct_on?: Maybe<Array<Recommendation_Risk_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
   offset?: Maybe<Scalars["Int"]>
@@ -5245,7 +5241,7 @@ export type UserRecommendationRisksByNeighborIdArgs = {
 }
 
 /** columns and relationships of "user" */
-export type UserRecommendationRisksByNeighborId_AggregateArgs = {
+export type UserRecommendationRisksByRecommenderId_AggregateArgs = {
   distinct_on?: Maybe<Array<Recommendation_Risk_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
   offset?: Maybe<Scalars["Int"]>
@@ -5386,7 +5382,7 @@ export type User_Bool_Exp = {
   name?: Maybe<String_Comparison_Exp>
   phone?: Maybe<String_Comparison_Exp>
   receivables?: Maybe<Receivables_Bool_Exp>
-  recommendationRisksByNeighborId?: Maybe<Recommendation_Risk_Bool_Exp>
+  recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
   recommendation_risks?: Maybe<Recommendation_Risk_Bool_Exp>
   supporters?: Maybe<Supporters_Bool_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
@@ -5448,7 +5444,7 @@ export type User_Insert_Input = {
   name?: Maybe<Scalars["String"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
-  recommendationRisksByNeighborId?: Maybe<
+  recommendationRisksByRecommenderId?: Maybe<
     Recommendation_Risk_Arr_Rel_Insert_Input
   >
   recommendation_risks?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
@@ -5562,7 +5558,7 @@ export type User_Order_By = {
   name?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
-  recommendationRisksByNeighborId_aggregate?: Maybe<
+  recommendationRisksByRecommenderId_aggregate?: Maybe<
     Recommendation_Risk_Aggregate_Order_By
   >
   recommendation_risks_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
@@ -6023,6 +6019,21 @@ export type GetCorpusDataQuery = { __typename?: "query_root" } & {
   }
 }
 
+export type GetCorpusRecommendationRisksQueryVariables = Exact<{
+  userIds?: Maybe<Array<Scalars["uuid"]>>
+}>
+
+export type GetCorpusRecommendationRisksQuery = {
+  __typename?: "query_root"
+} & {
+  recommendation_risk: Array<
+    { __typename?: "recommendation_risk" } & Pick<
+      Recommendation_Risk,
+      "recommender_id" | "risk_params"
+    >
+  >
+}
+
 export type GetLenderAllocationInputQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -6081,10 +6092,11 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
           > & {
               user: { __typename?: "user" } & Pick<
                 User,
-                "corpus_share" | "balance"
+                "id" | "corpus_share" | "balance"
               >
             }
         >
+        user: { __typename?: "user" } & Pick<User, "demographic_info">
       }
   >
 }
@@ -6452,6 +6464,16 @@ export const GetCorpusDataDocument = gql`
     }
   }
 `
+export const GetCorpusRecommendationRisksDocument = gql`
+  query GetCorpusRecommendationRisks($userIds: [uuid!]) {
+    recommendation_risk(
+      where: { recommender_id: { _in: $userIds }, agent_id: { _is_null: true } }
+    ) {
+      recommender_id
+      risk_params
+    }
+  }
+`
 export const GetLenderAllocationInputDocument = gql`
   query GetLenderAllocationInput {
     lenders: user(where: { user_type: { _eq: "lender" } }) {
@@ -6495,9 +6517,13 @@ export const GetLoanRequestDocument = gql`
         supporter_id
         pledge_amount
         user {
+          id
           corpus_share
           balance
         }
+      }
+      user {
+        demographic_info
       }
     }
   }
@@ -6760,6 +6786,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetCorpusDataQuery>(
           print(GetCorpusDataDocument),
+          variables
+        )
+      )
+    },
+    GetCorpusRecommendationRisks(
+      variables?: GetCorpusRecommendationRisksQueryVariables
+    ): Promise<GetCorpusRecommendationRisksQuery> {
+      return withWrapper(() =>
+        client.request<GetCorpusRecommendationRisksQuery>(
+          print(GetCorpusRecommendationRisksDocument),
           variables
         )
       )

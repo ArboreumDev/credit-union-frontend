@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  await sdk.ResetDB()
+  // await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -84,6 +84,8 @@ describe("Basic loan request flow for an accepted loan", () => {
       // upon certain conditions that are currently skipped for this initial version (e.g. when guarantors have confirmed)
       // we trigger the calculation of a loan offer. The flow is as follows:
       // - collecting inputs for the swarm-ai (risk-info, loan-amount, network-state...)
+      const riskInput = await dbClient.getRiskInput(request_id)
+      console.log(riskInput)
       // - formatting it such that the optimzer can use it and dropping it to the AWS-S3 bucket
       // - the bucket then calls back into our backend and stores the offer-parameters (interest, guarantor-breakdown,...)
       //    as a json on the loan_request entry (currently the call to the AI-container is mocked though)

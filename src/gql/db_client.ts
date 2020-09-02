@@ -12,7 +12,10 @@ import {
   generateUpdateAsSingleTransaction,
   transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
-import { DEFAULT_LOAN_TENOR } from "../../src/utils/constant.js"
+import {
+  DEFAULT_LOAN_TENOR,
+  DEFAULT_RISK_FREE_INTEREST_RATE,
+} from "../../src/utils/constant"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 
@@ -105,6 +108,11 @@ export class DbClient {
       corpusShare: 0.8,
       kumaraA: 20,
       kumaraB: 10,
+      idealloanSchedule: {
+        // if accepted this would be the schedule:
+        // matrix + 2 vectors created by running swarmai.loan.getLoanSchedule()
+        // used to create payment plan
+      },
     }
     const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
       latestOffer: mockedAiResult,
@@ -216,6 +224,34 @@ export class DbClient {
       }
     })
     return failures
+  }
+
+  getRiskInput = async (requestId: string) => {
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    const { recommendation_risk } = await this.sdk.GetCorpusRecommendationRisks(
+      {
+        userIds: loanRequest.supporters.map((x) => x.user.id),
+      }
+    )
+    // add the trust_amount to the supporter object
+    loanRequest.supporters.forEach((supporter) => {
+      const supporterEntry = recommendation_risk.filter(
+        (x) => x.recommender_id == supporter.user.id
+      )[0]
+      supporterEntry["trust_amount"] = supporter.pledge_amount
+    })
+    const borrowerInfo = {
+      loan_amount: loanRequest.amount,
+      loan_tenor: DEFAULT_LOAN_TENOR,
+      credit_score: loanRequest.user.demographic_info.creditScore,
+      education_years: loanRequest.user.demographic_info.yearsOfEducation,
+      income: loanRequest.user.demographic_info.income,
+      risk_free_interest_rate: DEFAULT_RISK_FREE_INTEREST_RATE,
+    }
+    return {
+      supporterInfo: recommendation_risk,
+      borrowerInfo,
+    }
   }
 
   getOptimizerInput = async (requestId: string) => {

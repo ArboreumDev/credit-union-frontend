@@ -1,6 +1,10 @@
 import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
-import { EDGE_STATUS, UserType } from "../../src/utils/types"
-import { generateEdgeInputFromTupleNotation } from "../../src/utils/network_helpers"
+import { EDGE_STATUS, UserType, RiskParams } from "../../src/utils/types"
+import {
+  generateEdgeInputFromTupleNotation,
+  addRecommendationRiskToUser,
+} from "../../src/utils/network_helpers"
+import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/utils/constant"
 
 type User = User_Insert_Input
 type EdgeTuple = [string, string, number]
@@ -12,7 +16,7 @@ export const LENDER1: User = {
   name: "rick",
   email: "rick@galaxy.io",
   user_type: "lender",
-  demographic_info: { country: "spaceland", education: "genius" },
+  demographic_info: { country: "spaceland" },
   user_number: 1,
   balance: 1000,
 }
@@ -34,12 +38,18 @@ export const BORROWER1: User = {
   name: "morty",
   email: "morty@galaxy.io",
   user_type: "borrower",
-  demographic_info: { country: "spaceland", education: "little" },
+  demographic_info: {
+    yearsOfEducation: 3,
+    income: 1400.0,
+    creditScore: 120.22,
+  },
   user_number: 3,
   balance: 10,
 }
 
-export const USERS = [LENDER1, LENDER2, BORROWER1]
+export const USERS = [LENDER1, LENDER2, BORROWER1].map((x) =>
+  addRecommendationRiskToUser(x, DEFAULT_RECOMMENDATION_RISK_PARAMS)
+)
 
 export const SUPPORTER1: User = {
   id: "970dca39-f591-4ad4-b5fd-d1ba4fe55954",
@@ -50,6 +60,10 @@ export const SUPPORTER1: User = {
   demographic_info: { country: "spaceland" },
   user_number: 4,
   balance: 200,
+  // if wanted we can also amend the user object like this to specify their reputation directly
+  recommendationRisksByRecommenderId: {
+    data: [{ risk_params: DEFAULT_RECOMMENDATION_RISK_PARAMS }],
+  },
 }
 
 export const EDGES: EdgeTuple[] = [

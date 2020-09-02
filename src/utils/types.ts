@@ -15,6 +15,15 @@ export enum UserType {
 export type User = GetUserByEmailQuery["user"][0]
 export type LoanRequest = User["loan_requests"][0]
 
+type BetaParms = [number, number]
+type KumrParams = [number, number]
+
+// the types are snake_cased to mirror the naming in the DB
+export type RiskParams = {
+  beta_params: BetaParms
+  kumr_params: KumrParams
+}
+
 export type JWTToken = {
   name: string
   email: string
