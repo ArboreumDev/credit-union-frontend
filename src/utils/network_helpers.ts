@@ -1,5 +1,5 @@
 import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
-import { EDGE_STATUS } from "./types"
+import { EDGE_STATUS, RiskParams } from "./types"
 const fs = require("fs")
 
 type User = User_Insert_Input
