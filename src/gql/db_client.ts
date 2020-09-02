@@ -79,27 +79,12 @@ export class DbClient {
       supporters.push({
         request_id: requestId,
         supporter_id: supporterIds[i],
-        amount: amounts[i],
+        pledge_amount: amounts[i],
       })
     }
     const data = await this.sdk.AddSupporters({ supporters })
     return data
   }
-
-  // updateSupporter = async (
-  //   requestId: string,
-  //   supporterId: [string],
-  //   amounts: [number],
-  //   status: string
-  // ) => {
-  //   const {supporterawait this.sdk.updateSupporter({
-  //     request_id: requestId,
-  //     supporter_id: supporterId,
-  //     amount,
-  //     status
-  //    })
-
-  // }
 
   /**
    * for a given request, create an offer by calling the swarmai-optimizer

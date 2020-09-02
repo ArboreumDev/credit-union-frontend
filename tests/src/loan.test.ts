@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -166,7 +166,7 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("the loan shows up in subsequent queries to the corpus Data", async () => {
       const input = await dbClient.getOptimizerInput(request_id)
-      console.log(input)
+      // console.log(input)
       expect(input.corpus.map((x) => x.loanId).includes(request_id)).toBeTruthy
     })
   })

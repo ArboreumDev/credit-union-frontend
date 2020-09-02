@@ -2,11 +2,11 @@
     $request_id: uuid!,
     $supporter_id: uuid!
     $status: String!,
-    $amount: Int
+    $pledge_amount: float8
   ) {
     supporter: update_supporters_by_pk (
       pk_columns: { request_id: $request_id, supporter_id: $supporter_id}
-      _set: { status: $status, pledge_amount: $amount }
+      _set: { status: $status, pledge_amount: $pledge_amount }
     ) {
       supporter_id
       status

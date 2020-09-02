@@ -55,7 +55,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     const { loanRequest } = await sdk.GetLoanRequest({ requestId: request_id })
     expect(loanRequest.supporters[0].supporter_id).toBe(SUPPORTER1.id)
     expect(loanRequest.supporters[0].status).toBe(SupporterStatus.unknown)
-    expect(loanRequest.supporters[0].amount).toBe(amount / 2)
+    expect(loanRequest.supporters[0].pledge_amount).toBe(amount / 2)
   })
 
   test.skip("users can register supporters that are not on the network yet", async () => {
@@ -72,10 +72,10 @@ describe("Basic loan request flow for an accepted loan", () => {
     const { supporter } = await sdk.UpdateSupporter({
       request_id,
       supporter_id: SUPPORTER1.id,
-      amount: 40,
+      pledge_amount: 40,
       status: SupporterStatus.confirmed,
     })
     expect(supporter.status).toBe(SupporterStatus.confirmed)
-    expect(supporter.amount).toBe(40)
+    expect(supporter.pledge_amount).toBe(40)
   })
 })
