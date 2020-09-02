@@ -15,6 +15,8 @@ import {
 import ProfilePage from "./profile"
 import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/LoanRequestInitiated"
 import { BLoanRequestAwaitsConfirmation } from "../components/borrower/LoanRequests/LoanNeedsConfirmation"
+import { Center } from "@chakra-ui/core"
+import { Contactus } from "../components/ContactUs"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -54,6 +56,9 @@ const Page = ({ state, session }: Props) => {
     <div>
       <AppBar />
       {componentMap[state]}
+      <Center>
+        <Contactus />
+      </Center>
     </div>
   )
 }

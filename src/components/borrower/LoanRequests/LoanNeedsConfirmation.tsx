@@ -109,9 +109,6 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
           </Center>
         </form>
         <Box h="30px" />
-        <Center>
-          <Contactus />
-        </Center>
       </Stack>
     </Container>
   )
