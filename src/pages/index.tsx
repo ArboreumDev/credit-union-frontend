@@ -56,7 +56,7 @@ const Page = ({ state, session }: Props) => {
     <div>
       <AppBar />
       {componentMap[state]}
-      <Center>
+      <Center margin="40px">
         <Contactus />
       </Center>
     </div>
