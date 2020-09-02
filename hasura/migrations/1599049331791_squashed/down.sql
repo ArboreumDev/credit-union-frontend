@@ -1,22 +1,7 @@
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "status" DROP DEFAULT;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "participation_request_time" DROP DEFAULT;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "invest_in_corpus" DROP DEFAULT;
-
-ALTER TABLE "public"."supporters" ALTER COLUMN "pledge_amount" TYPE integer;
-
-alter table "public"."supporters" rename column "pledge_amount" to "amount";
-
-alter table "public"."supporters" rename column "supporter_id" to "guarantor_id";
-
-alter table "public"."supporters" rename to "guarantors";
-
 DROP TABLE public.edges CASCADE;
 DROP TABLE public.encumbrance_participants CASCADE;
 DROP TABLE public.encumbrances CASCADE;
-DROP TABLE public.guarantors CASCADE;
+DROP TABLE public.supporters CASCADE;
 DROP TABLE public.loan_participants CASCADE;
 DROP TABLE public.loan_requests CASCADE;
 DROP TABLE public.loan_risk CASCADE;

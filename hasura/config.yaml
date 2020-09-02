@@ -1,8 +1,8 @@
 version: 2
-endpoint: https://fine-finch-84.hasura.app/
-admin_secret: T4AwDcyGfKLakMj
+endpoint: http://localhost:8080
+admin_secret: myadminsecretkey
 metadata_directory: metadata
 actions:
   kind: synchronous
-  handler_webhook_baseurl: https://app.arboreum.dev
+  handler_webhook_baseurl: http://localhost:3000
 show_update_notification: false
