@@ -66,7 +66,7 @@ const Page = () => {
 
   return (
     <Box>
-      <Center>
+      <Center marginBottom="20px">
         <Box w="200px">
           <Slider
             onChange={(v) => setStateIdx(v)}
@@ -81,7 +81,7 @@ const Page = () => {
           </Slider>
         </Box>
       </Center>
-      <Center>
+      <Center marginBottom="20px">
         <Heading as="h1" size="md">
           {title}
         </Heading>
