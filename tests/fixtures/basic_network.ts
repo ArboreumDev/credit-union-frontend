@@ -41,7 +41,7 @@ export const BORROWER1: User = {
 
 export const USERS = [LENDER1, LENDER2, BORROWER1]
 
-export const SUPPORTER1: User = {
+export const USER4: User = {
   id: "970dca39-f591-4ad4-b5fd-d1ba4fe55954",
   name: "noobnoob",
   email: "noob@galaxy.io",

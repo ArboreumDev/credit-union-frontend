@@ -8,7 +8,7 @@ mutation ResetDB {
   delete_encumbrances(where: {}) {
     affected_rows
   }
-  delete_supporters(where: {}) {
+  delete_guarantors(where: {}) {
     affected_rows
   }
   delete_recommendation_risk(where: {}) {

@@ -3,7 +3,7 @@ mutation StartLoan(
   $payable: payables_insert_input!
   $receivable: receivables_insert_input!
 ) # $balanceUpdate: ??
-# $supporters: [supporterDetailsInput!]!
+# $guarantors: [guarantorDetailsInput!]!
 {
   update_loan_requests_by_pk(
     pk_columns: { request_id: $request_id }
