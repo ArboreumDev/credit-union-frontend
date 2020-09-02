@@ -66,6 +66,21 @@ export type OptimizerContext = {
   corpus_cash: number
   novation: boolean
 }
+
+export type LoanRequestInfo = {
+  borrower_info: BorrowerInfo
+  request_id: string
+  tenor: number
+  amount: number
+  supporters: SupporterInfo[]
+  risk_params?: RiskParams
+}
+
+export type SwarmAiRequestMessage = {
+  loan_request_info: LoanRequestInfo
+  risk_assessment_context: RiskInput
+  optimizer_context: OptimizerContext
+}
 // =========== End of risk module types ========
 
 export enum EDGE_STATUS {
