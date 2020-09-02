@@ -71,7 +71,7 @@ const Page = () => {
         {stateIdx > 0 && (
           <Button onClick={() => setStateIdx(stateIdx - 1)}>&lt; </Button>
         )}
-        <Box w="200px" margin="20px">
+        <Box w="200px" marginBottom="20px">
           <Slider
             onChange={(v) => setStateIdx(v)}
             max={Object.keys(journeySequence).length - 1}
