@@ -12,7 +12,7 @@ db:
 	# TODO: handle this within a docker container, so hasura command works without any setup
 	yarn migrate
 	yarn metadata
-	cd ../hasura/; yarn hasura seeds apply
+	yarn seeds
 
 jest-test:
     # Use this to reset the DB when in dev mode
