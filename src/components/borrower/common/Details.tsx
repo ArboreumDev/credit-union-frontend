@@ -12,10 +12,10 @@ interface Params {
 
 export const Details = ({ rows }: Params) => (
   <Center>
-    <Stack>
+    <Stack spacing="15px">
       {rows.map((row) => (
         <Flex key={row.key}>
-          <Box w="200px">
+          <Box flex="1">
             <Text color="gray.500">{row.key}</Text>
           </Box>
           <Box flex="1">

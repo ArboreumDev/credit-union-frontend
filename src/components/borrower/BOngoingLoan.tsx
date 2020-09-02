@@ -8,6 +8,7 @@ import {
   StatNumber,
   Text,
   Button,
+  Stack,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
@@ -34,9 +35,9 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
 ]
 
 export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
-  <Container minW="sm" bg="white">
+  <Container minW="s" bg="white">
     <RepaymentNotReceived />
-    <Box margin="20px" padding="10px" borderWidth="5px" borderRadius="lg">
+    <Stack padding="10px" borderWidth="3px">
       <Center>
         <Text padding="0px" margin="0px" fontSize="30px">
           <CgFileDocument />
@@ -63,6 +64,6 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
       <Center>
         <Button>Make Repayment</Button>
       </Center>
-    </Box>
+    </Stack>
   </Container>
 )
