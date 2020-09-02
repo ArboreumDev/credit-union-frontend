@@ -16,7 +16,7 @@ const LandingPage = () => {
   return (
     <div className="Container">
       <VStack spacing={4} align="stretch">
-        <Center h="40px">
+        <Center margin="40px" h="40px">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Center>
         <Center h="40px">
@@ -25,7 +25,7 @@ const LandingPage = () => {
             colorScheme="blue"
             variant="outline"
           >
-            SignIn
+            Sign In
           </Button>
         </Center>
       </VStack>
