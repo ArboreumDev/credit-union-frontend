@@ -30,7 +30,7 @@ export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
+          <StatNumber>₹{loanRequest.amount}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>

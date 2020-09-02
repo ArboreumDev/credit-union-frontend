@@ -14,11 +14,24 @@ import {
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { LoanRequest } from "../../../utils/types"
+import { LoanRequest, CalculatedRisk } from "../../../utils/types"
 import { Contactus } from "../../ContactUs"
+import { Details, Row } from "../common/Details"
 
 interface Params {
   loanRequest: LoanRequest
+}
+const getRowsFromLoanRequestParams = (loan: LoanRequest): Row[] => {
+  const calculatedRisk = loan.risk_calc_result as CalculatedRisk
+
+  return [
+    { key: "Interest Rate", value: calculatedRisk.interestRate + "%" },
+    {
+      key: `Total due in ${calculatedRisk.loanTerm} months`,
+      value: "₹" + calculatedRisk.totalDue,
+    },
+    { key: "Repaid", value: "₹6000" },
+  ]
 }
 
 export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
@@ -49,35 +62,16 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
           <StatGroup>
             <Stat>
               <StatLabel>Amount</StatLabel>
-              <StatNumber>INR {loanRequest.amount}</StatNumber>
+              <StatNumber>₹{loanRequest.amount}</StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Purpose</StatLabel>
               <StatNumber>{loanRequest.purpose}</StatNumber>
             </Stat>
           </StatGroup>
-          <Box h="10px" />
-          <StatGroup>
-            <Stat>
-              <StatLabel>Interest</StatLabel>
-              <StatNumber>
-                {loanRequest.risk_calc_result.interestRate}%
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Total Due in 6 months</StatLabel>
-              <StatNumber>
-                INR {loanRequest.risk_calc_result.totalDue}
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Monthly Installments</StatLabel>
-              <StatNumber>
-                INR {loanRequest.risk_calc_result.monthlyDue}
-              </StatNumber>
-            </Stat>
-          </StatGroup>
+          <Box h="20px" />
         </Box>
+        <Details rows={getRowsFromLoanRequestParams(loanRequest)} />
         <Box h="30px" />
         <form onSubmit={handleSubmit(confirmLoan)}>
           <Stack>
@@ -91,6 +85,7 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
               I understand I will have to repay this loan with interest in 6
               monthly installments
             </Checkbox>
+            <Box h="10px" />
             <Checkbox
               size="sm"
               name="confirm_2"

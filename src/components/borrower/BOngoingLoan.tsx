@@ -21,12 +21,12 @@ interface Params {
 
 const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
   { key: "Status", value: "To Be disbursed" },
-  { key: "Loan Amount", value: "INR 1,20,000" },
-  { key: "Repaid", value: "INR 6000" },
-  { key: "Outstanding Principal", value: "INR 1,20,000" },
-  { key: "Outstanding Interest", value: "INR 20,000" },
+  { key: "Loan Amount", value: "₹1,20,000" },
+  { key: "Repaid", value: "₹6000" },
+  { key: "Outstanding Principal", value: "₹1,20,000" },
+  { key: "Outstanding Interest", value: "₹20,000" },
   { key: "Last Repayment Date", value: "30 August 2020" },
-  { key: "Next Repayment Amount", value: "INR 6,000" },
+  { key: "Next Repayment Amount", value: "₹6,000" },
   {
     key: "Next Repayment Due Date",
     value: "30 Septembed 2020",
@@ -50,7 +50,7 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>INR {loanRequest.amount}</StatNumber>
+          <StatNumber>₹{loanRequest.amount}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>

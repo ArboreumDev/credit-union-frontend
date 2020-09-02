@@ -35,9 +35,9 @@ const FIXTURES = {
         payback_status: null,
         purpose: "Home loan",
         risk_calc_result: {
+          loanTerm: 6,
           interestRate: 5.5,
           totalDue: 1200,
-          monthlyDues: 1200 / 6,
         },
         status: "initiated",
         created_at: "2020-08-29T04:12:41.393094+00:00",

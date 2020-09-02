@@ -20,10 +20,10 @@ interface Props {
 }
 
 const rows = [
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Disbursal", value: "INR 12,000" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Disbursal", value: "₹12,000" },
 ]
 
 const ProfilePage = ({ user }: Props) => {
