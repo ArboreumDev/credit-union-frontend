@@ -84,7 +84,7 @@ const Page = () => {
             <SliderThumb />
           </Slider>
         </Box>
-        {stateIdx < Object.keys(journeySequence).length && (
+        {stateIdx < Object.keys(journeySequence).length - 1 && (
           <Button onClick={() => setStateIdx(stateIdx + 1)}>&gt; </Button>
         )}
       </Center>
@@ -94,7 +94,7 @@ const Page = () => {
         </Heading>
       </Center>
       <Center marginBottom="20px">{title}</Center>
-      <Divider margin="20px"></Divider>
+      <Divider marginBottom="20px"></Divider>
       {component}
     </Box>
   )
