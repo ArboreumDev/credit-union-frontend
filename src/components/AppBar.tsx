@@ -15,15 +15,12 @@ const AppBar = () => (
     paddingBottom="0.8rem"
     paddingTop="1rem"
     as="nav"
-    marginTop="-10px"
-    marginLeft="-10px"
-    marginRight="-10px"
     marginBottom="20px"
     minH="40px"
     minW="s"
   >
     <Flex align="center">
-      <button onClick={() => Router.push("/")}>
+      <button onClick={() => location.reload()}>
         <img width="150px" src="/images/logo.svg" alt="logo" />
       </button>
     </Flex>

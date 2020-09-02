@@ -6,7 +6,7 @@ import {
   TabPanels,
   TabPanel,
 } from "@chakra-ui/core"
-import { getUIStateComponentMap } from "."
+import { getUIStateComponentMap } from "../../index"
 
 const FIXTURES = {
   USER: {

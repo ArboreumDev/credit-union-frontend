@@ -30,3 +30,13 @@ Linting automatically happen during commits. We use husky and lint-staged to ach
 
 To run manually:
 `yarn eslint .`
+
+# For production
+
+## Check if there are any build errors:
+
+`yarn build`
+
+## Migrations
+
+If there are changes to migrations, make sure the down migration file works well.
