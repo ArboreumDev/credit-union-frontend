@@ -259,7 +259,6 @@ export class DbClient {
     )
     const supporterShareValues = []
     confirmedSupporters.forEach((s) => {
-      // console.log('22', s.user.corpus_share, totalCorpusShares, totalCorpusInvestmentValue)
       const shareValue = proportion(
         s.user.corpus_share,
         totalCorpusShares,
@@ -268,12 +267,6 @@ export class DbClient {
       const totalValue = shareValue + s.user.balance
       const shareRatio = shareValue / totalValue
       supporterShareValues.push(shareRatio * s.pledge_amount)
-      // console.log('value', shareValue)
-      // console.log('user', s.supporter_id,)
-      // console.log('pledges total:', s.pledge_amount, 'has cash', s.user.balance, 'has shares:', s.user.corpus_share , '/', totalCorpusShares)
-      // console.log('total corpus value', totalCorpusInvestmentValue)
-      // console.log('portfolio split:', shareRatio )
-      // console.log('intermediateValues:', shareRatio, shareValue, totalValue, s.pledge_amount)
     })
     // sum up all shares
     const supporterCorpusShare = supporterShareValues.length
