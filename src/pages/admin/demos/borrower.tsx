@@ -12,6 +12,7 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  Divider,
 } from "@chakra-ui/core"
 import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
@@ -87,6 +88,7 @@ const Page = () => {
         </Heading>
       </Center>
       <Center marginBottom="20px">{title}</Center>
+      <Divider margin="20px"></Divider>
       {component}
     </Box>
   )
