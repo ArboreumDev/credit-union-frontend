@@ -12,8 +12,10 @@ import {
   generateUpdateAsSingleTransaction,
   transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
+import { DEFAULT_LOAN_TENOR } from "../../src/utils/constant.js"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
+
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
@@ -67,20 +69,43 @@ export class DbClient {
     }
   }
 
+  addSupporters = async (
+    requestId: string,
+    supporterIds: [string],
+    amounts: [number]
+  ) => {
+    const supporters = []
+    for (let i = 0; i < supporterIds.length; i++) {
+      supporters.push({
+        request_id: requestId,
+        supporter_id: supporterIds[i],
+        pledge_amount: amounts[i],
+      })
+    }
+    const data = await this.sdk.AddSupporters({ supporters })
+    return data
+  }
+
   /**
    * for a given request, create an offer by calling the swarmai-optimizer
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const data = await this.sdk.GetLoanRequest({ requestId })
-    const request = data.loan_requests_by_pk
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
 
     // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
     // const ai_input = await this.fetchDataForLoanRequestCalculation(req.borrower_id,  req.amount)
     // Once done, the AI will then call back into into our api and write to the DB
 
     // for simplicity will this is now be mocked up like this:
-    const mockedAiResult = { amount: request.amount, interest: 10 }
+    const mockedAiResult = {
+      amount: loanRequest.amount,
+      tenor: DEFAULT_LOAN_TENOR,
+      interest: 0.1,
+      corpusShare: 0.8,
+      kumaraA: 20,
+      kumaraB: 10,
+    }
     const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
       latestOffer: mockedAiResult,
     })
@@ -191,5 +216,70 @@ export class DbClient {
       }
     })
     return failures
+  }
+
+  getOptimizerInput = async (requestId: string) => {
+    const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
+      statusList: [LoanRequestStatus.live],
+    })
+    const totalCorpusShares = corpus.aggregate.sum.corpus_share
+    const totalCorpusCash = corpus.aggregate.sum.balance || 0
+    const totalCorpusInvestmentValue =
+      corpusInvestment.aggregate.sum.amount_total || 0
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+
+    // get the total value of guarantee that the supporters have in the form of portfolioshares
+    // "if you have two supporters one with a 40/60 split
+    // and antoerh with 20/80
+    // then you just take 60%*pledgeAmountA+20%pledgeAmountB"
+    const supporterShareValues = []
+    loanRequest.supporters.forEach((s) => {
+      // console.log('22', s.user.corpus_share, totalCorpusShares, totalCorpusInvestmentValue)
+      const shareValue = proportion(
+        s.user.corpus_share,
+        totalCorpusShares,
+        totalCorpusInvestmentValue
+      )
+      const totalValue = shareValue + s.user.balance
+      const shareRatio = shareValue / totalValue
+      supporterShareValues.push(shareRatio * s.pledge_amount)
+      // console.log('value', shareValue)
+      // console.log('user', s.supporter_id,)
+      // console.log('pledges total:', s.pledge_amount, 'has cash', s.user.balance, 'has shares:', s.user.corpus_share , '/', totalCorpusShares)
+      // console.log('total corpus value', totalCorpusInvestmentValue)
+      // console.log('portfolio split:', shareRatio )
+      // console.log('intermediateValues:', shareRatio, shareValue, totalValue, s.pledge_amount)
+    })
+    const supporterCorpusShare = supporterShareValues.reduce((a, b) => a + b)
+
+    return {
+      corpus: loans.map((x) => {
+        const terms = x.risk_calc_result.latestOffer
+        return {
+          id: x.request_id,
+          amountInPortfolio: proportion(terms.corpusShare, 1, terms.amount),
+          amountOwnedBySupporters: proportion(
+            1 - terms.corpusShare,
+            1,
+            terms.amount
+          ),
+          apr: terms.interest,
+          tenor: terms.tenor,
+          kumaraA: terms.kumaraA,
+          kumaraB: terms.kumaraB,
+          timeRemaining: 5, // TODO
+        }
+      }),
+      corpusCash: totalCorpusCash,
+      loanRequest: {
+        loan_request_id: loanRequest.request_id,
+        amount: loanRequest.risk_calc_result.latestOffer.amount,
+        tenor: loanRequest.risk_calc_result.latestOffer.tenor,
+        kumaraA: loanRequest.risk_calc_result.latestOffer.kumaraA,
+        kumaraB: loanRequest.risk_calc_result.latestOffer.kumaraB,
+      },
+      supporterCorpusShare,
+      novation: false,
+    }
   }
 }

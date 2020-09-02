@@ -1,3 +1,4 @@
+
 CREATE TYPE public.edge_status AS ENUM (
     'active',
     'awaiting_lender_confirmation',
@@ -17,6 +18,11 @@ CREATE TYPE public.user_t AS ENUM (
     'lender',
     'borrower',
     'guarantor'
+);
+CREATE TYPE public.supporter_status AS ENUM ( 
+    'unknown',
+    'rejected',
+    'confirmed'
 );
 CREATE FUNCTION public.set_current_timestamp_updated_at() RETURNS trigger
     LANGUAGE plpgsql
@@ -226,3 +232,17 @@ ALTER TABLE ONLY public.recommendation_risk
     ADD CONSTRAINT risk_agent_id_fkey FOREIGN KEY (agent_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.recommendation_risk
     ADD CONSTRAINT risk_neighbor_id_fkey FOREIGN KEY (neighbor_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+alter table "public"."guarantors" rename to "supporters";
+
+alter table "public"."supporters" rename column "guarantor_id" to "supporter_id";
+
+alter table "public"."supporters" rename column "amount" to "pledge_amount";
+
+ALTER TABLE "public"."supporters" ALTER COLUMN "pledge_amount" TYPE float8;
+
+ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "invest_in_corpus" SET DEFAULT True;
+
+ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "participation_request_time" SET DEFAULT now();
+
+ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "status" SET DEFAULT 'unknown';

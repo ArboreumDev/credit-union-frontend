@@ -38,6 +38,12 @@ export enum LoanRequestStatus {
   settled = "settled",
 }
 
+export enum SupporterStatus {
+  unknown = "unknown",
+  rejected = "rejected",
+  confirmed = "confirmed",
+}
+
 export type PortfolioUpdate = {
   userId: string
   balanceDelta: number
