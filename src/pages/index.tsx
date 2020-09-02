@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/client"
 import { useRouter } from "next/dist/client/router"
 import AppBar from "../components/AppBar"
-import { BOngoingLoan } from "../components/borrower/BLoan"
+import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
