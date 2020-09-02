@@ -67,13 +67,16 @@ const Page = () => {
 
   return (
     <Box>
-      <Center marginBottom="20px">
-        <Box w="200px">
+      <Center>
+        {stateIdx > 0 && (
+          <Button onClick={() => setStateIdx(stateIdx - 1)}>&lt; </Button>
+        )}
+        <Box w="200px" margin="20px">
           <Slider
             onChange={(v) => setStateIdx(v)}
             max={Object.keys(journeySequence).length - 1}
             step={1}
-            defaultValue={0}
+            value={stateIdx}
           >
             <SliderTrack>
               <SliderFilledTrack />
@@ -81,6 +84,9 @@ const Page = () => {
             <SliderThumb />
           </Slider>
         </Box>
+        {stateIdx < Object.keys(journeySequence).length && (
+          <Button onClick={() => setStateIdx(stateIdx + 1)}>&gt; </Button>
+        )}
       </Center>
       <Center>
         <Heading as="h1" size="md">
