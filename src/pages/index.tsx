@@ -36,7 +36,7 @@ export const getUIStateComponentMap = (user: User) => {
       <BLoanRequestAwaitsConfirmation loanRequest={loanRequest} />
     ),
     [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
-    [UIState.LDashboard]: <LenderDashboard />,
+    [UIState.LDashboard]: <LenderDashboard user={user} />,
     [UIState.Profile]: <ProfilePage user={user} />,
   }
 }
