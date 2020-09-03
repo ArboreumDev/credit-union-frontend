@@ -5,7 +5,7 @@ import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/landing"
-import Onboarding from "../components/onboarding"
+import Onboarding from "../components/onboarding/onboarding"
 import { Session, User } from "../utils/types"
 import {
   getMostRecentLoanRequest,
@@ -16,7 +16,7 @@ import ProfilePage from "./profile"
 import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/LoanRequestInitiated"
 import { BLoanRequestAwaitsConfirmation } from "../components/borrower/LoanRequests/LoanNeedsConfirmation"
 import { Center } from "@chakra-ui/core"
-import { Contactus } from "../components/ContactUs"
+import { Contactus } from "../components/common/ContactUs"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
