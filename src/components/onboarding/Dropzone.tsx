@@ -1,8 +1,8 @@
-import Dropzone from "react-dropzone"
+import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 import Axios from "axios"
 import { useState } from "react"
-import { UploadRequest } from "../pages/api/upload"
-import { UnorderedList, ListItem, Spinner } from "@chakra-ui/core"
+import Dropzone from "react-dropzone"
+import { UploadRequest } from "../../pages/api/upload"
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
