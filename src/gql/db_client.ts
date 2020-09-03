@@ -344,8 +344,8 @@ export class DbClient {
     // create the borrowerInfo-object
     const borrowerInfo = {
       borrower_id: loanRequest.borrower_id,
-      credit_score: loanRequest.user.demographic_info.creditScore,
-      education_years: loanRequest.user.demographic_info.yearsOfEducation,
+      credit_score: loanRequest.user.demographic_info.credit_score,
+      education_years: loanRequest.user.demographic_info.education_years,
       income: loanRequest.user.demographic_info.income,
     } as BorrowerInfo
     return {
