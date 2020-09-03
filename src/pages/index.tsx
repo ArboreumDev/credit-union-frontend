@@ -5,7 +5,7 @@ import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
 import LandingPage from "../components/common/landing"
-import Onboarding from "../components/onboarding/onboarding"
+import Onboarding from "../components/common/onboarding/onboarding"
 import { Session, User } from "../utils/types"
 import {
   getMostRecentLoanRequest,

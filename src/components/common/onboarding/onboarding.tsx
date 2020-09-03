@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/core"
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
-import { CreateUserMutationVariables } from "../../gql/sdk"
-import { fetcher } from "../../utils/api"
+import { CreateUserMutationVariables } from "../../../gql/sdk"
+import { fetcher } from "../../../utils/api"
 import Dropzone from "./Dropzone"
 
 type FormData = {
