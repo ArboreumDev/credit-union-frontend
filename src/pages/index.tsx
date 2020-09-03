@@ -1,10 +1,10 @@
 import { getSession } from "next-auth/client"
 import { useRouter } from "next/dist/client/router"
-import AppBar from "../components/AppBar"
+import AppBar from "../components/common/AppBar"
 import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
 import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import LandingPage from "../components/landing"
+import LandingPage from "../components/common/landing"
 import Onboarding from "../components/onboarding/onboarding"
 import { Session, User } from "../utils/types"
 import {
@@ -17,6 +17,7 @@ import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/LoanR
 import { BLoanRequestAwaitsConfirmation } from "../components/borrower/LoanRequests/LoanNeedsConfirmation"
 import { Center } from "@chakra-ui/core"
 import { Contactus } from "../components/common/ContactUs"
+import LenderDashboard from "../components/lender/LenderDashboard"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -35,7 +36,7 @@ export const getUIStateComponentMap = (user: User) => {
       <BLoanRequestAwaitsConfirmation loanRequest={loanRequest} />
     ),
     [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
-    [UIState.LDashboard]: <div>Lender Dashboard</div>,
+    [UIState.LDashboard]: <LenderDashboard />,
     [UIState.Profile]: <ProfilePage user={user} />,
   }
 }
