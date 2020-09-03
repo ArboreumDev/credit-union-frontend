@@ -1,0 +1,13 @@
+query GetCorpusRecommendationRisks (
+  $userIds: [uuid!]
+) {
+  recommendation_risk (
+    where: {
+      recommender_id: {_in: $userIds}
+      agent_id: {_is_null: true}
+    }
+  ) {
+    recommender_id
+    risk_params
+  }
+}

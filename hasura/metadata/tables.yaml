@@ -135,7 +135,7 @@
         foreign_key_constraint_on: agent_id
     - name: userByNeighborId
       using:
-        foreign_key_constraint_on: neighbor_id
+        foreign_key_constraint_on: recommender_id
 - table:
     schema: public
     name: supporters
@@ -206,10 +206,10 @@
           table:
             schema: public
             name: recommendation_risk
-    - name: recommendationRisksByNeighborId
+    - name: recommendationRisksByRecommenderId
       using:
         foreign_key_constraint_on:
-          column: neighbor_id
+          column: recommender_id
           table:
             schema: public
             name: recommendation_risk

@@ -19,5 +19,18 @@ query GetUserByEmail($email: String!) {
       amount
       purpose
     }
+    pledgeRequests: supporters (where: {status: {_eq: "unknown"}}) {
+      request_id
+      pledge_amount
+      participation_request_time
+      loan_request {
+        purpose
+        amount
+        user {
+          email
+          name
+        }
+      }
+    }
   }
 }
