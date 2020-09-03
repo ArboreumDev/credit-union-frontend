@@ -3,7 +3,12 @@ import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
 import { SupporterStatus } from "../../src/utils/types"
-import { BASIC_NETWORK, BORROWER1, SUPPORTER1 } from "../fixtures/basic_network"
+import {
+  BASIC_NETWORK,
+  BORROWER1,
+  SUPPORTER1,
+  SUPPORTER2,
+} from "../fixtures/basic_network"
 import { addNetwork } from "../../src/utils/network_helpers"
 import { getUserPortfolio } from "./test_helpers"
 
@@ -30,6 +35,8 @@ afterAll(async () => {
 
 describe("Basic loan request flow for an accepted loan", () => {
   const amount = 100
+  const pledgeAmount1 = amount / 2
+  const pledgeAmount2 = amount / 4
   const purpose = "go see another movie"
   let request_id: string
   let balancesBefore
@@ -50,12 +57,17 @@ describe("Basic loan request flow for an accepted loan", () => {
 
   test("suppporters that exist on the network can be added to the loan", async () => {
     await sdk.CreateUser({ user: SUPPORTER1 })
-    await dbClient.addSupporters(request_id, [SUPPORTER1.id], [amount / 2])
+    await sdk.CreateUser({ user: SUPPORTER2 })
+    await dbClient.addSupporters(
+      request_id,
+      [SUPPORTER1.id, SUPPORTER2.id],
+      [pledgeAmount1, pledgeAmount2]
+    )
 
     const { loanRequest } = await sdk.GetLoanRequest({ requestId: request_id })
     expect(loanRequest.supporters[0].supporter_id).toBe(SUPPORTER1.id)
     expect(loanRequest.supporters[0].status).toBe(SupporterStatus.unknown)
-    expect(loanRequest.supporters[0].pledge_amount).toBe(amount / 2)
+    expect(loanRequest.supporters[0].pledge_amount).toBe(pledgeAmount1)
   })
 
   test.skip("users can register supporters that are not on the network yet", async () => {
@@ -63,12 +75,16 @@ describe("Basic loan request flow for an accepted loan", () => {
     // other_user_mail field set to the other user
   })
 
-  test.skip("supporters see the request for a pledge in their dashboard", async () => {
-    // TODO
+  test("supporters see the request for a pledge with basic info in their dashboard", async () => {
+    let { user } = await sdk.GetUserByEmail({ email: SUPPORTER1.email })
+    user = user[0]
+    expect(user.pledgeRequests[0].pledge_amount).toBe(pledgeAmount1)
+    expect(user.pledgeRequests[0].loan_request.user.email).toBe(BORROWER1.email)
+    expect(user.pledgeRequests[0].loan_request.user.name).toBe(BORROWER1.name)
+    expect(user.pledgeRequests[0].loan_request.amount).toBe(amount)
   })
 
   test("supporters can accept (or reject) a pledge-request", async () => {
-    // await dbClient.Upda
     const { supporter } = await sdk.UpdateSupporter({
       request_id,
       supporter_id: SUPPORTER1.id,
@@ -77,5 +93,14 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
     expect(supporter.status).toBe(SupporterStatus.confirmed)
     expect(supporter.pledge_amount).toBe(40)
+  })
+
+  test("only confirmed supporters are included in the loan-request-calculation", async () => {
+    const { loan_request_info } = await dbClient.getOptimizerInput(request_id)
+    const loanSupporters = loan_request_info.supporters.map(
+      (x) => x.supporter_id
+    )
+    expect(loanSupporters).toContain(SUPPORTER1.id)
+    expect(loanSupporters).not.toContain(SUPPORTER2.id)
   })
 })

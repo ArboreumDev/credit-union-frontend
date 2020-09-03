@@ -4,6 +4,13 @@ import {
   LoanRequestStatus,
   UserType,
   User,
+  SupporterInfo,
+  BorrowerInfo,
+  SupporterStatus,
+  LiveLoanInfo,
+  RiskInput,
+  OptimizerContext,
+  SwarmAiRequestMessage,
 } from "../../src/utils/types"
 import {
   lenderBalanceToShareInLoan,
@@ -12,7 +19,11 @@ import {
   generateUpdateAsSingleTransaction,
   transformRequestToDashboardFormat,
 } from "../../src/utils/loan_helpers"
-import { DEFAULT_LOAN_TENOR } from "../../src/utils/constant.js"
+import {
+  DEFAULT_LOAN_TENOR,
+  DEFAULT_RISK_FREE_INTEREST_RATE,
+  DEFAULT_RECOMMENDATION_RISK_PARAMS,
+} from "../../src/utils/constant"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 
@@ -105,6 +116,11 @@ export class DbClient {
       corpusShare: 0.8,
       kumaraA: 20,
       kumaraB: 10,
+      idealloanSchedule: {
+        // if accepted this would be the schedule:
+        // matrix + 2 vectors created by running swarmai.loan.getLoanSchedule()
+        // used to create payment plan
+      },
     }
     const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
       latestOffer: mockedAiResult,
@@ -218,7 +234,15 @@ export class DbClient {
     return failures
   }
 
+  /**
+   * get all the data that is needed to run the optimizer and format it into the message
+   * it expects
+   * @param requestId
+   */
   getOptimizerInput = async (requestId: string) => {
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+
+    // ============ optimizer context =============================
     const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
       statusList: [LoanRequestStatus.live],
     })
@@ -226,15 +250,15 @@ export class DbClient {
     const totalCorpusCash = corpus.aggregate.sum.balance || 0
     const totalCorpusInvestmentValue =
       corpusInvestment.aggregate.sum.amount_total || 0
-    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
 
-    // get the total value of guarantee that the supporters have in the form of portfolioshares
-    // "if you have two supporters one with a 40/60 split
-    // and antoerh with 20/80
-    // then you just take 60%*pledgeAmountA+20%pledgeAmountB"
+    // Now get the total monetary-value of guarantee that the supporters have in the form of portfolioshares
+    //      "if you have two supporters one with a 40/60 split
+    //        and another with 20/80 then you just take 60%*pledgeAmountA+20%pledgeAmountB"
+    const confirmedSupporters = loanRequest.supporters.filter(
+      (x) => x.status == SupporterStatus.confirmed
+    )
     const supporterShareValues = []
-    loanRequest.supporters.forEach((s) => {
-      // console.log('22', s.user.corpus_share, totalCorpusShares, totalCorpusInvestmentValue)
+    confirmedSupporters.forEach((s) => {
       const shareValue = proportion(
         s.user.corpus_share,
         totalCorpusShares,
@@ -243,43 +267,90 @@ export class DbClient {
       const totalValue = shareValue + s.user.balance
       const shareRatio = shareValue / totalValue
       supporterShareValues.push(shareRatio * s.pledge_amount)
-      // console.log('value', shareValue)
-      // console.log('user', s.supporter_id,)
-      // console.log('pledges total:', s.pledge_amount, 'has cash', s.user.balance, 'has shares:', s.user.corpus_share , '/', totalCorpusShares)
-      // console.log('total corpus value', totalCorpusInvestmentValue)
-      // console.log('portfolio split:', shareRatio )
-      // console.log('intermediateValues:', shareRatio, shareValue, totalValue, s.pledge_amount)
     })
-    const supporterCorpusShare = supporterShareValues.reduce((a, b) => a + b)
+    // sum up all shares
+    const supporterCorpusShare = supporterShareValues.length
+      ? supporterShareValues.reduce((a, b) => a + b)
+      : 0
 
+    // use all existing loans in the portfolio to create a list of LiveLoanInfo-objects,
+    const liveLoanInfo = loans.map((x) => {
+      const terms = x.risk_calc_result.latestOffer
+      return {
+        loan_id: x.request_id,
+        amount_owned_portfolio: proportion(terms.corpusShare, 1, terms.amount),
+        amount_owned_supporters: proportion(
+          1 - terms.corpusShare,
+          1,
+          terms.amount
+        ),
+        interest: terms.interest,
+        tenor: terms.tenor,
+        kumr_params: [terms.kumaraA, terms.kumaraB],
+        time_remaining: 5, // TODO
+        loan_schedule: "TODO",
+      } as LiveLoanInfo
+    })
+    const riskInfo = await this.getRiskInput(requestId)
+    // create a big SwarmAiRequestMessage-Object
     return {
-      corpus: loans.map((x) => {
-        const terms = x.risk_calc_result.latestOffer
-        return {
-          id: x.request_id,
-          amountInPortfolio: proportion(terms.corpusShare, 1, terms.amount),
-          amountOwnedBySupporters: proportion(
-            1 - terms.corpusShare,
-            1,
-            terms.amount
-          ),
-          apr: terms.interest,
-          tenor: terms.tenor,
-          kumaraA: terms.kumaraA,
-          kumaraB: terms.kumaraB,
-          timeRemaining: 5, // TODO
-        }
-      }),
-      corpusCash: totalCorpusCash,
-      loanRequest: {
-        loan_request_id: loanRequest.request_id,
-        amount: loanRequest.risk_calc_result.latestOffer.amount,
-        tenor: loanRequest.risk_calc_result.latestOffer.tenor,
-        kumaraA: loanRequest.risk_calc_result.latestOffer.kumaraA,
-        kumaraB: loanRequest.risk_calc_result.latestOffer.kumaraB,
+      loan_request_info: {
+        request_id: requestId,
+        tenor: DEFAULT_LOAN_TENOR,
+        amount: loanRequest.amount,
+        borrower_info: riskInfo.borrowerInfo,
+        supporters: riskInfo.supporterInfo,
       },
-      supporterCorpusShare,
-      novation: false,
+      optimizer_context: {
+        risk_free_interest_rate: DEFAULT_RISK_FREE_INTEREST_RATE,
+        supporter_corpus_share: supporterCorpusShare || 0,
+        loans_in_corpus: liveLoanInfo,
+        corpus_cash: totalCorpusCash,
+        novation: false,
+      } as OptimizerContext,
+      risk_assessment_context: {
+        central_risk_info: DEFAULT_RECOMMENDATION_RISK_PARAMS,
+      } as RiskInput,
+    } as SwarmAiRequestMessage
+  }
+
+  /**
+   * collects basic info on the loan request, the borrower and the supporters
+   * supporters are combined into a list of SupporterInfoObjects
+   * @param requestId
+   */
+  getRiskInput = async (requestId: string) => {
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    const confirmedSupporters = loanRequest.supporters.filter(
+      (x) => x.status == SupporterStatus.confirmed
+    )
+    const { recommendation_risk } = await this.sdk.GetCorpusRecommendationRisks(
+      {
+        userIds: confirmedSupporters.map((x) => x.user.id),
+      }
+    )
+    // create SupporterInfo-objects
+    // TODO account for supporter status
+    const supporterInfo = confirmedSupporters.map((supporter) => {
+      const supporterRecRisk = recommendation_risk.filter(
+        (x) => x.recommender_id == supporter.user.id
+      )[0].risk_params
+      return {
+        supporter_id: supporter.user.id,
+        trust_amount: supporter.pledge_amount,
+        recommendation_risk: supporterRecRisk,
+      } as SupporterInfo
+    })
+    // create the borrowerInfo-object
+    const borrowerInfo = {
+      borrower_id: loanRequest.borrower_id,
+      credit_score: loanRequest.user.demographic_info.credit_score,
+      education_years: loanRequest.user.demographic_info.education_years,
+      income: loanRequest.user.demographic_info.income,
+    } as BorrowerInfo
+    return {
+      supporterInfo,
+      borrowerInfo,
     }
   }
 }

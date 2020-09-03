@@ -1,4 +1,5 @@
 
+
 CREATE TYPE public.edge_status AS ENUM (
     'active',
     'awaiting_lender_confirmation',
@@ -246,3 +247,17 @@ ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "invest_in_corpus" SET DEFAU
 ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "participation_request_time" SET DEFAULT now();
 
 ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "status" SET DEFAULT 'unknown';
+
+alter table "public"."recommendation_risk" drop constraint "risk_pkey";
+alter table "public"."recommendation_risk"
+    add constraint "recommendation_risk_pkey" 
+    primary key ( "neighbor_id" );
+
+ALTER TABLE ONLY "public"."recommendation_risk" ALTER COLUMN "recommendation_risk" SET DEFAULT jsonb_build_object();
+ALTER TABLE "public"."recommendation_risk" ALTER COLUMN "recommendation_risk" DROP NOT NULL;
+
+ALTER TABLE "public"."recommendation_risk" ALTER COLUMN "agent_id" DROP NOT NULL;
+
+alter table "public"."recommendation_risk" rename column "recommendation_risk" to "risk_params";
+
+alter table "public"."recommendation_risk" rename column "neighbor_id" to "recommender_id";

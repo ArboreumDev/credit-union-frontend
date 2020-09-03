@@ -1,5 +1,5 @@
 import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
-import { EDGE_STATUS } from "./types"
+import { EDGE_STATUS, RiskParams } from "./types"
 const fs = require("fs")
 
 type User = User_Insert_Input
@@ -24,6 +24,23 @@ export const generateEdgeInputFromTupleNotation = (
 // }
 
 // =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
+/**
+ * adds default recommendation risk to the user unless that user already has it defined
+ * @param user
+ * @param riskParams
+ */
+export const addRecommendationRiskToUser = (
+  user: User,
+  riskParams: RiskParams
+) => {
+  if (user.recommendationRisksByRecommenderId) return user
+  return {
+    ...user,
+    recommendationRisksByRecommenderId: {
+      data: [{ risk_params: riskParams }],
+    },
+  }
+}
 
 /** will insert all users and the basic connections into the db
  * @param users a dict of users to be added to the DB (see fixtures to see the format)

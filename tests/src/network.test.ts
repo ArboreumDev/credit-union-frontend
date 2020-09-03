@@ -4,6 +4,7 @@ import { initializeGQL } from "../../src/gql/graphql_client"
 import { EDGE_STATUS } from "../../src/utils/types"
 import { BASIC_NETWORK } from "../fixtures/basic_network"
 import { addNetwork, setupScenario } from "../../src/utils/network_helpers"
+import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/utils/constant"
 const basicCorpus = require("../fixtures/basicCorpus.json")
 
 global.fetch = require("node-fetch")
@@ -35,6 +36,15 @@ describe("An entire network can be added from a fixture", () => {
     Object.values(BASIC_NETWORK.nodes).forEach((user) => {
       expect(usermails).toContain(user.email)
     })
+  })
+
+  test("users are initialized with a default recommendation risk", async () => {
+    const { recommendation_risk } = await sdk.GetCorpusRecommendationRisks({
+      userIds: [BASIC_NETWORK.nodes[0].id],
+    })
+    expect(recommendation_risk[0].risk_params).toStrictEqual(
+      DEFAULT_RECOMMENDATION_RISK_PARAMS
+    )
   })
 
   test("all edges have been added", async () => {

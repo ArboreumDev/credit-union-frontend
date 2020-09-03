@@ -2,429 +2,419 @@
   "network": {
     "nodes": [
       {
-        "id": "56b4f968-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a92-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower21",
         "email": "borrower21@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower21",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 16,
-          "income": 30000.0,
-          "creditScore": 684.0449494024249
+          "education_years": 10,
+          "income": 12000.0,
+          "credit_score": 709.3718827776063
         }
       },
       {
-        "id": "56b4f969-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a93-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower22",
         "email": "borrower22@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower22",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 10,
-          "income": 14000.0,
-          "creditScore": 658.8306837612946
+          "education_years": 16,
+          "income": 35000.0,
+          "credit_score": 791.5822367265083
         }
       },
       {
-        "id": "56b4f96a-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a94-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower23",
         "email": "borrower23@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower23",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 16,
-          "income": 31000.0,
-          "creditScore": 761.5554877805995
+          "education_years": 10,
+          "income": 9000.0,
+          "credit_score": 639.1122462156277
         }
       },
       {
-        "id": "56b4f96b-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a95-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower24",
         "email": "borrower24@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower24",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 8,
-          "income": 7000.0,
-          "creditScore": 624.0841412087773
+          "education_years": 8,
+          "income": 9000.0,
+          "credit_score": 685.4324954630526
         }
       },
       {
-        "id": "56b4f96c-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a96-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower25",
         "email": "borrower25@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower25",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 8,
-          "income": 9000.0,
-          "creditScore": 625.0298220132897
+          "education_years": 16,
+          "income": 33000.0,
+          "credit_score": 741.124476355916
         }
       },
       {
-        "id": "56b4f96d-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a97-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower26",
         "email": "borrower26@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower26",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 8,
-          "income": 10000.0,
-          "creditScore": 512.9785745578451
+          "education_years": 10,
+          "income": 12000.0,
+          "credit_score": 495.58810668245576
         }
       },
       {
-        "id": "56b4f96e-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a98-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower27",
         "email": "borrower27@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower27",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 16,
-          "income": 34000.0,
-          "creditScore": 739.0304408410885
+          "education_years": 8,
+          "income": 8000.0,
+          "credit_score": 770.6839870054465
         }
       },
       {
-        "id": "56b4f96f-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a99-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower28",
         "email": "borrower28@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower28",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 10,
-          "income": 10000.0,
-          "creditScore": 620.0098033265133
+          "education_years": 16,
+          "income": 35000.0,
+          "credit_score": 659.5400898701783
         }
       },
       {
-        "id": "56b4f970-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9a-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower29",
         "email": "borrower29@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower29",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 10,
+          "education_years": 10,
           "income": 10000.0,
-          "creditScore": 357.4922537411315
+          "credit_score": 512.217259456908
         }
       },
       {
-        "id": "56b4f971-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9b-edc0-11ea-b90d-b9e34dde74d8",
         "name": "borrower30",
         "email": "borrower30@mail.com",
         "user_type": "borrower",
         "phone": "call-borrower30",
         "balance": 100,
         "demographic_info": {
-          "yearsOfEducation": 8,
-          "income": 9000.0,
-          "creditScore": 671.9793664377223
+          "education_years": 10,
+          "income": 14000.0,
+          "credit_score": 777.9243316671552
         }
       },
       {
-        "id": "56b4f972-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9c-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender1",
         "email": "lender1@mail.com",
         "user_type": "lender",
         "phone": "call-lender1",
-        "balance": 297.0,
+        "balance": 285.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f973-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9d-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender2",
         "email": "lender2@mail.com",
         "user_type": "lender",
         "phone": "call-lender2",
-        "balance": 675.0,
+        "balance": 430.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f974-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9e-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender3",
         "email": "lender3@mail.com",
         "user_type": "lender",
         "phone": "call-lender3",
-        "balance": 544.0,
+        "balance": 979.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f975-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5a9f-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender4",
         "email": "lender4@mail.com",
         "user_type": "lender",
         "phone": "call-lender4",
-        "balance": 209.0,
+        "balance": 445.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f976-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa0-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender5",
         "email": "lender5@mail.com",
         "user_type": "lender",
         "phone": "call-lender5",
-        "balance": 971.0,
+        "balance": 897.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f977-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa1-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender6",
         "email": "lender6@mail.com",
         "user_type": "lender",
         "phone": "call-lender6",
-        "balance": 559.0,
+        "balance": 1602.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f978-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa2-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender7",
         "email": "lender7@mail.com",
         "user_type": "lender",
         "phone": "call-lender7",
-        "balance": 1067.0,
+        "balance": 660.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f979-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa3-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender8",
         "email": "lender8@mail.com",
         "user_type": "lender",
         "phone": "call-lender8",
-        "balance": 953.0,
+        "balance": 662.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97a-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa4-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender9",
         "email": "lender9@mail.com",
         "user_type": "lender",
         "phone": "call-lender9",
-        "balance": 420.0,
+        "balance": 419.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97b-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa5-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender10",
         "email": "lender10@mail.com",
         "user_type": "lender",
         "phone": "call-lender10",
-        "balance": 656.0,
+        "balance": 220.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97c-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa6-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender11",
         "email": "lender11@mail.com",
         "user_type": "lender",
         "phone": "call-lender11",
-        "balance": 1174.0,
+        "balance": 457.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97d-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa7-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender12",
         "email": "lender12@mail.com",
         "user_type": "lender",
         "phone": "call-lender12",
-        "balance": 826.0,
+        "balance": 748.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97e-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa8-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender13",
         "email": "lender13@mail.com",
         "user_type": "lender",
         "phone": "call-lender13",
-        "balance": 418.0,
+        "balance": 760.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f97f-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aa9-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender14",
         "email": "lender14@mail.com",
         "user_type": "lender",
         "phone": "call-lender14",
-        "balance": 561.0,
+        "balance": 647.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f980-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aaa-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender15",
         "email": "lender15@mail.com",
         "user_type": "lender",
         "phone": "call-lender15",
-        "balance": 403.0,
+        "balance": 760.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f981-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aab-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender16",
         "email": "lender16@mail.com",
         "user_type": "lender",
         "phone": "call-lender16",
-        "balance": 717.0,
+        "balance": 509.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f982-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aac-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender17",
         "email": "lender17@mail.com",
         "user_type": "lender",
         "phone": "call-lender17",
-        "balance": 212.0,
+        "balance": 1286.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f983-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aad-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender18",
         "email": "lender18@mail.com",
         "user_type": "lender",
         "phone": "call-lender18",
-        "balance": 828.0,
+        "balance": 541.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f984-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aae-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender19",
         "email": "lender19@mail.com",
         "user_type": "lender",
         "phone": "call-lender19",
-        "balance": 621.0,
+        "balance": 1342.0,
         "demographic_info": {}
       },
       {
-        "id": "56b4f985-e877-11ea-b5fd-359608b9c149",
+        "id": "397b5aaf-edc0-11ea-b90d-b9e34dde74d8",
         "name": "lender20",
         "email": "lender20@mail.com",
         "user_type": "lender",
         "phone": "call-lender20",
-        "balance": 443.0,
+        "balance": 411.0,
         "demographic_info": {}
       }
     ],
     "edges": [
       [
-        "56b4f968-e877-11ea-b5fd-359608b9c149",
-        "56b4f968-e877-11ea-b5fd-359608b9c149",
-        194
+        "397b5a9e-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a92-edc0-11ea-b90d-b9e34dde74d8",
+        88
       ],
       [
-        "56b4f969-e877-11ea-b5fd-359608b9c149",
-        "56b4f968-e877-11ea-b5fd-359608b9c149",
-        403
+        "397b5a92-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a93-edc0-11ea-b90d-b9e34dde74d8",
+        220
       ],
       [
-        "56b4f976-e877-11ea-b5fd-359608b9c149",
-        "56b4f968-e877-11ea-b5fd-359608b9c149",
-        309
+        "397b5a93-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a93-edc0-11ea-b90d-b9e34dde74d8",
+        386
       ],
       [
-        "56b4f97a-e877-11ea-b5fd-359608b9c149",
-        "56b4f969-e877-11ea-b5fd-359608b9c149",
-        169
+        "397b5a94-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a94-edc0-11ea-b90d-b9e34dde74d8",
+        200
       ],
       [
-        "56b4f97c-e877-11ea-b5fd-359608b9c149",
-        "56b4f969-e877-11ea-b5fd-359608b9c149",
-        602
+        "397b5a95-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a94-edc0-11ea-b90d-b9e34dde74d8",
+        186
       ],
       [
-        "56b4f974-e877-11ea-b5fd-359608b9c149",
-        "56b4f96a-e877-11ea-b5fd-359608b9c149",
-        50
+        "397b5a96-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a94-edc0-11ea-b90d-b9e34dde74d8",
+        261
       ],
       [
-        "56b4f978-e877-11ea-b5fd-359608b9c149",
-        "56b4f96b-e877-11ea-b5fd-359608b9c149",
-        150
-      ],
-      [
-        "56b4f96a-e877-11ea-b5fd-359608b9c149",
-        "56b4f96c-e877-11ea-b5fd-359608b9c149",
-        154
-      ],
-      [
-        "56b4f96b-e877-11ea-b5fd-359608b9c149",
-        "56b4f96c-e877-11ea-b5fd-359608b9c149",
-        224
-      ],
-      [
-        "56b4f976-e877-11ea-b5fd-359608b9c149",
-        "56b4f96c-e877-11ea-b5fd-359608b9c149",
+        "397b5a97-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a95-edc0-11ea-b90d-b9e34dde74d8",
         161
       ],
       [
-        "56b4f96c-e877-11ea-b5fd-359608b9c149",
-        "56b4f96d-e877-11ea-b5fd-359608b9c149",
-        208
+        "397b5a98-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a96-edc0-11ea-b90d-b9e34dde74d8",
+        102
       ],
       [
-        "56b4f976-e877-11ea-b5fd-359608b9c149",
-        "56b4f96d-e877-11ea-b5fd-359608b9c149",
-        178
+        "397b5a99-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a97-edc0-11ea-b90d-b9e34dde74d8",
+        212
       ],
       [
-        "56b4f979-e877-11ea-b5fd-359608b9c149",
-        "56b4f96d-e877-11ea-b5fd-359608b9c149",
-        140
+        "397b5aae-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a97-edc0-11ea-b90d-b9e34dde74d8",
+        705
       ],
       [
-        "56b4f977-e877-11ea-b5fd-359608b9c149",
-        "56b4f96e-e877-11ea-b5fd-359608b9c149",
-        330
+        "397b5aa2-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a97-edc0-11ea-b90d-b9e34dde74d8",
+        253
       ],
       [
-        "56b4f983-e877-11ea-b5fd-359608b9c149",
-        "56b4f96e-e877-11ea-b5fd-359608b9c149",
-        374
+        "397b5a9a-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a98-edc0-11ea-b90d-b9e34dde74d8",
+        264
       ],
       [
-        "56b4f96d-e877-11ea-b5fd-359608b9c149",
-        "56b4f96f-e877-11ea-b5fd-359608b9c149",
-        216
+        "397b5aa7-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a98-edc0-11ea-b90d-b9e34dde74d8",
+        242
       ],
       [
-        "56b4f97d-e877-11ea-b5fd-359608b9c149",
-        "56b4f970-e877-11ea-b5fd-359608b9c149",
-        150
+        "397b5a9b-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a99-edc0-11ea-b90d-b9e34dde74d8",
+        156
       ],
       [
-        "56b4f97c-e877-11ea-b5fd-359608b9c149",
-        "56b4f970-e877-11ea-b5fd-359608b9c149",
-        101
+        "397b5aa3-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a9a-edc0-11ea-b90d-b9e34dde74d8",
+        93
       ],
       [
-        "56b4f96e-e877-11ea-b5fd-359608b9c149",
-        "56b4f971-e877-11ea-b5fd-359608b9c149",
-        135
+        "397b5a9e-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a9b-edc0-11ea-b90d-b9e34dde74d8",
+        392
       ],
       [
-        "56b4f96f-e877-11ea-b5fd-359608b9c149",
-        "56b4f971-e877-11ea-b5fd-359608b9c149",
-        288
+        "397b5aa8-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a9b-edc0-11ea-b90d-b9e34dde74d8",
+        175
+      ],
+      [
+        "397b5aac-edc0-11ea-b90d-b9e34dde74d8",
+        "397b5a9b-edc0-11ea-b90d-b9e34dde74d8",
+        291
       ]
     ]
   },
   "loan_requests": [
-    { "borrower_id": "56b4f968-e877-11ea-b5fd-359608b9c149", "amount": 1530.0 },
-    { "borrower_id": "56b4f969-e877-11ea-b5fd-359608b9c149", "amount": 664.0 },
-    { "borrower_id": "56b4f96a-e877-11ea-b5fd-359608b9c149", "amount": 94.0 },
-    { "borrower_id": "56b4f96b-e877-11ea-b5fd-359608b9c149", "amount": 249.0 },
-    { "borrower_id": "56b4f96c-e877-11ea-b5fd-359608b9c149", "amount": 981.0 },
-    { "borrower_id": "56b4f96d-e877-11ea-b5fd-359608b9c149", "amount": 1946.0 },
-    { "borrower_id": "56b4f96e-e877-11ea-b5fd-359608b9c149", "amount": 923.0 },
-    { "borrower_id": "56b4f96f-e877-11ea-b5fd-359608b9c149", "amount": 465.0 },
-    { "borrower_id": "56b4f970-e877-11ea-b5fd-359608b9c149", "amount": 215.0 },
-    { "borrower_id": "56b4f971-e877-11ea-b5fd-359608b9c149", "amount": 851.0 }
+    { "borrower_id": "397b5a92-edc0-11ea-b90d-b9e34dde74d8", "amount": 169.0 },
+    { "borrower_id": "397b5a93-edc0-11ea-b90d-b9e34dde74d8", "amount": 1230.0 },
+    { "borrower_id": "397b5a94-edc0-11ea-b90d-b9e34dde74d8", "amount": 2057.0 },
+    { "borrower_id": "397b5a95-edc0-11ea-b90d-b9e34dde74d8", "amount": 587.0 },
+    { "borrower_id": "397b5a96-edc0-11ea-b90d-b9e34dde74d8", "amount": 121.0 },
+    { "borrower_id": "397b5a97-edc0-11ea-b90d-b9e34dde74d8", "amount": 2407.0 },
+    { "borrower_id": "397b5a98-edc0-11ea-b90d-b9e34dde74d8", "amount": 359.0 },
+    { "borrower_id": "397b5a99-edc0-11ea-b90d-b9e34dde74d8", "amount": 1174.0 },
+    { "borrower_id": "397b5a9a-edc0-11ea-b90d-b9e34dde74d8", "amount": 5090.0 },
+    { "borrower_id": "397b5a9b-edc0-11ea-b90d-b9e34dde74d8", "amount": 5047.0 }
   ]
 }

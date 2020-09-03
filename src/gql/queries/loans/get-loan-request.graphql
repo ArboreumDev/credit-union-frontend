@@ -12,9 +12,13 @@ query GetLoanRequest($requestId: uuid!) {
       supporter_id
       pledge_amount
       user {
+        id
         corpus_share
         balance
       }
+    }
+    user {
+      demographic_info
     }
   }
 }

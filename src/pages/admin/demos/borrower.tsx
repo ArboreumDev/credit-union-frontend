@@ -43,6 +43,7 @@ const FIXTURES = {
         amount: 1000,
       },
     ],
+    pledgeRequests: [],
   },
 }
 
