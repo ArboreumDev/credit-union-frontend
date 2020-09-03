@@ -18,7 +18,7 @@ import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
 import { useState } from "react"
 import LenderDashboard from "../../../components/lender/LenderDashboard"
-import { Fixtures } from "./fixtures"
+import { Fixtures } from "../../../utils/demo/fixtures"
 
 const Page = () => {
   const journeySequence = {

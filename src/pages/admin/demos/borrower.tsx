@@ -17,7 +17,7 @@ import {
 import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
 import { useState } from "react"
-import { Fixtures } from "./fixtures"
+import { Fixtures } from "../../../utils/demo/fixtures"
 
 const Page = () => {
   const componentMap = getUIStateComponentMap(Fixtures.Borrower)

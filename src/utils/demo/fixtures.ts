@@ -1,4 +1,4 @@
-import { User } from "../../../utils/types"
+import { User } from "../types"
 
 export class Fixtures {
   static Lender: User = {
