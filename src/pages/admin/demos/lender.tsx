@@ -18,36 +18,7 @@ import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
 import { useState } from "react"
 import LenderDashboard from "../../../components/lender/LenderDashboard"
-
-const FIXTURES = {
-  USER: {
-    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
-    name: "Deepika Padukone",
-    email: "dev-admin@arboreum.dev",
-    phone: "+91 123-232-1231",
-    user_type: "lender",
-    balance: 0,
-    corpus_share: 0,
-    created_at: "2020-08-29T04:12:17.878911+00:00",
-    kyc_approved: true,
-    loan_requests: [],
-  },
-  LENDER_LOAN_REQUESTS: [
-    {
-      confirmation_date: null,
-      payback_status: null,
-      purpose: "Home loan",
-      risk_calc_result: {
-        loanTerm: 6,
-        interestRate: 5.5,
-        totalDue: 1200,
-      },
-      status: "initiated",
-      created_at: "2020-08-29T04:12:41.393094+00:00",
-      amount: 1000,
-    },
-  ],
-}
+import { Fixtures } from "./fixtures"
 
 const Page = () => {
   const journeySequence = {
@@ -59,12 +30,12 @@ const Page = () => {
     [UIState.Profile]: "Profile",
   }
   const componentMap = {
-    ...getUIStateComponentMap(FIXTURES.USER),
+    ...getUIStateComponentMap(Fixtures.Lender),
     LDashboardWithNotification: (
       <LenderDashboard
         user={{
-          ...FIXTURES.USER,
-          loan_requests: FIXTURES.LENDER_LOAN_REQUESTS, // fix the key here after fixing the query
+          ...Fixtures.Lender,
+          loan_requests: Fixtures.LenderLoanRequests, // fix the key here after fixing the query
         }}
       />
     ),
