@@ -5930,6 +5930,19 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "amount"
           >
         >
+        pledgeRequests: Array<
+          { __typename?: "supporters" } & Pick<
+            Supporters,
+            "request_id" | "pledge_amount" | "participation_request_time"
+          > & {
+              loan_request: { __typename?: "loan_requests" } & Pick<
+                Loan_Requests,
+                "purpose" | "amount"
+              > & {
+                  user: { __typename?: "user" } & Pick<User, "email" | "name">
+                }
+            }
+        >
       }
   >
 }
@@ -6389,6 +6402,19 @@ export const GetUserByEmailDocument = gql`
         created_at
         amount
         purpose
+      }
+      pledgeRequests: supporters(where: { status: { _eq: "unknown" } }) {
+        request_id
+        pledge_amount
+        participation_request_time
+        loan_request {
+          purpose
+          amount
+          user {
+            email
+            name
+          }
+        }
       }
     }
   }

@@ -63,12 +63,16 @@ describe("Basic loan request flow for an accepted loan", () => {
     // other_user_mail field set to the other user
   })
 
-  test.skip("supporters see the request for a pledge in their dashboard", async () => {
-    // TODO
+  test("supporters see the request for a pledge with basic info in their dashboard", async () => {
+    let { user } = await sdk.GetUserByEmail({ email: SUPPORTER1.email })
+    user = user[0]
+    expect(user.pledgeRequests[0].pledge_amount).toBe(pledgeAmount1)
+    expect(user.pledgeRequests[0].loan_request.user.email).toBe(BORROWER1.email)
+    expect(user.pledgeRequests[0].loan_request.user.name).toBe(BORROWER1.name)
+    expect(user.pledgeRequests[0].loan_request.amount).toBe(amount)
   })
 
   test("supporters can accept (or reject) a pledge-request", async () => {
-    // await dbClient.Upda
     const { supporter } = await sdk.UpdateSupporter({
       request_id,
       supporter_id: SUPPORTER1.id,
