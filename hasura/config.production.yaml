@@ -1,5 +1,5 @@
 version: 2
-endpoint: http://dev1.arbo.link/v1/graphql
+endpoint: http://dev1.arbo.link:8080/
 admin_secret: myadminsecretkey
 metadata_directory: metadata
 actions:
