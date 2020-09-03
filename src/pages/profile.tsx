@@ -12,21 +12,31 @@ import {
 import { getSession } from "next-auth/client"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
-import AppBar from "../components/AppBar"
-import { User, Session } from "../utils/types"
+import AppBar from "../components/common/AppBar"
+import { User, Session, UserType } from "../utils/types"
 
 interface Props {
   user: User
 }
 
-const rows = [
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Repayment", value: "INR 100" },
-  { key: "02/10/2020", type: "Disbursal", value: "INR 12,000" },
+const txBorrowerFixture = [
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Disbursal", value: "₹12,000" },
+]
+
+const txLenderFixture = [
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Repayment", value: "₹100" },
+  { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
 const ProfilePage = ({ user }: Props) => {
+  const transactions =
+    user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
+
   return (
     <div>
       <AppBar />
@@ -42,16 +52,16 @@ const ProfilePage = ({ user }: Props) => {
             </Heading>
             <Box h="10px" />
             <Stack>
-              {rows.map((row) => (
-                <Flex key={row.key}>
+              {transactions.map((tx, idx) => (
+                <Flex key={idx + "row"}>
                   <Box w="200px">
-                    <Text color="gray.500">{row.key}</Text>
+                    <Text color="gray.500">{tx.key}</Text>
                   </Box>
                   <Box flex="1">
-                    <Text align="right">{row.type}</Text>
+                    <Text align="right">{tx.type}</Text>
                   </Box>
                   <Box w="200px">
-                    <Text align="right">{row.value}</Text>
+                    <Text align="right">{tx.value}</Text>
                   </Box>
                 </Flex>
               ))}

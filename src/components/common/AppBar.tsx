@@ -20,7 +20,7 @@ const AppBar = () => (
     minW="s"
   >
     <Flex align="center">
-      <button onClick={() => location.reload()}>
+      <button onClick={() => Router.push("/")}>
         <img width="150px" src="/images/logo.svg" alt="logo" />
       </button>
     </Flex>

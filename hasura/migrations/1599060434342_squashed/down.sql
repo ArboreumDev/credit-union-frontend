@@ -1,33 +1,3 @@
-
-alter table "public"."recommendation_risk" rename column "recommender_id" to "neighbor_id";
-
-alter table "public"."recommendation_risk" rename column "risk_params" to "recommendation_risk";
-
-ALTER TABLE "public"."recommendation_risk" ALTER COLUMN "agent_id" SET NOT NULL;
-
-ALTER TABLE ONLY "public"."recommendation_risk" ALTER COLUMN "recommendation_risk" SET DEFAULT jsonb_build_array();
-ALTER TABLE "public"."recommendation_risk" ALTER COLUMN "recommendation_risk" SET NOT NULL;
-
-alter table "public"."recommendation_risk" drop constraint "recommendation_risk_pkey";
-alter table "public"."recommendation_risk"
-    add constraint "risk_pkey" 
-    primary key ( "neighbor_id", "agent_id" );
-
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "status" DROP DEFAULT;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "participation_request_time" DROP DEFAULT;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "invest_in_corpus" DROP DEFAULT;
-
-ALTER TABLE "public"."supporters" ALTER COLUMN "pledge_amount" TYPE integer;
-
-alter table "public"."supporters" rename column "pledge_amount" to "amount";
-
-alter table "public"."supporters" rename column "supporter_id" to "guarantor_id";
-
-alter table "public"."supporters" rename to "guarantors";
-
 DROP TABLE public.edges CASCADE;
 DROP TABLE public.encumbrance_participants CASCADE;
 DROP TABLE public.encumbrances CASCADE;

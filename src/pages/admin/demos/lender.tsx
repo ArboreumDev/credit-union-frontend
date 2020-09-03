@@ -17,20 +17,28 @@ import {
 import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
 import { useState } from "react"
+import LenderDashboard from "../../../components/lender/LenderDashboard"
 import { Fixtures } from "../../../utils/demo/fixtures"
 
 const Page = () => {
-  const componentMap = getUIStateComponentMap(Fixtures.Borrower)
   const journeySequence = {
     [UIState.Landing]: "Landing",
     [UIState.Onboarding]: "Onboarding",
     [UIState.KYCNotApprovedYet]: "Await KYC approval",
-    [UIState.BReadyToMakeNewLoan]: "Make new loan",
-    [UIState.BLoanRequestInitiated]: "Loan Initiated",
-    [UIState.BLoanRequestAwaitsConfirmation]:
-      "Loan needs borrower confirmation",
-    [UIState.BOngoingLoan]: "Ongoing Loan",
+    [UIState.LDashboard]: "Lender Dashboard",
+    LDashboardWithNotification: "Lender Dashboard With Notification",
     [UIState.Profile]: "Profile",
+  }
+  const componentMap = {
+    ...getUIStateComponentMap(Fixtures.Lender),
+    LDashboardWithNotification: (
+      <LenderDashboard
+        user={{
+          ...Fixtures.Lender,
+          loan_requests: Fixtures.LenderLoanRequests, // fix the key here after fixing the query
+        }}
+      />
+    ),
   }
 
   const [stateIdx, setStateIdx] = useState(0)
@@ -62,7 +70,7 @@ const Page = () => {
       </Center>
       <Center>
         <Heading as="h1" size="md">
-          Borrower Journey | {stateIdx + 1}
+          Lender Journey | {stateIdx + 1}
         </Heading>
       </Center>
       <Center marginBottom="20px">{title}</Center>

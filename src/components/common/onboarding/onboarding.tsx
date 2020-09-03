@@ -1,25 +1,24 @@
-import { useForm } from "react-hook-form"
-import { useRouter } from "next/dist/client/router"
-import Dropzone from "./Dropzone"
-import { CreateUserMutationVariables } from "../gql/sdk"
-import { fetcher } from "../utils/api"
 import {
-  Stack,
-  Input,
-  Radio,
-  RadioGroup,
+  Box,
   Button,
   Center,
-  Box,
-  VStack,
   Container,
-  Heading,
-  InputGroup,
-  InputLeftAddon,
   FormControl,
   FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Radio,
+  RadioGroup,
   RequiredIndicator,
+  Stack,
 } from "@chakra-ui/core"
+import { useRouter } from "next/dist/client/router"
+import { useForm } from "react-hook-form"
+import { CreateUserMutationVariables } from "../../../gql/sdk"
+import { fetcher } from "../../../utils/api"
+import Dropzone from "./Dropzone"
 
 type FormData = {
   name: string
