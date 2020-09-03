@@ -9,6 +9,7 @@ export enum UIState {
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
   BOngoingLoan = "BOngoingLoan",
   LDashboard = "LDashboard",
+  LDashboardWithNotification = "LDashboardWithNotification",
   Profile = "Profile",
 }
 

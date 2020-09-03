@@ -17,6 +17,7 @@ import {
 import { getUIStateComponentMap } from "../../index"
 import { UIState } from "../../../utils/UIStateHelpers"
 import { useState } from "react"
+import LenderDashboard from "../../../components/lender/LenderDashboard"
 
 const FIXTURES = {
   USER: {
@@ -29,32 +30,44 @@ const FIXTURES = {
     corpus_share: 0,
     created_at: "2020-08-29T04:12:17.878911+00:00",
     kyc_approved: true,
-    loan_requests: [
-      {
-        confirmation_date: null,
-        payback_status: null,
-        purpose: "Home loan",
-        risk_calc_result: {
-          loanTerm: 6,
-          interestRate: 5.5,
-          totalDue: 1200,
-        },
-        status: "initiated",
-        created_at: "2020-08-29T04:12:41.393094+00:00",
-        amount: 1000,
-      },
-    ],
+    loan_requests: [],
   },
+  LENDER_LOAN_REQUESTS: [
+    {
+      confirmation_date: null,
+      payback_status: null,
+      purpose: "Home loan",
+      risk_calc_result: {
+        loanTerm: 6,
+        interestRate: 5.5,
+        totalDue: 1200,
+      },
+      status: "initiated",
+      created_at: "2020-08-29T04:12:41.393094+00:00",
+      amount: 1000,
+    },
+  ],
 }
 
 const Page = () => {
-  const componentMap = getUIStateComponentMap(FIXTURES.USER)
   const journeySequence = {
     [UIState.Landing]: "Landing",
     [UIState.Onboarding]: "Onboarding",
     [UIState.KYCNotApprovedYet]: "Await KYC approval",
     [UIState.LDashboard]: "Lender Dashboard",
+    LDashboardWithNotification: "Lender Dashboard With Notification",
     [UIState.Profile]: "Profile",
+  }
+  const componentMap = {
+    ...getUIStateComponentMap(FIXTURES.USER),
+    LDashboardWithNotification: (
+      <LenderDashboard
+        user={{
+          ...FIXTURES.USER,
+          loan_requests: FIXTURES.LENDER_LOAN_REQUESTS, // fix the key here after fixing the query
+        }}
+      />
+    ),
   }
 
   const [stateIdx, setStateIdx] = useState(0)
@@ -86,7 +99,7 @@ const Page = () => {
       </Center>
       <Center>
         <Heading as="h1" size="md">
-          Borrower Journey | {stateIdx + 1}
+          Lender Journey | {stateIdx + 1}
         </Heading>
       </Center>
       <Center marginBottom="20px">{title}</Center>
