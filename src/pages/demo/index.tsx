@@ -9,11 +9,11 @@ export default () => (
       <Tab>Lender</Tab>
     </TabList>
 
-    <TabPanels margin="1px">
-      <TabPanel>
+    <TabPanels>
+      <TabPanel padding="0">
         <BorrowerDemo />
       </TabPanel>
-      <TabPanel>
+      <TabPanel padding="0">
         <LenderDemo />
       </TabPanel>
     </TabPanels>
