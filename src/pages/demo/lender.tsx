@@ -14,11 +14,11 @@ import {
   SliderThumb,
   Divider,
 } from "@chakra-ui/core"
-import { getUIStateComponentMap } from "../../index"
-import { UIState } from "../../../utils/UIStateHelpers"
+import { getUIStateComponentMap } from "../index"
+import { UIState } from "../../utils/UIStateHelpers"
 import { useState } from "react"
-import LenderDashboard from "../../../components/lender/LenderDashboard"
-import { Fixtures } from "../../../utils/demo/fixtures"
+import LenderDashboard from "../../components/lender/LenderDashboard"
+import { Fixtures } from "../../utils/demo/fixtures"
 
 const Page = () => {
   const journeySequence = {
