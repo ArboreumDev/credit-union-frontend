@@ -14,6 +14,7 @@ import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
 import { Details, Row } from "./common/Details"
 import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
+import formatDistance from "date-fns/formatDistance"
 
 interface Params {
   loan: LoanRequest
@@ -55,6 +56,12 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
         <Stat>
           <StatLabel>Purpose</StatLabel>
           <StatNumber>{loanRequest.purpose}</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Next Repayment Due In</StatLabel>
+          <StatNumber>
+            {formatDistance(new Date(), new Date(2020, 8, 30))}
+          </StatNumber>
         </Stat>
       </StatGroup>
       <Box h="30px" />
