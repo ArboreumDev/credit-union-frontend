@@ -30,7 +30,12 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
   { key: "Next Repayment Amount", value: "₹6,000" },
   {
     key: "Next Repayment Due Date",
-    value: "30 Septembed 2020",
+    value: "30 September 2020",
+    color: "red.500",
+  },
+  {
+    key: "Late Payment Fee",
+    value: "₹200",
     color: "red.500",
   },
 ]
