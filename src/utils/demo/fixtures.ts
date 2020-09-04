@@ -17,7 +17,7 @@ export class Fixtures {
 
   static Borrower: User = {
     id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
-    name: "Deepika Padukone",
+    name: "Amitabh Bachchan",
     email: "dev-admin@arboreum.dev",
     phone: "+91 123-232-1231",
     user_type: "borrower",
