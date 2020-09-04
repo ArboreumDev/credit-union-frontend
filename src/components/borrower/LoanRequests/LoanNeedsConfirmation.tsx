@@ -29,7 +29,7 @@ const getRowsFromLoanRequestParams = (loan: LoanRequest): Row[] => {
       key: `Total due in ${calculatedRisk.loanTerm} months`,
       value: "₹" + calculatedRisk.totalDue,
     },
-    { key: "Repaid", value: "₹6000" },
+    { key: "Monthly Repayment Due", value: "₹6000" },
   ]
 }
 
