@@ -3,7 +3,7 @@ import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 import { User } from "../../utils/types"
-import { Details } from "../borrower/common/Details"
+import { Details, Row } from "../borrower/common/Details"
 
 interface Props {
   user: User
