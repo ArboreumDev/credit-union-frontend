@@ -1,4 +1,13 @@
-import { Center, Stack, Wrap, Flex, Box, Text } from "@chakra-ui/core"
+import {
+  Center,
+  Stack,
+  Wrap,
+  Flex,
+  Box,
+  Text,
+  CircularProgress,
+  CircularProgressLabel,
+} from "@chakra-ui/core"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
@@ -35,13 +44,21 @@ const OngoingLoans = () => (
           <Text color="gray.500">{row.name}</Text>
         </Box>
         <Box flex="1">
-          <Text color={row.color || "black"} align="right">
+          <Text
+            alignContent="center"
+            color={row.color || "black"}
+            align="right"
+          >
             {row.total}
           </Text>
         </Box>
         <Box flex="1">
           <Text color={row.color || "black"} align="right">
-            {row.perc_repaid}
+            <CircularProgress value={row.perc_repaid * 100} color="green.400">
+              <CircularProgressLabel>
+                {row.perc_repaid * 100}%
+              </CircularProgressLabel>
+            </CircularProgress>
           </Text>
         </Box>
       </Flex>
