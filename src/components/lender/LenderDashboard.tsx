@@ -1,7 +1,7 @@
 import { Center, Stack, Wrap } from "@chakra-ui/core"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
-import { NewLoanRequest } from "./Notifications/NewLoanRequest"
+import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 import { User } from "../../utils/types"
 
 interface Props {
@@ -9,12 +9,12 @@ interface Props {
 }
 
 const LenderDashboard = ({ user }: Props) => {
-  const pledgeRequests = user.pledgeRequests // TODO change query to get lender_loan_requests
+  const pledgeRequests = user.pledge_requests // TODO change query to get lender_loan_requests
 
   return (
     <Stack padding="20px" spacing="20px">
-      {pledgeRequests.map((lr, idx) => (
-        <NewLoanRequest key={idx + `_nlr`} loanRequest={lr} />
+      {pledgeRequests.map((pr, idx) => (
+        <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
       ))}
 
       <Center>
