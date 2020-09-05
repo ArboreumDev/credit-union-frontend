@@ -43,19 +43,23 @@ export class Fixtures {
     pledgeRequests: [],
   }
 
-  static LenderLoanRequests = [
-    {
-      confirmation_date: null,
-      payback_status: null,
-      purpose: "Home loan",
-      risk_calc_result: {
-        loanTerm: 6,
-        interestRate: 5.5,
-        totalDue: 1200,
+  static UserWithLenderLoanRequest = {
+    ...Fixtures.Lender,
+    // TODO need to update the query
+    loan_requests: [
+      {
+        confirmation_date: null,
+        payback_status: null,
+        purpose: "Home loan",
+        risk_calc_result: {
+          loanTerm: 6,
+          interestRate: 5.5,
+          totalDue: 1200,
+        },
+        status: "initiated",
+        created_at: "2020-08-29T04:12:41.393094+00:00",
+        amount: 1000,
       },
-      status: "initiated",
-      created_at: "2020-08-29T04:12:41.393094+00:00",
-      amount: 1000,
-    },
-  ]
+    ],
+  }
 }

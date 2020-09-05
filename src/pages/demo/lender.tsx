@@ -1,6 +1,8 @@
 import { DemoView } from "../../components/demo/DemoView"
 import { Fixtures } from "../../utils/demo/fixtures"
 import { UIState } from "../../utils/UIStateHelpers"
+import { getUIStateComponentMap } from ".."
+import LenderDashboard from "../../components/lender/LenderDashboard"
 const journeySequence = {
   [UIState.Landing]: "Landing",
   [UIState.Onboarding]: "Onboarding",
@@ -10,10 +12,18 @@ const journeySequence = {
   [UIState.Profile]: "Profile",
 }
 
+const componentMap = {
+  ...getUIStateComponentMap(Fixtures.Lender),
+  LDashboardWithNotification: (
+    <LenderDashboard user={Fixtures.UserWithLenderLoanRequest} />
+  ),
+}
+
 export default () => (
   <DemoView
     demoTitle="Lender Journey"
-    user={Fixtures.Borrower}
+    user={Fixtures.Lender}
     journeySequence={journeySequence}
+    componentMap={componentMap}
   />
 )

@@ -14,7 +14,7 @@ const LenderDashboard = ({ user }: Props) => {
   return (
     <Stack padding="20px" spacing="20px">
       {loanRequests.map((lr, idx) => (
-        <NewLoanRequest key={`$(idx)+nlr`} loanRequest={lr} />
+        <NewLoanRequest key={idx + `_nlr`} loanRequest={lr} />
       ))}
 
       <Center>
