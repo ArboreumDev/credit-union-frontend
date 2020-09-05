@@ -19,7 +19,7 @@ query GetUserByEmail($email: String!) {
       amount
       purpose
     }
-    pledgeRequests: supporters (where: {status: {_eq: "unknown"}}) {
+    pledge_requests: supporters (where: {status: {_eq: "unknown"}}) {
       request_id
       pledge_amount
       participation_request_time
@@ -30,6 +30,7 @@ query GetUserByEmail($email: String!) {
           email
           name
         }
+        risk_calc_result
       }
     }
   }

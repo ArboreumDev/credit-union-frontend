@@ -14,6 +14,7 @@ export enum UserType {
 
 export type User = GetUserByEmailQuery["user"][0]
 export type LoanRequest = User["loan_requests"][0]
+export type PledgeRequest = User["pledge_requests"][0]
 
 // TODO @djudjuu
 export type CalculatedRisk = {
