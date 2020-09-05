@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { CalculatedRisk, LoanRequest } from "../../../utils/types"
-import { Details, Row } from "../common/Details"
+import { Details, Row } from "../../common/Details"
 import { Currency } from "../../common/Currency"
 
 interface Params {
@@ -34,7 +34,7 @@ const getRowsFromLoanRequestParams = (loan: LoanRequest): Row[] => {
   ]
 }
 
-export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
+export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
   }

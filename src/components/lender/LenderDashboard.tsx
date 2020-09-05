@@ -12,7 +12,7 @@ import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 import { User } from "../../utils/types"
-import { Details, Row } from "../borrower/common/Details"
+import { Details, Row } from "../common/Details"
 import { Currency } from "../common/Currency"
 
 interface Props {

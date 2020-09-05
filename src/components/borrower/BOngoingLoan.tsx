@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
-import { Details, Row } from "./common/Details"
+import { Details, Row } from "../common/Details"
 import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
 import formatDistance from "date-fns/formatDistance"
 

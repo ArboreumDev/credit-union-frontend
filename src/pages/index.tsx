@@ -13,8 +13,8 @@ import {
   UIState,
 } from "../utils/UIStateHelpers"
 import ProfilePage from "./profile"
-import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/LoanRequestInitiated"
-import { BLoanRequestAwaitsConfirmation } from "../components/borrower/LoanRequests/LoanNeedsConfirmation"
+import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/BLoanRequestInitiated"
+import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
 import { Center } from "@chakra-ui/core"
 import { Contactus } from "../components/common/ContactUs"
 import LenderDashboard from "../components/lender/LenderDashboard"
@@ -33,7 +33,7 @@ export const getUIStateComponentMap = (user: User) => {
       <BLoanRequestInitiated loanRequest={loanRequest} />
     ),
     [UIState.BLoanRequestAwaitsConfirmation]: (
-      <BLoanRequestAwaitsConfirmation loanRequest={loanRequest} />
+      <BLoanNeedsConfirmation loanRequest={loanRequest} />
     ),
     [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
     [UIState.LDashboard]: <LenderDashboard user={user} />,
