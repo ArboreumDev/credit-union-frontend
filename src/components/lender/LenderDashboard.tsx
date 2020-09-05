@@ -3,10 +3,27 @@ import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 import { User } from "../../utils/types"
+import { Details } from "../borrower/common/Details"
 
 interface Props {
   user: User
 }
+
+const getOngoingPledges = (): Row[] => [
+  { key: "Gaurav", value: "₹1,20,000" },
+  { key: "Nupur", value: "₹1,20,000" },
+  { key: "Lawrence", value: "₹20,000" },
+  {
+    key: "Dju",
+    value: "₹20,000",
+    color: "red.500",
+  },
+  {
+    key: "Sid",
+    value: "₹20,000",
+    color: "red.500",
+  },
+]
 
 const LenderDashboard = ({ user }: Props) => {
   console.log(user)
@@ -23,6 +40,10 @@ const LenderDashboard = ({ user }: Props) => {
           <DynamicDoughnut />
           <LineChart />
         </Wrap>
+      </Center>
+      <Center>Ongoing Loans</Center>
+      <Center>
+        <Details rows={getOngoingPledges()} />
       </Center>
     </Stack>
   )
