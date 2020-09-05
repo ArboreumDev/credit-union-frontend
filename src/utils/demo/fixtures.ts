@@ -45,8 +45,7 @@ export class Fixtures {
 
   static UserWithLenderLoanRequest = {
     ...Fixtures.Lender,
-    // TODO need to update the query
-    loan_requests: [
+    pledgeRequests: [
       {
         confirmation_date: null,
         payback_status: null,

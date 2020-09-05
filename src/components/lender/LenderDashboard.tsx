@@ -9,11 +9,11 @@ interface Props {
 }
 
 const LenderDashboard = ({ user }: Props) => {
-  const loanRequests = user.loan_requests // TODO change query to get lender_loan_requests
+  const pledgeRequests = user.pledgeRequests // TODO change query to get lender_loan_requests
 
   return (
     <Stack padding="20px" spacing="20px">
-      {loanRequests.map((lr, idx) => (
+      {pledgeRequests.map((lr, idx) => (
         <NewLoanRequest key={idx + `_nlr`} loanRequest={lr} />
       ))}
 
