@@ -51,12 +51,16 @@ export class Fixtures {
         pledge_amount: 1000,
         participation_request_time: "",
         loan_request: {
-          purpose: "Home loan",
+          purpose: "Daughter's Marriage",
           amount: 12000,
           risk_calc_result: {
             loanTerm: 6,
             interestRate: 5.5,
             totalDue: 1200,
+          },
+          user: {
+            email: "deepika@mail.com",
+            name: "Deepika Padukone",
           },
         },
       },
