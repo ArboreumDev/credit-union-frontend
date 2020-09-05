@@ -1,4 +1,4 @@
-import { Center, Stack, Wrap } from "@chakra-ui/core"
+import { Center, Stack, Wrap, Flex, Box, Text } from "@chakra-ui/core"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
@@ -9,21 +9,45 @@ interface Props {
   user: User
 }
 
-const getOngoingPledges = (): Row[] => [
-  { key: "Gaurav", value: "₹1,20,000" },
-  { key: "Nupur", value: "₹1,20,000" },
-  { key: "Lawrence", value: "₹20,000" },
+const getOngoingPledges = () => [
+  { name: "Gaurav", total: 120000, perc_repaid: 0.9 },
+  { name: "Nupur", total: 120000, perc_repaid: 0.5 },
+  { name: "Lawrence", total: 20000, perc_repaid: 0.3 },
   {
-    key: "Dju",
-    value: "₹20,000",
+    name: "Dju",
+    total: 20000,
+    perc_repaid: 0.1,
     color: "red.500",
   },
   {
-    key: "Sid",
-    value: "₹20,000",
+    name: "Sid",
+    total: 25000,
+    perc_repaid: 0.7,
     color: "red.500",
   },
 ]
+
+const OngoingLoans = () => (
+  <Stack spacing="15px" minW="280px">
+    {getOngoingPledges().map((row) => (
+      <Flex key={row.name}>
+        <Box flex="1">
+          <Text color="gray.500">{row.name}</Text>
+        </Box>
+        <Box flex="1">
+          <Text color={row.color || "black"} align="right">
+            {row.total}
+          </Text>
+        </Box>
+        <Box flex="1">
+          <Text color={row.color || "black"} align="right">
+            {row.perc_repaid}
+          </Text>
+        </Box>
+      </Flex>
+    ))}
+  </Stack>
+)
 
 const LenderDashboard = ({ user }: Props) => {
   console.log(user)
@@ -43,7 +67,7 @@ const LenderDashboard = ({ user }: Props) => {
       </Center>
       <Center>Ongoing Loans</Center>
       <Center>
-        <Details rows={getOngoingPledges()} />
+        <OngoingLoans />
       </Center>
     </Stack>
   )
