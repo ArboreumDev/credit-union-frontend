@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../../utils/types"
+import { Currency } from "../../common/Currency"
 
 interface Params {
   loanRequest: LoanRequest
@@ -30,7 +31,9 @@ export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>₹{loanRequest.amount}</StatNumber>
+          <StatNumber>
+            <Currency amount={loanRequest.amount} />
+          </StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>

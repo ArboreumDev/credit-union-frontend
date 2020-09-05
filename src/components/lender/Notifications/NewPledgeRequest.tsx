@@ -7,6 +7,7 @@ import {
   HStack,
 } from "@chakra-ui/core"
 import { PledgeRequest, CalculatedRisk } from "../../../utils/types"
+import { Currency } from "../../common/Currency"
 
 interface Params {
   pledgeRequest: PledgeRequest
@@ -37,8 +38,9 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
         for {loanRequest.purpose}
       </AlertDescription>
       <AlertDescription>
-        Amount ₹{loanRequest.amount} | Interest {riskCalcResult.interestRate}% |
-        Loan Term {riskCalcResult.loanTerm} months
+        Amount <Currency amount={loanRequest.amount} /> | Interest{" "}
+        {riskCalcResult.interestRate}% | Loan Term {riskCalcResult.loanTerm}{" "}
+        months
       </AlertDescription>
       <AlertDescription marginTop="20px" maxWidth="sm">
         <HStack>
