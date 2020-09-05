@@ -12,7 +12,7 @@ export class Fixtures {
     created_at: "2020-08-29T04:12:17.878911+00:00",
     kyc_approved: true,
     loan_requests: [],
-    pledgeRequests: [],
+    pledge_requests: [],
   }
 
   static Borrower: User = {
@@ -40,7 +40,7 @@ export class Fixtures {
         amount: 1000,
       },
     ],
-    pledgeRequests: [],
+    pledge_requests: [],
   }
 
   static UserWithLenderLoanRequest = {
