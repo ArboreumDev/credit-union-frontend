@@ -5,6 +5,7 @@ import { getUIStateComponentMap } from ".."
 import LenderDashboard from "../../components/lender/LenderDashboard"
 const journeySequence = {
   [UIState.Landing]: "Landing",
+  [UIState.Login]: "SignIn",
   [UIState.Onboarding]: "Onboarding",
   [UIState.KYCNotApprovedYet]: "Await KYC approval",
   [UIState.LDashboard]: "Lender Dashboard",

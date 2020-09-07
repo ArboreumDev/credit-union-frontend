@@ -19,6 +19,7 @@ import {
   UIState,
 } from "../utils/UIStateHelpers"
 import ProfilePage from "./profile"
+import LoginPage from "./login"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -27,6 +28,7 @@ export const getUIStateComponentMap = (user: User) => {
 
   return {
     [UIState.Landing]: <LandingPage />,
+    [UIState.Login]: <LoginPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
     [UIState.KYCNotApprovedYet]: <BAwaitingKYCConfirmation user={user} />,
     [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,

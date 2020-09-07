@@ -4,6 +4,7 @@ import { UIState } from "../../utils/UIStateHelpers"
 
 const journeySequence = {
   [UIState.Landing]: "Landing",
+  [UIState.Login]: "SignIn",
   [UIState.Onboarding]: "Onboarding",
   [UIState.KYCNotApprovedYet]: "Await KYC approval",
   [UIState.BReadyToMakeNewLoan]: "Make new loan",
@@ -18,6 +19,6 @@ export default () => (
     demoTitle="Borrower Journey"
     user={Fixtures.Borrower}
     journeySequence={journeySequence}
-    initPage={6}
+    initPage={1}
   />
 )

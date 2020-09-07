@@ -2,6 +2,7 @@ import { Session, User, UserType, LoanRequestStatus } from "./types"
 
 export enum UIState {
   Landing = "Landing",
+  Login = "SignIn",
   Onboarding = "Onboarding",
   KYCNotApprovedYet = "KYCNotApprovedYet",
   BReadyToMakeNewLoan = "BReadyToMakeNewLoan",
