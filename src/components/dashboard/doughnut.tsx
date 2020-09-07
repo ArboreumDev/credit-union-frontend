@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Doughnut } from "react-chartjs-2"
-import { Center } from "@chakra-ui/core"
+import { Center, Box } from "@chakra-ui/core"
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -34,11 +34,11 @@ export default function DynamicDoughnut() {
     // }, 1000);
   })
   return (
-    <div>
+    <Box minW="300px">
       <Center>
         <h4>Your Lending Portfolio</h4>
       </Center>
       <Doughnut data={state} width={380} height={380} />
-    </div>
+    </Box>
   )
 }
