@@ -1,13 +1,13 @@
 import { Box, Center, Flex, Text, Stack } from "@chakra-ui/core"
 
-export type Row = {
+export type KeyValueMap = {
   key: string
   value: string
   color?: string
 }
 
 interface Params {
-  rows: Row[]
+  rows: KeyValueMap[]
 }
 
 export const Details = ({ rows }: Params) => (
