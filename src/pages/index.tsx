@@ -1,11 +1,17 @@
+import { Center } from "@chakra-ui/core"
+import { GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
 import { useRouter } from "next/dist/client/router"
-import AppBar from "../components/common/AppBar"
+import BAwaitingKYCConfirmation from "../components/borrower/BAwaitingKYCConfirmation"
 import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
 import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
+import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
+import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/BLoanRequestInitiated"
+import AppBar from "../components/common/AppBar"
+import { Contactus } from "../components/common/ContactUs"
 import LandingPage from "../components/common/landing"
 import Onboarding from "../components/common/onboarding/onboarding"
+import LenderDashboard from "../components/lender/LenderDashboard"
 import { Session, User } from "../utils/types"
 import {
   getMostRecentLoanRequest,
@@ -13,13 +19,6 @@ import {
   UIState,
 } from "../utils/UIStateHelpers"
 import ProfilePage from "./profile"
-import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/BLoanRequestInitiated"
-import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
-import { Center } from "@chakra-ui/core"
-import { Contactus } from "../components/common/ContactUs"
-import LenderDashboard from "../components/lender/LenderDashboard"
-import { GetServerSideProps } from "next"
-import BAwaitingKYCConfirmation from "../components/borrower/BAwaitingKYCConfirmation"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests

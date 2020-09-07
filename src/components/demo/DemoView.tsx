@@ -18,15 +18,17 @@ interface Props {
   user: typeof Fixtures.Borrower
   journeySequence: any
   componentMap?: any
+  initPage?: number
 }
 export const DemoView = ({
   demoTitle,
   user,
   journeySequence,
   componentMap,
+  initPage = 0,
 }: Props) => {
   componentMap = componentMap || getUIStateComponentMap(user)
-  const [stateIdx, setStateIdx] = useState(0)
+  const [stateIdx, setStateIdx] = useState(initPage)
   const [state, componentTitle] = Object.entries(journeySequence)[stateIdx]
   const component = componentMap[state]
 
