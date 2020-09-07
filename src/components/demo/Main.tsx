@@ -33,7 +33,7 @@ const lComponentMap = {
     <LenderDashboard user={Fixtures.UserWithLenderLoanRequest} />
   ),
 }
-const MainDemo = ({ tabView = false }: { tabView: boolean }) => {
+const MainDemo = ({ tabView = false }: { tabView?: boolean }) => {
   const dview = tabView ? DemoTabView : DemoView
   return (
     <Tabs>
