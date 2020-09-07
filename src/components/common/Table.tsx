@@ -14,8 +14,17 @@ export const Column = (props: ColumnProps) => {
   const color = props.muted && "gray.500"
   return (
     <Box flex={1} textAlign={props.textAlign} color={color}>
-      <Text>{props.children}</Text>
+      {props.children}
     </Box>
+  )
+}
+
+export const TextColumn = (props: ColumnProps) => {
+  const color = props.muted && "gray.500"
+  return (
+    <Column {...props}>
+      <Text>{props.children}</Text>
+    </Column>
   )
 }
 

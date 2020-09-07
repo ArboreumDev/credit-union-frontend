@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { CalculatedRisk, LoanRequest } from "../../../utils/types"
 import { Currency } from "../../common/Currency"
-import { Row, Column, Table } from "../../common/Table"
+import { Row, TextColumn, Table } from "../../common/Table"
 
 interface Params {
   loanRequest: LoanRequest
@@ -28,26 +28,28 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
   return (
     <Table>
       <Row>
-        <Column muted>Interest Rate</Column>
-        <Column>
+        <TextColumn muted>Interest Rate</TextColumn>
+        <TextColumn>
           <Text align="right">{calculatedRisk.interestRate}%</Text>
-        </Column>
+        </TextColumn>
       </Row>
       <Row>
-        <Column muted>Total due in {calculatedRisk.loanTerm} months</Column>
-        <Column>
+        <TextColumn muted>
+          Total due in {calculatedRisk.loanTerm} months
+        </TextColumn>
+        <TextColumn>
           <Text align="right">
             <Currency amount={calculatedRisk.totalDue} />
           </Text>
-        </Column>
+        </TextColumn>
       </Row>
       <Row>
-        <Column muted>Monthly Payment Due</Column>
-        <Column textAlign="right">
+        <TextColumn muted>Monthly Payment Due</TextColumn>
+        <TextColumn textAlign="right">
           <Currency
             amount={calculatedRisk.totalDue / calculatedRisk.loanTerm}
           />
-        </Column>
+        </TextColumn>
       </Row>
     </Table>
   )
