@@ -11,27 +11,46 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  Flex,
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { CalculatedRisk, LoanRequest } from "../../../utils/types"
-import { Details, Row } from "../../common/Details"
 import { Currency } from "../../common/Currency"
+import { Row, Column, Table } from "../../common/Table"
 
 interface Params {
   loanRequest: LoanRequest
 }
-const getRowsFromLoanRequestParams = (loan: LoanRequest): Row[] => {
-  const calculatedRisk = loan.risk_calc_result as CalculatedRisk
 
-  return [
-    { key: "Interest Rate", value: calculatedRisk.interestRate + "%" },
-    {
-      key: `Total due in ${calculatedRisk.loanTerm} months`,
-      value: "₹" + calculatedRisk.totalDue,
-    },
-    { key: "Monthly Repayment Due", value: "₹6000" },
-  ]
+const LoanRequestTable = ({ loanRequest }: Params) => {
+  const calculatedRisk = loanRequest.risk_calc_result as CalculatedRisk
+  return (
+    <Table>
+      <Row>
+        <Column muted>Interest Rate</Column>
+        <Column>
+          <Text align="right">{calculatedRisk.interestRate}%</Text>
+        </Column>
+      </Row>
+      <Row>
+        <Column muted>Total due in {calculatedRisk.loanTerm} months</Column>
+        <Column>
+          <Text align="right">
+            <Currency amount={calculatedRisk.totalDue} />
+          </Text>
+        </Column>
+      </Row>
+      <Row>
+        <Column muted>Monthly Payment Due</Column>
+        <Column textAlign="right">
+          <Currency
+            amount={calculatedRisk.totalDue / calculatedRisk.loanTerm}
+          />
+        </Column>
+      </Row>
+    </Table>
+  )
 }
 
 export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
@@ -73,10 +92,10 @@ export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
           </StatGroup>
           <Box h="20px" />
         </Box>
-        <Details rows={getRowsFromLoanRequestParams(loanRequest)} />
-        <Box h="30px" />
+        <LoanRequestTable loanRequest={loanRequest} />
+        <Box h="10px" />
         <form onSubmit={handleSubmit(confirmLoan)}>
-          <Stack>
+          <Stack margin="10px">
             <Checkbox
               size="sm"
               name="confirm_1"
@@ -85,7 +104,7 @@ export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
               ref={register({ required: "This is required" })}
             >
               I understand I will have to repay this loan with interest in 6
-              monthly installments
+              monthly installments.
             </Checkbox>
             <Box h="10px" />
             <Checkbox
@@ -98,6 +117,16 @@ export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
               I understand if I am unable to repay an installment, the amount
               will be deducted from my monthly salary.
             </Checkbox>
+            <Box h="10px" />
+            <Checkbox
+              size="sm"
+              name="confirm_2"
+              colorScheme="green"
+              // @ts-ignore
+              ref={register({ required: "This is required" })}
+            >
+              I accept the proposed interest rate.
+            </Checkbox>
           </Stack>
           <Box h="30px" />
           {errors.example_1 && (
@@ -105,8 +134,8 @@ export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
           )}
           <Center>
             <HStack>
-              <Button type="submit">Confirm</Button>
-              <Button onClick={rejectLoan}>Reject</Button>
+              <Button type="submit">Accept Loan</Button>
+              <Button onClick={rejectLoan}>Reject Loan</Button>
             </HStack>
           </Center>
         </form>
