@@ -18,6 +18,7 @@ import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoa
 import { Center } from "@chakra-ui/core"
 import { Contactus } from "../components/common/ContactUs"
 import LenderDashboard from "../components/lender/LenderDashboard"
+import { GetServerSideProps } from "next"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -64,10 +65,10 @@ const Page = ({ state, session }: Props) => {
   )
 }
 
-Page.getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
   const state = await getUIState(session)
-  return { state, session }
+  return { props: { state, session } }
 }
 
 export default Page

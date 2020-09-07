@@ -14,6 +14,7 @@ import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
 import AppBar from "../components/common/AppBar"
 import { User, Session, UserType } from "../utils/types"
+import { GetServerSideProps } from "next"
 
 interface Props {
   user: User
@@ -83,9 +84,10 @@ const ProfilePage = ({ user }: Props) => {
     </div>
   )
 }
-ProfilePage.getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
-  return { user: session.user }
+  const user = session.user
+  return { props: { user } }
 }
 
 export default ProfilePage
