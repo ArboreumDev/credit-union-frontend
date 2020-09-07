@@ -33,11 +33,11 @@ export class Fixtures {
         risk_calc_result: {
           loanTerm: 6,
           interestRate: 5.5,
-          totalDue: 1200,
+          totalDue: 120000,
         },
         status: "initiated",
         created_at: "2020-08-29T04:12:41.393094+00:00",
-        amount: 1000,
+        amount: 120000,
       },
     ],
     pledge_requests: [],
