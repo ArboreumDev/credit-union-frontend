@@ -9,6 +9,8 @@ import {
   Text,
   Button,
   Stack,
+  CircularProgress,
+  CircularProgressLabel,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
@@ -39,7 +41,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
   },
 ]
 
-export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
+export const BOngoingLoan = ({ loan }: Params) => (
   <Container minW="s" bg="white">
     <RepaymentNotReceived />
     <Stack padding="10px" borderWidth="3px">
@@ -52,14 +54,21 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
         <Text>Active Loan</Text>
       </Center>
       <Box h="30px" />
+      <Center>
+        <CircularProgress size="120px" value={50} color="green.400">
+          <CircularProgressLabel maxW="80px" fontSize="20px">
+            {50}% Repaid
+          </CircularProgressLabel>
+        </CircularProgress>
+      </Center>
       <StatGroup>
         <Stat>
           <StatLabel>Amount</StatLabel>
-          <StatNumber>₹{loanRequest.amount}</StatNumber>
+          <StatNumber>₹{loan.amount}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
+          <StatNumber>{loan.purpose}</StatNumber>
         </Stat>
         <Stat>
           <StatLabel>Next Repayment Due In</StatLabel>
@@ -70,7 +79,7 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
         </Stat>
       </StatGroup>
       <Box h="30px" />
-      <Details rows={getTableObjectFromLoanRequest(loanRequest)} />
+      <Details rows={getTableObjectFromLoanRequest(loan)} />
       <Box h="30px" />
 
       <Center>
