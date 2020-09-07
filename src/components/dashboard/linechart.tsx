@@ -43,7 +43,7 @@ const LineChart = () => (
     <Center>
       <h4>Your Returns (APY)</h4>
     </Center>
-    <Line data={data} width={400} height={400} />
+    <Line data={data} width={380} height={380} />
   </div>
 )
 

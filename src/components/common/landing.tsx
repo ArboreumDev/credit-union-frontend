@@ -21,6 +21,7 @@ const LandingPage = () => {
         </Center>
         <Center h="40px">
           <Button
+            className="umami--click--signin-button"
             onClick={() => Router.push("/api/auth/signin")}
             colorScheme="blue"
             variant="outline"

@@ -15,7 +15,8 @@ import {
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { CalculatedRisk, LoanRequest } from "../../../utils/types"
-import { Details, Row } from "../common/Details"
+import { Details, Row } from "../../common/Details"
+import { Currency } from "../../common/Currency"
 
 interface Params {
   loanRequest: LoanRequest
@@ -29,11 +30,11 @@ const getRowsFromLoanRequestParams = (loan: LoanRequest): Row[] => {
       key: `Total due in ${calculatedRisk.loanTerm} months`,
       value: "₹" + calculatedRisk.totalDue,
     },
-    { key: "Repaid", value: "₹6000" },
+    { key: "Monthly Repayment Due", value: "₹6000" },
   ]
 }
 
-export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
+export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
   }
@@ -61,7 +62,9 @@ export const BLoanRequestAwaitsConfirmation = ({ loanRequest }: Params) => {
           <StatGroup>
             <Stat>
               <StatLabel>Amount</StatLabel>
-              <StatNumber>₹{loanRequest.amount}</StatNumber>
+              <StatNumber>
+                <Currency amount={loanRequest.amount} />
+              </StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Purpose</StatLabel>

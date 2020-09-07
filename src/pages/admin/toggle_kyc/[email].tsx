@@ -1,13 +1,13 @@
 import Router from "next/router"
 import { getSession } from "next-auth/client"
-import { NextPageContext } from "next"
+import { NextPageContext, GetServerSideProps } from "next"
 import { DbClient } from "../../../gql/db_client"
 import { Session } from "../../../utils/types"
 
 const Page = (props: { session: Session }) => {
   return <div>Toggled kyc</div>
 }
-Page.getInitialProps = async (context: NextPageContext) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
 
   if (session.user.email === "dev-admin@arboreum.dev") {
@@ -21,7 +21,7 @@ Page.getInitialProps = async (context: NextPageContext) => {
       kycApproved: !user.kyc_approved,
     })
   }
-  return { session: session }
+  return { props: { session } }
 }
 
 export default Page

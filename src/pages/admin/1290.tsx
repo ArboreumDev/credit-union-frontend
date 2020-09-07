@@ -1,6 +1,7 @@
 import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
+import { GetServerSideProps } from "next"
 
 export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   // Only use code like this when UI needs to refresh
@@ -20,7 +21,7 @@ export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   )
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO after JWT is implemented
   // check for session and if the user is one of the admin users
 

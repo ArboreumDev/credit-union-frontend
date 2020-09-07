@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "../../utils/types"
-import { Details, Row } from "./common/Details"
+import { Details, Row } from "../common/Details"
 import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
 
 interface Params {
@@ -29,7 +29,12 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): Row[] => [
   { key: "Next Repayment Amount", value: "₹6,000" },
   {
     key: "Next Repayment Due Date",
-    value: "30 Septembed 2020",
+    value: "30 September 2020",
+    color: "red.500",
+  },
+  {
+    key: "Late Payment Fee",
+    value: "₹200",
     color: "red.500",
   },
 ]
@@ -55,6 +60,13 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
         <Stat>
           <StatLabel>Purpose</StatLabel>
           <StatNumber>{loanRequest.purpose}</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel>Next Repayment Due In</StatLabel>
+          <StatNumber>
+            20 Days
+            {/* {formatDistance(new Date(), new Date(2020, 8, 30))} */}
+          </StatNumber>
         </Stat>
       </StatGroup>
       <Box h="30px" />
