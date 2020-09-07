@@ -64,6 +64,7 @@ export const BOngoingLoan = ({ loan: loanRequest }: Params) => (
         <Stat>
           <StatLabel>Next Repayment Due In</StatLabel>
           <StatNumber>
+            20 Days
             {/* {formatDistance(new Date(), new Date(2020, 8, 30))} */}
           </StatNumber>
         </Stat>
