@@ -25,14 +25,14 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       flexDirection="column"
       justifyContent="center"
       textAlign="center"
-      height="320px"
+      // height="320px"
       width="inherit"
       marginTop="20px"
       marginBottom="20px"
     >
       <AlertIcon boxSize="40px" mr={0} />
       <AlertTitle mt={4} mb={1} fontSize="lg">
-        New Loan Request
+        New Pledge Request
       </AlertTitle>
       <AlertDescription>
         {loanRequest.user.name} ({loanRequest.user.email}) is requesting a loan

@@ -1,4 +1,4 @@
-import { Center } from "@chakra-ui/core"
+import { Center, Box } from "@chakra-ui/core"
 import React from "react"
 import { Line } from "react-chartjs-2"
 
@@ -39,12 +39,12 @@ const data = {
 }
 
 const LineChart = () => (
-  <div>
+  <Box minW="300px">
     <Center>
       <h4>Your Returns (APY)</h4>
     </Center>
     <Line data={data} width={380} height={380} />
-  </div>
+  </Box>
 )
 
 export default LineChart
