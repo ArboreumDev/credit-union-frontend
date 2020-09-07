@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
                 ? ANALYTICS_WEBSITE_IDS.production
                 : ANALYTICS_WEBSITE_IDS.preview
             }
-            src="https://analytics-umami.vercel.app/umami.js"
+            src="/umami.js"
           />
         )}
       </Head>
