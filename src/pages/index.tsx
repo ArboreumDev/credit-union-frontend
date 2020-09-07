@@ -19,6 +19,7 @@ import { Center } from "@chakra-ui/core"
 import { Contactus } from "../components/common/ContactUs"
 import LenderDashboard from "../components/lender/LenderDashboard"
 import { GetServerSideProps } from "next"
+import BAwaitingKYCConfirmation from "../components/borrower/BAwaitingKYCConfirmation"
 
 export const getUIStateComponentMap = (user: User) => {
   const loanRequests = user.loan_requests
@@ -28,7 +29,7 @@ export const getUIStateComponentMap = (user: User) => {
   return {
     [UIState.Landing]: <LandingPage />,
     [UIState.Onboarding]: <Onboarding user={user} />,
-    [UIState.KYCNotApprovedYet]: <ApplicationSubmitted />,
+    [UIState.KYCNotApprovedYet]: <BAwaitingKYCConfirmation user={user} />,
     [UIState.BReadyToMakeNewLoan]: <BReadyToMakeNewLoan user={user} />,
     [UIState.BLoanRequestInitiated]: loanRequest && (
       <BLoanRequestInitiated loanRequest={loanRequest} />
