@@ -4,17 +4,24 @@ import { AppProps } from "next/app"
 import Head from "next/head"
 
 import { ChakraProvider } from "@chakra-ui/core"
+import { ANALYTICS_WEBSITE_IDS } from "../utils/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
       <Head>
-        <script
-          async
-          defer
-          data-website-id={process.env.UMAMI_WEBSITE_ID}
-          src="https://analytics-umami.vercel.app/umami.js"
-        ></script>
+        {typeof window !== "undefined" && (
+          <script
+            async
+            defer
+            data-website-id={
+              window.location.hostname == "app.arboreum.dev"
+                ? ANALYTICS_WEBSITE_IDS.production
+                : ANALYTICS_WEBSITE_IDS.preview
+            }
+            src="https://analytics-umami.vercel.app/umami.js"
+          />
+        )}
       </Head>
       <ChakraProvider resetCSS>
         <div>
