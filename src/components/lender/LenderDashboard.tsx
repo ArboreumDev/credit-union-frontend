@@ -54,13 +54,11 @@ const OngoingLoans = () => (
           </Text>
         </Box>
         <Box flex="1">
-          <Text color={row.color || "black"} align="right">
-            <CircularProgress value={row.perc_repaid * 100} color="green.400">
-              <CircularProgressLabel>
-                {row.perc_repaid * 100}%
-              </CircularProgressLabel>
-            </CircularProgress>
-          </Text>
+          <CircularProgress value={row.perc_repaid * 100} color="green.400">
+            <CircularProgressLabel>
+              {row.perc_repaid * 100}%
+            </CircularProgressLabel>
+          </CircularProgress>
         </Box>
       </Flex>
     ))}
