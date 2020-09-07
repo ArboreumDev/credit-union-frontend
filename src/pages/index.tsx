@@ -64,7 +64,7 @@ const Page = ({ state, session }: Props) => {
   )
 }
 
-Page.getInitialProps = async (context) => {
+Page.getServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
   const state = await getUIState(session)
   return { state, session }

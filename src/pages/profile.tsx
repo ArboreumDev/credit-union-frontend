@@ -83,7 +83,7 @@ const ProfilePage = ({ user }: Props) => {
     </div>
   )
 }
-ProfilePage.getInitialProps = async (context) => {
+ProfilePage.getServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
   return { user: session.user }
 }

@@ -7,7 +7,7 @@ import { Session } from "../../../utils/types"
 const Page = (props: { session: Session }) => {
   return <div>Toggled kyc</div>
 }
-Page.getInitialProps = async (context: NextPageContext) => {
+Page.getServerSideProps = async (context: NextPageContext) => {
   const session = (await getSession(context)) as Session
 
   if (session.user.email === "dev-admin@arboreum.dev") {
