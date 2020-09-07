@@ -2,6 +2,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 import { useState } from "react"
 import { getUIStateComponentMap } from "../../pages/index"
 import { Fixtures } from "../../utils/demo/fixtures"
+import { useToast } from "@chakra-ui/core"
 
 interface Props {
   demoTitle: string
@@ -17,21 +18,30 @@ export const DemoTabView = ({
   componentMap,
   initPage = 0,
 }: Props) => {
+  const toast = useToast()
   componentMap = componentMap || getUIStateComponentMap(user)
-  const [stateIdx, setStateIdx] = useState(initPage)
-  const [state, componentTitle] = Object.entries(journeySequence)[stateIdx]
-  const component = componentMap[state]
+  const tabEntries = Object.entries(journeySequence)
 
   return (
-    <Tabs margin="0px" defaultIndex={initPage}>
+    <Tabs
+      margin="0px"
+      defaultIndex={initPage}
+      onChange={(idx) =>
+        toast({
+          title: tabEntries[idx][1] as string,
+          duration: 2000,
+          isClosable: true,
+        })
+      }
+    >
       <TabList>
-        {Object.entries(journeySequence).map(([k, v], idx) => (
+        {tabEntries.map(([k, v], idx) => (
           <Tab key={"t" + idx}>{idx}</Tab>
         ))}
       </TabList>
 
       <TabPanels>
-        {Object.entries(journeySequence).map(([k, v], idx) => (
+        {tabEntries.map(([k, v], idx) => (
           <TabPanel key={"tp" + idx} padding="0px">
             {componentMap[k]}
           </TabPanel>
