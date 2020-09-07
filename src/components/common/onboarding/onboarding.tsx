@@ -19,9 +19,11 @@ import { useForm } from "react-hook-form"
 import { CreateUserMutationVariables } from "../../../gql/sdk"
 import { fetcher } from "../../../utils/api"
 import Dropzone from "./Dropzone"
+import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 
 type FormData = {
-  name: string
+  firstname: string
+  lastname: string
   phone: string
   user_type: string
 }
@@ -41,7 +43,7 @@ export default function Onboarding({ user }: Params) {
     console.log(data)
     const payload: CreateUserMutationVariables = {
       user: {
-        name: data.name,
+        name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
         email: user.email,
         user_type: data.user_type,
         phone: data.phone,
@@ -72,8 +74,14 @@ export default function Onboarding({ user }: Params) {
             </Center>
 
             <Input
-              placeholder="Name"
-              name="name"
+              placeholder="First Name"
+              name="firstname"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Input
+              placeholder="Last Name"
+              name="lastname"
               size="lg"
               ref={register({ required: true })}
             />
@@ -88,10 +96,8 @@ export default function Onboarding({ user }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
-            <FormControl id="first-name" isRequired>
-              <FormLabel>
-                What do you plan to do? <RequiredIndicator />
-              </FormLabel>
+            <FormControl isRequired>
+              <FormLabel>What do you plan to do?</FormLabel>
               <RadioGroup>
                 <Stack direction="row">
                   <Radio
@@ -108,14 +114,30 @@ export default function Onboarding({ user }: Params) {
                     // @ts-ignore
                     ref={register({ required: true })}
                   >
-                    Lend
+                    Invest
                   </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
 
             <Box>
-              <Dropzone email={user.email} />
+              <Dropzone email={user.email}>
+                <p>Drop KYC documents here: </p>
+                <UnorderedList>
+                  <ListItem>Passport</ListItem>
+                  <ListItem>Aadhar Card</ListItem>
+                  <ListItem>PAN Card</ListItem>
+                </UnorderedList>
+              </Dropzone>
+            </Box>
+            <Box>
+              <Dropzone email={user.email}>
+                <p>Drop financial documents here: </p>
+                <UnorderedList>
+                  <ListItem>latest Income Tax Returns</ListItem>
+                  <ListItem>Bank Statement for last 6 months</ListItem>
+                </UnorderedList>
+              </Dropzone>
             </Box>
             <Center>
               <Button type="submit">Submit</Button>

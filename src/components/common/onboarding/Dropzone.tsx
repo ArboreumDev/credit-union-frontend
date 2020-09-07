@@ -12,7 +12,7 @@ const toBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-export default (props: { email: string }) => {
+export default (props: { email: string; children: any }) => {
   const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
@@ -45,13 +45,7 @@ export default (props: { email: string }) => {
         {({ getRootProps, getInputProps }) => (
           <div className="dropzone" {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Drop KYC documents here: </p>
-            <UnorderedList>
-              <ListItem>Passport</ListItem>
-              <ListItem>Aadhar Card</ListItem>
-              <ListItem>PAN Card</ListItem>
-              <ListItem>Address Proof</ListItem>
-            </UnorderedList>
+            {props.children}
           </div>
         )}
       </Dropzone>
@@ -68,12 +62,10 @@ export default (props: { email: string }) => {
       <style jsx>
         {`
           .dropzone {
-            margin: 20px;
             padding: 20px;
-            height: 200px;
+            height: 150px;
             border-style: dashed;
             border-width: 2px;
-            /* margin-bottom: 100px; */
           }
         `}
       </style>
