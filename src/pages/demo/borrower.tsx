@@ -18,5 +18,6 @@ export default () => (
     demoTitle="Borrower Journey"
     user={Fixtures.Borrower}
     journeySequence={journeySequence}
+    initPage={6}
   />
 )
