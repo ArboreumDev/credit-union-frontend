@@ -13,6 +13,8 @@ import {
   RadioGroup,
   RequiredIndicator,
   Stack,
+  InputLeftElement,
+  Text,
 } from "@chakra-ui/core"
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
@@ -20,6 +22,7 @@ import { CreateUserMutationVariables } from "../../../gql/sdk"
 import { fetcher } from "../../../utils/api"
 import Dropzone from "./Dropzone"
 import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
+import { AiOutlineMail } from "react-icons/ai"
 
 type FormData = {
   firstname: string
@@ -72,7 +75,19 @@ export default function Onboarding({ user }: Params) {
                 Signup
               </Heading>
             </Center>
-
+            <InputGroup>
+              <InputLeftElement>
+                <Text>
+                  <AiOutlineMail />
+                </Text>
+              </InputLeftElement>
+              <Input
+                type="email"
+                placeholder="email"
+                disabled
+                value={user.email}
+              />
+            </InputGroup>
             <Input
               placeholder="First Name"
               name="firstname"
