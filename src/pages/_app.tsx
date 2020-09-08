@@ -10,9 +10,8 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
       <Head>
-        <Head>
-          <title>Arboreum</title>
-        </Head>
+        <title>Arboreum</title>
+        <meta name="description" content="Invest. Borrow."></meta>
         {typeof window !== "undefined" && (
           <script
             async
