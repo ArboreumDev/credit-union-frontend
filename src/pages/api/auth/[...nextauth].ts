@@ -44,9 +44,9 @@ const options = {
     session: async (session) => {
       let s = session as Session
       const _user = await dbClient.getUserByEmail(s.user.email)
-      const uistate = getUIState(_user || session.user)
+      const uiState = getUIState(_user || session.user)
 
-      s = { ...s, uiState: uistate }
+      s = { ...s, uiState: uiState }
       if (_user) s = { ...s, user: _user }
 
       console.log("session ", s)
