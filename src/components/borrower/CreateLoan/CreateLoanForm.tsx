@@ -37,7 +37,7 @@ interface Props {
 
 export default function CreateLoanForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [nSup, supCount] = useState(2)
+  const [nSup, supCount] = useState(1)
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -57,7 +57,7 @@ export default function CreateLoanForm({ user }: Props) {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Container maxW="300px" bg="white">
+        <Container minW="300px" bg="white">
           <Stack spacing={3}>
             <Input
               placeholder="Amount (₹)"
