@@ -43,7 +43,7 @@ export class Fixtures {
     pledge_requests: [],
   }
 
-  static UserWithLenderLoanRequest = {
+  static LenderWithPledgeRequest = {
     ...Fixtures.Lender,
     pledge_requests: [
       {

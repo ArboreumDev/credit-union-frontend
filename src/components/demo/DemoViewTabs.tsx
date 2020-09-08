@@ -1,26 +1,18 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import { useState } from "react"
-import { getUIStateComponentMap } from "../../pages/index"
-import { Fixtures } from "../../utils/demo/fixtures"
 import { useToast } from "@chakra-ui/core"
+import { JStep } from "./Main"
 
 interface Props {
   demoTitle: string
-  user: typeof Fixtures.Borrower
-  journeySequence: any
-  componentMap?: any
+  journeySequence: JStep[]
   initPage?: number
 }
 export const DemoTabView = ({
   demoTitle,
-  user,
   journeySequence,
-  componentMap,
   initPage = 0,
 }: Props) => {
   const toast = useToast()
-  componentMap = componentMap || getUIStateComponentMap(user)
-  const tabEntries = Object.entries(journeySequence)
 
   return (
     <Tabs
@@ -28,22 +20,22 @@ export const DemoTabView = ({
       defaultIndex={initPage}
       onChange={(idx) =>
         toast({
-          title: tabEntries[idx][1] as string,
+          title: journeySequence[idx].title as string,
           duration: 2000,
           isClosable: true,
         })
       }
     >
       <TabList>
-        {tabEntries.map(([k, v], idx) => (
+        {journeySequence.map((jstep, idx) => (
           <Tab key={"t" + idx}>{idx}</Tab>
         ))}
       </TabList>
 
       <TabPanels>
-        {tabEntries.map(([k, v], idx) => (
+        {journeySequence.map((jstep, idx) => (
           <TabPanel key={"tp" + idx} padding="0px">
-            {componentMap[k]}
+            {jstep.component}
           </TabPanel>
         ))}
       </TabPanels>

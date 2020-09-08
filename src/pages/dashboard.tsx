@@ -27,12 +27,12 @@ import CreateLoanModal from "../components/borrower/CreateLoan/CreateLoanModal"
 import KYCCompleted from "../components/borrower/Notifications/KYCCompleted"
 import CreateLoanForm from "../components/borrower/CreateLoan/CreateLoanForm"
 
-export const getUIStateComponent = (user: User, uiState: UIState) => {
+export const getDashboardComponent = (user: User, uiState: UIState) => {
   const loanRequests = user.loan_requests
   let loanRequest
   if (loanRequests) loanRequest = getMostRecentLoanRequest(user)
 
-  const map = {
+  const dashboardComponentMap = {
     [UIState.KYCNotApprovedYet]: (
       <div>
         <ApplicationSubmitted />
@@ -63,7 +63,7 @@ export const getUIStateComponent = (user: User, uiState: UIState) => {
     [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
     [UIState.LDashboard]: <LenderDashboard user={user} />,
   }
-  return map[uiState]
+  return dashboardComponentMap[uiState]
 }
 
 const Dashboard = () => {
@@ -77,7 +77,7 @@ const Dashboard = () => {
   )
     location.replace("/")
 
-  const mainComponent = getUIStateComponent(session.user, session.uiState)
+  const mainComponent = getDashboardComponent(session.user, session.uiState)
 
   return (
     <div>
