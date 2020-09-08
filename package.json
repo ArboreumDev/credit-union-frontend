@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.3",
-    "@chakra-ui/theme": "^1.0.0-rc.2",
+    "@chakra-ui/theme": "^1.0.0-rc.3",
     "aws-sdk": "^2.725.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
