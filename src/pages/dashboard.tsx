@@ -1,31 +1,17 @@
-import Onboarding from "../components/common/onboarding/onboarding"
-import { Center, Box, Heading } from "@chakra-ui/core"
-import { GetServerSideProps } from "next"
-import { getSession } from "next-auth/client"
-import { useRouter } from "next/dist/client/router"
-import BAwaitingKYCConfirmation from "../components/borrower/BAwaitingKYCConfirmation"
+import { Box, Center, Heading } from "@chakra-ui/core"
+import { useSession } from "next-auth/client"
 import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
-import BReadyToMakeNewLoan from "../components/borrower/BReadyToMakeNewLoan"
+import CreateLoanForm from "../components/borrower/CreateLoan/CreateLoanForm"
+import CreateLoanModal from "../components/borrower/CreateLoan/CreateLoanModal"
 import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
 import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/BLoanRequestInitiated"
+import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
+import KYCCompleted from "../components/borrower/Notifications/KYCCompleted"
 import AppBar from "../components/common/AppBar"
 import { Contactus } from "../components/common/ContactUs"
-import LandingPage from "../components/common/landing"
 import LenderDashboard from "../components/lender/LenderDashboard"
 import { Session, User } from "../utils/types"
-import {
-  getMostRecentLoanRequest,
-  getUIState,
-  UIState,
-} from "../utils/UIStateHelpers"
-import ProfilePage from "./profile"
-import LoginPage from "./login"
-
-import { useSession } from "next-auth/client"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import CreateLoanModal from "../components/borrower/CreateLoan/CreateLoanModal"
-import KYCCompleted from "../components/borrower/Notifications/KYCCompleted"
-import CreateLoanForm from "../components/borrower/CreateLoan/CreateLoanForm"
+import { getMostRecentLoanRequest, UIState } from "../utils/UIStateHelpers"
 
 export const getDashboardComponent = (user: User, uiState: UIState) => {
   const loanRequests = user.loan_requests
