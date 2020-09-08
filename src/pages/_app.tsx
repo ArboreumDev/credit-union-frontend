@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
                 ? ANALYTICS_WEBSITE_IDS.production
                 : ANALYTICS_WEBSITE_IDS.preview
             }
-            data-host-url="https://analytics-umami.vercel.app/"
+            data-host-url="https://analytics.arboreum.dev/"
             src="/umami.js"
           />
         )}
