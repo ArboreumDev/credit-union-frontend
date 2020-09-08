@@ -66,7 +66,7 @@ export default function Onboarding({ user }: Params) {
         <Container maxW="400px" bg="white">
           <Stack spacing={3}>
             <Center>
-              <Box h="40px">
+              <Box marginTop="20px" h="40px">
                 <img width="150px" src="/images/logo.svg" alt="logo" />
               </Box>
             </Center>
