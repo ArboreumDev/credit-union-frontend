@@ -5,7 +5,7 @@ export enum UIState {
   Login = "SignIn",
   Onboarding = "Onboarding",
   KYCNotApprovedYet = "KYCNotApprovedYet",
-  BReadyToMakeNewLoan = "BReadyToMakeNewLoan",
+  KYCConfirmed = "BReadyToMakeNewLoan",
   BLoanRequestInitiated = "BLoanRequestInitiated",
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
   BOngoingLoan = "BOngoingLoan",
@@ -19,18 +19,14 @@ export const getMostRecentLoanRequest = (user: User) =>
     (l1, l2) => Date.parse(l2.created_at) - Date.parse(l1.created_at)
   )[0]
 
-export const getUIState = async (session: Session) => {
-  if (!session) return UIState.Landing
-
-  const user = session.user
-
-  console.log("in index", user)
+export const getUIState = (user: User) => {
+  if (!user) return UIState.Landing
 
   if (!user.user_type) return UIState.Onboarding
   if (!user.kyc_approved) return UIState.KYCNotApprovedYet
   if (user.kyc_approved) {
     if (user.user_type === UserType.Borrower) {
-      if (user.loan_requests.length == 0) return UIState.BReadyToMakeNewLoan
+      if (user.loan_requests.length == 0) return UIState.KYCConfirmed
       if (user.loan_requests[0].status === LoanRequestStatus.initiated)
         return UIState.BLoanRequestInitiated
       else return UIState.BOngoingLoan
@@ -41,4 +37,14 @@ export const getUIState = async (session: Session) => {
   }
 
   return UIState.Landing
+}
+
+export const getUIStateRoute = (state: UIState) => {
+  console.log("uistate", state)
+  const stateRouteMap = {
+    [UIState.Landing]: "/",
+    [UIState.Onboarding]: "/Onboarding",
+  }
+  if (state in stateRouteMap) return stateRouteMap[state]
+  return "/dashboard"
 }
