@@ -30,3 +30,6 @@ jobs:
     - name: Test with jest
       run: |
         cd tests; make test
+    - name: build
+      run: |
+        yarn build
