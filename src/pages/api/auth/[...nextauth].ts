@@ -1,9 +1,8 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { initializeGQL } from "../../../gql/graphql_client"
-import { User, JWTToken } from "../../../utils/types"
-import { getSdk } from "../../../gql/sdk"
 import { DbClient } from "../../../gql/db_client"
+import { JWTToken, Session } from "../../../utils/types"
+import { getUIState } from "../../../utils/UIStateHelpers"
 
 const dbClient = new DbClient()
 
@@ -36,13 +35,6 @@ const options = {
 
   // A database is optional, but required to persist accounts in a database
   callbacks: {
-    // signin: async (profile, account, metadata) => { console.log(profile, account, metadata)},
-    // redirect: async (url, baseUrl) => {
-    //     console.log(url, baseUrl)
-    //     url.startsWith(baseUrl)
-    //         ? Promise.resolve(url)
-    //         : Promise.resolve(baseUrl)
-    //  },
     jwt: async (token: JWTToken) => {
       const _user = await dbClient.getUserByEmail(token.email)
       if (_user) token = { ...token, user: _user }
@@ -50,10 +42,15 @@ const options = {
       return Promise.resolve(token)
     },
     session: async (session) => {
-      const _user = await dbClient.getUserByEmail(session.user.email)
-      if (_user) session = { ...session, user: _user }
+      let s = session as Session
+      const _user = await dbClient.getUserByEmail(s.user.email)
+      const uistate = getUIState(_user || session.user)
 
-      return Promise.resolve(session)
+      s = { ...s, uiState: uistate }
+      if (_user) s = { ...s, user: _user }
+
+      console.log("session ", s)
+      return Promise.resolve(s)
     },
   },
   events: {
