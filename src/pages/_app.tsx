@@ -10,6 +10,9 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
       <Head>
+        <Head>
+          <title>Arboreum</title>
+        </Head>
         {typeof window !== "undefined" && (
           <script
             async

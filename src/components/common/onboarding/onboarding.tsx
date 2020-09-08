@@ -23,6 +23,7 @@ import { fetcher } from "../../../utils/api"
 import Dropzone from "./Dropzone"
 import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 import { AiOutlineMail } from "react-icons/ai"
+import Head from "next/head"
 
 type FormData = {
   firstname: string
@@ -62,6 +63,9 @@ export default function Onboarding({ user }: Params) {
 
   return (
     <div>
+      <Head>
+        <title>Onboarding</title>
+      </Head>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container maxW="400px" bg="white">
           <Stack spacing={3}>

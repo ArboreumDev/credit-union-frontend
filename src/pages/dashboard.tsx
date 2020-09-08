@@ -12,6 +12,7 @@ import { Contactus } from "../components/common/ContactUs"
 import LenderDashboard from "../components/lender/LenderDashboard"
 import { Session, User } from "../utils/types"
 import { getMostRecentLoanRequest, UIState } from "../utils/UIStateHelpers"
+import Head from "next/head"
 
 export const getDashboardComponent = (user: User, uiState: UIState) => {
   const loanRequests = user.loan_requests
@@ -67,6 +68,9 @@ const Dashboard = () => {
 
   return (
     <div>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
       <AppBar />
       {mainComponent}
       <Center margin="80px">
