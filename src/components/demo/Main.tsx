@@ -1,14 +1,12 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import { DemoView } from "../../components/demo/DemoView"
 import { DemoTabView } from "../../components/demo/DemoViewTabs"
+import { getDashboardComponent } from "../../pages/dashboard"
+import LoginPage from "../../pages/login"
+import ProfilePage from "../../pages/profile"
 import { Fixtures } from "../../utils/demo/fixtures"
 import { UIState } from "../../utils/UIStateHelpers"
-import LenderDashboard from "../../components/lender/LenderDashboard"
 import LandingPage from "../common/landing"
-import LoginPage from "../../pages/login"
-import { getDashboardComponent } from "../../pages/dashboard"
 import Onboarding from "../common/onboarding/onboarding"
-import ProfilePage from "../../pages/profile"
 
 export class JStep {
   constructor(
