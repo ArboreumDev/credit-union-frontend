@@ -29,18 +29,16 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
     <Table>
       <Row>
         <TextColumn muted>Interest Rate</TextColumn>
-        <TextColumn>
-          <Text align="right">{calculatedRisk.interestRate}%</Text>
+        <TextColumn textAlign="right">
+          {calculatedRisk.interestRate}%
         </TextColumn>
       </Row>
       <Row>
         <TextColumn muted>
           Total due in {calculatedRisk.loanTerm} months
         </TextColumn>
-        <TextColumn>
-          <Text align="right">
-            <Currency amount={calculatedRisk.totalDue} />
-          </Text>
+        <TextColumn textAlign="right">
+          <Currency amount={calculatedRisk.totalDue} />
         </TextColumn>
       </Row>
       <Row>
@@ -94,7 +92,10 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
           </StatGroup>
           <Box h="20px" />
         </Box>
-        <LoanRequestTable loanRequest={loanRequest} />
+        <Center maxW="100%">
+          <LoanRequestTable loanRequest={loanRequest} />
+        </Center>
+
         <Box h="10px" />
         <form onSubmit={handleSubmit(confirmLoan)}>
           <Stack margin="10px">
