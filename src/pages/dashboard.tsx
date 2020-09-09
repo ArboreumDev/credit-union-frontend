@@ -1,56 +1,76 @@
 import { Box, Center, Heading } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
-import { BOngoingLoan } from "../components/borrower/BOngoingLoan"
-import CreateLoanForm from "../components/borrower/CreateLoan/CreateLoanForm"
-import CreateLoanModal from "../components/borrower/CreateLoan/CreateLoanModal"
-import { BLoanNeedsConfirmation } from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
-import { BLoanRequestInitiated } from "../components/borrower/LoanRequests/BLoanRequestInitiated"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import KYCCompleted from "../components/borrower/Notifications/KYCCompleted"
-import AppBar from "../components/common/AppBar"
-import { Contactus } from "../components/common/ContactUs"
-import LenderDashboard from "../components/lender/LenderDashboard"
+import dynamic from "next/dynamic"
+import Head from "next/head"
+const BOngoingLoan = dynamic(() =>
+  import("../components/borrower/BOngoingLoan")
+)
+const CreateLoanForm = dynamic(() =>
+  import("../components/borrower/CreateLoan/CreateLoanForm")
+)
+const CreateLoanModal = dynamic(() =>
+  import("../components/borrower/CreateLoan/CreateLoanModal")
+)
+const BLoanNeedsConfirmation = dynamic(() =>
+  import("../components/borrower/LoanRequests/BLoanNeedsConfirmation")
+)
+const BLoanRequestInitiated = dynamic(() =>
+  import("../components/borrower/LoanRequests/BLoanRequestInitiated")
+)
+const ApplicationSubmitted = dynamic(() =>
+  import("../components/borrower/Notifications/ApplicationSubmitted")
+)
+const KYCCompleted = dynamic(() =>
+  import("../components/borrower/Notifications/KYCCompleted")
+)
+const AppBar = dynamic(() => import("../components/common/AppBar"))
+const Contactus = dynamic(() => import("../components/common/ContactUs"))
 import { Session, User } from "../utils/types"
 import { getMostRecentLoanRequest, UIState } from "../utils/UIStateHelpers"
-import Head from "next/head"
 
 export const getDashboardComponent = (user: User, uiState: UIState) => {
   const loanRequests = user.loan_requests
   let loanRequest
   if (loanRequests) loanRequest = getMostRecentLoanRequest(user)
-
-  const dashboardComponentMap = {
-    [UIState.KYCNotApprovedYet]: (
-      <div>
-        <ApplicationSubmitted />
-        <Center>
-          <CreateLoanModal user={user} />
-        </Center>
-      </div>
-    ),
-    [UIState.KYCConfirmed]: (
-      <Box>
-        <KYCCompleted />
-        <Box h="30px" />
-        <Center>
-          <Heading as="h1" size="lg">
-            Request Loan
-          </Heading>
-        </Center>
-        <Box h="30px" />
-        <CreateLoanForm user={user} />
-      </Box>
-    ),
-    [UIState.BLoanRequestInitiated]: loanRequest && (
-      <BLoanRequestInitiated loanRequest={loanRequest} />
-    ),
-    [UIState.BLoanRequestAwaitsConfirmation]: (
-      <BLoanNeedsConfirmation loanRequest={loanRequest} />
-    ),
-    [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
-    [UIState.LDashboard]: <LenderDashboard user={user} />,
+  switch (uiState) {
+    case UIState.KYCNotApprovedYet:
+      return (
+        <div>
+          <ApplicationSubmitted />
+          <Center>
+            <CreateLoanModal user={user} />
+          </Center>
+        </div>
+      )
+    case UIState.KYCConfirmed:
+      return (
+        <Box>
+          <KYCCompleted />
+          <Box h="30px" />
+          <Center>
+            <Heading as="h1" size="lg">
+              Request Loan
+            </Heading>
+          </Center>
+          <Box h="30px" />
+          <CreateLoanForm user={user} />
+        </Box>
+      )
+    case UIState.BLoanRequestInitiated:
+      return <BLoanRequestInitiated loanRequest={loanRequest} />
+    case UIState.BLoanRequestAwaitsConfirmation:
+      return <BLoanNeedsConfirmation loanRequest={loanRequest} />
+    case UIState.BOngoingLoan:
+      return <BOngoingLoan loan={loanRequest} />
+    case UIState.LDashboard: {
+      const LenderDashboard = dynamic(() =>
+        import("../components/lender/LenderDashboard")
+      )
+      return <LenderDashboard user={user} />
+    }
+    default:
+      return <div></div>
   }
-  return dashboardComponentMap[uiState]
 }
 
 const Dashboard = () => {

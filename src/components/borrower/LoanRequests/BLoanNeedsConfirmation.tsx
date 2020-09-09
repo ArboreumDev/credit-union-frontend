@@ -55,7 +55,7 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
   )
 }
 
-export const BLoanNeedsConfirmation = ({ loanRequest }: Params) => {
+export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
   }

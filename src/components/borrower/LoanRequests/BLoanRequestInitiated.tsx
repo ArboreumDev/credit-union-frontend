@@ -16,7 +16,7 @@ interface Params {
   loanRequest: LoanRequest
 }
 
-export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
+const BLoanRequestInitiated = ({ loanRequest }: Params) => (
   <Container minW="s" bg="white">
     <Box padding="10px" borderWidth="3px">
       <Center>
@@ -43,3 +43,5 @@ export const BLoanRequestInitiated = ({ loanRequest }: Params) => (
     </Box>
   </Container>
 )
+
+export default BLoanRequestInitiated

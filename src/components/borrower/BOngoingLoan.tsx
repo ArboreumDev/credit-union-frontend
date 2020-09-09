@@ -42,7 +42,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueMap[] => [
   },
 ]
 
-export const BOngoingLoan = ({ loan }: Params) => (
+const BOngoingLoan = ({ loan }: Params) => (
   <Container minW="s" bg="white">
     <RepaymentNotReceived />
     <Stack padding="10px" borderWidth="3px">
@@ -101,3 +101,5 @@ export const BOngoingLoan = ({ loan }: Params) => (
     </Stack>
   </Container>
 )
+
+export default BOngoingLoan
