@@ -20,18 +20,17 @@ const AppBar = () => (
     minW="s"
   >
     <Flex align="center">
-      <button onClick={() => Router.push("/")}>
+      <Link href="/dashboard">
         <img width="150px" src="/images/logo.svg" alt="logo" />
-      </button>
+      </Link>
     </Flex>
-    <Box flex="1" textAlign="right">
-      <Box>
-        <button onClick={() => Router.push("/profile")}>
-          <Text padding="0px" margin="0px" fontSize="3xl">
-            <CgProfile />
-          </Text>
-        </button>
-      </Box>
+    <Box flex="1"></Box>
+    <Box>
+      <Link href="/profile">
+        <Text align="right" padding="0px" margin="0px" fontSize="3xl">
+          <CgProfile />
+        </Text>
+      </Link>
     </Box>
     <style jsx>
       {`

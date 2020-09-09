@@ -2,54 +2,70 @@ import { Box, Center, Heading } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
 import dynamic from "next/dynamic"
 import Head from "next/head"
-const BOngoingLoan = dynamic(() =>
-  import("../components/borrower/BOngoingLoan")
-)
-const CreateLoanForm = dynamic(() =>
-  import("../components/borrower/CreateLoan/CreateLoanForm")
-)
-const CreateLoanModal = dynamic(() =>
-  import("../components/borrower/CreateLoan/CreateLoanModal")
-)
-const BLoanNeedsConfirmation = dynamic(() =>
-  import("../components/borrower/LoanRequests/BLoanNeedsConfirmation")
-)
-const BLoanRequestInitiated = dynamic(() =>
-  import("../components/borrower/LoanRequests/BLoanRequestInitiated")
-)
-const ApplicationSubmitted = dynamic(() =>
-  import("../components/borrower/Notifications/ApplicationSubmitted")
-)
-const KYCCompleted = dynamic(() =>
-  import("../components/borrower/Notifications/KYCCompleted")
-)
-const AppBar = dynamic(() => import("../components/common/AppBar"))
-const Contactus = dynamic(() => import("../components/common/ContactUs"))
-import { Session, User } from "../utils/types"
+import { Session, User, LoanRequest } from "../utils/types"
 import { getMostRecentLoanRequest, UIState } from "../utils/UIStateHelpers"
+import AppBar from "../components/common/AppBar"
+import Contactus from "../components/common/ContactUs"
 
-const getKYCNotApprovedYetComponent = (user: User) => (
-  <div>
-    <ApplicationSubmitted />
-    <Center>
-      <CreateLoanModal user={user} />
-    </Center>
-  </div>
-)
+const getBOngoingLoan = (loanRequest: LoanRequest) => {
+  const BLoanRequestInitiated = dynamic(() =>
+    import("../components/borrower/LoanRequests/BLoanRequestInitiated")
+  )
+  return <BLoanRequestInitiated loanRequest={loanRequest} />
+}
+const getBLoanNeedsConfirmation = (loanRequest: LoanRequest) => {
+  const BLoanNeedsConfirmation = dynamic(() =>
+    import("../components/borrower/LoanRequests/BLoanNeedsConfirmation")
+  )
+  return <BLoanNeedsConfirmation loanRequest={loanRequest} />
+}
+const getBLoanRequestInitiated = (loanRequest: LoanRequest) => {
+  const BOngoingLoan = dynamic(() =>
+    import("../components/borrower/BOngoingLoan")
+  )
+  return <BOngoingLoan loan={loanRequest} />
+}
 
-const getKYCConfirmedComponent = (user: User) => (
-  <Box>
-    <KYCCompleted />
-    <Box h="30px" />
-    <Center>
-      <Heading as="h1" size="lg">
-        Request Loan
-      </Heading>
-    </Center>
-    <Box h="30px" />
-    <CreateLoanForm user={user} />
-  </Box>
-)
+const getKYCNotApprovedYetComponent = (user: User) => {
+  const ApplicationSubmitted = dynamic(() =>
+    import("../components/borrower/Notifications/ApplicationSubmitted")
+  )
+  const CreateLoanModal = dynamic(() =>
+    import("../components/borrower/CreateLoan/CreateLoanModal")
+  )
+
+  return (
+    <div>
+      <ApplicationSubmitted />
+      <Center>
+        <CreateLoanModal user={user} />
+      </Center>
+    </div>
+  )
+}
+
+const getKYCConfirmedComponent = (user: User) => {
+  const KYCCompleted = dynamic(() =>
+    import("../components/borrower/Notifications/KYCCompleted")
+  )
+  const CreateLoanForm = dynamic(() =>
+    import("../components/borrower/CreateLoan/CreateLoanForm")
+  )
+
+  return (
+    <Box>
+      <KYCCompleted />
+      <Box h="30px" />
+      <Center>
+        <Heading as="h1" size="lg">
+          Request Loan
+        </Heading>
+      </Center>
+      <Box h="30px" />
+      <CreateLoanForm user={user} />
+    </Box>
+  )
+}
 
 const getLenderDashboardComponent = (user: User) => {
   const LenderDashboard = dynamic(() =>
@@ -66,13 +82,11 @@ export const getDashboardComponent = (user: User, uiState: UIState) => {
   return {
     [UIState.KYCNotApprovedYet]: getKYCNotApprovedYetComponent(user),
     [UIState.KYCConfirmed]: getKYCConfirmedComponent(user),
-    [UIState.BLoanRequestInitiated]: (
-      <BLoanRequestInitiated loanRequest={loanRequest} />
+    [UIState.BLoanRequestInitiated]: getBLoanNeedsConfirmation(loanRequest),
+    [UIState.BLoanRequestAwaitsConfirmation]: getBLoanNeedsConfirmation(
+      loanRequest
     ),
-    [UIState.BLoanRequestAwaitsConfirmation]: (
-      <BLoanNeedsConfirmation loanRequest={loanRequest} />
-    ),
-    [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
+    [UIState.BOngoingLoan]: getBOngoingLoan(loanRequest),
     [UIState.LDashboard]: getLenderDashboardComponent(user),
   }[uiState]
 }
