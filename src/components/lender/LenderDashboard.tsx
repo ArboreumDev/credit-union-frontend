@@ -82,7 +82,7 @@ const LenderDashboard = ({ user }: Props) => {
         </HStack>
       </Center>
       <Center>
-        <Wrap spacing="30px" justify="center">
+        <Wrap w="100%" spacing="30px" justify="center">
           <DynamicDoughnut />
           <LineChart />
         </Wrap>
