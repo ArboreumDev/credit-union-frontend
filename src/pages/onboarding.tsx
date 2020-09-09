@@ -5,7 +5,7 @@ import { UIState } from "../utils/UIStateHelpers"
 import { Session } from "../utils/types"
 
 const OnboardingPage = () => {
-  const [session, loading]: [Session, any] = useSession()
+  const [session, loading]: [Session, boolean] = useSession()
   if (loading) return <div></div>
   if (!session || session.user.user_type) location.replace("/")
 

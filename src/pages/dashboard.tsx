@@ -60,7 +60,7 @@ export const getDashboardComponent = (user: User) => {
 }
 
 const Dashboard = () => {
-  const [session, loading]: [Session, any] = useSession()
+  const [session, loading]: [Session, boolean] = useSession()
 
   if (loading) return <AppBar />
   if (!session || !session.user || !session.user.user_type)

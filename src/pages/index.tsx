@@ -6,7 +6,7 @@ import { UIState } from "../utils/UIStateHelpers"
 import { useSession } from "next-auth/client"
 
 const Page = () => {
-  const [session, loading]: [Session, any] = useSession()
+  const [session, loading]: [Session, boolean] = useSession()
   if (loading) return <div></div>
   console.log(session)
   if (session) {
