@@ -4,15 +4,10 @@ import { JStep } from "./Main"
 import AppBar from "../common/AppBar"
 
 interface Props {
-  demoTitle: string
   journeySequence: JStep[]
   initPage?: number
 }
-export const DemoTabView = ({
-  demoTitle,
-  journeySequence,
-  initPage = 0,
-}: Props) => {
+export const DemoTabView = ({ journeySequence, initPage = 0 }: Props) => {
   const toast = useToast()
 
   return (
@@ -21,7 +16,7 @@ export const DemoTabView = ({
       defaultIndex={initPage}
       onChange={(idx) =>
         toast({
-          title: journeySequence[idx].title as string,
+          title: (idx + journeySequence[idx].title) as string,
           duration: 2000,
           isClosable: true,
         })
@@ -34,7 +29,6 @@ export const DemoTabView = ({
       </TabList>
 
       <TabPanels>
-        <AppBar />
         {journeySequence.map((jstep, idx) => (
           <TabPanel key={"tp" + idx} padding="0px">
             {jstep.component}

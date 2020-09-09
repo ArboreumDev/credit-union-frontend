@@ -92,7 +92,7 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
           </StatGroup>
           <Box h="20px" />
         </Box>
-        <Center maxW="100%">
+        <Center w="100%">
           <LoanRequestTable loanRequest={loanRequest} />
         </Center>
 

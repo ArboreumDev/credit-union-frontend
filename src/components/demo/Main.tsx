@@ -81,16 +81,10 @@ const MainDemo = ({ tabView = false }: { tabView?: boolean }) => (
 
     <TabPanels>
       <TabPanel padding="0">
-        <DemoTabView
-          demoTitle="Borrower Journey"
-          journeySequence={bJourneySequence}
-        />
+        <DemoTabView journeySequence={bJourneySequence} />
       </TabPanel>
       <TabPanel padding="0">
-        <DemoTabView
-          demoTitle="Lender Journey"
-          journeySequence={lJourneySequence}
-        />
+        <DemoTabView journeySequence={lJourneySequence} />
       </TabPanel>
     </TabPanels>
   </Tabs>
