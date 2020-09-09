@@ -35,8 +35,9 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
         New Pledge Request
       </AlertTitle>
       <AlertDescription>
-        {loanRequest.user.name} ({loanRequest.user.email}) is requesting a loan
-        for {loanRequest.purpose} and is asking you to support it.
+        {loanRequest.user.name} ({loanRequest.user.email}) hase requested you to
+        pledge <Currency amount={pledgeRequest.pledge_amount} /> for his loan
+        request of amount <Currency amount={loanRequest.amount} />
       </AlertDescription>
       <AlertDescription>
         <Text>

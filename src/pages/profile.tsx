@@ -45,6 +45,7 @@ const ProfilePage = ({ user }: Props) => {
         <Stack>
           <Center>{user.name}</Center>
           <Center>{user.email}</Center>
+          <Center>{user.phone}</Center>
           <Box h="10px" />
           <Divider />
           <Box>
