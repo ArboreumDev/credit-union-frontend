@@ -15,6 +15,11 @@ import {
   Stack,
   InputLeftElement,
   Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/core"
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
@@ -115,49 +120,52 @@ export default function Onboarding({ user }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
-            <FormControl isRequired>
-              <FormLabel>What do you plan to do?</FormLabel>
-              <RadioGroup>
-                <Stack direction="row">
-                  <Radio
-                    value="borrower"
-                    name="user_type"
-                    // @ts-ignore Throwing compile time error. Hopefully fixed in future chakra version.
-                    ref={register({ required: true })}
-                  >
-                    Borrow
-                  </Radio>
-                  <Radio
-                    value="lender"
-                    name="user_type"
-                    // @ts-ignore
-                    ref={register({ required: true })}
-                  >
-                    Invest
-                  </Radio>
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+            <Tabs variant="unstyled">
+              <TabList>
+                <Tab _selected={{ color: "white", bg: "blue.500" }}>Invest</Tab>
+                <Tab _selected={{ color: "white", bg: "green.400" }}>
+                  Borrow
+                </Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Stack>
+                    <Input
+                      placeholder="PAN Card Number"
+                      name="pancard"
+                      size="lg"
+                    />
+                    <Input
+                      placeholder="Aadhar Card Number"
+                      name="aadhar"
+                      size="lg"
+                    />
+                  </Stack>
+                </TabPanel>
+                <TabPanel>
+                  <Box>
+                    <Dropzone email={user.email}>
+                      <p>Drop KYC documents here: </p>
+                      <UnorderedList>
+                        <ListItem>Passport</ListItem>
+                        <ListItem>Aadhar Card</ListItem>
+                        <ListItem>PAN Card</ListItem>
+                      </UnorderedList>
+                    </Dropzone>
+                  </Box>
+                  <Box>
+                    <Dropzone email={user.email}>
+                      <p>Drop financial documents here: </p>
+                      <UnorderedList>
+                        <ListItem>latest Income Tax Returns</ListItem>
+                        <ListItem>Bank Statement for last 6 months</ListItem>
+                      </UnorderedList>
+                    </Dropzone>
+                  </Box>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
 
-            <Box>
-              <Dropzone email={user.email}>
-                <p>Drop KYC documents here: </p>
-                <UnorderedList>
-                  <ListItem>Passport</ListItem>
-                  <ListItem>Aadhar Card</ListItem>
-                  <ListItem>PAN Card</ListItem>
-                </UnorderedList>
-              </Dropzone>
-            </Box>
-            <Box>
-              <Dropzone email={user.email}>
-                <p>Drop financial documents here: </p>
-                <UnorderedList>
-                  <ListItem>latest Income Tax Returns</ListItem>
-                  <ListItem>Bank Statement for last 6 months</ListItem>
-                </UnorderedList>
-              </Dropzone>
-            </Box>
             <Center>
               <Button type="submit">Submit</Button>
             </Center>
