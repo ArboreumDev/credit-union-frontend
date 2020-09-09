@@ -8,9 +8,9 @@ function getRandomInt(min, max) {
 
 const getState = () => ({
   labels: [
-    "Funds In Active Loans",
-    "Funds Acting As Guarantees",
-    "Uninvested Funds",
+    "Invested amount",
+    "Pledge amount as supporter",
+    "Uninvested amount",
   ],
   datasets: [
     {
@@ -36,7 +36,7 @@ export default function DynamicDoughnut() {
   return (
     <Box minW="300px">
       <Center>
-        <h4>Your Lending Portfolio</h4>
+        <h4>Your Investing Portfolio</h4>
       </Center>
       <Doughnut data={state} width={380} height={380} />
     </Box>

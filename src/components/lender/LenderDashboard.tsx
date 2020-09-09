@@ -7,6 +7,8 @@ import {
   Stack,
   Text,
   Wrap,
+  HStack,
+  Button,
 } from "@chakra-ui/core"
 import { User } from "../../utils/types"
 import { Currency } from "../common/Currency"
@@ -26,18 +28,18 @@ const getOngoingPledges = () => [
     name: "Dju",
     total: 20000,
     perc_repaid: 0.1,
-    color: "red.500",
+    color: "black",
   },
   {
     name: "Sid",
     total: 25000,
     perc_repaid: 0.7,
-    color: "red.500",
   },
 ]
 
-const OngoingLoans = () => (
+const PledgeInvestments = () => (
   <Stack spacing="15px" minW="280px">
+    <Center>You have {5} ongoing pledge investments:</Center>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
         <Box flex="1">
@@ -80,9 +82,14 @@ const LenderDashboard = ({ user }: Props) => {
           <LineChart />
         </Wrap>
       </Center>
-      <Center>Ongoing Loans</Center>
       <Center>
-        <OngoingLoans />
+        <HStack>
+          <Button>Add funds</Button>
+          <Button>Withdraw funds</Button>
+        </HStack>
+      </Center>
+      <Center>
+        <PledgeInvestments />
       </Center>
     </Stack>
   )
