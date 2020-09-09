@@ -1,6 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 import { useToast } from "@chakra-ui/core"
 import { JStep } from "./Main"
+import AppBar from "../common/AppBar"
 
 interface Props {
   demoTitle: string
@@ -33,6 +34,7 @@ export const DemoTabView = ({
       </TabList>
 
       <TabPanels>
+        <AppBar />
         {journeySequence.map((jstep, idx) => (
           <TabPanel key={"tp" + idx} padding="0px">
             {jstep.component}
