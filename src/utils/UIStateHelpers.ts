@@ -38,13 +38,3 @@ export const getUIState = (user: User) => {
 
   return UIState.Landing
 }
-
-export const getUIStateRoute = (state: UIState) => {
-  console.log("uistate", state)
-  const stateRouteMap = {
-    [UIState.Landing]: "/",
-    [UIState.Onboarding]: "/Onboarding",
-  }
-  if (state in stateRouteMap) return stateRouteMap[state]
-  return "/dashboard"
-}

@@ -2,29 +2,19 @@ import { GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
 import LandingPage from "../components/common/landing"
 import { Session } from "../utils/types"
-import { getUIStateRoute, UIState } from "../utils/UIStateHelpers"
+import { UIState } from "../utils/UIStateHelpers"
+import { useSession } from "next-auth/client"
 
 const Page = () => {
-  return <LandingPage />
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = (await getSession(context)) as Session
-
-  if (!session || session.uiState === UIState.Landing) {
-    return { props: {} }
-  } else {
-    const routeUrl = getUIStateRoute(session.uiState)
-    console.log("route ", routeUrl)
-    const res = context.res
-    if (res) {
-      res.writeHead(302, {
-        Location: routeUrl,
-      })
-      res.end()
-    }
+  const [session, loading]: [Session, any] = useSession()
+  if (loading) return <div></div>
+  console.log(session)
+  if (session) {
+    if (session.uiState === UIState.Onboarding) location.replace("/Onboarding")
+    else location.replace("/dashboard")
   }
-  return { props: {} }
+
+  return <LandingPage />
 }
 
 export default Page
