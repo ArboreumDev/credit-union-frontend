@@ -24,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       res.end()
     }
   }
+  return { props: {} }
 }
 
 export default Page
