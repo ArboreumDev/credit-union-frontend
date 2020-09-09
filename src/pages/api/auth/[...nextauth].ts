@@ -2,7 +2,6 @@ import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { DbClient } from "../../../gql/db_client"
 import { JWTToken, Session } from "../../../utils/types"
-import { getUIState } from "../../../utils/UIStateHelpers"
 
 const dbClient = new DbClient()
 
@@ -44,9 +43,7 @@ const options = {
     session: async (session) => {
       let s = session as Session
       const _user = await dbClient.getUserByEmail(s.user.email)
-      const uiState = getUIState(_user || session.user)
 
-      s = { ...s, uiState: uiState }
       if (_user) s = { ...s, user: _user }
 
       // console.log("session ", s)

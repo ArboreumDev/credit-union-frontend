@@ -10,8 +10,9 @@ const Page = () => {
   if (loading) return <div></div>
   console.log(session)
   if (session) {
-    if (session.uiState === UIState.Onboarding) location.replace("/Onboarding")
-    else location.replace("/dashboard")
+    const user = session.user
+    if (!user.user_type) location.replace("/Onboarding")
+    location.replace("/dashboard")
   }
 
   return <LandingPage />

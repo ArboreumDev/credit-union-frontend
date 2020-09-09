@@ -6,7 +6,6 @@ export type Session = {
   user: User
   accessToken: string
   expires: string
-  uiState?: UIState
 }
 
 export enum UserType {
