@@ -1,3 +1,4 @@
 import MainDemo from "../../components/demo/Main"
 
-export default () => <MainDemo tabView />
+const Demo = () => <MainDemo tabView />
+export default Demo

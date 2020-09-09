@@ -12,7 +12,7 @@ const toBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-export default (props: { email: string; children: any }) => {
+const FileDropzone = (props: { email: string; children: any }) => {
   const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
@@ -72,3 +72,4 @@ export default (props: { email: string; children: any }) => {
     </div>
   )
 }
+export default FileDropzone
