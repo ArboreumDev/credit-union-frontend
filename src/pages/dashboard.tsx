@@ -63,11 +63,7 @@ const Dashboard = () => {
   const [session, loading]: [Session, any] = useSession()
 
   if (loading) return <AppBar />
-  if (
-    !session ||
-    session.uiState === UIState.Landing ||
-    session.uiState === UIState.Onboarding
-  )
+  if (!session || !session.user || !session.user.user_type)
     location.replace("/")
 
   const mainComponent = getDashboardComponent(session.user)
