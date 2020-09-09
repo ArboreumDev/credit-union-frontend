@@ -9,6 +9,7 @@ export enum UIState {
   BLoanRequestInitiated = "BLoanRequestInitiated",
   BLoanRequestAwaitsConfirmation = "BLoanRequestAwaitsConfirmation",
   BOngoingLoan = "BOngoingLoan",
+  Dashboard = "Dashboard",
   LDashboard = "LDashboard",
   LDashboardWithNotification = "LDashboardWithNotification",
   Profile = "Profile",
@@ -24,17 +25,8 @@ export const getUIState = (user: User) => {
 
   if (!user.user_type) return UIState.Onboarding
   if (!user.kyc_approved) return UIState.KYCNotApprovedYet
-  if (user.kyc_approved) {
-    if (user.user_type === UserType.Borrower) {
-      if (user.loan_requests.length == 0) return UIState.KYCConfirmed
-      if (user.loan_requests[0].status === LoanRequestStatus.initiated)
-        return UIState.BLoanRequestInitiated
-      else return UIState.BOngoingLoan
-    }
-    if (user.user_type === UserType.Lender) {
-      return UIState.LDashboard
-    }
-  }
+  if (user.user_type === UserType.Borrower) return UIState.BDashboard
+  if (user.user_type === UserType.Lender) return UIState.LDashboard
 
   return UIState.Landing
 }

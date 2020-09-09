@@ -19,7 +19,7 @@ import { Column, Row, Table } from "../common/Table"
 import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
 
 interface Params {
-  loan: LoanRequest
+  loanRequest: LoanRequest
 }
 
 const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueMap[] => [
@@ -42,7 +42,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueMap[] => [
   },
 ]
 
-const BOngoingLoan = ({ loan }: Params) => (
+const BOngoingLoan = ({ loanRequest: loan }: Params) => (
   <Container minW="s" bg="white">
     <RepaymentNotReceived />
     <Stack padding="10px" borderWidth="3px">
