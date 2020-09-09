@@ -33,7 +33,7 @@ const txLenderFixture = [
   { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
-export const Profile = (user) => {
+export const Profile = ({ user }: Props) => {
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -91,7 +91,7 @@ const ProfilePage = () => {
   if (!session || !session.user.user_type) location.replace("/")
 
   const user = session.user
-  return <Profile />
+  return <Profile user={user} />
 }
 
 export default ProfilePage
