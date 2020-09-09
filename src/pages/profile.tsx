@@ -35,6 +35,9 @@ const txLenderFixture = [
 
 const ProfilePage = () => {
   const [session, loading]: [Session, boolean] = useSession()
+  if (loading) return <div></div>
+  if (!session || !session.user.user_type) location.replace("/")
+
   const user = session.user
 
   const transactions =

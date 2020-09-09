@@ -21,8 +21,7 @@ export class JStep {
 
     if (this.state === UIState.Onboarding)
       return <Onboarding user={this.fixture} />
-    if (this.state === UIState.Profile)
-      return <ProfilePage user={this.fixture} />
+    if (this.state === UIState.Profile) return <ProfilePage />
     if (this.state === UIState.Dashboard)
       return getDashboardComponent(this.fixture)
   }
