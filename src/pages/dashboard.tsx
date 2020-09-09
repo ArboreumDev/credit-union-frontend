@@ -63,22 +63,18 @@ export const getDashboardComponent = (user: User, uiState: UIState) => {
   let loanRequest
   if (loanRequests) loanRequest = getMostRecentLoanRequest(user)
 
-  switch (uiState) {
-    case UIState.KYCNotApprovedYet:
-      return getKYCNotApprovedYetComponent(user)
-    case UIState.KYCConfirmed:
-      return getKYCConfirmedComponent(user)
-    case UIState.BLoanRequestInitiated:
-      return <BLoanRequestInitiated loanRequest={loanRequest} />
-    case UIState.BLoanRequestAwaitsConfirmation:
-      return <BLoanNeedsConfirmation loanRequest={loanRequest} />
-    case UIState.BOngoingLoan:
-      return <BOngoingLoan loan={loanRequest} />
-    case UIState.LDashboard:
-      return getLenderDashboardComponent(user)
-    default:
-      return <div></div>
-  }
+  return {
+    [UIState.KYCNotApprovedYet]: getKYCNotApprovedYetComponent(user),
+    [UIState.KYCConfirmed]: getKYCConfirmedComponent(user),
+    [UIState.BLoanRequestInitiated]: (
+      <BLoanRequestInitiated loanRequest={loanRequest} />
+    ),
+    [UIState.BLoanRequestAwaitsConfirmation]: (
+      <BLoanNeedsConfirmation loanRequest={loanRequest} />
+    ),
+    [UIState.BOngoingLoan]: <BOngoingLoan loan={loanRequest} />,
+    [UIState.LDashboard]: getLenderDashboardComponent(user),
+  }[uiState]
 }
 
 const Dashboard = () => {
