@@ -1,6 +1,6 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 import { DemoTabView } from "../../components/demo/DemoViewTabs"
-import { getDashboardComponent } from "../../pages/dashboard"
+import Dashboard, { getDashboardComponent } from "../../pages/dashboard"
 import LoginPage from "../../pages/login"
 import ProfilePage from "../../pages/profile"
 import { Fixtures } from "../../utils/demo/fixtures"
@@ -17,13 +17,12 @@ export class JStep {
   ) {}
 
   get component() {
-    if (this.state === UIState.Onboarding) {
+    if (this.state === UIState.Onboarding)
       return <Onboarding user={this.fixture} />
-    }
-    if (this.state === UIState.Profile) {
+    if (this.state === UIState.Profile)
       return <ProfilePage user={this.fixture} />
-    }
-    return this._component || getDashboardComponent(this.fixture, this.state)
+    if (this.state === UIState.Dashboard)
+      return getDashboardComponent(this.fixture)
   }
 }
 
@@ -43,14 +42,19 @@ const bJourneySequence = [
   new BJStep(UIState.Landing, "Landing", <LandingPage />),
   new BJStep(UIState.Login, "SignIn", <LoginPage />),
   new BJStep(UIState.Onboarding, "Onboarding"),
-  new BJStep(UIState.KYCNotApprovedYet, "Await KYC approval"),
-  new BJStep(UIState.KYCConfirmed, "Make new loan"),
-  new BJStep(UIState.BLoanRequestInitiated, "Loan Initiated"),
-  new BJStep(
-    UIState.BLoanRequestAwaitsConfirmation,
-    "Loan needs borrower confirmation"
+  new BJStep(UIState.Dashboard, "KYC needs approval"),
+  new JStep(UIState.Dashboard, "KYC Confirmed", Fixtures.BorrowerKYCConfirmed),
+  new JStep(
+    UIState.Dashboard,
+    "Loan request initiated",
+    Fixtures.BorrowerLoanInitiated
   ),
-  new BJStep(UIState.BOngoingLoan, "Ongoing Loan"),
+  new JStep(
+    UIState.Dashboard,
+    "Loan request needs approval",
+    Fixtures.BorrowerLoanNeedsConfirmation
+  ),
+  new JStep(UIState.Dashboard, "Loan is live", Fixtures.BorrowerLoanLive),
   new BJStep(UIState.Profile, "Profile"),
 ]
 
@@ -58,10 +62,9 @@ const lJourneySequence = [
   new LJStep(UIState.Landing, "Landing", <LandingPage />),
   new LJStep(UIState.Login, "SignIn", <LoginPage />),
   new LJStep(UIState.Onboarding, "Onboarding"),
-  new LJStep(UIState.KYCNotApprovedYet, "Await KYC approval"),
-  new LJStep(UIState.LDashboard, "Lender Dashboard"),
+  new LJStep(UIState.Dashboard, "Lender Dashboard"),
   new JStep(
-    UIState.LDashboard,
+    UIState.Dashboard,
     "Lender Dashboard with Notification",
     Fixtures.LenderWithPledgeRequest
   ),
