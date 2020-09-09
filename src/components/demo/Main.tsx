@@ -17,6 +17,8 @@ export class JStep {
   ) {}
 
   get component() {
+    if (this._component) return this._component
+
     if (this.state === UIState.Onboarding)
       return <Onboarding user={this.fixture} />
     if (this.state === UIState.Profile)
