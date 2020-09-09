@@ -29,12 +29,13 @@ import Dropzone from "./Dropzone"
 import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 import { AiOutlineMail } from "react-icons/ai"
 import Head from "next/head"
+import { useState } from "react"
+import { UserType } from "../../../utils/types"
 
 type FormData = {
   firstname: string
   lastname: string
   phone: string
-  user_type: string
 }
 
 interface Params {
@@ -46,6 +47,8 @@ interface Params {
 
 export default function Onboarding({ user }: Params) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
+  const [userTypeIdx, setUserType] = useState(0)
+
   const router = useRouter()
 
   const onSubmit = (data: FormData) => {
@@ -54,14 +57,14 @@ export default function Onboarding({ user }: Params) {
       user: {
         name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
         email: user.email,
-        user_type: data.user_type,
+        user_type: { 0: UserType.Lender, 1: UserType.Borrower }[userTypeIdx],
         phone: data.phone,
       },
     }
     // Call mutation
     fetcher("CreateUser", payload)
       .then((res) => {
-        location.reload()
+        location.href = "/dashboard"
       })
       .catch((err) => console.error(err))
   }
@@ -120,7 +123,7 @@ export default function Onboarding({ user }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
-            <Tabs variant="unstyled">
+            <Tabs onChange={(idx) => setUserType(idx)} variant="unstyled">
               <TabList>
                 <Tab _selected={{ color: "white", bg: "blue.500" }}>Invest</Tab>
                 <Tab _selected={{ color: "white", bg: "green.400" }}>

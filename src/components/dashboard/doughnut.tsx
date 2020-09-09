@@ -38,7 +38,7 @@ export default function DynamicDoughnut() {
       <Center>
         <h4>Your Investing Portfolio</h4>
       </Center>
-      <Doughnut data={state} width={380} height={380} />
+      <Doughnut data={state} width={375} height={375} />
     </Box>
   )
 }

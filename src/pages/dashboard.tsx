@@ -52,8 +52,8 @@ export const getDashboardComponent = (user: User) => {
     return (
       <div>
         {!user.kyc_approved && <ApplicationSubmitted />}
-        {user.loan_requests.length === 0 && getRequestLoanComponent(user)}
-        {user.loan_requests.length > 0 && getLoanRequest(user.loan_requests[0])}
+        {loanRequests.length === 0 && getRequestLoanComponent(user)}
+        {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
       </div>
     )
   }
@@ -65,7 +65,7 @@ const Dashboard = () => {
   if (loading) return <AppBar />
   if (!session || !session.user || !session.user.user_type)
     location.replace("/")
-
+  console.log(session.user)
   const mainComponent = getDashboardComponent(session.user)
 
   return (

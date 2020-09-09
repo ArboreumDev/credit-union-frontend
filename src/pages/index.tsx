@@ -8,11 +8,10 @@ import { useSession } from "next-auth/client"
 const Page = () => {
   const [session, loading]: [Session, boolean] = useSession()
   if (loading) return <div></div>
-  console.log(session)
   if (session) {
     const user = session.user
-    if (!user.user_type) location.replace("/Onboarding")
-    location.replace("/dashboard")
+    if (!user.user_type) location.replace("/onboarding")
+    else location.replace("/dashboard")
   }
 
   return <LandingPage />
