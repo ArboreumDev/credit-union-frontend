@@ -75,19 +75,19 @@ const LenderDashboard = ({ user }: Props) => {
       {pledgeRequests.map((pr, idx) => (
         <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
       ))}
-
-      <Center>
-        <Wrap spacing="30px" justify="center">
-          <DynamicDoughnut />
-          <LineChart />
-        </Wrap>
-      </Center>
       <Center>
         <HStack>
           <Button>Add funds</Button>
           <Button>Withdraw funds</Button>
         </HStack>
       </Center>
+      <Center>
+        <Wrap spacing="30px" justify="center">
+          <DynamicDoughnut />
+          <LineChart />
+        </Wrap>
+      </Center>
+
       <Center>
         <PledgeInvestments />
       </Center>
