@@ -33,13 +33,7 @@ const txLenderFixture = [
   { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
-const ProfilePage = () => {
-  const [session, loading]: [Session, boolean] = useSession()
-  if (loading) return <div></div>
-  if (!session || !session.user.user_type) location.replace("/")
-
-  const user = session.user
-
+export const Profile = (user) => {
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -89,6 +83,15 @@ const ProfilePage = () => {
       </Container>
     </div>
   )
+}
+
+const ProfilePage = () => {
+  const [session, loading]: [Session, boolean] = useSession()
+  if (loading) return <div></div>
+  if (!session || !session.user.user_type) location.replace("/")
+
+  const user = session.user
+  return <Profile />
 }
 
 export default ProfilePage

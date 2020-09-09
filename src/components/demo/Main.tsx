@@ -1,8 +1,8 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 import { DemoTabView } from "../../components/demo/DemoViewTabs"
-import Dashboard, { getDashboardComponent } from "../../pages/dashboard"
+import { getDashboardComponent } from "../../pages/dashboard"
 import LoginPage from "../../pages/login"
-import ProfilePage from "../../pages/profile"
+import { Profile } from "../../pages/profile"
 import { Fixtures } from "../../utils/demo/fixtures"
 import { UIState } from "../../utils/UIStateHelpers"
 import LandingPage from "../common/landing"
@@ -21,7 +21,7 @@ export class JStep {
 
     if (this.state === UIState.Onboarding)
       return <Onboarding user={this.fixture} />
-    if (this.state === UIState.Profile) return <ProfilePage />
+    if (this.state === UIState.Profile) return <Profile />
     if (this.state === UIState.Dashboard)
       return getDashboardComponent(this.fixture)
   }
