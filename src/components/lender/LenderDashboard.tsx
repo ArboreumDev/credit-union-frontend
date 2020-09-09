@@ -1,19 +1,18 @@
 import {
-  Center,
-  Stack,
-  Wrap,
-  Flex,
   Box,
-  Text,
+  Center,
   CircularProgress,
   CircularProgressLabel,
+  Flex,
+  Stack,
+  Text,
+  Wrap,
 } from "@chakra-ui/core"
+import { User } from "../../utils/types"
+import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
-import { User } from "../../utils/types"
-import { Details, KeyValueMap } from "../common/Details"
-import { Currency } from "../common/Currency"
 
 interface Props {
   user: User
