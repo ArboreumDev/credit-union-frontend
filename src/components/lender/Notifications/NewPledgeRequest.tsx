@@ -47,7 +47,7 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
           <Row>
             <TextColumn>Your support</TextColumn>
             <TextColumn>
-              <Currency amount={loanRequest.amount} />
+              <Currency amount={pledgeRequest.pledge_amount} />
             </TextColumn>
           </Row>
           <Row>
@@ -70,7 +70,7 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       <AlertDescription marginTop="20px">
         <Wrap justify="center">
           <Button colorScheme="blue" w="280px">
-            I approve of thie pledge amount
+            I approve of the pledge amount
           </Button>
           <Button colorScheme="blue" w="280px">
             I wish to change pledge amount
