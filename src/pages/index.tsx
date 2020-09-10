@@ -4,15 +4,28 @@ import LandingPage from "../components/common/landing"
 import { Session } from "../utils/types"
 import { UIState } from "../utils/UIStateHelpers"
 import { useSession } from "next-auth/client"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const Page = () => {
   const [session, loading]: [Session, boolean] = useSession()
-  if (loading) return <div></div>
-  if (session) {
-    const user = session.user
-    if (!user.user_type) location.replace("/onboarding")
-    else location.replace("/dashboard")
-  }
+  const router = useRouter()
+
+  if (loading) return null
+
+  useEffect(() => {
+    if (!loading) {
+      if (session) {
+        if (!session.user.user_type) router.push("/onboarding")
+        else router.push("/dashboard")
+      }
+    }
+  }, [session, loading])
+
+  useEffect(() => {
+    // Prefetch the dashboard page
+    router.prefetch("/dashboard")
+  }, [])
 
   return <LandingPage />
 }
