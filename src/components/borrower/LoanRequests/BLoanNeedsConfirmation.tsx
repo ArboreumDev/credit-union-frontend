@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { CalculatedRisk, LoanRequest } from "../../../utils/types"
+import { CalculatedRisk, LoanRequest } from "utils/types"
 import { Currency } from "../../common/Currency"
 import { Row, TextColumn, Table } from "../../common/Table"
 

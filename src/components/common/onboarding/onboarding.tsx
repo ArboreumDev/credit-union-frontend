@@ -23,14 +23,14 @@ import {
 } from "@chakra-ui/core"
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
-import { CreateUserMutationVariables } from "../../../gql/sdk"
-import { fetcher } from "../../../utils/api"
+import { CreateUserMutationVariables } from "gql/sdk"
+import { fetcher } from "utils/api"
 import Dropzone from "./Dropzone"
 import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 import { AiOutlineMail } from "react-icons/ai"
 import Head from "next/head"
 import { useState } from "react"
-import { UserType } from "../../../utils/types"
+import { UserType } from "utils/types"
 
 type FormData = {
   firstname: string

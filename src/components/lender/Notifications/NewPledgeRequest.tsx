@@ -8,7 +8,7 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/core"
-import { CalculatedRisk, PledgeRequest } from "../../../utils/types"
+import { CalculatedRisk, PledgeRequest } from "utils/types"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
 

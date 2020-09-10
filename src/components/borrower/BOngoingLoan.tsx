@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
-import { LoanRequest } from "../../utils/types"
+import { LoanRequest } from "utils/types"
 import { Currency } from "../common/Currency"
 import { Details, KeyValueMap } from "../common/Details"
 import { Column, Row, Table } from "../common/Table"

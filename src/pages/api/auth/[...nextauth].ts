@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { DbClient } from "../../../gql/db_client"
-import { JWTToken, Session } from "../../../utils/types"
+import { DbClient } from "gql/db_client"
+import { JWTToken, Session } from "utils/types"
 
 const dbClient = new DbClient()
 
