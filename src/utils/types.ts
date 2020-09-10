@@ -3,7 +3,11 @@ import { GetUserByEmailQuery } from "../../src/gql/sdk"
 import { UIState } from "./UIStateHelpers"
 
 export type Session = {
-  user: User
+  user: {
+    name: string
+    email: string
+    avatar: string
+  }
   accessToken: string
   expires: string
 }
