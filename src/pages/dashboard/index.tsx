@@ -8,7 +8,6 @@ import BLoanRequestInitiated from "../../components/borrower/LoanRequests/BLoanR
 import ApplicationSubmitted from "../../components/borrower/Notifications/ApplicationSubmitted"
 import AppBar from "../../components/common/AppBar"
 import Contactus from "../../components/common/ContactUs"
-import LenderDashboard from "../../components/lender/LenderDashboard"
 import {
   LoanRequest,
   LoanRequestStatus,
@@ -16,6 +15,7 @@ import {
   User,
   UserType,
 } from "../../utils/types"
+import dynamic from "next/dynamic"
 
 const getRequestLoanComponent = (user: User) => {
   return (
@@ -43,8 +43,16 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
   }[loanRequest.status]
 }
 
+const getLenderDashboard = (user: User) => {
+  const LenderDashboard = dynamic(() =>
+    import("components/lender/LenderDashboard")
+  )
+  return <LenderDashboard user={user} />
+}
+
 export const getDashboardComponent = (user: User) => {
-  if (user.user_type === UserType.Lender) return <LenderDashboard user={user} />
+  if (user.user_type === UserType.Lender)
+    return <div>{getLenderDashboard(user)}</div>
   else {
     const loanRequests = user.loan_requests
     return (
