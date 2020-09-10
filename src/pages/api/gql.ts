@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
+import { Session, User } from "utils/types"
 import { DbClient } from "../../gql/db_client"
 import {
   CreateUserMutationVariables,
   Loan_Requests_Insert_Input,
 } from "../../gql/sdk"
-import { Session, User } from "utils/types"
 
 const secret = process.env.JWT_SECRET
 enum AUTH_TYPE {
@@ -90,6 +90,8 @@ export default async function handler(
           if (user) {
             const data = await action.getData(payload, user)
             res.status(200).json(data)
+          } else {
+            res.status(200).json({})
           }
         } catch (e) {
           console.error(e)

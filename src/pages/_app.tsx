@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Arboreum</title>
         <meta name="description" content="Invest. Borrow."></meta>
-        {typeof window !== "undefined" && (
+        {/* {typeof window !== "undefined" && (
           <script
             async
             defer
@@ -24,7 +24,7 @@ function App({ Component, pageProps }: AppProps) {
             data-host-url="https://analytics.arboreum.dev/"
             src="/umami.js"
           />
-        )}
+        )} */}
       </Head>
       <ChakraProvider resetCSS>
         <div>

@@ -9,11 +9,13 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
-import { useSession } from "next-auth/client"
-import Router from "next/router"
-import { CgLogOut } from "react-icons/cg"
 import AppBar from "components/common/AppBar"
-import { Session, User, UserType } from "utils/types"
+import Router, { useRouter } from "next/router"
+import { CgLogOut } from "react-icons/cg"
+import useSWR from "swr"
+import { fetcher } from "utils/api"
+import { User, UserType } from "utils/types"
+import { ACTIONS } from "./api/gql"
 
 interface Props {
   user: User
@@ -86,11 +88,13 @@ export const Profile = ({ user }: Props) => {
 }
 
 const ProfilePage = () => {
-  const [session, loading]: [Session, boolean] = useSession()
-  if (loading) return <div></div>
-  if (!session || !session.user.user_type) location.replace("/")
+  const { data, error } = useSWR(ACTIONS.GetUserByEmail, fetcher, {})
+  const router = useRouter()
 
-  const user = session.user
+  if (error) return router.push("/")
+  if (!data) return <AppBar />
+
+  const user = data as User
   return <Profile user={user} />
 }
 

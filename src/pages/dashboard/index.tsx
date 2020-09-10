@@ -1,6 +1,10 @@
 import { Box, Center, Heading } from "@chakra-ui/core"
-import { useSession } from "next-auth/client"
+import Onboarding from "components/common/onboarding/onboarding"
 import Head from "next/head"
+import { useRouter } from "next/router"
+import { ACTIONS } from "pages/api/gql"
+import useSWR from "swr"
+import { fetcher } from "utils/api"
 import BOngoingLoan from "../../components/borrower/BOngoingLoan"
 import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
@@ -12,15 +16,9 @@ import LenderDashboard from "../../components/lender/LenderDashboard"
 import {
   LoanRequest,
   LoanRequestStatus,
-  Session,
   User,
   UserType,
 } from "../../utils/types"
-import { fetcher } from "utils/api"
-import { ACTIONS } from "pages/api/gql"
-import useSWR from "swr"
-import { useRouter } from "next/router"
-import Onboarding from "components/common/onboarding/onboarding"
 
 const getRequestLoanComponent = (user: User) => {
   return (
@@ -49,7 +47,7 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
 }
 
 export const getDashboardComponent = (user: User) => {
-  if (!user.user_type) return <Onboarding user={user} />
+  // if (!user.user_type) return <Onboarding user={user} />
   if (user.user_type === UserType.Lender) return <LenderDashboard user={user} />
   else {
     const loanRequests = user.loan_requests
@@ -65,27 +63,29 @@ export const getDashboardComponent = (user: User) => {
 
 const Dashboard = () => {
   const { data, error } = useSWR(ACTIONS.GetUserByEmail, fetcher, {})
-  const [session, loading]: [Session, boolean] = useSession()
   const router = useRouter()
+
+  if (error) return router.push("/")
+  if (!data) return <AppBar />
+
   const user = data as User
+  console.log(user)
+  if (user && !user.user_type) return <Onboarding user={user} />
 
-  if (loading) return <AppBar />
-  if (!session) router.push("/")
-  if (user && !user.user_type)
-    router.push("/onboarding", undefined, { shallow: true })
-
-  return (
-    <div>
-      <Head>
-        <title>Dashboard</title>
-      </Head>
-      <AppBar />
-      {user && getDashboardComponent(user)}
-      <Center margin="80px">
-        <Contactus />
-      </Center>
-    </div>
-  )
+  if (user.user_type)
+    return (
+      <div>
+        <Head>
+          <title>Dashboard</title>
+        </Head>
+        <AppBar />
+        {getDashboardComponent(user)}
+        <Center margin="80px">
+          <Contactus />
+        </Center>
+      </div>
+    )
+  return null
 }
 
 export default Dashboard
