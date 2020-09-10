@@ -1,29 +1,19 @@
-import { useSession } from "next-auth/client"
-
-import { useForm } from "react-hook-form"
 import {
-  Stack,
-  Input,
-  Radio,
-  RadioGroup,
+  Box,
   Button,
   Center,
-  Box,
-  VStack,
   Container,
-  Textarea,
-  Select,
-  Text,
-  Flex,
   Heading,
+  Input,
+  Select,
+  Stack,
+  Text,
 } from "@chakra-ui/core"
-import { User, Session } from "../../../utils/types"
-import {
-  CreateLoanRequestMutation,
-  Loan_Requests_Insert_Input,
-} from "../../../gql/sdk"
-import { fetcher } from "../../../utils/api"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Loan_Requests_Insert_Input } from "gql/sdk"
+import { fetcher } from "utils/api"
+import { User } from "utils/types"
 
 type FormData = {
   amount: number

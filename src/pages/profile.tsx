@@ -12,8 +12,8 @@ import {
 import { useSession } from "next-auth/client"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
-import AppBar from "../components/common/AppBar"
-import { Session, User, UserType } from "../utils/types"
+import AppBar from "components/common/AppBar"
+import { Session, User, UserType } from "utils/types"
 
 interface Props {
   user: User
