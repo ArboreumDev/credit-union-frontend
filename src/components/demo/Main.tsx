@@ -10,7 +10,7 @@ import Onboarding from "../common/onboarding/onboarding"
 import { AddFundsForm } from "pages/dashboard/fund"
 
 export class JStep {
-  constructor(public title: string, private component: any) {}
+  constructor(public title: string, public component: any) {}
 }
 
 const bJourneySequence = [
