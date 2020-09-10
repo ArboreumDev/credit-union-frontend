@@ -63,7 +63,7 @@ const Dashboard = () => {
   if (loading) return <AppBar />
   if (!session || !session.user || !session.user.user_type)
     location.replace("/")
-  console.log(session.user)
+
   const mainComponent = getDashboardComponent(session.user)
 
   return (
