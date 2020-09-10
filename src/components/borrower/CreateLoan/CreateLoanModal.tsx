@@ -1,18 +1,15 @@
-import KYCCompleted from "../Notifications/KYCCompleted"
 import {
-  Center,
   Button,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/core"
-import CreateLoanForm from "./CreateLoanForm"
 import { User } from "utils/types"
+import CreateLoanForm from "./CreateLoanForm"
 
 interface Props {
   user: User
