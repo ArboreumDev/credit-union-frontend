@@ -1,5 +1,7 @@
 import { Box, Center, Heading } from "@chakra-ui/core"
-import { useSession } from "next-auth/client"
+import { GetServerSideProps } from "next"
+import { getSession, useSession } from "next-auth/client"
+import dynamic from "next/dynamic"
 import Head from "next/head"
 import BOngoingLoan from "../../components/borrower/BOngoingLoan"
 import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
@@ -15,7 +17,6 @@ import {
   User,
   UserType,
 } from "../../utils/types"
-import dynamic from "next/dynamic"
 
 const getRequestLoanComponent = (user: User) => {
   return (
@@ -65,27 +66,31 @@ export const getDashboardComponent = (user: User) => {
   }
 }
 
-const Dashboard = () => {
-  const [session, loading]: [Session, boolean] = useSession()
+const Dashboard = (props: { user: User }) => (
+  <div>
+    <Head>
+      <title>Dashboard</title>
+    </Head>
+    <AppBar />
+    {getDashboardComponent(props.user)}
+    <Center margin="80px">
+      <Contactus />
+    </Center>
+  </div>
+)
 
-  if (loading) return <AppBar />
-  if (!session || !session.user || !session.user.user_type)
-    location.replace("/")
-
-  const mainComponent = getDashboardComponent(session.user)
-
-  return (
-    <div>
-      <Head>
-        <title>Dashboard</title>
-      </Head>
-      <AppBar />
-      {mainComponent}
-      <Center margin="80px">
-        <Contactus />
-      </Center>
-    </div>
-  )
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = (await getSession({ req })) as Session
+  const user = session.user
+  if (res) {
+    if (!session) {
+      res.writeHead(301, {
+        Location: "/",
+      })
+      res.end()
+    }
+  }
+  return { props: { user } }
 }
 
 export default Dashboard

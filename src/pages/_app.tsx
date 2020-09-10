@@ -8,7 +8,7 @@ import { ANALYTICS_WEBSITE_IDS } from "../utils/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider session={pageProps.session}>
+    <Provider>
       <Head>
         <title>Arboreum</title>
         <meta name="description" content="Invest. Borrow."></meta>
