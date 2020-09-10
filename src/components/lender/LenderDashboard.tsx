@@ -67,7 +67,6 @@ const PledgeInvestments = () => (
 )
 
 const LenderDashboard = ({ user }: Props) => {
-  console.log(user)
   const pledgeRequests = user.pledge_requests // TODO change query to get lender_loan_requests
 
   return (
