@@ -36,7 +36,7 @@ const bJourneySequence = [
 const lJourneySequence = [
   new JStep("Landing", <LandingPage />),
   new JStep("SignIn", <LoginPage />),
-  new JStep("Onboarding", getDashboardComponent(Fixtures.Lender)),
+  new JStep("Onboarding", <Onboarding user={Fixtures.Lender} />),
   new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep("Add funds", <AddFundsForm user={Fixtures.Lender} />),
   new JStep(
