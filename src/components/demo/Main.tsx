@@ -7,69 +7,44 @@ import { Fixtures } from "../../utils/demo/fixtures"
 import { UIState } from "../../utils/UIStateHelpers"
 import LandingPage from "../common/landing"
 import Onboarding from "../common/onboarding/onboarding"
+import { AddFundsForm } from "pages/dashboard/fund"
 
 export class JStep {
-  constructor(
-    public state: UIState,
-    public title: string,
-    public fixture: any,
-    private _component?: any
-  ) {}
-
-  get component() {
-    if (this._component) return this._component
-
-    if (this.state === UIState.Onboarding)
-      return <Onboarding user={this.fixture} />
-    if (this.state === UIState.Profile) return <Profile user={this.fixture} />
-    if (this.state === UIState.Dashboard)
-      return getDashboardComponent(this.fixture)
-  }
-}
-
-class BJStep extends JStep {
-  constructor(state: UIState, title: string, component?: any) {
-    super(state, title, Fixtures.Borrower, component)
-  }
-}
-
-class LJStep extends JStep {
-  constructor(state: UIState, title: string, component?: any) {
-    super(state, title, Fixtures.Lender, component)
-  }
+  constructor(public title: string, private component: any) {}
 }
 
 const bJourneySequence = [
-  new BJStep(UIState.Landing, "Landing", <LandingPage />),
-  new BJStep(UIState.Login, "SignIn", <LoginPage />),
-  new BJStep(UIState.Onboarding, "Onboarding"),
-  new BJStep(UIState.Dashboard, "KYC needs approval"),
-  new JStep(UIState.Dashboard, "KYC Confirmed", Fixtures.BorrowerKYCConfirmed),
+  new JStep("Landing", <LandingPage />),
+  new JStep("SignIn", <LoginPage />),
+  new JStep("Onboarding", <Onboarding user={Fixtures.Borrower} />),
+  new JStep("KYC needs approval", getDashboardComponent(Fixtures.Borrower)),
   new JStep(
-    UIState.Dashboard,
+    "KYC Confirmed",
+    getDashboardComponent(Fixtures.BorrowerKYCConfirmed)
+  ),
+  new JStep(
     "Loan request initiated",
-    Fixtures.BorrowerLoanInitiated
+    getDashboardComponent(Fixtures.BorrowerLoanInitiated)
   ),
   new JStep(
-    UIState.Dashboard,
     "Loan request needs approval",
-    Fixtures.BorrowerLoanNeedsConfirmation
+    getDashboardComponent(Fixtures.BorrowerLoanNeedsConfirmation)
   ),
-  new JStep(UIState.Dashboard, "Loan is live", Fixtures.BorrowerLoanLive),
-  new BJStep(UIState.Profile, "Profile"),
+  new JStep("Loan is live", getDashboardComponent(Fixtures.BorrowerLoanLive)),
+  new JStep("Profile", <Profile user={Fixtures.Borrower} />),
 ]
 
 const lJourneySequence = [
-  new LJStep(UIState.Landing, "Landing", <LandingPage />),
-  new LJStep(UIState.Login, "SignIn", <LoginPage />),
-  new LJStep(UIState.Onboarding, "Onboarding"),
-  new LJStep(UIState.Dashboard, "Lender Dashboard"),
+  new JStep("Landing", <LandingPage />),
+  new JStep("SignIn", <LoginPage />),
+  new JStep("Onboarding", getDashboardComponent(Fixtures.Lender)),
+  new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
+  new JStep("Add funds", <AddFundsForm user={Fixtures.Lender} />),
   new JStep(
-    UIState.Dashboard,
     "Lender Dashboard with Notification",
-    Fixtures.LenderWithPledgeRequest
+    getDashboardComponent(Fixtures.LenderWithPledgeRequest)
   ),
-  new LJStep(UIState.Profile, "Profile"),
+  new JStep("Profile", <Profile user={Fixtures.Lender} />),
 ]
 
 const MainDemo = ({ tabView = false }: { tabView?: boolean }) => (

@@ -16,7 +16,7 @@ export const DemoTabView = ({ journeySequence, initPage = 0 }: Props) => {
       defaultIndex={initPage}
       onChange={(idx) =>
         toast({
-          title: (idx + " " + journeySequence[idx].title) as string,
+          title: (idx + ". " + journeySequence[idx].title) as string,
           duration: 2000,
           isClosable: true,
         })
