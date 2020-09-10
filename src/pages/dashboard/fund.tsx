@@ -9,10 +9,13 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AppBar from "components/common/AppBar"
-import { useSession } from "next-auth/client"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Session, User } from "utils/types"
+import useSWR from "swr"
+import { fetcher } from "utils/api"
+import { User } from "utils/types"
+import { ACTIONS } from "./api/gql"
 
 type FormData = {
   amount: number
@@ -77,11 +80,13 @@ export function AddFundsForm({ user }: Props) {
 }
 
 const AddFundsPage = () => {
-  const [session, loading]: [Session, boolean] = useSession()
-  if (loading) return <div></div>
-  if (!session || !session.user.user_type) location.replace("/")
+  const { data, error } = useSWR(ACTIONS.GetUserByEmail, fetcher, {})
+  const router = useRouter()
 
-  const user = session.user
+  if (error) return router.push("/")
+  if (!data) return <AppBar />
+
+  const user = data as User
   return <AddFundsForm user={user} />
 }
 
