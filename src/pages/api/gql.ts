@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { initializeGQL } from "../../gql/graphql_client"
+import { getSession } from "next-auth/client"
 import { DbClient } from "../../gql/db_client"
 import {
   CreateUserMutationVariables,
   Loan_Requests_Insert_Input,
 } from "../../gql/sdk"
-import jwt from "next-auth/jwt"
-import { JWTToken } from "../../utils/types"
+import { Session, User } from "../../utils/types"
 
 const secret = process.env.JWT_SECRET
 enum AUTH_TYPE {
@@ -31,20 +30,17 @@ const dbClient = new DbClient()
 
 class Action {
   constructor(
-    public getData: (payload: any, token: JWTToken) => Promise<any>,
+    public getData: (payload: any, user?: User) => Promise<any>,
     public authType: AUTH_TYPE
   ) {}
 }
 
-function createUser(payload: CreateUserMutationVariables, token: JWTToken) {
+function createUser(payload: CreateUserMutationVariables) {
   return dbClient.sdk.CreateUser(payload)
 }
 
-function createLoanRequest(
-  payload: Loan_Requests_Insert_Input,
-  token: JWTToken
-) {
-  if (payload.borrower_id === token.user.id) {
+function createLoanRequest(payload: Loan_Requests_Insert_Input, user: User) {
+  if (payload.borrower_id === user.id) {
     return dbClient.sdk.CreateLoanRequest({ request: payload })
   }
   return Promise.reject()
@@ -66,17 +62,22 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const token = (await jwt.getToken({ req, secret })) as JWTToken
+    const session = (await getSession({ req })) as Session
 
-    const authType = getAuthTypeFromEmail(token.email)
+    const authType = getAuthTypeFromEmail(session.user.email)
 
     const { actionType, payload } = req.body as GqlRequest
     const action: Action = ACTIONS[actionType]
     if (authType >= action.authType) {
       if (action) {
         try {
-          const data = await action.getData(payload, token)
-          res.status(200).json(data)
+          const user = session.user
+          if (user) {
+            const data = await action.getData(payload, user)
+            res.status(200).json(data)
+          } else {
+            res.status(200).json({})
+          }
         } catch (e) {
           console.error(e)
           res.status(400).json({ error: e })

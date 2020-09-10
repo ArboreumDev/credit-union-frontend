@@ -8,26 +8,24 @@ import { useRouter } from "next/router"
 import { useEffect } from "react"
 
 const Page = () => {
-  const [session, loading]: [Session, boolean] = useSession()
-  const router = useRouter()
-
-  if (loading) return null
-
-  useEffect(() => {
-    if (!loading) {
-      if (session) {
-        if (!session.user.user_type) router.push("/onboarding")
-        else router.push("/dashboard")
-      }
-    }
-  }, [session, loading])
-
-  useEffect(() => {
-    // Prefetch the dashboard page
-    router.prefetch("/dashboard")
-  }, [])
-
   return <LandingPage />
 }
 
+Page.getInitialProps = async ({ req, res }) => {
+  const session = (await getSession({ req })) as Session
+  if (res) {
+    if (session)
+      if (!session.user.user_type)
+        res.writeHead(301, {
+          Location: "/onboarding",
+        })
+      else
+        res.writeHead(301, {
+          Location: "/dashboard",
+        })
+    res.end()
+  }
+
+  return {}
+}
 export default Page

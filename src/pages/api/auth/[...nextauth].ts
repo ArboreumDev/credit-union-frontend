@@ -1,18 +1,12 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
+import { Session } from "utils/types"
 import { DbClient } from "gql/db_client"
-import { JWTToken, Session } from "utils/types"
 
 const dbClient = new DbClient()
 
 const options = {
   database: process.env.DATABASE_URL,
-  session: {
-    jwt: true,
-  },
-  jwt: {
-    secret: process.env.JWT_SECRET,
-  },
   // Configure one or more authentication providers
   providers: [
     Providers.Email({
@@ -31,15 +25,7 @@ const options = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-
-  // A database is optional, but required to persist accounts in a database
   callbacks: {
-    jwt: async (token: JWTToken) => {
-      const _user = await dbClient.getUserByEmail(token.email)
-      if (_user) token = { ...token, user: _user }
-
-      return Promise.resolve(token)
-    },
     session: async (session) => {
       let s = session as Session
       const _user = await dbClient.getUserByEmail(s.user.email)
@@ -48,23 +34,6 @@ const options = {
 
       // console.log("session ", s)
       return Promise.resolve(s)
-    },
-  },
-  events: {
-    signout: async (message) => {
-      console.log("sign out successful")
-    },
-    createUser: async (message) => {
-      /* user created */
-    },
-    linkAccount: async (message) => {
-      /* account linked to a user */
-    },
-    session: async (message) => {
-      /* session is active */
-    },
-    error: async (message) => {
-      /* error in authentication flow */
     },
   },
 }
