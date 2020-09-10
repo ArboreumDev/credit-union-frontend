@@ -4,11 +4,13 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  HStack,
+  Divider,
   Text,
+  Wrap,
 } from "@chakra-ui/core"
-import { PledgeRequest, CalculatedRisk } from "../../../utils/types"
+import { CalculatedRisk, PledgeRequest } from "utils/types"
 import { Currency } from "../../common/Currency"
+import { Row, Table, TextColumn } from "../../common/Table"
 
 interface Params {
   pledgeRequest: PledgeRequest
@@ -25,35 +27,58 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       flexDirection="column"
       justifyContent="center"
       textAlign="center"
-      height="320px"
+      // height="320px"
       width="inherit"
       marginTop="20px"
       marginBottom="20px"
     >
       <AlertIcon boxSize="40px" mr={0} />
       <AlertTitle mt={4} mb={1} fontSize="lg">
-        New Loan Request
+        New Pledge Request
       </AlertTitle>
       <AlertDescription>
-        {loanRequest.user.name} ({loanRequest.user.email}) is requesting a loan
-        for {loanRequest.purpose} and is asking you to support it.
+        {loanRequest.user.name} ({loanRequest.user.email}) hase requested you to
+        pledge <Currency amount={pledgeRequest.pledge_amount} /> for his loan
+        request of amount <Currency amount={loanRequest.amount} />
+        <Divider margin="10px" />
       </AlertDescription>
       <AlertDescription>
-        <Text>
-          Total Amount <Currency amount={loanRequest.amount} />
-        </Text>
-        <Text>
-          Your support: <Currency amount={pledgeRequest.pledge_amount} />
-        </Text>
-        <Text>Interest: {riskCalcResult.interestRate}%</Text>
-        <Text>Loan Term: {riskCalcResult.loanTerm} months</Text>
+        <Table>
+          <Row>
+            <TextColumn>Your support</TextColumn>
+            <TextColumn>
+              <Currency amount={pledgeRequest.pledge_amount} />
+            </TextColumn>
+          </Row>
+          <Row>
+            <TextColumn>Total Loan Amount</TextColumn>
+            <TextColumn>
+              <Currency amount={loanRequest.amount} />
+            </TextColumn>
+          </Row>
+          <Row>
+            <TextColumn>Loan Purpose</TextColumn>
+            <TextColumn>{loanRequest.purpose}</TextColumn>
+          </Row>
+          <Row>
+            <TextColumn>Loan Term</TextColumn>
+            <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
+          </Row>
+        </Table>
         <Text>Repayments will be made at the end of every month</Text>
       </AlertDescription>
-      <AlertDescription marginTop="20px" maxWidth="sm">
-        <HStack>
-          <Button>Invest</Button>
-          <Button>Reject</Button>
-        </HStack>
+      <AlertDescription marginTop="20px">
+        <Wrap justify="center">
+          <Button colorScheme="blue" w="280px">
+            I approve of the pledge amount
+          </Button>
+          <Button colorScheme="blue" w="280px">
+            I wish to change pledge amount
+          </Button>
+          <Button colorScheme="red" w="280px">
+            I cannot pledge for this person
+          </Button>
+        </Wrap>
       </AlertDescription>
     </Alert>
   )

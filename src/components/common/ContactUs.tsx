@@ -25,11 +25,11 @@ interface ContactProps {
   text?: string
 }
 
-export const Contactus = ({
+export default function Contactus({
   subject = "",
   body = "",
   text = "Contact Us",
-}: ContactProps) => {
+}: ContactProps) {
   return (
     <Mailto email="contact@arboreum.dev" subject={subject} body={body}>
       {text}

@@ -18,8 +18,8 @@ export default function ApplicationSubmitted() {
         Application submitted!
       </AlertTitle>
       <AlertDescription maxWidth="sm">
-        Thanks for submitting your application. Our team will get back to you
-        soon.
+        Thanks for submitting your documents. We will contact you if further
+        information is needed
       </AlertDescription>
     </Alert>
   )

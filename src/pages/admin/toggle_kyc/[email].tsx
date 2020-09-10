@@ -1,8 +1,8 @@
 import Router from "next/router"
 import { getSession } from "next-auth/client"
 import { NextPageContext, GetServerSideProps } from "next"
-import { DbClient } from "../../../gql/db_client"
-import { Session } from "../../../utils/types"
+import { DbClient } from "gql/db_client"
+import { Session } from "utils/types"
 
 const Page = (props: { session: Session }) => {
   return <div>Toggled kyc</div>

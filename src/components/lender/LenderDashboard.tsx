@@ -1,19 +1,20 @@
 import {
-  Center,
-  Stack,
-  Wrap,
-  Flex,
   Box,
-  Text,
+  Center,
   CircularProgress,
   CircularProgressLabel,
+  Flex,
+  Stack,
+  Text,
+  Wrap,
+  HStack,
+  Button,
 } from "@chakra-ui/core"
+import { User } from "../../utils/types"
+import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
-import { User } from "../../utils/types"
-import { Details, Row } from "../common/Details"
-import { Currency } from "../common/Currency"
 
 interface Props {
   user: User
@@ -27,18 +28,18 @@ const getOngoingPledges = () => [
     name: "Dju",
     total: 20000,
     perc_repaid: 0.1,
-    color: "red.500",
+    color: "black",
   },
   {
     name: "Sid",
     total: 25000,
     perc_repaid: 0.7,
-    color: "red.500",
   },
 ]
 
-const OngoingLoans = () => (
+const PledgeInvestments = () => (
   <Stack spacing="15px" minW="280px">
+    <Center>You have {5} ongoing pledge investments:</Center>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
         <Box flex="1">
@@ -74,16 +75,21 @@ const LenderDashboard = ({ user }: Props) => {
       {pledgeRequests.map((pr, idx) => (
         <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
       ))}
-
       <Center>
-        <Wrap spacing="30px" justify="center">
+        <HStack>
+          <Button>Add funds</Button>
+          <Button>Withdraw funds</Button>
+        </HStack>
+      </Center>
+      <Center>
+        <Wrap w="100%" spacing="30px" justify="center">
           <DynamicDoughnut />
           <LineChart />
         </Wrap>
       </Center>
-      <Center>Ongoing Loans</Center>
+
       <Center>
-        <OngoingLoans />
+        <PledgeInvestments />
       </Center>
     </Stack>
   )

@@ -13,17 +13,29 @@ import {
   RadioGroup,
   RequiredIndicator,
   Stack,
+  InputLeftElement,
+  Text,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/core"
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
-import { CreateUserMutationVariables } from "../../../gql/sdk"
-import { fetcher } from "../../../utils/api"
+import { CreateUserMutationVariables } from "gql/sdk"
+import { fetcher } from "utils/api"
 import Dropzone from "./Dropzone"
+import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
+import { AiOutlineMail } from "react-icons/ai"
+import Head from "next/head"
+import { useState } from "react"
+import { UserType } from "utils/types"
 
 type FormData = {
-  name: string
+  firstname: string
+  lastname: string
   phone: string
-  user_type: string
 }
 
 interface Params {
@@ -35,33 +47,38 @@ interface Params {
 
 export default function Onboarding({ user }: Params) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
+  const [userTypeIdx, setUserType] = useState(0)
+
   const router = useRouter()
 
   const onSubmit = (data: FormData) => {
     console.log(data)
     const payload: CreateUserMutationVariables = {
       user: {
-        name: data.name,
+        name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
         email: user.email,
-        user_type: data.user_type,
+        user_type: { 0: UserType.Lender, 1: UserType.Borrower }[userTypeIdx],
         phone: data.phone,
       },
     }
     // Call mutation
     fetcher("CreateUser", payload)
       .then((res) => {
-        location.reload()
+        location.href = "/dashboard"
       })
       .catch((err) => console.error(err))
   }
 
   return (
     <div>
+      <Head>
+        <title>Onboarding</title>
+      </Head>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container maxW="400px" bg="white">
           <Stack spacing={3}>
             <Center>
-              <Box h="40px">
+              <Box marginTop="20px" h="40px">
                 <img width="150px" src="/images/logo.svg" alt="logo" />
               </Box>
             </Center>
@@ -70,10 +87,28 @@ export default function Onboarding({ user }: Params) {
                 Signup
               </Heading>
             </Center>
-
+            <InputGroup>
+              <InputLeftElement>
+                <Text>
+                  <AiOutlineMail />
+                </Text>
+              </InputLeftElement>
+              <Input
+                type="email"
+                placeholder="email"
+                disabled
+                value={user.email}
+              />
+            </InputGroup>
             <Input
-              placeholder="Name"
-              name="name"
+              placeholder="First Name"
+              name="firstname"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Input
+              placeholder="Last Name"
+              name="lastname"
               size="lg"
               ref={register({ required: true })}
             />
@@ -88,35 +123,52 @@ export default function Onboarding({ user }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
-            <FormControl id="first-name" isRequired>
-              <FormLabel>
-                What do you plan to do? <RequiredIndicator />
-              </FormLabel>
-              <RadioGroup>
-                <Stack direction="row">
-                  <Radio
-                    value="borrower"
-                    name="user_type"
-                    // @ts-ignore Throwing compile time error. Hopefully fixed in future chakra version.
-                    ref={register({ required: true })}
-                  >
-                    Borrow
-                  </Radio>
-                  <Radio
-                    value="lender"
-                    name="user_type"
-                    // @ts-ignore
-                    ref={register({ required: true })}
-                  >
-                    Lend
-                  </Radio>
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+            <Tabs onChange={(idx) => setUserType(idx)} variant="unstyled">
+              <TabList>
+                <Tab _selected={{ color: "white", bg: "blue.500" }}>Invest</Tab>
+                <Tab _selected={{ color: "white", bg: "green.400" }}>
+                  Borrow
+                </Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Stack>
+                    <Input
+                      placeholder="PAN Card Number"
+                      name="pancard"
+                      size="lg"
+                    />
+                    <Input
+                      placeholder="Aadhar Card Number"
+                      name="aadhar"
+                      size="lg"
+                    />
+                  </Stack>
+                </TabPanel>
+                <TabPanel>
+                  <Box>
+                    <Dropzone email={user.email}>
+                      <p>Drop KYC documents here: </p>
+                      <UnorderedList>
+                        <ListItem>Passport</ListItem>
+                        <ListItem>Aadhar Card</ListItem>
+                        <ListItem>PAN Card</ListItem>
+                      </UnorderedList>
+                    </Dropzone>
+                  </Box>
+                  <Box>
+                    <Dropzone email={user.email}>
+                      <p>Drop financial documents here: </p>
+                      <UnorderedList>
+                        <ListItem>latest Income Tax Returns</ListItem>
+                        <ListItem>Bank Statement for last 6 months</ListItem>
+                      </UnorderedList>
+                    </Dropzone>
+                  </Box>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
 
-            <Box>
-              <Dropzone email={user.email} />
-            </Box>
             <Center>
               <Button type="submit">Submit</Button>
             </Center>

@@ -1,20 +1,19 @@
 import {
+  Box,
   Button,
   Center,
   Container,
-  Stack,
-  Box,
-  Text,
+  Divider,
   Flex,
   Heading,
-  Divider,
+  Stack,
+  Text,
 } from "@chakra-ui/core"
-import { getSession } from "next-auth/client"
+import { useSession } from "next-auth/client"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
-import AppBar from "../components/common/AppBar"
-import { User, Session, UserType } from "../utils/types"
-import { GetServerSideProps } from "next"
+import AppBar from "components/common/AppBar"
+import { Session, User, UserType } from "utils/types"
 
 interface Props {
   user: User
@@ -34,7 +33,7 @@ const txLenderFixture = [
   { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
-const ProfilePage = ({ user }: Props) => {
+export const Profile = ({ user }: Props) => {
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -45,6 +44,7 @@ const ProfilePage = ({ user }: Props) => {
         <Stack>
           <Center>{user.name}</Center>
           <Center>{user.email}</Center>
+          <Center>{user.phone}</Center>
           <Box h="10px" />
           <Divider />
           <Box>
@@ -84,10 +84,14 @@ const ProfilePage = ({ user }: Props) => {
     </div>
   )
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = (await getSession(context)) as Session
+
+const ProfilePage = () => {
+  const [session, loading]: [Session, boolean] = useSession()
+  if (loading) return <div></div>
+  if (!session || !session.user.user_type) location.replace("/")
+
   const user = session.user
-  return { props: { user } }
+  return <Profile user={user} />
 }
 
 export default ProfilePage

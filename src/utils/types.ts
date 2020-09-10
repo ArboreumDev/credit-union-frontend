@@ -1,5 +1,6 @@
 import { DbClient } from "../gql/db_client"
 import { GetUserByEmailQuery } from "../../src/gql/sdk"
+import { UIState } from "./UIStateHelpers"
 
 export type Session = {
   user: User
