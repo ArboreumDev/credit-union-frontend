@@ -85,7 +85,6 @@ export default async function handler(
     if (authType >= action.authType) {
       if (action) {
         try {
-          console.log("payload", payload)
           const user = await dbClient.getUserByEmail(session.user.email)
           if (user) {
             const data = await action.getData(payload, user)
