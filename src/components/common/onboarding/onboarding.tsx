@@ -64,7 +64,7 @@ export default function Onboarding({ user }: Params) {
     // Call mutation
     fetcher("CreateUser", payload)
       .then((res) => {
-        location.href = "/dashboard"
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }

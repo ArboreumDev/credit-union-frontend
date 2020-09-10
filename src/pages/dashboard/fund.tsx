@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form"
 import useSWR from "swr"
 import { fetcher } from "utils/api"
 import { User } from "utils/types"
-import { ACTIONS } from "./api/gql"
+import { ACTIONS } from "pages/api/gql"
 
 type FormData = {
   amount: number
@@ -38,7 +38,7 @@ export function AddFundsForm({ user }: Props) {
     // Call mutation
     // fetcher("CreateLoanRequestMutation", payload)
     //   .then((res) => {
-    //     location.reload()
+    //     router.push('/dashboard')
     //   })
     //   .catch((err) => console.error(err))
   }
