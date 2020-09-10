@@ -79,9 +79,17 @@ const Dashboard = (props: { user: User }) => (
   </div>
 )
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = (await getSession({ req })) as Session
   const user = session.user
+  if (res) {
+    if (!session) {
+      res.writeHead(301, {
+        Location: "/",
+      })
+      res.end()
+    }
+  }
   return { props: { user } }
 }
 
