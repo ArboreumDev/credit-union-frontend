@@ -1,23 +1,21 @@
 import { Box, Center, Heading } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
-import dynamic from "next/dynamic"
 import Head from "next/head"
-import AppBar from "../components/common/AppBar"
-import Contactus from "../components/common/ContactUs"
+import BOngoingLoan from "../../components/borrower/BOngoingLoan"
+import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
+import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
+import BLoanRequestInitiated from "../../components/borrower/LoanRequests/BLoanRequestInitiated"
+import ApplicationSubmitted from "../../components/borrower/Notifications/ApplicationSubmitted"
+import AppBar from "../../components/common/AppBar"
+import Contactus from "../../components/common/ContactUs"
+import LenderDashboard from "../../components/lender/LenderDashboard"
 import {
   LoanRequest,
   LoanRequestStatus,
   Session,
   User,
   UserType,
-} from "../utils/types"
-import { getMostRecentLoanRequest, UIState } from "../utils/UIStateHelpers"
-import LenderDashboard from "../components/lender/LenderDashboard"
-import ApplicationSubmitted from "../components/borrower/Notifications/ApplicationSubmitted"
-import CreateLoanForm from "../components/borrower/CreateLoan/CreateLoanForm"
-import BLoanRequestInitiated from "../components/borrower/LoanRequests/BLoanRequestInitiated"
-import BLoanNeedsConfirmation from "../components/borrower/LoanRequests/BLoanNeedsConfirmation"
-import BOngoingLoan from "../components/borrower/BOngoingLoan"
+} from "../../utils/types"
 
 const getRequestLoanComponent = (user: User) => {
   return (
