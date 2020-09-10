@@ -16,6 +16,11 @@ import {
   User,
   UserType,
 } from "../../utils/types"
+import { fetcher } from "utils/api"
+import { ACTIONS } from "pages/api/gql"
+import useSWR from "swr"
+import { useRouter } from "next/router"
+import Onboarding from "components/common/onboarding/onboarding"
 
 const getRequestLoanComponent = (user: User) => {
   return (
@@ -44,6 +49,7 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
 }
 
 export const getDashboardComponent = (user: User) => {
+  if (!user.user_type) return <Onboarding user={user} />
   if (user.user_type === UserType.Lender) return <LenderDashboard user={user} />
   else {
     const loanRequests = user.loan_requests
@@ -58,13 +64,15 @@ export const getDashboardComponent = (user: User) => {
 }
 
 const Dashboard = () => {
+  const { data, error } = useSWR(ACTIONS.GetUserByEmail, fetcher, {})
   const [session, loading]: [Session, boolean] = useSession()
+  const router = useRouter()
+  const user = data as User
 
   if (loading) return <AppBar />
-  if (!session || !session.user || !session.user.user_type)
-    location.replace("/")
-  console.log(session.user)
-  const mainComponent = getDashboardComponent(session.user)
+  if (!session) router.push("/")
+  if (user && !user.user_type)
+    router.push("/onboarding", undefined, { shallow: true })
 
   return (
     <div>
@@ -72,7 +80,7 @@ const Dashboard = () => {
         <title>Dashboard</title>
       </Head>
       <AppBar />
-      {mainComponent}
+      {user && getDashboardComponent(user)}
       <Center margin="80px">
         <Contactus />
       </Center>

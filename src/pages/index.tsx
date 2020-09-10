@@ -16,8 +16,7 @@ const Page = () => {
   useEffect(() => {
     if (!loading) {
       if (session) {
-        if (!session.user.user_type) router.push("/onboarding")
-        else router.push("/dashboard")
+        router.push("/dashboard")
       }
     }
   }, [session, loading])
