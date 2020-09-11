@@ -4,7 +4,7 @@ export class Fixtures {
   static Lender: User = {
     id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
     name: "Deepika Padukone",
-    email: "dev-admin@arboreum.dev",
+    email: "deepika@mail.com",
     phone: "+91 123-232-1231",
     user_type: "lender",
     balance: 0,
@@ -18,7 +18,7 @@ export class Fixtures {
   static Borrower: User = {
     id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
     name: "Amitabh Bachchan",
-    email: "dev-admin@arboreum.dev",
+    email: "bigb@mail.com",
     phone: "+91 123-232-1231",
     user_type: "borrower",
     balance: 0,
