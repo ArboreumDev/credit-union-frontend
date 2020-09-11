@@ -5,6 +5,8 @@ import {
   Container,
   Heading,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   Stack,
   Text,
@@ -49,12 +51,16 @@ export default function CreateLoanForm({ user }: Props) {
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container minW="300px" bg="white">
           <Stack spacing={3}>
-            <Input
-              placeholder="Amount (₹)"
-              name="amount"
-              size="lg"
-              ref={register({ required: true })}
-            />
+            <InputGroup>
+              <InputLeftElement>₹</InputLeftElement>
+              <Input
+                placeholder="Amount"
+                name="amount"
+                size="lg"
+                ref={register({ required: true })}
+              />
+            </InputGroup>
+
             <Select
               name="purpose"
               placeholder="Choose loan purpose"
