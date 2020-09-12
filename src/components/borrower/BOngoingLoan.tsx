@@ -12,9 +12,10 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
+import { irr_dec_to_perc as dec_to_perc } from "utils/currency"
 import { LoanRequest } from "utils/types"
 import { Currency } from "../common/Currency"
-import { Details, KeyValueMap } from "../common/Details"
+import { Details, KeyValueMap as KeyValueRows } from "../common/Details"
 import { Column, Row, Table } from "../common/Table"
 import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
 
@@ -22,14 +23,14 @@ interface Params {
   loanRequest: LoanRequest
 }
 
-const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueMap[] => [
+const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
   { key: "Status", value: "To Be disbursed" },
   { key: "Loan Amount", value: "₹1,20,000" },
-  { key: "Repaid", value: "₹6,000" },
-  { key: "Outstanding Principal", value: "₹1,20,000" },
-  { key: "Outstanding Interest", value: "₹20,000" },
+  { key: "Repaid", value: "₹10,000" },
+  { key: "Outstanding Principal", value: "₹1,10,000" },
+  { key: "Outstanding Interest", value: "₹7,700" },
   { key: "Last Repayment Date", value: "30 August 2020" },
-  { key: "Next Repayment Amount", value: "₹6,000", color: "red.500" },
+  { key: "Next Repayment Amount", value: "₹10,000", color: "red.500" },
   {
     key: "Next Repayment Due Date",
     value: "30 September 2020",
@@ -42,7 +43,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueMap[] => [
   },
 ]
 
-const BOngoingLoan = ({ loanRequest: loan }: Params) => (
+const BActiveLoan = ({ loanRequest: loan }: Params) => (
   <Container minW="s" bg="white">
     <RepaymentNotReceived />
     <Stack padding="10px" borderWidth="3px">
@@ -82,9 +83,13 @@ const BOngoingLoan = ({ loanRequest: loan }: Params) => (
           </Column>
           <Column>
             <Center>
-              <CircularProgress size="120px" value={50} color="green.400">
+              <CircularProgress
+                size="120px"
+                value={dec_to_perc(10000 / loan.amount)}
+                color="green.400"
+              >
                 <CircularProgressLabel maxW="80px" fontSize="20px">
-                  {50}% Repaid
+                  {dec_to_perc(10000 / loan.amount)}% Repaid
                 </CircularProgressLabel>
               </CircularProgress>
             </Center>
@@ -96,10 +101,10 @@ const BOngoingLoan = ({ loanRequest: loan }: Params) => (
       <Box h="30px" />
 
       <Center>
-        <Button>Make Repayment</Button>
+        <Button colorScheme="blue">Make Repayment</Button>
       </Center>
     </Stack>
   </Container>
 )
 
-export default BOngoingLoan
+export default BActiveLoan

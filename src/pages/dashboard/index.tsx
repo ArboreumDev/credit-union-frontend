@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next"
 import { getSession, useSession } from "next-auth/client"
 import dynamic from "next/dynamic"
 import Head from "next/head"
-import BOngoingLoan from "../../components/borrower/BOngoingLoan"
+import BActiveLoan from "../../components/borrower/BOngoingLoan"
 import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
 import BLoanRequestInitiated from "../../components/borrower/LoanRequests/BLoanRequestInitiated"
@@ -40,7 +40,7 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
     [LoanRequestStatus.awaiting_borrower_confirmation]: (
       <BLoanNeedsConfirmation loanRequest={loanRequest} />
     ),
-    [LoanRequestStatus.live]: <BOngoingLoan loanRequest={loanRequest} />,
+    [LoanRequestStatus.live]: <BActiveLoan loanRequest={loanRequest} />,
   }[loanRequest.status]
 }
 

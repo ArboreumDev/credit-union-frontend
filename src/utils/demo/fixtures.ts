@@ -79,7 +79,13 @@ export class Fixtures {
         request_id: "loan_req_id",
         pledge_amount: 5000,
         participation_request_time: "",
-        loan_request: Fixtures.LoanRequest,
+        loan_request: {
+          ...Fixtures.LoanRequest,
+          user: {
+            email: "deepika@mail.com",
+            name: "Deepika Padukone",
+          },
+        },
       },
     ],
   }
