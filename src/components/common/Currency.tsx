@@ -4,10 +4,10 @@ interface Props {
 }
 export const Currency = ({ type = "INR", amount }: Props) => (
   <span>
-    {amount.toLocaleString("en-GB", {
+    {amount.toLocaleString("en-IN", {
       style: "currency",
       currency: type,
-      minimumFractionDigits: 2,
+      minimumFractionDigits: 0,
     })}
   </span>
 )

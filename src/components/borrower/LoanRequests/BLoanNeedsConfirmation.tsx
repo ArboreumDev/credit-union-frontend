@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
+import { irr_dec_to_perc } from "utils/currency"
 import { CalculatedRisk, LoanRequest } from "utils/types"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
@@ -27,9 +28,21 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
   return (
     <Table>
       <Row>
+        <TextColumn muted>Principal</TextColumn>
+        <TextColumn textAlign="right">
+          <Currency amount={loanRequest.amount} />
+        </TextColumn>
+      </Row>
+      <Row>
         <TextColumn muted>Interest Rate</TextColumn>
         <TextColumn textAlign="right">
-          {calculatedRisk.interestRate}%
+          {irr_dec_to_perc(calculatedRisk.interestRate)}%
+        </TextColumn>
+      </Row>
+      <Row>
+        <TextColumn muted>Interest Amount</TextColumn>
+        <TextColumn textAlign="right">
+          <Currency amount={calculatedRisk.totalDue - loanRequest.amount} />
         </TextColumn>
       </Row>
       <Row>
@@ -136,8 +149,12 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
           )}
           <Center>
             <HStack>
-              <Button type="submit">Accept Loan</Button>
-              <Button onClick={rejectLoan}>Reject Loan</Button>
+              <Button colorScheme="blue" type="submit">
+                Accept Loan
+              </Button>
+              <Button colorScheme="red" onClick={rejectLoan}>
+                Reject Loan
+              </Button>
             </HStack>
           </Center>
         </form>

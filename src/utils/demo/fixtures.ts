@@ -34,14 +34,14 @@ export class Fixtures {
     kyc_approved: true,
   }
 
-  static LoanRequestInitiated: LoanRequest = {
+  static LoanRequest: LoanRequest = {
     confirmation_date: null,
     payback_status: null,
     purpose: "Home loan",
     risk_calc_result: {
       loanTerm: 6,
-      interestRate: 5.5,
-      totalDue: 120000,
+      interestRate: 0.07,
+      totalDue: 128400,
     },
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
@@ -49,17 +49,17 @@ export class Fixtures {
   }
 
   static LoanRequestNeedsConfirmation = {
-    ...Fixtures.LoanRequestInitiated,
+    ...Fixtures.LoanRequest,
     status: LoanRequestStatus.awaiting_borrower_confirmation,
   }
   static LoanRequestLive = {
-    ...Fixtures.LoanRequestInitiated,
+    ...Fixtures.LoanRequest,
     status: LoanRequestStatus.live,
   }
 
   static BorrowerLoanInitiated: User = {
     ...Fixtures.BorrowerKYCConfirmed,
-    loan_requests: [Fixtures.LoanRequestInitiated],
+    loan_requests: [Fixtures.LoanRequest],
   }
 
   static BorrowerLoanNeedsConfirmation: User = {
@@ -77,21 +77,9 @@ export class Fixtures {
     pledge_requests: [
       {
         request_id: "loan_req_id",
-        pledge_amount: 1000,
+        pledge_amount: 5000,
         participation_request_time: "",
-        loan_request: {
-          purpose: "Daughter's Marriage",
-          amount: 12000,
-          risk_calc_result: {
-            loanTerm: 6,
-            interestRate: 5.5,
-            totalDue: 1200,
-          },
-          user: {
-            email: "deepika@mail.com",
-            name: "Deepika Padukone",
-          },
-        },
+        loan_request: Fixtures.LoanRequest,
       },
     ],
   }
