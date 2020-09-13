@@ -1,4 +1,4 @@
 import MainDemo from "../../components/demo/Main"
 
-const Demo = () => <MainDemo tabView />
+const Demo = () => <MainDemo />
 export default Demo
