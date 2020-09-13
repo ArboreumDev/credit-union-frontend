@@ -32,7 +32,6 @@ const options = {
 
       if (_user) s = { ...s, user: _user }
 
-      // console.log("session ", s)
       return Promise.resolve(s)
     },
   },

@@ -46,7 +46,7 @@ const lJourneySequence = [
   new JStep("Profile", <Profile user={Fixtures.Lender} />),
 ]
 
-const MainDemo = ({ tabView = false }: { tabView?: boolean }) => (
+const MainDemo = () => (
   <Tabs>
     <TabList>
       <Tab>Borrower</Tab>
