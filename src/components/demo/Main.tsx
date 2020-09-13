@@ -48,7 +48,7 @@ const lJourneySequence = [
 
 const MainDemo = () => (
   <Tabs>
-    <TabList>
+    <TabList className="demo-tablist">
       <Tab>Borrower</Tab>
       <Tab>Lender</Tab>
     </TabList>

@@ -22,7 +22,7 @@ export const DemoTabView = ({ journeySequence, initPage = 0 }: Props) => {
         })
       }
     >
-      <TabList>
+      <TabList className="demo-tablist">
         {journeySequence.map((jstep, idx) => (
           <Tab key={"t" + idx}>{idx}</Tab>
         ))}
