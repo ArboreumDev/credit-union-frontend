@@ -1,35 +1,17 @@
-import axios from "axios"
-import { Fragment } from "react"
-import {
-  Button,
-  ButtonGroup,
-  Stack,
-  VStack,
-  StackDivider,
-  Box,
-  Center,
-} from "@chakra-ui/core"
-import { FiLogIn } from "react-icons/fi"
-import Router from "next/router"
+import { Center, Stack } from "@chakra-ui/core"
+import InvestBorrowButtons from "./onboarding/investBorrowButtons"
 
 const LandingPage = () => {
   return (
     <div className="Container">
-      <VStack spacing={4} align="stretch">
+      <Stack spacing={4} align="stretch">
         <Center margin="40px" h="40px">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Center>
         <Center h="40px">
-          <Button
-            className="umami--click--signin-button"
-            onClick={() => Router.push("/api/auth/signin")}
-            colorScheme="blue"
-            variant="outline"
-          >
-            Sign In
-          </Button>
+          <InvestBorrowButtons needSignin />
         </Center>
-      </VStack>
+      </Stack>
     </div>
   )
 }

@@ -43,12 +43,11 @@ interface Params {
     email: string
     name?: string
   }
+  userType: UserType
 }
 
-export default function Onboarding({ user }: Params) {
+export default function Onboarding({ user, userType }: Params) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [userTypeIdx, setUserType] = useState(0)
-
   const router = useRouter()
 
   const onSubmit = (data: FormData) => {
@@ -57,7 +56,7 @@ export default function Onboarding({ user }: Params) {
       user: {
         name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
         email: user.email,
-        user_type: { 0: UserType.Lender, 1: UserType.Borrower }[userTypeIdx],
+        user_type: userType,
         phone: data.phone,
       },
     }
@@ -123,54 +122,48 @@ export default function Onboarding({ user }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
-            <Tabs onChange={(idx) => setUserType(idx)} variant="unstyled">
-              <TabList>
-                <Tab _selected={{ color: "white", bg: "blue.500" }}>Invest</Tab>
-                <Tab _selected={{ color: "white", bg: "green.400" }}>
-                  Borrow
-                </Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <Stack>
-                    <Input
-                      placeholder="PAN Card Number"
-                      name="pancard"
-                      size="lg"
-                    />
-                    <Input
-                      placeholder="Aadhar Card Number"
-                      name="aadhar"
-                      size="lg"
-                    />
-                  </Stack>
-                </TabPanel>
-                <TabPanel>
-                  <Box>
-                    <Dropzone email={user.email}>
-                      <p>Drop KYC documents here: </p>
-                      <UnorderedList>
-                        <ListItem>Passport</ListItem>
-                        <ListItem>Aadhar Card</ListItem>
-                        <ListItem>PAN Card</ListItem>
-                      </UnorderedList>
-                    </Dropzone>
-                  </Box>
-                  <Box>
-                    <Dropzone email={user.email}>
-                      <p>Drop financial documents here: </p>
-                      <UnorderedList>
-                        <ListItem>latest Income Tax Returns</ListItem>
-                        <ListItem>Bank Statement for last 6 months</ListItem>
-                      </UnorderedList>
-                    </Dropzone>
-                  </Box>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+
+            {userType == UserType.Lender && (
+              <Stack>
+                <Input placeholder="PAN Card Number" name="pancard" size="lg" />
+                <Input
+                  placeholder="Aadhar Card Number"
+                  name="aadhar"
+                  size="lg"
+                />
+              </Stack>
+            )}
+
+            {userType == UserType.Borrower && (
+              <div>
+                <Box>
+                  <Dropzone email={user.email}>
+                    <p>Drop KYC documents here: </p>
+                    <UnorderedList>
+                      <ListItem>Passport</ListItem>
+                      <ListItem>Aadhar Card</ListItem>
+                      <ListItem>PAN Card</ListItem>
+                    </UnorderedList>
+                  </Dropzone>
+                </Box>
+                <Box>
+                  <Dropzone email={user.email}>
+                    <p>Drop financial documents here: </p>
+                    <UnorderedList>
+                      <ListItem>latest Income Tax Returns</ListItem>
+                      <ListItem>Bank Statement for last 6 months</ListItem>
+                    </UnorderedList>
+                  </Dropzone>
+                </Box>
+              </div>
+            )}
 
             <Center>
               <Button type="submit">Submit</Button>
+            </Center>
+            <Box h={30} />
+            <Center>
+              <a href="/api/auth/signout">Logout</a>
             </Center>
           </Stack>
         </Container>
