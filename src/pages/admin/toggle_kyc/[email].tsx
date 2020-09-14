@@ -10,7 +10,7 @@ const Page = (props: { session: Session }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
 
-  if (session.user.email === "dev-admin@arboreum.dev") {
+  if (session.user.email === "gp@arboreum.dev") {
     const { email } = context.query
 
     const dbClient = new DbClient()
