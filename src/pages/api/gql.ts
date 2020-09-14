@@ -5,7 +5,7 @@ import {
   CreateUserMutationVariables,
   Loan_Requests_Insert_Input,
 } from "../../gql/sdk"
-import { Session, User } from "../../utils/types"
+import { Session, User } from "../../lib/types"
 
 const secret = process.env.JWT_SECRET
 enum AUTH_TYPE {

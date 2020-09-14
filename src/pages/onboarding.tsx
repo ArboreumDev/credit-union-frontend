@@ -2,8 +2,8 @@ import InvestBorrowButtons from "components/common/onboarding/investBorrowButton
 import { InferGetServerSidePropsType } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { USER_TYPE_KEY } from "utils/constant"
-import getSSRProps from "utils/ssr"
+import { USER_TYPE_KEY } from "lib/constant"
+import getSSRProps from "lib/ssr"
 import Onboarding from "../components/common/onboarding/onboarding"
 import { Center, Stack } from "@chakra-ui/core"
 

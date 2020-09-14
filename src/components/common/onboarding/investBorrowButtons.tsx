@@ -1,8 +1,8 @@
 import { Button, HStack } from "@chakra-ui/core"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { USER_TYPE_KEY } from "utils/constant"
-import { UserType } from "utils/types"
+import { USER_TYPE_KEY } from "lib/constant"
+import { UserType } from "lib/types"
 
 const InvestBorrowButtons = (props: { needSignin?: boolean }) => {
   const router = useRouter()

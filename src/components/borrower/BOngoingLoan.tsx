@@ -12,8 +12,8 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
-import { irr_dec_to_perc as dec_to_perc } from "utils/currency"
-import { LoanRequest } from "utils/types"
+import { irr_dec_to_perc as dec_to_perc } from "lib/currency"
+import { LoanRequest } from "lib/types"
 import { Currency } from "../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../common/Details"
 import { Column, Row, Table } from "../common/Table"

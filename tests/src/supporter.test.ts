@@ -2,14 +2,14 @@ import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { DbClient } from "../../src/gql/db_client"
-import { SupporterStatus } from "../../src/utils/types"
+import { SupporterStatus } from "../../src/lib/types"
 import {
   BASIC_NETWORK,
   BORROWER1,
   SUPPORTER1,
   SUPPORTER2,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/utils/network_helpers"
+import { addNetwork } from "../../src/lib/network_helpers"
 import { getUserPortfolio } from "./test_helpers"
 
 global.fetch = require("node-fetch")

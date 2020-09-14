@@ -14,8 +14,8 @@ import {
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Loan_Requests_Insert_Input } from "gql/sdk"
-import { fetcher } from "utils/api"
-import { User } from "utils/types"
+import { fetcher } from "lib/api"
+import { User } from "lib/types"
 
 type FormData = {
   amount: number

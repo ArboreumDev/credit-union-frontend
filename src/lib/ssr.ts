@@ -1,5 +1,5 @@
 import { Session } from "./types"
-import { getSession } from "../../node_modules/next-auth/client"
+import { getSession } from "next-auth/client"
 import { GetServerSideProps } from "next"
 
 export function getRedirectLocation(page: string, session: Session) {

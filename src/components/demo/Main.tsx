@@ -1,11 +1,11 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 import { AddFundsForm } from "pages/dashboard/fund"
-import { UserType } from "utils/types"
+import { UserType } from "lib/types"
 import { DemoTabView } from "../../components/demo/DemoViewTabs"
 import { getDashboardComponent } from "../../pages/dashboard"
 import LoginPage from "../../pages/login"
 import { Profile } from "../../pages/profile"
-import { Fixtures } from "../../utils/demo/fixtures"
+import { Fixtures } from "../../lib/demo/fixtures"
 import LandingPage from "../common/landing"
 import Onboarding from "../common/onboarding/onboarding"
 

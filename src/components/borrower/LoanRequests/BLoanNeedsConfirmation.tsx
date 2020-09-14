@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { irr_dec_to_perc } from "utils/currency"
-import { CalculatedRisk, LoanRequest } from "utils/types"
+import { irr_dec_to_perc } from "lib/currency"
+import { CalculatedRisk, LoanRequest } from "lib/types"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
 

@@ -4,7 +4,7 @@ import { AppProps } from "next/app"
 import Head from "next/head"
 
 import { ChakraProvider } from "@chakra-ui/core"
-import { ANALYTICS_WEBSITE_IDS } from "../utils/constant"
+import { ANALYTICS_WEBSITE_IDS } from "../lib/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (

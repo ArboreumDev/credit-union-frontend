@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
 import dynamic from "next/dynamic"
 import Head from "next/head"
-import getSSRProps from "utils/ssr"
+import getSSRProps from "lib/ssr"
 import BActiveLoan from "../../components/borrower/BOngoingLoan"
 import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
@@ -17,7 +17,7 @@ import {
   Session,
   User,
   UserType,
-} from "../../utils/types"
+} from "../../lib/types"
 
 const getRequestLoanComponent = (user: User) => {
   return (

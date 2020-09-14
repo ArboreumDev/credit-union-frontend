@@ -1,4 +1,4 @@
-import getSSRProps from "utils/ssr"
+import getSSRProps from "lib/ssr"
 import LandingPage from "../components/common/landing"
 
 const Page = () => {

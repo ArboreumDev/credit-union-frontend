@@ -10,7 +10,7 @@ import {
   HStack,
   Button,
 } from "@chakra-ui/core"
-import { User } from "../../utils/types"
+import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"

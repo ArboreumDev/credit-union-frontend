@@ -12,7 +12,7 @@ import AppBar from "components/common/AppBar"
 import { useSession } from "next-auth/client"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Session, User } from "utils/types"
+import { Session, User } from "lib/types"
 
 type FormData = {
   amount: number
