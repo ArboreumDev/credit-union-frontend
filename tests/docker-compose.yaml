@@ -4,7 +4,7 @@ services:
     image: postgres:12
     restart: always
     ports:
-      - "8080:8080"
+      - "5432:5432"
     # volumes:
     # - db_data:/var/lib/postgresql/data
     environment:
@@ -26,14 +26,6 @@ services:
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       version: "3.3"
-  nextjs:
-    ports:
-      - 3000:3000
-    build:
-      context: ./
-      dockerfile: /Dockerfile
-    env_file:
-      - ../.env.local
 # volumes:
 # db_data:
 
