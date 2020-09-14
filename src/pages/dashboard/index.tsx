@@ -1,8 +1,9 @@
 import { Box, Center, Heading } from "@chakra-ui/core"
 import { GetServerSideProps } from "next"
-import { getSession, useSession } from "next-auth/client"
+import { getSession } from "next-auth/client"
 import dynamic from "next/dynamic"
 import Head from "next/head"
+import getSSRProps from "utils/ssr"
 import BActiveLoan from "../../components/borrower/BOngoingLoan"
 import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
@@ -79,18 +80,5 @@ const Dashboard = (props: { user: User }) => (
   </div>
 )
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = (await getSession({ req })) as Session
-  const user = session.user
-  if (res) {
-    if (!session) {
-      res.writeHead(301, {
-        Location: "/",
-      })
-      res.end()
-    }
-  }
-  return { props: { user } }
-}
-
+export const getServerSideProps = getSSRProps
 export default Dashboard
