@@ -1,10 +1,11 @@
-import getSSRProps from "lib/ssr"
+import useUser from "lib/useUser"
 import LandingPage from "../components/common/landing"
 
 const Page = () => {
+  // redirect if neededcd
+  useUser()
+
   return <LandingPage />
 }
-
-Page.getInitialProps = getSSRProps
 
 export default Page
