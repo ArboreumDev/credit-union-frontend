@@ -24,7 +24,7 @@ import {
 import { useRouter } from "next/dist/client/router"
 import { useForm } from "react-hook-form"
 import { CreateUserMutationVariables } from "gql/sdk"
-import { fetcher } from "lib/api"
+import { fetcherMutate } from "lib/api"
 import Dropzone from "./Dropzone"
 import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
 import { AiOutlineMail } from "react-icons/ai"
@@ -61,7 +61,7 @@ export default function Onboarding({ user, userType }: Params) {
       },
     }
     // Call mutation
-    fetcher("CreateUser", payload)
+    fetcherMutate("CreateUser", payload)
       .then((res) => {
         location.href = "/dashboard"
       })

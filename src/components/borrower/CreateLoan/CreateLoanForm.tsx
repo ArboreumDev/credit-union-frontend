@@ -14,7 +14,7 @@ import {
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Loan_Requests_Insert_Input } from "gql/sdk"
-import { fetcher } from "lib/api"
+import { fetcherMutate } from "lib/api"
 import { User } from "lib/types"
 
 type FormData = {
@@ -39,7 +39,7 @@ export default function CreateLoanForm({ user }: Props) {
       purpose: data.purpose,
     }
     // Call mutation
-    fetcher("CreateLoanRequestMutation", payload)
+    fetcherMutate("CreateLoanRequestMutation", payload)
       .then((res) => {
         location.reload()
       })
