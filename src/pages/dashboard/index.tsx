@@ -46,11 +46,17 @@ const getLenderDashboard = (user: User) => {
 
 export const getDashboardComponent = (user: User) => {
   if (user.user_type === UserType.Lender)
-    return <div>{getLenderDashboard(user)}</div>
+    return (
+      <div>
+        <AppBar />
+        {getLenderDashboard(user)}
+      </div>
+    )
   else {
     const loanRequests = user.loan_requests
     return (
       <div>
+        <AppBar />
         {!user.kyc_approved && <ApplicationSubmitted />}
         {loanRequests.length === 0 && getRequestLoanComponent(user)}
         {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
@@ -69,7 +75,6 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      <AppBar />
       {getDashboardComponent(user)}
       <Center margin="80px">
         <Contactus />
