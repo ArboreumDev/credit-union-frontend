@@ -44,8 +44,8 @@ export const lJourneySequence = [
     "Onboarding",
     <Onboarding user={Fixtures.Lender} userType={UserType.Lender} />
   ),
-  new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep("Add funds", <AddFundsForm user={Fixtures.Lender} />),
+  new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep(
     "Lender Dashboard with Notification",
     getDashboardComponent(Fixtures.LenderWithPledgeRequest)
