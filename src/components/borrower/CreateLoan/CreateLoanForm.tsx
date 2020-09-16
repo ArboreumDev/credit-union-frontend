@@ -3,19 +3,19 @@ import {
   Button,
   Center,
   Container,
+  Flex,
   Heading,
   Input,
-  InputGroup,
-  InputLeftElement,
   Select,
   Stack,
   Text,
 } from "@chakra-ui/core"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
+import AmountInput from "components/common/AmountInput"
 import { Loan_Requests_Insert_Input } from "gql/sdk"
 import { fetcherMutate } from "lib/api"
 import { User } from "lib/types"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 
 type FormData = {
   amount: number
@@ -51,16 +51,7 @@ export default function CreateLoanForm({ user }: Props) {
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container minW="300px" bg="white">
           <Stack spacing={3}>
-            <InputGroup>
-              <InputLeftElement>₹</InputLeftElement>
-              <Input
-                placeholder="Amount"
-                name="amount"
-                size="lg"
-                ref={register({ required: true })}
-              />
-            </InputGroup>
-
+            <AmountInput passRef={register({ required: true })} />
             <Select
               name="purpose"
               placeholder="Choose loan purpose"
@@ -80,26 +71,32 @@ export default function CreateLoanForm({ user }: Props) {
             {Array.from({ length: nSup }, (x, i) => i).map((idx) => (
               <Stack key={idx} spacing="10px" minW="280px">
                 <Text>Supporter {idx + 1}: </Text>
-                <Input
-                  placeholder="name"
-                  name="Supporter's name"
-                  size="lg"
-                  ref={register({ required: true })}
-                />
-
-                <Input
-                  placeholder="email address"
-                  name="email"
-                  size="lg"
-                  ref={register({ required: true })}
-                />
-
-                <Input
-                  placeholder="amount"
-                  name="amount"
-                  size="lg"
-                  ref={register({ required: true })}
-                />
+                <Flex>
+                  <Box flex={1}>
+                    <Input
+                      placeholder="Name"
+                      name="Supporter's name"
+                      size="lg"
+                      ref={register({ required: true })}
+                    />
+                  </Box>
+                  <Box flex={1}>
+                    <Input
+                      placeholder="Email"
+                      name="email"
+                      size="lg"
+                      ref={register({ required: true })}
+                    />
+                  </Box>
+                  <Box flex={1}>
+                    <Input
+                      placeholder="Amount"
+                      name="amount"
+                      size="lg"
+                      ref={register({ required: true })}
+                    />
+                  </Box>
+                </Flex>
               </Stack>
             ))}
             <Center>
