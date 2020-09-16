@@ -6,7 +6,7 @@ import {
   Tabs,
   useToast,
 } from "@chakra-ui/core"
-import { JStep } from "./TabDemo"
+import { JStep } from "pages/demo/[userType]/[jstep]"
 
 interface Props {
   journeySequence: JStep[]
