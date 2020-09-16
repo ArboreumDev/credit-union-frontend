@@ -8,7 +8,7 @@ import { ANALYTICS_WEBSITE_IDS } from "../lib/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider>
+    <ChakraProvider resetCSS>
       <Head>
         <title>Arboreum</title>
         <meta name="description" content="Invest. Borrow."></meta>
@@ -26,14 +26,13 @@ function App({ Component, pageProps }: AppProps) {
           />
         )} */}
       </Head>
-      <ChakraProvider resetCSS>
-        <div>
-          <div className="content">
-            <Component {...pageProps} />
-          </div>
+
+      <div>
+        <div className="content">
+          <Component {...pageProps} />
         </div>
-      </ChakraProvider>
-    </Provider>
+      </div>
+    </ChakraProvider>
   )
 }
 
