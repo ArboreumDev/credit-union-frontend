@@ -82,8 +82,8 @@ export class Fixtures {
         loan_request: {
           ...Fixtures.LoanRequest,
           user: {
-            email: "deepika@mail.com",
-            name: "Deepika Padukone",
+            email: "bigb@mail.com",
+            name: "Amitabh Bachann",
           },
         },
       },
