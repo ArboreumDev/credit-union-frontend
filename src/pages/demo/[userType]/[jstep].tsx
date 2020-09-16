@@ -1,13 +1,17 @@
-import { JStep } from "components/demo/Main"
-import { UserType } from "lib/types"
-import { useRouter } from "next/router"
-import { AddFundsForm } from "pages/dashboard/fund"
-import { Fixtures } from "lib/demo/fixtures"
-import { getDashboardComponent } from "pages/dashboard"
-import LoginPage from "pages/login"
-import { Profile } from "pages/profile"
+import { useEventListener } from "@chakra-ui/core"
 import LandingPage from "components/common/landing"
 import Onboarding from "components/common/onboarding/onboarding"
+import { Fixtures } from "lib/demo/fixtures"
+import { UserType } from "lib/types"
+import { useRouter } from "next/router"
+import { getDashboardComponent } from "pages/dashboard"
+import { AddFundsForm } from "pages/dashboard/fund"
+import LoginPage from "pages/login"
+import { Profile } from "pages/profile"
+
+export class JStep {
+  constructor(public title: string, public component: any) {}
+}
 
 export const bJourneySequence = [
   new JStep("Landing", <LandingPage />),
@@ -49,16 +53,49 @@ export const lJourneySequence = [
   new JStep("Profile", <Profile user={Fixtures.Lender} />),
 ]
 
+const getStepMax = (userType: UserType) => {
+  if (userType === UserType.Borrower) return bJourneySequence.length
+  if (userType === UserType.Lender) return lJourneySequence.length
+}
+
 const Demo = () => {
   const router = useRouter()
   const { userType, jstep } = router.query
-  if (userType == UserType.Borrower)
-    return bJourneySequence[parseInt(jstep as string)].component
-  if (userType == UserType.Lender)
-    return lJourneySequence[parseInt(jstep as string)].component
+  console.log(userType, jstep)
+  const jstepInt = parseInt(jstep as string)
+
+  function redirectJStep(isPrev?: boolean, toggleUserType?: boolean) {
+    let nUserType = userType
+    if (toggleUserType)
+      nUserType =
+        userType === UserType.Borrower ? UserType.Lender : UserType.Borrower
+
+    const nstep = isPrev ? jstepInt - 1 : jstepInt + 1
+    if (nstep >= 0 && nstep < getStepMax(userType as UserType)) {
+      const href = `/demo/${nUserType}/${nstep}`
+      router.push(href, href)
+    }
+  }
+  function handler({ key }) {
+    console.log(key)
+    if (key == "n") redirectJStep()
+    if (key == "p") redirectJStep(true)
+  }
+  function mouseHandler({ clientX, clientY }) {
+    console.log(clientX, clientY)
+    const mid = window.innerWidth / 2
+    const toggleUserType = clientY < 120 ? true : false
+    if (clientX > mid) redirectJStep(false, toggleUserType)
+    if (clientX < mid) redirectJStep(true, toggleUserType)
+  }
+
+  useEventListener("keydown", handler)
+  useEventListener("click", mouseHandler)
+
   return (
-    <div onKeyPress={(e) => console.log(e.keyCode)}>
-      {userType} {jstep}
+    <div onKeyPress={(e) => console.log(e.charCode)}>
+      {userType === UserType.Borrower && bJourneySequence[jstepInt].component}
+      {userType === UserType.Lender && lJourneySequence[jstepInt].component}
     </div>
   )
 }

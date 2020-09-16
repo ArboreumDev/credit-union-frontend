@@ -1,8 +1,8 @@
-import MainDemo from "../../components/demo/Main"
+import TabDemo from "../../components/demo/TabDemo"
 
 const Demo = () => (
   <div>
-    <MainDemo />
+    <TabDemo />
     <style jsx global>
       {`
         .demo-tablist {
