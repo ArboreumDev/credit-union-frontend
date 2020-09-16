@@ -76,24 +76,26 @@ const Demo = () => {
       router.push(href, href)
     }
   }
-  function handler({ key }) {
-    console.log(key)
-    if (key == "n") redirectJStep()
-    if (key == "p") redirectJStep(true)
-  }
+  // function handler({ key }) {
+  //   console.log(key)
+  //   if (key == "n") redirectJStep()
+  //   if (key == "p") redirectJStep(true)
+  // }
   function mouseHandler({ clientX, clientY }) {
     console.log(clientX, clientY)
+    if (clientX === 0 || clientY === 0) return
+
     const mid = window.innerWidth / 2
     const toggleUserType = clientY < 120 ? true : false
     if (clientX > mid) redirectJStep(false, toggleUserType)
     if (clientX < mid) redirectJStep(true, toggleUserType)
   }
 
-  useEventListener("keydown", handler)
+  // useEventListener("keydown", handler)
   useEventListener("click", mouseHandler)
 
   return (
-    <div onKeyPress={(e) => console.log(e.charCode)}>
+    <div>
       {userType === UserType.Borrower && bJourneySequence[jstepInt].component}
       {userType === UserType.Lender && lJourneySequence[jstepInt].component}
     </div>

@@ -88,15 +88,10 @@ export default function CreateLoanForm({ user }: Props) {
                       ref={register({ required: true })}
                     />
                   </Box>
-                  <Box flex={1}>
-                    <Input
-                      placeholder="Amount"
-                      name="amount"
-                      size="lg"
-                      ref={register({ required: true })}
-                    />
-                  </Box>
                 </Flex>
+                <Center flex={0.5}>
+                  <AmountInput passRef={register({ required: true })} />
+                </Center>
               </Stack>
             ))}
             <Center>
