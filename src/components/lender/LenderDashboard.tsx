@@ -10,6 +10,7 @@ import {
   HStack,
   Button,
 } from "@chakra-ui/core"
+import Link from "next/link"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
@@ -76,7 +77,9 @@ const LenderDashboard = ({ user }: Props) => {
       ))}
       <Center>
         <HStack>
-          <Button>Add funds</Button>
+          <Link href="/dashboard/fund">
+            <Button>Add funds</Button>
+          </Link>
           <Button>Withdraw funds</Button>
         </HStack>
       </Center>
