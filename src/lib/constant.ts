@@ -1,4 +1,4 @@
-import { RiskParams } from "../utils/types"
+import { RiskParams } from "./types"
 
 export const ANALYTICS_WEBSITE_IDS = {
   production: "de3e7d3b-c210-436b-a6ca-144fcc07a774",

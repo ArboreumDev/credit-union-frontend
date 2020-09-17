@@ -8,7 +8,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/core"
-import { User } from "utils/types"
+import { User } from "lib/types"
 import CreateLoanForm from "./CreateLoanForm"
 
 interface Props {

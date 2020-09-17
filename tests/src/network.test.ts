@@ -1,10 +1,10 @@
 import { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { EDGE_STATUS } from "../../src/utils/types"
+import { EDGE_STATUS } from "../../src/lib/types"
 import { BASIC_NETWORK } from "../fixtures/basic_network"
-import { addNetwork, setupScenario } from "../../src/utils/network_helpers"
-import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/utils/constant"
+import { addNetwork, setupScenario } from "../../src/lib/network_helpers"
+import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
 const basicCorpus = require("../fixtures/basicCorpus.json")
 
 global.fetch = require("node-fetch")

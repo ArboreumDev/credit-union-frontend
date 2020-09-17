@@ -6,7 +6,7 @@ services:
       - "8080:8080"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: $DATABASE_URL
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:arbor3umpg@arboreum-sf.cvdulo7qnwp6.us-west-1.rds.amazonaws.com:5432/pilot_db_9_16_2020
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production

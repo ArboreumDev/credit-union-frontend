@@ -1,10 +1,10 @@
 import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
-import { EDGE_STATUS, UserType, RiskParams } from "../../src/utils/types"
+import { EDGE_STATUS, UserType, RiskParams } from "../../src/lib/types"
 import {
   generateEdgeInputFromTupleNotation,
   addRecommendationRiskToUser,
-} from "../../src/utils/network_helpers"
-import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/utils/constant"
+} from "../../src/lib/network_helpers"
+import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
 
 type User = User_Insert_Input
 type EdgeTuple = [string, string, number]

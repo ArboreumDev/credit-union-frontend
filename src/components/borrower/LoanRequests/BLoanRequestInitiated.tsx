@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
-import { LoanRequest } from "utils/types"
+import { LoanRequest } from "lib/types"
 import { Currency } from "../../common/Currency"
 
 interface Params {

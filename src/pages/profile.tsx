@@ -9,11 +9,11 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
-import { useSession } from "next-auth/client"
+import AppBar from "components/common/AppBar"
+import { User, UserType } from "lib/types"
+import useUser from "lib/useUser"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
-import AppBar from "components/common/AppBar"
-import { Session, User, UserType } from "utils/types"
 
 interface Props {
   user: User
@@ -86,11 +86,10 @@ export const Profile = ({ user }: Props) => {
 }
 
 const ProfilePage = () => {
-  const [session, loading]: [Session, boolean] = useSession()
-  if (loading) return <div></div>
-  if (!session || !session.user.user_type) location.replace("/")
+  const { user, mutate } = useUser()
 
-  const user = session.user
+  if (!user) return <AppBar />
+
   return <Profile user={user} />
 }
 

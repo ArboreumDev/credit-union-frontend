@@ -1,10 +1,10 @@
-import { PortfolioUpdate } from "../../src/utils/types"
+import { PortfolioUpdate } from "./types"
 import {
   GetLoansByBorrowerAndStatusDocument,
   GetLoansByBorrowerAndStatusQuery,
   Sdk,
-} from "../../src/gql/sdk"
-import { LoanRequestStatus } from "../../src/utils/types"
+} from "../gql/sdk"
+import { LoanRequestStatus } from "./types"
 
 function toFloat8(x: number) {
   return parseFloat(x.toFixed(8))

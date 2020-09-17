@@ -11,19 +11,19 @@ import {
   RiskInput,
   OptimizerContext,
   SwarmAiRequestMessage,
-} from "../../src/utils/types"
+} from "../lib/types"
 import {
   lenderBalanceToShareInLoan,
   createStartLoanInputVariables,
   proportion,
   generateUpdateAsSingleTransaction,
   transformRequestToDashboardFormat,
-} from "../../src/utils/loan_helpers"
+} from "../lib/loan_helpers"
 import {
   DEFAULT_LOAN_TENOR,
   DEFAULT_RISK_FREE_INTEREST_RATE,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
-} from "../../src/utils/constant"
+} from "../lib/constant"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { GraphQLClient } from "graphql-request"
 

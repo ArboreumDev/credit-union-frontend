@@ -10,7 +10,8 @@ import {
   HStack,
   Button,
 } from "@chakra-ui/core"
-import { User } from "../../utils/types"
+import Link from "next/link"
+import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
 import LineChart from "../dashboard/linechart"
@@ -23,7 +24,7 @@ interface Props {
 const getOngoingPledges = () => [
   { name: "Gaurav", total: 120000, perc_repaid: 0.9 },
   { name: "Nupur", total: 120000, perc_repaid: 0.5 },
-  { name: "Lawrence", total: 20000, perc_repaid: 0.3 },
+  { name: "Laurence", total: 20000, perc_repaid: 0.3 },
   {
     name: "Dju",
     total: 20000,
@@ -42,10 +43,10 @@ const PledgeInvestments = () => (
     <Center>You have {5} ongoing pledge investments:</Center>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
-        <Box flex="1">
+        <Center flex="1">
           <Text color="gray.500">{row.name}</Text>
-        </Box>
-        <Box flex="1">
+        </Center>
+        <Center flex="1">
           <Text
             alignContent="center"
             color={row.color || "black"}
@@ -53,14 +54,14 @@ const PledgeInvestments = () => (
           >
             <Currency amount={row.total} />
           </Text>
-        </Box>
-        <Box flex="1">
+        </Center>
+        <Center flex="1">
           <CircularProgress value={row.perc_repaid * 100} color="green.400">
             <CircularProgressLabel>
               {row.perc_repaid * 100}%
             </CircularProgressLabel>
           </CircularProgress>
-        </Box>
+        </Center>
       </Flex>
     ))}
   </Stack>
@@ -76,7 +77,9 @@ const LenderDashboard = ({ user }: Props) => {
       ))}
       <Center>
         <HStack>
-          <Button>Add funds</Button>
+          <Link href="/dashboard/fund">
+            <Button>Add funds</Button>
+          </Link>
           <Button>Withdraw funds</Button>
         </HStack>
       </Center>

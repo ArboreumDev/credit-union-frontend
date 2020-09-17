@@ -6,7 +6,7 @@ import {
   EDGE_STATUS,
   LoanRequestStatus,
   SupporterStatus,
-} from "../../src/utils/types"
+} from "../../src/lib/types"
 import {
   BASIC_NETWORK,
   LENDER1,
@@ -14,8 +14,8 @@ import {
   BORROWER1,
   SUPPORTER1,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/utils/network_helpers"
-import { addAndConfirmSupporter } from "../../src/utils/loan_helpers"
+import { addNetwork } from "../../src/lib/network_helpers"
+import { addAndConfirmSupporter } from "../../src/lib/loan_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
 import lender from "../../src/components/dashboard/lender"

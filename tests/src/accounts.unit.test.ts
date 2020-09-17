@@ -8,7 +8,7 @@ import {
   EDGE1,
   EDGE2,
 } from "../fixtures/basic_network"
-import { EDGE_STATUS } from "../../src/utils/types"
+import { EDGE_STATUS } from "../../src/lib/types"
 import { getUserPortfolio } from "./test_helpers"
 import { DbClient } from "../../src/gql/db_client"
 

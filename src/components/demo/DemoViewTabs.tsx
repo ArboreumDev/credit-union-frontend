@@ -6,7 +6,7 @@ import {
   Tabs,
   useToast,
 } from "@chakra-ui/core"
-import { JStep } from "./Main"
+import { JStep } from "pages/demo/[userType]/[jstep]"
 
 interface Props {
   journeySequence: JStep[]
@@ -17,15 +17,16 @@ export const DemoTabView = ({ journeySequence, initPage = 0 }: Props) => {
 
   return (
     <Tabs
+      id="journeyStepsTabs"
       margin="0px"
       defaultIndex={initPage}
-      onChange={(idx) =>
-        toast({
-          title: (idx + ". " + journeySequence[idx].title) as string,
-          duration: 2000,
-          isClosable: true,
-        })
-      }
+      // onChange={(idx) =>
+      // toast({
+      //   title: (idx + ". " + journeySequence[idx].title) as string,
+      //   duration: 2000,
+      //   isClosable: true,
+      // })
+      // }
     >
       <TabList className="demo-tablist">
         {journeySequence.map((jstep, idx) => (
