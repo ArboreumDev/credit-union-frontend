@@ -43,10 +43,10 @@ const PledgeInvestments = () => (
     <Center>You have {5} ongoing pledge investments:</Center>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
-        <Box flex="1">
+        <Center flex="1">
           <Text color="gray.500">{row.name}</Text>
-        </Box>
-        <Box flex="1">
+        </Center>
+        <Center flex="1">
           <Text
             alignContent="center"
             color={row.color || "black"}
@@ -54,14 +54,14 @@ const PledgeInvestments = () => (
           >
             <Currency amount={row.total} />
           </Text>
-        </Box>
-        <Box flex="1">
+        </Center>
+        <Center flex="1">
           <CircularProgress value={row.perc_repaid * 100} color="green.400">
             <CircularProgressLabel>
               {row.perc_repaid * 100}%
             </CircularProgressLabel>
           </CircularProgress>
-        </Box>
+        </Center>
       </Flex>
     ))}
   </Stack>
