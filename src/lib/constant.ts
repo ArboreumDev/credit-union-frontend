@@ -1,8 +1,8 @@
 import { RiskParams } from "./types"
 
 export const ANALYTICS_WEBSITE_IDS = {
-  production: "de3e7d3b-c210-436b-a6ca-144fcc07a774",
-  preview: "8c4e11cd-cd24-45a2-b33e-0f07da110e73",
+  production: "c0dca8db-6303-4e1b-bb29-3422514663e9",
+  preview: "90f23cc8-c238-4f5c-876a-c83f66335036",
 }
 export const USER_TYPE_KEY = "userType"
 

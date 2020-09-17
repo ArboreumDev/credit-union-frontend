@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Provider } from "next-auth/client"
-import { AppProps } from "next/app"
+import { AppProps, NextWebVitalsMetric } from "next/app"
 import Head from "next/head"
 
 import { ChakraProvider } from "@chakra-ui/core"
@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Arboreum</title>
         <meta name="description" content="Invest. Borrow."></meta>
-        {/* {typeof window !== "undefined" && (
+        {typeof window !== "undefined" && (
           <script
             async
             defer
@@ -21,10 +21,9 @@ function App({ Component, pageProps }: AppProps) {
                 ? ANALYTICS_WEBSITE_IDS.production
                 : ANALYTICS_WEBSITE_IDS.preview
             }
-            data-host-url="https://analytics.arboreum.dev/"
-            src="/umami.js"
+            src="https://analytics.arboreum.dev/umami.js"
           />
-        )} */}
+        )}
       </Head>
 
       <div>
@@ -34,6 +33,10 @@ function App({ Component, pageProps }: AppProps) {
       </div>
     </ChakraProvider>
   )
+}
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  console.log(metric)
 }
 
 export default App
