@@ -1,9 +1,7 @@
 mutation InsertEvent($event: events_insert_input!) {
-  insert_events(objects: [$event]) {
-    returning {
+  insert_events_one(object: $event) {
       id,
       headers,
       event
-    }
   }
 }

@@ -6285,12 +6285,8 @@ export type InsertEventMutationVariables = Exact<{
 }>
 
 export type InsertEventMutation = { __typename?: "mutation_root" } & {
-  insert_events?: Maybe<
-    { __typename?: "events_mutation_response" } & {
-      returning: Array<
-        { __typename?: "events" } & Pick<Events, "id" | "headers" | "event">
-      >
-    }
+  insert_events_one?: Maybe<
+    { __typename?: "events" } & Pick<Events, "id" | "headers" | "event">
   >
 }
 
@@ -6772,12 +6768,10 @@ export const ApproveKycDocument = gql`
 `
 export const InsertEventDocument = gql`
   mutation InsertEvent($event: events_insert_input!) {
-    insert_events(objects: [$event]) {
-      returning {
-        id
-        headers
-        event
-      }
+    insert_events_one(object: $event) {
+      id
+      headers
+      event
     }
   }
 `
