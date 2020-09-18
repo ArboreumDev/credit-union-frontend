@@ -1,4 +1,6 @@
 import axios from "axios"
+import { LogEventTypes } from "./constant"
+import { LogEvent } from "./types"
 
 export const fetcherMutate = (action, payload) => {
   const base_url = process.env.NEXTAUTH_URL || ""
@@ -24,4 +26,31 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   const error = new Error(response.statusText)
   console.error(response)
   throw error
+}
+
+export async function captureLog(event: LogEvent) {
+  fetcher("/api/health/log", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(event),
+  })
+}
+
+// https://blog.sentry.io/2016/01/04/client-javascript-reporting-window-onerror
+// TODO hook up to try catch when needed
+export async function captureError(ex: any) {
+  const errorData = {
+    name: ex.name, // e.g. ReferenceError
+    message: ex.line, // e.g. x is undefined
+    url: document.location.href,
+    stack: ex.stack, // stacktrace string; remember, different per-browser!
+  }
+
+  captureLog({
+    eventType: LogEventTypes.ClientError,
+    data: errorData,
+  })
 }

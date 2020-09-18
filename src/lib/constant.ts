@@ -15,4 +15,5 @@ export const DEFAULT_RECOMMENDATION_RISK_PARAMS: RiskParams = {
 
 export enum LogEventTypes {
   ClientWebVitals = "client_web_vitals",
+  ClientError = "client_error",
 }
