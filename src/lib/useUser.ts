@@ -6,7 +6,6 @@ import fetcher from "./api"
 
 // inspired by https://github.com/vercel/next.js/blob/7203f500916d336f4e1cbcd162baff624c9cd969/examples/with-iron-session/lib/useUser.js#L5
 function getRedirectLocation(session: Session, currentPage: string) {
-  console.log("redirect", session, currentPage)
   if (!session || !session.user) return "/"
 
   const user = session.user
@@ -28,7 +27,6 @@ export default function useUser() {
   const session = data as Session
   if (session) {
     const destination = getRedirectLocation(session, currentPage)
-    console.log("dest", destination)
     if (destination != currentPage) {
       Router.push(destination)
       return {}
