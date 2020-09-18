@@ -1,4 +1,3 @@
-import axios from "axios"
 import { LogEventTypes } from "./constant"
 import { LogEvent } from "./types"
 
@@ -7,9 +6,14 @@ export const fetcherMutate = (action, payload) => {
   const url = base_url + "/api/gql"
   console.log(url)
 
-  return axios
-    .post(url, { actionType: action, payload: payload })
-    .then((res) => res.data)
+  return fetcher(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ actionType: action, payload: payload }),
+  })
 }
 
 export default async function fetcher(...args: Parameters<typeof fetch>) {
@@ -29,7 +33,7 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
 }
 
 export async function captureLog(event: LogEvent) {
-  fetcher("/api/health/log", {
+  return fetcher("/api/health/log", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -49,7 +53,7 @@ export async function captureError(ex: any) {
     stack: ex.stack, // stacktrace string; remember, different per-browser!
   }
 
-  captureLog({
+  return captureLog({
     eventType: LogEventTypes.ClientError,
     data: errorData,
   })
