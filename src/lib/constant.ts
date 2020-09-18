@@ -12,3 +12,7 @@ export const DEFAULT_RECOMMENDATION_RISK_PARAMS: RiskParams = {
   beta_params: [5, 2],
   kumr_params: [4, 5],
 }
+
+export enum LogEventTypes {
+  ClientWebVitals = "client_web_vitals",
+}

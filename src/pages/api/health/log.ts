@@ -7,13 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
-    const d = await dbClient.sdk.InsertEvent({
-      event: {
-        headers: req.headers,
-        event: req.body,
-      },
-    })
-    res.status(200).json({ status: "OK", data: d })
-  }
+  const d = await dbClient.logEvent(req.body, req.headers)
+  res.status(200).json({ status: "OK", data: d })
 }

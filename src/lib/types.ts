@@ -121,3 +121,8 @@ export type PortfolioUpdate = {
   shareDelta: number
   alias?: string
 }
+
+export type LogEvent = {
+  eventType: string
+  data: any
+}

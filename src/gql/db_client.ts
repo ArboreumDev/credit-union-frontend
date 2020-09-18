@@ -353,4 +353,14 @@ export class DbClient {
       borrowerInfo,
     }
   }
+
+  logEvent = async (event?: any, headers?: any) => {
+    const res = await this.sdk.InsertEvent({
+      event: {
+        headers: headers,
+        event: event,
+      },
+    })
+    return res.insert_events
+  }
 }

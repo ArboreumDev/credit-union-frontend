@@ -4,7 +4,8 @@ import { AppProps, NextWebVitalsMetric } from "next/app"
 import Head from "next/head"
 
 import { ChakraProvider } from "@chakra-ui/core"
-import { ANALYTICS_WEBSITE_IDS } from "../lib/constant"
+import { ANALYTICS_WEBSITE_IDS, LogEventTypes } from "../lib/constant"
+import { LogEvent } from "lib/types"
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -36,7 +37,21 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log(metric)
+  const event: LogEvent = {
+    eventType: LogEventTypes.ClientWebVitals,
+    data: { metric: metric, url: location.href, page: location.pathname },
+  }
+
+  console.log(event)
+
+  fetch("/api/health/log", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(event),
+  })
 }
 
 export default App
