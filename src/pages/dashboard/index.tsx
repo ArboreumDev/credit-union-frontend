@@ -67,6 +67,7 @@ export const getDashboardComponent = (user: User) => {
 
 const Dashboard = () => {
   const { user, mutate } = useUser()
+  console.log("dashboard", user)
 
   if (!user) return <AppBar />
 

@@ -6,8 +6,9 @@ import fetcher from "./api"
 
 // inspired by https://github.com/vercel/next.js/blob/7203f500916d336f4e1cbcd162baff624c9cd969/examples/with-iron-session/lib/useUser.js#L5
 function getRedirectLocation(session: Session, currentPage: string) {
+  console.log("redirect", session, currentPage)
   if (!session || !session.user) return "/"
-  console.log(session)
+
   const user = session.user
   if (!user.user_type) return "/onboarding"
   if (user.user_type) {
@@ -23,14 +24,16 @@ export default function useUser() {
   if (typeof window == "undefined") return {}
 
   const currentPage = window.location.pathname
+
   const session = data as Session
-
-  useEffect(() => {
-    if (session) {
-      const destination = getRedirectLocation(session, currentPage)
-      if (destination != currentPage) Router.push(destination)
+  if (session) {
+    const destination = getRedirectLocation(session, currentPage)
+    console.log("dest", destination)
+    if (destination != currentPage) {
+      Router.push(destination)
+      return {}
     }
-  }, [session])
+  }
 
-  return { user: session ? session.user : undefined, mutate }
+  return { user: data ? data.user : undefined, mutate }
 }
