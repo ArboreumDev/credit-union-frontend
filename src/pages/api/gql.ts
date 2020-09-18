@@ -19,7 +19,12 @@ export default async function handler(
     const session = (await getSession({ req })) as Session
     const { actionType, payload } = req.body as GqlRequest
     try {
-      const data = await runAction(actionType as ActionTypes, session, payload)
+      const data = await runAction(
+        actionType as ActionTypes,
+        session,
+        payload,
+        dbClient
+      )
       res.status(200).json(data)
     } catch (error) {
       res.status(401).json({ error })
