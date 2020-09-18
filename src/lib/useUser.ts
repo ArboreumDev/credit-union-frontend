@@ -33,5 +33,5 @@ export default function useUser() {
     }
   }
 
-  return { user: data ? data.user : undefined, mutate }
+  return { user: data ? data.user : undefined }
 }

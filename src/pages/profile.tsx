@@ -86,7 +86,7 @@ export const Profile = ({ user }: Props) => {
 }
 
 const ProfilePage = () => {
-  const { user, mutate } = useUser()
+  const { user } = useUser()
 
   if (!user) return <AppBar />
 
