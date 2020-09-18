@@ -6,6 +6,11 @@ import {
 import { NextApiRequest } from "next"
 import { Session, User } from "./types"
 
+export const ACTION_ERRORS = {
+  Unauthorized: new Error("Unauthorized"),
+  Invalid: new Error("Invalid"),
+}
+
 enum AUTH_TYPE {
   ANY,
   USER,
@@ -42,7 +47,7 @@ export abstract class Action {
   run() {
     if (this.isUserAllowed) {
       return this._run()
-    } else return Promise.reject()
+    } else return Promise.reject(ACTION_ERRORS.Unauthorized)
   }
 }
 
@@ -62,7 +67,7 @@ export class CreateUser extends Action {
   }
 }
 
-export class CreateLoanRequest extends Action {
+export class CreateLoan extends Action {
   minAuthLevel = AUTH_TYPE.USER
   private payload: Loan_Requests_Insert_Input
   constructor(
@@ -85,7 +90,7 @@ export class CreateLoanRequest extends Action {
 }
 
 export class LogEvent extends Action {
-  minAuthLevel = AUTH_TYPE.USER
+  minAuthLevel = AUTH_TYPE.ANY
   private payload: NextApiRequest
   constructor(session: Session, dbClient: DbClient, payload: NextApiRequest) {
     super(session, dbClient)
@@ -105,6 +110,24 @@ export enum ActionTypes {
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [ActionTypes.CreateUser]: CreateUser,
-  [ActionTypes.CreateLoan]: CreateLoanRequest,
+  [ActionTypes.CreateLoan]: CreateLoan,
   [ActionTypes.LogEvent]: LogEvent,
+}
+
+export function runAction(
+  actionType: ActionTypes,
+  session: Session,
+  payload: any,
+  dbClient: DbClient
+) {
+  const actionMap = {
+    [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
+    [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
+    [ActionTypes.LogEvent]: new LogEvent(session, dbClient, payload),
+  }
+  if (actionType in actionMap) {
+    const action = actionMap[actionType]
+    if (action.isUserAllowed()) return action.run()
+    else return Promise.reject(ACTION_ERRORS.Unauthorized)
+  } else return Promise.reject(ACTION_ERRORS.Invalid)
 }

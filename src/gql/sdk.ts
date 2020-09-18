@@ -1208,6 +1208,8 @@ export type Events = {
   event?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
   id: Scalars["uuid"]
+  /** An object relationship */
+  user?: Maybe<User>
   user_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -1270,6 +1272,7 @@ export type Events_Bool_Exp = {
   event?: Maybe<Jsonb_Comparison_Exp>
   headers?: Maybe<Jsonb_Comparison_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
+  user?: Maybe<User_Bool_Exp>
   user_id?: Maybe<Uuid_Comparison_Exp>
 }
 
@@ -1303,6 +1306,7 @@ export type Events_Insert_Input = {
   event?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
   id?: Maybe<Scalars["uuid"]>
+  user?: Maybe<User_Obj_Rel_Insert_Input>
   user_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -1364,6 +1368,7 @@ export type Events_Order_By = {
   event?: Maybe<Order_By>
   headers?: Maybe<Order_By>
   id?: Maybe<Order_By>
+  user?: Maybe<User_Order_By>
   user_id?: Maybe<Order_By>
 }
 
@@ -5389,6 +5394,10 @@ export type User = {
   encumbrances: Array<Encumbrances>
   /** An aggregated array relationship */
   encumbrances_aggregate: Encumbrances_Aggregate
+  /** An array relationship */
+  events: Array<Events>
+  /** An aggregated array relationship */
+  events_aggregate: Events_Aggregate
   id: Scalars["uuid"]
   kyc_approved?: Maybe<Scalars["Boolean"]>
   /** An array relationship */
@@ -5485,6 +5494,24 @@ export type UserEncumbrances_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Encumbrances_Order_By>>
   where?: Maybe<Encumbrances_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserEventsArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserEvents_AggregateArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
 }
 
 /** columns and relationships of "user" */
@@ -5700,6 +5727,7 @@ export type User_Bool_Exp = {
   edgesByLenderId?: Maybe<Edges_Bool_Exp>
   email?: Maybe<String_Comparison_Exp>
   encumbrances?: Maybe<Encumbrances_Bool_Exp>
+  events?: Maybe<Events_Bool_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
   kyc_approved?: Maybe<Boolean_Comparison_Exp>
   loan_participants?: Maybe<Loan_Participants_Bool_Exp>
@@ -5762,6 +5790,7 @@ export type User_Insert_Input = {
   edgesByLenderId?: Maybe<Edges_Arr_Rel_Insert_Input>
   email?: Maybe<Scalars["String"]>
   encumbrances?: Maybe<Encumbrances_Arr_Rel_Insert_Input>
+  events?: Maybe<Events_Arr_Rel_Insert_Input>
   id?: Maybe<Scalars["uuid"]>
   kyc_approved?: Maybe<Scalars["Boolean"]>
   loan_participants?: Maybe<Loan_Participants_Arr_Rel_Insert_Input>
@@ -5876,6 +5905,7 @@ export type User_Order_By = {
   edges_aggregate?: Maybe<Edges_Aggregate_Order_By>
   email?: Maybe<Order_By>
   encumbrances_aggregate?: Maybe<Encumbrances_Aggregate_Order_By>
+  events_aggregate?: Maybe<Events_Aggregate_Order_By>
   id?: Maybe<Order_By>
   kyc_approved?: Maybe<Order_By>
   loan_participants_aggregate?: Maybe<Loan_Participants_Aggregate_Order_By>
@@ -6245,6 +6275,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "corpus_share"
       | "created_at"
       | "kyc_approved"
+      | "demographic_info"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -6299,10 +6330,9 @@ export type InsertEventMutationVariables = Exact<{
 
 export type InsertEventMutation = { __typename?: "mutation_root" } & {
   insert_events_one?: Maybe<
-    { __typename?: "events" } & Pick<
-      Events,
-      "id" | "user_id" | "headers" | "event"
-    >
+    { __typename?: "events" } & Pick<Events, "id" | "headers" | "event"> & {
+        user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "email">>
+      }
   >
 }
 
@@ -6656,6 +6686,12 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
       "affected_rows"
     >
   >
+  delete_events?: Maybe<
+    { __typename?: "events_mutation_response" } & Pick<
+      Events_Mutation_Response,
+      "affected_rows"
+    >
+  >
 }
 
 export const ChangeUserCashBalanceDocument = gql`
@@ -6734,6 +6770,7 @@ export const GetUserByEmailDocument = gql`
       corpus_share
       created_at
       kyc_approved
+      demographic_info
       loan_requests {
         confirmation_date
         payback_status
@@ -6786,7 +6823,10 @@ export const InsertEventDocument = gql`
   mutation InsertEvent($event: events_insert_input!) {
     insert_events_one(object: $event) {
       id
-      user_id
+      user {
+        id
+        email
+      }
       headers
       event
     }
@@ -7064,6 +7104,9 @@ export const ResetDbDocument = gql`
       affected_rows
     }
     delete_user(where: {}) {
+      affected_rows
+    }
+    delete_events(where: {}) {
       affected_rows
     }
   }
