@@ -1,0 +1,9 @@
+mutation InsertEvent($event: events_insert_input!) {
+  insert_events(objects: [$event]) {
+    returning {
+      id,
+      headers,
+      event
+    }
+  }
+}

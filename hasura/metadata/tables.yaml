@@ -41,6 +41,9 @@
             name: encumbrance_participants
 - table:
     schema: public
+    name: events
+- table:
+    schema: public
     name: loan_participants
   object_relationships:
     - name: loan_request

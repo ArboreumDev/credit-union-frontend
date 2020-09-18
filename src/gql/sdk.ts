@@ -1201,6 +1201,207 @@ export type Encumbrances_Variance_Order_By = {
   pay_frequency?: Maybe<Order_By>
 }
 
+/** columns and relationships of "events" */
+export type Events = {
+  __typename?: "events"
+  created_at: Scalars["timestamptz"]
+  event?: Maybe<Scalars["jsonb"]>
+  headers?: Maybe<Scalars["jsonb"]>
+  id: Scalars["uuid"]
+}
+
+/** columns and relationships of "events" */
+export type EventsEventArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** columns and relationships of "events" */
+export type EventsHeadersArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** aggregated selection of "events" */
+export type Events_Aggregate = {
+  __typename?: "events_aggregate"
+  aggregate?: Maybe<Events_Aggregate_Fields>
+  nodes: Array<Events>
+}
+
+/** aggregate fields of "events" */
+export type Events_Aggregate_Fields = {
+  __typename?: "events_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Events_Max_Fields>
+  min?: Maybe<Events_Min_Fields>
+}
+
+/** aggregate fields of "events" */
+export type Events_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Events_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "events" */
+export type Events_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Events_Max_Order_By>
+  min?: Maybe<Events_Min_Order_By>
+}
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Events_Append_Input = {
+  event?: Maybe<Scalars["jsonb"]>
+  headers?: Maybe<Scalars["jsonb"]>
+}
+
+/** input type for inserting array relation for remote table "events" */
+export type Events_Arr_Rel_Insert_Input = {
+  data: Array<Events_Insert_Input>
+  on_conflict?: Maybe<Events_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "events". All fields are combined with a logical 'AND'. */
+export type Events_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Events_Bool_Exp>>>
+  _not?: Maybe<Events_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Events_Bool_Exp>>>
+  created_at?: Maybe<Timestamptz_Comparison_Exp>
+  event?: Maybe<Jsonb_Comparison_Exp>
+  headers?: Maybe<Jsonb_Comparison_Exp>
+  id?: Maybe<Uuid_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "events" */
+export enum Events_Constraint {
+  /** unique or primary key constraint */
+  EventsPkey = "events_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Events_Delete_At_Path_Input = {
+  event?: Maybe<Array<Maybe<Scalars["String"]>>>
+  headers?: Maybe<Array<Maybe<Scalars["String"]>>>
+}
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Events_Delete_Elem_Input = {
+  event?: Maybe<Scalars["Int"]>
+  headers?: Maybe<Scalars["Int"]>
+}
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Events_Delete_Key_Input = {
+  event?: Maybe<Scalars["String"]>
+  headers?: Maybe<Scalars["String"]>
+}
+
+/** input type for inserting data into table "events" */
+export type Events_Insert_Input = {
+  created_at?: Maybe<Scalars["timestamptz"]>
+  event?: Maybe<Scalars["jsonb"]>
+  headers?: Maybe<Scalars["jsonb"]>
+  id?: Maybe<Scalars["uuid"]>
+}
+
+/** aggregate max on columns */
+export type Events_Max_Fields = {
+  __typename?: "events_max_fields"
+  created_at?: Maybe<Scalars["timestamptz"]>
+  id?: Maybe<Scalars["uuid"]>
+}
+
+/** order by max() on columns of table "events" */
+export type Events_Max_Order_By = {
+  created_at?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Events_Min_Fields = {
+  __typename?: "events_min_fields"
+  created_at?: Maybe<Scalars["timestamptz"]>
+  id?: Maybe<Scalars["uuid"]>
+}
+
+/** order by min() on columns of table "events" */
+export type Events_Min_Order_By = {
+  created_at?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "events" */
+export type Events_Mutation_Response = {
+  __typename?: "events_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Events>
+}
+
+/** input type for inserting object relation for remote table "events" */
+export type Events_Obj_Rel_Insert_Input = {
+  data: Events_Insert_Input
+  on_conflict?: Maybe<Events_On_Conflict>
+}
+
+/** on conflict condition type for table "events" */
+export type Events_On_Conflict = {
+  constraint: Events_Constraint
+  update_columns: Array<Events_Update_Column>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** ordering options when selecting data from "events" */
+export type Events_Order_By = {
+  created_at?: Maybe<Order_By>
+  event?: Maybe<Order_By>
+  headers?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "events" */
+export type Events_Pk_Columns_Input = {
+  id: Scalars["uuid"]
+}
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Events_Prepend_Input = {
+  event?: Maybe<Scalars["jsonb"]>
+  headers?: Maybe<Scalars["jsonb"]>
+}
+
+/** select columns of table "events" */
+export enum Events_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Event = "event",
+  /** column name */
+  Headers = "headers",
+  /** column name */
+  Id = "id",
+}
+
+/** input type for updating data in table "events" */
+export type Events_Set_Input = {
+  created_at?: Maybe<Scalars["timestamptz"]>
+  event?: Maybe<Scalars["jsonb"]>
+  headers?: Maybe<Scalars["jsonb"]>
+  id?: Maybe<Scalars["uuid"]>
+}
+
+/** update columns of table "events" */
+export enum Events_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Event = "event",
+  /** column name */
+  Headers = "headers",
+  /** column name */
+  Id = "id",
+}
+
 /** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
   _eq?: Maybe<Scalars["float8"]>
@@ -2331,6 +2532,10 @@ export type Mutation_Root = {
   delete_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** delete single row from the table: "encumbrances" */
   delete_encumbrances_by_pk?: Maybe<Encumbrances>
+  /** delete data from the table: "events" */
+  delete_events?: Maybe<Events_Mutation_Response>
+  /** delete single row from the table: "events" */
+  delete_events_by_pk?: Maybe<Events>
   /** delete data from the table: "loan_participants" */
   delete_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** delete single row from the table: "loan_participants" */
@@ -2377,6 +2582,10 @@ export type Mutation_Root = {
   insert_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** insert a single row into the table: "encumbrances" */
   insert_encumbrances_one?: Maybe<Encumbrances>
+  /** insert data into the table: "events" */
+  insert_events?: Maybe<Events_Mutation_Response>
+  /** insert a single row into the table: "events" */
+  insert_events_one?: Maybe<Events>
   /** insert data into the table: "loan_participants" */
   insert_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** insert a single row into the table: "loan_participants" */
@@ -2423,6 +2632,10 @@ export type Mutation_Root = {
   update_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** update single row of the table: "encumbrances" */
   update_encumbrances_by_pk?: Maybe<Encumbrances>
+  /** update data of the table: "events" */
+  update_events?: Maybe<Events_Mutation_Response>
+  /** update single row of the table: "events" */
+  update_events_by_pk?: Maybe<Events>
   /** update data of the table: "loan_participants" */
   update_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** update single row of the table: "loan_participants" */
@@ -2486,6 +2699,16 @@ export type Mutation_RootDelete_EncumbrancesArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Encumbrances_By_PkArgs = {
   encumbrance_id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_EventsArgs = {
+  where: Events_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Events_By_PkArgs = {
+  id: Scalars["uuid"]
 }
 
 /** mutation root */
@@ -2605,6 +2828,18 @@ export type Mutation_RootInsert_EncumbrancesArgs = {
 export type Mutation_RootInsert_Encumbrances_OneArgs = {
   object: Encumbrances_Insert_Input
   on_conflict?: Maybe<Encumbrances_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_EventsArgs = {
+  objects: Array<Events_Insert_Input>
+  on_conflict?: Maybe<Events_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Events_OneArgs = {
+  object: Events_Insert_Input
+  on_conflict?: Maybe<Events_On_Conflict>
 }
 
 /** mutation root */
@@ -2743,6 +2978,28 @@ export type Mutation_RootUpdate_Encumbrances_By_PkArgs = {
   _inc?: Maybe<Encumbrances_Inc_Input>
   _set?: Maybe<Encumbrances_Set_Input>
   pk_columns: Encumbrances_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_EventsArgs = {
+  _append?: Maybe<Events_Append_Input>
+  _delete_at_path?: Maybe<Events_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Events_Delete_Elem_Input>
+  _delete_key?: Maybe<Events_Delete_Key_Input>
+  _prepend?: Maybe<Events_Prepend_Input>
+  _set?: Maybe<Events_Set_Input>
+  where: Events_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Events_By_PkArgs = {
+  _append?: Maybe<Events_Append_Input>
+  _delete_at_path?: Maybe<Events_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Events_Delete_Elem_Input>
+  _delete_key?: Maybe<Events_Delete_Key_Input>
+  _prepend?: Maybe<Events_Prepend_Input>
+  _set?: Maybe<Events_Set_Input>
+  pk_columns: Events_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -3382,6 +3639,12 @@ export type Query_Root = {
   encumbrances_aggregate: Encumbrances_Aggregate
   /** fetch data from the table: "encumbrances" using primary key columns */
   encumbrances_by_pk?: Maybe<Encumbrances>
+  /** fetch data from the table: "events" */
+  events: Array<Events>
+  /** fetch aggregated fields from the table: "events" */
+  events_aggregate: Events_Aggregate
+  /** fetch data from the table: "events" using primary key columns */
+  events_by_pk?: Maybe<Events>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -3500,6 +3763,29 @@ export type Query_RootEncumbrances_AggregateArgs = {
 /** query root */
 export type Query_RootEncumbrances_By_PkArgs = {
   encumbrance_id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootEventsArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootEvents_AggregateArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootEvents_By_PkArgs = {
+  id: Scalars["uuid"]
 }
 
 /** query root */
@@ -4358,6 +4644,12 @@ export type Subscription_Root = {
   encumbrances_aggregate: Encumbrances_Aggregate
   /** fetch data from the table: "encumbrances" using primary key columns */
   encumbrances_by_pk?: Maybe<Encumbrances>
+  /** fetch data from the table: "events" */
+  events: Array<Events>
+  /** fetch aggregated fields from the table: "events" */
+  events_aggregate: Events_Aggregate
+  /** fetch data from the table: "events" using primary key columns */
+  events_by_pk?: Maybe<Events>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -4476,6 +4768,29 @@ export type Subscription_RootEncumbrances_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootEncumbrances_By_PkArgs = {
   encumbrance_id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootEventsArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootEvents_AggregateArgs = {
+  distinct_on?: Maybe<Array<Events_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Events_Order_By>>
+  where?: Maybe<Events_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootEvents_By_PkArgs = {
+  id: Scalars["uuid"]
 }
 
 /** subscription root */
@@ -5965,6 +6280,20 @@ export type ApproveKycMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
 }
 
+export type InsertEventMutationVariables = Exact<{
+  event: Events_Insert_Input
+}>
+
+export type InsertEventMutation = { __typename?: "mutation_root" } & {
+  insert_events?: Maybe<
+    { __typename?: "events_mutation_response" } & {
+      returning: Array<
+        { __typename?: "events" } & Pick<Events, "id" | "headers" | "event">
+      >
+    }
+  >
+}
+
 export type AddSupportersMutationVariables = Exact<{
   supporters: Array<Supporters_Insert_Input>
 }>
@@ -6441,6 +6770,17 @@ export const ApproveKycDocument = gql`
     }
   }
 `
+export const InsertEventDocument = gql`
+  mutation InsertEvent($event: events_insert_input!) {
+    insert_events(objects: [$event]) {
+      returning {
+        id
+        headers
+        event
+      }
+    }
+  }
+`
 export const AddSupportersDocument = gql`
   mutation AddSupporters($supporters: [supporters_insert_input!]!) {
     supporters: insert_supporters(objects: $supporters) {
@@ -6785,6 +7125,16 @@ export function getSdk(
     ): Promise<ApproveKycMutation> {
       return withWrapper(() =>
         client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
+      )
+    },
+    InsertEvent(
+      variables: InsertEventMutationVariables
+    ): Promise<InsertEventMutation> {
+      return withWrapper(() =>
+        client.request<InsertEventMutation>(
+          print(InsertEventDocument),
+          variables
+        )
       )
     },
     AddSupporters(
