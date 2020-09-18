@@ -27,7 +27,7 @@ export const getAuthTypeFromEmail = (email: string) => {
 const dbClient = new DbClient()
 
 export abstract class Action {
-  constructor(private session: Session) {}
+  constructor(protected session: Session) {}
 
   abstract minAuthLevel: AUTH_TYPE
   abstract _run(): Promise<any>
