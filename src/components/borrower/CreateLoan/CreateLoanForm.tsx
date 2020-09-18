@@ -18,7 +18,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 type FormData = {
-  amount: number
+  loanAmount: number
   purpose: string
   loanSupporters: string
 }
@@ -35,7 +35,7 @@ export default function CreateLoanForm({ user }: Props) {
     console.log(data)
     const payload: Loan_Requests_Insert_Input = {
       borrower_id: user.id,
-      amount: data.amount,
+      amount: data.loanAmount,
       purpose: data.purpose,
     }
     // Call mutation
@@ -51,17 +51,22 @@ export default function CreateLoanForm({ user }: Props) {
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container minW="300px" bg="white">
           <Stack spacing={3}>
-            <AmountInput passRef={register({ required: true })} />
+            <AmountInput
+              passName="loanAmount"
+              passRef={register({ required: true })}
+            />
             <Select
               name="purpose"
               placeholder="Choose loan purpose"
               ref={register({ required: false })}
             >
-              <option value="School">Educational expense</option>
-              <option value="Auto">Home repair/ renovation</option>
-              <option value="Other">Medical expenses</option>
-              <option value="Other">Wedding in family</option>
-              <option value="Other">Business activity</option>
+              <option value="Educational expense">Educational expense</option>
+              <option value="Home repair/ renovation">
+                Home repair/ renovation
+              </option>
+              <option value="Medical expenses">Medical expenses</option>
+              <option value="Wedding in family">Wedding in family</option>
+              <option value="Business activity">Business activity</option>
               <option value="Other">Other</option>
             </Select>
             <Box h="10px" />
@@ -75,7 +80,7 @@ export default function CreateLoanForm({ user }: Props) {
                   <Box flex={1}>
                     <Input
                       placeholder="Name"
-                      name="Supporter's name"
+                      name={`supporter_${idx}_name`}
                       size="lg"
                       ref={register({ required: true })}
                     />
@@ -83,14 +88,17 @@ export default function CreateLoanForm({ user }: Props) {
                   <Box flex={1}>
                     <Input
                       placeholder="Email"
-                      name="email"
+                      name={`supporter_${idx}_email`}
                       size="lg"
                       ref={register({ required: true })}
                     />
                   </Box>
                 </Flex>
                 <Center flex={0.5}>
-                  <AmountInput passRef={register({ required: true })} />
+                  <AmountInput
+                    passName={`supporter_${idx}_amount`}
+                    passRef={register({ required: true })}
+                  />
                 </Center>
               </Stack>
             ))}
