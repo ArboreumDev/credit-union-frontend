@@ -1,4 +1,5 @@
 import { GetUserByEmailQuery } from "../gql/sdk"
+import { LogEventTypes } from "./constant"
 
 export type Session = {
   user: User
@@ -121,6 +122,6 @@ export type PortfolioUpdate = {
 }
 
 export type LogEvent = {
-  eventType: string
+  eventType: LogEventTypes
   data: any
 }
