@@ -97,7 +97,11 @@ export class LogEvent extends Action {
     this.payload = payload
   }
   _run() {
-    return this.dbClient.logEvent(this.payload.body, this.payload.headers)
+    return this.dbClient.logEvent(
+      this.payload.body,
+      this.payload.headers,
+      this.session.user.id
+    )
   }
 }
 
