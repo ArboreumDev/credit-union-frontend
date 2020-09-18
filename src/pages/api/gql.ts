@@ -3,7 +3,7 @@ import {
   ACTIONS,
   ActionTypes,
   CreateUser,
-  CreateLoanRequest,
+  CreateLoanRequest as CreateLoan,
   LogEvent,
 } from "lib/gql_api_actions"
 import { NextApiRequest, NextApiResponse } from "next"
@@ -14,6 +14,8 @@ import {
   Loan_Requests_Insert_Input,
 } from "../../gql/sdk"
 import { Session, User } from "../../lib/types"
+
+const dbClient = new DbClient()
 
 type GqlRequest = {
   actionType: string
@@ -26,9 +28,9 @@ export function runAction(
   payload: any
 ) {
   const actionMap = {
-    [ActionTypes.CreateUser]: new CreateUser(session, payload),
-    [ActionTypes.CreateLoanRequest]: new CreateLoanRequest(session, payload),
-    [ActionTypes.LogEvent]: new LogEvent(session, payload),
+    [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
+    [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
+    [ActionTypes.LogEvent]: new LogEvent(session, dbClient, payload),
   }
   if (actionType in actionMap) {
     const action = actionMap[actionType]
