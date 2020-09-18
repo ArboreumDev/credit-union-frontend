@@ -1208,6 +1208,7 @@ export type Events = {
   event?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
   id: Scalars["uuid"]
+  user_id?: Maybe<Scalars["uuid"]>
 }
 
 /** columns and relationships of "events" */
@@ -1269,6 +1270,7 @@ export type Events_Bool_Exp = {
   event?: Maybe<Jsonb_Comparison_Exp>
   headers?: Maybe<Jsonb_Comparison_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
+  user_id?: Maybe<Uuid_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "events" */
@@ -1301,6 +1303,7 @@ export type Events_Insert_Input = {
   event?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
   id?: Maybe<Scalars["uuid"]>
+  user_id?: Maybe<Scalars["uuid"]>
 }
 
 /** aggregate max on columns */
@@ -1308,12 +1311,14 @@ export type Events_Max_Fields = {
   __typename?: "events_max_fields"
   created_at?: Maybe<Scalars["timestamptz"]>
   id?: Maybe<Scalars["uuid"]>
+  user_id?: Maybe<Scalars["uuid"]>
 }
 
 /** order by max() on columns of table "events" */
 export type Events_Max_Order_By = {
   created_at?: Maybe<Order_By>
   id?: Maybe<Order_By>
+  user_id?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
@@ -1321,12 +1326,14 @@ export type Events_Min_Fields = {
   __typename?: "events_min_fields"
   created_at?: Maybe<Scalars["timestamptz"]>
   id?: Maybe<Scalars["uuid"]>
+  user_id?: Maybe<Scalars["uuid"]>
 }
 
 /** order by min() on columns of table "events" */
 export type Events_Min_Order_By = {
   created_at?: Maybe<Order_By>
   id?: Maybe<Order_By>
+  user_id?: Maybe<Order_By>
 }
 
 /** response of any mutation on the table "events" */
@@ -1357,6 +1364,7 @@ export type Events_Order_By = {
   event?: Maybe<Order_By>
   headers?: Maybe<Order_By>
   id?: Maybe<Order_By>
+  user_id?: Maybe<Order_By>
 }
 
 /** primary key columns input for table: "events" */
@@ -1380,6 +1388,8 @@ export enum Events_Select_Column {
   Headers = "headers",
   /** column name */
   Id = "id",
+  /** column name */
+  UserId = "user_id",
 }
 
 /** input type for updating data in table "events" */
@@ -1388,6 +1398,7 @@ export type Events_Set_Input = {
   event?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
   id?: Maybe<Scalars["uuid"]>
+  user_id?: Maybe<Scalars["uuid"]>
 }
 
 /** update columns of table "events" */
@@ -1400,6 +1411,8 @@ export enum Events_Update_Column {
   Headers = "headers",
   /** column name */
   Id = "id",
+  /** column name */
+  UserId = "user_id",
 }
 
 /** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
@@ -6286,7 +6299,10 @@ export type InsertEventMutationVariables = Exact<{
 
 export type InsertEventMutation = { __typename?: "mutation_root" } & {
   insert_events_one?: Maybe<
-    { __typename?: "events" } & Pick<Events, "id" | "headers" | "event">
+    { __typename?: "events" } & Pick<
+      Events,
+      "id" | "user_id" | "headers" | "event"
+    >
   >
 }
 
@@ -6770,6 +6786,7 @@ export const InsertEventDocument = gql`
   mutation InsertEvent($event: events_insert_input!) {
     insert_events_one(object: $event) {
       id
+      user_id
       headers
       event
     }
