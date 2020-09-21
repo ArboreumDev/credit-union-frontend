@@ -1,7 +1,15 @@
 import Link from "next/link"
 
 import React from "react"
-import { Box, Heading, Flex, Text, Button, Center } from "@chakra-ui/core"
+import {
+  Box,
+  Heading,
+  Flex,
+  Text,
+  Button,
+  Center,
+  HStack,
+} from "@chakra-ui/core"
 import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
 
@@ -25,13 +33,15 @@ const AppBar = () => (
       </Link>
     </Flex>
     <Box flex="1"></Box>
-    {/* <Box>
+    <HStack>
       <Link href="/profile">
-        <Text align="right" padding="0px" margin="0px" fontSize="3xl">
-          <CgProfile />
-        </Text>
+        <Button>Feedback</Button>
       </Link>
-    </Box> */}
+      <Link href="/profile">
+        <Button variant="ghost">Support</Button>
+      </Link>
+    </HStack>
+
     <style jsx>
       {`
         button {
