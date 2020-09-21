@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/core"
 import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
+import FeedbackPopover from "./FeedbackPopover"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (
@@ -35,7 +36,7 @@ const AppBar = () => (
     <Box flex="1"></Box>
     <HStack>
       <Link href="/profile">
-        <Button>Feedback</Button>
+        <FeedbackPopover />
       </Link>
       <Link href="/profile">
         <Button variant="ghost">Support</Button>

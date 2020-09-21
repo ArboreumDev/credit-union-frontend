@@ -17,4 +17,5 @@ export enum LogEventTypes {
   ClientWebVitals = "client_web_vitals",
   ClientError = "client_error",
   ClientLog = "client_log",
+  ClientFeedback = "client_feedback",
 }

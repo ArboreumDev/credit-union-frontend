@@ -1,3 +1,4 @@
+import { stringList } from "aws-sdk/clients/datapipeline"
 import { LogEventTypes } from "./constant"
 import { LogEvent } from "./types"
 
@@ -40,6 +41,15 @@ export async function captureLog(event: LogEvent) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(event),
+  })
+}
+
+export async function captureFeedback(message: string) {
+  return captureLog({
+    eventType: LogEventTypes.ClientFeedback,
+    data: {
+      message: message,
+    },
   })
 }
 
