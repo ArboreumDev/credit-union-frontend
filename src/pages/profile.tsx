@@ -39,7 +39,6 @@ export const Profile = ({ user }: Props) => {
 
   return (
     <div>
-      <AppBar />
       <Container>
         <Stack>
           <Center>{user.name}</Center>
@@ -90,7 +89,12 @@ const ProfilePage = () => {
 
   if (!user) return <AppBar />
 
-  return <Profile user={user} />
+  return (
+    <div>
+      <AppBar />
+      <Profile user={user} />
+    </div>
+  )
 }
 
 export default ProfilePage
