@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
+import AmountInput from "components/common/AmountInput"
 import AppBar from "components/common/AppBar"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
@@ -42,20 +43,15 @@ export function AddFundsForm({ user }: Props) {
 
   return (
     <Box>
-      <AppBar />
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container minW="300px" bg="white">
           <Stack spacing={3}>
             <Center>
-              <Heading>Deposit funds</Heading>
+              <Heading>Invest Money</Heading>
             </Center>
-
-            <Input
-              placeholder="Amount (₹)"
-              name="amount"
-              size="lg"
-              ref={register({ required: true })}
-            />
+            <Box h="30px" />
+            <Text>How much money would you like to invest?</Text>
+            <AmountInput passRef={register({ required: true })} />
 
             <Box h="30px" />
             <Text>
@@ -80,7 +76,12 @@ const AddFundsPage = () => {
   const { user } = useUser()
   if (!user) return <AppBar />
 
-  return <AddFundsForm user={user} />
+  return (
+    <div>
+      <AppBar />
+      <AddFundsForm user={user} />
+    </div>
+  )
 }
 
 export default AddFundsPage
