@@ -6680,15 +6680,15 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
       "affected_rows"
     >
   >
-  delete_user?: Maybe<
-    { __typename?: "user_mutation_response" } & Pick<
-      User_Mutation_Response,
-      "affected_rows"
-    >
-  >
   delete_events?: Maybe<
     { __typename?: "events_mutation_response" } & Pick<
       Events_Mutation_Response,
+      "affected_rows"
+    >
+  >
+  delete_user?: Maybe<
+    { __typename?: "user_mutation_response" } & Pick<
+      User_Mutation_Response,
       "affected_rows"
     >
   >
@@ -7103,10 +7103,10 @@ export const ResetDbDocument = gql`
     delete_edges(where: {}) {
       affected_rows
     }
-    delete_user(where: {}) {
+    delete_events(where: {}) {
       affected_rows
     }
-    delete_events(where: {}) {
+    delete_user(where: {}) {
       affected_rows
     }
   }

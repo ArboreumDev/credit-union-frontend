@@ -43,7 +43,8 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
     data: { metric: metric, url: location.href, page: location.pathname },
   }
 
-  captureLog(event)
+  // Uncomment to send metrics to server
+  // captureLog(event)
 }
 
 export default App

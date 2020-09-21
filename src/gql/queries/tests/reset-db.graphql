@@ -29,10 +29,10 @@ mutation ResetDB {
   delete_edges(where: {}) {
     affected_rows
   }
-  delete_user(where: {}) {
+  delete_events(where: {}) {
     affected_rows
   }
-  delete_events(where: {}) {
+  delete_user(where: {}) {
     affected_rows
   }
 }

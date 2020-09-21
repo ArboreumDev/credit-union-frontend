@@ -352,14 +352,14 @@ export class DbClient {
     }
   }
 
-  logEvent = async (event?: LogEvent, headers?: any, userId?: string) => {
-    const res = await this.sdk.InsertEvent({
-      event: {
-        headers: headers,
-        event: event,
-        user_id: userId,
-      },
-    })
+  logEvent = async (eventData?: LogEvent, headers?: any, userId?: string) => {
+    const event = {
+      headers: headers,
+      event: eventData,
+      user_id: userId,
+    }
+    const res = await this.sdk.InsertEvent({ event })
+    // console.log("LogEvent - ", event)
     return res.insert_events_one
   }
 }
