@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
-import AppBar from "components/common/AppBar"
+import AppBar from "components/common/nav/AppBar"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"

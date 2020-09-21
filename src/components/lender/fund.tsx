@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import AppBar from "components/common/AppBar"
+import AppBar from "components/common/nav/AppBar"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
 import { useState } from "react"

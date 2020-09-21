@@ -2,7 +2,7 @@ import { Center } from "@chakra-ui/core"
 import useUser from "lib/useUser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
-import AppBar from "../../components/common/AppBar"
+import AppBar from "../../components/common/nav/AppBar"
 import { User, UserType } from "../../lib/types"
 
 const getLenderDashboard = (user: User) => {
