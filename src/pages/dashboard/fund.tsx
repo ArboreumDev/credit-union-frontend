@@ -54,17 +54,23 @@ export function AddFundsForm({ user }: Props) {
             />
 
             <Box h="30px" />
-            <ul>
-              <li>The amount will be invested in several loans.</li>
-              <li>
-                Funds once invested, cannot be withdrawn before payback is
-                complete.
-              </li>
-              <li>
-                An any point in time, you may withdraw un-invested funds from
-                your account.
-              </li>
-            </ul>
+            <Box padding="20px">
+              <ul>
+                <li>
+                  The amount invested will automatically be allocated towards
+                  several loans.
+                </li>
+                <li>
+                  Funds once invested, cannot be withdrawn before payback is
+                  complete.
+                </li>
+                <li>
+                  An any point in time, you may withdraw un-invested funds from
+                  your account.
+                </li>
+              </ul>
+            </Box>
+
             <Box h="30px" />
             <Center>
               <Button type="submit">Submit</Button>
