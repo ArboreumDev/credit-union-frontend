@@ -22,7 +22,7 @@ import {
   Wrap,
 } from "@chakra-ui/core"
 import { Column, Row, Table } from "components/common/Table"
-import { AddFundsForm } from "pages/dashboard/fund"
+import { AddFundsForm } from "components/lender/fund"
 import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"

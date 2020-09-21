@@ -8,7 +8,7 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/core"
-import { AddFundsForm } from "pages/dashboard/fund"
+import { AddFundsForm } from "components/lender/fund"
 import { Profile } from "pages/profile"
 import BActiveLoan from "components/borrower/BOngoingLoan"
 import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"

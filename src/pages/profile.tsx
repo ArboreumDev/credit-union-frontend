@@ -39,9 +39,9 @@ export const Profile = ({ user }: Props) => {
 
   return (
     <Stack>
-      <Center>{user.name}</Center>
-      <Center>{user.email}</Center>
-      <Center>{user.phone}</Center>
+      <Text>{user.name}</Text>
+      <Text>{user.email}</Text>
+      <Text>{user.phone}</Text>
       <Box h="10px" />
       <Divider />
       <Box>
