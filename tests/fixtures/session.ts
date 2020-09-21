@@ -1,7 +1,7 @@
 import { User_Insert_Input } from "gql/sdk"
 import { Session } from "lib/types"
 
-export function getDummySession(user: User_Insert_Input): Session {
+export function getMockSession(user: User_Insert_Input): Session {
   return {
     accessToken: null,
     expires: null,
