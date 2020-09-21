@@ -76,7 +76,7 @@ const LenderDashboard = ({ user }: Props) => (
       <Box h="20px" />
       <Stack spacing={6}>
         <Flex>
-          <Box flex={0.5}>Wallet</Box>
+          <Box flex={0.5}>Uninvested</Box>
           <Box flex={0.5} textAlign="center">
             <Currency amount={20000} />
           </Box>

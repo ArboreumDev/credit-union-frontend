@@ -35,7 +35,7 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       marginTop="20px"
       marginBottom="20px"
     >
-      <AlertIcon boxSize="40px" mr={0} />
+      {/* <AlertIcon boxSize="40px" mr={0} /> */}
       <AlertTitle mt={4} mb={1} fontSize="lg">
         New Pledge Request
       </AlertTitle>
