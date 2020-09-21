@@ -162,9 +162,6 @@ export default function Onboarding({ user, userType }: Params) {
               <Button type="submit">Submit</Button>
             </Center>
             <Box h={30} />
-            <Center>
-              <a href="/api/auth/signout">Logout</a>
-            </Center>
           </Stack>
         </Container>
       </form>
