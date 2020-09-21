@@ -1,34 +1,17 @@
 import {
   Box,
-  Center,
-  CircularProgress,
-  CircularProgressLabel,
   Flex,
   Heading,
   HStack,
   Progress,
-  SimpleGrid,
   Stack,
   Stat,
-  StatHelpText,
   StatLabel,
   StatNumber,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
-  Wrap,
 } from "@chakra-ui/core"
-import { Column, Row, Table } from "components/common/Table"
-import { AddFundsForm } from "components/lender/fund"
-import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
-import DynamicDoughnut from "../dashboard/doughnut"
-import LineChart from "../dashboard/linechart"
-import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 
 interface Props {
   user: User
@@ -75,95 +58,64 @@ const PledgeInvestments = () => (
   </Stack>
 )
 
-const LenderDashboard = ({ user }: Props) => {
-  const pledgeRequests = user.pledge_requests
-
-  return (
-    <Box margin="20px">
-      <Tabs>
-        <TabList>
-          <Tab>Dashboard</Tab>
-          <Tab>Invest</Tab>
-          <Tab>Account</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <Stack maxW="lg" spacing={10}>
-              {pledgeRequests.map((pr, idx) => (
-                <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
-              ))}
-              <Box />
-              <HStack spacing={20}>
-                <Stat>
-                  <StatLabel fontSize="lg">Total Assets</StatLabel>
-                  <StatNumber fontSize="3xl">₹12000.00</StatNumber>
-                </Stat>
-                <Stat>
-                  <StatLabel fontSize="lg">APY</StatLabel>
-                  <StatNumber fontSize="3xl">4.50%</StatNumber>
-                </Stat>
-              </HStack>
-              <Box>
-                <Heading size="sm">Asset Allocation</Heading>
-                <Box h="20px" />
-                <Stack spacing={6}>
-                  <Flex>
-                    <Box flex={0.5}>Wallet</Box>
-                    <Box flex={0.5} textAlign="center">
-                      <Currency amount={20000} />
-                    </Box>
-                    <Box flex={1}>
-                      <Progress h="20px" value={20} />
-                    </Box>
-                    <Box flex={0.3} textAlign="right">
-                      20%
-                    </Box>
-                  </Flex>
-                  <Flex>
-                    <Box flex={0.5}>Invested</Box>
-                    <Box flex={0.5} textAlign="center">
-                      <Currency amount={50000} />
-                    </Box>
-                    <Box flex={1}>
-                      <Progress h="20px" value={50} />
-                    </Box>
-                    <Box flex={0.3} textAlign="right">
-                      50%
-                    </Box>
-                  </Flex>
-                  <Flex>
-                    <Box flex={0.5}>Pledged</Box>
-                    <Box flex={0.5} textAlign="center">
-                      <Currency amount={30000} />
-                    </Box>
-                    <Box flex={1}>
-                      <Progress h="20px" value={30} />
-                    </Box>
-                    <Box flex={0.3} textAlign="right">
-                      30%
-                    </Box>
-                  </Flex>
-                </Stack>
-              </Box>
-              <Box>
-                <PledgeInvestments />
-              </Box>
-            </Stack>
-          </TabPanel>
-          <TabPanel>
-            <Box maxW="lg">
-              <AddFundsForm user={user} />
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <Box maxW="lg">
-              <Profile user={user} />
-            </Box>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+const LenderDashboard = ({ user }: Props) => (
+  <Stack maxW="lg" spacing={10}>
+    <Box />
+    <HStack spacing={20}>
+      <Stat>
+        <StatLabel fontSize="lg">Total Assets</StatLabel>
+        <StatNumber fontSize="3xl">₹12000.00</StatNumber>
+      </Stat>
+      <Stat>
+        <StatLabel fontSize="lg">APY</StatLabel>
+        <StatNumber fontSize="3xl">4.50%</StatNumber>
+      </Stat>
+    </HStack>
+    <Box>
+      <Heading size="sm">Asset Allocation</Heading>
+      <Box h="20px" />
+      <Stack spacing={6}>
+        <Flex>
+          <Box flex={0.5}>Wallet</Box>
+          <Box flex={0.5} textAlign="center">
+            <Currency amount={20000} />
+          </Box>
+          <Box flex={1}>
+            <Progress h="20px" value={20} />
+          </Box>
+          <Box flex={0.3} textAlign="right">
+            20%
+          </Box>
+        </Flex>
+        <Flex>
+          <Box flex={0.5}>Invested</Box>
+          <Box flex={0.5} textAlign="center">
+            <Currency amount={50000} />
+          </Box>
+          <Box flex={1}>
+            <Progress h="20px" value={50} />
+          </Box>
+          <Box flex={0.3} textAlign="right">
+            50%
+          </Box>
+        </Flex>
+        <Flex>
+          <Box flex={0.5}>Pledged</Box>
+          <Box flex={0.5} textAlign="center">
+            <Currency amount={30000} />
+          </Box>
+          <Box flex={1}>
+            <Progress h="20px" value={30} />
+          </Box>
+          <Box flex={0.3} textAlign="right">
+            30%
+          </Box>
+        </Flex>
+      </Stack>
     </Box>
-  )
-}
-
+    <Box>
+      <PledgeInvestments />
+    </Box>
+  </Stack>
+)
 export default LenderDashboard

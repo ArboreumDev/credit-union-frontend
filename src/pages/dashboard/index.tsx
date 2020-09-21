@@ -3,14 +3,11 @@ import useUser from "lib/useUser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
 import AppBar from "../../components/common/AppBar"
-import Contactus from "../../components/common/ContactUs"
 import { User, UserType } from "../../lib/types"
 
 const getLenderDashboard = (user: User) => {
-  const LenderDashboard = dynamic(() =>
-    import("components/lender/LenderDashboard")
-  )
-  return <LenderDashboard user={user} />
+  const LenderHome = dynamic(() => import("components/lender/LenderHome"))
+  return <LenderHome user={user} />
 }
 
 const getBorrowerDashboard = (user: User) => {
