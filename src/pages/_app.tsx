@@ -4,7 +4,7 @@ import { AppProps } from "next/app"
 import Head from "next/head"
 
 import { ChakraProvider } from "@chakra-ui/core"
-import { ANALYTICS_WEBSITE_IDS } from "../lib/constant"
+import { ANALYTICS_WEBSITE_IDS, LAST_REDIRECT_PAGE } from "../lib/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -25,6 +25,21 @@ function App({ Component, pageProps }: AppProps) {
             src="/umami.js"
           />
         )} */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `
+        lastRedirect = localStorage.getItem('` +
+              LAST_REDIRECT_PAGE +
+              `');
+        currentPage = location.pathname;
+        if (lastRedirect && lastRedirect != currentPage) {
+          console.log('redirect',currentPage, lastRedirect)
+          window.location.href = lastRedirect
+        }
+        `,
+          }}
+        />
       </Head>
 
       <div>

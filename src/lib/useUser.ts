@@ -1,8 +1,9 @@
 import { useEffect } from "react"
-import Router from "next/router"
 import useSWR from "swr"
 import { Session, User } from "./types"
 import fetcher from "./api"
+import { LAST_REDIRECT_PAGE } from "lib/constant"
+import { useRouter } from "next/router"
 
 // inspired by https://github.com/vercel/next.js/blob/7203f500916d336f4e1cbcd162baff624c9cd969/examples/with-iron-session/lib/useUser.js#L5
 function getRedirectLocation(session: Session, currentPage: string) {
@@ -18,7 +19,9 @@ function getRedirectLocation(session: Session, currentPage: string) {
 }
 
 export default function useUser() {
+  // Fast redirect from home
   const { data, mutate } = useSWR("/api/auth/session", fetcher)
+  const router = useRouter()
 
   if (typeof window == "undefined") return {}
 
@@ -28,7 +31,10 @@ export default function useUser() {
   useEffect(() => {
     if (session) {
       const destination = getRedirectLocation(session, currentPage)
-      if (destination != currentPage) Router.push(destination)
+      if (destination != currentPage) {
+        localStorage.setItem(LAST_REDIRECT_PAGE, destination)
+        router.push(destination)
+      }
     }
   }, [session])
 
