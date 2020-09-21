@@ -53,9 +53,9 @@ const getOngoingPledges = () => [
 
 const PledgeInvestments = () => (
   <Stack spacing="15px" minW="280px">
-    <Center>
+    <Box>
       <Heading size="sm">You have {5} ongoing pledge investments:</Heading>
-    </Center>
+    </Box>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
         <Center flex="1">
@@ -109,7 +109,8 @@ const LenderDashboard = ({ user }: Props) => {
                   <StatNumber>4.50%</StatNumber>
                 </Stat>
               </HStack>
-              <Box>
+              <Wrap></Wrap>
+              <Box maxW="300px">
                 <Heading size="sm">Assets</Heading>
                 <Box h="20px" />
                 <Stack>
@@ -134,7 +135,7 @@ const LenderDashboard = ({ user }: Props) => {
                 </Stack>
               </Box>
 
-              <Box>
+              <Box maxW="300px">
                 <Heading size="sm">Asset Allocation</Heading>
                 <Box h="20px" />
                 <Stack>
@@ -167,7 +168,7 @@ const LenderDashboard = ({ user }: Props) => {
                   </Flex>
                 </Stack>
               </Box>
-              <Box>
+              <Box maxW="300px">
                 <PledgeInvestments />
               </Box>
             </Stack>
