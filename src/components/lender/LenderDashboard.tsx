@@ -79,7 +79,7 @@ const LenderDashboard = ({ user }: Props) => {
   const pledgeRequests = user.pledge_requests
 
   return (
-    <Box maxW="lg" margin="20px">
+    <Box margin="20px">
       <Tabs>
         <TabList>
           <Tab>Dashboard</Tab>
@@ -88,7 +88,7 @@ const LenderDashboard = ({ user }: Props) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Stack spacing={10}>
+            <Stack maxW="lg" spacing={10}>
               {pledgeRequests.map((pr, idx) => (
                 <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
               ))}
@@ -151,10 +151,14 @@ const LenderDashboard = ({ user }: Props) => {
             </Stack>
           </TabPanel>
           <TabPanel>
-            <AddFundsForm user={user} />
+            <Box maxW="lg">
+              <AddFundsForm user={user} />
+            </Box>
           </TabPanel>
           <TabPanel>
-            <Profile user={user} />
+            <Box maxW="lg">
+              <Profile user={user} />
+            </Box>
           </TabPanel>
         </TabPanels>
       </Tabs>
