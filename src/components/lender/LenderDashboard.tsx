@@ -4,13 +4,26 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Flex,
+  Heading,
+  HStack,
+  Progress,
+  SimpleGrid,
   Stack,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   Wrap,
-  HStack,
-  Button,
 } from "@chakra-ui/core"
-import Link from "next/link"
+import { Column, Row, Table } from "components/common/Table"
+import { AddFundsForm } from "pages/dashboard/fund"
+import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import DynamicDoughnut from "../dashboard/doughnut"
@@ -40,7 +53,9 @@ const getOngoingPledges = () => [
 
 const PledgeInvestments = () => (
   <Stack spacing="15px" minW="280px">
-    <Center>You have {5} ongoing pledge investments:</Center>
+    <Center>
+      <Heading size="sm">You have {5} ongoing pledge investments:</Heading>
+    </Center>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
         <Center flex="1">
@@ -68,32 +83,104 @@ const PledgeInvestments = () => (
 )
 
 const LenderDashboard = ({ user }: Props) => {
-  const pledgeRequests = user.pledge_requests // TODO change query to get lender_loan_requests
+  const pledgeRequests = user.pledge_requests
 
   return (
-    <Stack padding="20px" spacing="20px">
-      {pledgeRequests.map((pr, idx) => (
-        <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
-      ))}
-      <Center>
-        <HStack>
-          <Link href="/dashboard/fund">
-            <Button>Add funds</Button>
-          </Link>
-          <Button>Withdraw funds</Button>
-        </HStack>
-      </Center>
-      <Center>
-        <Wrap w="100%" spacing="30px" justify="center">
-          <DynamicDoughnut />
-          <LineChart />
-        </Wrap>
-      </Center>
+    <Box margin="20px">
+      <Tabs>
+        <TabList>
+          <Tab>Dashboard</Tab>
+          <Tab>Invest</Tab>
+          <Tab>Account</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Stack spacing={6}>
+              {pledgeRequests.map((pr, idx) => (
+                <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
+              ))}
+              <HStack spacing={8}>
+                <Stat>
+                  <StatLabel>Total Assets</StatLabel>
+                  <StatNumber>₹12000.00</StatNumber>
+                </Stat>
+                <Stat>
+                  <StatLabel>APY</StatLabel>
+                  <StatNumber>4.50%</StatNumber>
+                </Stat>
+              </HStack>
+              <Box>
+                <Heading size="sm">Assets</Heading>
+                <Box h="20px" />
+                <Stack>
+                  <Flex>
+                    <Box flex={0.5}>Wallet</Box>
+                    <Box flex={0.5} textAlign="right">
+                      <Currency amount={20000} />
+                    </Box>
+                  </Flex>
+                  <Flex>
+                    <Box flex={0.5}>Invested</Box>
+                    <Box flex={0.5} textAlign="right">
+                      <Currency amount={50000} />
+                    </Box>
+                  </Flex>
+                  <Flex>
+                    <Box flex={0.5}>Pledged</Box>
+                    <Box flex={0.5} textAlign="right">
+                      <Currency amount={30000} />
+                    </Box>
+                  </Flex>
+                </Stack>
+              </Box>
 
-      <Center>
-        <PledgeInvestments />
-      </Center>
-    </Stack>
+              <Box>
+                <Heading size="sm">Asset Allocation</Heading>
+                <Box h="20px" />
+                <Stack>
+                  <Flex>
+                    <Box flex={0.5}>Wallet</Box>
+                    <Box flex={1}>
+                      <Progress h="20px" value={20} />
+                    </Box>
+                    <Box flex={0.3} textAlign="right">
+                      20%
+                    </Box>
+                  </Flex>
+                  <Flex>
+                    <Box flex={0.5}>Invested</Box>
+                    <Box flex={1}>
+                      <Progress h="20px" value={50} />
+                    </Box>
+                    <Box flex={0.3} textAlign="right">
+                      50%
+                    </Box>
+                  </Flex>
+                  <Flex>
+                    <Box flex={0.5}>Pledged</Box>
+                    <Box flex={1}>
+                      <Progress h="20px" value={30} />
+                    </Box>
+                    <Box flex={0.3} textAlign="right">
+                      30%
+                    </Box>
+                  </Flex>
+                </Stack>
+              </Box>
+              <Box>
+                <PledgeInvestments />
+              </Box>
+            </Stack>
+          </TabPanel>
+          <TabPanel>
+            <AddFundsForm user={user} />
+          </TabPanel>
+          <TabPanel>
+            <Profile user={user} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Box>
   )
 }
 
