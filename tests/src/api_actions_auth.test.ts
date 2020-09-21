@@ -16,7 +16,7 @@ import {
   runAction,
 } from "../../src/lib/gql_api_actions"
 import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
-import { getDummySession as getMockSession } from "../fixtures/session"
+import { getMockSession } from "../fixtures/session"
 
 global.fetch = require("node-fetch")
 
