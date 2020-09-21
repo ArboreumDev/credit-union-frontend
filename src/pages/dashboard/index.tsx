@@ -48,9 +48,6 @@ const Dashboard = () => {
         <title>Dashboard</title>
       </Head>
       {getDashboardComponent(user)}
-      <Center margin="80px">
-        <Contactus />
-      </Center>
     </div>
   )
 }

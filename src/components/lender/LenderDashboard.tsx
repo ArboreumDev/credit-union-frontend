@@ -54,14 +54,14 @@ const getOngoingPledges = () => [
 const PledgeInvestments = () => (
   <Stack spacing="15px" minW="280px">
     <Box>
-      <Heading size="sm">You have {5} ongoing pledge investments:</Heading>
+      <Heading size="sm">You have {5} ongoing pledge investments</Heading>
     </Box>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
-        <Center flex="1">
+        <Box verticalAlign="center" flex="1">
           <Text color="gray.500">{row.name}</Text>
-        </Center>
-        <Center flex="1">
+        </Box>
+        <Box flex="1">
           <Text
             alignContent="center"
             color={row.color || "black"}
@@ -69,14 +69,7 @@ const PledgeInvestments = () => (
           >
             <Currency amount={row.total} />
           </Text>
-        </Center>
-        <Center flex="1">
-          <CircularProgress value={row.perc_repaid * 100} color="green.400">
-            <CircularProgressLabel>
-              {row.perc_repaid * 100}%
-            </CircularProgressLabel>
-          </CircularProgress>
-        </Center>
+        </Box>
       </Flex>
     ))}
   </Stack>
@@ -86,7 +79,7 @@ const LenderDashboard = ({ user }: Props) => {
   const pledgeRequests = user.pledge_requests
 
   return (
-    <Box margin="20px">
+    <Box maxW="lg" margin="20px">
       <Tabs>
         <TabList>
           <Tab>Dashboard</Tab>
@@ -95,52 +88,30 @@ const LenderDashboard = ({ user }: Props) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Stack spacing={6}>
+            <Stack spacing={10}>
               {pledgeRequests.map((pr, idx) => (
                 <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
               ))}
-              <HStack spacing={8}>
+              <Box />
+              <HStack spacing={20}>
                 <Stat>
-                  <StatLabel>Total Assets</StatLabel>
-                  <StatNumber>₹12000.00</StatNumber>
+                  <StatLabel fontSize="lg">Total Assets</StatLabel>
+                  <StatNumber fontSize="3xl">₹12000.00</StatNumber>
                 </Stat>
                 <Stat>
-                  <StatLabel>APY</StatLabel>
-                  <StatNumber>4.50%</StatNumber>
+                  <StatLabel fontSize="lg">APY</StatLabel>
+                  <StatNumber fontSize="3xl">4.50%</StatNumber>
                 </Stat>
               </HStack>
-              <Wrap></Wrap>
-              <Box maxW="300px">
-                <Heading size="sm">Assets</Heading>
-                <Box h="20px" />
-                <Stack>
-                  <Flex>
-                    <Box flex={0.5}>Wallet</Box>
-                    <Box flex={0.5} textAlign="right">
-                      <Currency amount={20000} />
-                    </Box>
-                  </Flex>
-                  <Flex>
-                    <Box flex={0.5}>Invested</Box>
-                    <Box flex={0.5} textAlign="right">
-                      <Currency amount={50000} />
-                    </Box>
-                  </Flex>
-                  <Flex>
-                    <Box flex={0.5}>Pledged</Box>
-                    <Box flex={0.5} textAlign="right">
-                      <Currency amount={30000} />
-                    </Box>
-                  </Flex>
-                </Stack>
-              </Box>
-
-              <Box maxW="300px">
+              <Box>
                 <Heading size="sm">Asset Allocation</Heading>
                 <Box h="20px" />
-                <Stack>
+                <Stack spacing={6}>
                   <Flex>
                     <Box flex={0.5}>Wallet</Box>
+                    <Box flex={0.5} textAlign="center">
+                      <Currency amount={20000} />
+                    </Box>
                     <Box flex={1}>
                       <Progress h="20px" value={20} />
                     </Box>
@@ -150,6 +121,9 @@ const LenderDashboard = ({ user }: Props) => {
                   </Flex>
                   <Flex>
                     <Box flex={0.5}>Invested</Box>
+                    <Box flex={0.5} textAlign="center">
+                      <Currency amount={50000} />
+                    </Box>
                     <Box flex={1}>
                       <Progress h="20px" value={50} />
                     </Box>
@@ -159,6 +133,9 @@ const LenderDashboard = ({ user }: Props) => {
                   </Flex>
                   <Flex>
                     <Box flex={0.5}>Pledged</Box>
+                    <Box flex={0.5} textAlign="center">
+                      <Currency amount={30000} />
+                    </Box>
                     <Box flex={1}>
                       <Progress h="20px" value={30} />
                     </Box>
@@ -168,7 +145,7 @@ const LenderDashboard = ({ user }: Props) => {
                   </Flex>
                 </Stack>
               </Box>
-              <Box maxW="300px">
+              <Box>
                 <PledgeInvestments />
               </Box>
             </Stack>

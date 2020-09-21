@@ -44,39 +44,37 @@ export function AddFundsForm({ user }: Props) {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Container minW="300px" bg="white">
-          <Stack spacing={3}>
-            <Box h="30px" />
-            <Text>How much money would you like to invest?</Text>
-            <AmountInput
-              passName="amount"
-              passRef={register({ required: true })}
-            />
+        <Stack spacing={3}>
+          <Box h="30px" />
+          <Text>How much money would you like to invest?</Text>
+          <AmountInput
+            passName="amount"
+            passRef={register({ required: true })}
+          />
 
-            <Box h="30px" />
-            <Box padding="20px">
-              <ul>
-                <li>
-                  The amount invested will automatically be allocated towards
-                  several loans.
-                </li>
-                <li>
-                  Funds once invested, cannot be withdrawn before payback is
-                  complete.
-                </li>
-                <li>
-                  An any point in time, you may withdraw un-invested funds from
-                  your account.
-                </li>
-              </ul>
-            </Box>
+          <Box h="30px" />
+          <Box padding="20px">
+            <ul>
+              <li>
+                The amount invested will automatically be allocated towards
+                several loans.
+              </li>
+              <li>
+                Funds once invested, cannot be withdrawn before payback is
+                complete.
+              </li>
+              <li>
+                An any point in time, you may withdraw un-invested funds from
+                your account.
+              </li>
+            </ul>
+          </Box>
 
-            <Box h="30px" />
-            <Center>
-              <Button type="submit">Submit</Button>
-            </Center>
-          </Stack>
-        </Container>
+          <Box h="30px" />
+          <Center>
+            <Button type="submit">Submit</Button>
+          </Center>
+        </Stack>
       </form>
     </Box>
   )
