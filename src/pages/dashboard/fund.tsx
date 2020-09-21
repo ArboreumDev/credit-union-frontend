@@ -46,22 +46,26 @@ export function AddFundsForm({ user }: Props) {
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Container minW="300px" bg="white">
           <Stack spacing={3}>
-            <Center>
-              <Heading>Invest Money</Heading>
-            </Center>
             <Box h="30px" />
             <Text>How much money would you like to invest?</Text>
-            <AmountInput passRef={register({ required: true })} />
+            <AmountInput
+              passName="amount"
+              passRef={register({ required: true })}
+            />
 
             <Box h="30px" />
-            <Text>
-              The amount will be invested in several loans. Funds once invested,
-              cannot be withdrawn before payback is complete.
-            </Text>
-            <Text>
-              An any point in time, you may withdraw un-invested funds from your
-              account.
-            </Text>
+            <ul>
+              <li>The amount will be invested in several loans.</li>
+              <li>
+                Funds once invested, cannot be withdrawn before payback is
+                complete.
+              </li>
+              <li>
+                An any point in time, you may withdraw un-invested funds from
+                your account.
+              </li>
+            </ul>
+            <Box h="30px" />
             <Center>
               <Button type="submit">Submit</Button>
             </Center>
