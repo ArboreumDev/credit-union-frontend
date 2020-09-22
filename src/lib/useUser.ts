@@ -1,13 +1,14 @@
 import { useEffect } from "react"
-import Router from "next/router"
 import useSWR from "swr"
 import { Session, User } from "./types"
 import fetcher from "./api"
+import { LAST_REDIRECT_PAGE } from "lib/constant"
+import { useRouter } from "next/router"
 
 // inspired by https://github.com/vercel/next.js/blob/7203f500916d336f4e1cbcd162baff624c9cd969/examples/with-iron-session/lib/useUser.js#L5
 function getRedirectLocation(session: Session, currentPage: string) {
   if (!session || !session.user) return "/"
-
+  console.log(session)
   const user = session.user
   if (!user.user_type) return "/onboarding"
   if (user.user_type) {
@@ -18,20 +19,24 @@ function getRedirectLocation(session: Session, currentPage: string) {
 }
 
 export default function useUser() {
+  // Fast redirect from home
   const { data, mutate } = useSWR("/api/auth/session", fetcher)
+  const router = useRouter()
 
   if (typeof window == "undefined") return {}
 
   const currentPage = window.location.pathname
-
   const session = data as Session
-  if (session) {
-    const destination = getRedirectLocation(session, currentPage)
-    if (destination != currentPage) {
-      Router.push(destination)
-      return {}
-    }
-  }
 
-  return { user: data ? data.user : undefined }
+  useEffect(() => {
+    if (session) {
+      const destination = getRedirectLocation(session, currentPage)
+      if (destination != currentPage) {
+        localStorage.setItem(LAST_REDIRECT_PAGE, destination)
+        router.push(destination)
+      }
+    }
+  }, [session])
+
+  return { user: session ? session.user : undefined, mutate }
 }

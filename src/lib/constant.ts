@@ -5,6 +5,7 @@ export const ANALYTICS_WEBSITE_IDS = {
   preview: "90f23cc8-c238-4f5c-876a-c83f66335036",
 }
 export const USER_TYPE_KEY = "userType"
+export const LAST_REDIRECT_PAGE = "lastPage"
 
 export const DEFAULT_LOAN_TENOR = 6 // in months
 export const DEFAULT_RISK_FREE_INTEREST_RATE = 0.5
