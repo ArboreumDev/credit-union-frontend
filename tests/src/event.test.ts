@@ -1,9 +1,8 @@
-import { DbClient } from "../../src/gql/db_client"
 import { GraphQLClient } from "graphql-request"
+import { DbClient } from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { Sdk } from "../../src/gql/sdk"
 import { LogEventTypes } from "../../src/lib/constant"
-import { LogEvent } from "../../src/lib/types"
 import { BORROWER1 } from "../fixtures/basic_network"
 
 global.fetch = require("node-fetch")
@@ -41,7 +40,7 @@ describe("Create new event", () => {
 
 describe("Create feedback", () => {
   const message = "hi"
-  const data: LogEvent = {
+  const data = {
     message: message,
   }
   const headers = {

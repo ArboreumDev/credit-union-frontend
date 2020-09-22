@@ -1,11 +1,7 @@
-import * as React from "react"
-import { Provider } from "next-auth/client"
+import { ChakraProvider } from "@chakra-ui/core"
 import { AppProps, NextWebVitalsMetric } from "next/app"
 import Head from "next/head"
-
-import { ChakraProvider } from "@chakra-ui/core"
-import { LogEvent } from "lib/types"
-import { captureLog } from "lib/api"
+import * as React from "react"
 import {
   ANALYTICS_WEBSITE_IDS,
   LAST_REDIRECT_PAGE,
@@ -63,7 +59,7 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  const event: LogEvent = {
+  const event = {
     eventType: LogEventTypes.ClientWebVitals,
     data: { metric: metric, url: location.href, page: location.pathname },
   }

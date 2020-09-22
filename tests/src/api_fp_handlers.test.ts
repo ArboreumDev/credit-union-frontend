@@ -1,12 +1,10 @@
 import { GraphQLClient } from "graphql-request"
-import { NextApiRequest, NextApiResponse } from "next"
+import { NextApiRequest } from "next"
 import httpMocks from "node-mocks-http"
 import { FPPushHandler } from "pages/api/integration/fp"
 import { DbClient } from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { Sdk } from "../../src/gql/sdk"
-import { LogEventTypes } from "../../src/lib/constant"
-import { LogEvent } from "../../src/lib/types"
 
 global.fetch = require("node-fetch")
 

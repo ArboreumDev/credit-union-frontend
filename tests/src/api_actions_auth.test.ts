@@ -1,6 +1,4 @@
 import { GraphQLClient } from "graphql-request"
-import { NextApiRequest } from "next"
-import httpMocks from "node-mocks-http"
 import { DbClient } from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import {
@@ -10,13 +8,11 @@ import {
   Loan_Requests_Insert_Input,
   Sdk,
 } from "../../src/gql/sdk"
-import { LogEventTypes } from "../../src/lib/constant"
 import {
   ActionTypes,
   ACTION_ERRORS,
   runAction,
 } from "../../src/lib/gql_api_actions"
-import { LogEvent } from "../../src/lib/types"
 import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 
