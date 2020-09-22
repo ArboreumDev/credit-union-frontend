@@ -118,6 +118,9 @@
         foreign_key_constraint_on: agent_id
 - table:
     schema: public
+    name: payable_type
+- table:
+    schema: public
     name: payables
   object_relationships:
     - name: loan_request

@@ -1,11 +1,12 @@
 mutation InsertEvent($event: events_insert_input!) {
   insert_events_one(object: $event) {
     id
+    event_type
     user {
       id
       email
     }
     headers
-    event
+    data
   }
 }

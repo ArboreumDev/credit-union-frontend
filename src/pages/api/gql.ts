@@ -23,8 +23,7 @@ export default async function handler(
         actionType as ActionTypes,
         session,
         payload,
-        dbClient,
-        req
+        dbClient
       )
       res.status(200).json(data)
     } catch (error) {

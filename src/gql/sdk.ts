@@ -1205,7 +1205,8 @@ export type Encumbrances_Variance_Order_By = {
 export type Events = {
   __typename?: "events"
   created_at: Scalars["timestamptz"]
-  event?: Maybe<Scalars["jsonb"]>
+  data?: Maybe<Scalars["jsonb"]>
+  event_type: Scalars["String"]
   headers?: Maybe<Scalars["jsonb"]>
   id: Scalars["uuid"]
   /** An object relationship */
@@ -1214,7 +1215,7 @@ export type Events = {
 }
 
 /** columns and relationships of "events" */
-export type EventsEventArgs = {
+export type EventsDataArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
@@ -1253,7 +1254,7 @@ export type Events_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Events_Append_Input = {
-  event?: Maybe<Scalars["jsonb"]>
+  data?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
 }
 
@@ -1269,7 +1270,8 @@ export type Events_Bool_Exp = {
   _not?: Maybe<Events_Bool_Exp>
   _or?: Maybe<Array<Maybe<Events_Bool_Exp>>>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
-  event?: Maybe<Jsonb_Comparison_Exp>
+  data?: Maybe<Jsonb_Comparison_Exp>
+  event_type?: Maybe<String_Comparison_Exp>
   headers?: Maybe<Jsonb_Comparison_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
@@ -1284,26 +1286,27 @@ export enum Events_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Events_Delete_At_Path_Input = {
-  event?: Maybe<Array<Maybe<Scalars["String"]>>>
+  data?: Maybe<Array<Maybe<Scalars["String"]>>>
   headers?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Events_Delete_Elem_Input = {
-  event?: Maybe<Scalars["Int"]>
+  data?: Maybe<Scalars["Int"]>
   headers?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Events_Delete_Key_Input = {
-  event?: Maybe<Scalars["String"]>
+  data?: Maybe<Scalars["String"]>
   headers?: Maybe<Scalars["String"]>
 }
 
 /** input type for inserting data into table "events" */
 export type Events_Insert_Input = {
   created_at?: Maybe<Scalars["timestamptz"]>
-  event?: Maybe<Scalars["jsonb"]>
+  data?: Maybe<Scalars["jsonb"]>
+  event_type?: Maybe<Scalars["String"]>
   headers?: Maybe<Scalars["jsonb"]>
   id?: Maybe<Scalars["uuid"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
@@ -1314,6 +1317,7 @@ export type Events_Insert_Input = {
 export type Events_Max_Fields = {
   __typename?: "events_max_fields"
   created_at?: Maybe<Scalars["timestamptz"]>
+  event_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
   user_id?: Maybe<Scalars["uuid"]>
 }
@@ -1321,6 +1325,7 @@ export type Events_Max_Fields = {
 /** order by max() on columns of table "events" */
 export type Events_Max_Order_By = {
   created_at?: Maybe<Order_By>
+  event_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
   user_id?: Maybe<Order_By>
 }
@@ -1329,6 +1334,7 @@ export type Events_Max_Order_By = {
 export type Events_Min_Fields = {
   __typename?: "events_min_fields"
   created_at?: Maybe<Scalars["timestamptz"]>
+  event_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
   user_id?: Maybe<Scalars["uuid"]>
 }
@@ -1336,6 +1342,7 @@ export type Events_Min_Fields = {
 /** order by min() on columns of table "events" */
 export type Events_Min_Order_By = {
   created_at?: Maybe<Order_By>
+  event_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
   user_id?: Maybe<Order_By>
 }
@@ -1365,7 +1372,8 @@ export type Events_On_Conflict = {
 /** ordering options when selecting data from "events" */
 export type Events_Order_By = {
   created_at?: Maybe<Order_By>
-  event?: Maybe<Order_By>
+  data?: Maybe<Order_By>
+  event_type?: Maybe<Order_By>
   headers?: Maybe<Order_By>
   id?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
@@ -1379,7 +1387,7 @@ export type Events_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Events_Prepend_Input = {
-  event?: Maybe<Scalars["jsonb"]>
+  data?: Maybe<Scalars["jsonb"]>
   headers?: Maybe<Scalars["jsonb"]>
 }
 
@@ -1388,7 +1396,9 @@ export enum Events_Select_Column {
   /** column name */
   CreatedAt = "created_at",
   /** column name */
-  Event = "event",
+  Data = "data",
+  /** column name */
+  EventType = "event_type",
   /** column name */
   Headers = "headers",
   /** column name */
@@ -1400,7 +1410,8 @@ export enum Events_Select_Column {
 /** input type for updating data in table "events" */
 export type Events_Set_Input = {
   created_at?: Maybe<Scalars["timestamptz"]>
-  event?: Maybe<Scalars["jsonb"]>
+  data?: Maybe<Scalars["jsonb"]>
+  event_type?: Maybe<Scalars["String"]>
   headers?: Maybe<Scalars["jsonb"]>
   id?: Maybe<Scalars["uuid"]>
   user_id?: Maybe<Scalars["uuid"]>
@@ -1411,7 +1422,9 @@ export enum Events_Update_Column {
   /** column name */
   CreatedAt = "created_at",
   /** column name */
-  Event = "event",
+  Data = "data",
+  /** column name */
+  EventType = "event_type",
   /** column name */
   Headers = "headers",
   /** column name */
@@ -2566,6 +2579,10 @@ export type Mutation_Root = {
   delete_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** delete single row from the table: "loan_risk" */
   delete_loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** delete data from the table: "payable_type" */
+  delete_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** delete single row from the table: "payable_type" */
+  delete_payable_type_by_pk?: Maybe<Payable_Type>
   /** delete data from the table: "payables" */
   delete_payables?: Maybe<Payables_Mutation_Response>
   /** delete single row from the table: "payables" */
@@ -2616,6 +2633,10 @@ export type Mutation_Root = {
   insert_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** insert a single row into the table: "loan_risk" */
   insert_loan_risk_one?: Maybe<Loan_Risk>
+  /** insert data into the table: "payable_type" */
+  insert_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** insert a single row into the table: "payable_type" */
+  insert_payable_type_one?: Maybe<Payable_Type>
   /** insert data into the table: "payables" */
   insert_payables?: Maybe<Payables_Mutation_Response>
   /** insert a single row into the table: "payables" */
@@ -2666,6 +2687,10 @@ export type Mutation_Root = {
   update_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** update single row of the table: "loan_risk" */
   update_loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** update data of the table: "payable_type" */
+  update_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** update single row of the table: "payable_type" */
+  update_payable_type_by_pk?: Maybe<Payable_Type>
   /** update data of the table: "payables" */
   update_payables?: Maybe<Payables_Mutation_Response>
   /** update single row of the table: "payables" */
@@ -2759,6 +2784,16 @@ export type Mutation_RootDelete_Loan_RiskArgs = {
 export type Mutation_RootDelete_Loan_Risk_By_PkArgs = {
   agent_id: Scalars["uuid"]
   request_id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Payable_TypeArgs = {
+  where: Payable_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Payable_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** mutation root */
@@ -2894,6 +2929,18 @@ export type Mutation_RootInsert_Loan_RiskArgs = {
 export type Mutation_RootInsert_Loan_Risk_OneArgs = {
   object: Loan_Risk_Insert_Input
   on_conflict?: Maybe<Loan_Risk_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Payable_TypeArgs = {
+  objects: Array<Payable_Type_Insert_Input>
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Payable_Type_OneArgs = {
+  object: Payable_Type_Insert_Input
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
 }
 
 /** mutation root */
@@ -3081,6 +3128,18 @@ export type Mutation_RootUpdate_Loan_Risk_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootUpdate_Payable_TypeArgs = {
+  _set?: Maybe<Payable_Type_Set_Input>
+  where: Payable_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Payable_Type_By_PkArgs = {
+  _set?: Maybe<Payable_Type_Set_Input>
+  pk_columns: Payable_Type_Pk_Columns_Input
+}
+
+/** mutation root */
 export type Mutation_RootUpdate_PayablesArgs = {
   _inc?: Maybe<Payables_Inc_Input>
   _set?: Maybe<Payables_Set_Input>
@@ -3205,6 +3264,149 @@ export enum Order_By {
   DescNullsFirst = "desc_nulls_first",
   /** in the descending order, nulls last */
   DescNullsLast = "desc_nulls_last",
+}
+
+/** columns and relationships of "payable_type" */
+export type Payable_Type = {
+  __typename?: "payable_type"
+  comment?: Maybe<Scalars["String"]>
+  value: Scalars["String"]
+}
+
+/** aggregated selection of "payable_type" */
+export type Payable_Type_Aggregate = {
+  __typename?: "payable_type_aggregate"
+  aggregate?: Maybe<Payable_Type_Aggregate_Fields>
+  nodes: Array<Payable_Type>
+}
+
+/** aggregate fields of "payable_type" */
+export type Payable_Type_Aggregate_Fields = {
+  __typename?: "payable_type_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Payable_Type_Max_Fields>
+  min?: Maybe<Payable_Type_Min_Fields>
+}
+
+/** aggregate fields of "payable_type" */
+export type Payable_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Payable_Type_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "payable_type" */
+export type Payable_Type_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Payable_Type_Max_Order_By>
+  min?: Maybe<Payable_Type_Min_Order_By>
+}
+
+/** input type for inserting array relation for remote table "payable_type" */
+export type Payable_Type_Arr_Rel_Insert_Input = {
+  data: Array<Payable_Type_Insert_Input>
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "payable_type". All fields are combined with a logical 'AND'. */
+export type Payable_Type_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Payable_Type_Bool_Exp>>>
+  _not?: Maybe<Payable_Type_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Payable_Type_Bool_Exp>>>
+  comment?: Maybe<String_Comparison_Exp>
+  value?: Maybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "payable_type" */
+export enum Payable_Type_Constraint {
+  /** unique or primary key constraint */
+  PayableTypePkey = "payable_type_pkey",
+}
+
+/** input type for inserting data into table "payable_type" */
+export type Payable_Type_Insert_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** aggregate max on columns */
+export type Payable_Type_Max_Fields = {
+  __typename?: "payable_type_max_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by max() on columns of table "payable_type" */
+export type Payable_Type_Max_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Payable_Type_Min_Fields = {
+  __typename?: "payable_type_min_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by min() on columns of table "payable_type" */
+export type Payable_Type_Min_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "payable_type" */
+export type Payable_Type_Mutation_Response = {
+  __typename?: "payable_type_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Payable_Type>
+}
+
+/** input type for inserting object relation for remote table "payable_type" */
+export type Payable_Type_Obj_Rel_Insert_Input = {
+  data: Payable_Type_Insert_Input
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** on conflict condition type for table "payable_type" */
+export type Payable_Type_On_Conflict = {
+  constraint: Payable_Type_Constraint
+  update_columns: Array<Payable_Type_Update_Column>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** ordering options when selecting data from "payable_type" */
+export type Payable_Type_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "payable_type" */
+export type Payable_Type_Pk_Columns_Input = {
+  value: Scalars["String"]
+}
+
+/** select columns of table "payable_type" */
+export enum Payable_Type_Select_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
+/** input type for updating data in table "payable_type" */
+export type Payable_Type_Set_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** update columns of table "payable_type" */
+export enum Payable_Type_Update_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
 }
 
 /** columns and relationships of "payables" */
@@ -3681,6 +3883,12 @@ export type Query_Root = {
   loan_risk_aggregate: Loan_Risk_Aggregate
   /** fetch data from the table: "loan_risk" using primary key columns */
   loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** fetch data from the table: "payable_type" */
+  payable_type: Array<Payable_Type>
+  /** fetch aggregated fields from the table: "payable_type" */
+  payable_type_aggregate: Payable_Type_Aggregate
+  /** fetch data from the table: "payable_type" using primary key columns */
+  payable_type_by_pk?: Maybe<Payable_Type>
   /** fetch data from the table: "payables" */
   payables: Array<Payables>
   /** fetch aggregated fields from the table: "payables" */
@@ -3875,6 +4083,29 @@ export type Query_RootLoan_Risk_AggregateArgs = {
 export type Query_RootLoan_Risk_By_PkArgs = {
   agent_id: Scalars["uuid"]
   request_id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootPayable_TypeArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootPayable_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootPayable_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** query root */
@@ -4686,6 +4917,12 @@ export type Subscription_Root = {
   loan_risk_aggregate: Loan_Risk_Aggregate
   /** fetch data from the table: "loan_risk" using primary key columns */
   loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** fetch data from the table: "payable_type" */
+  payable_type: Array<Payable_Type>
+  /** fetch aggregated fields from the table: "payable_type" */
+  payable_type_aggregate: Payable_Type_Aggregate
+  /** fetch data from the table: "payable_type" using primary key columns */
+  payable_type_by_pk?: Maybe<Payable_Type>
   /** fetch data from the table: "payables" */
   payables: Array<Payables>
   /** fetch aggregated fields from the table: "payables" */
@@ -4880,6 +5117,29 @@ export type Subscription_RootLoan_Risk_AggregateArgs = {
 export type Subscription_RootLoan_Risk_By_PkArgs = {
   agent_id: Scalars["uuid"]
   request_id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootPayable_TypeArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootPayable_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootPayable_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** subscription root */
@@ -6330,9 +6590,10 @@ export type InsertEventMutationVariables = Exact<{
 
 export type InsertEventMutation = { __typename?: "mutation_root" } & {
   insert_events_one?: Maybe<
-    { __typename?: "events" } & Pick<Events, "id" | "headers" | "event"> & {
-        user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "email">>
-      }
+    { __typename?: "events" } & Pick<
+      Events,
+      "id" | "event_type" | "headers" | "data"
+    > & { user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "email">> }
   >
 }
 
@@ -6823,12 +7084,13 @@ export const InsertEventDocument = gql`
   mutation InsertEvent($event: events_insert_input!) {
     insert_events_one(object: $event) {
       id
+      event_type
       user {
         id
         email
       }
       headers
-      event
+      data
     }
   }
 `
