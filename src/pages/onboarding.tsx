@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 import Onboarding from "../components/common/onboarding/onboarding"
 
 const BorrowerOnboardingPage = () => {
-  const { user } = useUser()
+  const { user, mutate } = useUser()
   const [userType, setUserType] = useState(null)
   const router = useRouter()
 

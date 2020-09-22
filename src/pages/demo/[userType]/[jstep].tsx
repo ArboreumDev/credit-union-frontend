@@ -5,7 +5,7 @@ import { Fixtures } from "lib/demo/fixtures"
 import { UserType } from "lib/types"
 import { useRouter } from "next/router"
 import { getDashboardComponent } from "pages/dashboard"
-import { AddFundsForm } from "components/lender/fund"
+import { AddFundsForm } from "pages/dashboard/fund"
 import LoginPage from "pages/login"
 import { Profile } from "pages/profile"
 
