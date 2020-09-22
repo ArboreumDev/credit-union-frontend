@@ -121,17 +121,17 @@ export function runAction(
   actionType: ActionTypes,
   session: Session,
   payload: any,
-  dbClient: DbClient
+  dbClient: DbClient,
+  req: NextApiRequest
 ) {
   // console.log(session, payload)
   const actionMap = {
     [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
     [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
-    [ActionTypes.LogEvent]: new LogEvent(session, dbClient, payload),
+    [ActionTypes.LogEvent]: new LogEvent(session, dbClient, req),
   }
   if (actionType in actionMap) {
     const action = actionMap[actionType]
-    console.log(actionType, action.isUserAllowed())
     if (action.isUserAllowed()) return action.run()
     else return Promise.reject(ACTION_ERRORS.Unauthorized)
   } else return Promise.reject(ACTION_ERRORS.Invalid)
