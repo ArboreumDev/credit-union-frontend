@@ -14,6 +14,7 @@ import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
 import FeedbackPopover from "./FeedbackPopover"
 import SupportPopover from "./SupportPopover"
+import DrawerButton from "./Drawer"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (
@@ -35,10 +36,11 @@ const AppBar = () => (
       </Link>
     </Flex>
     <Box flex="1"></Box>
-    <HStack>
+    <HStack className="navButtons">
       <FeedbackPopover />
       <SupportPopover />
     </HStack>
+    <DrawerButton />
 
     <style jsx>
       {`
@@ -49,6 +51,24 @@ const AppBar = () => (
           cursor: pointer;
           overflow: hidden;
           outline: none;
+        }
+      `}
+    </style>
+    <style jsx global>
+      {`
+        .drawerButton {
+          display: block;
+        }
+        .navButtons {
+          display: none;
+        }
+        @media only screen and (min-width: 500px) {
+          .navButtons {
+            display: block;
+          }
+          .drawerButton {
+            display: none;
+          }
         }
       `}
     </style>
