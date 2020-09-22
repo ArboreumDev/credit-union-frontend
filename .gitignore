@@ -37,4 +37,3 @@ production/hasura/
 
 .vercel
 production/.env.*
-.*~

@@ -14,11 +14,6 @@ React + Typescript + Next.js
 2. For local dev, edit [hosts](https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls) file
 3. `yarn dev` to start server
 
-### debugging
-
-Modify `package.json` to debug: `"dev": "NODE_OPTIONS='--inspect' next",`
-Can't change source after debug has started.
-
 ### Add graphql queries
 
 - Add queries to `/src/gql/queries/<query_type>/<query_name>.graphql`

@@ -1,24 +1,14 @@
 import Link from "next/link"
 
 import React from "react"
-import {
-  Box,
-  Heading,
-  Flex,
-  Text,
-  Button,
-  Center,
-  HStack,
-} from "@chakra-ui/core"
+import { Box, Heading, Flex, Text, Button, Center } from "@chakra-ui/core"
 import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
-import FeedbackPopover from "./FeedbackPopover"
-import SupportPopover from "./SupportPopover"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (
   <Flex
-    // bg="gray.300"
+    bg="gray.300"
     color="black"
     paddingLeft="1.5rem"
     paddingRight="1.5rem"
@@ -35,11 +25,13 @@ const AppBar = () => (
       </Link>
     </Flex>
     <Box flex="1"></Box>
-    <HStack>
-      <FeedbackPopover />
-      <SupportPopover />
-    </HStack>
-
+    <Box>
+      <Link href="/profile">
+        <Text align="right" padding="0px" margin="0px" fontSize="3xl">
+          <CgProfile />
+        </Text>
+      </Link>
+    </Box>
     <style jsx>
       {`
         button {

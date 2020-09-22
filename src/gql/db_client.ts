@@ -1,29 +1,31 @@
-import { GraphQLClient } from "graphql-request"
-import { getSdk, Sdk } from "../../src/gql/sdk"
+import { initializeGQL } from "./graphql_client"
 import {
-  DEFAULT_LOAN_TENOR,
-  DEFAULT_RECOMMENDATION_RISK_PARAMS,
-  DEFAULT_RISK_FREE_INTEREST_RATE,
-} from "../lib/constant"
-import {
-  createStartLoanInputVariables,
-  generateUpdateAsSingleTransaction,
-  lenderBalanceToShareInLoan,
-  proportion,
-} from "../lib/loan_helpers"
-import {
-  BorrowerInfo,
-  LiveLoanInfo,
-  LoanRequestStatus,
-  LogEvent,
-  OptimizerContext,
   PortfolioUpdate,
-  RiskInput,
+  LoanRequestStatus,
+  UserType,
+  User,
   SupporterInfo,
+  BorrowerInfo,
   SupporterStatus,
+  LiveLoanInfo,
+  RiskInput,
+  OptimizerContext,
   SwarmAiRequestMessage,
 } from "../lib/types"
-import { initializeGQL } from "./graphql_client"
+import {
+  lenderBalanceToShareInLoan,
+  createStartLoanInputVariables,
+  proportion,
+  generateUpdateAsSingleTransaction,
+  transformRequestToDashboardFormat,
+} from "../lib/loan_helpers"
+import {
+  DEFAULT_LOAN_TENOR,
+  DEFAULT_RISK_FREE_INTEREST_RATE,
+  DEFAULT_RECOMMENDATION_RISK_PARAMS,
+} from "../lib/constant"
+import { Sdk, getSdk } from "../../src/gql/sdk"
+import { GraphQLClient } from "graphql-request"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
@@ -350,16 +352,5 @@ export class DbClient {
       supporterInfo,
       borrowerInfo,
     }
-  }
-
-  logEvent = async (eventData?: LogEvent, headers?: any, userId?: string) => {
-    const event = {
-      headers: headers,
-      event: eventData,
-      user_id: userId,
-    }
-    const res = await this.sdk.InsertEvent({ event })
-    console.log("LogEvent - ", { eventData, userId })
-    return res.insert_events_one
   }
 }

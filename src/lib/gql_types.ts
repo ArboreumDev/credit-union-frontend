@@ -1,6 +1,3 @@
-import { GraphQLClient } from "graphql-request"
-import { print } from "graphql"
-import gql from "graphql-tag"
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
@@ -14,7 +11,6 @@ export type Scalars = {
   Float: number
   date: any
   edge_status: any
-  float8: any
   jsonb: any
   loan_request_status: any
   numeric: any
@@ -1201,17 +1197,354 @@ export type Encumbrances_Variance_Order_By = {
   pay_frequency?: Maybe<Order_By>
 }
 
-/** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
-export type Float8_Comparison_Exp = {
-  _eq?: Maybe<Scalars["float8"]>
-  _gt?: Maybe<Scalars["float8"]>
-  _gte?: Maybe<Scalars["float8"]>
-  _in?: Maybe<Array<Scalars["float8"]>>
-  _is_null?: Maybe<Scalars["Boolean"]>
-  _lt?: Maybe<Scalars["float8"]>
-  _lte?: Maybe<Scalars["float8"]>
-  _neq?: Maybe<Scalars["float8"]>
-  _nin?: Maybe<Array<Scalars["float8"]>>
+/** columns and relationships of "guarantors" */
+export type Guarantors = {
+  __typename?: "guarantors"
+  amount: Scalars["Int"]
+  guarantee_division?: Maybe<Scalars["jsonb"]>
+  guarantor_id: Scalars["uuid"]
+  invest_in_corpus: Scalars["Boolean"]
+  /** An object relationship */
+  loan_request: Loan_Requests
+  participation_request_time: Scalars["timestamptz"]
+  request_id: Scalars["uuid"]
+  status: Scalars["String"]
+  /** An object relationship */
+  user: User
+}
+
+/** columns and relationships of "guarantors" */
+export type GuarantorsGuarantee_DivisionArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** aggregated selection of "guarantors" */
+export type Guarantors_Aggregate = {
+  __typename?: "guarantors_aggregate"
+  aggregate?: Maybe<Guarantors_Aggregate_Fields>
+  nodes: Array<Guarantors>
+}
+
+/** aggregate fields of "guarantors" */
+export type Guarantors_Aggregate_Fields = {
+  __typename?: "guarantors_aggregate_fields"
+  avg?: Maybe<Guarantors_Avg_Fields>
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Guarantors_Max_Fields>
+  min?: Maybe<Guarantors_Min_Fields>
+  stddev?: Maybe<Guarantors_Stddev_Fields>
+  stddev_pop?: Maybe<Guarantors_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Guarantors_Stddev_Samp_Fields>
+  sum?: Maybe<Guarantors_Sum_Fields>
+  var_pop?: Maybe<Guarantors_Var_Pop_Fields>
+  var_samp?: Maybe<Guarantors_Var_Samp_Fields>
+  variance?: Maybe<Guarantors_Variance_Fields>
+}
+
+/** aggregate fields of "guarantors" */
+export type Guarantors_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Guarantors_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "guarantors" */
+export type Guarantors_Aggregate_Order_By = {
+  avg?: Maybe<Guarantors_Avg_Order_By>
+  count?: Maybe<Order_By>
+  max?: Maybe<Guarantors_Max_Order_By>
+  min?: Maybe<Guarantors_Min_Order_By>
+  stddev?: Maybe<Guarantors_Stddev_Order_By>
+  stddev_pop?: Maybe<Guarantors_Stddev_Pop_Order_By>
+  stddev_samp?: Maybe<Guarantors_Stddev_Samp_Order_By>
+  sum?: Maybe<Guarantors_Sum_Order_By>
+  var_pop?: Maybe<Guarantors_Var_Pop_Order_By>
+  var_samp?: Maybe<Guarantors_Var_Samp_Order_By>
+  variance?: Maybe<Guarantors_Variance_Order_By>
+}
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Guarantors_Append_Input = {
+  guarantee_division?: Maybe<Scalars["jsonb"]>
+}
+
+/** input type for inserting array relation for remote table "guarantors" */
+export type Guarantors_Arr_Rel_Insert_Input = {
+  data: Array<Guarantors_Insert_Input>
+  on_conflict?: Maybe<Guarantors_On_Conflict>
+}
+
+/** aggregate avg on columns */
+export type Guarantors_Avg_Fields = {
+  __typename?: "guarantors_avg_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by avg() on columns of table "guarantors" */
+export type Guarantors_Avg_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** Boolean expression to filter rows from the table "guarantors". All fields are combined with a logical 'AND'. */
+export type Guarantors_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Guarantors_Bool_Exp>>>
+  _not?: Maybe<Guarantors_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Guarantors_Bool_Exp>>>
+  amount?: Maybe<Int_Comparison_Exp>
+  guarantee_division?: Maybe<Jsonb_Comparison_Exp>
+  guarantor_id?: Maybe<Uuid_Comparison_Exp>
+  invest_in_corpus?: Maybe<Boolean_Comparison_Exp>
+  loan_request?: Maybe<Loan_Requests_Bool_Exp>
+  participation_request_time?: Maybe<Timestamptz_Comparison_Exp>
+  request_id?: Maybe<Uuid_Comparison_Exp>
+  status?: Maybe<String_Comparison_Exp>
+  user?: Maybe<User_Bool_Exp>
+}
+
+/** unique or primary key constraints on table "guarantors" */
+export enum Guarantors_Constraint {
+  /** unique or primary key constraint */
+  GuarantorsPkey = "guarantors_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Guarantors_Delete_At_Path_Input = {
+  guarantee_division?: Maybe<Array<Maybe<Scalars["String"]>>>
+}
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Guarantors_Delete_Elem_Input = {
+  guarantee_division?: Maybe<Scalars["Int"]>
+}
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Guarantors_Delete_Key_Input = {
+  guarantee_division?: Maybe<Scalars["String"]>
+}
+
+/** input type for incrementing integer column in table "guarantors" */
+export type Guarantors_Inc_Input = {
+  amount?: Maybe<Scalars["Int"]>
+}
+
+/** input type for inserting data into table "guarantors" */
+export type Guarantors_Insert_Input = {
+  amount?: Maybe<Scalars["Int"]>
+  guarantee_division?: Maybe<Scalars["jsonb"]>
+  guarantor_id?: Maybe<Scalars["uuid"]>
+  invest_in_corpus?: Maybe<Scalars["Boolean"]>
+  loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
+  participation_request_time?: Maybe<Scalars["timestamptz"]>
+  request_id?: Maybe<Scalars["uuid"]>
+  status?: Maybe<Scalars["String"]>
+  user?: Maybe<User_Obj_Rel_Insert_Input>
+}
+
+/** aggregate max on columns */
+export type Guarantors_Max_Fields = {
+  __typename?: "guarantors_max_fields"
+  amount?: Maybe<Scalars["Int"]>
+  guarantor_id?: Maybe<Scalars["uuid"]>
+  participation_request_time?: Maybe<Scalars["timestamptz"]>
+  request_id?: Maybe<Scalars["uuid"]>
+  status?: Maybe<Scalars["String"]>
+}
+
+/** order by max() on columns of table "guarantors" */
+export type Guarantors_Max_Order_By = {
+  amount?: Maybe<Order_By>
+  guarantor_id?: Maybe<Order_By>
+  participation_request_time?: Maybe<Order_By>
+  request_id?: Maybe<Order_By>
+  status?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Guarantors_Min_Fields = {
+  __typename?: "guarantors_min_fields"
+  amount?: Maybe<Scalars["Int"]>
+  guarantor_id?: Maybe<Scalars["uuid"]>
+  participation_request_time?: Maybe<Scalars["timestamptz"]>
+  request_id?: Maybe<Scalars["uuid"]>
+  status?: Maybe<Scalars["String"]>
+}
+
+/** order by min() on columns of table "guarantors" */
+export type Guarantors_Min_Order_By = {
+  amount?: Maybe<Order_By>
+  guarantor_id?: Maybe<Order_By>
+  participation_request_time?: Maybe<Order_By>
+  request_id?: Maybe<Order_By>
+  status?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "guarantors" */
+export type Guarantors_Mutation_Response = {
+  __typename?: "guarantors_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Guarantors>
+}
+
+/** input type for inserting object relation for remote table "guarantors" */
+export type Guarantors_Obj_Rel_Insert_Input = {
+  data: Guarantors_Insert_Input
+  on_conflict?: Maybe<Guarantors_On_Conflict>
+}
+
+/** on conflict condition type for table "guarantors" */
+export type Guarantors_On_Conflict = {
+  constraint: Guarantors_Constraint
+  update_columns: Array<Guarantors_Update_Column>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** ordering options when selecting data from "guarantors" */
+export type Guarantors_Order_By = {
+  amount?: Maybe<Order_By>
+  guarantee_division?: Maybe<Order_By>
+  guarantor_id?: Maybe<Order_By>
+  invest_in_corpus?: Maybe<Order_By>
+  loan_request?: Maybe<Loan_Requests_Order_By>
+  participation_request_time?: Maybe<Order_By>
+  request_id?: Maybe<Order_By>
+  status?: Maybe<Order_By>
+  user?: Maybe<User_Order_By>
+}
+
+/** primary key columns input for table: "guarantors" */
+export type Guarantors_Pk_Columns_Input = {
+  guarantor_id: Scalars["uuid"]
+  request_id: Scalars["uuid"]
+}
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Guarantors_Prepend_Input = {
+  guarantee_division?: Maybe<Scalars["jsonb"]>
+}
+
+/** select columns of table "guarantors" */
+export enum Guarantors_Select_Column {
+  /** column name */
+  Amount = "amount",
+  /** column name */
+  GuaranteeDivision = "guarantee_division",
+  /** column name */
+  GuarantorId = "guarantor_id",
+  /** column name */
+  InvestInCorpus = "invest_in_corpus",
+  /** column name */
+  ParticipationRequestTime = "participation_request_time",
+  /** column name */
+  RequestId = "request_id",
+  /** column name */
+  Status = "status",
+}
+
+/** input type for updating data in table "guarantors" */
+export type Guarantors_Set_Input = {
+  amount?: Maybe<Scalars["Int"]>
+  guarantee_division?: Maybe<Scalars["jsonb"]>
+  guarantor_id?: Maybe<Scalars["uuid"]>
+  invest_in_corpus?: Maybe<Scalars["Boolean"]>
+  participation_request_time?: Maybe<Scalars["timestamptz"]>
+  request_id?: Maybe<Scalars["uuid"]>
+  status?: Maybe<Scalars["String"]>
+}
+
+/** aggregate stddev on columns */
+export type Guarantors_Stddev_Fields = {
+  __typename?: "guarantors_stddev_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev() on columns of table "guarantors" */
+export type Guarantors_Stddev_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** aggregate stddev_pop on columns */
+export type Guarantors_Stddev_Pop_Fields = {
+  __typename?: "guarantors_stddev_pop_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev_pop() on columns of table "guarantors" */
+export type Guarantors_Stddev_Pop_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** aggregate stddev_samp on columns */
+export type Guarantors_Stddev_Samp_Fields = {
+  __typename?: "guarantors_stddev_samp_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev_samp() on columns of table "guarantors" */
+export type Guarantors_Stddev_Samp_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** aggregate sum on columns */
+export type Guarantors_Sum_Fields = {
+  __typename?: "guarantors_sum_fields"
+  amount?: Maybe<Scalars["Int"]>
+}
+
+/** order by sum() on columns of table "guarantors" */
+export type Guarantors_Sum_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** update columns of table "guarantors" */
+export enum Guarantors_Update_Column {
+  /** column name */
+  Amount = "amount",
+  /** column name */
+  GuaranteeDivision = "guarantee_division",
+  /** column name */
+  GuarantorId = "guarantor_id",
+  /** column name */
+  InvestInCorpus = "invest_in_corpus",
+  /** column name */
+  ParticipationRequestTime = "participation_request_time",
+  /** column name */
+  RequestId = "request_id",
+  /** column name */
+  Status = "status",
+}
+
+/** aggregate var_pop on columns */
+export type Guarantors_Var_Pop_Fields = {
+  __typename?: "guarantors_var_pop_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by var_pop() on columns of table "guarantors" */
+export type Guarantors_Var_Pop_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** aggregate var_samp on columns */
+export type Guarantors_Var_Samp_Fields = {
+  __typename?: "guarantors_var_samp_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by var_samp() on columns of table "guarantors" */
+export type Guarantors_Var_Samp_Order_By = {
+  amount?: Maybe<Order_By>
+}
+
+/** aggregate variance on columns */
+export type Guarantors_Variance_Fields = {
+  __typename?: "guarantors_variance_fields"
+  amount?: Maybe<Scalars["Float"]>
+}
+
+/** order by variance() on columns of table "guarantors" */
+export type Guarantors_Variance_Order_By = {
+  amount?: Maybe<Order_By>
 }
 
 /** expression to compare columns of type jsonb. All fields are combined with logical 'AND'. */
@@ -1568,6 +1901,10 @@ export type Loan_Requests = {
   /** An aggregated array relationship */
   encumbrances_aggregate: Encumbrances_Aggregate
   /** An array relationship */
+  guarantors: Array<Guarantors>
+  /** An aggregated array relationship */
+  guarantors_aggregate: Guarantors_Aggregate
+  /** An array relationship */
   loan_participants: Array<Loan_Participants>
   /** An aggregated array relationship */
   loan_participants_aggregate: Loan_Participants_Aggregate
@@ -1588,10 +1925,6 @@ export type Loan_Requests = {
   request_id: Scalars["uuid"]
   risk_calc_result?: Maybe<Scalars["jsonb"]>
   status?: Maybe<Scalars["loan_request_status"]>
-  /** An array relationship */
-  supporters: Array<Supporters>
-  /** An aggregated array relationship */
-  supporters_aggregate: Supporters_Aggregate
   /** An object relationship */
   user: User
 }
@@ -1612,6 +1945,24 @@ export type Loan_RequestsEncumbrances_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Encumbrances_Order_By>>
   where?: Maybe<Encumbrances_Bool_Exp>
+}
+
+/** columns and relationships of "loan_requests" */
+export type Loan_RequestsGuarantorsArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** columns and relationships of "loan_requests" */
+export type Loan_RequestsGuarantors_AggregateArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
 }
 
 /** columns and relationships of "loan_requests" */
@@ -1691,24 +2042,6 @@ export type Loan_RequestsRisk_Calc_ResultArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
-/** columns and relationships of "loan_requests" */
-export type Loan_RequestsSupportersArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** columns and relationships of "loan_requests" */
-export type Loan_RequestsSupporters_AggregateArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
 /** aggregated selection of "loan_requests" */
 export type Loan_Requests_Aggregate = {
   __typename?: "loan_requests_aggregate"
@@ -1785,6 +2118,7 @@ export type Loan_Requests_Bool_Exp = {
   confirmation_date?: Maybe<Timestamptz_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   encumbrances?: Maybe<Encumbrances_Bool_Exp>
+  guarantors?: Maybe<Guarantors_Bool_Exp>
   loan_participants?: Maybe<Loan_Participants_Bool_Exp>
   loan_risks?: Maybe<Loan_Risk_Bool_Exp>
   payables?: Maybe<Payables_Bool_Exp>
@@ -1794,7 +2128,6 @@ export type Loan_Requests_Bool_Exp = {
   request_id?: Maybe<Uuid_Comparison_Exp>
   risk_calc_result?: Maybe<Jsonb_Comparison_Exp>
   status?: Maybe<Loan_Request_Status_Comparison_Exp>
-  supporters?: Maybe<Supporters_Bool_Exp>
   user?: Maybe<User_Bool_Exp>
 }
 
@@ -1831,6 +2164,7 @@ export type Loan_Requests_Insert_Input = {
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   encumbrances?: Maybe<Encumbrances_Arr_Rel_Insert_Input>
+  guarantors?: Maybe<Guarantors_Arr_Rel_Insert_Input>
   loan_participants?: Maybe<Loan_Participants_Arr_Rel_Insert_Input>
   loan_risks?: Maybe<Loan_Risk_Arr_Rel_Insert_Input>
   payables?: Maybe<Payables_Arr_Rel_Insert_Input>
@@ -1840,7 +2174,6 @@ export type Loan_Requests_Insert_Input = {
   request_id?: Maybe<Scalars["uuid"]>
   risk_calc_result?: Maybe<Scalars["jsonb"]>
   status?: Maybe<Scalars["loan_request_status"]>
-  supporters?: Maybe<Supporters_Arr_Rel_Insert_Input>
   user?: Maybe<User_Obj_Rel_Insert_Input>
 }
 
@@ -1919,6 +2252,7 @@ export type Loan_Requests_Order_By = {
   confirmation_date?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   encumbrances_aggregate?: Maybe<Encumbrances_Aggregate_Order_By>
+  guarantors_aggregate?: Maybe<Guarantors_Aggregate_Order_By>
   loan_participants_aggregate?: Maybe<Loan_Participants_Aggregate_Order_By>
   loan_risks_aggregate?: Maybe<Loan_Risk_Aggregate_Order_By>
   payables_aggregate?: Maybe<Payables_Aggregate_Order_By>
@@ -1928,7 +2262,6 @@ export type Loan_Requests_Order_By = {
   request_id?: Maybe<Order_By>
   risk_calc_result?: Maybe<Order_By>
   status?: Maybe<Order_By>
-  supporters_aggregate?: Maybe<Supporters_Aggregate_Order_By>
   user?: Maybe<User_Order_By>
 }
 
@@ -2331,6 +2664,10 @@ export type Mutation_Root = {
   delete_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** delete single row from the table: "encumbrances" */
   delete_encumbrances_by_pk?: Maybe<Encumbrances>
+  /** delete data from the table: "guarantors" */
+  delete_guarantors?: Maybe<Guarantors_Mutation_Response>
+  /** delete single row from the table: "guarantors" */
+  delete_guarantors_by_pk?: Maybe<Guarantors>
   /** delete data from the table: "loan_participants" */
   delete_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** delete single row from the table: "loan_participants" */
@@ -2343,6 +2680,10 @@ export type Mutation_Root = {
   delete_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** delete single row from the table: "loan_risk" */
   delete_loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** delete data from the table: "payable_type" */
+  delete_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** delete single row from the table: "payable_type" */
+  delete_payable_type_by_pk?: Maybe<Payable_Type>
   /** delete data from the table: "payables" */
   delete_payables?: Maybe<Payables_Mutation_Response>
   /** delete single row from the table: "payables" */
@@ -2355,10 +2696,6 @@ export type Mutation_Root = {
   delete_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** delete single row from the table: "recommendation_risk" */
   delete_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
-  /** delete data from the table: "supporters" */
-  delete_supporters?: Maybe<Supporters_Mutation_Response>
-  /** delete single row from the table: "supporters" */
-  delete_supporters_by_pk?: Maybe<Supporters>
   /** delete data from the table: "user" */
   delete_user?: Maybe<User_Mutation_Response>
   /** delete single row from the table: "user" */
@@ -2377,6 +2714,10 @@ export type Mutation_Root = {
   insert_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** insert a single row into the table: "encumbrances" */
   insert_encumbrances_one?: Maybe<Encumbrances>
+  /** insert data into the table: "guarantors" */
+  insert_guarantors?: Maybe<Guarantors_Mutation_Response>
+  /** insert a single row into the table: "guarantors" */
+  insert_guarantors_one?: Maybe<Guarantors>
   /** insert data into the table: "loan_participants" */
   insert_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** insert a single row into the table: "loan_participants" */
@@ -2389,6 +2730,10 @@ export type Mutation_Root = {
   insert_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** insert a single row into the table: "loan_risk" */
   insert_loan_risk_one?: Maybe<Loan_Risk>
+  /** insert data into the table: "payable_type" */
+  insert_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** insert a single row into the table: "payable_type" */
+  insert_payable_type_one?: Maybe<Payable_Type>
   /** insert data into the table: "payables" */
   insert_payables?: Maybe<Payables_Mutation_Response>
   /** insert a single row into the table: "payables" */
@@ -2401,10 +2746,6 @@ export type Mutation_Root = {
   insert_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** insert a single row into the table: "recommendation_risk" */
   insert_recommendation_risk_one?: Maybe<Recommendation_Risk>
-  /** insert data into the table: "supporters" */
-  insert_supporters?: Maybe<Supporters_Mutation_Response>
-  /** insert a single row into the table: "supporters" */
-  insert_supporters_one?: Maybe<Supporters>
   /** insert data into the table: "user" */
   insert_user?: Maybe<User_Mutation_Response>
   /** insert a single row into the table: "user" */
@@ -2423,6 +2764,10 @@ export type Mutation_Root = {
   update_encumbrances?: Maybe<Encumbrances_Mutation_Response>
   /** update single row of the table: "encumbrances" */
   update_encumbrances_by_pk?: Maybe<Encumbrances>
+  /** update data of the table: "guarantors" */
+  update_guarantors?: Maybe<Guarantors_Mutation_Response>
+  /** update single row of the table: "guarantors" */
+  update_guarantors_by_pk?: Maybe<Guarantors>
   /** update data of the table: "loan_participants" */
   update_loan_participants?: Maybe<Loan_Participants_Mutation_Response>
   /** update single row of the table: "loan_participants" */
@@ -2435,6 +2780,10 @@ export type Mutation_Root = {
   update_loan_risk?: Maybe<Loan_Risk_Mutation_Response>
   /** update single row of the table: "loan_risk" */
   update_loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** update data of the table: "payable_type" */
+  update_payable_type?: Maybe<Payable_Type_Mutation_Response>
+  /** update single row of the table: "payable_type" */
+  update_payable_type_by_pk?: Maybe<Payable_Type>
   /** update data of the table: "payables" */
   update_payables?: Maybe<Payables_Mutation_Response>
   /** update single row of the table: "payables" */
@@ -2447,10 +2796,6 @@ export type Mutation_Root = {
   update_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** update single row of the table: "recommendation_risk" */
   update_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
-  /** update data of the table: "supporters" */
-  update_supporters?: Maybe<Supporters_Mutation_Response>
-  /** update single row of the table: "supporters" */
-  update_supporters_by_pk?: Maybe<Supporters>
   /** update data of the table: "user" */
   update_user?: Maybe<User_Mutation_Response>
   /** update single row of the table: "user" */
@@ -2489,6 +2834,17 @@ export type Mutation_RootDelete_Encumbrances_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootDelete_GuarantorsArgs = {
+  where: Guarantors_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Guarantors_By_PkArgs = {
+  guarantor_id: Scalars["uuid"]
+  request_id: Scalars["uuid"]
+}
+
+/** mutation root */
 export type Mutation_RootDelete_Loan_ParticipantsArgs = {
   where: Loan_Participants_Bool_Exp
 }
@@ -2521,6 +2877,16 @@ export type Mutation_RootDelete_Loan_Risk_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootDelete_Payable_TypeArgs = {
+  where: Payable_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Payable_Type_By_PkArgs = {
+  value: Scalars["String"]
+}
+
+/** mutation root */
 export type Mutation_RootDelete_PayablesArgs = {
   where: Payables_Bool_Exp
 }
@@ -2538,6 +2904,7 @@ export type Mutation_RootDelete_ReceivablesArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Receivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver_id: Scalars["uuid"]
 }
 
 /** mutation root */
@@ -2547,18 +2914,8 @@ export type Mutation_RootDelete_Recommendation_RiskArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Recommendation_Risk_By_PkArgs = {
-  recommender_id: Scalars["uuid"]
-}
-
-/** mutation root */
-export type Mutation_RootDelete_SupportersArgs = {
-  where: Supporters_Bool_Exp
-}
-
-/** mutation root */
-export type Mutation_RootDelete_Supporters_By_PkArgs = {
-  request_id: Scalars["uuid"]
-  supporter_id: Scalars["uuid"]
+  agent_id: Scalars["uuid"]
+  neighbor_id: Scalars["uuid"]
 }
 
 /** mutation root */
@@ -2608,6 +2965,18 @@ export type Mutation_RootInsert_Encumbrances_OneArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootInsert_GuarantorsArgs = {
+  objects: Array<Guarantors_Insert_Input>
+  on_conflict?: Maybe<Guarantors_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Guarantors_OneArgs = {
+  object: Guarantors_Insert_Input
+  on_conflict?: Maybe<Guarantors_On_Conflict>
+}
+
+/** mutation root */
 export type Mutation_RootInsert_Loan_ParticipantsArgs = {
   objects: Array<Loan_Participants_Insert_Input>
   on_conflict?: Maybe<Loan_Participants_On_Conflict>
@@ -2644,6 +3013,18 @@ export type Mutation_RootInsert_Loan_Risk_OneArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootInsert_Payable_TypeArgs = {
+  objects: Array<Payable_Type_Insert_Input>
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Payable_Type_OneArgs = {
+  object: Payable_Type_Insert_Input
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** mutation root */
 export type Mutation_RootInsert_PayablesArgs = {
   objects: Array<Payables_Insert_Input>
   on_conflict?: Maybe<Payables_On_Conflict>
@@ -2677,18 +3058,6 @@ export type Mutation_RootInsert_Recommendation_RiskArgs = {
 export type Mutation_RootInsert_Recommendation_Risk_OneArgs = {
   object: Recommendation_Risk_Insert_Input
   on_conflict?: Maybe<Recommendation_Risk_On_Conflict>
-}
-
-/** mutation root */
-export type Mutation_RootInsert_SupportersArgs = {
-  objects: Array<Supporters_Insert_Input>
-  on_conflict?: Maybe<Supporters_On_Conflict>
-}
-
-/** mutation root */
-export type Mutation_RootInsert_Supporters_OneArgs = {
-  object: Supporters_Insert_Input
-  on_conflict?: Maybe<Supporters_On_Conflict>
 }
 
 /** mutation root */
@@ -2743,6 +3112,30 @@ export type Mutation_RootUpdate_Encumbrances_By_PkArgs = {
   _inc?: Maybe<Encumbrances_Inc_Input>
   _set?: Maybe<Encumbrances_Set_Input>
   pk_columns: Encumbrances_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_GuarantorsArgs = {
+  _append?: Maybe<Guarantors_Append_Input>
+  _delete_at_path?: Maybe<Guarantors_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Guarantors_Delete_Elem_Input>
+  _delete_key?: Maybe<Guarantors_Delete_Key_Input>
+  _inc?: Maybe<Guarantors_Inc_Input>
+  _prepend?: Maybe<Guarantors_Prepend_Input>
+  _set?: Maybe<Guarantors_Set_Input>
+  where: Guarantors_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Guarantors_By_PkArgs = {
+  _append?: Maybe<Guarantors_Append_Input>
+  _delete_at_path?: Maybe<Guarantors_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Guarantors_Delete_Elem_Input>
+  _delete_key?: Maybe<Guarantors_Delete_Key_Input>
+  _inc?: Maybe<Guarantors_Inc_Input>
+  _prepend?: Maybe<Guarantors_Prepend_Input>
+  _set?: Maybe<Guarantors_Set_Input>
+  pk_columns: Guarantors_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -2806,6 +3199,18 @@ export type Mutation_RootUpdate_Loan_Risk_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootUpdate_Payable_TypeArgs = {
+  _set?: Maybe<Payable_Type_Set_Input>
+  where: Payable_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Payable_Type_By_PkArgs = {
+  _set?: Maybe<Payable_Type_Set_Input>
+  pk_columns: Payable_Type_Pk_Columns_Input
+}
+
+/** mutation root */
 export type Mutation_RootUpdate_PayablesArgs = {
   _inc?: Maybe<Payables_Inc_Input>
   _set?: Maybe<Payables_Set_Input>
@@ -2853,30 +3258,6 @@ export type Mutation_RootUpdate_Recommendation_Risk_By_PkArgs = {
   _prepend?: Maybe<Recommendation_Risk_Prepend_Input>
   _set?: Maybe<Recommendation_Risk_Set_Input>
   pk_columns: Recommendation_Risk_Pk_Columns_Input
-}
-
-/** mutation root */
-export type Mutation_RootUpdate_SupportersArgs = {
-  _append?: Maybe<Supporters_Append_Input>
-  _delete_at_path?: Maybe<Supporters_Delete_At_Path_Input>
-  _delete_elem?: Maybe<Supporters_Delete_Elem_Input>
-  _delete_key?: Maybe<Supporters_Delete_Key_Input>
-  _inc?: Maybe<Supporters_Inc_Input>
-  _prepend?: Maybe<Supporters_Prepend_Input>
-  _set?: Maybe<Supporters_Set_Input>
-  where: Supporters_Bool_Exp
-}
-
-/** mutation root */
-export type Mutation_RootUpdate_Supporters_By_PkArgs = {
-  _append?: Maybe<Supporters_Append_Input>
-  _delete_at_path?: Maybe<Supporters_Delete_At_Path_Input>
-  _delete_elem?: Maybe<Supporters_Delete_Elem_Input>
-  _delete_key?: Maybe<Supporters_Delete_Key_Input>
-  _inc?: Maybe<Supporters_Inc_Input>
-  _prepend?: Maybe<Supporters_Prepend_Input>
-  _set?: Maybe<Supporters_Set_Input>
-  pk_columns: Supporters_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -2932,20 +3313,190 @@ export enum Order_By {
   DescNullsLast = "desc_nulls_last",
 }
 
+/** columns and relationships of "payable_type" */
+export type Payable_Type = {
+  __typename?: "payable_type"
+  comment?: Maybe<Scalars["String"]>
+  /** An array relationship */
+  payables: Array<Payables>
+  /** An aggregated array relationship */
+  payables_aggregate: Payables_Aggregate
+  value: Scalars["String"]
+}
+
+/** columns and relationships of "payable_type" */
+export type Payable_TypePayablesArgs = {
+  distinct_on?: Maybe<Array<Payables_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payables_Order_By>>
+  where?: Maybe<Payables_Bool_Exp>
+}
+
+/** columns and relationships of "payable_type" */
+export type Payable_TypePayables_AggregateArgs = {
+  distinct_on?: Maybe<Array<Payables_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payables_Order_By>>
+  where?: Maybe<Payables_Bool_Exp>
+}
+
+/** aggregated selection of "payable_type" */
+export type Payable_Type_Aggregate = {
+  __typename?: "payable_type_aggregate"
+  aggregate?: Maybe<Payable_Type_Aggregate_Fields>
+  nodes: Array<Payable_Type>
+}
+
+/** aggregate fields of "payable_type" */
+export type Payable_Type_Aggregate_Fields = {
+  __typename?: "payable_type_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Payable_Type_Max_Fields>
+  min?: Maybe<Payable_Type_Min_Fields>
+}
+
+/** aggregate fields of "payable_type" */
+export type Payable_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Payable_Type_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "payable_type" */
+export type Payable_Type_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Payable_Type_Max_Order_By>
+  min?: Maybe<Payable_Type_Min_Order_By>
+}
+
+/** input type for inserting array relation for remote table "payable_type" */
+export type Payable_Type_Arr_Rel_Insert_Input = {
+  data: Array<Payable_Type_Insert_Input>
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "payable_type". All fields are combined with a logical 'AND'. */
+export type Payable_Type_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Payable_Type_Bool_Exp>>>
+  _not?: Maybe<Payable_Type_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Payable_Type_Bool_Exp>>>
+  comment?: Maybe<String_Comparison_Exp>
+  payables?: Maybe<Payables_Bool_Exp>
+  value?: Maybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "payable_type" */
+export enum Payable_Type_Constraint {
+  /** unique or primary key constraint */
+  PayableTypePkey = "payable_type_pkey",
+}
+
+/** input type for inserting data into table "payable_type" */
+export type Payable_Type_Insert_Input = {
+  comment?: Maybe<Scalars["String"]>
+  payables?: Maybe<Payables_Arr_Rel_Insert_Input>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** aggregate max on columns */
+export type Payable_Type_Max_Fields = {
+  __typename?: "payable_type_max_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by max() on columns of table "payable_type" */
+export type Payable_Type_Max_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Payable_Type_Min_Fields = {
+  __typename?: "payable_type_min_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by min() on columns of table "payable_type" */
+export type Payable_Type_Min_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "payable_type" */
+export type Payable_Type_Mutation_Response = {
+  __typename?: "payable_type_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Payable_Type>
+}
+
+/** input type for inserting object relation for remote table "payable_type" */
+export type Payable_Type_Obj_Rel_Insert_Input = {
+  data: Payable_Type_Insert_Input
+  on_conflict?: Maybe<Payable_Type_On_Conflict>
+}
+
+/** on conflict condition type for table "payable_type" */
+export type Payable_Type_On_Conflict = {
+  constraint: Payable_Type_Constraint
+  update_columns: Array<Payable_Type_Update_Column>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** ordering options when selecting data from "payable_type" */
+export type Payable_Type_Order_By = {
+  comment?: Maybe<Order_By>
+  payables_aggregate?: Maybe<Payables_Aggregate_Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "payable_type" */
+export type Payable_Type_Pk_Columns_Input = {
+  value: Scalars["String"]
+}
+
+/** select columns of table "payable_type" */
+export enum Payable_Type_Select_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
+/** input type for updating data in table "payable_type" */
+export type Payable_Type_Set_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** update columns of table "payable_type" */
+export enum Payable_Type_Update_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
 /** columns and relationships of "payables" */
 export type Payables = {
   __typename?: "payables"
-  amount_paid: Scalars["float8"]
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total: Scalars["float8"]
+  amount_paid: Scalars["Int"]
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total: Scalars["Int"]
   created_at?: Maybe<Scalars["timestamptz"]>
-  due_date?: Maybe<Scalars["timetz"]>
+  due_date: Scalars["timetz"]
   last_paid?: Maybe<Scalars["timetz"]>
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
-  pay_frequency?: Maybe<Scalars["Int"]>
   pay_priority: Scalars["Int"]
+  /** An object relationship */
+  payableTypeByPayableType: Payable_Type
+  payable_type: Scalars["String"]
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -3005,7 +3556,6 @@ export type Payables_Avg_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3014,7 +3564,6 @@ export type Payables_Avg_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3023,16 +3572,17 @@ export type Payables_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Payables_Bool_Exp>>>
   _not?: Maybe<Payables_Bool_Exp>
   _or?: Maybe<Array<Maybe<Payables_Bool_Exp>>>
-  amount_paid?: Maybe<Float8_Comparison_Exp>
-  amount_remain?: Maybe<Float8_Comparison_Exp>
-  amount_total?: Maybe<Float8_Comparison_Exp>
+  amount_paid?: Maybe<Int_Comparison_Exp>
+  amount_remain?: Maybe<Int_Comparison_Exp>
+  amount_total?: Maybe<Int_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   due_date?: Maybe<Timetz_Comparison_Exp>
   last_paid?: Maybe<Timetz_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
-  pay_frequency?: Maybe<Int_Comparison_Exp>
   pay_priority?: Maybe<Int_Comparison_Exp>
+  payableTypeByPayableType?: Maybe<Payable_Type_Bool_Exp>
+  payable_type?: Maybe<String_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
 }
 
@@ -3044,40 +3594,40 @@ export enum Payables_Constraint {
 
 /** input type for incrementing integer column in table "payables" */
 export type Payables_Inc_Input = {
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
-  pay_frequency?: Maybe<Scalars["Int"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
 }
 
 /** input type for inserting data into table "payables" */
 export type Payables_Insert_Input = {
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["timetz"]>
   last_paid?: Maybe<Scalars["timetz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
-  pay_frequency?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
+  payableTypeByPayableType?: Maybe<Payable_Type_Obj_Rel_Insert_Input>
+  payable_type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** aggregate max on columns */
 export type Payables_Max_Fields = {
   __typename?: "payables_max_fields"
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["timetz"]>
   last_paid?: Maybe<Scalars["timetz"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  pay_frequency?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
+  payable_type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -3090,23 +3640,23 @@ export type Payables_Max_Order_By = {
   due_date?: Maybe<Order_By>
   last_paid?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
+  payable_type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
 export type Payables_Min_Fields = {
   __typename?: "payables_min_fields"
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["timetz"]>
   last_paid?: Maybe<Scalars["timetz"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  pay_frequency?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
+  payable_type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -3119,8 +3669,8 @@ export type Payables_Min_Order_By = {
   due_date?: Maybe<Order_By>
   last_paid?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
+  payable_type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -3156,8 +3706,9 @@ export type Payables_Order_By = {
   last_paid?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
+  payableTypeByPayableType?: Maybe<Payable_Type_Order_By>
+  payable_type?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -3183,24 +3734,24 @@ export enum Payables_Select_Column {
   /** column name */
   LoanId = "loan_id",
   /** column name */
-  PayFrequency = "pay_frequency",
-  /** column name */
   PayPriority = "pay_priority",
+  /** column name */
+  PayableType = "payable_type",
   /** column name */
   UpdatedAt = "updated_at",
 }
 
 /** input type for updating data in table "payables" */
 export type Payables_Set_Input = {
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["timetz"]>
   last_paid?: Maybe<Scalars["timetz"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  pay_frequency?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
+  payable_type?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -3210,7 +3761,6 @@ export type Payables_Stddev_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3219,7 +3769,6 @@ export type Payables_Stddev_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3229,7 +3778,6 @@ export type Payables_Stddev_Pop_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3238,7 +3786,6 @@ export type Payables_Stddev_Pop_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3248,7 +3795,6 @@ export type Payables_Stddev_Samp_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3257,17 +3803,15 @@ export type Payables_Stddev_Samp_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
 /** aggregate sum on columns */
 export type Payables_Sum_Fields = {
   __typename?: "payables_sum_fields"
-  amount_paid?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
-  pay_frequency?: Maybe<Scalars["Int"]>
+  amount_paid?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   pay_priority?: Maybe<Scalars["Int"]>
 }
 
@@ -3276,7 +3820,6 @@ export type Payables_Sum_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3297,9 +3840,9 @@ export enum Payables_Update_Column {
   /** column name */
   LoanId = "loan_id",
   /** column name */
-  PayFrequency = "pay_frequency",
-  /** column name */
   PayPriority = "pay_priority",
+  /** column name */
+  PayableType = "payable_type",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -3310,7 +3853,6 @@ export type Payables_Var_Pop_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3319,7 +3861,6 @@ export type Payables_Var_Pop_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3329,7 +3870,6 @@ export type Payables_Var_Samp_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3338,7 +3878,6 @@ export type Payables_Var_Samp_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3348,7 +3887,6 @@ export type Payables_Variance_Fields = {
   amount_paid?: Maybe<Scalars["Float"]>
   amount_remain?: Maybe<Scalars["Float"]>
   amount_total?: Maybe<Scalars["Float"]>
-  pay_frequency?: Maybe<Scalars["Float"]>
   pay_priority?: Maybe<Scalars["Float"]>
 }
 
@@ -3357,7 +3895,6 @@ export type Payables_Variance_Order_By = {
   amount_paid?: Maybe<Order_By>
   amount_remain?: Maybe<Order_By>
   amount_total?: Maybe<Order_By>
-  pay_frequency?: Maybe<Order_By>
   pay_priority?: Maybe<Order_By>
 }
 
@@ -3382,6 +3919,12 @@ export type Query_Root = {
   encumbrances_aggregate: Encumbrances_Aggregate
   /** fetch data from the table: "encumbrances" using primary key columns */
   encumbrances_by_pk?: Maybe<Encumbrances>
+  /** fetch data from the table: "guarantors" */
+  guarantors: Array<Guarantors>
+  /** fetch aggregated fields from the table: "guarantors" */
+  guarantors_aggregate: Guarantors_Aggregate
+  /** fetch data from the table: "guarantors" using primary key columns */
+  guarantors_by_pk?: Maybe<Guarantors>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -3400,6 +3943,12 @@ export type Query_Root = {
   loan_risk_aggregate: Loan_Risk_Aggregate
   /** fetch data from the table: "loan_risk" using primary key columns */
   loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** fetch data from the table: "payable_type" */
+  payable_type: Array<Payable_Type>
+  /** fetch aggregated fields from the table: "payable_type" */
+  payable_type_aggregate: Payable_Type_Aggregate
+  /** fetch data from the table: "payable_type" using primary key columns */
+  payable_type_by_pk?: Maybe<Payable_Type>
   /** fetch data from the table: "payables" */
   payables: Array<Payables>
   /** fetch aggregated fields from the table: "payables" */
@@ -3418,12 +3967,6 @@ export type Query_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
-  /** fetch data from the table: "supporters" */
-  supporters: Array<Supporters>
-  /** fetch aggregated fields from the table: "supporters" */
-  supporters_aggregate: Supporters_Aggregate
-  /** fetch data from the table: "supporters" using primary key columns */
-  supporters_by_pk?: Maybe<Supporters>
   /** fetch data from the table: "user" */
   user: Array<User>
   /** fetch aggregated fields from the table: "user" */
@@ -3503,6 +4046,30 @@ export type Query_RootEncumbrances_By_PkArgs = {
 }
 
 /** query root */
+export type Query_RootGuarantorsArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootGuarantors_AggregateArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootGuarantors_By_PkArgs = {
+  guarantor_id: Scalars["uuid"]
+  request_id: Scalars["uuid"]
+}
+
+/** query root */
 export type Query_RootLoan_ParticipantsArgs = {
   distinct_on?: Maybe<Array<Loan_Participants_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -3574,6 +4141,29 @@ export type Query_RootLoan_Risk_By_PkArgs = {
 }
 
 /** query root */
+export type Query_RootPayable_TypeArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootPayable_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootPayable_Type_By_PkArgs = {
+  value: Scalars["String"]
+}
+
+/** query root */
 export type Query_RootPayablesArgs = {
   distinct_on?: Maybe<Array<Payables_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -3617,6 +4207,7 @@ export type Query_RootReceivables_AggregateArgs = {
 /** query root */
 export type Query_RootReceivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver_id: Scalars["uuid"]
 }
 
 /** query root */
@@ -3639,31 +4230,8 @@ export type Query_RootRecommendation_Risk_AggregateArgs = {
 
 /** query root */
 export type Query_RootRecommendation_Risk_By_PkArgs = {
-  recommender_id: Scalars["uuid"]
-}
-
-/** query root */
-export type Query_RootSupportersArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** query root */
-export type Query_RootSupporters_AggregateArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** query root */
-export type Query_RootSupporters_By_PkArgs = {
-  request_id: Scalars["uuid"]
-  supporter_id: Scalars["uuid"]
+  agent_id: Scalars["uuid"]
+  neighbor_id: Scalars["uuid"]
 }
 
 /** query root */
@@ -3692,22 +4260,22 @@ export type Query_RootUser_By_PkArgs = {
 /** columns and relationships of "receivables" */
 export type Receivables = {
   __typename?: "receivables"
-  amount_received: Scalars["float8"]
-  amount_remain: Scalars["float8"]
-  amount_total: Scalars["float8"]
+  amount_received: Scalars["Int"]
+  amount_remain: Scalars["Int"]
+  amount_total: Scalars["Int"]
   created_at: Scalars["timestamptz"]
-  due_date?: Maybe<Scalars["date"]>
-  encumbrance_id?: Maybe<Scalars["uuid"]>
-  last_received?: Maybe<Scalars["timestamptz"]>
+  due_date: Scalars["date"]
+  encumbrance_id: Scalars["uuid"]
+  last_received: Scalars["timestamptz"]
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
-  receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
-  status?: Maybe<Scalars["String"]>
+  receive_frequency: Scalars["Int"]
+  receiver_id: Scalars["uuid"]
+  status: Scalars["String"]
   updated_at: Scalars["timestamptz"]
   /** An object relationship */
-  user?: Maybe<User>
+  user: User
 }
 
 /** aggregated selection of "receivables" */
@@ -3782,9 +4350,9 @@ export type Receivables_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Receivables_Bool_Exp>>>
   _not?: Maybe<Receivables_Bool_Exp>
   _or?: Maybe<Array<Maybe<Receivables_Bool_Exp>>>
-  amount_received?: Maybe<Float8_Comparison_Exp>
-  amount_remain?: Maybe<Float8_Comparison_Exp>
-  amount_total?: Maybe<Float8_Comparison_Exp>
+  amount_received?: Maybe<Int_Comparison_Exp>
+  amount_remain?: Maybe<Int_Comparison_Exp>
+  amount_total?: Maybe<Int_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   due_date?: Maybe<Date_Comparison_Exp>
   encumbrance_id?: Maybe<Uuid_Comparison_Exp>
@@ -3806,17 +4374,17 @@ export enum Receivables_Constraint {
 
 /** input type for incrementing integer column in table "receivables" */
 export type Receivables_Inc_Input = {
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   receive_frequency?: Maybe<Scalars["Int"]>
 }
 
 /** input type for inserting data into table "receivables" */
 export type Receivables_Insert_Input = {
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["date"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
@@ -3833,9 +4401,9 @@ export type Receivables_Insert_Input = {
 /** aggregate max on columns */
 export type Receivables_Max_Fields = {
   __typename?: "receivables_max_fields"
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["date"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
@@ -3866,9 +4434,9 @@ export type Receivables_Max_Order_By = {
 /** aggregate min on columns */
 export type Receivables_Min_Fields = {
   __typename?: "receivables_min_fields"
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["date"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
@@ -3939,6 +4507,7 @@ export type Receivables_Order_By = {
 /** primary key columns input for table: "receivables" */
 export type Receivables_Pk_Columns_Input = {
   loan_id: Scalars["uuid"]
+  receiver_id: Scalars["uuid"]
 }
 
 /** select columns of table "receivables" */
@@ -3971,9 +4540,9 @@ export enum Receivables_Select_Column {
 
 /** input type for updating data in table "receivables" */
 export type Receivables_Set_Input = {
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   due_date?: Maybe<Scalars["date"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
@@ -4039,9 +4608,9 @@ export type Receivables_Stddev_Samp_Order_By = {
 /** aggregate sum on columns */
 export type Receivables_Sum_Fields = {
   __typename?: "receivables_sum_fields"
-  amount_received?: Maybe<Scalars["float8"]>
-  amount_remain?: Maybe<Scalars["float8"]>
-  amount_total?: Maybe<Scalars["float8"]>
+  amount_received?: Maybe<Scalars["Int"]>
+  amount_remain?: Maybe<Scalars["Int"]>
+  amount_total?: Maybe<Scalars["Int"]>
   receive_frequency?: Maybe<Scalars["Int"]>
 }
 
@@ -4135,18 +4704,18 @@ export type Receivables_Variance_Order_By = {
 /** columns and relationships of "recommendation_risk" */
 export type Recommendation_Risk = {
   __typename?: "recommendation_risk"
-  agent_id?: Maybe<Scalars["uuid"]>
-  recommender_id: Scalars["uuid"]
-  risk_params?: Maybe<Scalars["jsonb"]>
+  agent_id: Scalars["uuid"]
+  neighbor_id: Scalars["uuid"]
+  recommendation_risk: Scalars["jsonb"]
   updated_at: Scalars["timestamptz"]
   /** An object relationship */
-  user?: Maybe<User>
+  user: User
   /** An object relationship */
   userByNeighborId: User
 }
 
 /** columns and relationships of "recommendation_risk" */
-export type Recommendation_RiskRisk_ParamsArgs = {
+export type Recommendation_RiskRecommendation_RiskArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
@@ -4180,7 +4749,7 @@ export type Recommendation_Risk_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Recommendation_Risk_Append_Input = {
-  risk_params?: Maybe<Scalars["jsonb"]>
+  recommendation_risk?: Maybe<Scalars["jsonb"]>
 }
 
 /** input type for inserting array relation for remote table "recommendation_risk" */
@@ -4195,8 +4764,8 @@ export type Recommendation_Risk_Bool_Exp = {
   _not?: Maybe<Recommendation_Risk_Bool_Exp>
   _or?: Maybe<Array<Maybe<Recommendation_Risk_Bool_Exp>>>
   agent_id?: Maybe<Uuid_Comparison_Exp>
-  recommender_id?: Maybe<Uuid_Comparison_Exp>
-  risk_params?: Maybe<Jsonb_Comparison_Exp>
+  neighbor_id?: Maybe<Uuid_Comparison_Exp>
+  recommendation_risk?: Maybe<Jsonb_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
   userByNeighborId?: Maybe<User_Bool_Exp>
@@ -4205,29 +4774,29 @@ export type Recommendation_Risk_Bool_Exp = {
 /** unique or primary key constraints on table "recommendation_risk" */
 export enum Recommendation_Risk_Constraint {
   /** unique or primary key constraint */
-  RecommendationRiskPkey = "recommendation_risk_pkey",
+  RiskPkey = "risk_pkey",
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Recommendation_Risk_Delete_At_Path_Input = {
-  risk_params?: Maybe<Array<Maybe<Scalars["String"]>>>
+  recommendation_risk?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Recommendation_Risk_Delete_Elem_Input = {
-  risk_params?: Maybe<Scalars["Int"]>
+  recommendation_risk?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Recommendation_Risk_Delete_Key_Input = {
-  risk_params?: Maybe<Scalars["String"]>
+  recommendation_risk?: Maybe<Scalars["String"]>
 }
 
 /** input type for inserting data into table "recommendation_risk" */
 export type Recommendation_Risk_Insert_Input = {
   agent_id?: Maybe<Scalars["uuid"]>
-  recommender_id?: Maybe<Scalars["uuid"]>
-  risk_params?: Maybe<Scalars["jsonb"]>
+  neighbor_id?: Maybe<Scalars["uuid"]>
+  recommendation_risk?: Maybe<Scalars["jsonb"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
   userByNeighborId?: Maybe<User_Obj_Rel_Insert_Input>
@@ -4237,14 +4806,14 @@ export type Recommendation_Risk_Insert_Input = {
 export type Recommendation_Risk_Max_Fields = {
   __typename?: "recommendation_risk_max_fields"
   agent_id?: Maybe<Scalars["uuid"]>
-  recommender_id?: Maybe<Scalars["uuid"]>
+  neighbor_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by max() on columns of table "recommendation_risk" */
 export type Recommendation_Risk_Max_Order_By = {
   agent_id?: Maybe<Order_By>
-  recommender_id?: Maybe<Order_By>
+  neighbor_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -4252,14 +4821,14 @@ export type Recommendation_Risk_Max_Order_By = {
 export type Recommendation_Risk_Min_Fields = {
   __typename?: "recommendation_risk_min_fields"
   agent_id?: Maybe<Scalars["uuid"]>
-  recommender_id?: Maybe<Scalars["uuid"]>
+  neighbor_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by min() on columns of table "recommendation_risk" */
 export type Recommendation_Risk_Min_Order_By = {
   agent_id?: Maybe<Order_By>
-  recommender_id?: Maybe<Order_By>
+  neighbor_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -4288,8 +4857,8 @@ export type Recommendation_Risk_On_Conflict = {
 /** ordering options when selecting data from "recommendation_risk" */
 export type Recommendation_Risk_Order_By = {
   agent_id?: Maybe<Order_By>
-  recommender_id?: Maybe<Order_By>
-  risk_params?: Maybe<Order_By>
+  neighbor_id?: Maybe<Order_By>
+  recommendation_risk?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
   userByNeighborId?: Maybe<User_Order_By>
@@ -4297,12 +4866,13 @@ export type Recommendation_Risk_Order_By = {
 
 /** primary key columns input for table: "recommendation_risk" */
 export type Recommendation_Risk_Pk_Columns_Input = {
-  recommender_id: Scalars["uuid"]
+  agent_id: Scalars["uuid"]
+  neighbor_id: Scalars["uuid"]
 }
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Recommendation_Risk_Prepend_Input = {
-  risk_params?: Maybe<Scalars["jsonb"]>
+  recommendation_risk?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "recommendation_risk" */
@@ -4310,9 +4880,9 @@ export enum Recommendation_Risk_Select_Column {
   /** column name */
   AgentId = "agent_id",
   /** column name */
-  RecommenderId = "recommender_id",
+  NeighborId = "neighbor_id",
   /** column name */
-  RiskParams = "risk_params",
+  RecommendationRisk = "recommendation_risk",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -4320,8 +4890,8 @@ export enum Recommendation_Risk_Select_Column {
 /** input type for updating data in table "recommendation_risk" */
 export type Recommendation_Risk_Set_Input = {
   agent_id?: Maybe<Scalars["uuid"]>
-  recommender_id?: Maybe<Scalars["uuid"]>
-  risk_params?: Maybe<Scalars["jsonb"]>
+  neighbor_id?: Maybe<Scalars["uuid"]>
+  recommendation_risk?: Maybe<Scalars["jsonb"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -4330,9 +4900,9 @@ export enum Recommendation_Risk_Update_Column {
   /** column name */
   AgentId = "agent_id",
   /** column name */
-  RecommenderId = "recommender_id",
+  NeighborId = "neighbor_id",
   /** column name */
-  RiskParams = "risk_params",
+  RecommendationRisk = "recommendation_risk",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -4358,6 +4928,12 @@ export type Subscription_Root = {
   encumbrances_aggregate: Encumbrances_Aggregate
   /** fetch data from the table: "encumbrances" using primary key columns */
   encumbrances_by_pk?: Maybe<Encumbrances>
+  /** fetch data from the table: "guarantors" */
+  guarantors: Array<Guarantors>
+  /** fetch aggregated fields from the table: "guarantors" */
+  guarantors_aggregate: Guarantors_Aggregate
+  /** fetch data from the table: "guarantors" using primary key columns */
+  guarantors_by_pk?: Maybe<Guarantors>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -4376,6 +4952,12 @@ export type Subscription_Root = {
   loan_risk_aggregate: Loan_Risk_Aggregate
   /** fetch data from the table: "loan_risk" using primary key columns */
   loan_risk_by_pk?: Maybe<Loan_Risk>
+  /** fetch data from the table: "payable_type" */
+  payable_type: Array<Payable_Type>
+  /** fetch aggregated fields from the table: "payable_type" */
+  payable_type_aggregate: Payable_Type_Aggregate
+  /** fetch data from the table: "payable_type" using primary key columns */
+  payable_type_by_pk?: Maybe<Payable_Type>
   /** fetch data from the table: "payables" */
   payables: Array<Payables>
   /** fetch aggregated fields from the table: "payables" */
@@ -4394,12 +4976,6 @@ export type Subscription_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
-  /** fetch data from the table: "supporters" */
-  supporters: Array<Supporters>
-  /** fetch aggregated fields from the table: "supporters" */
-  supporters_aggregate: Supporters_Aggregate
-  /** fetch data from the table: "supporters" using primary key columns */
-  supporters_by_pk?: Maybe<Supporters>
   /** fetch data from the table: "user" */
   user: Array<User>
   /** fetch aggregated fields from the table: "user" */
@@ -4479,6 +5055,30 @@ export type Subscription_RootEncumbrances_By_PkArgs = {
 }
 
 /** subscription root */
+export type Subscription_RootGuarantorsArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootGuarantors_AggregateArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootGuarantors_By_PkArgs = {
+  guarantor_id: Scalars["uuid"]
+  request_id: Scalars["uuid"]
+}
+
+/** subscription root */
 export type Subscription_RootLoan_ParticipantsArgs = {
   distinct_on?: Maybe<Array<Loan_Participants_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -4550,6 +5150,29 @@ export type Subscription_RootLoan_Risk_By_PkArgs = {
 }
 
 /** subscription root */
+export type Subscription_RootPayable_TypeArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootPayable_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Payable_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Payable_Type_Order_By>>
+  where?: Maybe<Payable_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootPayable_Type_By_PkArgs = {
+  value: Scalars["String"]
+}
+
+/** subscription root */
 export type Subscription_RootPayablesArgs = {
   distinct_on?: Maybe<Array<Payables_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -4593,6 +5216,7 @@ export type Subscription_RootReceivables_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootReceivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver_id: Scalars["uuid"]
 }
 
 /** subscription root */
@@ -4615,31 +5239,8 @@ export type Subscription_RootRecommendation_Risk_AggregateArgs = {
 
 /** subscription root */
 export type Subscription_RootRecommendation_Risk_By_PkArgs = {
-  recommender_id: Scalars["uuid"]
-}
-
-/** subscription root */
-export type Subscription_RootSupportersArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** subscription root */
-export type Subscription_RootSupporters_AggregateArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** subscription root */
-export type Subscription_RootSupporters_By_PkArgs = {
-  request_id: Scalars["uuid"]
-  supporter_id: Scalars["uuid"]
+  agent_id: Scalars["uuid"]
+  neighbor_id: Scalars["uuid"]
 }
 
 /** subscription root */
@@ -4663,356 +5264,6 @@ export type Subscription_RootUser_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootUser_By_PkArgs = {
   id: Scalars["uuid"]
-}
-
-/** columns and relationships of "supporters" */
-export type Supporters = {
-  __typename?: "supporters"
-  guarantee_division?: Maybe<Scalars["jsonb"]>
-  invest_in_corpus: Scalars["Boolean"]
-  /** An object relationship */
-  loan_request: Loan_Requests
-  participation_request_time: Scalars["timestamptz"]
-  pledge_amount: Scalars["float8"]
-  request_id: Scalars["uuid"]
-  status: Scalars["String"]
-  supporter_id: Scalars["uuid"]
-  /** An object relationship */
-  user: User
-}
-
-/** columns and relationships of "supporters" */
-export type SupportersGuarantee_DivisionArgs = {
-  path?: Maybe<Scalars["String"]>
-}
-
-/** aggregated selection of "supporters" */
-export type Supporters_Aggregate = {
-  __typename?: "supporters_aggregate"
-  aggregate?: Maybe<Supporters_Aggregate_Fields>
-  nodes: Array<Supporters>
-}
-
-/** aggregate fields of "supporters" */
-export type Supporters_Aggregate_Fields = {
-  __typename?: "supporters_aggregate_fields"
-  avg?: Maybe<Supporters_Avg_Fields>
-  count?: Maybe<Scalars["Int"]>
-  max?: Maybe<Supporters_Max_Fields>
-  min?: Maybe<Supporters_Min_Fields>
-  stddev?: Maybe<Supporters_Stddev_Fields>
-  stddev_pop?: Maybe<Supporters_Stddev_Pop_Fields>
-  stddev_samp?: Maybe<Supporters_Stddev_Samp_Fields>
-  sum?: Maybe<Supporters_Sum_Fields>
-  var_pop?: Maybe<Supporters_Var_Pop_Fields>
-  var_samp?: Maybe<Supporters_Var_Samp_Fields>
-  variance?: Maybe<Supporters_Variance_Fields>
-}
-
-/** aggregate fields of "supporters" */
-export type Supporters_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Supporters_Select_Column>>
-  distinct?: Maybe<Scalars["Boolean"]>
-}
-
-/** order by aggregate values of table "supporters" */
-export type Supporters_Aggregate_Order_By = {
-  avg?: Maybe<Supporters_Avg_Order_By>
-  count?: Maybe<Order_By>
-  max?: Maybe<Supporters_Max_Order_By>
-  min?: Maybe<Supporters_Min_Order_By>
-  stddev?: Maybe<Supporters_Stddev_Order_By>
-  stddev_pop?: Maybe<Supporters_Stddev_Pop_Order_By>
-  stddev_samp?: Maybe<Supporters_Stddev_Samp_Order_By>
-  sum?: Maybe<Supporters_Sum_Order_By>
-  var_pop?: Maybe<Supporters_Var_Pop_Order_By>
-  var_samp?: Maybe<Supporters_Var_Samp_Order_By>
-  variance?: Maybe<Supporters_Variance_Order_By>
-}
-
-/** append existing jsonb value of filtered columns with new jsonb value */
-export type Supporters_Append_Input = {
-  guarantee_division?: Maybe<Scalars["jsonb"]>
-}
-
-/** input type for inserting array relation for remote table "supporters" */
-export type Supporters_Arr_Rel_Insert_Input = {
-  data: Array<Supporters_Insert_Input>
-  on_conflict?: Maybe<Supporters_On_Conflict>
-}
-
-/** aggregate avg on columns */
-export type Supporters_Avg_Fields = {
-  __typename?: "supporters_avg_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by avg() on columns of table "supporters" */
-export type Supporters_Avg_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** Boolean expression to filter rows from the table "supporters". All fields are combined with a logical 'AND'. */
-export type Supporters_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
-  _not?: Maybe<Supporters_Bool_Exp>
-  _or?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
-  guarantee_division?: Maybe<Jsonb_Comparison_Exp>
-  invest_in_corpus?: Maybe<Boolean_Comparison_Exp>
-  loan_request?: Maybe<Loan_Requests_Bool_Exp>
-  participation_request_time?: Maybe<Timestamptz_Comparison_Exp>
-  pledge_amount?: Maybe<Float8_Comparison_Exp>
-  request_id?: Maybe<Uuid_Comparison_Exp>
-  status?: Maybe<String_Comparison_Exp>
-  supporter_id?: Maybe<Uuid_Comparison_Exp>
-  user?: Maybe<User_Bool_Exp>
-}
-
-/** unique or primary key constraints on table "supporters" */
-export enum Supporters_Constraint {
-  /** unique or primary key constraint */
-  GuarantorsPkey = "guarantors_pkey",
-}
-
-/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-export type Supporters_Delete_At_Path_Input = {
-  guarantee_division?: Maybe<Array<Maybe<Scalars["String"]>>>
-}
-
-/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-export type Supporters_Delete_Elem_Input = {
-  guarantee_division?: Maybe<Scalars["Int"]>
-}
-
-/** delete key/value pair or string element. key/value pairs are matched based on their key value */
-export type Supporters_Delete_Key_Input = {
-  guarantee_division?: Maybe<Scalars["String"]>
-}
-
-/** input type for incrementing integer column in table "supporters" */
-export type Supporters_Inc_Input = {
-  pledge_amount?: Maybe<Scalars["float8"]>
-}
-
-/** input type for inserting data into table "supporters" */
-export type Supporters_Insert_Input = {
-  guarantee_division?: Maybe<Scalars["jsonb"]>
-  invest_in_corpus?: Maybe<Scalars["Boolean"]>
-  loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
-  participation_request_time?: Maybe<Scalars["timestamptz"]>
-  pledge_amount?: Maybe<Scalars["float8"]>
-  request_id?: Maybe<Scalars["uuid"]>
-  status?: Maybe<Scalars["String"]>
-  supporter_id?: Maybe<Scalars["uuid"]>
-  user?: Maybe<User_Obj_Rel_Insert_Input>
-}
-
-/** aggregate max on columns */
-export type Supporters_Max_Fields = {
-  __typename?: "supporters_max_fields"
-  participation_request_time?: Maybe<Scalars["timestamptz"]>
-  pledge_amount?: Maybe<Scalars["float8"]>
-  request_id?: Maybe<Scalars["uuid"]>
-  status?: Maybe<Scalars["String"]>
-  supporter_id?: Maybe<Scalars["uuid"]>
-}
-
-/** order by max() on columns of table "supporters" */
-export type Supporters_Max_Order_By = {
-  participation_request_time?: Maybe<Order_By>
-  pledge_amount?: Maybe<Order_By>
-  request_id?: Maybe<Order_By>
-  status?: Maybe<Order_By>
-  supporter_id?: Maybe<Order_By>
-}
-
-/** aggregate min on columns */
-export type Supporters_Min_Fields = {
-  __typename?: "supporters_min_fields"
-  participation_request_time?: Maybe<Scalars["timestamptz"]>
-  pledge_amount?: Maybe<Scalars["float8"]>
-  request_id?: Maybe<Scalars["uuid"]>
-  status?: Maybe<Scalars["String"]>
-  supporter_id?: Maybe<Scalars["uuid"]>
-}
-
-/** order by min() on columns of table "supporters" */
-export type Supporters_Min_Order_By = {
-  participation_request_time?: Maybe<Order_By>
-  pledge_amount?: Maybe<Order_By>
-  request_id?: Maybe<Order_By>
-  status?: Maybe<Order_By>
-  supporter_id?: Maybe<Order_By>
-}
-
-/** response of any mutation on the table "supporters" */
-export type Supporters_Mutation_Response = {
-  __typename?: "supporters_mutation_response"
-  /** number of affected rows by the mutation */
-  affected_rows: Scalars["Int"]
-  /** data of the affected rows by the mutation */
-  returning: Array<Supporters>
-}
-
-/** input type for inserting object relation for remote table "supporters" */
-export type Supporters_Obj_Rel_Insert_Input = {
-  data: Supporters_Insert_Input
-  on_conflict?: Maybe<Supporters_On_Conflict>
-}
-
-/** on conflict condition type for table "supporters" */
-export type Supporters_On_Conflict = {
-  constraint: Supporters_Constraint
-  update_columns: Array<Supporters_Update_Column>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** ordering options when selecting data from "supporters" */
-export type Supporters_Order_By = {
-  guarantee_division?: Maybe<Order_By>
-  invest_in_corpus?: Maybe<Order_By>
-  loan_request?: Maybe<Loan_Requests_Order_By>
-  participation_request_time?: Maybe<Order_By>
-  pledge_amount?: Maybe<Order_By>
-  request_id?: Maybe<Order_By>
-  status?: Maybe<Order_By>
-  supporter_id?: Maybe<Order_By>
-  user?: Maybe<User_Order_By>
-}
-
-/** primary key columns input for table: "supporters" */
-export type Supporters_Pk_Columns_Input = {
-  request_id: Scalars["uuid"]
-  supporter_id: Scalars["uuid"]
-}
-
-/** prepend existing jsonb value of filtered columns with new jsonb value */
-export type Supporters_Prepend_Input = {
-  guarantee_division?: Maybe<Scalars["jsonb"]>
-}
-
-/** select columns of table "supporters" */
-export enum Supporters_Select_Column {
-  /** column name */
-  GuaranteeDivision = "guarantee_division",
-  /** column name */
-  InvestInCorpus = "invest_in_corpus",
-  /** column name */
-  ParticipationRequestTime = "participation_request_time",
-  /** column name */
-  PledgeAmount = "pledge_amount",
-  /** column name */
-  RequestId = "request_id",
-  /** column name */
-  Status = "status",
-  /** column name */
-  SupporterId = "supporter_id",
-}
-
-/** input type for updating data in table "supporters" */
-export type Supporters_Set_Input = {
-  guarantee_division?: Maybe<Scalars["jsonb"]>
-  invest_in_corpus?: Maybe<Scalars["Boolean"]>
-  participation_request_time?: Maybe<Scalars["timestamptz"]>
-  pledge_amount?: Maybe<Scalars["float8"]>
-  request_id?: Maybe<Scalars["uuid"]>
-  status?: Maybe<Scalars["String"]>
-  supporter_id?: Maybe<Scalars["uuid"]>
-}
-
-/** aggregate stddev on columns */
-export type Supporters_Stddev_Fields = {
-  __typename?: "supporters_stddev_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by stddev() on columns of table "supporters" */
-export type Supporters_Stddev_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** aggregate stddev_pop on columns */
-export type Supporters_Stddev_Pop_Fields = {
-  __typename?: "supporters_stddev_pop_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by stddev_pop() on columns of table "supporters" */
-export type Supporters_Stddev_Pop_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** aggregate stddev_samp on columns */
-export type Supporters_Stddev_Samp_Fields = {
-  __typename?: "supporters_stddev_samp_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by stddev_samp() on columns of table "supporters" */
-export type Supporters_Stddev_Samp_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** aggregate sum on columns */
-export type Supporters_Sum_Fields = {
-  __typename?: "supporters_sum_fields"
-  pledge_amount?: Maybe<Scalars["float8"]>
-}
-
-/** order by sum() on columns of table "supporters" */
-export type Supporters_Sum_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** update columns of table "supporters" */
-export enum Supporters_Update_Column {
-  /** column name */
-  GuaranteeDivision = "guarantee_division",
-  /** column name */
-  InvestInCorpus = "invest_in_corpus",
-  /** column name */
-  ParticipationRequestTime = "participation_request_time",
-  /** column name */
-  PledgeAmount = "pledge_amount",
-  /** column name */
-  RequestId = "request_id",
-  /** column name */
-  Status = "status",
-  /** column name */
-  SupporterId = "supporter_id",
-}
-
-/** aggregate var_pop on columns */
-export type Supporters_Var_Pop_Fields = {
-  __typename?: "supporters_var_pop_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by var_pop() on columns of table "supporters" */
-export type Supporters_Var_Pop_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** aggregate var_samp on columns */
-export type Supporters_Var_Samp_Fields = {
-  __typename?: "supporters_var_samp_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by var_samp() on columns of table "supporters" */
-export type Supporters_Var_Samp_Order_By = {
-  pledge_amount?: Maybe<Order_By>
-}
-
-/** aggregate variance on columns */
-export type Supporters_Variance_Fields = {
-  __typename?: "supporters_variance_fields"
-  pledge_amount?: Maybe<Scalars["Float"]>
-}
-
-/** order by variance() on columns of table "supporters" */
-export type Supporters_Variance_Order_By = {
-  pledge_amount?: Maybe<Order_By>
 }
 
 /** expression to compare columns of type timestamptz. All fields are combined with logical 'AND'. */
@@ -5044,8 +5295,7 @@ export type Timetz_Comparison_Exp = {
 /** columns and relationships of "user" */
 export type User = {
   __typename?: "user"
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   created_at: Scalars["timestamptz"]
   demographic_info?: Maybe<Scalars["jsonb"]>
   /** An array relationship */
@@ -5061,8 +5311,11 @@ export type User = {
   encumbrances: Array<Encumbrances>
   /** An aggregated array relationship */
   encumbrances_aggregate: Encumbrances_Aggregate
+  /** An array relationship */
+  guarantors: Array<Guarantors>
+  /** An aggregated array relationship */
+  guarantors_aggregate: Guarantors_Aggregate
   id: Scalars["uuid"]
-  kyc_approved?: Maybe<Scalars["Boolean"]>
   /** An array relationship */
   loan_participants: Array<Loan_Participants>
   /** An aggregated array relationship */
@@ -5084,19 +5337,15 @@ export type User = {
   /** An aggregated array relationship */
   receivables_aggregate: Receivables_Aggregate
   /** An array relationship */
-  recommendationRisksByRecommenderId: Array<Recommendation_Risk>
+  recommendationRisksByNeighborId: Array<Recommendation_Risk>
   /** An aggregated array relationship */
-  recommendationRisksByRecommenderId_aggregate: Recommendation_Risk_Aggregate
+  recommendationRisksByNeighborId_aggregate: Recommendation_Risk_Aggregate
   /** An array relationship */
   recommendation_risks: Array<Recommendation_Risk>
   /** An aggregated array relationship */
   recommendation_risks_aggregate: Recommendation_Risk_Aggregate
-  /** An array relationship */
-  supporters: Array<Supporters>
-  /** An aggregated array relationship */
-  supporters_aggregate: Supporters_Aggregate
   updated_at: Scalars["timestamptz"]
-  user_number: Scalars["Int"]
+  user_number?: Maybe<Scalars["Int"]>
   user_type: Scalars["user_t"]
 }
 
@@ -5157,6 +5406,24 @@ export type UserEncumbrances_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Encumbrances_Order_By>>
   where?: Maybe<Encumbrances_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserGuarantorsArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserGuarantors_AggregateArgs = {
+  distinct_on?: Maybe<Array<Guarantors_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Guarantors_Order_By>>
+  where?: Maybe<Guarantors_Bool_Exp>
 }
 
 /** columns and relationships of "user" */
@@ -5232,7 +5499,7 @@ export type UserReceivables_AggregateArgs = {
 }
 
 /** columns and relationships of "user" */
-export type UserRecommendationRisksByRecommenderIdArgs = {
+export type UserRecommendationRisksByNeighborIdArgs = {
   distinct_on?: Maybe<Array<Recommendation_Risk_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
   offset?: Maybe<Scalars["Int"]>
@@ -5241,7 +5508,7 @@ export type UserRecommendationRisksByRecommenderIdArgs = {
 }
 
 /** columns and relationships of "user" */
-export type UserRecommendationRisksByRecommenderId_AggregateArgs = {
+export type UserRecommendationRisksByNeighborId_AggregateArgs = {
   distinct_on?: Maybe<Array<Recommendation_Risk_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
   offset?: Maybe<Scalars["Int"]>
@@ -5265,24 +5532,6 @@ export type UserRecommendation_Risks_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Recommendation_Risk_Order_By>>
   where?: Maybe<Recommendation_Risk_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserSupportersArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserSupporters_AggregateArgs = {
-  distinct_on?: Maybe<Array<Supporters_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Supporters_Order_By>>
-  where?: Maybe<Supporters_Bool_Exp>
 }
 
 /** aggregated selection of "user" */
@@ -5344,7 +5593,6 @@ export type User_Arr_Rel_Insert_Input = {
 export type User_Avg_Fields = {
   __typename?: "user_avg_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5353,7 +5601,6 @@ export type User_Avg_Fields = {
 /** order by avg() on columns of table "user" */
 export type User_Avg_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5364,16 +5611,15 @@ export type User_Bool_Exp = {
   _and?: Maybe<Array<Maybe<User_Bool_Exp>>>
   _not?: Maybe<User_Bool_Exp>
   _or?: Maybe<Array<Maybe<User_Bool_Exp>>>
-  balance?: Maybe<Float8_Comparison_Exp>
-  corpus_share?: Maybe<Float8_Comparison_Exp>
+  balance?: Maybe<Int_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   demographic_info?: Maybe<Jsonb_Comparison_Exp>
   edges?: Maybe<Edges_Bool_Exp>
   edgesByLenderId?: Maybe<Edges_Bool_Exp>
   email?: Maybe<String_Comparison_Exp>
   encumbrances?: Maybe<Encumbrances_Bool_Exp>
+  guarantors?: Maybe<Guarantors_Bool_Exp>
   id?: Maybe<Uuid_Comparison_Exp>
-  kyc_approved?: Maybe<Boolean_Comparison_Exp>
   loan_participants?: Maybe<Loan_Participants_Bool_Exp>
   loan_requests?: Maybe<Loan_Requests_Bool_Exp>
   loan_risks?: Maybe<Loan_Risk_Bool_Exp>
@@ -5382,9 +5628,8 @@ export type User_Bool_Exp = {
   name?: Maybe<String_Comparison_Exp>
   phone?: Maybe<String_Comparison_Exp>
   receivables?: Maybe<Receivables_Bool_Exp>
-  recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
+  recommendationRisksByNeighborId?: Maybe<Recommendation_Risk_Bool_Exp>
   recommendation_risks?: Maybe<Recommendation_Risk_Bool_Exp>
-  supporters?: Maybe<Supporters_Bool_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user_number?: Maybe<Int_Comparison_Exp>
   user_type?: Maybe<User_T_Comparison_Exp>
@@ -5417,8 +5662,7 @@ export type User_Delete_Key_Input = {
 
 /** input type for incrementing integer column in table "user" */
 export type User_Inc_Input = {
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Int"]>
@@ -5426,16 +5670,15 @@ export type User_Inc_Input = {
 
 /** input type for inserting data into table "user" */
 export type User_Insert_Input = {
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   demographic_info?: Maybe<Scalars["jsonb"]>
   edges?: Maybe<Edges_Arr_Rel_Insert_Input>
   edgesByLenderId?: Maybe<Edges_Arr_Rel_Insert_Input>
   email?: Maybe<Scalars["String"]>
   encumbrances?: Maybe<Encumbrances_Arr_Rel_Insert_Input>
+  guarantors?: Maybe<Guarantors_Arr_Rel_Insert_Input>
   id?: Maybe<Scalars["uuid"]>
-  kyc_approved?: Maybe<Scalars["Boolean"]>
   loan_participants?: Maybe<Loan_Participants_Arr_Rel_Insert_Input>
   loan_requests?: Maybe<Loan_Requests_Arr_Rel_Insert_Input>
   loan_risks?: Maybe<Loan_Risk_Arr_Rel_Insert_Input>
@@ -5444,11 +5687,10 @@ export type User_Insert_Input = {
   name?: Maybe<Scalars["String"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
-  recommendationRisksByRecommenderId?: Maybe<
+  recommendationRisksByNeighborId?: Maybe<
     Recommendation_Risk_Arr_Rel_Insert_Input
   >
   recommendation_risks?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
-  supporters?: Maybe<Supporters_Arr_Rel_Insert_Input>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user_number?: Maybe<Scalars["Int"]>
   user_type?: Maybe<Scalars["user_t"]>
@@ -5457,8 +5699,7 @@ export type User_Insert_Input = {
 /** aggregate max on columns */
 export type User_Max_Fields = {
   __typename?: "user_max_fields"
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   email?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
@@ -5473,7 +5714,6 @@ export type User_Max_Fields = {
 /** order by max() on columns of table "user" */
 export type User_Max_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   email?: Maybe<Order_By>
   id?: Maybe<Order_By>
@@ -5488,8 +5728,7 @@ export type User_Max_Order_By = {
 /** aggregate min on columns */
 export type User_Min_Fields = {
   __typename?: "user_min_fields"
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   email?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
@@ -5504,7 +5743,6 @@ export type User_Min_Fields = {
 /** order by min() on columns of table "user" */
 export type User_Min_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   email?: Maybe<Order_By>
   id?: Maybe<Order_By>
@@ -5541,15 +5779,14 @@ export type User_On_Conflict = {
 /** ordering options when selecting data from "user" */
 export type User_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   demographic_info?: Maybe<Order_By>
   edgesByLenderId_aggregate?: Maybe<Edges_Aggregate_Order_By>
   edges_aggregate?: Maybe<Edges_Aggregate_Order_By>
   email?: Maybe<Order_By>
   encumbrances_aggregate?: Maybe<Encumbrances_Aggregate_Order_By>
+  guarantors_aggregate?: Maybe<Guarantors_Aggregate_Order_By>
   id?: Maybe<Order_By>
-  kyc_approved?: Maybe<Order_By>
   loan_participants_aggregate?: Maybe<Loan_Participants_Aggregate_Order_By>
   loan_requests_aggregate?: Maybe<Loan_Requests_Aggregate_Order_By>
   loan_risks_aggregate?: Maybe<Loan_Risk_Aggregate_Order_By>
@@ -5558,11 +5795,10 @@ export type User_Order_By = {
   name?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
-  recommendationRisksByRecommenderId_aggregate?: Maybe<
+  recommendationRisksByNeighborId_aggregate?: Maybe<
     Recommendation_Risk_Aggregate_Order_By
   >
   recommendation_risks_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
-  supporters_aggregate?: Maybe<Supporters_Aggregate_Order_By>
   updated_at?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
   user_type?: Maybe<Order_By>
@@ -5583,8 +5819,6 @@ export enum User_Select_Column {
   /** column name */
   Balance = "balance",
   /** column name */
-  CorpusShare = "corpus_share",
-  /** column name */
   CreatedAt = "created_at",
   /** column name */
   DemographicInfo = "demographic_info",
@@ -5592,8 +5826,6 @@ export enum User_Select_Column {
   Email = "email",
   /** column name */
   Id = "id",
-  /** column name */
-  KycApproved = "kyc_approved",
   /** column name */
   MaxExposure = "max_exposure",
   /** column name */
@@ -5612,13 +5844,11 @@ export enum User_Select_Column {
 
 /** input type for updating data in table "user" */
 export type User_Set_Input = {
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   demographic_info?: Maybe<Scalars["jsonb"]>
   email?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["uuid"]>
-  kyc_approved?: Maybe<Scalars["Boolean"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
@@ -5632,7 +5862,6 @@ export type User_Set_Input = {
 export type User_Stddev_Fields = {
   __typename?: "user_stddev_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5641,7 +5870,6 @@ export type User_Stddev_Fields = {
 /** order by stddev() on columns of table "user" */
 export type User_Stddev_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5651,7 +5879,6 @@ export type User_Stddev_Order_By = {
 export type User_Stddev_Pop_Fields = {
   __typename?: "user_stddev_pop_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5660,7 +5887,6 @@ export type User_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "user" */
 export type User_Stddev_Pop_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5670,7 +5896,6 @@ export type User_Stddev_Pop_Order_By = {
 export type User_Stddev_Samp_Fields = {
   __typename?: "user_stddev_samp_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5679,7 +5904,6 @@ export type User_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "user" */
 export type User_Stddev_Samp_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5688,8 +5912,7 @@ export type User_Stddev_Samp_Order_By = {
 /** aggregate sum on columns */
 export type User_Sum_Fields = {
   __typename?: "user_sum_fields"
-  balance?: Maybe<Scalars["float8"]>
-  corpus_share?: Maybe<Scalars["float8"]>
+  balance?: Maybe<Scalars["Int"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Int"]>
@@ -5698,7 +5921,6 @@ export type User_Sum_Fields = {
 /** order by sum() on columns of table "user" */
 export type User_Sum_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5722,8 +5944,6 @@ export enum User_Update_Column {
   /** column name */
   Balance = "balance",
   /** column name */
-  CorpusShare = "corpus_share",
-  /** column name */
   CreatedAt = "created_at",
   /** column name */
   DemographicInfo = "demographic_info",
@@ -5731,8 +5951,6 @@ export enum User_Update_Column {
   Email = "email",
   /** column name */
   Id = "id",
-  /** column name */
-  KycApproved = "kyc_approved",
   /** column name */
   MaxExposure = "max_exposure",
   /** column name */
@@ -5753,7 +5971,6 @@ export enum User_Update_Column {
 export type User_Var_Pop_Fields = {
   __typename?: "user_var_pop_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5762,7 +5979,6 @@ export type User_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "user" */
 export type User_Var_Pop_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5772,7 +5988,6 @@ export type User_Var_Pop_Order_By = {
 export type User_Var_Samp_Fields = {
   __typename?: "user_var_samp_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5781,7 +5996,6 @@ export type User_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "user" */
 export type User_Var_Samp_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5791,7 +6005,6 @@ export type User_Var_Samp_Order_By = {
 export type User_Variance_Fields = {
   __typename?: "user_variance_fields"
   balance?: Maybe<Scalars["Float"]>
-  corpus_share?: Maybe<Scalars["Float"]>
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   user_number?: Maybe<Scalars["Float"]>
@@ -5800,7 +6013,6 @@ export type User_Variance_Fields = {
 /** order by variance() on columns of table "user" */
 export type User_Variance_Order_By = {
   balance?: Maybe<Order_By>
-  corpus_share?: Maybe<Order_By>
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -5818,1114 +6030,3 @@ export type Uuid_Comparison_Exp = {
   _neq?: Maybe<Scalars["uuid"]>
   _nin?: Maybe<Array<Scalars["uuid"]>>
 }
-
-export type ChangeUserCashBalanceMutationVariables = Exact<{
-  userId: Scalars["uuid"]
-  delta: Scalars["float8"]
-}>
-
-export type ChangeUserCashBalanceMutation = { __typename?: "mutation_root" } & {
-  user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
-}
-
-export type CreateUserMutationVariables = Exact<{
-  user: User_Insert_Input
-}>
-
-export type CreateUserMutation = { __typename?: "mutation_root" } & {
-  insert_user_one?: Maybe<
-    { __typename?: "user" } & Pick<
-      User,
-      | "id"
-      | "created_at"
-      | "email"
-      | "user_type"
-      | "name"
-      | "phone"
-      | "demographic_info"
-      | "user_number"
-    >
-  >
-}
-
-export type GetAllUsersQueryVariables = Exact<{ [key: string]: never }>
-
-export type GetAllUsersQuery = { __typename?: "query_root" } & {
-  user: Array<
-    { __typename?: "user" } & Pick<
-      User,
-      | "id"
-      | "email"
-      | "name"
-      | "user_type"
-      | "balance"
-      | "user_number"
-      | "corpus_share"
-      | "kyc_approved"
-    >
-  >
-}
-
-export type GetLenderDashboardInfoQueryVariables = Exact<{
-  user_id: Scalars["uuid"]
-}>
-
-export type GetLenderDashboardInfoQuery = { __typename?: "query_root" } & {
-  lender?: Maybe<
-    { __typename?: "user" } & Pick<User, "balance" | "corpus_share">
-  >
-  corpusInvestment: { __typename?: "receivables_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "receivables_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "receivables_sum_fields" } & Pick<
-            Receivables_Sum_Fields,
-            "amount_total" | "amount_remain" | "amount_received"
-          >
-        >
-      }
-    >
-  }
-  corpusShares: { __typename?: "user_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "user_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<
-            User_Sum_Fields,
-            "corpus_share"
-          >
-        >
-      }
-    >
-  }
-}
-
-export type GetUserByEmailQueryVariables = Exact<{
-  email: Scalars["String"]
-}>
-
-export type GetUserByEmailQuery = { __typename?: "query_root" } & {
-  user: Array<
-    { __typename?: "user" } & Pick<
-      User,
-      | "id"
-      | "name"
-      | "email"
-      | "phone"
-      | "user_type"
-      | "balance"
-      | "corpus_share"
-      | "created_at"
-      | "kyc_approved"
-    > & {
-        loan_requests: Array<
-          { __typename?: "loan_requests" } & Pick<
-            Loan_Requests,
-            | "confirmation_date"
-            | "payback_status"
-            | "purpose"
-            | "risk_calc_result"
-            | "status"
-            | "created_at"
-            | "amount"
-          >
-        >
-        pledge_requests: Array<
-          { __typename?: "supporters" } & Pick<
-            Supporters,
-            "request_id" | "pledge_amount" | "participation_request_time"
-          > & {
-              loan_request: { __typename?: "loan_requests" } & Pick<
-                Loan_Requests,
-                "purpose" | "amount" | "risk_calc_result"
-              > & {
-                  user: { __typename?: "user" } & Pick<User, "email" | "name">
-                }
-            }
-        >
-      }
-  >
-}
-
-export type SetUserCashBalanceMutationVariables = Exact<{
-  userId: Scalars["uuid"]
-  amount: Scalars["float8"]
-}>
-
-export type SetUserCashBalanceMutation = { __typename?: "mutation_root" } & {
-  user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
-}
-
-export type ApproveKycMutationVariables = Exact<{
-  userId: Scalars["uuid"]
-  kycApproved: Scalars["Boolean"]
-}>
-
-export type ApproveKycMutation = { __typename?: "mutation_root" } & {
-  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
-}
-
-export type AddSupportersMutationVariables = Exact<{
-  supporters: Array<Supporters_Insert_Input>
-}>
-
-export type AddSupportersMutation = { __typename?: "mutation_root" } & {
-  supporters?: Maybe<
-    { __typename?: "supporters_mutation_response" } & {
-      returning: Array<
-        { __typename?: "supporters" } & Pick<
-          Supporters,
-          "status" | "supporter_id" | "pledge_amount"
-        >
-      >
-    }
-  >
-}
-
-export type CreateLoanRequestMutationVariables = Exact<{
-  request: Loan_Requests_Insert_Input
-}>
-
-export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
-  insert_loan_requests_one?: Maybe<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "amount" | "purpose" | "status" | "risk_calc_result"
-    >
-  >
-}
-
-export type GetCorpusDataQueryVariables = Exact<{
-  statusList: Array<Scalars["loan_request_status"]>
-}>
-
-export type GetCorpusDataQuery = { __typename?: "query_root" } & {
-  loans: Array<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "risk_calc_result" | "confirmation_date"
-    >
-  >
-  corpus: { __typename?: "user_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "user_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<
-            User_Sum_Fields,
-            "balance" | "corpus_share"
-          >
-        >
-      }
-    >
-  }
-  corpusInvestment: { __typename?: "receivables_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "receivables_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "receivables_sum_fields" } & Pick<
-            Receivables_Sum_Fields,
-            "amount_total" | "amount_remain" | "amount_received"
-          >
-        >
-      }
-    >
-  }
-}
-
-export type GetCorpusRecommendationRisksQueryVariables = Exact<{
-  userIds?: Maybe<Array<Scalars["uuid"]>>
-}>
-
-export type GetCorpusRecommendationRisksQuery = {
-  __typename?: "query_root"
-} & {
-  recommendation_risk: Array<
-    { __typename?: "recommendation_risk" } & Pick<
-      Recommendation_Risk,
-      "recommender_id" | "risk_params"
-    >
-  >
-}
-
-export type GetLenderAllocationInputQueryVariables = Exact<{
-  [key: string]: never
-}>
-
-export type GetLenderAllocationInputQuery = { __typename?: "query_root" } & {
-  lenders: Array<
-    { __typename?: "user" } & Pick<
-      User,
-      "name" | "user_number" | "id" | "balance" | "corpus_share"
-    >
-  >
-  corpusCash: { __typename?: "user_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "user_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<User_Sum_Fields, "balance">
-        >
-      }
-    >
-  }
-}
-
-export type GetLoanOfferQueryVariables = Exact<{
-  request_id: Scalars["uuid"]
-}>
-
-export type GetLoanOfferQuery = { __typename?: "query_root" } & {
-  loan_requests_by_pk?: Maybe<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "borrower_id" | "risk_calc_result" | "amount"
-    >
-  >
-}
-
-export type GetLoanRequestQueryVariables = Exact<{
-  requestId: Scalars["uuid"]
-}>
-
-export type GetLoanRequestQuery = { __typename?: "query_root" } & {
-  loanRequest?: Maybe<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      | "request_id"
-      | "borrower_id"
-      | "purpose"
-      | "amount"
-      | "status"
-      | "risk_calc_result"
-      | "payback_status"
-    > & {
-        supporters: Array<
-          { __typename?: "supporters" } & Pick<
-            Supporters,
-            "status" | "supporter_id" | "pledge_amount"
-          > & {
-              user: { __typename?: "user" } & Pick<
-                User,
-                "id" | "corpus_share" | "balance"
-              >
-            }
-        >
-        user: { __typename?: "user" } & Pick<User, "demographic_info">
-      }
-  >
-}
-
-export type GetLoansByBorrowerAndStatusQueryVariables = Exact<{
-  borrower_id: Scalars["uuid"]
-  statusList: Array<Scalars["loan_request_status"]>
-}>
-
-export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
-  loanRequests: Array<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "amount" | "status" | "risk_calc_result"
-    > & {
-        payables: Array<
-          { __typename?: "payables" } & Pick<
-            Payables,
-            | "pay_frequency"
-            | "due_date"
-            | "last_paid"
-            | "amount_total"
-            | "amount_paid"
-            | "amount_remain"
-          >
-        >
-      }
-  >
-}
-
-export type StartLoanMutationVariables = Exact<{
-  request_id: Scalars["uuid"]
-  payable: Payables_Insert_Input
-  receivable: Receivables_Insert_Input
-}>
-
-export type StartLoanMutation = { __typename?: "mutation_root" } & {
-  update_loan_requests_by_pk?: Maybe<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "status"
-    >
-  >
-  insert_payables_one?: Maybe<
-    { __typename?: "payables" } & Pick<Payables, "amount_total" | "amount_paid">
-  >
-  insert_receivables_one?: Maybe<
-    { __typename?: "receivables" } & Pick<
-      Receivables,
-      "amount_total" | "amount_received" | "status"
-    >
-  >
-}
-
-export type UpdateLoanRequestWithOfferMutationVariables = Exact<{
-  requestId: Scalars["uuid"]
-  newOffer: Scalars["jsonb"]
-}>
-
-export type UpdateLoanRequestWithOfferMutation = {
-  __typename?: "mutation_root"
-} & {
-  update_loan_requests_by_pk?: Maybe<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "status" | "risk_calc_result"
-    >
-  >
-}
-
-export type UpdateSupporterMutationVariables = Exact<{
-  request_id: Scalars["uuid"]
-  supporter_id: Scalars["uuid"]
-  status: Scalars["String"]
-  pledge_amount?: Maybe<Scalars["float8"]>
-}>
-
-export type UpdateSupporterMutation = { __typename?: "mutation_root" } & {
-  supporter?: Maybe<
-    { __typename?: "supporters" } & Pick<
-      Supporters,
-      "supporter_id" | "status" | "pledge_amount"
-    >
-  >
-}
-
-export type GetEdgesByStatusQueryVariables = Exact<{
-  status: Scalars["edge_status"]
-}>
-
-export type GetEdgesByStatusQuery = { __typename?: "query_root" } & {
-  edges: Array<
-    { __typename?: "edges" } & Pick<Edges, "trust_amount"> & {
-        from_user?: Maybe<
-          { __typename?: "user" } & Pick<User, "id" | "user_number" | "name">
-        >
-        to_user?: Maybe<
-          { __typename?: "user" } & Pick<User, "id" | "user_number" | "name">
-        >
-      }
-  >
-}
-
-export type InsertEdgeMutationVariables = Exact<{
-  edge: Edges_Insert_Input
-}>
-
-export type InsertEdgeMutation = { __typename?: "mutation_root" } & {
-  insert_edges?: Maybe<
-    { __typename?: "edges_mutation_response" } & {
-      returning: Array<
-        { __typename?: "edges" } & Pick<
-          Edges,
-          "edge_id" | "status" | "other_user_email" | "trust_amount"
-        > & {
-            from_user?: Maybe<
-              { __typename?: "user" } & Pick<User, "name" | "balance">
-            >
-            to_user?: Maybe<{ __typename?: "user" } & Pick<User, "name">>
-          }
-      >
-    }
-  >
-}
-
-export type DeleteAllUsersMutationVariables = Exact<{ [key: string]: never }>
-
-export type DeleteAllUsersMutation = { __typename?: "mutation_root" } & {
-  delete_user?: Maybe<
-    { __typename?: "user_mutation_response" } & Pick<
-      User_Mutation_Response,
-      "affected_rows"
-    >
-  >
-}
-
-export type ResetDbMutationVariables = Exact<{ [key: string]: never }>
-
-export type ResetDbMutation = { __typename?: "mutation_root" } & {
-  delete_receivables?: Maybe<
-    { __typename?: "receivables_mutation_response" } & Pick<
-      Receivables_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_payables?: Maybe<
-    { __typename?: "payables_mutation_response" } & Pick<
-      Payables_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_encumbrances?: Maybe<
-    { __typename?: "encumbrances_mutation_response" } & Pick<
-      Encumbrances_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_supporters?: Maybe<
-    { __typename?: "supporters_mutation_response" } & Pick<
-      Supporters_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_recommendation_risk?: Maybe<
-    { __typename?: "recommendation_risk_mutation_response" } & Pick<
-      Recommendation_Risk_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_loan_risk?: Maybe<
-    { __typename?: "loan_risk_mutation_response" } & Pick<
-      Loan_Risk_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_loan_participants?: Maybe<
-    { __typename?: "loan_participants_mutation_response" } & Pick<
-      Loan_Participants_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_encumbrance_participants?: Maybe<
-    { __typename?: "encumbrance_participants_mutation_response" } & Pick<
-      Encumbrance_Participants_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_loan_requests?: Maybe<
-    { __typename?: "loan_requests_mutation_response" } & Pick<
-      Loan_Requests_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_edges?: Maybe<
-    { __typename?: "edges_mutation_response" } & Pick<
-      Edges_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_user?: Maybe<
-    { __typename?: "user_mutation_response" } & Pick<
-      User_Mutation_Response,
-      "affected_rows"
-    >
-  >
-}
-
-export const ChangeUserCashBalanceDocument = gql`
-  mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
-    user: update_user_by_pk(
-      pk_columns: { id: $userId }
-      _inc: { balance: $delta }
-    ) {
-      balance
-    }
-  }
-`
-export const CreateUserDocument = gql`
-  mutation CreateUser($user: user_insert_input!) {
-    insert_user_one(object: $user) {
-      id
-      created_at
-      email
-      user_type
-      name
-      phone
-      demographic_info
-      user_number
-    }
-  }
-`
-export const GetAllUsersDocument = gql`
-  query GetAllUsers {
-    user {
-      id
-      email
-      name
-      user_type
-      balance
-      user_number
-      corpus_share
-      kyc_approved
-    }
-  }
-`
-export const GetLenderDashboardInfoDocument = gql`
-  query GetLenderDashboardInfo($user_id: uuid!) {
-    lender: user_by_pk(id: $user_id) {
-      balance
-      corpus_share
-    }
-    corpusInvestment: receivables_aggregate(
-      where: { loan_request: { status: { _eq: "live" } } }
-    ) {
-      aggregate {
-        sum {
-          amount_total
-          amount_remain
-          amount_received
-        }
-      }
-    }
-    corpusShares: user_aggregate {
-      aggregate {
-        sum {
-          corpus_share
-        }
-      }
-    }
-  }
-`
-export const GetUserByEmailDocument = gql`
-  query GetUserByEmail($email: String!) {
-    user(where: { email: { _eq: $email } }) {
-      id
-      name
-      email
-      phone
-      user_type
-      balance
-      corpus_share
-      created_at
-      kyc_approved
-      loan_requests {
-        confirmation_date
-        payback_status
-        purpose
-        risk_calc_result
-        status
-        created_at
-        amount
-        purpose
-      }
-      pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
-        request_id
-        pledge_amount
-        participation_request_time
-        loan_request {
-          purpose
-          amount
-          user {
-            email
-            name
-          }
-          risk_calc_result
-        }
-      }
-    }
-  }
-`
-export const SetUserCashBalanceDocument = gql`
-  mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {
-    user: update_user_by_pk(
-      pk_columns: { id: $userId }
-      _set: { balance: $amount }
-    ) {
-      balance
-    }
-  }
-`
-export const ApproveKycDocument = gql`
-  mutation ApproveKYC($userId: uuid!, $kycApproved: Boolean!) {
-    user: update_user_by_pk(
-      pk_columns: { id: $userId }
-      _set: { kyc_approved: $kycApproved }
-    ) {
-      id
-      kyc_approved
-    }
-  }
-`
-export const AddSupportersDocument = gql`
-  mutation AddSupporters($supporters: [supporters_insert_input!]!) {
-    supporters: insert_supporters(objects: $supporters) {
-      returning {
-        status
-        supporter_id
-        pledge_amount
-      }
-    }
-  }
-`
-export const CreateLoanRequestDocument = gql`
-  mutation CreateLoanRequest($request: loan_requests_insert_input!) {
-    insert_loan_requests_one(object: $request) {
-      request_id
-      amount
-      purpose
-      status
-      risk_calc_result
-    }
-  }
-`
-export const GetCorpusDataDocument = gql`
-  query GetCorpusData($statusList: [loan_request_status!]!) {
-    loans: loan_requests(where: { status: { _in: $statusList } }) {
-      request_id
-      risk_calc_result
-      confirmation_date
-    }
-    corpus: user_aggregate(where: { user_type: { _eq: "lender" } }) {
-      aggregate {
-        sum {
-          balance
-          corpus_share
-        }
-      }
-    }
-    corpusInvestment: receivables_aggregate(
-      where: { loan_request: { status: { _eq: "live" } } }
-    ) {
-      aggregate {
-        sum {
-          amount_total
-          amount_remain
-          amount_received
-        }
-      }
-    }
-  }
-`
-export const GetCorpusRecommendationRisksDocument = gql`
-  query GetCorpusRecommendationRisks($userIds: [uuid!]) {
-    recommendation_risk(
-      where: { recommender_id: { _in: $userIds }, agent_id: { _is_null: true } }
-    ) {
-      recommender_id
-      risk_params
-    }
-  }
-`
-export const GetLenderAllocationInputDocument = gql`
-  query GetLenderAllocationInput {
-    lenders: user(where: { user_type: { _eq: "lender" } }) {
-      name
-      user_number
-      id
-      balance
-      corpus_share
-    }
-    corpusCash: user_aggregate(where: { user_type: { _eq: "lender" } }) {
-      aggregate {
-        sum {
-          balance
-        }
-      }
-    }
-  }
-`
-export const GetLoanOfferDocument = gql`
-  query GetLoanOffer($request_id: uuid!) {
-    loan_requests_by_pk(request_id: $request_id) {
-      request_id
-      borrower_id
-      risk_calc_result
-      amount
-    }
-  }
-`
-export const GetLoanRequestDocument = gql`
-  query GetLoanRequest($requestId: uuid!) {
-    loanRequest: loan_requests_by_pk(request_id: $requestId) {
-      request_id
-      borrower_id
-      purpose
-      amount
-      status
-      risk_calc_result
-      payback_status
-      supporters {
-        status
-        supporter_id
-        pledge_amount
-        user {
-          id
-          corpus_share
-          balance
-        }
-      }
-      user {
-        demographic_info
-      }
-    }
-  }
-`
-export const GetLoansByBorrowerAndStatusDocument = gql`
-  query GetLoansByBorrowerAndStatus(
-    $borrower_id: uuid!
-    $statusList: [loan_request_status!]!
-  ) {
-    loanRequests: loan_requests(
-      where: {
-        _and: [
-          { borrower_id: { _eq: $borrower_id } }
-          { status: { _in: $statusList } }
-        ]
-      }
-    ) {
-      request_id
-      amount
-      status
-      risk_calc_result
-      payables {
-        pay_frequency
-        due_date
-        last_paid
-        amount_total
-        amount_paid
-        amount_remain
-      }
-    }
-  }
-`
-export const StartLoanDocument = gql`
-  mutation StartLoan(
-    $request_id: uuid!
-    $payable: payables_insert_input!
-    $receivable: receivables_insert_input!
-  ) {
-    update_loan_requests_by_pk(
-      pk_columns: { request_id: $request_id }
-      _set: { status: "live" }
-    ) {
-      request_id
-      status
-    }
-    insert_payables_one(object: $payable) {
-      amount_total
-      amount_paid
-    }
-    insert_receivables_one(object: $receivable) {
-      amount_total
-      amount_received
-      status
-    }
-  }
-`
-export const UpdateLoanRequestWithOfferDocument = gql`
-  mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
-    update_loan_requests_by_pk(
-      pk_columns: { request_id: $requestId }
-      _set: { status: "awaiting_borrower_confirmation" }
-      _append: { risk_calc_result: $newOffer }
-    ) {
-      request_id
-      status
-      risk_calc_result
-    }
-  }
-`
-export const UpdateSupporterDocument = gql`
-  mutation UpdateSupporter(
-    $request_id: uuid!
-    $supporter_id: uuid!
-    $status: String!
-    $pledge_amount: float8
-  ) {
-    supporter: update_supporters_by_pk(
-      pk_columns: { request_id: $request_id, supporter_id: $supporter_id }
-      _set: { status: $status, pledge_amount: $pledge_amount }
-    ) {
-      supporter_id
-      status
-      pledge_amount
-    }
-  }
-`
-export const GetEdgesByStatusDocument = gql`
-  query GetEdgesByStatus($status: edge_status!) {
-    edges: edges(where: { status: { _eq: $status } }) {
-      from_user {
-        id
-        user_number
-        name
-      }
-      to_user {
-        id
-        user_number
-        name
-      }
-      trust_amount
-    }
-  }
-`
-export const InsertEdgeDocument = gql`
-  mutation InsertEdge($edge: edges_insert_input!) {
-    insert_edges(objects: [$edge]) {
-      returning {
-        edge_id
-        status
-        other_user_email
-        trust_amount
-        from_user {
-          name
-          balance
-        }
-        to_user {
-          name
-        }
-      }
-    }
-  }
-`
-export const DeleteAllUsersDocument = gql`
-  mutation DeleteAllUsers {
-    delete_user(where: {}) {
-      affected_rows
-    }
-  }
-`
-export const ResetDbDocument = gql`
-  mutation ResetDB {
-    delete_receivables(where: {}) {
-      affected_rows
-    }
-    delete_payables(where: {}) {
-      affected_rows
-    }
-    delete_encumbrances(where: {}) {
-      affected_rows
-    }
-    delete_supporters(where: {}) {
-      affected_rows
-    }
-    delete_recommendation_risk(where: {}) {
-      affected_rows
-    }
-    delete_loan_risk(where: {}) {
-      affected_rows
-    }
-    delete_loan_participants(where: {}) {
-      affected_rows
-    }
-    delete_encumbrance_participants(where: {}) {
-      affected_rows
-    }
-    delete_loan_requests(where: {}) {
-      affected_rows
-    }
-    delete_edges(where: {}) {
-      affected_rows
-    }
-    delete_user(where: {}) {
-      affected_rows
-    }
-  }
-`
-
-export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>
-
-const defaultWrapper: SdkFunctionWrapper = (sdkFunction) => sdkFunction()
-export function getSdk(
-  client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper
-) {
-  return {
-    ChangeUserCashBalance(
-      variables: ChangeUserCashBalanceMutationVariables
-    ): Promise<ChangeUserCashBalanceMutation> {
-      return withWrapper(() =>
-        client.request<ChangeUserCashBalanceMutation>(
-          print(ChangeUserCashBalanceDocument),
-          variables
-        )
-      )
-    },
-    CreateUser(
-      variables: CreateUserMutationVariables
-    ): Promise<CreateUserMutation> {
-      return withWrapper(() =>
-        client.request<CreateUserMutation>(print(CreateUserDocument), variables)
-      )
-    },
-    GetAllUsers(
-      variables?: GetAllUsersQueryVariables
-    ): Promise<GetAllUsersQuery> {
-      return withWrapper(() =>
-        client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables)
-      )
-    },
-    GetLenderDashboardInfo(
-      variables: GetLenderDashboardInfoQueryVariables
-    ): Promise<GetLenderDashboardInfoQuery> {
-      return withWrapper(() =>
-        client.request<GetLenderDashboardInfoQuery>(
-          print(GetLenderDashboardInfoDocument),
-          variables
-        )
-      )
-    },
-    GetUserByEmail(
-      variables: GetUserByEmailQueryVariables
-    ): Promise<GetUserByEmailQuery> {
-      return withWrapper(() =>
-        client.request<GetUserByEmailQuery>(
-          print(GetUserByEmailDocument),
-          variables
-        )
-      )
-    },
-    SetUserCashBalance(
-      variables: SetUserCashBalanceMutationVariables
-    ): Promise<SetUserCashBalanceMutation> {
-      return withWrapper(() =>
-        client.request<SetUserCashBalanceMutation>(
-          print(SetUserCashBalanceDocument),
-          variables
-        )
-      )
-    },
-    ApproveKYC(
-      variables: ApproveKycMutationVariables
-    ): Promise<ApproveKycMutation> {
-      return withWrapper(() =>
-        client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
-      )
-    },
-    AddSupporters(
-      variables: AddSupportersMutationVariables
-    ): Promise<AddSupportersMutation> {
-      return withWrapper(() =>
-        client.request<AddSupportersMutation>(
-          print(AddSupportersDocument),
-          variables
-        )
-      )
-    },
-    CreateLoanRequest(
-      variables: CreateLoanRequestMutationVariables
-    ): Promise<CreateLoanRequestMutation> {
-      return withWrapper(() =>
-        client.request<CreateLoanRequestMutation>(
-          print(CreateLoanRequestDocument),
-          variables
-        )
-      )
-    },
-    GetCorpusData(
-      variables: GetCorpusDataQueryVariables
-    ): Promise<GetCorpusDataQuery> {
-      return withWrapper(() =>
-        client.request<GetCorpusDataQuery>(
-          print(GetCorpusDataDocument),
-          variables
-        )
-      )
-    },
-    GetCorpusRecommendationRisks(
-      variables?: GetCorpusRecommendationRisksQueryVariables
-    ): Promise<GetCorpusRecommendationRisksQuery> {
-      return withWrapper(() =>
-        client.request<GetCorpusRecommendationRisksQuery>(
-          print(GetCorpusRecommendationRisksDocument),
-          variables
-        )
-      )
-    },
-    GetLenderAllocationInput(
-      variables?: GetLenderAllocationInputQueryVariables
-    ): Promise<GetLenderAllocationInputQuery> {
-      return withWrapper(() =>
-        client.request<GetLenderAllocationInputQuery>(
-          print(GetLenderAllocationInputDocument),
-          variables
-        )
-      )
-    },
-    GetLoanOffer(
-      variables: GetLoanOfferQueryVariables
-    ): Promise<GetLoanOfferQuery> {
-      return withWrapper(() =>
-        client.request<GetLoanOfferQuery>(
-          print(GetLoanOfferDocument),
-          variables
-        )
-      )
-    },
-    GetLoanRequest(
-      variables: GetLoanRequestQueryVariables
-    ): Promise<GetLoanRequestQuery> {
-      return withWrapper(() =>
-        client.request<GetLoanRequestQuery>(
-          print(GetLoanRequestDocument),
-          variables
-        )
-      )
-    },
-    GetLoansByBorrowerAndStatus(
-      variables: GetLoansByBorrowerAndStatusQueryVariables
-    ): Promise<GetLoansByBorrowerAndStatusQuery> {
-      return withWrapper(() =>
-        client.request<GetLoansByBorrowerAndStatusQuery>(
-          print(GetLoansByBorrowerAndStatusDocument),
-          variables
-        )
-      )
-    },
-    StartLoan(
-      variables: StartLoanMutationVariables
-    ): Promise<StartLoanMutation> {
-      return withWrapper(() =>
-        client.request<StartLoanMutation>(print(StartLoanDocument), variables)
-      )
-    },
-    UpdateLoanRequestWithOffer(
-      variables: UpdateLoanRequestWithOfferMutationVariables
-    ): Promise<UpdateLoanRequestWithOfferMutation> {
-      return withWrapper(() =>
-        client.request<UpdateLoanRequestWithOfferMutation>(
-          print(UpdateLoanRequestWithOfferDocument),
-          variables
-        )
-      )
-    },
-    UpdateSupporter(
-      variables: UpdateSupporterMutationVariables
-    ): Promise<UpdateSupporterMutation> {
-      return withWrapper(() =>
-        client.request<UpdateSupporterMutation>(
-          print(UpdateSupporterDocument),
-          variables
-        )
-      )
-    },
-    GetEdgesByStatus(
-      variables: GetEdgesByStatusQueryVariables
-    ): Promise<GetEdgesByStatusQuery> {
-      return withWrapper(() =>
-        client.request<GetEdgesByStatusQuery>(
-          print(GetEdgesByStatusDocument),
-          variables
-        )
-      )
-    },
-    InsertEdge(
-      variables: InsertEdgeMutationVariables
-    ): Promise<InsertEdgeMutation> {
-      return withWrapper(() =>
-        client.request<InsertEdgeMutation>(print(InsertEdgeDocument), variables)
-      )
-    },
-    DeleteAllUsers(
-      variables?: DeleteAllUsersMutationVariables
-    ): Promise<DeleteAllUsersMutation> {
-      return withWrapper(() =>
-        client.request<DeleteAllUsersMutation>(
-          print(DeleteAllUsersDocument),
-          variables
-        )
-      )
-    },
-    ResetDB(variables?: ResetDbMutationVariables): Promise<ResetDbMutation> {
-      return withWrapper(() =>
-        client.request<ResetDbMutation>(print(ResetDbDocument), variables)
-      )
-    },
-  }
-}
-export type Sdk = ReturnType<typeof getSdk>
