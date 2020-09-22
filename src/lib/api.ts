@@ -1,4 +1,3 @@
-import { stringList } from "aws-sdk/clients/datapipeline"
 import { LogEventTypes } from "./constant"
 import { ActionTypes } from "./gql_api_actions"
 import { LogEvent } from "./types"
