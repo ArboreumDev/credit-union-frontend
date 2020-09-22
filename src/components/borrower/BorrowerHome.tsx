@@ -55,7 +55,7 @@ const BorrowerDashboard = ({ user }: Props) => {
       <Tabs>
         <TabList>
           <Tab>Dashboard</Tab>
-          <Tab>Repayments</Tab>
+          {user.loan_requests.length > 0 && <Tab>Repayments</Tab>}
           <Tab>Account</Tab>
         </TabList>
         <TabPanels>
@@ -64,9 +64,11 @@ const BorrowerDashboard = ({ user }: Props) => {
             {loanRequests.length === 0 && getRequestLoanComponent(user)}
             {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
           </TabPanel>
-          <TabPanel>
-            <RepaymentsForm user={user} />
-          </TabPanel>
+          {user.loan_requests.length && (
+            <TabPanel>
+              <RepaymentsForm user={user} />
+            </TabPanel>
+          )}
           <TabPanel>
             <Profile user={user} />
           </TabPanel>

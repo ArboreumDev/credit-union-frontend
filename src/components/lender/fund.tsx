@@ -36,14 +36,14 @@ export function AddFundsForm({ user }: Props) {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Box h="30px" />
+          <Box h="10px" />
           <Text>How much money would you like to invest?</Text>
           <AmountInput
             passName="amount"
             passRef={register({ required: true })}
           />
 
-          <Box h="30px" />
+          <Box h="10px" />
           <Box padding="20px">
             <ul>
               <li>
