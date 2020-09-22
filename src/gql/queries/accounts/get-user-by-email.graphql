@@ -9,6 +9,7 @@ query GetUserByEmail($email: String!) {
     corpus_share
     created_at
     kyc_approved
+    demographic_info
     loan_requests {
       confirmation_date
       payback_status
