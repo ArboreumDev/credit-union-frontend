@@ -16,7 +16,6 @@ import {
   BorrowerInfo,
   LiveLoanInfo,
   LoanRequestStatus,
-  LogEvent,
   OptimizerContext,
   PortfolioUpdate,
   RiskInput,
