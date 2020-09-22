@@ -32,8 +32,15 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   throw error
 }
 
-export async function captureLog(event: LogEvent) {
-  return fetcherMutate(ActionTypes.LogEvent, event)
+export async function captureLog(event) {
+  return fetcher("/api/log", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(event),
+  })
 }
 
 export async function captureFeedback(message: string) {
