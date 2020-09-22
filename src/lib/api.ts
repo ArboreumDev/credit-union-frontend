@@ -1,13 +1,21 @@
-import axios from "axios"
+import { stringList } from "aws-sdk/clients/datapipeline"
+import { LogEventTypes } from "./constant"
+import { ActionTypes } from "./gql_api_actions"
+import { LogEvent } from "./types"
 
 export const fetcherMutate = (action, payload) => {
   const base_url = process.env.NEXTAUTH_URL || ""
   const url = base_url + "/api/gql"
   console.log(url)
 
-  return axios
-    .post(url, { actionType: action, payload: payload })
-    .then((res) => res.data)
+  return fetcher(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ actionType: action, payload: payload }),
+  })
 }
 
 export default async function fetcher(...args: Parameters<typeof fetch>) {
@@ -24,4 +32,33 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   const error = new Error(response.statusText)
   console.error(response)
   throw error
+}
+
+export async function captureLog(event: LogEvent) {
+  return fetcherMutate(ActionTypes.LogEvent, event)
+}
+
+export async function captureFeedback(message: string) {
+  return captureLog({
+    eventType: LogEventTypes.ClientFeedback,
+    data: {
+      message: message,
+    },
+  })
+}
+
+// https://blog.sentry.io/2016/01/04/client-javascript-reporting-window-onerror
+// TODO hook up to try catch when needed
+export async function captureError(ex: any) {
+  const errorData = {
+    name: ex.name, // e.g. ReferenceError
+    message: ex.line, // e.g. x is undefined
+    url: document.location.href,
+    stack: ex.stack, // stacktrace string; remember, different per-browser!
+  }
+
+  return captureLog({
+    eventType: LogEventTypes.ClientError,
+    data: errorData,
+  })
 }

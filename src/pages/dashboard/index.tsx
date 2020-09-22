@@ -1,72 +1,41 @@
-import { Box, Center, Heading } from "@chakra-ui/core"
+import { Center } from "@chakra-ui/core"
 import useUser from "lib/useUser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
-import BActiveLoan from "../../components/borrower/BOngoingLoan"
-import CreateLoanForm from "../../components/borrower/CreateLoan/CreateLoanForm"
-import BLoanNeedsConfirmation from "../../components/borrower/LoanRequests/BLoanNeedsConfirmation"
-import BLoanRequestInitiated from "../../components/borrower/LoanRequests/BLoanRequestInitiated"
-import ApplicationSubmitted from "../../components/borrower/Notifications/ApplicationSubmitted"
-import AppBar from "../../components/common/AppBar"
-import Contactus from "../../components/common/ContactUs"
-import { LoanRequest, LoanRequestStatus, User, UserType } from "../../lib/types"
-
-const getRequestLoanComponent = (user: User) => {
-  return (
-    <Box>
-      <Center>
-        <Heading as="h1" size="lg">
-          Request Loan
-        </Heading>
-      </Center>
-      <Box h="30px" />
-      <CreateLoanForm user={user} />
-    </Box>
-  )
-}
-
-const getLoanRequest = (loanRequest: LoanRequest) => {
-  return {
-    [LoanRequestStatus.initiated]: (
-      <BLoanRequestInitiated loanRequest={loanRequest} />
-    ),
-    [LoanRequestStatus.awaiting_borrower_confirmation]: (
-      <BLoanNeedsConfirmation loanRequest={loanRequest} />
-    ),
-    [LoanRequestStatus.live]: <BActiveLoan loanRequest={loanRequest} />,
-  }[loanRequest.status]
-}
+import AppBar from "../../components/common/nav/AppBar"
+import { User, UserType } from "../../lib/types"
 
 const getLenderDashboard = (user: User) => {
-  const LenderDashboard = dynamic(() =>
-    import("components/lender/LenderDashboard")
-  )
-  return <LenderDashboard user={user} />
+  const LenderHome = dynamic(() => import("components/lender/LenderHome"))
+  return <LenderHome user={user} />
 }
 
-export const getDashboardComponent = (user: User) => {
-  if (user.user_type === UserType.Lender)
-    return (
+const getBorrowerDashboard = (user: User) => {
+  const BorrowerDashboard = dynamic(() =>
+    import("components/borrower/BorrowerDashboard")
+  )
+  return <BorrowerDashboard user={user} />
+}
+
+export const getDashboardComponent = (user: User) => (
+  <div>
+    {user.user_type === UserType.Lender && (
       <div>
         <AppBar />
         {getLenderDashboard(user)}
       </div>
-    )
-  else {
-    const loanRequests = user.loan_requests
-    return (
+    )}
+    {user.user_type === UserType.Borrower && (
       <div>
         <AppBar />
-        {!user.kyc_approved && <ApplicationSubmitted />}
-        {loanRequests.length === 0 && getRequestLoanComponent(user)}
-        {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
+        {getBorrowerDashboard(user)}
       </div>
-    )
-  }
-}
+    )}
+  </div>
+)
 
 const Dashboard = () => {
-  const { user, mutate } = useUser()
+  const { user } = useUser()
 
   if (!user) return <AppBar />
 
@@ -76,9 +45,6 @@ const Dashboard = () => {
         <title>Dashboard</title>
       </Head>
       {getDashboardComponent(user)}
-      <Center margin="80px">
-        <Contactus />
-      </Center>
     </div>
   )
 }
