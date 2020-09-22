@@ -12,7 +12,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const dbClient = new DbClient()
     try {
       const data = await FPPushHandler(req)
       res.status(200).json(data)
