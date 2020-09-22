@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/core"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
+import { dec_to_perc } from "lib/currency"
 
 interface Props {
   user: User
@@ -64,11 +65,13 @@ const LenderDashboard = ({ user }: Props) => (
     <HStack spacing={20}>
       <Stat>
         <StatLabel fontSize="lg">Total Assets</StatLabel>
-        <StatNumber fontSize="3xl">₹12000.00</StatNumber>
+        <StatNumber fontSize="3xl">
+          <Currency amount={120000} />
+        </StatNumber>
       </Stat>
       <Stat>
         <StatLabel fontSize="lg">APY</StatLabel>
-        <StatNumber fontSize="3xl">4.50%</StatNumber>
+        <StatNumber fontSize="3xl">{dec_to_perc(0.045)}</StatNumber>
       </Stat>
     </HStack>
     <Box>
