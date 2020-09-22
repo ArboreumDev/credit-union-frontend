@@ -1,12 +1,12 @@
 import { GraphQLClient } from "graphql-request"
 import { NextApiRequest, NextApiResponse } from "next"
 import httpMocks from "node-mocks-http"
+import { FPPushHandler } from "pages/api/integration/fp"
 import { DbClient } from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { Sdk } from "../../src/gql/sdk"
 import { LogEventTypes } from "../../src/lib/constant"
 import { LogEvent } from "../../src/lib/types"
-import FPPushHandler from "../../src/pages/api/integration/fp"
 
 global.fetch = require("node-fetch")
 
@@ -30,21 +30,17 @@ describe("Create new fp push event", () => {
   })
 
   test("push", async () => {
-    const event: LogEvent = {
-      eventType: LogEventTypes.FPPush,
-      data: {
-        test: "data",
-      },
+    const fpPushData: any = {
+      key: "value",
     }
     const req = httpMocks.createRequest<NextApiRequest>({
-      body: { payload: event },
+      body: fpPushData,
       headers: {
         ip: "10.0.0.1",
       },
     })
-    const res = httpMocks.createResponse<NextApiResponse>()
 
-    const data = await FPPushHandler(req, res)
-    console.log(data)
+    const data = await FPPushHandler(req)
+    expect(data.event.data.key === fpPushData.key)
   })
 })
