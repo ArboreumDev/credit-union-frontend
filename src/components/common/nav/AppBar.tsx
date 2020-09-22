@@ -1,20 +1,8 @@
+import { Box, Flex, HStack } from "@chakra-ui/core"
 import Link from "next/link"
-
 import React from "react"
-import {
-  Box,
-  Heading,
-  Flex,
-  Text,
-  Button,
-  Center,
-  HStack,
-} from "@chakra-ui/core"
-import { CgProfile } from "react-icons/cg"
-import Router from "next/router"
-import FeedbackPopover from "./FeedbackPopover"
-import SupportPopover from "./SupportPopover"
 import DrawerButton from "./Drawer"
+import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (

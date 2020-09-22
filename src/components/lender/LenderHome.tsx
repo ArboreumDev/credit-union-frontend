@@ -13,9 +13,9 @@ const LenderHome = ({ user }: Props) => (
   <Box margin="20px">
     <Tabs>
       <TabList>
-        <Tab>Dashboard</Tab>
-        <Tab>Invest</Tab>
-        <Tab>Account</Tab>
+        <Tab className="no-focus-outline">Dashboard</Tab>
+        <Tab className="no-focus-outline">Invest</Tab>
+        <Tab className="no-focus-outline">Account</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
@@ -38,6 +38,13 @@ const LenderHome = ({ user }: Props) => (
         </TabPanel>
       </TabPanels>
     </Tabs>
+    <style jsx>
+      {`
+        .no-focus-outline button:focus {
+          outline: none;
+        }
+      `}
+    </style>
   </Box>
 )
 

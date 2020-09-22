@@ -10,27 +10,45 @@ import {
   Textarea,
 } from "@chakra-ui/core"
 import { captureFeedback } from "lib/api"
-import { createRef } from "react"
+import { createRef, useRef, useState } from "react"
 
-const FeedbackPopover = () => {
+interface Props {
+  title: string
+  header: string
+  onSubmit: (v: string) => void
+  buttonVariant?: string
+}
+
+const InputTextPopover = (props: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
   const textInput = createRef<HTMLTextAreaElement>()
+  const open = () => setIsOpen(true)
+  const close = () => setIsOpen(false)
+
   const submitHandler = () => {
     const node = textInput.current as any
-    captureFeedback(node.value as string)
+    props.onSubmit(node.value as string)
+    setIsOpen(false)
   }
   return (
-    <Popover>
+    <Popover
+      initialFocusRef={textInput}
+      isOpen={isOpen}
+      onOpen={open}
+      onClose={close}
+    >
       <PopoverTrigger>
-        <Button variant="outline">Feedback</Button>
+        <Button variant={props.buttonVariant ?? "outline"}>
+          {props.title}
+        </Button>
       </PopoverTrigger>
+
       <PopoverContent>
-        <PopoverArrow />
         <PopoverCloseButton />
-        <PopoverHeader border="0">
-          Your feedback helps us improve!
-        </PopoverHeader>
+        <PopoverArrow />
+        <PopoverHeader border="0">{props.header}</PopoverHeader>
         <PopoverBody>
-          <Textarea ref={textInput} autoFocus placeholder="Your feedback" />
+          <Textarea ref={textInput} autoFocus />
           <Button onClick={submitHandler}>Send</Button>
         </PopoverBody>
       </PopoverContent>
@@ -38,4 +56,19 @@ const FeedbackPopover = () => {
   )
 }
 
-export default FeedbackPopover
+export const SupportPopover = () => (
+  <InputTextPopover
+    title="Support"
+    header="Please email us and we will get back to you shortly!"
+    onSubmit={captureFeedback}
+    buttonVariant="ghost"
+  />
+)
+
+export const FeedbackPopover = () => (
+  <InputTextPopover
+    title="Feedback"
+    header="Your feedback helps us improve!"
+    onSubmit={captureFeedback}
+  />
+)
