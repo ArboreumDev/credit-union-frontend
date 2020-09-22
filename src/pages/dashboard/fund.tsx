@@ -77,7 +77,7 @@ export function AddFundsForm({ user }: Props) {
 }
 
 const AddFundsPage = () => {
-  const { user, mutate } = useUser()
+  const { user } = useUser()
   if (!user) return <AppBar />
 
   return <AddFundsForm user={user} />

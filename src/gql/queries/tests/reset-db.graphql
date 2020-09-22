@@ -32,4 +32,7 @@ mutation ResetDB {
   delete_user(where: {}) {
     affected_rows
   }
+  delete_events(where: {}) {
+    affected_rows
+  }
 }

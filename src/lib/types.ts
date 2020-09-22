@@ -1,6 +1,5 @@
-import { DbClient } from "../gql/db_client"
 import { GetUserByEmailQuery } from "../gql/sdk"
-import { UIState } from "./UIStateHelpers"
+import { LogEventTypes } from "./constant"
 
 export type Session = {
   user: User
@@ -120,4 +119,9 @@ export type PortfolioUpdate = {
   balanceDelta: number
   shareDelta: number
   alias?: string
+}
+
+export type LogEvent = {
+  eventType: LogEventTypes
+  data: any
 }
