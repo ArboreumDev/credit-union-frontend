@@ -38,7 +38,7 @@ function App({ Component, pageProps }: AppProps) {
                   LAST_REDIRECT_PAGE +
                   `');
         currentPage = location.pathname;
-        if (lastRedirect && lastRedirect != currentPage) {
+        if (lastRedirect && lastRedirect != currentPage && lastRedirect === "/dashboard") {
           console.log('redirect',currentPage, lastRedirect)
           window.location.href = lastRedirect
         }
