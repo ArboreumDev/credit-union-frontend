@@ -50,7 +50,7 @@ describe("Create new log event", () => {
       },
     }
     const payload = httpMocks.createRequest<NextApiRequest>({
-      body: event,
+      body: { payload: event },
       headers: {
         ip: "10.0.0.1",
       },
@@ -63,7 +63,6 @@ describe("Create new log event", () => {
       dbClient,
       payload
     )
-
     expect(res.event.data.userId === event.data.userId)
   })
 })
