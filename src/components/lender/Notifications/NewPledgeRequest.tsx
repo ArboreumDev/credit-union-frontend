@@ -4,11 +4,13 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
+  Collapse,
   Divider,
   Text,
   Wrap,
 } from "@chakra-ui/core"
 import { CalculatedRisk, PledgeRequest } from "lib/types"
+import { useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
 
@@ -17,6 +19,7 @@ interface Params {
 }
 
 export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
+  const [show, setShow] = useState(false)
   const loanRequest = pledgeRequest.loan_request
   const riskCalcResult = loanRequest.risk_calc_result as CalculatedRisk
 
@@ -32,7 +35,7 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       marginTop="20px"
       marginBottom="20px"
     >
-      <AlertIcon boxSize="40px" mr={0} />
+      {/* <AlertIcon boxSize="40px" mr={0} /> */}
       <AlertTitle mt={4} mb={1} fontSize="lg">
         New Pledge Request
       </AlertTitle>
@@ -42,31 +45,37 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
         request of amount <Currency amount={loanRequest.amount} />
         <Divider margin="10px" />
       </AlertDescription>
-      <AlertDescription>
-        <Table>
-          <Row>
-            <TextColumn>Your support</TextColumn>
-            <TextColumn>
-              <Currency amount={pledgeRequest.pledge_amount} />
-            </TextColumn>
-          </Row>
-          <Row>
-            <TextColumn>Total Loan Amount</TextColumn>
-            <TextColumn>
-              <Currency amount={loanRequest.amount} />
-            </TextColumn>
-          </Row>
-          <Row>
-            <TextColumn>Loan Purpose</TextColumn>
-            <TextColumn>{loanRequest.purpose}</TextColumn>
-          </Row>
-          <Row>
-            <TextColumn>Loan Term</TextColumn>
-            <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
-          </Row>
-        </Table>
-        <Text>Repayments will be made at the end of every month</Text>
-      </AlertDescription>
+      <Button variant="link" onClick={() => setShow(!show)}>
+        Show details
+      </Button>
+      <Collapse mt={4} isOpen={show}>
+        <AlertDescription>
+          <Table>
+            <Row>
+              <TextColumn>Your support</TextColumn>
+              <TextColumn>
+                <Currency amount={pledgeRequest.pledge_amount} />
+              </TextColumn>
+            </Row>
+            <Row>
+              <TextColumn>Total Loan Amount</TextColumn>
+              <TextColumn>
+                <Currency amount={loanRequest.amount} />
+              </TextColumn>
+            </Row>
+            <Row>
+              <TextColumn>Loan Purpose</TextColumn>
+              <TextColumn>{loanRequest.purpose}</TextColumn>
+            </Row>
+            <Row>
+              <TextColumn>Loan Term</TextColumn>
+              <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
+            </Row>
+          </Table>
+          <Text>Repayments will be made at the end of every month</Text>
+        </AlertDescription>
+      </Collapse>
+
       <AlertDescription marginTop="20px">
         <Wrap justify="center">
           <Button colorScheme="blue" w="280px">

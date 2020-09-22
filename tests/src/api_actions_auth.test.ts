@@ -1,5 +1,5 @@
-import { DbClient } from "../../src/gql/db_client"
 import { GraphQLClient } from "graphql-request"
+import { DbClient } from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import {
   CreateLoanRequestMutation,
@@ -8,15 +8,13 @@ import {
   Loan_Requests_Insert_Input,
   Sdk,
 } from "../../src/gql/sdk"
-import { LogEventTypes } from "../../src/lib/constant"
-import { LogEvent, Session, UserType } from "../../src/lib/types"
 import {
   ActionTypes,
   ACTION_ERRORS,
   runAction,
 } from "../../src/lib/gql_api_actions"
 import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
-import { getDummySession as getMockSession } from "../fixtures/session"
+import { getMockSession } from "../fixtures/session"
 
 global.fetch = require("node-fetch")
 
@@ -32,37 +30,6 @@ beforeAll(async () => {
   dbClient = new DbClient(client)
   sdk = dbClient.sdk
   await sdk.ResetDB()
-})
-
-describe("Create new log event", () => {
-  afterAll(async () => {
-    await sdk.ResetDB()
-  })
-
-  test("new log event", async () => {
-    const event: LogEvent = {
-      eventType: LogEventTypes.ClientLog,
-      data: {
-        userId: "UserId",
-        test: "test",
-      },
-    }
-
-    const payload = {
-      body: event,
-      headers: {
-        ip: "10.0.0.1",
-      },
-    }
-    const res = await runAction(
-      ActionTypes.LogEvent,
-      undefined,
-      payload,
-      dbClient
-    )
-
-    expect(res.event.data.userId === event.data.userId)
-  })
 })
 
 describe("Create new user", () => {

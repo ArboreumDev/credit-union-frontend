@@ -1,5 +1,5 @@
 import { LogEventTypes } from "./constant"
-import { LogEvent } from "./types"
+import { ActionTypes } from "./gql_api_actions"
 
 export const fetcherMutate = (action, payload) => {
   const base_url = process.env.NEXTAUTH_URL || ""
@@ -32,14 +32,23 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   throw error
 }
 
-export async function captureLog(event: LogEvent) {
-  return fetcher("/api/health/log", {
+export async function captureLog(event) {
+  return fetcher("/api/log", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(event),
+  })
+}
+
+export async function captureFeedback(message: string) {
+  return captureLog({
+    eventType: LogEventTypes.ClientFeedback,
+    data: {
+      message: message,
+    },
   })
 }
 

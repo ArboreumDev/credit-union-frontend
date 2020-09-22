@@ -3,7 +3,8 @@ CREATE TABLE "public"."events"(
     "created_at" timestamptz NOT NULL DEFAULT now(),
     "user_id" uuid, 
     "headers" jsonb, 
-    "event" jsonb, 
+    "data" jsonb,
+    "event_type" character varying(40) NOT NULL, 
     PRIMARY KEY ("id") , 
     UNIQUE ("id"));
 

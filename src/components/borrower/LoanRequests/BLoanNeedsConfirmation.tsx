@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/core"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { irr_dec_to_perc } from "lib/currency"
+import { dec_to_perc } from "lib/currency"
 import { CalculatedRisk, LoanRequest } from "lib/types"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
@@ -36,7 +36,7 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
       <Row>
         <TextColumn muted>Interest Rate</TextColumn>
         <TextColumn textAlign="right">
-          {irr_dec_to_perc(calculatedRisk.interestRate)}%
+          {dec_to_perc(calculatedRisk.interestRate)}%
         </TextColumn>
       </Row>
       <Row>

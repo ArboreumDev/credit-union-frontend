@@ -4,6 +4,7 @@ import {
   DEFAULT_LOAN_TENOR,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   DEFAULT_RISK_FREE_INTEREST_RATE,
+  LogEventTypes as LogEventType,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -15,7 +16,6 @@ import {
   BorrowerInfo,
   LiveLoanInfo,
   LoanRequestStatus,
-  LogEvent,
   OptimizerContext,
   PortfolioUpdate,
   RiskInput,
@@ -33,16 +33,18 @@ import { initializeGQL } from "./graphql_client"
  * A class to be used in the frontend to send queries to the DB.
  */
 export class DbClient {
-  /**
-   *
-   * @param client graphql client to run self-constructed graphql-requests in string format
-   */
+  private static instance: DbClient
+
   public sdk: Sdk
   public client: GraphQLClient
 
   constructor(_client?: GraphQLClient) {
+    if (DbClient.instance) {
+      return DbClient.instance
+    }
     this.client = _client || initializeGQL()
     this.sdk = getSdk(this.client)
+    DbClient.instance = this
   }
 
   getUserByEmail = async (email: string) => {
@@ -352,14 +354,19 @@ export class DbClient {
     }
   }
 
-  logEvent = async (event?: LogEvent, headers?: any, userId?: string) => {
-    const res = await this.sdk.InsertEvent({
-      event: {
-        headers: headers,
-        event: event,
-        user_id: userId,
-      },
-    })
+  logEvent = async (
+    eventType: LogEventType,
+    eventData?: any,
+    headers?: any,
+    userId?: string
+  ) => {
+    const event = {
+      headers: headers,
+      data: eventData,
+      user_id: userId,
+      event_type: eventType,
+    }
+    const res = await this.sdk.InsertEvent({ event })
     return res.insert_events_one
   }
 }

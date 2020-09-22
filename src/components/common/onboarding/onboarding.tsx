@@ -31,6 +31,7 @@ import { AiOutlineMail } from "react-icons/ai"
 import Head from "next/head"
 import { useState } from "react"
 import { UserType } from "lib/types"
+import { ActionTypes } from "lib/gql_api_actions"
 
 type FormData = {
   firstname: string
@@ -61,7 +62,7 @@ export default function Onboarding({ user, userType }: Params) {
       },
     }
     // Call mutation
-    fetcherMutate("CreateUser", payload)
+    fetcherMutate(ActionTypes.CreateUser, payload)
       .then((res) => {
         location.href = "/dashboard"
       })
@@ -162,9 +163,6 @@ export default function Onboarding({ user, userType }: Params) {
               <Button type="submit">Submit</Button>
             </Center>
             <Box h={30} />
-            <Center>
-              <a href="/api/auth/signout">Logout</a>
-            </Center>
           </Stack>
         </Container>
       </form>
