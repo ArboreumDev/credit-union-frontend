@@ -27,60 +27,42 @@ describe("Create new event", () => {
   })
 
   test("new log event", async () => {
-    const event: LogEvent = {
-      eventType: LogEventTypes.ClientLog,
-      data: {
-        test: "test",
-      },
+    const data = {
+      test: "test",
     }
     const headers = {
       IP: "10.0.0.1",
     }
 
-    const res = await dbClient.logEvent(event, headers)
+    const res = await dbClient.logEvent(LogEventTypes.ClientLog, data, headers)
     expect(res.headers.IP === headers.IP)
   })
 })
 
 describe("Create feedback", () => {
+  const message = "hi"
+  const data: LogEvent = {
+    message: message,
+  }
+  const headers = {
+    IP: "10.0.0.1",
+  }
+  const eventType = LogEventTypes.ClientFeedback
+
   afterAll(async () => {
     await sdk.ResetDB()
   })
 
   test("new log event", async () => {
-    const message = "hi"
-    const event: LogEvent = {
-      eventType: LogEventTypes.ClientFeedback,
-      data: {
-        message: message,
-      },
-    }
-    const headers = {
-      IP: "10.0.0.1",
-    }
-
-    const res = await dbClient.logEvent(event, headers)
+    const res = await dbClient.logEvent(eventType, data, headers)
     expect(res.headers.IP === headers.IP)
-    expect(res.event.data.message === message)
+    expect(res.data.message === message)
+    expect(res.event_type === eventType)
   })
 
-  test("new log event with session", async () => {
+  test("new log event with user_id", async () => {
     await sdk.CreateUser({ user: BORROWER1 })
-    const message = "hi"
-
-    const event: LogEvent = {
-      eventType: LogEventTypes.ClientFeedback,
-      data: {
-        message: message,
-      },
-    }
-    const headers = {
-      IP: "10.0.0.1",
-    }
-
-    const res = await dbClient.logEvent(event, headers, BORROWER1.id)
-    expect(res.headers.IP === headers.IP)
-    expect(res.event.data.message === message)
+    const res = await dbClient.logEvent(eventType, data, headers, BORROWER1.id)
     expect(res.user.id === BORROWER1.id)
   })
 })

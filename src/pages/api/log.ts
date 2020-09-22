@@ -2,9 +2,11 @@ import { DbClient } from "gql/db_client"
 import { LogEventTypes } from "lib/constant"
 import { NextApiRequest, NextApiResponse } from "next"
 
-export async function FPPushHandler(req: NextApiRequest) {
+export async function LogPushHandler(req: NextApiRequest) {
   const dbClient = new DbClient()
-  return dbClient.logEvent(LogEventTypes.FPPush, req.body, req.headers)
+  const { logEventType, eventData } = req.body
+
+  return dbClient.logEvent(logEventType, eventData, req.headers)
 }
 
 export default async function handler(
@@ -14,7 +16,7 @@ export default async function handler(
   if (req.method === "POST") {
     const dbClient = new DbClient()
     try {
-      const data = await FPPushHandler(req)
+      const data = await LogPushHandler(req)
       res.status(200).json(data)
     } catch (error) {
       console.log(error)

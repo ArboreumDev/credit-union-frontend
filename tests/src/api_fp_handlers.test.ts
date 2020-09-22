@@ -40,7 +40,7 @@ describe("Create new fp push event", () => {
       },
     })
 
-    const data = await FPPushHandler(req)
-    expect(data.event.data.key === fpPushData.key)
+    const event = await FPPushHandler(req)
+    expect(event.data.key === fpPushData.key)
   })
 })

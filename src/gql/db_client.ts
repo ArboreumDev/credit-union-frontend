@@ -4,6 +4,7 @@ import {
   DEFAULT_LOAN_TENOR,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   DEFAULT_RISK_FREE_INTEREST_RATE,
+  LogEventTypes as LogEventType,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -354,11 +355,17 @@ export class DbClient {
     }
   }
 
-  logEvent = async (eventData?: LogEvent, headers?: any, userId?: string) => {
+  logEvent = async (
+    eventType: LogEventType,
+    eventData?: any,
+    headers?: any,
+    userId?: string
+  ) => {
     const event = {
       headers: headers,
-      event: eventData,
+      data: eventData,
       user_id: userId,
+      event_type: eventType,
     }
     const res = await this.sdk.InsertEvent({ event })
     return res.insert_events_one

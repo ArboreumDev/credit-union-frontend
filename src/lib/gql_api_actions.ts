@@ -30,10 +30,14 @@ export const getAuthTypeFromEmail = (email: string) => {
 }
 
 export abstract class Action {
-  constructor(protected session: Session, protected dbClient: DbClient) {}
+  constructor(
+    protected session: Session,
+    protected dbClient: DbClient,
+    protected payload: any
+  ) {}
 
   abstract minAuthLevel: AUTH_TYPE
-  abstract _run(): Promise<any>
+  abstract run(): Promise<any>
 
   isUserAllowed() {
     if (this.minAuthLevel === AUTH_TYPE.ANY) return true
@@ -43,92 +47,51 @@ export abstract class Action {
     }
     return false
   }
-
-  run() {
-    return this._run()
-  }
 }
 
 export class CreateUser extends Action {
   minAuthLevel = AUTH_TYPE.ANY
-  private payload: CreateUserMutationVariables
-  constructor(
-    session: Session,
-    dbClient: DbClient,
-    payload: CreateUserMutationVariables
-  ) {
-    super(session, dbClient)
-    this.payload = payload
-  }
-  _run() {
+
+  run() {
     return this.dbClient.sdk.CreateUser(this.payload)
   }
 }
 
 export class CreateLoan extends Action {
   minAuthLevel = AUTH_TYPE.USER
-  private payload: Loan_Requests_Insert_Input
-  constructor(
-    session: Session,
-    dbClient: DbClient,
-    payload: Loan_Requests_Insert_Input
-  ) {
-    super(session, dbClient)
-    this.payload = payload
-  }
+
   isUserAllowed() {
     return (
       super.isUserAllowed() && this.payload.borrower_id === this.session.user.id
     )
   }
 
-  _run() {
+  run() {
     return this.dbClient.sdk.CreateLoanRequest({ request: this.payload })
-  }
-}
-
-export class LogEvent extends Action {
-  minAuthLevel = AUTH_TYPE.ANY
-  private payload: NextApiRequest
-  constructor(session: Session, dbClient: DbClient, payload: NextApiRequest) {
-    super(session, dbClient)
-    this.payload = payload
-  }
-  _run() {
-    const userId = this.session ? this.session.user.id : null
-    return this.dbClient.logEvent(
-      this.payload.body.payload,
-      this.payload.headers,
-      userId
-    )
   }
 }
 
 export enum ActionTypes {
   CreateUser = "CREATE_USER",
   CreateLoan = "CREATE_LOAN_REQUEST_MUTATION",
-  LogEvent = "LOG_EVENT",
 }
 
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [ActionTypes.CreateUser]: CreateUser,
   [ActionTypes.CreateLoan]: CreateLoan,
-  [ActionTypes.LogEvent]: LogEvent,
 }
 
 export function runAction(
   actionType: ActionTypes,
   session: Session,
   payload: any,
-  dbClient: DbClient,
-  req?: NextApiRequest
+  dbClient: DbClient
 ) {
   // console.log(session, payload)
   const actionMap = {
     [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
     [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
-    [ActionTypes.LogEvent]: new LogEvent(session, dbClient, req),
   }
   if (actionType in actionMap) {
     const action = actionMap[actionType]
