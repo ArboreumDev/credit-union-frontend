@@ -51,7 +51,7 @@ const BorrowerDashboard = ({ user }: Props) => {
   const loanRequests = user.loan_requests
 
   return (
-    <Box margin="20px">
+    <Box margin="0px">
       <Tabs>
         <TabList>
           <Tab>Dashboard</Tab>
