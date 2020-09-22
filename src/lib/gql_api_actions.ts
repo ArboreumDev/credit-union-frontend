@@ -97,7 +97,7 @@ export class LogEvent extends Action {
   _run() {
     const userId = this.session ? this.session.user.id : null
     return this.dbClient.logEvent(
-      this.payload.body,
+      this.payload.body.payload,
       this.payload.headers,
       userId
     )
