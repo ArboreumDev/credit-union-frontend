@@ -1,5 +1,6 @@
 import { stringList } from "aws-sdk/clients/datapipeline"
 import { LogEventTypes } from "./constant"
+import { ActionTypes } from "./gql_api_actions"
 import { LogEvent } from "./types"
 
 export const fetcherMutate = (action, payload) => {
@@ -34,14 +35,7 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
 }
 
 export async function captureLog(event: LogEvent) {
-  return fetcher("/api/health/log", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(event),
-  })
+  return fetcherMutate(ActionTypes.LogEvent, event)
 }
 
 export async function captureFeedback(message: string) {
