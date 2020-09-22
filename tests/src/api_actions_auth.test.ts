@@ -17,6 +17,8 @@ import {
 } from "../../src/lib/gql_api_actions"
 import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
+import { NextApiRequest } from "next"
+import httpMocks from "node-mocks-http"
 
 global.fetch = require("node-fetch")
 
@@ -47,18 +49,19 @@ describe("Create new log event", () => {
         test: "test",
       },
     }
-
-    const payload = {
+    const payload = httpMocks.createRequest<NextApiRequest>({
       body: event,
       headers: {
         ip: "10.0.0.1",
       },
-    }
+    })
+
     const res = await runAction(
       ActionTypes.LogEvent,
       undefined,
-      payload,
-      dbClient
+      null,
+      dbClient,
+      payload
     )
 
     expect(res.event.data.userId === event.data.userId)
