@@ -12,7 +12,7 @@ const getLenderDashboard = (user: User) => {
 
 const getBorrowerDashboard = (user: User) => {
   const BorrowerDashboard = dynamic(() =>
-    import("components/borrower/BorrowerDashboard")
+    import("components/borrower/BorrowerHome")
   )
   return <BorrowerDashboard user={user} />
 }

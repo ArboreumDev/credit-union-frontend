@@ -8,14 +8,14 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/core"
-import { AddFundsForm } from "components/lender/fund"
-import { Profile } from "pages/profile"
 import BActiveLoan from "components/borrower/BOngoingLoan"
 import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "components/borrower/LoanRequests/BLoanNeedsConfirmation"
 import BLoanRequestInitiated from "components/borrower/LoanRequests/BLoanRequestInitiated"
 import ApplicationSubmitted from "components/borrower/Notifications/ApplicationSubmitted"
+import { Profile } from "pages/profile"
 import { LoanRequest, LoanRequestStatus, User } from "../../lib/types"
+import RepaymentsForm from "./repayments"
 
 interface Props {
   user: User
@@ -65,7 +65,7 @@ const BorrowerDashboard = ({ user }: Props) => {
             {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
           </TabPanel>
           <TabPanel>
-            <AddFundsForm user={user} />
+            <RepaymentsForm user={user} />
           </TabPanel>
           <TabPanel>
             <Profile user={user} />

@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AppBar from "components/common/nav/AppBar"
+import WithdrawFundsForm from "components/lender/withdraw"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
@@ -38,12 +39,22 @@ export const Profile = ({ user }: Props) => {
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
   return (
-    <Stack>
-      <Text>{user.name}</Text>
-      <Text>{user.email}</Text>
-      <Text>{user.phone}</Text>
-      <Box h="10px" />
+    <Stack spacing={6}>
+      <Stack>
+        <Heading size="sm">Profile</Heading>
+        <Text>{user.name}</Text>
+        <Text>{user.email}</Text>
+        <Text>{user.phone}</Text>
+      </Stack>
+      {user.user_type === UserType.Lender && (
+        <Stack>
+          <Divider />
+          <Heading size="sm">Withdraw</Heading>
+          <WithdrawFundsForm user={user} />
+        </Stack>
+      )}
       <Divider />
+
       <Box>
         <Heading as="h4" size="md">
           Transactions

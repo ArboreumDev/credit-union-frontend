@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Heading,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/core"
+import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import AppBar from "components/common/nav/AppBar"
 import { User } from "lib/types"
@@ -80,16 +71,4 @@ export function AddFundsForm({ user }: Props) {
   )
 }
 
-const AddFundsPage = () => {
-  const { user } = useUser()
-  if (!user) return <AppBar />
-
-  return (
-    <div>
-      <AppBar />
-      <AddFundsForm user={user} />
-    </div>
-  )
-}
-
-export default AddFundsPage
+export default AddFundsForm
