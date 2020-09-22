@@ -19,4 +19,5 @@ export enum LogEventTypes {
   ClientError = "client_error",
   ClientLog = "client_log",
   ClientFeedback = "client_feedback",
+  FPPush = "fp_push",
 }

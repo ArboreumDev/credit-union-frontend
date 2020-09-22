@@ -359,7 +359,6 @@ export class DbClient {
       user_id: userId,
     }
     const res = await this.sdk.InsertEvent({ event })
-    console.log("LogEvent - ", { eventData, userId })
     return res.insert_events_one
   }
 }
