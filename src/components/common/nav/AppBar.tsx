@@ -57,17 +57,17 @@ const AppBar = () => (
     <style jsx global>
       {`
         .drawerButton {
-          display: block;
+          display: block !important;
         }
         .navButtons {
-          display: none;
+          display: none !important;
         }
         @media only screen and (min-width: 500px) {
           .navButtons {
-            display: block;
+            display: block !important;
           }
           .drawerButton {
-            display: none;
+            display: none !important;
           }
         }
       `}
