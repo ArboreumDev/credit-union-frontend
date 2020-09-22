@@ -71,18 +71,39 @@ const LenderDashboard = ({ user }: Props) => (
       </Stat>
       <Stat>
         <StatLabel fontSize="lg">APY</StatLabel>
-        <StatNumber fontSize="3xl">{dec_to_perc(0.045)}</StatNumber>
+        <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
       </Stat>
     </HStack>
+    <Box maxW="300px">
+      <Heading size="sm">Assets</Heading>
+      <Box h="20px" />
+      <Stack>
+        <Flex>
+          <Box flex={0.5}>Wallet</Box>
+          <Box flex={0.5} textAlign="right">
+            <Currency amount={20000} />
+          </Box>
+        </Flex>
+        <Flex>
+          <Box flex={0.5}>Invested</Box>
+          <Box flex={0.5} textAlign="right">
+            <Currency amount={50000} />
+          </Box>
+        </Flex>
+        <Flex>
+          <Box flex={0.5}>Pledged</Box>
+          <Box flex={0.5} textAlign="right">
+            <Currency amount={30000} />
+          </Box>
+        </Flex>
+      </Stack>
+    </Box>
     <Box>
       <Heading size="sm">Asset Allocation</Heading>
       <Box h="20px" />
       <Stack spacing={6}>
         <Flex>
-          <Box flex={0.5}>Uninvested</Box>
-          <Box flex={0.5} textAlign="center">
-            <Currency amount={20000} />
-          </Box>
+          <Box flex={0.6}>Uninvested</Box>
           <Box flex={1}>
             <Progress h="20px" value={20} />
           </Box>
@@ -91,10 +112,7 @@ const LenderDashboard = ({ user }: Props) => (
           </Box>
         </Flex>
         <Flex>
-          <Box flex={0.5}>Invested</Box>
-          <Box flex={0.5} textAlign="center">
-            <Currency amount={50000} />
-          </Box>
+          <Box flex={0.6}>Invested</Box>
           <Box flex={1}>
             <Progress h="20px" value={50} />
           </Box>
@@ -103,10 +121,7 @@ const LenderDashboard = ({ user }: Props) => (
           </Box>
         </Flex>
         <Flex>
-          <Box flex={0.5}>Pledged</Box>
-          <Box flex={0.5} textAlign="center">
-            <Currency amount={30000} />
-          </Box>
+          <Box flex={0.6}>Pledged</Box>
           <Box flex={1}>
             <Progress h="20px" value={30} />
           </Box>
