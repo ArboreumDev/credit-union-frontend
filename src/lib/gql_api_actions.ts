@@ -45,9 +45,7 @@ export abstract class Action {
   }
 
   run() {
-    if (this.isUserAllowed) {
-      return this._run()
-    } else return Promise.reject(ACTION_ERRORS.Unauthorized)
+    return this._run()
   }
 }
 
@@ -125,6 +123,7 @@ export function runAction(
   payload: any,
   dbClient: DbClient
 ) {
+  // console.log(session, payload)
   const actionMap = {
     [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
     [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
@@ -132,6 +131,7 @@ export function runAction(
   }
   if (actionType in actionMap) {
     const action = actionMap[actionType]
+    console.log(actionType, action.isUserAllowed())
     if (action.isUserAllowed()) return action.run()
     else return Promise.reject(ACTION_ERRORS.Unauthorized)
   } else return Promise.reject(ACTION_ERRORS.Invalid)
