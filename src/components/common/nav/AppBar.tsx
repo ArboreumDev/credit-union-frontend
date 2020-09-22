@@ -13,6 +13,7 @@ import {
 import { CgProfile } from "react-icons/cg"
 import Router from "next/router"
 import FeedbackPopover from "./FeedbackPopover"
+import SupportPopover from "./SupportPopover"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (
@@ -35,12 +36,8 @@ const AppBar = () => (
     </Flex>
     <Box flex="1"></Box>
     <HStack>
-      <Link href="/profile">
-        <FeedbackPopover />
-      </Link>
-      <Link href="/profile">
-        <Button variant="ghost">Support</Button>
-      </Link>
+      <FeedbackPopover />
+      <SupportPopover />
     </HStack>
 
     <style jsx>

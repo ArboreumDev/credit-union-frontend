@@ -1,5 +1,6 @@
 import {
   Button,
+  Textarea,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -7,12 +8,11 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Textarea,
 } from "@chakra-ui/core"
 import { captureFeedback } from "lib/api"
 import { createRef } from "react"
 
-const FeedbackPopover = () => {
+const SupportPopover = () => {
   const textInput = createRef<HTMLTextAreaElement>()
   const submitHandler = () => {
     const node = textInput.current as any
@@ -21,16 +21,20 @@ const FeedbackPopover = () => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant="outline">Feedback</Button>
+        <Button variant="ghost">Support</Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader border="0">
-          Your feedback helps us improve!
+          Please email us and we will get back to you shortly.
         </PopoverHeader>
         <PopoverBody>
-          <Textarea ref={textInput} autoFocus placeholder="Your feedback" />
+          <Textarea
+            ref={textInput}
+            autoFocus
+            placeholder="Ask us any question!"
+          />
           <Button onClick={submitHandler}>Send</Button>
         </PopoverBody>
       </PopoverContent>
@@ -38,4 +42,4 @@ const FeedbackPopover = () => {
   )
 }
 
-export default FeedbackPopover
+export default SupportPopover
