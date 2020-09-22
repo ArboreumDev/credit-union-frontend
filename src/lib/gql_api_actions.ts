@@ -122,7 +122,7 @@ export function runAction(
   session: Session,
   payload: any,
   dbClient: DbClient,
-  req: NextApiRequest
+  req?: NextApiRequest
 ) {
   // console.log(session, payload)
   const actionMap = {
