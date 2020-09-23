@@ -98,7 +98,7 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
 
   test("only confirmed supporters are included in the loan-request-calculation", async () => {
-    const { loan_request_info } = await dbClient.getOptimizerInput(request_id)
+    const { loan_request_info } = await dbClient.getSwarmAiInput(request_id)
     const loanSupporters = loan_request_info.supporters.map(
       (x) => x.supporter_id
     )

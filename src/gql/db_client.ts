@@ -239,7 +239,7 @@ export class DbClient {
    * it expects
    * @param requestId
    */
-  getOptimizerInput = async (requestId: string) => {
+  getSwarmAiInput = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
 
     // ============ optimizer context =============================

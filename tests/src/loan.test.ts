@@ -85,7 +85,7 @@ describe("Basic loan request flow for an accepted loan", () => {
       // we trigger the calculation of a loan offer. The flow is as follows:
       // - collecting inputs for the swarm-ai (risk-info, loan-amount, network-state...)
       // const riskInput = await dbClient.getRiskInput(request_id)
-      // const optimizerInput = await dbClient.getOptimizerInput(request_id)
+      const optimizerInput = await dbClient.getSwarmAiInput(request_id)
       // console.log(JSON.stringify(optimizerInput))
       // console.log(optimizerInput.loan_request_info.supporters)
       // - formatting it such that the optimzer can use it and dropping it to the AWS-S3 bucket
@@ -169,7 +169,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the loan shows up in subsequent queries to the corpus Data", async () => {
-      const { optimizer_context } = await dbClient.getOptimizerInput(request_id)
+      const { optimizer_context } = await dbClient.getSwarmAiInput(request_id)
       expect(
         optimizer_context.loans_in_corpus
           .map((x) => x.loanId)
