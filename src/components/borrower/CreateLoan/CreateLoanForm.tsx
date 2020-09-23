@@ -50,8 +50,12 @@ export default function CreateLoanForm({ user }: Props) {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Container minW="300px" bg="white">
+        <Container minW="300px">
           <Stack spacing={3}>
+            <Center>
+              <Heading size="lg">Request Loan</Heading>
+            </Center>
+
             <AmountInput
               passName="loanAmount"
               passRef={register({ required: true })}

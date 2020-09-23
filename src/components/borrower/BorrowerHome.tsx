@@ -24,50 +24,64 @@ interface Props {
   initPanelIdx?: number
 }
 
-const getRequestLoanComponent = (user: User) => {
-  return (
-    <Box>
-      <Heading as="h1" size="lg">
-        Request a loan
-      </Heading>
+class Borrower {
+  constructor(public user: User) {}
 
-      <Box h="30px" />
-      <CreateLoanForm user={user} />
-    </Box>
-  )
-}
+  static generateLoanComponent = (loanRequest: LoanRequest) => {
+    return {
+      [LoanRequestStatus.initiated]: (
+        <BLoanRequestInitiated loanRequest={loanRequest} />
+      ),
+      [LoanRequestStatus.awaiting_borrower_confirmation]: (
+        <BLoanNeedsConfirmation loanRequest={loanRequest} />
+      ),
+      [LoanRequestStatus.active]: <BActiveLoan loanRequest={loanRequest} />,
+    }[loanRequest.status]
+  }
 
-const getLoanRequest = (loanRequest: LoanRequest) => {
-  return {
-    [LoanRequestStatus.initiated]: (
-      <BLoanRequestInitiated loanRequest={loanRequest} />
-    ),
-    [LoanRequestStatus.awaiting_borrower_confirmation]: (
-      <BLoanNeedsConfirmation loanRequest={loanRequest} />
-    ),
-    [LoanRequestStatus.live]: <BActiveLoan loanRequest={loanRequest} />,
-  }[loanRequest.status]
+  get loans() {
+    return this.user.loan_requests
+  }
+  get hasLoanReq() {
+    return this.loans && this.loans.length > 0
+  }
+  get ongoingLoan() {
+    return this.hasLoanReq && this.loans[0]
+  }
+  get loanStatus() {
+    return this.hasLoanReq && this.ongoingLoan.status
+  }
+  get hasActiveLoan() {
+    return (
+      this.hasLoanReq && this.ongoingLoan.status === LoanRequestStatus.active
+    )
+  }
+  get mainComponent() {
+    if (!this.hasLoanReq) return <CreateLoanForm user={this.user} />
+    else return Borrower.generateLoanComponent(this.ongoingLoan)
+  }
+  get notification() {
+    if (!this.user.kyc_approved) return <ApplicationSubmitted />
+    if (this.hasActiveLoan) return <UpcomingRepayment />
+  }
 }
 
 const BorrowerHome = ({ user, initPanelIdx }: Props) => {
-  const loanRequests = user.loan_requests
+  const borrower = new Borrower(user)
   const tabs = [
     new TabComponent(
       "Dashboard",
       (
         <>
-          {!user.kyc_approved && <ApplicationSubmitted />}
-          {!user.kyc_approved && <UpcomingRepayment />}
-
-          {loanRequests.length === 0 && getRequestLoanComponent(user)}
-          {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
+          {borrower.notification}
+          {borrower.mainComponent}
         </>
       )
     ),
     new TabComponent("Account", <Profile user={user} />),
   ]
 
-  if (user.loan_requests.length)
+  if (borrower.hasActiveLoan)
     tabs.push(new TabComponent("Repay", <RepaymentsForm user={user} />))
 
   return <TabHome tabs={tabs} initPanelIdx={initPanelIdx} />
