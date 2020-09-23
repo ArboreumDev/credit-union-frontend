@@ -45,12 +45,16 @@ export type SupporterInfo = {
   recommendation_risk: RiskParams
 }
 
-// this type mirrors the type expected by the swarmAI module
-export type BorrowerInfo = {
-  borrower_id: string
+export type DemographicInfo = {
   education_years: number
   income: number
   credit_score: number
+}
+
+// this type mirrors the type expected by the swarmAI module
+export type BorrowerInfo = {
+  borrower_id: string
+  demographic_info: DemographicInfo
 }
 
 export type LiveLoanInfo = {
@@ -63,16 +67,35 @@ export type LiveLoanInfo = {
   loan_schedule: any
 }
 
+export type LoanInfo = {
+  request_id: string
+  tenor: number
+  amount: number
+  num_annual_cmpnd_prds: number
+  borrower_apr: number
+  borrower_collateral: number
+  corpus_apr: number
+  supporter_apr: number
+  supporter_share: number
+  supporter_cash_encumbered: number
+  supporter_portfolio_encumbered: number
+  supporter_lag: number
+  penalty_apr: number
+  repayments?: number[]
+  loan_schedule?: any
+}
+
 export type RiskInput = {
   central_risk_info: RiskParams
 }
 
 export type OptimizerContext = {
-  risk_free_interest_rate?: number
   supporter_corpus_share: number
   loans_in_corpus: LiveLoanInfo[]
   corpus_cash: number
-  novation: boolean
+  supporter_cash: number
+  novation?: boolean
+  risk_free_apr?: number
 }
 
 export type LoanRequestInfo = {
@@ -82,12 +105,19 @@ export type LoanRequestInfo = {
   amount: number
   supporters: SupporterInfo[]
   risk_params?: RiskParams
+  borrower_collateral: number
 }
 
 export type SwarmAiRequestMessage = {
   loan_request_info: LoanRequestInfo
   risk_assessment_context: RiskInput
   optimizer_context: OptimizerContext
+}
+
+export type SwarmAiRespone = {
+  loan_request_info: LoanRequestInfo
+  corpus_share: number
+  loan_info: LoanInfo
 }
 // =========== End of risk module types ========
 
