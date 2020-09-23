@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Container,
   Heading,
   Tab,
   TabList,
@@ -58,7 +59,12 @@ class Borrower {
   }
   get mainComponent() {
     if (!this.hasLoanReq) return <CreateLoanForm user={this.user} />
-    else return Borrower.generateLoanComponent(this.ongoingLoan)
+    else
+      return (
+        <Container maxW="sm">
+          {Borrower.generateLoanComponent(this.ongoingLoan)}
+        </Container>
+      )
   }
   get notification() {
     if (!this.user.kyc_approved) return <ApplicationSubmitted />

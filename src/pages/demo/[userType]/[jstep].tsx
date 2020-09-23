@@ -65,7 +65,6 @@ const getStepMax = (userType: UserType) => {
 const Demo = () => {
   const router = useRouter()
   const { userType, jstep } = router.query
-  console.log(userType, jstep)
   const jstepInt = parseInt(jstep as string)
 
   function redirectJStep(isPrev?: boolean, toggleUserType?: boolean) {

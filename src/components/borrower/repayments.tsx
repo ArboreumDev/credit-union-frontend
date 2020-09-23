@@ -33,7 +33,7 @@ export function RepaymentsForm({ user }: Props) {
   }
 
   return (
-    <Box>
+    <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Box h="30px" />

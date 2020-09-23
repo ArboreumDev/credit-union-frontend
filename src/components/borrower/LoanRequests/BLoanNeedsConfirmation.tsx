@@ -74,7 +74,7 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
   const { register, setValue, handleSubmit, errors } = useForm<any>()
 
   return (
-    <Stack padding="10px">
+    <Container padding="10px">
       <Center>
         <Text fontSize="100px" color="green.500">
           <AiOutlineFileDone />
@@ -156,6 +156,6 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
         </Center>
       </form>
       <Box h="30px" />
-    </Stack>
+    </Container>
   )
 }
