@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  await sdk.ResetDB()
+  // await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -62,6 +62,15 @@ describe("Basic loan request flow for an accepted loan", () => {
     await addNetwork(sdk, BASIC_NETWORK)
     const { user } = await sdk.GetAllUsers()
     balancesBefore = getUserPortfolio(user)
+  })
+
+  describe("the swarmAi can...", () => {
+    test("... respond to loan requests", async () => {
+      const res = await dbClient.callSwarmAI()
+      expect(res).toHaveProperty("corpus_share")
+      expect(res).toHaveProperty("loan_info.borrower_apr")
+      expect(res).toHaveProperty("loan_request_info.request_id")
+    })
   })
 
   describe("A borrower user requests a loan...", () => {

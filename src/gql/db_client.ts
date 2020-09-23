@@ -22,8 +22,10 @@ import {
   SupporterInfo,
   SupporterStatus,
   SwarmAiRequestMessage,
+  SwarmAiResponse,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
+import { sampleAiInput } from "../../tests/fixtures/swarmai_fixtures"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
@@ -126,6 +128,21 @@ export class DbClient {
       latestOffer: mockedAiResult,
     })
     return { updatedRequest: aiResult }
+  }
+
+  callSwarmAI = async (requestId = "") => {
+    const DEV_URL = "http://127.0.0.1:3001/loan/request"
+    const data = { request_msg: sampleAiInput }
+    const params = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+    const res = await fetch(DEV_URL, params)
+    return res.json() as SwarmAiResponse
   }
 
   /**
