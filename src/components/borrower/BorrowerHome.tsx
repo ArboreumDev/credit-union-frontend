@@ -13,6 +13,7 @@ import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"
 import BLoanNeedsConfirmation from "components/borrower/LoanRequests/BLoanNeedsConfirmation"
 import BLoanRequestInitiated from "components/borrower/LoanRequests/BLoanRequestInitiated"
 import ApplicationSubmitted from "components/borrower/Notifications/ApplicationSubmitted"
+import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
 import { LoanRequest, LoanRequestStatus, User } from "../../lib/types"
 import UpcomingRepayment from "./Notifications/UpcomingRepayment"
@@ -50,37 +51,26 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
 
 const BorrowerHome = ({ user, initPanelIdx }: Props) => {
   const loanRequests = user.loan_requests
+  const tabs = [
+    new TabComponent(
+      "Dashboard",
+      (
+        <>
+          {!user.kyc_approved && <ApplicationSubmitted />}
+          {!user.kyc_approved && <UpcomingRepayment />}
 
-  return (
-    <Box margin={[0, 1, 2, 3]} padding={[2, 3, 4, 5]}>
-      <Tabs index={initPanelIdx}>
-        <TabList>
-          <Tab>Dashboard</Tab>
-          <Tab>Account</Tab>
-          {user.loan_requests.length > 0 && <Tab>Repayments</Tab>}
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            {!user.kyc_approved && <ApplicationSubmitted />}
-            {!user.kyc_approved && <UpcomingRepayment />}
+          {loanRequests.length === 0 && getRequestLoanComponent(user)}
+          {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
+        </>
+      )
+    ),
+    new TabComponent("Account", <Profile user={user} />),
+  ]
 
-            <Box padding={2} maxW="lg">
-              {loanRequests.length === 0 && getRequestLoanComponent(user)}
-              {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <Profile user={user} />
-          </TabPanel>
-          {user.loan_requests.length && (
-            <TabPanel>
-              <RepaymentsForm user={user} />
-            </TabPanel>
-          )}
-        </TabPanels>
-      </Tabs>
-    </Box>
-  )
+  if (user.loan_requests.length)
+    tabs.push(new TabComponent("Repay", <RepaymentsForm user={user} />))
+
+  return <TabHome tabs={tabs} initPanelIdx={initPanelIdx} />
 }
 
 export default BorrowerHome

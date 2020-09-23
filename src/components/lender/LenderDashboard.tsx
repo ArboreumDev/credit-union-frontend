@@ -61,7 +61,7 @@ const PledgeInvestments = () => (
 
 const LenderDashboard = ({ user }: Props) => (
   <Stack maxW="lg" spacing={10}>
-    <HStack spacing={20}>
+    <HStack spacing={20} marginTop={4}>
       <Stat>
         <StatLabel fontSize="lg">Total Assets</StatLabel>
         <StatNumber fontSize="3xl">
