@@ -1,5 +1,6 @@
 import { RiskParams } from "./types"
 
+export const DEV_URL = "http://127.0.0.1:3001"
 export const ANALYTICS_WEBSITE_IDS = {
   production: "c0dca8db-6303-4e1b-bb29-3422514663e9",
   preview: "90f23cc8-c238-4f5c-876a-c83f66335036",

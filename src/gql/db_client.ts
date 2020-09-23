@@ -2,6 +2,7 @@ import { GraphQLClient } from "graphql-request"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_LOAN_TENOR,
+  DEV_URL,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   DEFAULT_RISK_FREE_INTEREST_RATE,
   LogEventTypes as LogEventType,
@@ -101,19 +102,17 @@ export class DbClient {
     return data
   }
 
-  callSwarmAI = async (requestId: string) => {
-    const DEV_URL = "http://127.0.0.1:3001/loan/request"
+  callSwarmAI = async (url: string, payload: any) => {
     // const data = { request_msg: sampleAiInput }
-    const data = { request_msg: await this.getSwarmAiInput(requestId) }
     const params = {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     }
-    const res = await (await fetch(DEV_URL, params)).json()
+    const res = await (await fetch(url, params)).json()
     return res as SwarmAiResponse
   }
 
@@ -124,7 +123,9 @@ export class DbClient {
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const aiResponse = await this.callSwarmAI(requestId)
+    const url = DEV_URL + "/loan/request"
+    const payload = { request_msg: await this.getSwarmAiInput(requestId) }
+    const aiResponse = await this.callSwarmAI(url, payload)
     const updatedRequest = await this.sdk.UpdateLoanRequestWithOffer({
       requestId,
       newOffer: { latestOffer: aiResponse },
