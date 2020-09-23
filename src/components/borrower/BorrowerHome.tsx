@@ -47,7 +47,7 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
   }[loanRequest.status]
 }
 
-const BorrowerDashboard = ({ user }: Props) => {
+const BorrowerHome = ({ user }: Props) => {
   const loanRequests = user.loan_requests
 
   return (
@@ -78,4 +78,4 @@ const BorrowerDashboard = ({ user }: Props) => {
   )
 }
 
-export default BorrowerDashboard
+export default BorrowerHome
