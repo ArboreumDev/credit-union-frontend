@@ -19,6 +19,7 @@ import RepaymentsForm from "./repayments"
 
 interface Props {
   user: User
+  initPanelIdx?: number
 }
 
 const getRequestLoanComponent = (user: User) => {
@@ -47,12 +48,12 @@ const getLoanRequest = (loanRequest: LoanRequest) => {
   }[loanRequest.status]
 }
 
-const BorrowerHome = ({ user }: Props) => {
+const BorrowerHome = ({ user, initPanelIdx }: Props) => {
   const loanRequests = user.loan_requests
 
   return (
     <Box margin="0px">
-      <Tabs>
+      <Tabs index={initPanelIdx}>
         <TabList>
           <Tab>Dashboard</Tab>
           {user.loan_requests.length > 0 && <Tab>Repayments</Tab>}

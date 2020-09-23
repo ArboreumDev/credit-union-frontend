@@ -8,7 +8,7 @@ import { getDashboardComponent } from "pages/dashboard"
 import { AddFundsForm } from "components/lender/fund"
 import LoginPage from "pages/login"
 import { Profile } from "pages/profile"
-import BorrowerDashboard from "components/borrower/BorrowerHome"
+import AppBar from "components/common/nav/AppBar"
 import LenderHome from "components/lender/LenderHome"
 
 export class JStep {
@@ -25,18 +25,18 @@ export const bJourneySequence = [
   new JStep("KYC needs approval", getDashboardComponent(Fixtures.Borrower)),
   new JStep(
     "KYC Confirmed",
-    <BorrowerDashboard user={Fixtures.BorrowerKYCConfirmed} />
+    getDashboardComponent(Fixtures.BorrowerKYCConfirmed)
   ),
   new JStep(
     "Loan request initiated",
-    <BorrowerDashboard user={Fixtures.BorrowerLoanInitiated} />
+    getDashboardComponent(Fixtures.BorrowerLoanInitiated)
   ),
   new JStep(
     "Loan request needs approval",
-    <BorrowerDashboard user={Fixtures.BorrowerLoanNeedsConfirmation} />
+    getDashboardComponent(Fixtures.BorrowerLoanNeedsConfirmation)
   ),
   new JStep("Loan is live", getDashboardComponent(Fixtures.BorrowerLoanLive)),
-  new JStep("Profile", <Profile user={Fixtures.Borrower} />),
+  new JStep("Profile", getDashboardComponent(Fixtures.BorrowerLoanLive, 2)),
 ]
 
 export const lJourneySequence = [
@@ -46,13 +46,13 @@ export const lJourneySequence = [
     "Onboarding",
     <Onboarding user={Fixtures.Lender} userType={UserType.Lender} />
   ),
-  new JStep("Add funds", <AddFundsForm user={Fixtures.Lender} />),
-  new JStep("Lender Dashboard", <LenderHome user={Fixtures.Lender} />),
+  new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
+  new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep(
     "Lender Dashboard with Notification",
-    <LenderHome user={Fixtures.LenderWithPledgeRequest} />
+    getDashboardComponent(Fixtures.LenderWithPledgeRequest)
   ),
-  new JStep("Profile", <Profile user={Fixtures.Lender} />),
+  new JStep("Profile", getDashboardComponent(Fixtures.Lender, 2)),
 ]
 
 const getStepMax = (userType: UserType) => {

@@ -7,15 +7,16 @@ import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 
 interface Props {
   user: User
+  initPanelIdx?: number
 }
 
-const LenderHome = ({ user }: Props) => (
+const LenderHome = ({ user, initPanelIdx }: Props) => (
   <Box margin="20px">
-    <Tabs>
+    <Tabs index={initPanelIdx}>
       <TabList>
-        <Tab className="no-focus-outline">Dashboard</Tab>
-        <Tab className="no-focus-outline">Invest</Tab>
-        <Tab className="no-focus-outline">Account</Tab>
+        <Tab>Dashboard</Tab>
+        <Tab>Invest</Tab>
+        <Tab>Account</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
