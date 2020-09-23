@@ -64,7 +64,7 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
             {!user.kyc_approved && <ApplicationSubmitted />}
             {!user.kyc_approved && <UpcomingRepayment />}
 
-            <Box maxW="lg">
+            <Box padding={2} maxW="lg">
               {loanRequests.length === 0 && getRequestLoanComponent(user)}
               {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
             </Box>

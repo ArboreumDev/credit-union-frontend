@@ -46,7 +46,7 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
 
 const BActiveLoan = ({ loanRequest: loan }: Params) => (
   <>
-    <Stack padding="10px">
+    <Stack>
       <Heading size="lg">Active Loan</Heading>
       <Table>
         <Row>
