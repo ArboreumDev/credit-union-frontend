@@ -30,9 +30,6 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       flexDirection="column"
       justifyContent="center"
       textAlign="center"
-      // height="320px"
-      width="inherit"
-      marginTop="20px"
       marginBottom="20px"
     >
       {/* <AlertIcon boxSize="40px" mr={0} /> */}

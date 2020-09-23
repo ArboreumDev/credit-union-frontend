@@ -36,7 +36,6 @@ export function AddFundsForm({ user }: Props) {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Box h="10px" />
           <Text>How much money would you like to invest?</Text>
           <AmountInput
             passName="amount"

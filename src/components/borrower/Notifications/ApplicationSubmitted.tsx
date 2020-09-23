@@ -10,7 +10,6 @@ export default function ApplicationSubmitted() {
       textAlign="center"
       height="200px"
       width="inherit"
-      marginTop="20px"
       marginBottom="20px"
     >
       <AlertIcon boxSize="40px" mr={0} />

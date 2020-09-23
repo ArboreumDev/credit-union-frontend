@@ -9,8 +9,6 @@ export default function UpcomingRepayment() {
       justifyContent="center"
       textAlign="center"
       height="200px"
-      width="inherit"
-      marginTop="20px"
       marginBottom="20px"
     >
       <AlertTitle mt={4} mb={1} fontSize="lg">
