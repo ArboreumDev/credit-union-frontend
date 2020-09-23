@@ -101,37 +101,6 @@ export class DbClient {
     return data
   }
 
-  /**
-   * for a given request, create an offer by calling the swarmai-optimizer
-   * @param request_id
-   */
-  calculateLoanRequestOffer = async (requestId: string) => {
-    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
-
-    // TODO put msg to bucket that will trigger ai to calculate the loan risk and what the potential lenders would contribute
-    // const ai_input = await this.fetchDataForLoanRequestCalculation(req.borrower_id,  req.amount)
-    // Once done, the AI will then call back into into our api and write to the DB
-
-    // for simplicity will this is now be mocked up like this:
-    const mockedAiResult = {
-      amount: loanRequest.amount,
-      tenor: DEFAULT_LOAN_TENOR,
-      interest: 0.1,
-      corpusShare: 0.8,
-      kumaraA: 20,
-      kumaraB: 10,
-      idealloanSchedule: {
-        // if accepted this would be the schedule:
-        // matrix + 2 vectors created by running swarmai.loan.getLoanSchedule()
-        // used to create payment plan
-      },
-    }
-    const aiResult = await this.storeNewOfferOnLoanRequest(requestId, {
-      latestOffer: mockedAiResult,
-    })
-    return { updatedRequest: aiResult }
-  }
-
   callSwarmAI = async (requestId: string) => {
     const DEV_URL = "http://127.0.0.1:3001/loan/request"
     // const data = { request_msg: sampleAiInput }
@@ -149,18 +118,18 @@ export class DbClient {
   }
 
   /**
-   * When the ai is done, this function should be called to save stuff into the DB
-   * Currently, stores best offer-params in loan_requests.risk_calc_result
+   * for a given request, create an offer by calling the swarmai-optimizer, and store the result
+   * on the loan-request-table under the key 'latestOffer'
    * and updates status of loan_request to 'awaiting_borrower_confirmation`
-   * @param {} graphqlClient
-   * @param {} newOffer should be an object {interest_rate: int, lenders: [{lender_id, lender_amount, interest_rate}]} <the latter is lender_insert_input
+   * @param request_id
    */
-  storeNewOfferOnLoanRequest = async (requestId: string, newOffer: any) => {
-    const res = await this.sdk.UpdateLoanRequestWithOffer({
+  calculateLoanRequestOffer = async (requestId: string) => {
+    const aiResponse = await this.callSwarmAI(requestId)
+    const updatedRequest = await this.sdk.UpdateLoanRequestWithOffer({
       requestId,
-      newOffer,
+      newOffer: { latestOffer: aiResponse },
     })
-    return res.update_loan_requests_by_pk
+    return { updatedRequest: updatedRequest.update_loan_requests_by_pk }
   }
 
   /**

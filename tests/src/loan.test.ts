@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // reset
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Basic loan request flow for an accepted loan", () => {
@@ -86,33 +86,24 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {
-      // lets add and confirm a supporter so that the loan is more interesting
       await sdk.CreateUser({ user: SUPPORTER1 })
       await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
-      // upon certain conditions that are currently skipped for this initial version (e.g. when guarantors have confirmed)
-      // we trigger the calculation of a loan offer. The flow is as follows:
-      // - collecting inputs for the swarm-ai (risk-info, loan-amount, network-state...)
-      // const riskInput = await dbClient.getRiskInput(request_id)
-      const optimizerInput = await dbClient.getSwarmAiInput(request_id)
-      // console.log(JSON.stringify(optimizerInput))
-      // console.log(optimizerInput.loan_request_info.supporters)
-      // - formatting it such that the optimzer can use it and dropping it to the AWS-S3 bucket
-      // - the bucket then calls back into our backend and stores the offer-parameters (interest, guarantor-breakdown,...)
-      //    as a json on the loan_request entry (currently the call to the AI-container is mocked though)
-      // - the loan-request status is updated to signal the borrower that they have a loan offer
       const { updatedRequest } = await dbClient.calculateLoanRequestOffer(
         request_id
       )
+
       expect(updatedRequest.status).toBe(
         LoanRequestStatus.awaiting_borrower_confirmation
       )
 
       // verify how the output of the optimizer is stored in DB:
       expect(updatedRequest.risk_calc_result).toHaveProperty("latestOffer")
-      expect(updatedRequest.risk_calc_result.latestOffer.amount).toBe(amount)
+      expect(updatedRequest.risk_calc_result.latestOffer.loan_info.amount).toBe(
+        amount
+      )
     })
   })
-  describe("When the borrower accepts a loan offer...", () => {
+  describe.skip("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
       const { startedLoan } = await dbClient.acceptLoanOffer(
         request_id,
