@@ -16,7 +16,11 @@ export const LENDER1: User = {
   name: "rick",
   email: "rick@galaxy.io",
   user_type: "lender",
-  demographic_info: { country: "spaceland" },
+  demographic_info: {
+    yearsOfEducation: 50,
+    income: 400000.0,
+    creditScore: 1200,
+  },
   user_number: 1,
   balance: 1000,
 }
@@ -27,7 +31,12 @@ export const LENDER2: User = {
   phone: "1234",
   email: "summer@highschool.io",
   user_type: "lender",
-  demographic_info: { country: "spaceland" },
+  demographic_info: {
+    yearsOfEducation: 5,
+    income: 400.0,
+    creditScore: 500,
+  },
+
   user_number: 2,
   balance: 200,
 }
@@ -40,8 +49,8 @@ export const BORROWER1: User = {
   user_type: "borrower",
   demographic_info: {
     yearsOfEducation: 3,
-    income: 1400.0,
-    creditScore: 120.22,
+    income: 300,
+    creditScore: 450,
   },
   user_number: 3,
   balance: 10,
@@ -57,7 +66,11 @@ export const SUPPORTER1: User = {
   email: "noob@galaxy.io",
   phone: "1234",
   user_type: "lender",
-  demographic_info: { country: "spaceland" },
+  demographic_info: {
+    yearsOfEducation: 10,
+    income: 400.0,
+    creditScore: 800,
+  },
   user_number: 4,
   balance: 200,
   // if wanted we can also amend the user object like this to specify their reputation directly
