@@ -46,7 +46,7 @@ export async function captureLog(event) {
 export async function captureFeedback(message: string) {
   return captureLog({
     eventType: LogEventTypes.ClientFeedback,
-    data: {
+    eventData: {
       message: message,
     },
   })
@@ -64,6 +64,6 @@ export async function captureError(ex: any) {
 
   return captureLog({
     eventType: LogEventTypes.ClientError,
-    data: errorData,
+    eventData: errorData,
   })
 }
