@@ -56,8 +56,8 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
       <Tabs index={initPanelIdx}>
         <TabList>
           <Tab>Dashboard</Tab>
-          {user.loan_requests.length > 0 && <Tab>Repayments</Tab>}
           <Tab>Account</Tab>
+          {user.loan_requests.length > 0 && <Tab>Repayments</Tab>}
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -65,14 +65,14 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
             {loanRequests.length === 0 && getRequestLoanComponent(user)}
             {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
           </TabPanel>
+          <TabPanel>
+            <Profile user={user} />
+          </TabPanel>
           {user.loan_requests.length && (
             <TabPanel>
               <RepaymentsForm user={user} />
             </TabPanel>
           )}
-          <TabPanel>
-            <Profile user={user} />
-          </TabPanel>
         </TabPanels>
       </Tabs>
     </Box>

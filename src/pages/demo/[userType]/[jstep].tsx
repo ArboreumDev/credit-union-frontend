@@ -52,7 +52,8 @@ export const lJourneySequence = [
     "Lender Dashboard with Notification",
     getDashboardComponent(Fixtures.LenderWithPledgeRequest)
   ),
-  new JStep("Profile", getDashboardComponent(Fixtures.Lender, 2)),
+  new JStep("Profile", getDashboardComponent(Fixtures.Lender, 1)),
+  new JStep("Repayments", getDashboardComponent(Fixtures.Lender, 2)),
 ]
 
 const getStepMax = (userType: UserType) => {
