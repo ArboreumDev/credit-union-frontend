@@ -9,10 +9,10 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/core"
-import BActiveLoan from "components/borrower/BOngoingLoan"
+import BActiveLoan from "components/borrower/LoanRequests/ActiveLoan"
 import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"
-import BLoanNeedsConfirmation from "components/borrower/LoanRequests/BLoanNeedsConfirmation"
-import BLoanRequestInitiated from "components/borrower/LoanRequests/BLoanRequestInitiated"
+import BLoanNeedsConfirmation from "components/borrower/LoanRequests/LoanNeedsConfirmation"
+import BLoanRequestInitiated from "components/borrower/LoanRequests/LoanRequestInitiated"
 import ApplicationSubmitted from "components/borrower/Notifications/ApplicationSubmitted"
 import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
