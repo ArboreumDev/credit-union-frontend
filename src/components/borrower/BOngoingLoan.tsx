@@ -5,6 +5,7 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Container,
+  Heading,
   Stack,
   Stat,
   StatLabel,
@@ -17,7 +18,7 @@ import { LoanRequest } from "lib/types"
 import { Currency } from "../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../common/Details"
 import { Column, Row, Table } from "../common/Table"
-import RepaymentNotReceived from "./Notifications/RepaymentNotReceived"
+import UpcomingRepayment from "./Notifications/UpcomingRepayment"
 
 interface Params {
   loanRequest: LoanRequest
@@ -44,18 +45,9 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
 ]
 
 const BActiveLoan = ({ loanRequest: loan }: Params) => (
-  <Container minW="s" bg="white">
-    <RepaymentNotReceived />
-    <Stack padding="10px" borderWidth="3px">
-      <Center>
-        <Text padding="0px" margin="0px" fontSize="30px">
-          <CgFileDocument />
-        </Text>
-      </Center>
-      <Center>
-        <Text>Active Loan</Text>
-      </Center>
-      <Box h="30px" />
+  <>
+    <Stack padding="10px">
+      <Heading size="lg">Active Loan</Heading>
       <Table>
         <Row>
           <Column>
@@ -104,7 +96,7 @@ const BActiveLoan = ({ loanRequest: loan }: Params) => (
         <Button colorScheme="blue">Make Repayment</Button>
       </Center>
     </Stack>
-  </Container>
+  </>
 )
 
 export default BActiveLoan

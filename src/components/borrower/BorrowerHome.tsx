@@ -15,6 +15,7 @@ import BLoanRequestInitiated from "components/borrower/LoanRequests/BLoanRequest
 import ApplicationSubmitted from "components/borrower/Notifications/ApplicationSubmitted"
 import { Profile } from "pages/profile"
 import { LoanRequest, LoanRequestStatus, User } from "../../lib/types"
+import UpcomingRepayment from "./Notifications/UpcomingRepayment"
 import RepaymentsForm from "./repayments"
 
 interface Props {
@@ -25,11 +26,10 @@ interface Props {
 const getRequestLoanComponent = (user: User) => {
   return (
     <Box>
-      <Center>
-        <Heading as="h1" size="lg">
-          Request Loan
-        </Heading>
-      </Center>
+      <Heading as="h1" size="lg">
+        Request a loan
+      </Heading>
+
       <Box h="30px" />
       <CreateLoanForm user={user} />
     </Box>
@@ -52,7 +52,7 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
   const loanRequests = user.loan_requests
 
   return (
-    <Box margin="0px">
+    <Box margin={[0, 1, 2, 3]} padding={[2, 3, 4, 5]}>
       <Tabs index={initPanelIdx}>
         <TabList>
           <Tab>Dashboard</Tab>
@@ -62,8 +62,12 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
         <TabPanels>
           <TabPanel>
             {!user.kyc_approved && <ApplicationSubmitted />}
-            {loanRequests.length === 0 && getRequestLoanComponent(user)}
-            {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
+            {!user.kyc_approved && <UpcomingRepayment />}
+
+            <Box maxW="lg">
+              {loanRequests.length === 0 && getRequestLoanComponent(user)}
+              {loanRequests.length > 0 && getLoanRequest(loanRequests[0])}
+            </Box>
           </TabPanel>
           <TabPanel>
             <Profile user={user} />

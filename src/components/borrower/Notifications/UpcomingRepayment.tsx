@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/core"
 
-export default function RepaymentNotReceived() {
+export default function UpcomingRepayment() {
   return (
     <Alert
       status="warning"

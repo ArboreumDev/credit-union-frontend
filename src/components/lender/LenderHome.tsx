@@ -11,7 +11,7 @@ interface Props {
 }
 
 const LenderHome = ({ user, initPanelIdx }: Props) => (
-  <Box margin="20px">
+  <Box margin={[0, 1, 2, 3]} padding={[2, 3, 4, 5]}>
     <Tabs index={initPanelIdx}>
       <TabList>
         <Tab>Dashboard</Tab>

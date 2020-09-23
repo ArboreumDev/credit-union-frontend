@@ -14,7 +14,6 @@ const AppBar = () => (
     paddingBottom="0.8rem"
     paddingTop="1rem"
     as="nav"
-    marginBottom="20px"
     minH="40px"
     minW="s"
   >
