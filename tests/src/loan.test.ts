@@ -64,15 +64,6 @@ describe("Basic loan request flow for an accepted loan", () => {
     balancesBefore = getUserPortfolio(user)
   })
 
-  describe("the swarmAi can...", () => {
-    test("... respond to loan requests", async () => {
-      const res = await dbClient.callSwarmAI()
-      expect(res).toHaveProperty("corpus_share")
-      expect(res).toHaveProperty("loan_info.borrower_apr")
-      expect(res).toHaveProperty("loan_request_info.request_id")
-    })
-  })
-
   describe("A borrower user requests a loan...", () => {
     test("A loan request with status 'initiated' is created", async () => {
       const { request } = await dbClient.createLoanRequest(
@@ -84,6 +75,14 @@ describe("Basic loan request flow for an accepted loan", () => {
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
       expect(request.status).toBe(LoanRequestStatus.initiated)
+    })
+
+    test("the swarmai module can respond to loan requests", async () => {
+      const res = await dbClient.callSwarmAI(request_id)
+      // console.log('res', res)
+      expect(res.loan_request_info.request_id).toBe(request_id)
+      expect(res).toHaveProperty("corpus_share")
+      expect(res).toHaveProperty("loan_info.borrower_apr")
     })
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {

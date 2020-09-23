@@ -23,6 +23,8 @@ import {
   SupporterStatus,
   SwarmAiRequestMessage,
   SwarmAiResponse,
+  LoanRequestInfo,
+  DemographicInfo,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
 import { sampleAiInput } from "../../tests/fixtures/swarmai_fixtures"
@@ -130,9 +132,10 @@ export class DbClient {
     return { updatedRequest: aiResult }
   }
 
-  callSwarmAI = async (requestId = "") => {
+  callSwarmAI = async (requestId: string) => {
     const DEV_URL = "http://127.0.0.1:3001/loan/request"
-    const data = { request_msg: sampleAiInput }
+    // const data = { request_msg: sampleAiInput }
+    const data = { request_msg: await this.getSwarmAiInput(requestId) }
     const params = {
       method: "POST",
       headers: {
@@ -141,8 +144,8 @@ export class DbClient {
       },
       body: JSON.stringify(data),
     }
-    const res = await fetch(DEV_URL, params)
-    return res.json() as SwarmAiResponse
+    const res = await (await fetch(DEV_URL, params)).json()
+    return res as SwarmAiResponse
   }
 
   /**
@@ -260,74 +263,79 @@ export class DbClient {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
 
     // ============ optimizer context =============================
-    const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
-      statusList: [LoanRequestStatus.live],
-    })
-    const totalCorpusShares = corpus.aggregate.sum.corpus_share
-    const totalCorpusCash = corpus.aggregate.sum.balance || 0
-    const totalCorpusInvestmentValue =
-      corpusInvestment.aggregate.sum.amount_total || 0
+    // not needed while we use backup model
+    // const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
+    //   statusList: [LoanRequestStatus.live],
+    // })
+    // const totalCorpusShares = corpus.aggregate.sum.corpus_share
+    // const totalCorpusCash = corpus.aggregate.sum.balance || 0
+    // const totalCorpusInvestmentValue =
+    //   corpusInvestment.aggregate.sum.amount_total || 0
 
-    // Now get the total monetary-value of guarantee that the supporters have in the form of portfolioshares
-    //      "if you have two supporters one with a 40/60 split
-    //        and another with 20/80 then you just take 60%*pledgeAmountA+20%pledgeAmountB"
-    const confirmedSupporters = loanRequest.supporters.filter(
-      (x) => x.status == SupporterStatus.confirmed
-    )
-    const supporterShareValues = []
-    confirmedSupporters.forEach((s) => {
-      const shareValue = proportion(
-        s.user.corpus_share,
-        totalCorpusShares,
-        totalCorpusInvestmentValue
-      )
-      const totalValue = shareValue + s.user.balance
-      const shareRatio = shareValue / totalValue
-      supporterShareValues.push(shareRatio * s.pledge_amount)
-    })
-    // sum up all shares
-    const supporterCorpusShare = supporterShareValues.length
-      ? supporterShareValues.reduce((a, b) => a + b)
-      : 0
+    // // Now get the total monetary-value of guarantee that the supporters have in the form of portfolioshares
+    // //      "if you have two supporters one with a 40/60 split
+    // //        and another with 20/80 then you just take 60%*pledgeAmountA+20%pledgeAmountB"
+    // const confirmedSupporters = loanRequest.supporters.filter(
+    //   (x) => x.status == SupporterStatus.confirmed
+    // )
+    // const supporterShareValues = []
+    // confirmedSupporters.forEach((s) => {
+    //   const shareValue = proportion(
+    //     s.user.corpus_share,
+    //     totalCorpusShares,
+    //     totalCorpusInvestmentValue
+    //   )
+    //   const totalValue = shareValue + s.user.balance
+    //   const shareRatio = shareValue / totalValue
+    //   supporterShareValues.push(shareRatio * s.pledge_amount)
+    // })
+    // // sum up all shares
+    // const supporterCorpusShare = supporterShareValues.length
+    //   ? supporterShareValues.reduce((a, b) => a + b)
+    //   : 0
 
     // use all existing loans in the portfolio to create a list of LiveLoanInfo-objects,
-    const liveLoanInfo = loans.map((x) => {
-      const terms = x.risk_calc_result.latestOffer
-      return {
-        loan_id: x.request_id,
-        amount_owned_portfolio: proportion(terms.corpusShare, 1, terms.amount),
-        amount_owned_supporters: proportion(
-          1 - terms.corpusShare,
-          1,
-          terms.amount
-        ),
-        interest: terms.interest,
-        tenor: terms.tenor,
-        kumr_params: [terms.kumaraA, terms.kumaraB],
-        time_remaining: 5, // TODO
-        loan_schedule: "TODO",
-      } as LiveLoanInfo
-    })
+    // const liveLoanInfo = loans.map((x) => {
+    //   const terms = x.risk_calc_result.latestOffer
+    //   return {
+    //     loan_id: x.request_id,
+    //     amount_owned_portfolio: proportion(terms.corpusShare, 1, terms.amount),
+    //     amount_owned_supporters: proportion(
+    //       1 - terms.corpusShare,
+    //       1,
+    //       terms.amount
+    //     ),
+    //     interest: terms.interest,
+    //     tenor: terms.tenor,
+    //     kumr_params: [terms.kumaraA, terms.kumaraB],
+    //     time_remaining: 5, // TODO
+    //     loan_schedule: "TODO",
+    //   } as LiveLoanInfo
+    // })
+
+    // ============ risk context =============================
     const riskInfo = await this.getRiskInput(requestId)
     // create a big SwarmAiRequestMessage-Object
     return {
       loan_request_info: {
+        borrower_info: riskInfo.borrowerInfo,
         request_id: requestId,
         tenor: DEFAULT_LOAN_TENOR,
+        borrower_collateral: 0,
         amount: loanRequest.amount,
-        borrower_info: riskInfo.borrowerInfo,
         supporters: riskInfo.supporterInfo,
-      },
-      optimizer_context: {
-        risk_free_interest_rate: DEFAULT_RISK_FREE_INTEREST_RATE,
-        supporter_corpus_share: supporterCorpusShare || 0,
-        loans_in_corpus: liveLoanInfo,
-        corpus_cash: totalCorpusCash,
-        novation: false,
-      } as OptimizerContext,
-      risk_assessment_context: {
-        central_risk_info: DEFAULT_RECOMMENDATION_RISK_PARAMS,
-      } as RiskInput,
+      } as LoanRequestInfo,
+      // optimizer_context: {
+      // risk_free_apr: DEFAULT_RISK_FREE_INTEREST_RATE,
+      // supporter_corpus_share: supporterCorpusShare || 0,
+      // loans_in_corpus: liveLoanInfo,
+      // corpus_cash: totalCorpusCash,
+      // supporter_cash: totalCorpusCash,
+      // novation: false,
+      // } as OptimizerContext,
+      // risk_assessment_context: {
+      // central_risk_info: DEFAULT_RECOMMENDATION_RISK_PARAMS,
+      // } as RiskInput,
     } as SwarmAiRequestMessage
   }
 
@@ -361,9 +369,11 @@ export class DbClient {
     // create the borrowerInfo-object
     const borrowerInfo = {
       borrower_id: loanRequest.borrower_id,
-      credit_score: loanRequest.user.demographic_info.credit_score,
-      education_years: loanRequest.user.demographic_info.education_years,
-      income: loanRequest.user.demographic_info.income,
+      demographic_info: {
+        credit_score: loanRequest.user.demographic_info.creditScore,
+        education_years: loanRequest.user.demographic_info.yearsOfEducation,
+        income: loanRequest.user.demographic_info.income,
+      } as DemographicInfo,
     } as BorrowerInfo
     return {
       supporterInfo,
