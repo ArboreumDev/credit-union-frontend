@@ -38,17 +38,18 @@ export type JWTToken = {
   user?: User
 }
 
+export type DemographicInfo = {
+  education_years: number
+  income: number
+  credit_score: number
+}
+
 // =========== the following types mirror the types expected by the swarmAI module ========
 export type SupporterInfo = {
   supporter_id: string
   trust_amount: number
   recommendation_risk: RiskParams
-}
-
-export type DemographicInfo = {
-  education_years: number
-  income: number
-  credit_score: number
+  demographic_info?: DemographicInfo
 }
 
 // this type mirrors the type expected by the swarmAI module
@@ -103,18 +104,18 @@ export type LoanRequestInfo = {
   request_id: string
   tenor: number
   amount: number
+  borrower_collateral: number
   supporters: SupporterInfo[]
   risk_params?: RiskParams
-  borrower_collateral: number
 }
 
 export type SwarmAiRequestMessage = {
   loan_request_info: LoanRequestInfo
-  risk_assessment_context: RiskInput
-  optimizer_context: OptimizerContext
+  risk_assessment_context?: RiskInput
+  optimizer_context?: OptimizerContext
 }
 
-export type SwarmAiRespone = {
+export type SwarmAiResponse = {
   loan_request_info: LoanRequestInfo
   corpus_share: number
   loan_info: LoanInfo
