@@ -6480,6 +6480,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "user_number"
       | "corpus_share"
       | "kyc_approved"
+      | "demographic_info"
     >
   >
 }
@@ -6990,6 +6991,7 @@ export const GetAllUsersDocument = gql`
       user_number
       corpus_share
       kyc_approved
+      demographic_info
     }
   }
 `
