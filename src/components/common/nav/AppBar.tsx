@@ -18,9 +18,14 @@ const AppBar = () => (
     minW="s"
   >
     <Flex align="center">
-      <Link href="/dashboard">
-        <img width="150px" src="/images/logo.svg" alt="logo" />
-      </Link>
+      <HStack spacing={5}>
+        <Link href="/dashboard">
+          <img width="150px" src="/images/logo.svg" alt="logo" />
+        </Link>
+        <Link href="/dashboard">
+          <img width={70} src="/images/xcompany.svg" alt="logo" />
+        </Link>
+      </HStack>
     </Flex>
     <Box flex="1"></Box>
     <HStack className="navButtons">
