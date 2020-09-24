@@ -105,4 +105,14 @@ describe("Basic loan request flow for an accepted loan", () => {
     expect(loanSupporters).toContain(SUPPORTER1.id)
     expect(loanSupporters).not.toContain(SUPPORTER2.id)
   })
+
+  test("confirmed supporters have their balance reduced if a loan is accepted", async () => {
+    await dbClient.calculateLoanRequestOffer(request_id)
+    await dbClient.acceptLoanOffer(request_id)
+    const { user } = await sdk.GetAllUsers()
+    const balancesAfter = getUserPortfolio(user)
+    expect(SUPPORTER1.balance).toBeGreaterThan(
+      balancesAfter[SUPPORTER1.id].cash
+    )
+  })
 })

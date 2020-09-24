@@ -1,4 +1,4 @@
-import { PortfolioUpdate } from "./types"
+import { PortfolioUpdate, SupporterStatus } from "./types"
 import {
   GetLoansByBorrowerAndStatusDocument,
   GetLoansByBorrowerAndStatusQuery,
@@ -186,4 +186,11 @@ export const addAndConfirmSupporter = async (
       },
     ],
   })
+  const data = await sdk.UpdateSupporter({
+    request_id: requestId,
+    supporter_id: supporterId,
+    status: SupporterStatus.confirmed,
+    pledge_amount: amount,
+  })
+  return data
 }

@@ -89,7 +89,13 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
+      const data = await addAndConfirmSupporter(
+        sdk,
+        request_id,
+        SUPPORTER1.id,
+        pledgeAmount
+      )
+      console.log(data)
       const { updatedRequest } = await dbClient.calculateLoanRequestOffer(
         request_id
       )
@@ -167,6 +173,10 @@ describe("Basic loan request flow for an accepted loan", () => {
       const diffLender2 =
         balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash
       expect(diffLender1).toBeGreaterThan(diffLender2)
+
+      expect(SUPPORTER1.balance).toBeGreaterThan(
+        balancesAfter[SUPPORTER1.id].cash
+      )
     })
 
     // skipped until we have properly dealt with how exiting loans are stored
