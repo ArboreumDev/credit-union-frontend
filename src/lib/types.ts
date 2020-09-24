@@ -45,6 +45,27 @@ export type DemographicInfo = {
 }
 
 // =========== the following types mirror the types expected by the swarmAI module ========
+export type UserInfo = {
+  id: string
+  balance: number
+  name: string
+  email: string
+  user_type: UserType
+  phone: string
+  demographic_info: DemographicInfo
+  // those are only there if user is lender
+  // ideally they would default to zero
+  corpus_share?: number
+  encumbered_cash?: number
+  encumbered_portfolio?: number
+}
+
+export type Scenario = {
+  users: any // TODO should be Dict[str, UserInfo]
+  loans: any // TODO
+  loan_requests: any // TODO
+}
+
 export type SupporterInfo = {
   supporter_id: string
   trust_amount: number
@@ -119,7 +140,15 @@ export type SwarmAiResponse = {
   loan_request_info: LoanRequestInfo
   corpus_share: number
   loan_info: LoanInfo
+  loan_schedule?: LoanSchedule
 }
+
+export type LoanSchedule = {
+  borrower_view: any
+  supporter_view?: any
+  corpus_view?: any
+}
+
 // =========== End of risk module types ========
 
 export enum EDGE_STATUS {
@@ -150,4 +179,9 @@ export type PortfolioUpdate = {
   balanceDelta: number
   shareDelta: number
   alias?: string
+}
+
+export type AccountsUpdate = {
+  updates: any //PortfolioUpdate[]
+  transactions: any
 }
