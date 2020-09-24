@@ -82,7 +82,6 @@ describe("Basic loan request flow for an accepted loan", () => {
       const url = DEV_URL + "/loan/request"
       const payload = await dbClient.getSwarmAiInput(request_id)
       const res = await dbClient.callSwarmAI(url, { request_msg: payload })
-      // console.log('res', res)
       expect(res.loan_request_info.request_id).toBe(request_id)
       expect(res).toHaveProperty("corpus_share")
       expect(res).toHaveProperty("loan_info.borrower_apr")
@@ -106,7 +105,7 @@ describe("Basic loan request flow for an accepted loan", () => {
       )
     })
   })
-  describe.skip("When the borrower accepts a loan offer...", () => {
+  describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
       const { startedLoan } = await dbClient.acceptLoanOffer(
         request_id,
