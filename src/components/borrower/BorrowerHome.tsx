@@ -84,7 +84,14 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
         </>
       )
     ),
-    new TabComponent("Account", <Profile user={user} />),
+    new TabComponent(
+      "Account",
+      (
+        <Box maxW="lg">
+          <Profile user={user} />
+        </Box>
+      )
+    ),
   ]
 
   if (borrower.hasActiveLoan)
