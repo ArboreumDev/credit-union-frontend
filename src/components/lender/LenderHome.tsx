@@ -1,44 +1,48 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import { AddFundsForm } from "components/lender/fund"
+import AddFundsForm from "./fund"
 import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
 import LenderDashboard from "./LenderDashboard"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
+import TabHome, { TabComponent } from "components/common/home/tabs"
 
 interface Props {
   user: User
+  initPanelIdx?: number
 }
 
-const LenderHome = ({ user }: Props) => (
-  <Box margin="20px">
-    <Tabs>
-      <TabList>
-        <Tab>Dashboard</Tab>
-        <Tab>Invest</Tab>
-        <Tab>Account</Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>
-          <Box maxW="100%">
-            {user.pledge_requests.map((pr, idx) => (
-              <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
-            ))}
-            <LenderDashboard user={user} />
-          </Box>
-        </TabPanel>
-        <TabPanel>
-          <Box maxW="lg">
-            <AddFundsForm user={user} />
-          </Box>
-        </TabPanel>
-        <TabPanel>
-          <Box maxW="lg">
-            <Profile user={user} />
-          </Box>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  </Box>
-)
+const LenderHome = ({ user, initPanelIdx }: Props) => {
+  const tabs = [
+    new TabComponent(
+      "Dashboard",
+      (
+        <Box>
+          {user.pledge_requests.map((pr, idx) => (
+            <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
+          ))}
+          <LenderDashboard user={user} />
+        </Box>
+      )
+    ),
+    new TabComponent(
+      "Invest",
+      (
+        <Box maxW="lg">
+          <AddFundsForm user={user} />
+        </Box>
+      )
+    ),
+    new TabComponent(
+      "Account",
+      (
+        <Box maxW="lg">
+          <Profile user={user} />
+        </Box>
+      )
+    ),
+  ]
+
+  return <TabHome tabs={tabs} initPanelIdx={initPanelIdx} />
+}
 
 export default LenderHome

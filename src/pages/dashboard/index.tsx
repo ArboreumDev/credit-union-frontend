@@ -5,33 +5,23 @@ import Head from "next/head"
 import AppBar from "../../components/common/nav/AppBar"
 import { User, UserType } from "../../lib/types"
 
-const getLenderDashboard = (user: User) => {
+const getLenderHome = (user: User, initPanelIdx?: number) => {
   const LenderHome = dynamic(() => import("components/lender/LenderHome"))
-  return <LenderHome user={user} />
+  return <LenderHome user={user} initPanelIdx={initPanelIdx} />
 }
 
-const getBorrowerDashboard = (user: User) => {
-  const BorrowerDashboard = dynamic(() =>
-    import("components/borrower/BorrowerDashboard")
-  )
-  return <BorrowerDashboard user={user} />
+const getBorrowerHome = (user: User, initPanelIdx?: number) => {
+  const BorrowerHome = dynamic(() => import("components/borrower/BorrowerHome"))
+  return <BorrowerHome user={user} initPanelIdx={initPanelIdx} />
 }
 
-export const getDashboardComponent = (user: User) => (
-  <div>
-    {user.user_type === UserType.Lender && (
-      <div>
-        <AppBar />
-        {getLenderDashboard(user)}
-      </div>
-    )}
-    {user.user_type === UserType.Borrower && (
-      <div>
-        <AppBar />
-        {getBorrowerDashboard(user)}
-      </div>
-    )}
-  </div>
+export const getDashboardComponent = (user: User, initPanelIdx?: number) => (
+  <>
+    <AppBar />
+    {user.user_type === UserType.Lender && getLenderHome(user, initPanelIdx)}
+    {user.user_type === UserType.Borrower &&
+      getBorrowerHome(user, initPanelIdx)}
+  </>
 )
 
 const Dashboard = () => {

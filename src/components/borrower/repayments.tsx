@@ -14,7 +14,7 @@ interface Props {
   user: User
 }
 
-export function AddFundsForm({ user }: Props) {
+export function RepaymentsForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
@@ -33,32 +33,14 @@ export function AddFundsForm({ user }: Props) {
   }
 
   return (
-    <Box>
+    <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Text>How much money would you like to invest?</Text>
+          <Text>Please make a repayment</Text>
           <AmountInput
             passName="amount"
             passRef={register({ required: true })}
           />
-
-          <Box h="10px" />
-          <Box padding="20px">
-            <ul>
-              <li>
-                The amount invested will automatically be allocated towards
-                several loans.
-              </li>
-              <li>
-                Funds once invested, cannot be withdrawn before payback is
-                complete.
-              </li>
-              <li>
-                An any point in time, you may withdraw un-invested funds from
-                your account.
-              </li>
-            </ul>
-          </Box>
 
           <Box h="30px" />
           <Center>
@@ -70,4 +52,4 @@ export function AddFundsForm({ user }: Props) {
   )
 }
 
-export default AddFundsForm
+export default RepaymentsForm

@@ -70,7 +70,7 @@ export default function Onboarding({ user, userType }: Params) {
   }
 
   return (
-    <div>
+    <Box padding={4}>
       <Head>
         <title>Onboarding</title>
       </Head>
@@ -166,6 +166,6 @@ export default function Onboarding({ user, userType }: Params) {
           </Stack>
         </Container>
       </form>
-    </div>
+    </Box>
   )
 }

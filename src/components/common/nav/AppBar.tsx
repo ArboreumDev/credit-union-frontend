@@ -1,20 +1,8 @@
+import { Box, Center, Flex, HStack, Text } from "@chakra-ui/core"
 import Link from "next/link"
-
 import React from "react"
-import {
-  Box,
-  Heading,
-  Flex,
-  Text,
-  Button,
-  Center,
-  HStack,
-} from "@chakra-ui/core"
-import { CgProfile } from "react-icons/cg"
-import Router from "next/router"
-import FeedbackPopover from "./FeedbackPopover"
-import SupportPopover from "./SupportPopover"
 import DrawerButton from "./Drawer"
+import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
 
 // Note: This code could be better, so I'd recommend you to understand how I solved and you could write yours better :)
 const AppBar = () => (
@@ -26,14 +14,20 @@ const AppBar = () => (
     paddingBottom="0.8rem"
     paddingTop="1rem"
     as="nav"
-    marginBottom="20px"
     minH="40px"
     minW="s"
   >
     <Flex align="center">
-      <Link href="/dashboard">
-        <img width="150px" src="/images/logo.svg" alt="logo" />
-      </Link>
+      <HStack spacing={[5, 10, 20]}>
+        <Link href="/dashboard">
+          <img width="150px" src="/images/logo.svg" alt="logo" />
+        </Link>
+        <Center h="24px">
+          <Text color="gray.500" as="samp">
+            CompanyX
+          </Text>
+        </Center>
+      </HStack>
     </Flex>
     <Box flex="1"></Box>
     <HStack className="navButtons">

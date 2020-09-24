@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/core"
 
-export default function RepaymentNotReceived() {
+export default function UpcomingRepayment() {
   return (
     <Alert
       status="warning"
@@ -9,8 +9,6 @@ export default function RepaymentNotReceived() {
       justifyContent="center"
       textAlign="center"
       height="200px"
-      width="inherit"
-      marginTop="20px"
       marginBottom="20px"
     >
       <AlertTitle mt={4} mb={1} fontSize="lg">

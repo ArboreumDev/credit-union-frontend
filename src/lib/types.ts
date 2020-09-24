@@ -165,7 +165,7 @@ export enum LoanRequestStatus {
   initiated = "initiated",
   // awaiting_guarantor_confirmation="awaiting_guarantor_confirmation",
   awaiting_borrower_confirmation = "awaiting_borrower_confirmation",
-  live = "live",
+  active = "live",
   settled = "settled",
 }
 

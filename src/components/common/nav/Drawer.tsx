@@ -12,9 +12,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/core"
 import { useRef } from "react"
-import FeedbackPopover from "./FeedbackPopover"
-import SupportPopover from "./SupportPopover"
 import { FiSettings } from "react-icons/fi"
+import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
 
 export default function DrawerButton() {
   const { isOpen, onOpen, onClose } = useDisclosure()

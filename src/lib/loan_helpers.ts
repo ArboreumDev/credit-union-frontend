@@ -132,7 +132,7 @@ const generateUserBalanceUpdate = (
  */
 export const transformRequestToDashboardFormat = (loanRequest: any) => {
   // const liveRequest = loanRequests.filter(x => x.status == LoanRequestStatus.live)[0]
-  if (loanRequest.status === LoanRequestStatus.live) {
+  if (loanRequest.status === LoanRequestStatus.active) {
     // there can only be one request at the moment
     return {
       loanId: loanRequest.request_id,

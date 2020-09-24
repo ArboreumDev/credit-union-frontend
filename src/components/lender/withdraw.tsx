@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
+import { Currency } from "components/common/Currency"
 import AppBar from "components/common/nav/AppBar"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
@@ -23,7 +24,7 @@ interface Props {
   user: User
 }
 
-export function AddFundsForm({ user }: Props) {
+export function WithdrawFundsForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
@@ -45,32 +46,15 @@ export function AddFundsForm({ user }: Props) {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Box h="30px" />
-          <Text>How much money would you like to invest?</Text>
+          <Text>
+            Enter the amount you wish to withdraw (Max{" "}
+            <Currency amount={user.balance ?? 0} />)
+          </Text>
           <AmountInput
             passName="amount"
             passRef={register({ required: true })}
           />
 
-          <Box h="30px" />
-          <Box padding="20px">
-            <ul>
-              <li>
-                The amount invested will automatically be allocated towards
-                several loans.
-              </li>
-              <li>
-                Funds once invested, cannot be withdrawn before payback is
-                complete.
-              </li>
-              <li>
-                An any point in time, you may withdraw un-invested funds from
-                your account.
-              </li>
-            </ul>
-          </Box>
-
-          <Box h="30px" />
           <Center>
             <Button type="submit">Submit</Button>
           </Center>
@@ -80,16 +64,4 @@ export function AddFundsForm({ user }: Props) {
   )
 }
 
-const AddFundsPage = () => {
-  const { user } = useUser()
-  if (!user) return <AppBar />
-
-  return (
-    <div>
-      <AppBar />
-      <AddFundsForm user={user} />
-    </div>
-  )
-}
-
-export default AddFundsPage
+export default WithdrawFundsForm

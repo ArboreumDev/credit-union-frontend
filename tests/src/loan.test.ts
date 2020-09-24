@@ -118,7 +118,7 @@ describe("Basic loan request flow for an accepted loan", () => {
         "latestOffer"
       )
       expect(startedLoan.update_loan_requests_by_pk.status).toBe(
-        LoanRequestStatus.live
+        LoanRequestStatus.active
       )
 
       // payable should make sense
