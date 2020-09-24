@@ -24,8 +24,10 @@ import {
   SupporterStatus,
   SwarmAiRequestMessage,
   SwarmAiResponse,
+  UserInfo,
   LoanRequestInfo,
   DemographicInfo,
+  Scenario,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
 import { sampleAiInput } from "../../tests/fixtures/swarmai_fixtures"
@@ -113,7 +115,7 @@ export class DbClient {
       body: JSON.stringify(payload),
     }
     const res = await (await fetch(url, params)).json()
-    return res as SwarmAiResponse
+    return res
   }
 
   /**
@@ -125,7 +127,7 @@ export class DbClient {
   calculateLoanRequestOffer = async (requestId: string) => {
     const url = DEV_URL + "/loan/request"
     const payload = { request_msg: await this.getSwarmAiInput(requestId) }
-    const aiResponse = await this.callSwarmAI(url, payload)
+    const aiResponse = (await this.callSwarmAI(url, payload)) as SwarmAiResponse
     const updatedRequest = await this.sdk.UpdateLoanRequestWithOffer({
       requestId,
       newOffer: { latestOffer: aiResponse },
@@ -142,64 +144,44 @@ export class DbClient {
    * @param offer_key which of the possible different offers on the request should be executed
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
-    // get offer and unpack it
+    // query swarmai to get convert loan-terms to aset-updates for everyone involved
+
     const data = await this.sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
-    const { amount, interest } = offer_params.risk_calc_result.latestOffer
-    const { lenders, corpusCash } = await this.sdk.GetLenderAllocationInput()
-    const totalCorpusCash = corpusCash.aggregate.sum.balance
+    console.log(offer_params.risk_calc_result.latestOffer)
+    const systemState = (await this.getSystemSummary()) as Scenario
+    const payload = {
+      system_state: systemState,
+      aiResponse: offer_params.risk_calc_result.latestOffer,
+    }
+    // console.log('payload', payload.system_state)
+    // console.log('payload', payload)
+    const result = await this.callSwarmAI(DEV_URL + "/loan/accept", payload)
+    console.log("---------", result.updates)
+    // const pUpdates: Array<PortfolioUpdate> = []
+    // for (var u of updates) {
+    // pUpdates .push(u as PortfolioUpdate)
+    //  }
 
-    // verify the corpus still has capacity to fulfill the loan offer
-    if (totalCorpusCash >= amount) {
-      // compute loan-allocation based on lender cash-balances
-      const portfolioUpdates: Array<PortfolioUpdate> = []
-      lenders.forEach((lender) => {
-        const shareInLoan = lenderBalanceToShareInLoan(
-          lender.balance,
-          totalCorpusCash,
-          amount
-        )
-        portfolioUpdates.push({
-          userId: lender.id,
-          balanceDelta: -shareInLoan,
-          shareDelta: shareInLoan,
-          alias: "user" + lender.user_number.toString(),
-        } as PortfolioUpdate)
-      })
-      // TODO transform PortfolioUpdates into transactions and store them on loan-request entry under the offer-key
+    await this.updatePortfolios(result.updates)
 
-      // find out whether transactions have gone through, then execute portfolioUpdates
-      await this.updatePortfolios(portfolioUpdates)
-
-      // -> create payables receivables based on loan offer parameters
-      const variables = createStartLoanInputVariables(
-        request_id,
-        amount,
-        interest
-      )
-      const startedLoan = await this.sdk.StartLoan(variables)
-      return {
-        startedLoan,
-      }
-    } else {
-      console.error("ERROR: Offer is outdated: Not enough balance in corpus")
+    // -> create payables receivables based on loan offer parameters
+    const variables = createStartLoanInputVariables(
+      request_id,
+      offer_params.risk_calc_result.latestOffer.loan_schedule.borrower_view
+        .total_payments.remain
+    )
+    const startedLoan = await this.sdk.StartLoan(variables)
+    console.log("stated")
+    return {
+      startedLoan,
     }
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
-    const dryRunFailures = await this.dryRunPortfolioUpdates(updates)
-    if (dryRunFailures.length == 0) {
-      const updateMutation = generateUpdateAsSingleTransaction(updates)
-      const data = await this.client.request(updateMutation)
-      return data
-    } else {
-      return {
-        ERROR: {
-          description: "One update could not be run",
-          data: dryRunFailures,
-        },
-      }
-    }
+    const updateMutation = generateUpdateAsSingleTransaction(updates)
+    const data = await this.client.request(updateMutation)
+    return data
   }
 
   /**
@@ -208,21 +190,21 @@ export class DbClient {
    * - that all given userIds are in the database (TODO)
    * @param updates
    */
-  dryRunPortfolioUpdates = async (updates: Array<PortfolioUpdate>) => {
-    const failures = []
-    const { user } = await this.sdk.GetAllUsers()
-    user.forEach((user) => {
-      const userUpdates = updates.filter((u) => u.userId == user.id)
-      if (userUpdates.length) {
-        const totalCashUpdate =
-          userUpdates.map((u) => u.balanceDelta).reduce((a, b) => a + b) || 0
-        if (user.balance + totalCashUpdate < 0) {
-          failures.push({ userId: user.id, updates: userUpdates })
-        }
-      }
-    })
-    return failures
-  }
+  // dryRunPortfolioUpdates = async (updates: Array<PortfolioUpdate>) => {
+  //   const failures = []
+  //   const { user } = await this.sdk.GetAllUsers()
+  //   user.forEach((user) => {
+  //     const userUpdates = updates.filter((u) => u.userId == user.id)
+  //     if (userUpdates.length) {
+  //       const totalCashUpdate =
+  //         userUpdates.map((u) => u.balanceDelta).reduce((a, b) => a + b) || 0
+  //       if (user.balance + totalCashUpdate < 0) {
+  //         failures.push({ userId: user.id, updates: userUpdates })
+  //       }
+  //     }
+  //   })
+  //   return failures
+  // }
 
   /**
    * get all the data that is needed to run the optimizer and format it into the message
@@ -307,6 +289,38 @@ export class DbClient {
       // central_risk_info: DEFAULT_RECOMMENDATION_RISK_PARAMS,
       // } as RiskInput,
     } as SwarmAiRequestMessage
+  }
+
+  /**
+   * summaries the portfolios of all users
+   * and TODO loan rquests
+   * and TODO all loans in the system
+   */
+  getSystemSummary = async () => {
+    const data = await this.sdk.GetAllUsers()
+    const users = data.user.map((u) => {
+      return {
+        id: u.id,
+        balance: u.balance,
+        name: u.name,
+        email: u.email,
+        user_type: u.user_type,
+        demographic_info: u.demographic_info,
+        corpus_share: u.corpus_share,
+        encumbered_cash: 0, // TODO
+        encumbered_portfolio: 0, // TODO
+      } as UserInfo
+    })
+    const userDict = {}
+    users.forEach((user) => {
+      userDict[user.id] = user
+    })
+
+    return {
+      users: userDict,
+      loans: [],
+      loan_requests: [],
+    } as Scenario
   }
 
   /**
