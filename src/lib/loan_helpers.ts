@@ -53,19 +53,17 @@ export const lenderBalanceToShareInLoan = (
 
 export const createStartLoanInputVariables = (
   request_id: string,
-  amount: number,
-  interest: number
+  totalOwedAmount: number
 ) => {
-  const owedAmount = proportion(1 + interest, 1, amount)
   const receivable = {
     loan_id: request_id,
-    amount_total: owedAmount,
-    amount_remain: owedAmount,
+    amount_total: totalOwedAmount,
+    amount_remain: totalOwedAmount,
   }
   const payable = {
     loan_id: request_id,
-    amount_total: owedAmount,
-    amount_remain: owedAmount,
+    amount_total: totalOwedAmount,
+    amount_remain: totalOwedAmount,
     amount_paid: 0,
     pay_priority: 1,
   }
@@ -86,14 +84,16 @@ export const generateUpdateAsSingleTransaction = (
   userInputList: Array<PortfolioUpdate>
 ): string => {
   let query = "mutation updateUserBalances {"
+  let i = 0
   userInputList.forEach((user) => {
+    i++
     query =
       query +
       generateUserBalanceUpdate(
         user.userId,
         user.balanceDelta,
         user.shareDelta,
-        user.alias
+        "user" + i.toString()
       )
   })
   query = query + "}"
