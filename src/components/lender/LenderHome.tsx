@@ -16,7 +16,7 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
     new TabComponent(
       "Dashboard",
       (
-        <Box maxW="100%">
+        <Box>
           {user.pledge_requests.map((pr, idx) => (
             <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
           ))}

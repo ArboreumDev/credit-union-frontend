@@ -18,7 +18,7 @@ const AppBar = () => (
     minW="s"
   >
     <Flex align="center">
-      <HStack spacing={5}>
+      <HStack spacing={[5, 10, 20]}>
         <Link href="/dashboard">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Link>
