@@ -145,6 +145,7 @@ export type SwarmAiResponse = {
 
 export type LoanSchedule = {
   borrower_view: any
+  next_borrower_payment: number
   supporter_view?: any
   corpus_view?: any
 }
