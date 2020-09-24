@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Input,
+  InputGroup,
   Select,
   Stack,
   Text,
@@ -50,65 +51,84 @@ export default function CreateLoanForm({ user }: Props) {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Container minW="300px" bg="white">
-          <Stack spacing={3}>
-            <AmountInput
-              passName="loanAmount"
-              passRef={register({ required: true })}
-            />
-            <Select
-              name="purpose"
-              placeholder="Choose loan purpose"
-              ref={register({ required: false })}
-            >
-              <option value="Educational expense">Educational expense</option>
-              <option value="Home repair/ renovation">
-                Home repair/ renovation
-              </option>
-              <option value="Medical expenses">Medical expenses</option>
-              <option value="Wedding in family">Wedding in family</option>
-              <option value="Business activity">Business activity</option>
-              <option value="Other">Other</option>
-            </Select>
-            <Box h="10px" />
-            <Heading size="md">Supporters</Heading>
-            <Text>Total pledge amount needs to be 20% of loan size</Text>
-
-            {Array.from({ length: nSup }, (x, i) => i).map((idx) => (
-              <Stack key={idx} spacing="10px" minW="280px">
-                <Text>Supporter {idx + 1}: </Text>
-                <Flex>
-                  <Box flex={1}>
-                    <Input
-                      placeholder="Name"
-                      name={`supporter_${idx}_name`}
-                      size="lg"
-                      ref={register({ required: true })}
-                    />
-                  </Box>
-                  <Box flex={1}>
-                    <Input
-                      placeholder="Email"
-                      name={`supporter_${idx}_email`}
-                      size="lg"
-                      ref={register({ required: true })}
-                    />
-                  </Box>
-                </Flex>
-                <Center flex={0.5}>
-                  <AmountInput
-                    passName={`supporter_${idx}_amount`}
-                    passRef={register({ required: true })}
-                  />
-                </Center>
-              </Stack>
-            ))}
+        <Container minW="300px">
+          <Stack spacing={5}>
             <Center>
-              <Button variant="ghost" onClick={() => supCount(nSup + 1)}>
-                Add Supporter
-              </Button>
+              <Heading size="lg">Request Loan</Heading>
             </Center>
-            <Box h="30px" />
+
+            <Stack>
+              <Text>How much do you need?</Text>
+              <AmountInput
+                passName="loanAmount"
+                passRef={register({ required: true })}
+              />
+            </Stack>
+
+            <Stack>
+              <Text>What{"'"}s the money for?</Text>
+              <Select
+                name="purpose"
+                placeholder="Choose loan purpose"
+                ref={register({ required: false })}
+              >
+                <option value="Educational expense">Educational expense</option>
+                <option value="Home repair/ renovation">
+                  Home repair/ renovation
+                </option>
+                <option value="Medical expenses">Medical expenses</option>
+                <option value="Wedding in family">Wedding in family</option>
+                <option value="Business activity">Business activity</option>
+                <option value="Other">Other</option>
+              </Select>
+            </Stack>
+            <Stack>
+              <Heading size="md">Supporters</Heading>
+              <Text>
+                Supporters are your friends and colleagues who improve your
+                credit rating by guaranteeing a part of your loan.
+              </Text>
+              <Text>
+                The total amount pledged by your supporters needs to be at least
+                20% of loan size
+              </Text>
+
+              {Array.from({ length: nSup }, (x, i) => i).map((idx) => (
+                <Stack key={idx} spacing="10px" minW="280px">
+                  <Text>Supporter {idx + 1}: </Text>
+                  <Flex>
+                    <Box flex={1}>
+                      <Input
+                        placeholder="Name"
+                        name={`supporter_${idx}_name`}
+                        size="lg"
+                        ref={register({ required: true })}
+                      />
+                    </Box>
+                    <Box flex={1}>
+                      <Input
+                        placeholder="Email"
+                        name={`supporter_${idx}_email`}
+                        size="lg"
+                        ref={register({ required: true })}
+                      />
+                    </Box>
+                  </Flex>
+                  <Center flex={0.5}>
+                    <AmountInput
+                      passName={`supporter_${idx}_amount`}
+                      passRef={register({ required: true })}
+                    />
+                  </Center>
+                </Stack>
+              ))}
+              <Center>
+                <Button variant="ghost" onClick={() => supCount(nSup + 1)}>
+                  Add Supporter
+                </Button>
+              </Center>
+            </Stack>
+
             <Center>
               <Button type="submit">Submit</Button>
             </Center>

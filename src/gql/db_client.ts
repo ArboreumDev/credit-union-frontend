@@ -244,7 +244,7 @@ export class DbClient {
 
     // ============ optimizer context =============================
     const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
-      statusList: [LoanRequestStatus.live],
+      statusList: [LoanRequestStatus.active],
     })
     const totalCorpusShares = corpus.aggregate.sum.corpus_share
     const totalCorpusCash = corpus.aggregate.sum.balance || 0

@@ -8,6 +8,8 @@ import { getDashboardComponent } from "pages/dashboard"
 import { AddFundsForm } from "components/lender/fund"
 import LoginPage from "pages/login"
 import { Profile } from "pages/profile"
+import AppBar from "components/common/nav/AppBar"
+import LenderHome from "components/lender/LenderHome"
 
 export class JStep {
   constructor(public title: string, public component: any) {}
@@ -34,7 +36,8 @@ export const bJourneySequence = [
     getDashboardComponent(Fixtures.BorrowerLoanNeedsConfirmation)
   ),
   new JStep("Loan is live", getDashboardComponent(Fixtures.BorrowerLoanLive)),
-  new JStep("Profile", <Profile user={Fixtures.Borrower} />),
+  new JStep("Profile", getDashboardComponent(Fixtures.BorrowerLoanLive, 1)),
+  new JStep("Repayments", getDashboardComponent(Fixtures.BorrowerLoanLive, 2)),
 ]
 
 export const lJourneySequence = [
@@ -44,13 +47,14 @@ export const lJourneySequence = [
     "Onboarding",
     <Onboarding user={Fixtures.Lender} userType={UserType.Lender} />
   ),
-  new JStep("Add funds", <AddFundsForm user={Fixtures.Lender} />),
+  new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
   new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep(
     "Lender Dashboard with Notification",
     getDashboardComponent(Fixtures.LenderWithPledgeRequest)
   ),
-  new JStep("Profile", <Profile user={Fixtures.Lender} />),
+  new JStep("Profile", getDashboardComponent(Fixtures.Lender, 1)),
+  new JStep("Repayments", getDashboardComponent(Fixtures.Lender, 2)),
 ]
 
 const getStepMax = (userType: UserType) => {
@@ -61,7 +65,6 @@ const getStepMax = (userType: UserType) => {
 const Demo = () => {
   const router = useRouter()
   const { userType, jstep } = router.query
-  console.log(userType, jstep)
   const jstepInt = parseInt(jstep as string)
 
   function redirectJStep(isPrev?: boolean, toggleUserType?: boolean) {

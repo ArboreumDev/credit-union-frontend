@@ -54,7 +54,7 @@ export class Fixtures {
   }
   static LoanRequestLive = {
     ...Fixtures.LoanRequest,
-    status: LoanRequestStatus.live,
+    status: LoanRequestStatus.active,
   }
 
   static BorrowerLoanInitiated: User = {
