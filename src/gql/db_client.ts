@@ -148,20 +148,12 @@ export class DbClient {
 
     const data = await this.sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
-    console.log(offer_params.risk_calc_result.latestOffer)
     const systemState = (await this.getSystemSummary()) as Scenario
     const payload = {
       system_state: systemState,
       aiResponse: offer_params.risk_calc_result.latestOffer,
     }
-    // console.log('payload', payload.system_state)
-    // console.log('payload', payload)
     const result = await this.callSwarmAI(DEV_URL + "/loan/accept", payload)
-    console.log("---------", result.updates)
-    // const pUpdates: Array<PortfolioUpdate> = []
-    // for (var u of updates) {
-    // pUpdates .push(u as PortfolioUpdate)
-    //  }
 
     await this.updatePortfolios(result.updates)
 
@@ -172,7 +164,6 @@ export class DbClient {
         .total_payments.remain
     )
     const startedLoan = await this.sdk.StartLoan(variables)
-    console.log("stated")
     return {
       startedLoan,
     }
