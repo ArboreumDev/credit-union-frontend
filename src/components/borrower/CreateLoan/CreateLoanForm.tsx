@@ -86,10 +86,10 @@ export default function CreateLoanForm({ user }: Props) {
               <Heading size="md">Supporters</Heading>
               <Text>
                 Supporters are your friends and colleagues who improve your
-                credit rating by guaranteeing a part of the loan.
+                credit rating by guaranteeing a part of your loan.
               </Text>
               <Text>
-                The total amount pledged by your supporters needs to be atleast
+                The total amount pledged by your supporters needs to be at least
                 20% of loan size
               </Text>
 

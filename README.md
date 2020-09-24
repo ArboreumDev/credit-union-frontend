@@ -10,7 +10,7 @@ React + Typescript + Next.js
 
 ## Development
 
-1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars. Atleast one authentication provider is needed.
+1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars. At least one authentication provider is needed.
 2. For local dev, edit [hosts](https://stackoverflow.com/questions/10456174/oauth-how-to-test-with-local-urls) file
 3. `yarn dev` to start server
 
