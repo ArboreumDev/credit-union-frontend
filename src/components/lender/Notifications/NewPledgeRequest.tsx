@@ -6,6 +6,7 @@ import {
   Button,
   Collapse,
   Divider,
+  Stack,
   Text,
   Wrap,
 } from "@chakra-ui/core"
@@ -43,34 +44,40 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
         <Divider margin="10px" />
       </AlertDescription>
       <Button variant="link" onClick={() => setShow(!show)}>
-        Show details
+        {show ? "Hide" : "Show"} Details
       </Button>
       <Collapse mt={4} isOpen={show}>
-        <AlertDescription>
-          <Table>
-            <Row>
-              <TextColumn>Your support</TextColumn>
-              <TextColumn>
-                <Currency amount={pledgeRequest.pledge_amount} />
-              </TextColumn>
-            </Row>
-            <Row>
-              <TextColumn>Total Loan Amount</TextColumn>
-              <TextColumn>
-                <Currency amount={loanRequest.amount} />
-              </TextColumn>
-            </Row>
-            <Row>
-              <TextColumn>Loan Purpose</TextColumn>
-              <TextColumn>{loanRequest.purpose}</TextColumn>
-            </Row>
-            <Row>
-              <TextColumn>Loan Term</TextColumn>
-              <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
-            </Row>
-          </Table>
-          <Text>Repayments will be made at the end of every month</Text>
-        </AlertDescription>
+        <Stack>
+          <AlertDescription>
+            <Table>
+              <Row>
+                <TextColumn>Your support</TextColumn>
+                <TextColumn>
+                  <Currency amount={pledgeRequest.pledge_amount} />
+                </TextColumn>
+              </Row>
+              <Row>
+                <TextColumn>Total Loan Amount</TextColumn>
+                <TextColumn>
+                  <Currency amount={loanRequest.amount} />
+                </TextColumn>
+              </Row>
+              <Row>
+                <TextColumn>Loan Purpose</TextColumn>
+                <TextColumn>{loanRequest.purpose}</TextColumn>
+              </Row>
+              <Row>
+                <TextColumn>Loan Term</TextColumn>
+                <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
+              </Row>
+            </Table>
+          </AlertDescription>
+          <AlertDescription>
+            <Text>
+              Repayments are expected to be made at the end of every month
+            </Text>
+          </AlertDescription>
+        </Stack>
       </Collapse>
 
       <AlertDescription marginTop="20px">
