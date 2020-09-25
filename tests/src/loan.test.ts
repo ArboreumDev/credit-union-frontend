@@ -66,16 +66,22 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
 
   describe("A borrower user requests a loan...", () => {
-    test("A loan request with status 'initiated' is created", async () => {
+    test("A loan request with is created and the swarmai responds with an offer", async () => {
       const { request } = await dbClient.createLoanRequest(
         borrower1.id,
         amount,
         purpose
       )
+      // const request = data.update_loan_requests_by_pk
       request_id = request.request_id
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
-      expect(request.status).toBe(LoanRequestStatus.initiated)
+      expect(request.status).toBe(
+        LoanRequestStatus.awaiting_borrower_confirmation
+      )
+      expect(
+        request.risk_calc_result.latestOffer.loan_info.borrower_apr
+      ).toBeGreaterThan(0)
     })
 
     test("the swarmai module can respond to loan requests", async () => {
@@ -89,26 +95,18 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("The AI collects the input and stores and provides possible terms of the loan", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      const data = await addAndConfirmSupporter(
-        sdk,
-        request_id,
-        SUPPORTER1.id,
-        pledgeAmount
-      )
-      console.log(data)
-      const { updatedRequest } = await dbClient.calculateLoanRequestOffer(
-        request_id
-      )
+      await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
+      // console.log(data)
+      const { request } = await dbClient.calculateLoanRequestOffer(request_id)
+      // const updatedRequest = data.update_loan_requests_by_pk
 
-      expect(updatedRequest.status).toBe(
+      expect(request.status).toBe(
         LoanRequestStatus.awaiting_borrower_confirmation
       )
 
       // verify how the output of the optimizer is stored in DB:
-      expect(updatedRequest.risk_calc_result).toHaveProperty("latestOffer")
-      expect(updatedRequest.risk_calc_result.latestOffer.loan_info.amount).toBe(
-        amount
-      )
+      expect(request.risk_calc_result).toHaveProperty("latestOffer")
+      expect(request.risk_calc_result.latestOffer.loan_info.amount).toBe(amount)
     })
   })
   describe("When the borrower accepts a loan offer...", () => {
