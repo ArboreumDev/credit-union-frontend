@@ -113,7 +113,6 @@ export class DbClient {
       body: JSON.stringify(payload),
     }
     const res = await (await fetch(url, params)).json()
-    console.log(res)
     return res
   }
 
