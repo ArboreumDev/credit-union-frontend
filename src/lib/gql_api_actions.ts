@@ -126,7 +126,7 @@ export class ChangeBalance extends Action {
 
 export class AcceptRejectPledge extends Action {
   static Name = "AcceptRejectPledge"
-  static InputType: ChangeUserCashBalanceMutationVariables // TODO
+  static InputType: UpdateSupporterMutationVariables
   minAuthLevel = AUTH_TYPE.USER
 
   isUserAllowed() {
@@ -134,12 +134,12 @@ export class AcceptRejectPledge extends Action {
   }
 
   run() {
-    // TODO Add accept logic here
-    // return this.dbClient.sdk.ChangeUserCashBalance({
-    //   userId: this.user.id,
-    //   delta: this.payload.delta,
-    // })
-    return null
+    return this.dbClient.sdk.UpdateSupporter({
+      request_id: this.payload.request_id,
+      supporter_id: this.user.id,
+      status: this.payload.status, // see types.SupporterStatus
+      pledge_amount: this.payload.pledge_amount,
+    })
   }
 
   static fetch(payload: typeof AcceptRejectPledge.InputType) {
