@@ -31,7 +31,9 @@ const BLoanRequestInitiated = ({ loanRequest }: Params) => (
       <Stat>
         <StatLabel>Amount</StatLabel>
         <StatNumber>
-          <Currency amount={loanRequest.amount} />
+          <Currency
+            amount={loanRequest.risk_calc_result.latestOffer.loan_info.amount}
+          />
         </StatNumber>
       </Stat>
       <Stat>

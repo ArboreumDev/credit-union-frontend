@@ -16,7 +16,7 @@ import {
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
-import { CalculatedRisk, LoanRequest } from "lib/types"
+import { CalculatedRisk, LoanRequest, SwarmAiResponse } from "lib/types"
 import { Currency } from "../../common/Currency"
 
 interface Params {
@@ -24,7 +24,8 @@ interface Params {
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
-  const calculatedRisk = loanRequest.risk_calc_result as CalculatedRisk
+  const calculatedRisk = loanRequest.risk_calc_result
+    .latestOffer as SwarmAiResponse
   return (
     <Stack w="100%">
       <Flex>
@@ -36,26 +37,37 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
       <Flex>
         <Box flex={0.5}>Interest Rate</Box>
         <Box flex={0.5} textAlign="right">
-          {dec_to_perc(calculatedRisk.interestRate)}%
+          {calculatedRisk.loan_info.borrower_apr}%
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Interest Amount</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={calculatedRisk.totalDue - loanRequest.amount} />
+          <Currency
+            amount={
+              calculatedRisk.loan_schedule.borrower_view.total_payments.remain -
+              loanRequest.amount
+            }
+          />
         </Box>
       </Flex>
       <Flex>
-        <Box flex={0.5}>Total due in {calculatedRisk.loanTerm} months</Box>
+        <Box flex={0.5}>
+          Total due in {calculatedRisk.loan_info.tenor} months
+        </Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={calculatedRisk.totalDue} />
+          <Currency
+            amount={
+              calculatedRisk.loan_schedule.borrower_view.total_payments.remain
+            }
+          />
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Monthly Payment Due</Box>
         <Box flex={0.5} textAlign="right">
           <Currency
-            amount={calculatedRisk.totalDue / calculatedRisk.loanTerm}
+            amount={calculatedRisk.loan_schedule.next_borrower_payment}
           />
         </Box>
       </Flex>

@@ -44,61 +44,64 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
   },
 ]
 
-const BActiveLoan = ({ loanRequest: loan }: Params) => (
-  <>
-    <Stack>
-      <Center>
-        <Heading size="lg">Active Loan</Heading>
-      </Center>
+const BActiveLoan = ({ loanRequest: loan }: Params) => {
+  const amt = loan.risk_calc_result.latestOffer.loan_info.amount
+  return (
+    <>
+      <Stack>
+        <Center>
+          <Heading size="lg">Active Loan</Heading>
+        </Center>
 
-      <Row>
-        <Column>
-          <Center>
-            <Stack spacing="3">
-              <Stat>
-                <StatLabel>Amount</StatLabel>
-                <StatNumber>
-                  <Currency amount={loan.amount} />
-                </StatNumber>
-              </Stat>
-              <Stat>
-                <StatLabel>Purpose</StatLabel>
-                <StatNumber>{loan.purpose}</StatNumber>
-              </Stat>
-              <Stat>
-                <StatLabel>Next Repayment Due In</StatLabel>
-                <StatNumber>
-                  20 Days
-                  {/* {formatDistance(new Date(), new Date(2020, 8, 30))} */}
-                </StatNumber>
-              </Stat>
-            </Stack>
-          </Center>
-        </Column>
-        <Column>
-          <Center>
-            <CircularProgress
-              size="120px"
-              value={dec_to_perc(10000 / loan.amount)}
-              color="green.400"
-            >
-              <CircularProgressLabel maxW="80px" fontSize="20px">
-                {dec_to_perc(10000 / loan.amount)}% Repaid
-              </CircularProgressLabel>
-            </CircularProgress>
-          </Center>
-        </Column>
-      </Row>
+        <Row>
+          <Column>
+            <Center>
+              <Stack spacing="3">
+                <Stat>
+                  <StatLabel>Amount</StatLabel>
+                  <StatNumber>
+                    <Currency amount={amt} />
+                  </StatNumber>
+                </Stat>
+                <Stat>
+                  <StatLabel>Purpose</StatLabel>
+                  <StatNumber>{loan.purpose}</StatNumber>
+                </Stat>
+                <Stat>
+                  <StatLabel>Next Repayment Due In</StatLabel>
+                  <StatNumber>
+                    20 Days
+                    {/* {formatDistance(new Date(), new Date(2020, 8, 30))} */}
+                  </StatNumber>
+                </Stat>
+              </Stack>
+            </Center>
+          </Column>
+          <Column>
+            <Center>
+              <CircularProgress
+                size="120px"
+                value={dec_to_perc(10000 / amt)}
+                color="green.400"
+              >
+                <CircularProgressLabel maxW="80px" fontSize="20px">
+                  {dec_to_perc(10000 / amt)}% Repaid
+                </CircularProgressLabel>
+              </CircularProgress>
+            </Center>
+          </Column>
+        </Row>
 
-      <Box h="30px" />
-      <Details rows={getTableObjectFromLoanRequest(loan)} />
-      <Box h="30px" />
+        <Box h="30px" />
+        <Details rows={getTableObjectFromLoanRequest(loan)} />
+        <Box h="30px" />
 
-      <Center>
-        <Button colorScheme="blue">Make Repayment</Button>
-      </Center>
-    </Stack>
-  </>
-)
+        <Center>
+          <Button colorScheme="blue">Make Repayment</Button>
+        </Center>
+      </Stack>
+    </>
+  )
+}
 
 export default BActiveLoan

@@ -113,6 +113,7 @@ export class DbClient {
       body: JSON.stringify(payload),
     }
     const res = await (await fetch(url, params)).json()
+    console.log(res)
     return res
   }
 
@@ -263,7 +264,7 @@ export class DbClient {
         borrower_info: riskInfo.borrowerInfo,
         request_id: requestId,
         tenor: DEFAULT_LOAN_TENOR,
-        borrower_collateral: riskInfo.borrowerInfo.demographic_info.income / 2,
+        borrower_collateral: 0,
         amount: loanRequest.amount,
         supporters: riskInfo.supporterInfo,
       } as LoanRequestInfo,

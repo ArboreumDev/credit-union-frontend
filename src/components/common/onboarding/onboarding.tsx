@@ -59,6 +59,11 @@ export default function Onboarding({ user, userType }: Params) {
         email: user.email,
         user_type: userType,
         phone: data.phone,
+        demographic_info: {
+          yearsOfEducation: 3,
+          income: 300,
+          creditScore: 450,
+        },
       },
     })
       .then((res) => {

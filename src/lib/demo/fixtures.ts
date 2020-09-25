@@ -39,9 +39,21 @@ export class Fixtures {
     payback_status: null,
     purpose: "Home loan",
     risk_calc_result: {
-      loanTerm: 6,
-      interestRate: 0.07,
-      totalDue: 128400,
+      latestOffer: {
+        loan_info: {
+          tenor: 6,
+          borrower_apr: 8.190322,
+        },
+        loan_schedule: {
+          corpus_view: null,
+          borrower_view: {
+            total_payments: {
+              paid: 0,
+              remain: 44290.565568,
+            },
+          },
+        },
+      },
     },
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",

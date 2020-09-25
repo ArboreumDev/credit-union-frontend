@@ -29,6 +29,7 @@ class Borrower {
   constructor(public user: User) {}
 
   static generateLoanComponent = (loanRequest: LoanRequest) => {
+    console.log(loanRequest)
     return {
       [LoanRequestStatus.initiated]: (
         <BLoanRequestInitiated loanRequest={loanRequest} />
