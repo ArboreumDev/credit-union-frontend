@@ -11,8 +11,10 @@ import {
 import AmountInput from "components/common/AmountInput"
 import { Currency } from "components/common/Currency"
 import AppBar from "components/common/nav/AppBar"
+import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -25,21 +27,20 @@ interface Props {
 }
 
 export function WithdrawFundsForm({ user }: Props) {
+  const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-    // const payload: XXX-TODO = {
-    //   lender_id: user.id,
-    //   amount: data.amount
-    // }
-    // Call mutation
-    // fetcher("CreateLoanRequestMutation", payload)
-    //   .then((res) => {
-    //     location.reload()
-    //   })
-    //   .catch((err) => console.error(err))
+  const onSubmit = (formData: FormData) => {
+    console.log(formData)
+    ChangeBalance.fetch({
+      userId: user.id,
+      delta: -formData.amount,
+    })
+      .then((res) => {
+        location.href = "/dashboard"
+      })
+      .catch((err) => console.error(err))
   }
 
   return (
