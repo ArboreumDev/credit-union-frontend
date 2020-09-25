@@ -1,9 +1,10 @@
 import { DbClient } from "gql/db_client"
 import {
   ChangeUserCashBalanceMutationVariables,
-  CreateLoanRequestMutation,
+  UpdateSupporterMutationVariables,
   CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,
+  UpdateLoanRequestWithOfferMutation,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { Session, UserType } from "./types"
@@ -71,22 +72,18 @@ export class CreateUser extends Action {
 export class CreateLoan extends Action {
   static Name = "CreateLoan"
   static InputType: CreateLoanRequestMutationVariables
-  static ReturnType: CreateLoanRequestMutation
+  static ReturnType: UpdateLoanRequestWithOfferMutation
 
   minAuthLevel = AUTH_TYPE.USER
 
   run() {
-    try {
-      // add call to swarmai here
-    } catch (err) {
-      console.error(err)
-    }
-    return this.dbClient.sdk.CreateLoanRequest({
-      request: {
-        ...this.payload.request,
-        borrower_id: this.user.id,
-      },
-    })
+    // actually we first need to create the loan request and then call swarmai
+    // but now I am doing it inside dbClient
+    return this.dbClient.createLoanRequest(
+      this.user.id /*borrower_id*/,
+      this.payload.request.amount,
+      this.payload.request.purpose
+    )
   }
 
   isUserAllowed() {

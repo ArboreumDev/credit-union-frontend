@@ -82,9 +82,7 @@ export class DbClient {
         risk_calc_result: {},
       },
     })
-    return {
-      request: data.insert_loan_requests_one,
-    }
+    return this.calculateLoanRequestOffer(request.request_id)
   }
 
   addSupporters = async (
@@ -128,11 +126,11 @@ export class DbClient {
     const url = DEV_URL + "/loan/request"
     const payload = { request_msg: await this.getSwarmAiInput(requestId) }
     const aiResponse = (await this.callSwarmAI(url, payload)) as SwarmAiResponse
-    const updatedRequest = await this.sdk.UpdateLoanRequestWithOffer({
+
+    return this.sdk.UpdateLoanRequestWithOffer({
       requestId,
       newOffer: { latestOffer: aiResponse },
     })
-    return { updatedRequest: updatedRequest.update_loan_requests_by_pk }
   }
 
   /**
