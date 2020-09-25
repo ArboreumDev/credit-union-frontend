@@ -74,7 +74,7 @@ export class DbClient {
     amount: number,
     purpose: string
   ) => {
-    const data = await this.sdk.CreateLoanRequest({
+    const { request } = await this.sdk.CreateLoanRequest({
       request: {
         borrower_id,
         amount,

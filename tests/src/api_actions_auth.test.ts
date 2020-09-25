@@ -76,7 +76,7 @@ describe("Create new loan | user is Authorized", () => {
       payload,
       dbClient
     )
-    expect(res.insert_loan_requests_one.amount === payload.request.amount)
+    expect(res.request.amount === payload.request.amount)
   })
 })
 

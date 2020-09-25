@@ -6620,7 +6620,7 @@ export type CreateLoanRequestMutationVariables = Exact<{
 }>
 
 export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
-  insert_loan_requests_one?: Maybe<
+  request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "amount" | "purpose" | "status" | "risk_calc_result"
@@ -6805,10 +6805,10 @@ export type UpdateLoanRequestWithOfferMutationVariables = Exact<{
 export type UpdateLoanRequestWithOfferMutation = {
   __typename?: "mutation_root"
 } & {
-  update_loan_requests_by_pk?: Maybe<
+  request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "status" | "risk_calc_result"
+      "request_id" | "purpose" | "amount" | "status" | "risk_calc_result"
     >
   >
 }
@@ -7109,7 +7109,7 @@ export const AddSupportersDocument = gql`
 `
 export const CreateLoanRequestDocument = gql`
   mutation CreateLoanRequest($request: loan_requests_insert_input!) {
-    insert_loan_requests_one(object: $request) {
+    request: insert_loan_requests_one(object: $request) {
       request_id
       amount
       purpose
@@ -7264,12 +7264,14 @@ export const StartLoanDocument = gql`
 `
 export const UpdateLoanRequestWithOfferDocument = gql`
   mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
-    update_loan_requests_by_pk(
+    request: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
       _set: { status: "awaiting_borrower_confirmation" }
       _append: { risk_calc_result: $newOffer }
     ) {
       request_id
+      purpose
+      amount
       status
       risk_calc_result
     }
