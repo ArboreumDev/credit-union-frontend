@@ -111,26 +111,21 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
   describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
-      const { startedLoan } = await dbClient.acceptLoanOffer(
-        request_id,
-        "latestOffer"
-      )
-      expect(startedLoan.update_loan_requests_by_pk.status).toBe(
+      const data = await dbClient.acceptLoanOffer(request_id, "latestOffer")
+      expect(data.update_loan_requests_by_pk.status).toBe(
         LoanRequestStatus.active
       )
 
       // payable should make sense
-      expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
-        amount
-      )
-      expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
+      expect(data.insert_payables_one.amount_total).toBeGreaterThan(amount)
+      expect(data.insert_payables_one.amount_paid).toBe(0)
 
       // receivable should match payable
-      expect(startedLoan.insert_receivables_one.amount_total).toBe(
-        startedLoan.insert_payables_one.amount_total
+      expect(data.insert_receivables_one.amount_total).toBe(
+        data.insert_payables_one.amount_total
       )
-      expect(startedLoan.insert_receivables_one.amount_received).toBe(
-        startedLoan.insert_payables_one.amount_paid
+      expect(data.insert_receivables_one.amount_received).toBe(
+        data.insert_payables_one.amount_paid
       )
     })
 

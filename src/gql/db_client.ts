@@ -161,10 +161,11 @@ export class DbClient {
       offer_params.risk_calc_result.latestOffer.loan_schedule.borrower_view
         .total_payments.remain
     )
-    const startedLoan = await this.sdk.StartLoan(variables)
-    return {
-      startedLoan,
-    }
+    return this.sdk.StartLoan(variables)
+    // const startedLoan = await this.sdk.StartLoan(variables)
+    // return {
+    //   startedLoan,
+    // }
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {

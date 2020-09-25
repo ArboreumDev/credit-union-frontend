@@ -5,6 +5,7 @@ import {
   CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,
   UpdateLoanRequestWithOfferMutation,
+  StartLoanMutation,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { Session, UserType } from "./types"
@@ -144,12 +145,33 @@ export class AcceptRejectPledge extends Action {
   }
 }
 
+export class AcceptLoanOffer extends Action {
+  static Name = "AcceptLoan"
+  static InputType: string
+  static ReturnType: StartLoanMutation
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+  }
+
+  run() {
+    return this.dbClient.acceptLoanOffer(this.payload.request_id)
+  }
+
+  // static fetch(payload: anytypeof AcceptLoanOffer.InputType) {
+  static fetch(payload: any) {
+    return fetcherMutate(AcceptLoanOffer.Name, payload)
+  }
+}
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
   [ChangeBalance.Name]: ChangeBalance,
   [AcceptRejectPledge.Name]: AcceptRejectPledge,
+  [AcceptLoanOffer.Name]: AcceptLoanOffer,
 }
 
 export function runAction(
