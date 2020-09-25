@@ -14,7 +14,7 @@ import {
 import AmountInput from "components/common/AmountInput"
 import { Loan_Requests_Insert_Input } from "gql/sdk"
 import { fetcherMutate } from "lib/api"
-import { ActionTypes } from "lib/gql_api_actions"
+import { CreateLoan } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -35,13 +35,13 @@ export default function CreateLoanForm({ user }: Props) {
 
   const onSubmit = (data: FormData) => {
     console.log(data)
-    const payload: Loan_Requests_Insert_Input = {
-      borrower_id: user.id,
-      amount: data.loanAmount,
-      purpose: data.purpose,
-    }
-    // Call mutation
-    fetcherMutate(ActionTypes.CreateLoan, payload)
+    CreateLoan.fetch({
+      request: {
+        borrower_id: user.id,
+        amount: data.loanAmount,
+        purpose: data.purpose,
+      },
+    })
       .then((res) => {
         location.reload()
       })

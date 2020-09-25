@@ -1,4 +1,4 @@
-import { ActionTypes, runAction } from "lib/gql_api_actions"
+import { runAction } from "lib/gql_api_actions"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
 import { DbClient } from "../../gql/db_client"
@@ -19,12 +19,7 @@ export default async function handler(
     const session = (await getSession({ req })) as Session
     const { actionType, payload } = req.body as GqlRequest
     try {
-      const data = await runAction(
-        actionType as ActionTypes,
-        session,
-        payload,
-        dbClient
-      )
+      const data = await runAction(actionType, session, payload, dbClient)
       res.status(200).json(data)
     } catch (error) {
       console.log(error)

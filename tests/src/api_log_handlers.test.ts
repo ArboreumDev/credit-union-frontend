@@ -28,7 +28,7 @@ describe("Create new log event", () => {
     await sdk.ResetDB()
   })
 
-  test("push", async () => {
+  test.skip("push", async () => {
     const feedbackEvent: any = {
       eventType: LogEventTypes.ClientFeedback,
       eventData: {

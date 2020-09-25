@@ -9,8 +9,9 @@ import {
   Sdk,
 } from "../../src/gql/sdk"
 import {
-  ActionTypes,
   ACTION_ERRORS,
+  CreateLoan,
+  CreateUser,
   runAction,
 } from "../../src/lib/gql_api_actions"
 import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
@@ -38,11 +39,11 @@ describe("Create new user", () => {
   })
 
   test("new user", async () => {
-    const payload: CreateUserMutationVariables = {
+    const payload: typeof CreateUser.InputType = {
       user: BORROWER1,
     }
     const res: CreateUserMutation = await runAction(
-      ActionTypes.CreateUser,
+      CreateUser.Name,
       undefined,
       payload,
       dbClient
@@ -52,32 +53,41 @@ describe("Create new user", () => {
 })
 
 describe("Create new loan | user is Authorized", () => {
+  const payload: typeof CreateLoan.InputType = {
+    request: {
+      amount: 100,
+      borrower_id: BORROWER1.id,
+    },
+  }
+
   beforeAll(async () => {
     // add users
-    await sdk.CreateUser({ user: LENDER1 })
     await sdk.CreateUser({ user: BORROWER1 })
   })
   afterAll(async () => {
     await sdk.ResetDB()
   })
   test("new loan", async () => {
-    const payload: Loan_Requests_Insert_Input = {
-      amount: 100,
-      borrower_id: BORROWER1.id,
-    }
     const session = getMockSession(BORROWER1)
 
-    const res: CreateLoanRequestMutation = await runAction(
-      ActionTypes.CreateLoan,
+    const res: typeof CreateLoan.ReturnType = await runAction(
+      CreateLoan.Name,
       session,
       payload,
       dbClient
     )
-    expect(res.insert_loan_requests_one.amount === payload.amount)
+    expect(res.insert_loan_requests_one.amount === payload.request.amount)
   })
 })
 
 describe("Create new loan | user is Unauthorized", () => {
+  const payload: typeof CreateLoan.InputType = {
+    request: {
+      amount: 100,
+      borrower_id: BORROWER1.id,
+    },
+  }
+
   beforeAll(async () => {
     // add users
     await sdk.CreateUser({ user: LENDER1 })
@@ -87,22 +97,12 @@ describe("Create new loan | user is Unauthorized", () => {
     await sdk.ResetDB()
   })
   test("no session | unauthorized loan", async () => {
-    const payload: Loan_Requests_Insert_Input = {
-      amount: 100,
-      borrower_id: BORROWER1.id,
-    }
-
     expect(
-      runAction(ActionTypes.CreateLoan, undefined, payload, dbClient)
+      runAction(CreateLoan.Name, undefined, payload, dbClient)
     ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
   })
 
   test("no session | invalid loan", async () => {
-    const payload: Loan_Requests_Insert_Input = {
-      amount: 100,
-      borrower_id: BORROWER1.id,
-    }
-
     expect(
       // @ts-ignore
       runAction("invalid", undefined, payload, dbClient)
@@ -110,14 +110,10 @@ describe("Create new loan | user is Unauthorized", () => {
   })
 
   test("illegal user | unauthorized loan", async () => {
-    const payload: Loan_Requests_Insert_Input = {
-      amount: 100,
-      borrower_id: BORROWER1.id,
-    }
     const session = getMockSession(LENDER1)
 
     expect(
-      runAction(ActionTypes.CreateLoan, session, payload, dbClient)
+      runAction(CreateLoan.Name, session, payload, dbClient)
     ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
   })
 })

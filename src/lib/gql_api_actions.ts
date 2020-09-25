@@ -1,10 +1,12 @@
 import { DbClient } from "gql/db_client"
 import {
+  ChangeUserCashBalanceMutationVariables,
+  CreateLoanRequestMutation,
+  CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,
-  Loan_Requests_Insert_Input,
 } from "gql/sdk"
-import { NextApiRequest } from "next"
-import { Session, User } from "./types"
+import { fetcherMutate } from "./api"
+import { Session, UserType } from "./types"
 
 export const ACTION_ERRORS = {
   Unauthorized: new Error("Unauthorized"),
@@ -35,14 +37,17 @@ export abstract class Action {
     protected dbClient: DbClient,
     protected payload: any
   ) {}
-
   abstract minAuthLevel: AUTH_TYPE
   abstract run(): Promise<any>
+
+  get user() {
+    return this.session.user
+  }
 
   isUserAllowed() {
     if (this.minAuthLevel === AUTH_TYPE.ANY) return true
     if (this.session) {
-      const authType = getAuthTypeFromEmail(this.session.user.email)
+      const authType = getAuthTypeFromEmail(this.user.email)
       return authType >= this.minAuthLevel
     }
     return false
@@ -50,51 +55,114 @@ export abstract class Action {
 }
 
 export class CreateUser extends Action {
+  static Name = "CreateUser"
+  static InputType: CreateUserMutationVariables
   minAuthLevel = AUTH_TYPE.ANY
 
   run() {
     return this.dbClient.sdk.CreateUser(this.payload)
   }
+
+  static fetch(payload: typeof CreateUser.InputType) {
+    return fetcherMutate(CreateUser.Name, payload)
+  }
 }
 
 export class CreateLoan extends Action {
+  static Name = "CreateLoan"
+  static InputType: CreateLoanRequestMutationVariables
+  static ReturnType: CreateLoanRequestMutation
+
   minAuthLevel = AUTH_TYPE.USER
+
+  run() {
+    try {
+      // add call to swarmai here
+    } catch (err) {
+      console.error(err)
+    }
+    return this.dbClient.sdk.CreateLoanRequest({
+      request: {
+        ...this.payload.request,
+        borrower_id: this.user.id,
+      },
+    })
+  }
 
   isUserAllowed() {
     return (
-      super.isUserAllowed() && this.payload.borrower_id === this.session.user.id
+      super.isUserAllowed() &&
+      this.payload &&
+      this.payload.request &&
+      this.payload.request.borrower_id == this.user.id
     )
   }
 
-  run() {
-    return this.dbClient.sdk.CreateLoanRequest({ request: this.payload })
+  static fetch(payload: typeof CreateLoan.InputType) {
+    return fetcherMutate(CreateLoan.Name, payload)
   }
 }
 
-export enum ActionTypes {
-  CreateUser = "CREATE_USER",
-  CreateLoan = "CREATE_LOAN_REQUEST_MUTATION",
+export class ChangeBalance extends Action {
+  static Name = "ChangeBalance"
+  static InputType: ChangeUserCashBalanceMutationVariables
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+  }
+
+  run() {
+    return this.dbClient.sdk.ChangeUserCashBalance({
+      userId: this.user.id,
+      delta: this.payload.delta,
+    })
+  }
+
+  static fetch(payload: typeof ChangeBalance.InputType) {
+    return fetcherMutate(ChangeBalance.Name, payload)
+  }
+}
+
+export class AcceptRejectPledge extends Action {
+  static Name = "AcceptRejectPledge"
+  static InputType: ChangeUserCashBalanceMutationVariables // TODO
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+  }
+
+  run() {
+    // TODO Add accept logic here
+    // return this.dbClient.sdk.ChangeUserCashBalance({
+    //   userId: this.user.id,
+    //   delta: this.payload.delta,
+    // })
+    return null
+  }
+
+  static fetch(payload: typeof AcceptRejectPledge.InputType) {
+    return fetcherMutate(AcceptRejectPledge.Name, payload)
+  }
 }
 
 // TODO Add dynamic type validation
 export const ACTIONS = {
-  [ActionTypes.CreateUser]: CreateUser,
-  [ActionTypes.CreateLoan]: CreateLoan,
+  [CreateUser.Name]: CreateUser,
+  [CreateLoan.Name]: CreateLoan,
+  [ChangeBalance.Name]: ChangeBalance,
+  [AcceptRejectPledge.Name]: AcceptRejectPledge,
 }
 
 export function runAction(
-  actionType: ActionTypes,
+  actionType: string,
   session: Session,
   payload: any,
   dbClient: DbClient
 ) {
-  // console.log(session, payload)
-  const actionMap = {
-    [ActionTypes.CreateUser]: new CreateUser(session, dbClient, payload),
-    [ActionTypes.CreateLoan]: new CreateLoan(session, dbClient, payload),
-  }
-  if (actionType in actionMap) {
-    const action = actionMap[actionType]
+  if (actionType in ACTIONS) {
+    const action = new ACTIONS[actionType](session, dbClient, payload)
     if (action.isUserAllowed()) return action.run()
     else return Promise.reject(ACTION_ERRORS.Unauthorized)
   } else return Promise.reject(ACTION_ERRORS.Invalid)
