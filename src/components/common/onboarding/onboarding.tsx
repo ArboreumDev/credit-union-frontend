@@ -31,7 +31,7 @@ import { AiOutlineMail } from "react-icons/ai"
 import Head from "next/head"
 import { useState } from "react"
 import { UserType } from "lib/types"
-import { ActionTypes } from "lib/gql_api_actions"
+import { CreateUser } from "lib/gql_api_actions"
 
 type FormData = {
   firstname: string
@@ -53,16 +53,14 @@ export default function Onboarding({ user, userType }: Params) {
 
   const onSubmit = (data: FormData) => {
     console.log(data)
-    const payload: CreateUserMutationVariables = {
+    CreateUser.fetch({
       user: {
         name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
         email: user.email,
         user_type: userType,
         phone: data.phone,
       },
-    }
-    // Call mutation
-    fetcherMutate(ActionTypes.CreateUser, payload)
+    })
       .then((res) => {
         location.href = "/dashboard"
       })

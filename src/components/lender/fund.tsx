@@ -24,6 +24,10 @@ export function AddFundsForm({ user }: Props) {
       userId: user.id,
       delta: formData.amount,
     })
+      .then((res) => {
+        location.href = "/dashboard"
+      })
+      .catch((err) => console.error(err))
   }
 
   return (

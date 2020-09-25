@@ -4,11 +4,9 @@ import {
   CreateLoanRequestMutation,
   CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,
-  Loan_Requests_Insert_Input,
 } from "gql/sdk"
-import { NextApiRequest } from "next"
 import { fetcherMutate } from "./api"
-import { Session, User, UserType } from "./types"
+import { Session, UserType } from "./types"
 
 export const ACTION_ERRORS = {
   Unauthorized: new Error("Unauthorized"),
@@ -65,7 +63,7 @@ export class CreateUser extends Action {
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
-    fetcherMutate(CreateUser.name, payload)
+    return fetcherMutate(CreateUser.name, payload)
   }
 }
 
@@ -94,7 +92,7 @@ export class CreateLoan extends Action {
   }
 
   static fetch(payload: typeof CreateLoan.InputType) {
-    fetcherMutate(CreateLoan.name, payload)
+    return fetcherMutate(CreateLoan.name, payload)
   }
 }
 
@@ -114,7 +112,7 @@ export class ChangeBalance extends Action {
   }
 
   static fetch(payload: typeof ChangeBalance.InputType) {
-    fetcherMutate(ChangeBalance.name, payload)
+    return fetcherMutate(ChangeBalance.name, payload)
   }
 }
 
