@@ -121,11 +121,34 @@ export class ChangeBalance extends Action {
   }
 }
 
+export class AcceptRejectPledge extends Action {
+  static InputType: ChangeUserCashBalanceMutationVariables // TODO
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+  }
+
+  run() {
+    // TODO Add accept logic here
+    // return this.dbClient.sdk.ChangeUserCashBalance({
+    //   userId: this.user.id,
+    //   delta: this.payload.delta,
+    // })
+    return null
+  }
+
+  static fetch(payload: typeof AcceptRejectPledge.InputType) {
+    return fetcherMutate(AcceptRejectPledge.name, payload)
+  }
+}
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.name]: CreateUser,
   [CreateLoan.name]: CreateLoan,
   [ChangeBalance.name]: ChangeBalance,
+  [AcceptRejectPledge.name]: AcceptRejectPledge,
 }
 
 export function runAction(
@@ -134,14 +157,8 @@ export function runAction(
   payload: any,
   dbClient: DbClient
 ) {
-  // console.log(session, payload)
-  const actionMap = {
-    [CreateUser.name]: new CreateUser(session, dbClient, payload),
-    [CreateLoan.name]: new CreateLoan(session, dbClient, payload),
-    [ChangeBalance.name]: new ChangeBalance(session, dbClient, payload),
-  }
-  if (actionType in actionMap) {
-    const action = actionMap[actionType]
+  if (actionType in ACTIONS) {
+    const action = new ACTIONS[actionType](session, dbClient, payload)
     if (action.isUserAllowed()) return action.run()
     else return Promise.reject(ACTION_ERRORS.Unauthorized)
   } else return Promise.reject(ACTION_ERRORS.Invalid)
