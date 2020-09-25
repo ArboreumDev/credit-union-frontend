@@ -87,6 +87,11 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
+
+// demo var
+const dist = [0.2, 0.5, 0.3]
+const distPerc = dist.map(dec_to_perc)
+
 const LenderDashboard = ({ user }: Props) => (
   <Stack w="100%" spacing={8}>
     <HStack spacing={20} marginTop={1}>
@@ -104,23 +109,23 @@ const LenderDashboard = ({ user }: Props) => (
     <Heading size="md">Account Overview</Heading>
     <Stack>
       <Wrap w="100%">
-        {Asset("Uninvested", 20000)}
-        {Asset("Invested", 50000)}
-        {Asset("Pledged", 30000)}
+        {Asset("Uninvested", dist[0] * user.balance)}
+        {Asset("Invested", dist[1] * user.balance)}
+        {Asset("Pledged", dist[2] * user.balance)}
       </Wrap>
     </Stack>
     <Heading size="md">Asset Allocation</Heading>
     <Wrap w="100%" spacing={[8, 0, 0, 0]}>
       <Center minW={320} maxW="sm">
         <Box w={160}>
-          <DynamicDoughnut amounts={[20, 50, 30]} />
+          <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
         </Box>
       </Center>
       <Center minW={320} maxW="sm">
         <Stack w="100%" spacing={6}>
-          {AllocatedAsset("Uninvested", 20, "#FF6384")}
-          {AllocatedAsset("Invested", 50, "#36A2EB")}
-          {AllocatedAsset("Pledged", 30, "#FFCE56")}
+          {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
+          {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
+          {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
         </Stack>
       </Center>
     </Wrap>

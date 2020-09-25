@@ -3,5 +3,5 @@ function toFixedNumber(num, digits, base = 10) {
   return Math.round(num * pow) / pow
 }
 
-export const dec_to_perc = (irr: number, digits = 1) =>
+export const dec_to_perc = (irr: number, digits = 1): number =>
   toFixedNumber(irr * 100, digits)
