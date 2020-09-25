@@ -43,7 +43,7 @@ describe("Create new user", () => {
       user: BORROWER1,
     }
     const res: CreateUserMutation = await runAction(
-      CreateUser.name,
+      CreateUser.Name,
       undefined,
       payload,
       dbClient
@@ -71,7 +71,7 @@ describe("Create new loan | user is Authorized", () => {
     const session = getMockSession(BORROWER1)
 
     const res: typeof CreateLoan.ReturnType = await runAction(
-      CreateLoan.name,
+      CreateLoan.Name,
       session,
       payload,
       dbClient
@@ -98,7 +98,7 @@ describe("Create new loan | user is Unauthorized", () => {
   })
   test("no session | unauthorized loan", async () => {
     expect(
-      runAction(CreateLoan.name, undefined, payload, dbClient)
+      runAction(CreateLoan.Name, undefined, payload, dbClient)
     ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
   })
 
@@ -113,7 +113,7 @@ describe("Create new loan | user is Unauthorized", () => {
     const session = getMockSession(LENDER1)
 
     expect(
-      runAction(CreateLoan.name, session, payload, dbClient)
+      runAction(CreateLoan.Name, session, payload, dbClient)
     ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
   })
 })

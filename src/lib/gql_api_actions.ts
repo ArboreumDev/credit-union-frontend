@@ -55,6 +55,7 @@ export abstract class Action {
 }
 
 export class CreateUser extends Action {
+  static Name = "CreateUser"
   static InputType: CreateUserMutationVariables
   minAuthLevel = AUTH_TYPE.ANY
 
@@ -63,11 +64,12 @@ export class CreateUser extends Action {
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
-    return fetcherMutate(CreateUser.name, payload)
+    return fetcherMutate(CreateUser.Name, payload)
   }
 }
 
 export class CreateLoan extends Action {
+  static Name = "CreateLoan"
   static InputType: CreateLoanRequestMutationVariables
   static ReturnType: CreateLoanRequestMutation
 
@@ -97,11 +99,12 @@ export class CreateLoan extends Action {
   }
 
   static fetch(payload: typeof CreateLoan.InputType) {
-    return fetcherMutate(CreateLoan.name, payload)
+    return fetcherMutate(CreateLoan.Name, payload)
   }
 }
 
 export class ChangeBalance extends Action {
+  static Name = "ChangeBalance"
   static InputType: ChangeUserCashBalanceMutationVariables
   minAuthLevel = AUTH_TYPE.USER
 
@@ -117,11 +120,12 @@ export class ChangeBalance extends Action {
   }
 
   static fetch(payload: typeof ChangeBalance.InputType) {
-    return fetcherMutate(ChangeBalance.name, payload)
+    return fetcherMutate(ChangeBalance.Name, payload)
   }
 }
 
 export class AcceptRejectPledge extends Action {
+  static Name = "AcceptRejectPledge"
   static InputType: ChangeUserCashBalanceMutationVariables // TODO
   minAuthLevel = AUTH_TYPE.USER
 
@@ -139,16 +143,16 @@ export class AcceptRejectPledge extends Action {
   }
 
   static fetch(payload: typeof AcceptRejectPledge.InputType) {
-    return fetcherMutate(AcceptRejectPledge.name, payload)
+    return fetcherMutate(AcceptRejectPledge.Name, payload)
   }
 }
 
 // TODO Add dynamic type validation
 export const ACTIONS = {
-  [CreateUser.name]: CreateUser,
-  [CreateLoan.name]: CreateLoan,
-  [ChangeBalance.name]: ChangeBalance,
-  [AcceptRejectPledge.name]: AcceptRejectPledge,
+  [CreateUser.Name]: CreateUser,
+  [CreateLoan.Name]: CreateLoan,
+  [ChangeBalance.Name]: ChangeBalance,
+  [AcceptRejectPledge.Name]: AcceptRejectPledge,
 }
 
 export function runAction(
