@@ -1,5 +1,4 @@
 import { LogEventTypes } from "./constant"
-import { ActionTypes } from "./gql_api_actions"
 
 export const fetcherMutate = (action, payload) => {
   const base_url = process.env.NEXTAUTH_URL || ""
