@@ -93,7 +93,7 @@ const LenderDashboard = ({ user }: Props) => (
       <Stat>
         <StatLabel fontSize="lg">Total Assets</StatLabel>
         <StatNumber fontSize="3xl">
-          <Currency amount={120000} />
+          <Currency amount={user.balance} />
         </StatNumber>
       </Stat>
       <Stat>
