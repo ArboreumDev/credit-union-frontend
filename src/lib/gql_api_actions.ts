@@ -74,6 +74,11 @@ export class CreateLoan extends Action {
   minAuthLevel = AUTH_TYPE.USER
 
   run() {
+    try {
+      // add call to swarmai here
+    } catch (err) {
+      console.error(err)
+    }
     return this.dbClient.sdk.CreateLoanRequest({
       request: {
         ...this.payload.request,
