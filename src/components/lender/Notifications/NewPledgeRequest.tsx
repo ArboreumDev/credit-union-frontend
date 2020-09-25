@@ -10,7 +10,8 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/core"
-import { CalculatedRisk, PledgeRequest } from "lib/types"
+import { AcceptRejectPledge } from "lib/gql_api_actions"
+import { CalculatedRisk, PledgeRequest, SupporterStatus } from "lib/types"
 import { useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
@@ -82,13 +83,46 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
 
       <AlertDescription marginTop="20px">
         <Wrap justify="center">
-          <Button colorScheme="blue" w="280px">
+          <Button
+            onClick={() =>
+              AcceptRejectPledge.fetch({
+                request_id: pledgeRequest.request_id,
+                supporter_id: pledgeRequest.loan_request.user.email,
+                status: SupporterStatus.confirmed,
+                pledge_amount: 400,
+              })
+            }
+            colorScheme="blue"
+            w="280px"
+          >
             I approve of the pledge amount
           </Button>
-          <Button colorScheme="blue" w="280px">
+          <Button
+            onClick={() =>
+              AcceptRejectPledge.fetch({
+                request_id: pledgeRequest.request_id,
+                supporter_id: pledgeRequest.loan_request.user.email,
+                status: SupporterStatus.unknown,
+                pledge_amount: 400,
+              })
+            }
+            colorScheme="blue"
+            w="280px"
+          >
             I wish to change pledge amount
           </Button>
-          <Button colorScheme="red" w="280px">
+          <Button
+            onClick={() =>
+              AcceptRejectPledge.fetch({
+                request_id: pledgeRequest.request_id,
+                supporter_id: pledgeRequest.loan_request.user.email,
+                status: SupporterStatus.rejected,
+                pledge_amount: 400,
+              })
+            }
+            colorScheme="red"
+            w="280px"
+          >
             I cannot pledge for this person
           </Button>
         </Wrap>
