@@ -9,8 +9,6 @@ export const config = {
     },
   },
 }
-const BUCKET = "kyc-arboreum"
-
 // Load the AWS SDK for Node.js
 
 // Set the region
@@ -57,7 +55,7 @@ export const UploadToS3 = async (
   return s3
     .upload({
       Bucket: bucket,
-      Key: key,
+      Key: `${process.env.ENVIRONMENT}/` + key,
       Body: body,
       ACL: "public-read",
       ContentEncoding: contentEncoding,
@@ -80,10 +78,11 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
-      const key = uploadRequest.email + "/" + uploadRequest.file_name
+      const key =
+        "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
 
       const { Location } = await UploadToS3(
-        BUCKET,
+        "uploads-all-arboreum",
         key,
         Buffer.from(uploadRequest.data, "base64"),
         uploadRequest.ctype,
