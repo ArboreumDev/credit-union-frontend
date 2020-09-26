@@ -30,6 +30,24 @@ const s3 = new AWS.S3()
 // call S3 to retrieve upload file to specified bucket
 const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
+export const UploadToS3 = async (
+  bucket: string,
+  key: string,
+  base64Data: string,
+  contentType: string
+) => {
+  return s3
+    .upload({
+      Bucket: BUCKET,
+      Key: key,
+      Body: Buffer.from(base64Data, "base64"),
+      ACL: "public-read",
+      ContentEncoding: "base64",
+      ContentType: contentType,
+    })
+    .promise()
+}
+
 export type UploadRequest = {
   email: string
   file_name: string
@@ -44,16 +62,14 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
-      const { Location } = await s3
-        .upload({
-          Bucket: BUCKET,
-          Key: uploadRequest.email + "/" + uploadRequest.file_name,
-          Body: Buffer.from(uploadRequest.data, "base64"),
-          ACL: "public-read",
-          ContentEncoding: "base64",
-          ContentType: uploadRequest.ctype,
-        })
-        .promise()
+      const key = uploadRequest.email + "/" + uploadRequest.file_name
+
+      const { Location } = await UploadToS3(
+        BUCKET,
+        key,
+        uploadRequest.data,
+        uploadRequest.ctype
+      )
 
       res.statusCode = 200
       res.json({ Location })
