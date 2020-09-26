@@ -1,5 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
 import AWS from "aws-sdk"
+import { SLACK_WEBHOOK_URL } from "lib/constant"
+import { NextApiRequest, NextApiResponse } from "next"
 
 export const config = {
   api: {
@@ -8,8 +9,6 @@ export const config = {
     },
   },
 }
-const BUCKET = "kyc-arboreum"
-
 // Load the AWS SDK for Node.js
 
 // Set the region
@@ -27,8 +26,43 @@ AWS.config.setPromisesDependency(null)
 // Create S3 service object
 const s3 = new AWS.S3()
 
-// call S3 to retrieve upload file to specified bucket
-const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
+export const PostToSlack = async (message: string) => {
+  const response = await fetch(SLACK_WEBHOOK_URL, {
+    body: JSON.stringify({
+      text: `[${process.env.ENVIRONMENT}] ${message}`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  })
+  if (!response.ok) {
+    return console.error(
+      "Slack post failed",
+      response.status,
+      await response.json()
+    )
+  }
+}
+
+export const UploadToS3 = async (
+  bucket: string,
+  key: string,
+  body: Buffer | string,
+  contentType: string,
+  contentEncoding: string
+) => {
+  return s3
+    .upload({
+      Bucket: bucket,
+      Key: `${process.env.ENVIRONMENT}/` + key,
+      Body: body,
+      ACL: "public-read",
+      ContentEncoding: contentEncoding,
+      ContentType: contentType,
+    })
+    .promise()
+}
 
 export type UploadRequest = {
   email: string
@@ -44,23 +78,21 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
-      const { Location } = await s3
-        .upload({
-          Bucket: BUCKET,
-          Key: uploadRequest.email + "/" + uploadRequest.file_name,
-          Body: Buffer.from(uploadRequest.data, "base64"),
-          ACL: "public-read",
-          ContentEncoding: "base64",
-          ContentType: uploadRequest.ctype,
-        })
-        .promise()
+      const key =
+        "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
 
-      res.statusCode = 200
-      res.json({ Location })
+      const { Location } = await UploadToS3(
+        "uploads-all-arboreum",
+        key,
+        Buffer.from(uploadRequest.data, "base64"),
+        uploadRequest.ctype,
+        "base64"
+      )
+      PostToSlack("New user KYC Upload: " + Location)
+      res.status(200).json({ Location })
     } catch (e) {
       console.log(e)
-      res.statusCode = 500
-      res.json({ e })
+      res.status(500).json({ e })
     }
   }
 }

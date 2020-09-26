@@ -1,10 +1,12 @@
-import { DbClient } from "gql/db_client"
-import { LogEventTypes } from "lib/constant"
 import { NextApiRequest, NextApiResponse } from "next"
+import { PostToSlack, UploadToS3 } from "../upload"
 
-export async function FPPushHandler(req: NextApiRequest) {
-  const dbClient = new DbClient()
-  return dbClient.logEvent(LogEventTypes.FPPush, req.body, req.headers)
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "100mb",
+    },
+  },
 }
 
 export default async function handler(
@@ -13,8 +15,16 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const data = await FPPushHandler(req)
-      res.status(200).json(data)
+      const data = JSON.stringify(req.body)
+      const { Location } = await UploadToS3(
+        "uploads-all-arboreum",
+        "integrations/" + Date.now(),
+        data,
+        "text/html",
+        null
+      )
+      PostToSlack("FinancePeer Upload: " + Location + "  " + data.slice(0, 20))
+      res.status(200).json({ location: Location })
     } catch (error) {
       console.log(error)
       res.status(401).json({ error })
