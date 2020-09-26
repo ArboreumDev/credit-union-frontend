@@ -1,5 +1,3 @@
-import { DbClient } from "gql/db_client"
-import { LogEventTypes } from "lib/constant"
 import { NextApiRequest, NextApiResponse } from "next"
 import { PostToSlack, UploadToS3 } from "../upload"
 
@@ -17,15 +15,15 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      console.log(req.body)
+      const data = JSON.stringify(req.body)
       const { Location } = await UploadToS3(
         "uploads-all-arboreum",
         "integrations/" + Date.now(),
-        JSON.stringify(req.body),
+        data,
         "text/html",
         null
       )
-      await PostToSlack("FinancePeer Upload: " + Location)
+      PostToSlack("FinancePeer Upload: " + Location + "  " + data.slice(0, 20))
       res.status(200).json({ location: Location })
     } catch (error) {
       console.log(error)

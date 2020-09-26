@@ -1,5 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
 import AWS from "aws-sdk"
+import { SLACK_WEBHOOK_URL } from "lib/constant"
+import { NextApiRequest, NextApiResponse } from "next"
 
 export const config = {
   api: {
@@ -27,22 +28,23 @@ AWS.config.setPromisesDependency(null)
 // Create S3 service object
 const s3 = new AWS.S3()
 
-// call S3 to retrieve upload file to specified bucket
-const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
-
-export const PostToSlack = (message: string) => {
-  return fetch(
-    "https://hooks.slack.com/services/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",
-    {
-      body: JSON.stringify({
-        text: message,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }
-  )
+export const PostToSlack = async (message: string) => {
+  const response = await fetch(SLACK_WEBHOOK_URL, {
+    body: JSON.stringify({
+      text: `[${process.env.ENVIRONMENT}] ${message}`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  })
+  if (!response.ok) {
+    return console.error(
+      "Slack post failed",
+      response.status,
+      await response.json()
+    )
+  }
 }
 
 export const UploadToS3 = async (
@@ -87,7 +89,7 @@ export default async function handler(
         uploadRequest.ctype,
         "base64"
       )
-      await PostToSlack("New user KYC Upload: " + Location)
+      PostToSlack("New user KYC Upload: " + Location)
       res.status(200).json({ Location })
     } catch (e) {
       console.log(e)

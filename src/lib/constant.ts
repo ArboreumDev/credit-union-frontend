@@ -21,3 +21,6 @@ export enum LogEventTypes {
   ClientFeedback = "client_feedback",
   FPPush = "fp_push",
 }
+
+export const SLACK_WEBHOOK_URL =
+  "https://hooks.slack.com/services/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"
