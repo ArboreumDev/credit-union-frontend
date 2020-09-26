@@ -11,12 +11,16 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/core"
+import useUser from "lib/useUser"
 import { useRef } from "react"
 import { FiSettings } from "react-icons/fi"
+import CompanyX from "./Companyx"
 import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
+import LogoutButton from "./LogoutButton"
 
 export default function DrawerButton() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { user } = useUser()
   const btnRef = useRef()
 
   return (
@@ -41,8 +45,10 @@ export default function DrawerButton() {
             <DrawerHeader></DrawerHeader>
             <DrawerBody>
               <Stack>
+                <CompanyX />
                 <FeedbackPopover />
                 <SupportPopover />
+                {user && <LogoutButton />}
               </Stack>
             </DrawerBody>
           </DrawerContent>

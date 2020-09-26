@@ -59,7 +59,7 @@ const InputTextPopover = (props: Props) => {
 export const SupportPopover = () => (
   <InputTextPopover
     title="Support"
-    header="Please email us and we will get back to you shortly!"
+    header="Please write to us and we will get back to you shortly!"
     onSubmit={captureFeedback}
     buttonVariant="ghost"
   />

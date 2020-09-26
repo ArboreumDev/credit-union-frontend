@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AppBar from "components/common/nav/AppBar"
+import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/withdraw"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
@@ -79,14 +80,7 @@ export const Profile = ({ user }: Props) => {
 
       <Box h="20px" />
       <Divider />
-      <Button
-        onClick={() => Router.push("/api/auth/signout")}
-        rightIcon={<CgLogOut />}
-        colorScheme="blue"
-        variant="outline"
-      >
-        Logout
-      </Button>
+      <LogoutButton />
     </Stack>
   )
 }

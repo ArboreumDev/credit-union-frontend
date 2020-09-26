@@ -10,6 +10,7 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  Tooltip,
   Wrap,
 } from "@chakra-ui/core"
 import { User } from "../../lib/types"
@@ -102,7 +103,9 @@ const LenderDashboard = ({ user }: Props) => (
         </StatNumber>
       </Stat>
       <Stat>
-        <StatLabel fontSize="lg">APY</StatLabel>
+        <StatLabel fontSize="lg">
+          <Tooltip label="Annual Percentage Yield">APY</Tooltip>
+        </StatLabel>
         <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
       </Stat>
     </HStack>
