@@ -31,7 +31,7 @@ const s3 = new AWS.S3()
 const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
 export const PostToSlack = (message: string) => {
-  fetch(
+  return fetch(
     "https://hooks.slack.com/services/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",
     {
       body: JSON.stringify({
@@ -87,14 +87,11 @@ export default async function handler(
         uploadRequest.ctype,
         "base64"
       )
-
-      res.statusCode = 200
-      PostToSlack("New user KYC Upload: " + Location)
-      res.json({ Location })
+      await PostToSlack("New user KYC Upload: " + Location)
+      res.status(200).json({ Location })
     } catch (e) {
       console.log(e)
-      res.statusCode = 500
-      res.json({ e })
+      res.status(500).json({ e })
     }
   }
 }

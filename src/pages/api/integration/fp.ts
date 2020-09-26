@@ -25,7 +25,7 @@ export default async function handler(
         "text/html",
         null
       )
-      PostToSlack("FinancePeer Upload: " + Location)
+      await PostToSlack("FinancePeer Upload: " + Location)
       res.status(200).json({ location: Location })
     } catch (error) {
       console.log(error)
