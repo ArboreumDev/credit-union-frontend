@@ -30,19 +30,35 @@ const s3 = new AWS.S3()
 // call S3 to retrieve upload file to specified bucket
 const uploadParams = { Bucket: BUCKET, Key: "", Body: "" }
 
+export const PostToSlack = (message: string) => {
+  fetch(
+    "https://hooks.slack.com/services/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",
+    {
+      body: JSON.stringify({
+        text: message,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }
+  )
+}
+
 export const UploadToS3 = async (
   bucket: string,
   key: string,
-  base64Data: string,
-  contentType: string
+  body: Buffer | string,
+  contentType: string,
+  contentEncoding: string
 ) => {
   return s3
     .upload({
-      Bucket: BUCKET,
+      Bucket: bucket,
       Key: key,
-      Body: Buffer.from(base64Data, "base64"),
+      Body: body,
       ACL: "public-read",
-      ContentEncoding: "base64",
+      ContentEncoding: contentEncoding,
       ContentType: contentType,
     })
     .promise()
@@ -67,11 +83,13 @@ export default async function handler(
       const { Location } = await UploadToS3(
         BUCKET,
         key,
-        uploadRequest.data,
-        uploadRequest.ctype
+        Buffer.from(uploadRequest.data, "base64"),
+        uploadRequest.ctype,
+        "base64"
       )
 
       res.statusCode = 200
+      PostToSlack("New user KYC Upload: " + Location)
       res.json({ Location })
     } catch (e) {
       console.log(e)
