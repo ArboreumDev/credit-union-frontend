@@ -51,7 +51,7 @@ export const Profile = ({ user }: Props) => {
         <Stack>
           <Divider />
           <Heading size="sm">Withdraw</Heading>
-          <WithdrawFundsForm user={user} />
+          <WithdrawFundsForm />
         </Stack>
       )}
       <Divider />

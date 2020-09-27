@@ -1,16 +1,6 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Heading,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/core"
+import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import { Currency } from "components/common/Currency"
-import AppBar from "components/common/nav/AppBar"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
@@ -26,7 +16,8 @@ interface Props {
   user: User
 }
 
-export function WithdrawFundsForm({ user }: Props) {
+export function WithdrawFundsForm() {
+  const { user, mutate } = useUser()
   const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
@@ -38,7 +29,7 @@ export function WithdrawFundsForm({ user }: Props) {
       delta: -formData.amount,
     })
       .then((res) => {
-        location.href = "/dashboard"
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }

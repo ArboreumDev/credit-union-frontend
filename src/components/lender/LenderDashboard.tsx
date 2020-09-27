@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
   Heading,
@@ -14,12 +13,10 @@ import {
   Tooltip,
   Wrap,
 } from "@chakra-ui/core"
+import DynamicDoughnut from "components/dashboard/doughnut"
+import { dec_to_perc } from "lib/currency"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
-import { dec_to_perc } from "lib/currency"
-import DynamicDoughnut from "components/dashboard/doughnut"
-import LineChart from "components/dashboard/linechart"
-import Link from "next/link"
 
 interface Props {
   user: User
@@ -145,13 +142,6 @@ const LenderDashboard = ({ user }: Props) => (
       <Box maxW="sm">
         <PledgeInvestments />
       </Box>
-    )}
-    {user.balance === 0 && (
-      <Link href="/dashboard/invest">
-        <Button colorScheme="blue" maxW="sm">
-          Start Investing
-        </Button>
-      </Link>
     )}
   </Stack>
 )

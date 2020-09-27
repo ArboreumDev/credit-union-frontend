@@ -1,8 +1,9 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import { fetcherMutate } from "lib/api"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
+import useUser from "lib/useUser"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -14,7 +15,9 @@ interface Props {
   user: User
 }
 
-export function AddFundsForm({ user }: Props) {
+export function AddFundsForm() {
+  const { user, mutate } = useUser()
+  const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
@@ -25,7 +28,7 @@ export function AddFundsForm({ user }: Props) {
       delta: formData.amount,
     })
       .then((res) => {
-        location.href = "/dashboard"
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
