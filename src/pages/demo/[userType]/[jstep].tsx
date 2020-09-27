@@ -5,11 +5,7 @@ import { Fixtures } from "lib/demo/fixtures"
 import { UserType } from "lib/types"
 import { useRouter } from "next/router"
 import { getDashboardComponent } from "pages/dashboard/[[...route]]"
-import { AddFundsForm } from "components/lender/fund"
 import LoginPage from "pages/login"
-import { Profile } from "pages/profile"
-import AppBar from "components/common/nav/AppBar"
-import LenderHome from "components/lender/LenderHome"
 
 export class JStep {
   constructor(public title: string, public component: any) {}
