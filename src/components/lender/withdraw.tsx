@@ -3,7 +3,6 @@ import AmountInput from "components/common/AmountInput"
 import { Currency } from "components/common/Currency"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
-import useUser from "lib/useUser"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -16,8 +15,7 @@ interface Props {
   user: User
 }
 
-export function WithdrawFundsForm() {
-  const { user, mutate } = useUser()
+export function WithdrawFundsForm({ user }: Props) {
   const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
@@ -28,7 +26,7 @@ export function WithdrawFundsForm() {
       userId: user.id,
       delta: -formData.amount,
     })
-      .then((res) => {
+      .then(async (res) => {
         router.push("/dashboard")
       })
       .catch((err) => console.error(err))

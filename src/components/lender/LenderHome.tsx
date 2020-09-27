@@ -38,7 +38,7 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       ),
       (
         <Box maxW="lg">
-          <AddFundsForm />
+          <AddFundsForm user={user} />
         </Box>
       )
     ),

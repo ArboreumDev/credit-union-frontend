@@ -15,8 +15,7 @@ interface Props {
   user: User
 }
 
-export function AddFundsForm() {
-  const { user, mutate } = useUser()
+export function AddFundsForm({ user }: Props) {
   const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
