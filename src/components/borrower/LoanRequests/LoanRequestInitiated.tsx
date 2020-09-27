@@ -2,6 +2,9 @@ import {
   Box,
   Center,
   Container,
+  Flex,
+  Heading,
+  Stack,
   Stat,
   StatGroup,
   StatLabel,
@@ -11,13 +14,25 @@ import {
 import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest } from "lib/types"
 import { Currency } from "../../common/Currency"
+import AddSupporter from "../CreateLoan/AddSupporter"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
+const LoanSupporter = ({ loanRequest }: Params) => (
+  <Stack>
+    <Heading size="md">Supporters</Heading>
+    <Flex>
+      <Box flex={1}>Gaurav</Box>
+      <Box flex={1}>gp@arboreum.dev</Box>
+      <Box flex={1}>Accepted</Box>
+    </Flex>
+  </Stack>
+)
+
 const BLoanRequestInitiated = ({ loanRequest }: Params) => (
-  <Box padding="10px">
+  <Stack padding="10px">
     <Center>
       <Text fontSize="100px">
         <CgFileDocument />
@@ -39,7 +54,11 @@ const BLoanRequestInitiated = ({ loanRequest }: Params) => (
         <StatNumber>{loanRequest.purpose}</StatNumber>
       </Stat>
     </StatGroup>
-  </Box>
+    <Box h="30px" />
+    <LoanSupporter />
+    <Box h="30px" />
+    <AddSupporter />
+  </Stack>
 )
 
 export default BLoanRequestInitiated
