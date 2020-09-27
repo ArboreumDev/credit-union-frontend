@@ -37,15 +37,15 @@ export class Fixtures {
   static LoanRequest: LoanRequest = {
     confirmation_date: null,
     payback_status: null,
-    purpose: "Home loan",
+    purpose: "Home Repair",
     risk_calc_result: {
       loanTerm: 6,
       interestRate: 0.07,
-      totalDue: 128400,
+      totalDue: 96300,
     },
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
-    amount: 120000,
+    amount: 90000,
   }
 
   static LoanRequestNeedsConfirmation = {
@@ -74,6 +74,7 @@ export class Fixtures {
 
   static LenderWithPledgeRequest = {
     ...Fixtures.Lender,
+    balance: 10000,
     pledge_requests: [
       {
         request_id: "loan_req_id",

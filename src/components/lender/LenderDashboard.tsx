@@ -23,18 +23,18 @@ interface Props {
 }
 
 const getOngoingPledges = () => [
-  { name: "Gaurav", total: 120000, perc_repaid: 0.9 },
-  { name: "Nupur", total: 120000, perc_repaid: 0.5 },
-  { name: "Laurence", total: 20000, perc_repaid: 0.3 },
+  { name: "Gaurav", total: 20000, perc_repaid: 0.9 },
+  { name: "Nupur", total: 30000, perc_repaid: 0.5 },
+  { name: "Laurence", total: 24000, perc_repaid: 0.3 },
   {
     name: "Dju",
-    total: 20000,
+    total: 12000,
     perc_repaid: 0.1,
     color: "black",
   },
   {
     name: "Sid",
-    total: 25000,
+    total: 15000,
     perc_repaid: 0.7,
   },
 ]
