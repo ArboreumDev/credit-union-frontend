@@ -29,13 +29,7 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       )
     ),
     new TabComponent(
-      user.balance <= 0 ? (
-        <Text as="mark" fontWeight="bold">
-          Invest
-        </Text>
-      ) : (
-        "Invest"
-      ),
+      user.balance <= 0 ? <Text fontWeight="bold">Invest</Text> : "Invest",
       (
         <Box maxW="lg">
           <AddFundsForm user={user} />

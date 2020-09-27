@@ -20,10 +20,6 @@ export const bJourneySequence = [
   ),
   new JStep("KYC needs approval", getDashboardComponent(Fixtures.Borrower)),
   new JStep(
-    "KYC Confirmed",
-    getDashboardComponent(Fixtures.BorrowerKYCConfirmed)
-  ),
-  new JStep(
     "Loan request initiated",
     getDashboardComponent(Fixtures.BorrowerLoanInitiated)
   ),
