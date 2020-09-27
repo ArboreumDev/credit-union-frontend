@@ -36,6 +36,7 @@ const txLenderFixture = [
 ]
 
 export const Profile = ({ user }: Props) => {
+  const { user: _, mutate } = useUser()
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -51,7 +52,7 @@ export const Profile = ({ user }: Props) => {
         <Stack>
           <Divider />
           <Heading size="sm">Withdraw</Heading>
-          <WithdrawFundsForm />
+          <WithdrawFundsForm user={user} />
         </Stack>
       )}
       <Divider />
