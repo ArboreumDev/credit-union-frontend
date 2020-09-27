@@ -5,6 +5,7 @@ import { User } from "../../lib/types"
 import LenderDashboard from "./LenderDashboard"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 import TabHome, { TabComponent } from "components/common/home/tabs"
+import { useRouter } from "next/router"
 
 interface Props {
   user: User
@@ -12,6 +13,9 @@ interface Props {
 }
 
 const LenderHome = ({ user, initPanelIdx }: Props) => {
+  const router = useRouter()
+  const { route } = router.query
+
   const tabs = [
     new TabComponent(
       "Dashboard",

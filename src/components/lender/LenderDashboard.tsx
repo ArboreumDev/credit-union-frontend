@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Center,
   Flex,
   Heading,
@@ -18,6 +19,7 @@ import { Currency } from "../common/Currency"
 import { dec_to_perc } from "lib/currency"
 import DynamicDoughnut from "components/dashboard/doughnut"
 import LineChart from "components/dashboard/linechart"
+import Link from "next/link"
 
 interface Props {
   user: User
@@ -102,12 +104,14 @@ const LenderDashboard = ({ user }: Props) => (
           <Currency amount={user.balance} />
         </StatNumber>
       </Stat>
-      <Stat>
-        <StatLabel fontSize="lg">
-          <Tooltip label="Annual Percentage Yield">APY</Tooltip>
-        </StatLabel>
-        <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
-      </Stat>
+      {user.balance > 0 && (
+        <Stat>
+          <StatLabel fontSize="lg">
+            <Tooltip label="Annual Percentage Yield">APY</Tooltip>
+          </StatLabel>
+          <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
+        </Stat>
+      )}
     </HStack>
     <Heading size="md">Account Overview</Heading>
     <Stack>
@@ -117,24 +121,38 @@ const LenderDashboard = ({ user }: Props) => (
         {Asset("Pledged", dist[2] * user.balance)}
       </Wrap>
     </Stack>
-    <Heading size="md">Asset Allocation</Heading>
-    <Wrap w="100%" spacing={[8, 0, 0, 0]}>
-      <Center minW={320} maxW="sm">
-        <Box w={160}>
-          <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
-        </Box>
-      </Center>
-      <Center minW={320} maxW="sm">
-        <Stack w="100%" spacing={6}>
-          {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
-          {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
-          {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
-        </Stack>
-      </Center>
-    </Wrap>
-    <Box maxW="sm">
-      <PledgeInvestments />
-    </Box>
+    {user.balance > 0 && (
+      <>
+        <Heading size="md">Asset Allocation</Heading>
+        <Wrap w="100%" spacing={[8, 0, 0, 0]}>
+          <Center minW={320} maxW="sm">
+            <Box w={160}>
+              <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
+            </Box>
+          </Center>
+          <Center minW={320} maxW="sm">
+            <Stack w="100%" spacing={6}>
+              {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
+              {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
+              {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
+            </Stack>
+          </Center>
+        </Wrap>
+      </>
+    )}
+
+    {user.pledge_requests.length > 0 && (
+      <Box maxW="sm">
+        <PledgeInvestments />
+      </Box>
+    )}
+    {user.balance === 0 && (
+      <Link href="/dashboard/invest">
+        <Button colorScheme="blue" maxW="sm">
+          Start Investing
+        </Button>
+      </Link>
+    )}
   </Stack>
 )
 export default LenderDashboard
