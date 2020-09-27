@@ -54,7 +54,7 @@ export function AddFundsForm({ user }: Props) {
                 complete.
               </li>
               <li>
-                An any point in time, you may withdraw un-invested funds from
+                At any point in time, you may withdraw un-invested funds from
                 your account.
               </li>
             </ul>

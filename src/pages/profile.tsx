@@ -57,28 +57,29 @@ export const Profile = ({ user }: Props) => {
       )}
       <Divider />
 
-      <Box>
-        <Heading as="h4" size="md">
-          Transactions
-        </Heading>
-        <Box h="10px" />
-        <Stack>
-          {transactions.map((tx, idx) => (
-            <Flex key={idx + "row"}>
-              <Box w="200px">
-                <Text color="gray.500">{tx.key}</Text>
-              </Box>
-              <Box flex="1">
-                <Text align="right">{tx.type}</Text>
-              </Box>
-              <Box w="200px">
-                <Text align="right">{tx.value}</Text>
-              </Box>
-            </Flex>
-          ))}
-        </Stack>
-      </Box>
-
+      {user.user_type === UserType.Borrower && (
+        <Box>
+          <Heading as="h4" size="md">
+            Transactions
+          </Heading>
+          <Box h="10px" />
+          <Stack>
+            {transactions.map((tx, idx) => (
+              <Flex key={idx + "row"}>
+                <Box w="200px">
+                  <Text color="gray.500">{tx.key}</Text>
+                </Box>
+                <Box flex="1">
+                  <Text align="right">{tx.type}</Text>
+                </Box>
+                <Box w="200px">
+                  <Text align="right">{tx.value}</Text>
+                </Box>
+              </Flex>
+            ))}
+          </Stack>
+        </Box>
+      )}
       <Box h="20px" />
       <Divider />
       <LogoutButton />
