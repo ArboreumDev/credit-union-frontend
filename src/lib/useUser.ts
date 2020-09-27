@@ -30,7 +30,7 @@ export default function useUser() {
   const isDemo = () => /^\/demo.*$/.test(currentPage)
 
   useEffect(() => {
-    if (!isDemo && session) {
+    if (!isDemo() && session) {
       const destination = getRedirectLocation(session, currentPage)
       if (destination != currentPage) {
         localStorage.setItem(LAST_REDIRECT_PAGE, destination)
