@@ -5,6 +5,7 @@ import {
   Sdk,
 } from "../gql/sdk"
 import { LoanRequestStatus } from "./types"
+import { DbClient } from "gql/db_client"
 
 function toFloat8(x: number) {
   return parseFloat(x.toFixed(8))
@@ -172,25 +173,17 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
 }
 
 export const addAndConfirmSupporter = async (
-  sdk: Sdk,
+  dbClient: DbClient,
   requestId: string,
   supporterId: string,
   amount: number
 ) => {
-  await sdk.AddSupporters({
-    supporters: [
-      {
-        request_id: requestId,
-        supporter_id: supporterId,
-        pledge_amount: amount,
-      },
-    ],
-  })
-  const data = await sdk.UpdateSupporter({
-    request_id: requestId,
-    supporter_id: supporterId,
-    status: SupporterStatus.confirmed,
-    pledge_amount: amount,
-  })
+  await dbClient.addSupporters(requestId, [supporterId], [amount])
+  const data = await dbClient.updateSupporter(
+    requestId,
+    supporterId,
+    SupporterStatus.confirmed,
+    amount
+  )
   return data
 }

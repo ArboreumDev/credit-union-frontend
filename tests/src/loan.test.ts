@@ -95,7 +95,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
       await addAndConfirmSupporter(
-        sdk,
+        dbClient,
         request_id,
         SUPPORTER1.id,
         pledgeAmount / 2
@@ -110,7 +110,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
       await sdk.CreateUser({ user: SUPPORTER2 })
       await addAndConfirmSupporter(
-        sdk,
+        dbClient,
         request_id,
         SUPPORTER2.id,
         pledgeAmount / 2
@@ -119,6 +119,7 @@ describe("Basic loan request flow for an accepted loan", () => {
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: request_id,
       })
+      console.log(loanRequest)
 
       // The AI has collected the input and stores possible terms of the loan in the db
       expect(loanRequest.status).toBe(
@@ -133,7 +134,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
   })
 
-  describe("When the borrower accepts a loan offer...", () => {
+  describe.skip("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
       const data = await dbClient.acceptLoanOffer(request_id, "latestOffer")
       expect(data.update_loan_requests_by_pk.status).toBe(
