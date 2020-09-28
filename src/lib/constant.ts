@@ -8,6 +8,7 @@ export const ANALYTICS_WEBSITE_IDS = {
 export const USER_TYPE_KEY = "userType"
 export const LAST_REDIRECT_PAGE = "lastPage"
 
+export const MIN_SUPPORT_RATIO = 0.2
 export const DEFAULT_LOAN_TENOR = 6 // in months
 export const DEFAULT_RISK_FREE_INTEREST_RATE = 0.5
 export const DEFAULT_RECOMMENDATION_RISK_PARAMS: RiskParams = {

@@ -85,7 +85,12 @@ export const SUPPORTER2: User = {
   email: "birdperson@galaxy.io",
   phone: "4321",
   user_type: "lender",
-  demographic_info: { country: "spaceland" },
+  demographic_info: {
+    yearsOfEducation: 10,
+    income: 600.0,
+    creditScore: 800,
+  },
+
   user_number: 5,
   balance: 400,
   // if wanted we can also amend the user object like this to specify their reputation directly

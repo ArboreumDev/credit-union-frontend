@@ -13,6 +13,7 @@ import {
   LENDER2,
   BORROWER1,
   SUPPORTER1,
+  SUPPORTER2,
 } from "../fixtures/basic_network"
 import { addNetwork } from "../../src/lib/network_helpers"
 import { addAndConfirmSupporter } from "../../src/lib/loan_helpers"
@@ -20,6 +21,8 @@ import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
 import { DEV_URL } from "../../src/lib/constant"
 import lender from "../../src/components/dashboard/lender"
+import { lastDayOfDecade } from "date-fns"
+import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
 
 global.fetch = require("node-fetch")
 
@@ -44,7 +47,7 @@ afterAll(async () => {
 describe("Basic loan request flow for an accepted loan", () => {
   let dbClient: DbClient
   const amount = 100
-  const pledgeAmount = amount / 2
+  const pledgeAmount = amount * MIN_SUPPORT_RATIO
   const purpose = "go see the movies"
   let request_id: string
   // var testOutput;
@@ -89,22 +92,47 @@ describe("Basic loan request flow for an accepted loan", () => {
       expect(res).toHaveProperty("loan_info.borrower_apr")
     })
 
-    test("The AI collects the input and stores and provides possible terms of the loan", async () => {
+    test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
-      // console.log(data)
-      const { request } = await dbClient.calculateLoanRequestOffer(request_id)
-      // const updatedRequest = data.update_loan_requests_by_pk
+      await addAndConfirmSupporter(
+        sdk,
+        request_id,
+        SUPPORTER1.id,
+        pledgeAmount / 2
+      )
 
-      expect(request.status).toBe(
+      const { loanRequest } = await sdk.GetLoanRequest({
+        requestId: request_id,
+      })
+      expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
+    })
+
+    test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
+      await sdk.CreateUser({ user: SUPPORTER2 })
+      await addAndConfirmSupporter(
+        sdk,
+        request_id,
+        SUPPORTER2.id,
+        pledgeAmount / 2
+      )
+
+      const { loanRequest } = await sdk.GetLoanRequest({
+        requestId: request_id,
+      })
+
+      // The AI has collected the input and stores possible terms of the loan in the db
+      expect(loanRequest.status).toBe(
         LoanRequestStatus.awaiting_borrower_confirmation
       )
 
       // verify how the output of the optimizer is stored in DB:
-      expect(request.risk_calc_result).toHaveProperty("latestOffer")
-      expect(request.risk_calc_result.latestOffer.loan_info.amount).toBe(amount)
+      expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
+      expect(loanRequest.risk_calc_result.latestOffer.loan_info.amount).toBe(
+        amount
+      )
     })
   })
+
   describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
       const data = await dbClient.acceptLoanOffer(request_id, "latestOffer")
