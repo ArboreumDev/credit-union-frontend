@@ -17,6 +17,7 @@ import DynamicDoughnut from "components/dashboard/doughnut"
 import { dec_to_perc } from "lib/currency"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
+import LenderModel from "./LenderModel"
 import PledgeInvestments from "./Pledges"
 
 interface Props {
@@ -53,57 +54,62 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 const dist = [0.2, 0.5, 0.3]
 const distPerc = dist.map(dec_to_perc)
 
-const LenderDashboard = ({ user }: Props) => (
-  <Stack w="100%" spacing={8}>
-    <HStack spacing={20} marginTop={1}>
-      <Stat>
-        <StatLabel fontSize="lg">Total Assets</StatLabel>
-        <StatNumber fontSize="3xl">
-          <Currency amount={user.balance} />
-        </StatNumber>
-      </Stat>
-      {user.balance > 0 && (
-        <Stat>
-          <StatLabel fontSize="lg">
-            <Tooltip label="Annual Percentage Yield">APY</Tooltip>
-          </StatLabel>
-          <StatNumber fontSize="3xl">{dec_to_perc(0.163)}%</StatNumber>
-        </Stat>
-      )}
-    </HStack>
-    <Heading size="md">Account Overview</Heading>
-    <Stack>
-      <Wrap w="100%">
-        {Asset("Invested", dist[1] * user.balance)}
-        {Asset("Pledged", dist[2] * user.balance)}
-        {Asset("Uninvested", dist[0] * user.balance)}
-      </Wrap>
-    </Stack>
-    {user.balance > 0 && (
-      <>
-        <Heading size="md">Asset Allocation</Heading>
-        <Wrap w="100%" spacing={[8, 0, 0, 0]}>
-          <Center minW={320} maxW="sm">
-            <Box w={160}>
-              <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
-            </Box>
-          </Center>
-          <Center minW={320} maxW="sm">
-            <Stack w="100%" spacing={6}>
-              {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
-              {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
-              {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
-            </Stack>
-          </Center>
-        </Wrap>
-      </>
-    )}
+const LenderDashboard = ({ user }: Props) => {
+  const lender = new LenderModel(user)
 
-    {user.pledges.length > 0 && (
-      <Box maxW="sm">
-        <PledgeInvestments pledges={user.pledges} />
-      </Box>
-    )}
-  </Stack>
-)
+  return (
+    <Stack w="100%" spacing={8}>
+      <HStack spacing={20} marginTop={1}>
+        <Stat>
+          <StatLabel fontSize="lg">Total Assets</StatLabel>
+          <StatNumber fontSize="3xl">
+            <Currency amount={lender.totalAssets} />
+          </StatNumber>
+        </Stat>
+        {user.balance > 0 && (
+          <Stat>
+            <StatLabel fontSize="lg">
+              <Tooltip label="Annual Percentage Yield">APY</Tooltip>
+            </StatLabel>
+            <StatNumber fontSize="3xl">{dec_to_perc(0.163)}%</StatNumber>
+          </Stat>
+        )}
+      </HStack>
+      <Heading size="md">Account Overview</Heading>
+      <Stack>
+        <Wrap w="100%">
+          {Asset("Invested", dist[1] * user.balance)}
+          {Asset("Pledged", dist[2] * user.balance)}
+          {Asset("Uninvested", dist[0] * user.balance)}
+        </Wrap>
+      </Stack>
+      {user.balance > 0 && (
+        <>
+          <Heading size="md">Asset Allocation</Heading>
+          <Wrap w="100%" spacing={[8, 0, 0, 0]}>
+            <Center minW={320} maxW="sm">
+              <Box w={160}>
+                <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
+              </Box>
+            </Center>
+            <Center minW={320} maxW="sm">
+              <Stack w="100%" spacing={6}>
+                {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
+                {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
+                {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
+              </Stack>
+            </Center>
+          </Wrap>
+        </>
+      )}
+
+      {user.pledges?.length > 0 && (
+        <Box maxW="sm">
+          <PledgeInvestments pledges={user.pledges} />
+        </Box>
+      )}
+    </Stack>
+  )
+}
+
 export default LenderDashboard

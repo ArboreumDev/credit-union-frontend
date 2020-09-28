@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/core"
 import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
-import { User } from "../../lib/types"
+import { User } from "lib/types"
 import BorrowerModel from "./BorrowerModel"
 import RepaymentsForm from "./repayments"
 
