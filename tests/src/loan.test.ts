@@ -76,12 +76,8 @@ describe("Basic loan request flow for an accepted loan", () => {
       request_id = request.request_id
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
-      expect(request.status).toBe(
-        LoanRequestStatus.awaiting_borrower_confirmation
-      )
-      expect(
-        request.risk_calc_result.latestOffer.loan_info.borrower_apr
-      ).toBeGreaterThan(0)
+      expect(request.status).toBe(LoanRequestStatus.initiated)
+      expect(request.risk_calc_result.latestOffer).toBeUndefined
     })
 
     test("the swarmai module can respond to loan requests", async () => {

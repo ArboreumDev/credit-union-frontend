@@ -82,7 +82,10 @@ export class DbClient {
         risk_calc_result: {},
       },
     })
-    return this.calculateLoanRequestOffer(request.request_id)
+    // potentially do other stuff here (notify us...)
+    return { request }
+
+    // return this.calculateLoanRequestOffer(request.request_id)
   }
 
   addSupporters = async (
