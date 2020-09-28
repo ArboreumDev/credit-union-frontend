@@ -6825,7 +6825,19 @@ export type UpdateSupporterMutation = { __typename?: "mutation_root" } & {
     { __typename?: "supporters" } & Pick<
       Supporters,
       "supporter_id" | "status" | "pledge_amount"
-    >
+    > & {
+        supported_request: { __typename?: "loan_requests" } & Pick<
+          Loan_Requests,
+          "amount"
+        > & {
+            supporters: Array<
+              { __typename?: "supporters" } & Pick<
+                Supporters,
+                "status" | "pledge_amount"
+              >
+            >
+          }
+      }
   >
 }
 
@@ -7291,6 +7303,13 @@ export const UpdateSupporterDocument = gql`
       supporter_id
       status
       pledge_amount
+      supported_request: loan_request {
+        amount
+        supporters {
+          status
+          pledge_amount
+        }
+      }
     }
   }
 `

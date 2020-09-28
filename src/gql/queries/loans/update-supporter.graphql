@@ -11,5 +11,12 @@
       supporter_id
       status
       pledge_amount
+      supported_request: loan_request {
+        amount
+        supporters {
+         status
+         pledge_amount 
+        }
+      }
     }
   }
