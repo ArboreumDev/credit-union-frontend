@@ -106,6 +106,33 @@ export const SUPPORTER2: User = {
   },
 }
 
+export const SUPPORTER3: User = {
+  id: "880dca39-f591-4ad4-b5fd-d1ba4fe55954",
+  name: "scrunchy",
+  email: "scrunchy@galaxy.io",
+  phone: "4321scrunch",
+  user_type: "lender",
+  demographic_info: {
+    yearsOfEducation: 1,
+    income: 100.0,
+    creditScore: 300,
+  },
+
+  user_number: 6,
+  balance: 400,
+  // if wanted we can also amend the user object like this to specify their reputation directly
+  recommendationRisksByRecommenderId: {
+    data: [
+      {
+        risk_params: {
+          beta_params: [19, 10],
+          kumr_params: [4, 5],
+        } as RiskParams,
+      },
+    ],
+  },
+}
+
 export const EDGES: EdgeTuple[] = [
   [LENDER1.id, BORROWER1.id, 100],
   [LENDER2.id, BORROWER1.id, 40],

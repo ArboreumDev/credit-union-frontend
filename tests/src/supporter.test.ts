@@ -73,6 +73,16 @@ describe("Basic loan request flow for an accepted loan", () => {
   test.skip("users can register supporters that are not on the network yet", async () => {
     // those should be put into the system by adding an edge of status unknown with the
     // other_user_mail field set to the other user
+    // TODO add loan request with unknown supporter email
+    //  - TODO dbClient createLoanRequest needs to check if supporter exists
+    //     -> yes: create entry in supporters table
+    //     -> no: create entry in edges table with status unknown
+    // TODO after we have created a new user, check edges tables for unknown-edges and
+    // create the create the corresponding pledge-requests
+    // TEST structure
+    // create loan-request with SUPPorter3-email as supporterInfo
+    // create user (SUPPORTER3)
+    // verify new user sees pledge-request on dashboard
   })
 
   test("supporters see the request for a pledge with basic info in their dashboard", async () => {
