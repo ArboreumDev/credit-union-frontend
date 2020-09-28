@@ -23,18 +23,20 @@ interface Props {
 }
 
 const getOngoingPledges = () => [
-  { name: "Gaurav", total: 20000, perc_repaid: 0.9 },
-  { name: "Nupur", total: 30000, perc_repaid: 0.5 },
-  { name: "Laurence", total: 24000, perc_repaid: 0.3 },
+  { name: "Gaurav", total: 20000, status: "active", perc_repaid: 0.9 },
+  { name: "Nupur", total: 30000, status: "active", perc_repaid: 0.5 },
+  { name: "Laurence", total: 24000, status: "repaid", perc_repaid: 0.3 },
   {
     name: "Dju",
     total: 12000,
+    status: "repaid",
     perc_repaid: 0.1,
     color: "black",
   },
   {
     name: "Sid",
     total: 15000,
+    status: "repaid",
     perc_repaid: 0.7,
   },
 ]
@@ -42,19 +44,27 @@ const getOngoingPledges = () => [
 const PledgeInvestments = () => (
   <Stack spacing="15px">
     <Box>
-      <Heading size="md">You have {5} ongoing pledge investments</Heading>
+      <Heading size="md">Pledges</Heading>
     </Box>
+    <Flex>
+      <Box verticalAlign="center" flex="1">
+        Name
+      </Box>
+      <Box verticalAlign="center" flex="1">
+        Status
+      </Box>
+      <Box flex="1">Currency</Box>
+    </Flex>
     {getOngoingPledges().map((row) => (
       <Flex key={row.name}>
         <Box verticalAlign="center" flex="1">
-          <Text color="gray.500">{row.name}</Text>
+          <Text>{row.name}</Text>
+        </Box>
+        <Box verticalAlign="center" flex="1">
+          <Text>{row.status}</Text>
         </Box>
         <Box flex="1">
-          <Text
-            alignContent="center"
-            color={row.color || "black"}
-            align="right"
-          >
+          <Text color={row.color || "black"}>
             <Currency amount={row.total} />
           </Text>
         </Box>
@@ -113,9 +123,9 @@ const LenderDashboard = ({ user }: Props) => (
     <Heading size="md">Account Overview</Heading>
     <Stack>
       <Wrap w="100%">
-        {Asset("Uninvested", dist[0] * user.balance)}
         {Asset("Invested", dist[1] * user.balance)}
         {Asset("Pledged", dist[2] * user.balance)}
+        {Asset("Uninvested", dist[0] * user.balance)}
       </Wrap>
     </Stack>
     {user.balance > 0 && (
@@ -129,9 +139,9 @@ const LenderDashboard = ({ user }: Props) => (
           </Center>
           <Center minW={320} maxW="sm">
             <Stack w="100%" spacing={6}>
-              {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
               {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
               {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
+              {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
             </Stack>
           </Center>
         </Wrap>
