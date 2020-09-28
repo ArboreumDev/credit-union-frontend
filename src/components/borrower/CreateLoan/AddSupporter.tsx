@@ -43,36 +43,37 @@ export default function AddSupporter({ addSupporter }: Props) {
         The total amount pledged by your supporters needs to be at least 20% of
         loan size
       </Text>
-      <Stack spacing="10px" minW="280px">
-        <Flex>
-          <Box flex={1}>
-            <Input
-              placeholder="Name"
-              name={`name`}
-              size="lg"
-              ref={register({ required: true })}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing="10px" minW="280px">
+          <Flex>
+            <Box flex={1}>
+              <Input
+                placeholder="Name"
+                name={`name`}
+                size="lg"
+                ref={register({ required: true })}
+              />
+            </Box>
+            <Box flex={1}>
+              <Input
+                placeholder="Email"
+                name={`email`}
+                size="lg"
+                ref={register({ required: true })}
+              />
+            </Box>
+          </Flex>
+          <Center flex={0.5}>
+            <AmountInput
+              passName={`amount`}
+              passRef={register({ required: true })}
             />
-          </Box>
-          <Box flex={1}>
-            <Input
-              placeholder="Email"
-              name={`email`}
-              size="lg"
-              ref={register({ required: true })}
-            />
-          </Box>
-        </Flex>
-        <Center flex={0.5}>
-          <AmountInput
-            passName={`amount`}
-            passRef={register({ required: true })}
-          />
+          </Center>
+        </Stack>
+        <Center>
+          <Button type="submit">Add Supporter</Button>
         </Center>
-      </Stack>
-      )
-      <Center>
-        <Button type="submit">Add Supporter</Button>
-      </Center>
+      </form>
     </Stack>
   )
 }

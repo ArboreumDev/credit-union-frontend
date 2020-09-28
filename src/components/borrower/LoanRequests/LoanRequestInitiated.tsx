@@ -15,15 +15,15 @@ import { CgFileDocument } from "react-icons/cg"
 import { LoanRequest, LoanRequestStatus, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
 import AddSupporter from "../CreateLoan/AddSupporter"
-import SupportersList from "../CreateLoan/SupportersList"
+import SupportersList, { Supporter } from "../CreateLoan/SupportersList"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
 const BLoanRequestInitiated = ({ loanRequest }: Params) => {
-  const addSupporter = (supporterId: string, pledge_amount: number) => {
-    console.log(supporterId, pledge_amount)
+  const addSupporter = (supporter: Supporter) => {
+    console.log(supporter)
   }
   return (
     <Stack padding="10px">
