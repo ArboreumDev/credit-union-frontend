@@ -3,6 +3,7 @@ import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_LOAN_TENOR,
   DEV_URL,
+  MIN_SUPPORT_RATIO,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   DEFAULT_RISK_FREE_INTEREST_RATE,
   LogEventTypes as LogEventType,
@@ -84,8 +85,6 @@ export class DbClient {
     })
     // potentially do other stuff here (notify us...)
     return { request }
-
-    // return this.calculateLoanRequestOffer(request.request_id)
   }
 
   addSupporters = async (
@@ -117,6 +116,17 @@ export class DbClient {
       status,
       pledge_amount,
     })
+    // verify if min support is reached
+    const totalSupport = supporter.supported_request.supporters
+      .filter((x) => x.status == SupporterStatus.confirmed)
+      .map((x) => x.pledge_amount)
+      .reduce((a, b) => a + b)
+    if (
+      totalSupport >=
+      supporter.supported_request.amount * MIN_SUPPORT_RATIO
+    ) {
+      await this.calculateLoanRequestOffer(request_id)
+    }
 
     return supporter
   }

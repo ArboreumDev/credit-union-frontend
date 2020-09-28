@@ -119,7 +119,6 @@ describe("Basic loan request flow for an accepted loan", () => {
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: request_id,
       })
-      console.log(loanRequest)
 
       // The AI has collected the input and stores possible terms of the loan in the db
       expect(loanRequest.status).toBe(
@@ -134,7 +133,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
   })
 
-  describe.skip("When the borrower accepts a loan offer...", () => {
+  describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
       const data = await dbClient.acceptLoanOffer(request_id, "latestOffer")
       expect(data.update_loan_requests_by_pk.status).toBe(
