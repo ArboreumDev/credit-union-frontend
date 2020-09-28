@@ -3,7 +3,7 @@ import TabHome, { TabComponent } from "components/common/home/tabs"
 import { useRouter } from "next/router"
 import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
-import AddFundsForm from "./fund"
+import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 

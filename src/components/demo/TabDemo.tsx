@@ -1,5 +1,5 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import { AddFundsForm } from "components/lender/fund"
+import { AddFundsForm } from "components/lender/Fund"
 import { UserType } from "lib/types"
 import { DemoTabView } from "./DemoViewTabs"
 import { getDashboardComponent } from "../../pages/dashboard/[[...route]]"
