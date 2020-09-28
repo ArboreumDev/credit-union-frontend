@@ -9,13 +9,27 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import { AcceptRejectPledge } from "lib/gql_api_actions"
 import { useForm } from "react-hook-form"
+import { Supporter } from "./SupportersList"
 
-export default function AddSupporter() {
+interface FormData {
+  name: string
+  email: string
+  amount: number
+}
+interface Props {
+  addSupporter: (Supporter) => void
+}
+export default function AddSupporter({ addSupporter }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
+
   const onSubmit = (data: FormData) => {
     console.log(data)
+    addSupporter({
+      name: data.name,
+      email: data.email,
+      amount: data.amount,
+    })
   }
 
   return (
@@ -34,7 +48,7 @@ export default function AddSupporter() {
           <Box flex={1}>
             <Input
               placeholder="Name"
-              name={`supporter_name`}
+              name={`name`}
               size="lg"
               ref={register({ required: true })}
             />
@@ -42,7 +56,7 @@ export default function AddSupporter() {
           <Box flex={1}>
             <Input
               placeholder="Email"
-              name={`supporter_email`}
+              name={`email`}
               size="lg"
               ref={register({ required: true })}
             />
@@ -50,14 +64,14 @@ export default function AddSupporter() {
         </Flex>
         <Center flex={0.5}>
           <AmountInput
-            passName={`supporter_amount`}
+            passName={`amount`}
             passRef={register({ required: true })}
           />
         </Center>
       </Stack>
       )
       <Center>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Add Supporter</Button>
       </Center>
     </Stack>
   )
