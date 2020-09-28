@@ -99,9 +99,9 @@ const LenderDashboard = ({ user }: Props) => (
       </>
     )}
 
-    {user.pledge_requests.length > 0 && (
+    {user.pledges.length > 0 && (
       <Box maxW="sm">
-        <PledgeInvestments />
+        <PledgeInvestments pledges={user.pledges} />
       </Box>
     )}
   </Stack>

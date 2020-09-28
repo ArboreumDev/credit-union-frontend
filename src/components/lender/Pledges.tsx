@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/core"
 import DynamicDoughnut from "components/dashboard/doughnut"
 import { dec_to_perc } from "lib/currency"
-import { User } from "../../lib/types"
+import { PledgeRequest, User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 
 const getOngoingPledges = () => [
@@ -36,8 +36,11 @@ const getOngoingPledges = () => [
     perc_repaid: 0.7,
   },
 ]
+interface Props {
+  pledges: PledgeRequest[]
+}
 
-const PledgeInvestments = () => (
+const PledgeInvestments = ({ pledges }: Props) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Pledges</Heading>
@@ -51,18 +54,16 @@ const PledgeInvestments = () => (
       </Box>
       <Box flex="1">Currency</Box>
     </Flex>
-    {getOngoingPledges().map((row) => (
-      <Flex key={row.name}>
+    {pledges.map((pledge) => (
+      <Flex key={pledge.request_id}>
         <Box verticalAlign="center" flex="1">
-          <Text>{row.name}</Text>
+          <Text>{pledge.loan_request.user.name}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{row.status}</Text>
+          <Text>{"active"}</Text>
         </Box>
         <Box flex="1">
-          <Text color={row.color || "black"}>
-            <Currency amount={row.total} />
-          </Text>
+          <Currency amount={pledge.pledge_amount} />
         </Box>
       </Flex>
     ))}
