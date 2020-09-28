@@ -17,8 +17,7 @@ CREATE TYPE public.loan_request_status AS ENUM (
 );
 CREATE TYPE public.user_t AS ENUM (
     'lender',
-    'borrower',
-    'guarantor'
+    'borrower'
 );
 CREATE TYPE public.supporter_status AS ENUM ( 
     'unknown',
@@ -51,7 +50,7 @@ CREATE TABLE public.encumbrance_participants (
 );
 CREATE TABLE public.encumbrances (
     loan_id uuid NOT NULL,
-    guarantor_id uuid NOT NULL,
+    supporter_id uuid NOT NULL,
     encumbered_asset_type text NOT NULL,
     amount_total numeric NOT NULL,
     amount_paid numeric NOT NULL,
@@ -64,13 +63,13 @@ CREATE TABLE public.encumbrances (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     encumbrance_id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
-CREATE TABLE public.guarantors (
+CREATE TABLE public.supporters (
     request_id uuid NOT NULL,
-    guarantor_id uuid NOT NULL,
-    amount integer NOT NULL,
-    status text NOT NULL,
-    invest_in_corpus boolean NOT NULL,
-    participation_request_time timestamp with time zone NOT NULL,
+    supporter_id uuid NOT NULL,
+    pledge_amount float8 NOT NULL,
+    status text DEFAULT 'unknown' NOT NULL,
+    invest_in_corpus boolean DEFAULT True NOT NULL,
+    participation_request_time timestamp with time zone DEFAULT now() NOT NULL,
     guarantee_division jsonb DEFAULT jsonb_build_object()
 );
 CREATE TABLE public.loan_participants (
@@ -165,8 +164,8 @@ ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_pkey PRIMARY KEY (encumbrance_id);
 ALTER TABLE ONLY public.encumbrance_participants
     ADD CONSTRAINT guarantee_participants_pkey PRIMARY KEY (encumbrance_id, recipient_id);
-ALTER TABLE ONLY public.guarantors
-    ADD CONSTRAINT guarantors_pkey PRIMARY KEY (request_id, guarantor_id);
+ALTER TABLE ONLY public.supporters
+    ADD CONSTRAINT supporters_pkey PRIMARY KEY (request_id, supporter_id);
 ALTER TABLE ONLY public.loan_participants
     ADD CONSTRAINT loan_participants_pkey PRIMARY KEY (loan_id, lender_id);
 ALTER TABLE ONLY public.loan_requests
@@ -204,15 +203,15 @@ ALTER TABLE ONLY public.edges
 ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_lender_id_fkey FOREIGN KEY (lender_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrances
-    ADD CONSTRAINT encumbrances_guarantor_id_fkey FOREIGN KEY (guarantor_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT encumbrances_supporter_id_fkey FOREIGN KEY (supporter_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_loan_id_fkey FOREIGN KEY (loan_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrance_participants
     ADD CONSTRAINT guarantee_participants_encumbrance_id_fkey FOREIGN KEY (encumbrance_id) REFERENCES public.encumbrances(encumbrance_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE ONLY public.guarantors
-    ADD CONSTRAINT guarantors_guarantor_id_fkey FOREIGN KEY (guarantor_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE ONLY public.guarantors
-    ADD CONSTRAINT guarantors_request_id_fkey FOREIGN KEY (request_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.supporters
+    ADD CONSTRAINT supporters_supporter_id_fkey FOREIGN KEY (supporter_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.supporters
+    ADD CONSTRAINT supporters_request_id_fkey FOREIGN KEY (request_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.loan_participants
     ADD CONSTRAINT loan_participants_lender_id_fkey FOREIGN KEY (lender_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.loan_participants
@@ -233,20 +232,6 @@ ALTER TABLE ONLY public.recommendation_risk
     ADD CONSTRAINT risk_agent_id_fkey FOREIGN KEY (agent_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.recommendation_risk
     ADD CONSTRAINT risk_neighbor_id_fkey FOREIGN KEY (neighbor_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-
-alter table "public"."guarantors" rename to "supporters";
-
-alter table "public"."supporters" rename column "guarantor_id" to "supporter_id";
-
-alter table "public"."supporters" rename column "amount" to "pledge_amount";
-
-ALTER TABLE "public"."supporters" ALTER COLUMN "pledge_amount" TYPE float8;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "invest_in_corpus" SET DEFAULT True;
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "participation_request_time" SET DEFAULT now();
-
-ALTER TABLE ONLY "public"."supporters" ALTER COLUMN "status" SET DEFAULT 'unknown';
 
 alter table "public"."recommendation_risk" drop constraint "risk_pkey";
 alter table "public"."recommendation_risk"
