@@ -3,35 +3,23 @@ import {
   Button,
   Center,
   Container,
-  FormControl,
-  FormLabel,
   Heading,
   Input,
   InputGroup,
   InputLeftAddon,
-  Radio,
-  RadioGroup,
-  RequiredIndicator,
-  Stack,
   InputLeftElement,
+  ListItem,
+  Stack,
   Text,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
+  UnorderedList,
 } from "@chakra-ui/core"
-import { useRouter } from "next/dist/client/router"
-import { useForm } from "react-hook-form"
-import { CreateUserMutationVariables } from "gql/sdk"
-import { fetcherMutate } from "lib/api"
-import Dropzone from "./Dropzone"
-import { ListItem, Spinner, UnorderedList } from "@chakra-ui/core"
-import { AiOutlineMail } from "react-icons/ai"
-import Head from "next/head"
-import { useState } from "react"
-import { UserType } from "lib/types"
 import { CreateUser } from "lib/gql_api_actions"
+import { UserType } from "lib/types"
+import { useRouter } from "next/dist/client/router"
+import Head from "next/head"
+import { useForm } from "react-hook-form"
+import { AiOutlineMail } from "react-icons/ai"
+import Dropzone from "./Dropzone"
 
 type FormData = {
   firstname: string

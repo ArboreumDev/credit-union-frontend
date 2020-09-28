@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import { useForm } from "react-hook-form"
-import { Supporter } from "./SupportersList"
 
 interface FormData {
   name: string
