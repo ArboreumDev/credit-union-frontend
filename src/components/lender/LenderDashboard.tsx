@@ -106,7 +106,7 @@ const LenderDashboard = ({ user }: Props) => (
           <StatLabel fontSize="lg">
             <Tooltip label="Annual Percentage Yield">APY</Tooltip>
           </StatLabel>
-          <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
+          <StatNumber fontSize="3xl">{dec_to_perc(0.163)}%</StatNumber>
         </Stat>
       )}
     </HStack>

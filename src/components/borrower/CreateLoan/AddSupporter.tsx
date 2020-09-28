@@ -20,10 +20,10 @@ export default function AddSupporter() {
 
   return (
     <Stack>
-      <Heading size="md">Add Supporter</Heading>
+      <Heading size="md">Add Supporters</Heading>
       <Text>
-        Supporters are your friends and colleagues who improve your credit
-        rating by guaranteeing a part of your loan.
+        Add well-wishers who can contribute to your loan to help reduce your
+        interest rate
       </Text>
       <Text>
         The total amount pledged by your supporters needs to be at least 20% of

@@ -2,7 +2,6 @@ import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
-import useUser from "lib/useUser"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -45,14 +44,7 @@ export function AddFundsForm({ user }: Props) {
           <Box h="10px" />
           <Box padding="20px">
             <ul>
-              <li>
-                The amount invested will automatically be allocated towards
-                several loans.
-              </li>
-              <li>
-                Funds once invested, cannot be withdrawn before payback is
-                complete.
-              </li>
+              <li>Your funds will be invested across many loans</li>
               <li>
                 At any point in time, you may withdraw un-invested funds from
                 your account.

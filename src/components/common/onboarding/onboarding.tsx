@@ -62,7 +62,7 @@ export default function Onboarding({ user, userType }: Params) {
       },
     })
       .then((res) => {
-        location.href = "/dashboard"
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
@@ -147,9 +147,9 @@ export default function Onboarding({ user, userType }: Params) {
                 </Box>
                 <Box>
                   <Dropzone email={user.email}>
-                    <p>Drop financial documents here: </p>
+                    <p>Upload financial documents here: </p>
                     <UnorderedList>
-                      <ListItem>latest Income Tax Returns</ListItem>
+                      <ListItem>Latest Income Tax Returns</ListItem>
                       <ListItem>Bank Statement for last 6 months</ListItem>
                     </UnorderedList>
                   </Dropzone>
