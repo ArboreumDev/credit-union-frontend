@@ -31,7 +31,7 @@ interface Params {
 const LoanRequestTable = ({ loanRequest }: Params) => {
   const confirmed = loanRequest.supporters.filter(
     (x) => x.status == SupporterStatus.confirmed
-  )
+  ).length
   const calculatedRisk = loanRequest.risk_calc_result
     .latestOffer as SwarmAiResponse
   return (
@@ -46,7 +46,7 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
         <Box flex={0.5}>Support</Box>
         <Box flex={0.5} textAlign="right">
           <p>
-            {confirmed} out of {loanRequest.supporters.length} have confirmed{" "}
+            {confirmed} out of {loanRequest.supporters.length} have confirmed
           </p>
         </Box>
       </Flex>
