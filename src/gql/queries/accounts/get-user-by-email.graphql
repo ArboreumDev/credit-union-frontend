@@ -19,6 +19,10 @@ query GetUserByEmail($email: String!) {
       created_at
       amount
       purpose
+      supporters {
+        pledge_amount
+        status
+      }
     }
     pledge_requests: supporters (where: {status: {_eq: "unknown"}}) {
       request_id

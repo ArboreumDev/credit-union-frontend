@@ -6548,7 +6548,14 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "status"
             | "created_at"
             | "amount"
-          >
+          > & {
+              supporters: Array<
+                { __typename?: "supporters" } & Pick<
+                  Supporters,
+                  "pledge_amount" | "status"
+                >
+              >
+            }
         >
         pledge_requests: Array<
           { __typename?: "supporters" } & Pick<
@@ -7055,6 +7062,10 @@ export const GetUserByEmailDocument = gql`
         created_at
         amount
         purpose
+        supporters {
+          pledge_amount
+          status
+        }
       }
       pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
         request_id

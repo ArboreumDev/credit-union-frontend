@@ -16,7 +16,12 @@ import {
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
-import { CalculatedRisk, LoanRequest, SwarmAiResponse } from "lib/types"
+import {
+  CalculatedRisk,
+  LoanRequest,
+  SwarmAiResponse,
+  SupporterStatus,
+} from "lib/types"
 import { Currency } from "../../common/Currency"
 
 interface Params {
@@ -24,6 +29,9 @@ interface Params {
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
+  const confirmed = loanRequest.supporters.filter(
+    (x) => x.status == SupporterStatus.confirmed
+  )
   const calculatedRisk = loanRequest.risk_calc_result
     .latestOffer as SwarmAiResponse
   return (
@@ -32,6 +40,14 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
         <Box flex={0.5}>Principal</Box>
         <Box flex={0.5} textAlign="right">
           <Currency amount={loanRequest.amount} />
+        </Box>
+      </Flex>
+      <Flex>
+        <Box flex={0.5}>Support</Box>
+        <Box flex={0.5} textAlign="right">
+          <p>
+            {confirmed} out of {loanRequest.supporters.length} have confirmed{" "}
+          </p>
         </Box>
       </Flex>
       <Flex>
