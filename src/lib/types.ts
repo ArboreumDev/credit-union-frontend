@@ -105,6 +105,7 @@ export type LoanInfo = {
   penalty_apr: number
   repayments?: number[]
   loan_schedule?: any
+  desired_irr?: number
 }
 
 export type RiskInput = {
