@@ -132,12 +132,12 @@ export class AcceptRejectPledge extends Action {
   }
 
   run() {
-    return this.dbClient.sdk.UpdateSupporter({
-      request_id: this.payload.request_id,
-      supporter_id: this.user.id,
-      status: this.payload.status, // see types.SupporterStatus
-      pledge_amount: this.payload.pledge_amount,
-    })
+    return this.dbClient.updateSupporter(
+      this.payload.request_id,
+      this.user.id,
+      this.payload.status, // see types.SupporterStatus
+      this.payload.pledge_amount
+    )
   }
 
   static fetch(payload: typeof AcceptRejectPledge.InputType) {

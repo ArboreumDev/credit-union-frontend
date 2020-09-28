@@ -102,6 +102,22 @@ export class DbClient {
     return data
   }
 
+  updateSupporter = async (
+    request_id: string,
+    supporter_id: string,
+    status: SupporterStatus,
+    pledge_amount: number
+  ) => {
+    const { supporter } = await this.sdk.UpdateSupporter({
+      request_id,
+      supporter_id,
+      status,
+      pledge_amount,
+    })
+
+    return supporter
+  }
+
   callSwarmAI = async (url: string, payload: any) => {
     // const data = { request_msg: sampleAiInput }
     const params = {
