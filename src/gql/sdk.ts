@@ -6563,7 +6563,7 @@ export type PledgeFieldsFragment = { __typename?: "supporters" } & Pick<
 > & {
     loan_request: { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "purpose" | "amount" | "risk_calc_result"
+      "purpose" | "amount" | "status" | "risk_calc_result"
     > & { user: { __typename?: "user" } & Pick<User, "email" | "name"> }
   }
 
@@ -6964,6 +6964,7 @@ export const PledgeFieldsFragmentDoc = gql`
     loan_request {
       purpose
       amount
+      status
       user {
         email
         name

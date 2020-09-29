@@ -36,6 +36,7 @@ fragment pledgeFields on supporters {
   loan_request {
     purpose
     amount
+    status
     user {
       email
       name
