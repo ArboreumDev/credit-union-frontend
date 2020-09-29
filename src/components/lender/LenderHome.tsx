@@ -1,10 +1,11 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import AddFundsForm from "./fund"
+import { Box, Text } from "@chakra-ui/core"
+import TabHome, { TabComponent } from "components/common/home/tabs"
+import { useRouter } from "next/router"
 import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
+import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
-import TabHome, { TabComponent } from "components/common/home/tabs"
 
 interface Props {
   user: User
@@ -12,6 +13,9 @@ interface Props {
 }
 
 const LenderHome = ({ user, initPanelIdx }: Props) => {
+  const router = useRouter()
+  const { route } = router.query
+
   const tabs = [
     new TabComponent(
       "Dashboard",
@@ -25,7 +29,7 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       )
     ),
     new TabComponent(
-      "Invest",
+      user.balance <= 0 ? <Text fontWeight="bold">Invest</Text> : "Invest",
       (
         <Box maxW="lg">
           <AddFundsForm user={user} />

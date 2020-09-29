@@ -6558,21 +6558,22 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             }
         >
         pledge_requests: Array<
-          { __typename?: "supporters" } & Pick<
-            Supporters,
-            "request_id" | "pledge_amount" | "participation_request_time"
-          > & {
-              loan_request: { __typename?: "loan_requests" } & Pick<
-                Loan_Requests,
-                "purpose" | "amount" | "risk_calc_result"
-              > & {
-                  user: { __typename?: "user" } & Pick<User, "email" | "name">
-                }
-            }
+          { __typename?: "supporters" } & PledgeFieldsFragment
         >
+        pledges: Array<{ __typename?: "supporters" } & PledgeFieldsFragment>
       }
   >
 }
+
+export type PledgeFieldsFragment = { __typename?: "supporters" } & Pick<
+  Supporters,
+  "request_id" | "pledge_amount" | "participation_request_time"
+> & {
+    loan_request: { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "purpose" | "amount" | "status" | "risk_calc_result"
+    > & { user: { __typename?: "user" } & Pick<User, "email" | "name"> }
+  }
 
 export type SetUserCashBalanceMutationVariables = Exact<{
   userId: Scalars["uuid"]
@@ -6975,6 +6976,23 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export const PledgeFieldsFragmentDoc = gql`
+  fragment pledgeFields on supporters {
+    request_id
+    pledge_amount
+    participation_request_time
+    loan_request {
+      purpose
+      amount
+      status
+      user {
+        email
+        name
+      }
+      risk_calc_result
+    }
+  }
+`
 export const ChangeUserCashBalanceDocument = gql`
   mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
     user: update_user_by_pk(
@@ -7068,21 +7086,14 @@ export const GetUserByEmailDocument = gql`
         }
       }
       pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
-        request_id
-        pledge_amount
-        participation_request_time
-        loan_request {
-          purpose
-          amount
-          user {
-            email
-            name
-          }
-          risk_calc_result
-        }
+        ...pledgeFields
+      }
+      pledges: supporters(where: { status: { _eq: "confirmed" } }) {
+        ...pledgeFields
       }
     }
   }
+  ${PledgeFieldsFragmentDoc}
 `
 export const SetUserCashBalanceDocument = gql`
   mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {

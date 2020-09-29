@@ -10,7 +10,8 @@ import {
   Text,
 } from "@chakra-ui/core"
 import AppBar from "components/common/nav/AppBar"
-import WithdrawFundsForm from "components/lender/withdraw"
+import LogoutButton from "components/common/nav/LogoutButton"
+import WithdrawFundsForm from "components/lender/Withdraw"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
@@ -35,6 +36,7 @@ const txLenderFixture = [
 ]
 
 export const Profile = ({ user }: Props) => {
+  const { user: _, mutate } = useUser()
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -54,39 +56,33 @@ export const Profile = ({ user }: Props) => {
         </Stack>
       )}
       <Divider />
-
-      <Box>
-        <Heading as="h4" size="md">
-          Transactions
-        </Heading>
-        <Box h="10px" />
-        <Stack>
-          {transactions.map((tx, idx) => (
-            <Flex key={idx + "row"}>
-              <Box w="200px">
-                <Text color="gray.500">{tx.key}</Text>
-              </Box>
-              <Box flex="1">
-                <Text align="right">{tx.type}</Text>
-              </Box>
-              <Box w="200px">
-                <Text align="right">{tx.value}</Text>
-              </Box>
-            </Flex>
-          ))}
-        </Stack>
-      </Box>
-
+      {/* 
+      {user.user_type === UserType.Borrower && (
+        <Box>
+          <Heading as="h4" size="md">
+            Transactions (for demo)
+          </Heading>
+          <Box h="10px" />
+          <Stack>
+            {transactions.map((tx, idx) => (
+              <Flex key={idx + "row"}>
+                <Box w="200px">
+                  <Text color="gray.500">{tx.key}</Text>
+                </Box>
+                <Box flex="1">
+                  <Text align="right">{tx.type}</Text>
+                </Box>
+                <Box w="200px">
+                  <Text align="right">{tx.value}</Text>
+                </Box>
+              </Flex>
+            ))}
+          </Stack>
+        </Box>
+      )} */}
       <Box h="20px" />
       <Divider />
-      <Button
-        onClick={() => Router.push("/api/auth/signout")}
-        rightIcon={<CgLogOut />}
-        colorScheme="blue"
-        variant="outline"
-      >
-        Logout
-      </Button>
+      <LogoutButton />
     </Stack>
   )
 }

@@ -1,6 +1,7 @@
-import { Box, Center, Flex, HStack, Text } from "@chakra-ui/core"
+import { Box, Button, Center, Flex, HStack, Text } from "@chakra-ui/core"
 import Link from "next/link"
 import React from "react"
+import CompanyX from "./Companyx"
 import DrawerButton from "./Drawer"
 import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
 
@@ -22,15 +23,11 @@ const AppBar = () => (
         <Link href="/dashboard">
           <img width="150px" src="/images/logo.svg" alt="logo" />
         </Link>
-        <Center h="24px">
-          <Text color="gray.500" as="samp">
-            CompanyX
-          </Text>
-        </Center>
       </HStack>
     </Flex>
     <Box flex="1"></Box>
     <HStack className="navButtons">
+      <CompanyX />
       <FeedbackPopover />
       <SupportPopover />
     </HStack>

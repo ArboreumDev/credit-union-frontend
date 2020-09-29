@@ -1,8 +1,8 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import { fetcherMutate } from "lib/api"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -15,6 +15,7 @@ interface Props {
 }
 
 export function AddFundsForm({ user }: Props) {
+  const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
@@ -25,7 +26,7 @@ export function AddFundsForm({ user }: Props) {
       delta: formData.amount,
     })
       .then((res) => {
-        location.href = "/dashboard"
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
@@ -43,16 +44,9 @@ export function AddFundsForm({ user }: Props) {
           <Box h="10px" />
           <Box padding="20px">
             <ul>
+              <li>Your funds will be invested across many loans</li>
               <li>
-                The amount invested will automatically be allocated towards
-                several loans.
-              </li>
-              <li>
-                Funds once invested, cannot be withdrawn before payback is
-                complete.
-              </li>
-              <li>
-                An any point in time, you may withdraw un-invested funds from
+                At any point in time, you may withdraw un-invested funds from
                 your account.
               </li>
             </ul>

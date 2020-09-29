@@ -2,6 +2,9 @@ import {
   Box,
   Center,
   Container,
+  Flex,
+  Heading,
+  Stack,
   Stat,
   StatGroup,
   StatLabel,
@@ -9,39 +12,54 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { CgFileDocument } from "react-icons/cg"
-import { LoanRequest } from "lib/types"
+import { LoanRequest, LoanRequestStatus, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
+import AddSupporter from "../CreateLoan/AddSupporter"
+import SupportersList, { Supporter } from "../CreateLoan/SupportersList"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
-const BLoanRequestInitiated = ({ loanRequest }: Params) => (
-  <Box padding="10px">
-    <Center>
-      <Text fontSize="100px">
-        <CgFileDocument />
-      </Text>
-    </Center>
-    <Center>
-      <Text>Loan request is being processed.</Text>
-    </Center>
-    <Box h="30px" />
-    <StatGroup>
-      <Stat>
-        <StatLabel>Amount</StatLabel>
-        <StatNumber>
-          <Currency
-            amount={loanRequest.risk_calc_result.latestOffer.loan_info.amount}
-          />
-        </StatNumber>
-      </Stat>
-      <Stat>
-        <StatLabel>Purpose</StatLabel>
-        <StatNumber>{loanRequest.purpose}</StatNumber>
-      </Stat>
-    </StatGroup>
-  </Box>
-)
+const BLoanRequestInitiated = ({ loanRequest }: Params) => {
+  const addSupporter = (supporter: Supporter) => {
+    console.log(supporter)
+  }
+  return (
+    <Stack spacing={10}>
+      <Stack>
+        <Center>
+          <Text fontSize="100px">
+            <CgFileDocument />
+          </Text>
+        </Center>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Amount</StatLabel>
+            <StatNumber>
+              <Currency amount={loanRequest.amount} />
+            </StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Purpose</StatLabel>
+            <StatNumber>{loanRequest.purpose}</StatNumber>
+          </Stat>
+        </StatGroup>
+      </Stack>
+      <SupportersList
+        supporters={[
+          {
+            name: "Gaurav",
+            email: "gp@arboreum.dev",
+            amount: 1000,
+            status: SupporterStatus.confirmed,
+          },
+        ]}
+        loanRequest={loanRequest}
+      />
+      <AddSupporter addSupporter={addSupporter} />
+    </Stack>
+  )
+}
 
 export default BLoanRequestInitiated

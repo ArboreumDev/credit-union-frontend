@@ -89,8 +89,8 @@ export class DbClient {
 
   addSupporters = async (
     requestId: string,
-    supporterIds: [string],
-    amounts: [number]
+    supporterIds: string[],
+    amounts: number[]
   ) => {
     const supporters = []
     for (let i = 0; i < supporterIds.length; i++) {
