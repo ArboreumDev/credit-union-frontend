@@ -34,15 +34,15 @@ const Asset = (title: string, amount: number) => (
 )
 const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   <Flex>
-    <Box flex={0.6}>
-      <Text color={color} fontSize="lg">
+    <Box flex={0.7}>
+      <Text color={color} fontWeight="bold" fontSize="lg">
         {title}
       </Text>
     </Box>
     <Box flex={1}>
-      <Progress color={color} h="20px" value={percentage} />
+      <Progress color={color} h="25px" value={percentage} />
     </Box>
-    <Box flex={0.3} textAlign="right">
+    <Box flex={0.4} textAlign="right">
       <Text color={color} fontSize="lg">
         {percentage}%
       </Text>
@@ -66,37 +66,47 @@ const LenderDashboard = ({ user }: Props) => {
             <Currency amount={lender.totalAssets} />
           </StatNumber>
         </Stat>
-        {user.balance > 0 && (
+        {lender.uninvested > 0 && (
           <Stat>
             <StatLabel fontSize="lg">
               <Tooltip label="Annual Percentage Yield">APY</Tooltip>
             </StatLabel>
-            <StatNumber fontSize="3xl">{dec_to_perc(0.163)}%</StatNumber>
+            <StatNumber fontSize="3xl">{lender.APY}%</StatNumber>
           </Stat>
         )}
       </HStack>
       <Heading size="md">Account Overview</Heading>
       <Stack>
         <Wrap w="100%">
-          {Asset("Invested", dist[1] * user.balance)}
-          {Asset("Pledged", dist[2] * user.balance)}
-          {Asset("Uninvested", dist[0] * user.balance)}
+          {Asset("Invested", lender.invested)}
+          {Asset("Pledged", lender.totalPledgeAmount)}
+          {Asset("Uninvested", lender.uninvested)}
         </Wrap>
       </Stack>
-      {user.balance > 0 && (
+      {lender.totalAssets > 0 && (
         <>
           <Heading size="md">Asset Allocation</Heading>
           <Wrap w="100%" spacing={[8, 0, 0, 0]}>
             <Center minW={320} maxW="sm">
               <Box w={160}>
-                <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
+                <DynamicDoughnut
+                  amounts={[
+                    lender.invested,
+                    lender.totalPledgeAmount,
+                    lender.uninvested,
+                  ]}
+                />
               </Box>
             </Center>
             <Center minW={320} maxW="sm">
               <Stack w="100%" spacing={6}>
-                {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
-                {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
-                {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
+                {AllocatedAsset("Invested", lender.percInvested, "blue.500")}
+                {AllocatedAsset("Pledged", lender.percPledged, "green.500")}
+                {AllocatedAsset(
+                  "Uninvested",
+                  lender.percUninvested,
+                  "gray.400"
+                )}
               </Stack>
             </Center>
           </Wrap>
