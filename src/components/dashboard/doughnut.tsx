@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Doughnut } from "react-chartjs-2"
-import { Center, Box } from "@chakra-ui/core"
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min

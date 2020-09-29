@@ -50,10 +50,6 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   </Flex>
 )
 
-// demo var
-const dist = [0.2, 0.5, 0.3]
-const distPerc = dist.map(dec_to_perc)
-
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
 
