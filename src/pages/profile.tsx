@@ -56,7 +56,7 @@ export const Profile = ({ user }: Props) => {
         </Stack>
       )}
       <Divider />
-
+      {/* 
       {user.user_type === UserType.Borrower && (
         <Box>
           <Heading as="h4" size="md">
@@ -79,7 +79,7 @@ export const Profile = ({ user }: Props) => {
             ))}
           </Stack>
         </Box>
-      )}
+      )} */}
       <Box h="20px" />
       <Divider />
       <LogoutButton />

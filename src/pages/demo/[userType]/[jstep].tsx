@@ -42,6 +42,10 @@ export const lJourneySequence = [
   new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
   new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
   new JStep(
+    "Lender Dashboard with Assets",
+    getDashboardComponent(Fixtures.LenderWithInvestments)
+  ),
+  new JStep(
     "Lender Dashboard with Notification",
     getDashboardComponent(Fixtures.LenderWithPledgeRequest)
   ),

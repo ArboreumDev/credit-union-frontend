@@ -14,8 +14,8 @@ export default class LenderModel {
 
   get totalPledgeAmount() {
     return this.user.pledges
-      ?.map((p) => p.pledge_amount)
-      .reduce((a, b) => a + b)
+      .map((p) => p.pledge_amount)
+      .reduce((a, b) => a + b, 0)
   }
 
   get totalAssets() {
