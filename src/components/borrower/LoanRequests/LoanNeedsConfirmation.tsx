@@ -23,6 +23,7 @@ import {
   SupporterStatus,
 } from "lib/types"
 import { Currency } from "../../common/Currency"
+import { AcceptLoanOffer } from "../../../lib/gql_api_actions"
 
 interface Params {
   loanRequest: LoanRequest
@@ -94,6 +95,7 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
 export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
+    AcceptLoanOffer.fetch({ request_id: loanRequest.request_id })
   }
   const rejectLoan = () => {
     console.log("reject loan", JSON.stringify(loanRequest))
