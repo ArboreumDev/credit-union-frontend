@@ -13,6 +13,7 @@ export class Fixtures {
     kyc_approved: true,
     loan_requests: [],
     pledge_requests: [],
+    pledges: [],
   }
 
   static Borrower: User = {
@@ -27,6 +28,7 @@ export class Fixtures {
     kyc_approved: false,
     loan_requests: [],
     pledge_requests: [],
+    pledges: [],
   }
 
   static BorrowerKYCConfirmed: User = {
@@ -37,15 +39,15 @@ export class Fixtures {
   static LoanRequest: LoanRequest = {
     confirmation_date: null,
     payback_status: null,
-    purpose: "Home loan",
+    purpose: "Home Repair",
     risk_calc_result: {
       loanTerm: 6,
       interestRate: 0.07,
-      totalDue: 128400,
+      totalDue: 96300,
     },
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
-    amount: 120000,
+    amount: 90000,
   }
 
   static LoanRequestNeedsConfirmation = {
@@ -72,8 +74,28 @@ export class Fixtures {
     loan_requests: [Fixtures.LoanRequestLive],
   }
 
-  static LenderWithPledgeRequest = {
+  static LenderWithInvestments = {
     ...Fixtures.Lender,
+    balance: 10000,
+    corpus_share: 1000,
+    pledges: [
+      {
+        request_id: "loan_req_id",
+        pledge_amount: 5000,
+        participation_request_time: "",
+        loan_request: {
+          ...Fixtures.LoanRequest,
+          user: {
+            email: "gp@arboreum.dev",
+            name: "Gaurav",
+          },
+        },
+      },
+    ],
+  }
+
+  static LenderWithPledgeRequest = {
+    ...Fixtures.LenderWithInvestments,
     pledge_requests: [
       {
         request_id: "loan_req_id",

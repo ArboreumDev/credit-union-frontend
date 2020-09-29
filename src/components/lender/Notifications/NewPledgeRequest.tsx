@@ -73,9 +73,7 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
             </Table>
           </AlertDescription>
           <AlertDescription>
-            <Text>
-              Repayments are expected to be made at the end of every month
-            </Text>
+            <Text>Monthly repayments</Text>
           </AlertDescription>
         </Stack>
       </Collapse>

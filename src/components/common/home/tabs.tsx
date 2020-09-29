@@ -1,7 +1,7 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
 
 export class TabComponent {
-  constructor(public title: string, public component: any) {}
+  constructor(public title: any, public component: any) {}
 }
 
 interface Props {

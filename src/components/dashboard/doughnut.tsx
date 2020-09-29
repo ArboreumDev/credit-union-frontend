@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Doughnut } from "react-chartjs-2"
-import { Center, Box } from "@chakra-ui/core"
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -8,16 +7,12 @@ function getRandomInt(min, max) {
 
 export default function DynamicDoughnut({ amounts }: any) {
   const state = {
-    labels: [
-      "Uninvested amount",
-      "Invested amount",
-      "Pledge amount as supporter",
-    ],
+    labels: ["Invested", "Pledged", "Uninvested"],
     datasets: [
       {
         data: amounts,
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: ["#3481ce", "#38a169", "#a3b1c0"],
+        hoverBackgroundColor: ["#3481ce", "#38a169", "#a3b1c0"],
       },
     ],
   }

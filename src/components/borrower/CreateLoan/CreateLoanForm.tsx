@@ -31,8 +31,6 @@ interface Props {
 
 export default function CreateLoanForm({ user }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [nSup, supCount] = useState(1)
-
   const onSubmit = (data: FormData) => {
     console.log(data)
     CreateLoan.fetch({
@@ -81,52 +79,6 @@ export default function CreateLoanForm({ user }: Props) {
                 <option value="Business activity">Business activity</option>
                 <option value="Other">Other</option>
               </Select>
-            </Stack>
-            <Stack>
-              <Heading size="md">Supporters</Heading>
-              <Text>
-                Supporters are your friends and colleagues who improve your
-                credit rating by guaranteeing a part of your loan.
-              </Text>
-              <Text>
-                The total amount pledged by your supporters needs to be at least
-                20% of loan size
-              </Text>
-
-              {Array.from({ length: nSup }, (x, i) => i).map((idx) => (
-                <Stack key={idx} spacing="10px" minW="280px">
-                  <Text>Supporter {idx + 1}: </Text>
-                  <Flex>
-                    <Box flex={1}>
-                      <Input
-                        placeholder="Name"
-                        name={`supporter_${idx}_name`}
-                        size="lg"
-                        ref={register({ required: true })}
-                      />
-                    </Box>
-                    <Box flex={1}>
-                      <Input
-                        placeholder="Email"
-                        name={`supporter_${idx}_email`}
-                        size="lg"
-                        ref={register({ required: true })}
-                      />
-                    </Box>
-                  </Flex>
-                  <Center flex={0.5}>
-                    <AmountInput
-                      passName={`supporter_${idx}_amount`}
-                      passRef={register({ required: true })}
-                    />
-                  </Center>
-                </Stack>
-              ))}
-              <Center>
-                <Button variant="ghost" onClick={() => supCount(nSup + 1)}>
-                  Add Supporter
-                </Button>
-              </Center>
             </Stack>
 
             <Center>

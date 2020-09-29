@@ -20,19 +20,27 @@ query GetUserByEmail($email: String!) {
       amount
       purpose
     }
-    pledge_requests: supporters (where: {status: {_eq: "unknown"}}) {
-      request_id
-      pledge_amount
-      participation_request_time
-      loan_request {
-        purpose
-        amount
-        user {
-          email
-          name
-        }
-        risk_calc_result
-      }
+    pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
+      ...pledgeFields
     }
+    pledges: supporters(where: { status: { _eq: "confirmed" } }) {
+      ...pledgeFields
+    }
+  }
+}
+
+fragment pledgeFields on supporters {
+  request_id
+  pledge_amount
+  participation_request_time
+  loan_request {
+    purpose
+    amount
+    status
+    user {
+      email
+      name
+    }
+    risk_calc_result
   }
 }

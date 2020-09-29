@@ -1,19 +1,8 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Heading,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/core"
+import { Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import { Currency } from "components/common/Currency"
-import AppBar from "components/common/nav/AppBar"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
-import useUser from "lib/useUser"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -37,8 +26,8 @@ export function WithdrawFundsForm({ user }: Props) {
       userId: user.id,
       delta: -formData.amount,
     })
-      .then((res) => {
-        location.href = "/dashboard"
+      .then(async (res) => {
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
@@ -51,14 +40,17 @@ export function WithdrawFundsForm({ user }: Props) {
             Enter the amount you wish to withdraw (Max{" "}
             <Currency amount={user.balance ?? 0} />)
           </Text>
-          <AmountInput
-            passName="amount"
-            passRef={register({ required: true })}
-          />
-
-          <Center>
-            <Button type="submit">Submit</Button>
-          </Center>
+          <Flex>
+            <Box flex={1}>
+              <AmountInput
+                passName="amount"
+                passRef={register({ required: true })}
+              />
+            </Box>
+            <Center flex={0.4}>
+              <Button type="submit">Withdraw</Button>
+            </Center>
+          </Flex>
         </Stack>
       </form>
     </Box>

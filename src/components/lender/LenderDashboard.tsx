@@ -10,58 +10,20 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  Tooltip,
   Wrap,
 } from "@chakra-ui/core"
+import DynamicDoughnut from "components/dashboard/doughnut"
+import { dec_to_perc } from "lib/currency"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
-import { dec_to_perc } from "lib/currency"
-import DynamicDoughnut from "components/dashboard/doughnut"
-import LineChart from "components/dashboard/linechart"
+import LenderModel from "./LenderModel"
+import PledgeInvestments from "./Pledges"
 
 interface Props {
   user: User
 }
 
-const getOngoingPledges = () => [
-  { name: "Gaurav", total: 120000, perc_repaid: 0.9 },
-  { name: "Nupur", total: 120000, perc_repaid: 0.5 },
-  { name: "Laurence", total: 20000, perc_repaid: 0.3 },
-  {
-    name: "Dju",
-    total: 20000,
-    perc_repaid: 0.1,
-    color: "black",
-  },
-  {
-    name: "Sid",
-    total: 25000,
-    perc_repaid: 0.7,
-  },
-]
-
-const PledgeInvestments = () => (
-  <Stack spacing="15px">
-    <Box>
-      <Heading size="md">You have {5} ongoing pledge investments</Heading>
-    </Box>
-    {getOngoingPledges().map((row) => (
-      <Flex key={row.name}>
-        <Box verticalAlign="center" flex="1">
-          <Text color="gray.500">{row.name}</Text>
-        </Box>
-        <Box flex="1">
-          <Text
-            alignContent="center"
-            color={row.color || "black"}
-            align="right"
-          >
-            <Currency amount={row.total} />
-          </Text>
-        </Box>
-      </Flex>
-    ))}
-  </Stack>
-)
 const Asset = (title: string, amount: number) => (
   <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
     <Box flex={0.5}>{title}</Box>
@@ -72,15 +34,15 @@ const Asset = (title: string, amount: number) => (
 )
 const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   <Flex>
-    <Box flex={0.6}>
-      <Text color={color} fontSize="lg">
+    <Box flex={0.7}>
+      <Text color={color} fontWeight="bold" fontSize="lg">
         {title}
       </Text>
     </Box>
     <Box flex={1}>
-      <Progress color={color} h="20px" value={percentage} />
+      <Progress color={color} h="25px" value={percentage} />
     </Box>
-    <Box flex={0.3} textAlign="right">
+    <Box flex={0.4} textAlign="right">
       <Text color={color} fontSize="lg">
         {percentage}%
       </Text>
@@ -88,50 +50,72 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   </Flex>
 )
 
-// demo var
-const dist = [0.2, 0.5, 0.3]
-const distPerc = dist.map(dec_to_perc)
+const LenderDashboard = ({ user }: Props) => {
+  const lender = new LenderModel(user)
 
-const LenderDashboard = ({ user }: Props) => (
-  <Stack w="100%" spacing={8}>
-    <HStack spacing={20} marginTop={1}>
-      <Stat>
-        <StatLabel fontSize="lg">Total Assets</StatLabel>
-        <StatNumber fontSize="3xl">
-          <Currency amount={user.balance} />
-        </StatNumber>
-      </Stat>
-      <Stat>
-        <StatLabel fontSize="lg">APY</StatLabel>
-        <StatNumber fontSize="3xl">{dec_to_perc(0.045)}%</StatNumber>
-      </Stat>
-    </HStack>
-    <Heading size="md">Account Overview</Heading>
-    <Stack>
-      <Wrap w="100%">
-        {Asset("Uninvested", dist[0] * user.balance)}
-        {Asset("Invested", dist[1] * user.balance)}
-        {Asset("Pledged", dist[2] * user.balance)}
-      </Wrap>
-    </Stack>
-    <Heading size="md">Asset Allocation</Heading>
-    <Wrap w="100%" spacing={[8, 0, 0, 0]}>
-      <Center minW={320} maxW="sm">
-        <Box w={160}>
-          <DynamicDoughnut amounts={dist.map((d) => d * user.balance)} />
+  return (
+    <Stack w="100%" spacing={8}>
+      <HStack spacing={20} marginTop={1}>
+        <Stat>
+          <StatLabel fontSize="lg">Total Assets</StatLabel>
+          <StatNumber fontSize="3xl">
+            <Currency amount={lender.totalAssets} />
+          </StatNumber>
+        </Stat>
+        {lender.uninvested > 0 && (
+          <Stat>
+            <StatLabel fontSize="lg">
+              <Tooltip label="Annual Percentage Yield">APY</Tooltip>
+            </StatLabel>
+            <StatNumber fontSize="3xl">{lender.APY}%</StatNumber>
+          </Stat>
+        )}
+      </HStack>
+      <Heading size="md">Account Overview</Heading>
+      <Stack>
+        <Wrap w="100%">
+          {Asset("Invested", lender.invested)}
+          {Asset("Pledged", lender.totalPledgeAmount)}
+          {Asset("Uninvested", lender.uninvested)}
+        </Wrap>
+      </Stack>
+      {lender.totalAssets > 0 && (
+        <>
+          <Heading size="md">Asset Allocation</Heading>
+          <Wrap w="100%" spacing={[8, 0, 0, 0]}>
+            <Center minW={320} maxW="sm">
+              <Box w={160}>
+                <DynamicDoughnut
+                  amounts={[
+                    lender.invested,
+                    lender.totalPledgeAmount,
+                    lender.uninvested,
+                  ]}
+                />
+              </Box>
+            </Center>
+            <Center minW={320} maxW="sm">
+              <Stack w="100%" spacing={6}>
+                {AllocatedAsset("Invested", lender.percInvested, "blue.500")}
+                {AllocatedAsset("Pledged", lender.percPledged, "green.500")}
+                {AllocatedAsset(
+                  "Uninvested",
+                  lender.percUninvested,
+                  "gray.500"
+                )}
+              </Stack>
+            </Center>
+          </Wrap>
+        </>
+      )}
+
+      {user.pledges?.length > 0 && (
+        <Box maxW="sm">
+          <PledgeInvestments pledges={user.pledges} />
         </Box>
-      </Center>
-      <Center minW={320} maxW="sm">
-        <Stack w="100%" spacing={6}>
-          {AllocatedAsset("Uninvested", distPerc[0], "#FF6384")}
-          {AllocatedAsset("Invested", distPerc[1], "#36A2EB")}
-          {AllocatedAsset("Pledged", distPerc[2], "#FFCE56")}
-        </Stack>
-      </Center>
-    </Wrap>
-    <Box maxW="sm">
-      <PledgeInvestments />
-    </Box>
-  </Stack>
-)
+      )}
+    </Stack>
+  )
+}
+
 export default LenderDashboard

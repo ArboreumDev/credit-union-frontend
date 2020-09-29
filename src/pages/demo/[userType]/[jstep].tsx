@@ -4,12 +4,8 @@ import Onboarding from "components/common/onboarding/onboarding"
 import { Fixtures } from "lib/demo/fixtures"
 import { UserType } from "lib/types"
 import { useRouter } from "next/router"
-import { getDashboardComponent } from "pages/dashboard"
-import { AddFundsForm } from "components/lender/fund"
+import { getDashboardComponent } from "pages/dashboard/[[...route]]"
 import LoginPage from "pages/login"
-import { Profile } from "pages/profile"
-import AppBar from "components/common/nav/AppBar"
-import LenderHome from "components/lender/LenderHome"
 
 export class JStep {
   constructor(public title: string, public component: any) {}
@@ -23,10 +19,6 @@ export const bJourneySequence = [
     <Onboarding user={Fixtures.Borrower} userType={UserType.Borrower} />
   ),
   new JStep("KYC needs approval", getDashboardComponent(Fixtures.Borrower)),
-  new JStep(
-    "KYC Confirmed",
-    getDashboardComponent(Fixtures.BorrowerKYCConfirmed)
-  ),
   new JStep(
     "Loan request initiated",
     getDashboardComponent(Fixtures.BorrowerLoanInitiated)
@@ -49,6 +41,10 @@ export const lJourneySequence = [
   ),
   new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
   new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
+  new JStep(
+    "Lender Dashboard with Assets",
+    getDashboardComponent(Fixtures.LenderWithInvestments)
+  ),
   new JStep(
     "Lender Dashboard with Notification",
     getDashboardComponent(Fixtures.LenderWithPledgeRequest)
