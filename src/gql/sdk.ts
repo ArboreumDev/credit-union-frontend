@@ -6554,7 +6554,12 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
                 { __typename?: "supporters" } & Pick<
                   Supporters,
                   "pledge_amount" | "status"
-                >
+                > & {
+                    user: { __typename?: "user" } & Pick<
+                      User,
+                      "id" | "name" | "email"
+                    >
+                  }
               >
             }
         >
@@ -6743,7 +6748,7 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
           > & {
               user: { __typename?: "user" } & Pick<
                 User,
-                "id" | "corpus_share" | "balance"
+                "id" | "email" | "corpus_share" | "balance"
               >
             }
         >
@@ -7081,6 +7086,11 @@ export const GetUserByEmailDocument = gql`
         supporters {
           pledge_amount
           status
+          user {
+            id
+            name
+            email
+          }
         }
       }
       pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
@@ -7230,6 +7240,7 @@ export const GetLoanRequestDocument = gql`
         pledge_amount
         user {
           id
+          email
           corpus_share
           balance
         }

@@ -1,7 +1,6 @@
 import {
   Alert,
   AlertDescription,
-  AlertIcon,
   AlertTitle,
   Button,
   Collapse,
@@ -11,7 +10,8 @@ import {
   Wrap,
 } from "@chakra-ui/core"
 import { AcceptRejectPledge } from "lib/gql_api_actions"
-import { CalculatedRisk, PledgeRequest, SupporterStatus } from "lib/types"
+import { PledgeRequest, SupporterStatus } from "lib/types"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
@@ -21,9 +21,21 @@ interface Params {
 }
 
 export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
+  const router = useRouter()
   const [show, setShow] = useState(false)
   const loanRequest = pledgeRequest.loan_request
-  const riskCalcResult = loanRequest.risk_calc_result as CalculatedRisk
+  const submitPledge = (status: SupporterStatus) => {
+    AcceptRejectPledge.fetch({
+      request_id: pledgeRequest.request_id,
+      supporter_id: pledgeRequest.loan_request.user.email,
+      status: status,
+      pledge_amount: pledgeRequest.pledge_amount,
+    })
+      .then(async (res) => {
+        router.push("/")
+      })
+      .catch((err) => console.error(err))
+  }
 
   return (
     <Alert
@@ -69,7 +81,10 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
               </Row>
               <Row>
                 <TextColumn>Loan Term</TextColumn>
-                <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
+                <TextColumn>
+                  {loanRequest.risk_calc_result?.latestOffer.loan_info.tenor}{" "}
+                  months
+                </TextColumn>
               </Row>
             </Table>
           </AlertDescription>
@@ -82,42 +97,21 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
       <AlertDescription marginTop="20px">
         <Wrap justify="center">
           <Button
-            onClick={() =>
-              AcceptRejectPledge.fetch({
-                request_id: pledgeRequest.request_id,
-                supporter_id: pledgeRequest.loan_request.user.email,
-                status: SupporterStatus.confirmed,
-                pledge_amount: 400,
-              })
-            }
+            onClick={() => submitPledge(SupporterStatus.confirmed)}
             colorScheme="blue"
             w="280px"
           >
             I approve of the pledge amount
           </Button>
           <Button
-            onClick={() =>
-              AcceptRejectPledge.fetch({
-                request_id: pledgeRequest.request_id,
-                supporter_id: pledgeRequest.loan_request.user.email,
-                status: SupporterStatus.unknown,
-                pledge_amount: 400,
-              })
-            }
+            onClick={() => submitPledge(SupporterStatus.rejected)}
             colorScheme="blue"
             w="280px"
           >
             I wish to change pledge amount
           </Button>
           <Button
-            onClick={() =>
-              AcceptRejectPledge.fetch({
-                request_id: pledgeRequest.request_id,
-                supporter_id: pledgeRequest.loan_request.user.email,
-                status: SupporterStatus.rejected,
-                pledge_amount: 400,
-              })
-            }
+            onClick={() => submitPledge(SupporterStatus.rejected)}
             colorScheme="red"
             w="280px"
           >

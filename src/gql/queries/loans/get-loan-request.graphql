@@ -13,6 +13,7 @@ query GetLoanRequest($requestId: uuid!) {
       pledge_amount
       user {
         id
+        email
         corpus_share
         balance
       }

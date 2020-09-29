@@ -4,13 +4,15 @@ import { LoanRequest, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
 
 export interface Supporter {
-  name: string
-  email: string
-  amount: number
+  user: {
+    name: string
+    email: string
+  }
+  pledge_amount: number
   status: SupporterStatus
 }
 
-interface Params {
+interface Props {
   loanRequest: LoanRequest
   supporters: Supporter[]
 }
@@ -37,7 +39,7 @@ const supporterStatusToTextMap = {
   [SupporterStatus.rejected]: <Dot color="red" />,
   [SupporterStatus.confirmed]: <Dot color="green" />,
 }
-const SupportersList = ({ loanRequest, supporters }: Params) => (
+const SupportersList = ({ loanRequest, supporters }: Props) => (
   <Stack>
     <Heading size="md">Supporters</Heading>
     <Flex fontWeight="semibold" color="gray">
@@ -53,14 +55,16 @@ const SupportersList = ({ loanRequest, supporters }: Params) => (
     </Flex>
     {supporters.map((s, idx) => (
       <Flex key={idx + "_row"}>
-        <Box flex={1}>{s.name}</Box>
+        <Box flex={1}>{s.user.name}</Box>
         <Box display={["none", "block"]} flex={[0, 1, 1]}>
-          {s.email}
+          {s.user.email}
         </Box>
         <Box display={["none", "block"]} flex={0.6}>
-          <Currency amount={s.amount} />
+          <Currency amount={s.pledge_amount} />
         </Box>
-        <Box flex={0.6}>{dec_to_perc(s.amount / loanRequest.amount)}%</Box>
+        <Box flex={0.6}>
+          {dec_to_perc(s.pledge_amount / loanRequest.amount)}%
+        </Box>
         <Center w="55px">{supporterStatusToTextMap[s.status]}</Center>
       </Flex>
     ))}

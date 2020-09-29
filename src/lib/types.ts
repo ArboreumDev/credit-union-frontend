@@ -18,9 +18,49 @@ export type PledgeRequest = User["pledge_requests"][0]
 
 // TODO @djudjuu
 export type CalculatedRisk = {
-  loanTerm: number
-  interestRate: number
-  totalDue: number
+  latestOffer: {
+    loan_info: {
+      tenor: number
+      amount: number
+      corpus_apr: number
+      repayments: any[]
+      request_id: string
+      penalty_apr: number
+      borrower_apr: number
+      supporter_portfolio_encumbered: number
+      borrower_info: any
+      supporter_apr: number
+      supporter_lag: number
+      supporter_share: number
+      borrower_collateral: number
+      num_annual_cmpnd_prds: number
+      supporter_cash_encumbered: number
+    }
+    corpus_share: number
+    loan_schedule: {
+      corpus_view: any
+      borrower_view: {
+        total_payments: {
+          paid: number
+          remain: number
+        }
+        corpus_interest: {
+          paid: number
+          remain: number
+        }
+        corpus_principal: {
+          paid: number
+          remain: number
+        }
+        supporter_interest: any
+        borrower_collateral: any
+        supporter_principal: any
+      }
+      supporter_view: any
+      next_borrower_payment: number
+    }
+    loan_request_info: any
+  }
 }
 
 type BetaParms = [number, number]

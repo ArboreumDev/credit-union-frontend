@@ -40,14 +40,7 @@ const BLoanRequestInitiated = ({ loanRequest }: Props) => {
         </StatGroup>
       </Stack>
       <SupportersList
-        supporters={[
-          {
-            name: "Gaurav",
-            email: "gp@arboreum.dev",
-            amount: 1000,
-            status: SupporterStatus.confirmed,
-          },
-        ]}
+        supporters={loanRequest.supporters}
         loanRequest={loanRequest}
       />
       <AddSupporter loanRequest={loanRequest} />

@@ -104,7 +104,7 @@ export class DbClient {
     const totalSupport = supporter.supported_request.supporters
       .filter((x) => x.status == SupporterStatus.confirmed)
       .map((x) => x.pledge_amount)
-      .reduce((a, b) => a + b)
+      .reduce((a, b) => a + b, 0)
     if (
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO

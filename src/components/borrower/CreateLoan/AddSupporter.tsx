@@ -12,9 +12,10 @@ import AmountInput from "components/common/AmountInput"
 import { useForm } from "react-hook-form"
 import { AddSupporter as AddSupporterAction } from "lib/gql_api_actions"
 import { LoanRequest } from "lib/types"
+import { useRouter } from "next/router"
 
 interface FormData {
-  name: string
+  // name: string
   email: string
   amount: number
 }
@@ -22,6 +23,7 @@ interface Props {
   loanRequest: LoanRequest
 }
 export default function AddSupporter({ loanRequest }: Props) {
+  const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
 
   const onSubmit = (data: FormData) => {
@@ -31,6 +33,10 @@ export default function AddSupporter({ loanRequest }: Props) {
       email: data.email,
       amount: data.amount,
     })
+      .then(async (res) => {
+        router.push("/dashboard")
+      })
+      .catch((err) => console.error(err))
   }
 
   return (
@@ -47,29 +53,30 @@ export default function AddSupporter({ loanRequest }: Props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing="10px" minW="280px">
           <Flex>
-            <Box flex={1}>
+            {/* <Box flex={1}>
               <Input
                 placeholder="Name"
                 name={`name`}
                 size="lg"
                 ref={register({ required: true })}
               />
-            </Box>
+            </Box> */}
             <Box flex={1}>
               <Input
                 placeholder="Email"
                 name={`email`}
-                size="lg"
+                size="md"
                 ref={register({ required: true })}
               />
             </Box>
+            <Center flex={0.6}>
+              <AmountInput
+                passName={`amount`}
+                passRef={register({ required: true })}
+              />
+            </Center>
           </Flex>
-          <Center flex={0.5}>
-            <AmountInput
-              passName={`amount`}
-              passRef={register({ required: true })}
-            />
-          </Center>
+
           <Center>
             <Button type="submit">Add Supporter</Button>
           </Center>
