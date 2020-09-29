@@ -1,17 +1,9 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import { AddFundsForm } from "components/lender/Fund"
-import { UserType } from "lib/types"
-import { DemoTabView } from "./DemoViewTabs"
-import { getDashboardComponent } from "../../pages/dashboard/[[...route]]"
-import LoginPage from "../../pages/login"
-import { Profile } from "../../pages/profile"
-import { Fixtures } from "../../lib/demo/fixtures"
-import LandingPage from "../common/landing"
-import Onboarding from "../common/onboarding/onboarding"
 import {
   bJourneySequence,
   lJourneySequence,
 } from "pages/demo/[userType]/[jstep]"
+import { DemoTabView } from "./DemoViewTabs"
 
 const TabDemo = () => (
   <Tabs>
