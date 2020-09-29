@@ -45,7 +45,7 @@ const PledgeInvestments = ({ pledges }: Props) => (
     <Box>
       <Heading size="md">Pledges</Heading>
     </Box>
-    <Flex>
+    <Flex fontWeight="semibold">
       <Box verticalAlign="center" flex="1">
         Name
       </Box>

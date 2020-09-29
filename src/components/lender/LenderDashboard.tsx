@@ -101,7 +101,7 @@ const LenderDashboard = ({ user }: Props) => {
                 {AllocatedAsset(
                   "Uninvested",
                   lender.percUninvested,
-                  "gray.400"
+                  "gray.500"
                 )}
               </Stack>
             </Center>

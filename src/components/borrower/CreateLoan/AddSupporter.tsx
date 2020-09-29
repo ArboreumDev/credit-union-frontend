@@ -68,10 +68,10 @@ export default function AddSupporter({ addSupporter }: Props) {
               passRef={register({ required: true })}
             />
           </Center>
+          <Center>
+            <Button type="submit">Add Supporter</Button>
+          </Center>
         </Stack>
-        <Center>
-          <Button type="submit">Add Supporter</Button>
-        </Center>
       </form>
     </Stack>
   )

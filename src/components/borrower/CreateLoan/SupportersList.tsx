@@ -40,7 +40,7 @@ const supporterStatusToTextMap = {
 const SupportersList = ({ loanRequest, supporters }: Params) => (
   <Stack>
     <Heading size="md">Supporters</Heading>
-    <Flex fontWeight="bold" color="gray">
+    <Flex fontWeight="semibold" color="gray">
       <Box flex={1}>Name</Box>
       <Box display={["none", "block"]} flex={[0, 1, 1]}>
         Email
