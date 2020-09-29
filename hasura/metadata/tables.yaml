@@ -30,7 +30,7 @@
         foreign_key_constraint_on: loan_id
     - name: user
       using:
-        foreign_key_constraint_on: guarantor_id
+        foreign_key_constraint_on: supporter_id
   array_relationships:
     - name: encumbrance_participants
       using:
@@ -177,7 +177,7 @@
     - name: encumbrances
       using:
         foreign_key_constraint_on:
-          column: guarantor_id
+          column: supporter_id
           table:
             schema: public
             name: encumbrances
