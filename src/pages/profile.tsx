@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/core"
 import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
-import WithdrawFundsForm from "components/lender/Withdraw"
+import WithdrawFundsForm from "components/lender/withdraw"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
