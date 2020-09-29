@@ -6541,6 +6541,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
             Loan_Requests,
+            | "request_id"
             | "confirmation_date"
             | "payback_status"
             | "purpose"
@@ -7072,6 +7073,7 @@ export const GetUserByEmailDocument = gql`
       kyc_approved
       demographic_info
       loan_requests {
+        request_id
         confirmation_date
         payback_status
         purpose

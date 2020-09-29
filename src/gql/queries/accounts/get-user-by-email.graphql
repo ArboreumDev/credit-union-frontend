@@ -11,6 +11,7 @@ query GetUserByEmail($email: String!) {
     kyc_approved
     demographic_info
     loan_requests {
+      request_id
       confirmation_date
       payback_status
       purpose

@@ -37,6 +37,7 @@ export class Fixtures {
   }
 
   static LoanRequest: LoanRequest = {
+    request_id: "2466df66-ef1c-4e82-ad21-70943dcecaf6",
     confirmation_date: null,
     payback_status: null,
     purpose: "Home Repair",
