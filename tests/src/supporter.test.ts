@@ -58,11 +58,20 @@ describe("Basic loan request flow for an accepted loan", () => {
   test("suppporters that exist on the network can be added to the loan", async () => {
     await sdk.CreateUser({ user: SUPPORTER1 })
     await sdk.CreateUser({ user: SUPPORTER2 })
-    await dbClient.addSupporters(
-      request_id,
-      [SUPPORTER1.id, SUPPORTER2.id],
-      [pledgeAmount1, pledgeAmount2]
-    )
+    await dbClient.sdk.AddSupporter({
+      supporter: {
+        request_id: request_id,
+        supporter_id: SUPPORTER1.id,
+        pledge_amount: pledgeAmount1,
+      },
+    })
+    await dbClient.sdk.AddSupporter({
+      supporter: {
+        request_id: request_id,
+        supporter_id: SUPPORTER2.id,
+        pledge_amount: pledgeAmount2,
+      },
+    })
 
     const { loanRequest } = await sdk.GetLoanRequest({ requestId: request_id })
     expect(loanRequest.supporters[0].supporter_id).toBe(SUPPORTER1.id)

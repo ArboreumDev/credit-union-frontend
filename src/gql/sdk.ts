@@ -714,12 +714,12 @@ export type Encumbrances = {
   /** An aggregated array relationship */
   encumbrance_participants_aggregate: Encumbrance_Participants_Aggregate
   expected_dissolve_amount: Scalars["numeric"]
-  guarantor_id: Scalars["uuid"]
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
   pay_frequency: Scalars["Int"]
   status: Scalars["String"]
+  supporter_id: Scalars["uuid"]
   updated_at: Scalars["timestamptz"]
   /** An object relationship */
   user: User
@@ -826,11 +826,11 @@ export type Encumbrances_Bool_Exp = {
   encumbrance_id?: Maybe<Uuid_Comparison_Exp>
   encumbrance_participants?: Maybe<Encumbrance_Participants_Bool_Exp>
   expected_dissolve_amount?: Maybe<Numeric_Comparison_Exp>
-  guarantor_id?: Maybe<Uuid_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   pay_frequency?: Maybe<Int_Comparison_Exp>
   status?: Maybe<String_Comparison_Exp>
+  supporter_id?: Maybe<Uuid_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
 }
@@ -863,11 +863,11 @@ export type Encumbrances_Insert_Input = {
     Encumbrance_Participants_Arr_Rel_Insert_Input
   >
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
 }
@@ -883,10 +883,10 @@ export type Encumbrances_Max_Fields = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -900,10 +900,10 @@ export type Encumbrances_Max_Order_By = {
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -918,10 +918,10 @@ export type Encumbrances_Min_Fields = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -935,10 +935,10 @@ export type Encumbrances_Min_Order_By = {
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -977,11 +977,11 @@ export type Encumbrances_Order_By = {
     Encumbrance_Participants_Aggregate_Order_By
   >
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
 }
@@ -1010,13 +1010,13 @@ export enum Encumbrances_Select_Column {
   /** column name */
   ExpectedDissolveAmount = "expected_dissolve_amount",
   /** column name */
-  GuarantorId = "guarantor_id",
-  /** column name */
   LoanId = "loan_id",
   /** column name */
   PayFrequency = "pay_frequency",
   /** column name */
   Status = "status",
+  /** column name */
+  SupporterId = "supporter_id",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -1031,10 +1031,10 @@ export type Encumbrances_Set_Input = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -1133,13 +1133,13 @@ export enum Encumbrances_Update_Column {
   /** column name */
   ExpectedDissolveAmount = "expected_dissolve_amount",
   /** column name */
-  GuarantorId = "guarantor_id",
-  /** column name */
   LoanId = "loan_id",
   /** column name */
   PayFrequency = "pay_frequency",
   /** column name */
   Status = "status",
+  /** column name */
+  SupporterId = "supporter_id",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -5364,7 +5364,7 @@ export type Supporters_Bool_Exp = {
 /** unique or primary key constraints on table "supporters" */
 export enum Supporters_Constraint {
   /** unique or primary key constraint */
-  GuarantorsPkey = "guarantors_pkey",
+  SupportersPkey = "supporters_pkey",
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -6607,20 +6607,16 @@ export type InsertEventMutation = { __typename?: "mutation_root" } & {
   >
 }
 
-export type AddSupportersMutationVariables = Exact<{
-  supporters: Array<Supporters_Insert_Input>
+export type AddSupporterMutationVariables = Exact<{
+  supporter: Supporters_Insert_Input
 }>
 
-export type AddSupportersMutation = { __typename?: "mutation_root" } & {
-  supporters?: Maybe<
-    { __typename?: "supporters_mutation_response" } & {
-      returning: Array<
-        { __typename?: "supporters" } & Pick<
-          Supporters,
-          "status" | "supporter_id" | "pledge_amount"
-        >
-      >
-    }
+export type AddSupporterMutation = { __typename?: "mutation_root" } & {
+  insert_supporters_one?: Maybe<
+    { __typename?: "supporters" } & Pick<
+      Supporters,
+      "status" | "supporter_id" | "pledge_amount"
+    >
   >
 }
 
@@ -7132,14 +7128,12 @@ export const InsertEventDocument = gql`
     }
   }
 `
-export const AddSupportersDocument = gql`
-  mutation AddSupporters($supporters: [supporters_insert_input!]!) {
-    supporters: insert_supporters(objects: $supporters) {
-      returning {
-        status
-        supporter_id
-        pledge_amount
-      }
+export const AddSupporterDocument = gql`
+  mutation AddSupporter($supporter: supporters_insert_input!) {
+    insert_supporters_one(object: $supporter) {
+      status
+      supporter_id
+      pledge_amount
     }
   }
 `
@@ -7500,12 +7494,12 @@ export function getSdk(
         )
       )
     },
-    AddSupporters(
-      variables: AddSupportersMutationVariables
-    ): Promise<AddSupportersMutation> {
+    AddSupporter(
+      variables: AddSupporterMutationVariables
+    ): Promise<AddSupporterMutation> {
       return withWrapper(() =>
-        client.request<AddSupportersMutation>(
-          print(AddSupportersDocument),
+        client.request<AddSupporterMutation>(
+          print(AddSupporterDocument),
           variables
         )
       )

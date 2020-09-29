@@ -86,24 +86,6 @@ export class DbClient {
     // potentially do other stuff here (notify us...)
     return { request }
   }
-
-  addSupporters = async (
-    requestId: string,
-    supporterIds: string[],
-    amounts: number[]
-  ) => {
-    const supporters = []
-    for (let i = 0; i < supporterIds.length; i++) {
-      supporters.push({
-        request_id: requestId,
-        supporter_id: supporterIds[i],
-        pledge_amount: amounts[i],
-      })
-    }
-    const data = await this.sdk.AddSupporters({ supporters })
-    return data
-  }
-
   updateSupporter = async (
     request_id: string,
     supporter_id: string,

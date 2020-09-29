@@ -16,7 +16,6 @@ import {
   SUPPORTER2,
 } from "../fixtures/basic_network"
 import { addNetwork } from "../../src/lib/network_helpers"
-import { addAndConfirmSupporter } from "../../src/lib/loan_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
 import { DEV_URL } from "../../src/lib/constant"
@@ -94,13 +93,19 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      await addAndConfirmSupporter(
-        dbClient,
+      await sdk.AddSupporter({
+        supporter: {
+          request_id,
+          supporter_id: SUPPORTER1.id,
+          pledge_amount: pledgeAmount / 2,
+        },
+      })
+      await dbClient.updateSupporter(
         request_id,
         SUPPORTER1.id,
-        pledgeAmount / 2
+        SupporterStatus.confirmed,
+        amount
       )
-
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: request_id,
       })
@@ -109,13 +114,19 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
       await sdk.CreateUser({ user: SUPPORTER2 })
-      await addAndConfirmSupporter(
-        dbClient,
+      await sdk.AddSupporter({
+        supporter: {
+          request_id,
+          supporter_id: SUPPORTER2.id,
+          pledge_amount: pledgeAmount / 2,
+        },
+      })
+      await dbClient.updateSupporter(
         request_id,
         SUPPORTER2.id,
-        pledgeAmount / 2
+        SupporterStatus.confirmed,
+        amount
       )
-
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: request_id,
       })
@@ -165,8 +176,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the users balances are updated accordingly", async () => {
-      const { user } = await sdk.GetAllUsers()
-      balancesAfter = getUserPortfolio(user)
+      const { user: allUsers } = await sdk.GetAllUsers()
+      balancesAfter = getUserPortfolio(allUsers)
 
       // sanity-check that lender 2 has brought more than lender 1
       expect(lender1.balance).toBeGreaterThan(lender2.balance)
