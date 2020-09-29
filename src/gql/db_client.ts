@@ -3,35 +3,26 @@ import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_LOAN_TENOR,
   DEV_URL,
-  MIN_SUPPORT_RATIO,
-  DEFAULT_RECOMMENDATION_RISK_PARAMS,
-  DEFAULT_RISK_FREE_INTEREST_RATE,
   LogEventTypes as LogEventType,
+  MIN_SUPPORT_RATIO,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
   generateUpdateAsSingleTransaction,
-  lenderBalanceToShareInLoan,
-  proportion,
 } from "../lib/loan_helpers"
 import {
   BorrowerInfo,
-  LiveLoanInfo,
-  LoanRequestStatus,
-  OptimizerContext,
+  DemographicInfo,
+  LoanRequestInfo,
   PortfolioUpdate,
-  RiskInput,
+  Scenario,
   SupporterInfo,
   SupporterStatus,
   SwarmAiRequestMessage,
   SwarmAiResponse,
   UserInfo,
-  LoanRequestInfo,
-  DemographicInfo,
-  Scenario,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
-import { sampleAiInput } from "../../tests/fixtures/swarmai_fixtures"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
@@ -85,6 +76,17 @@ export class DbClient {
     })
     // potentially do other stuff here (notify us...)
     return { request }
+  }
+  addSupporter = async (requestId: string, email: string, amount: number) => {
+    const user = await this.getUserByEmail(email)
+    const data = await this.sdk.AddSupporter({
+      supporter: {
+        request_id: requestId,
+        supporter_id: user.id,
+        pledge_amount: amount,
+      },
+    })
+    return data
   }
   updateSupporter = async (
     request_id: string,

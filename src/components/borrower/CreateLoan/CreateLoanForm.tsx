@@ -3,20 +3,14 @@ import {
   Button,
   Center,
   Container,
-  Flex,
   Heading,
-  Input,
-  InputGroup,
   Select,
   Stack,
   Text,
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import { Loan_Requests_Insert_Input } from "gql/sdk"
-import { fetcherMutate } from "lib/api"
 import { CreateLoan } from "lib/gql_api_actions"
 import { User } from "lib/types"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 type FormData = {
@@ -82,7 +76,7 @@ export default function CreateLoanForm({ user }: Props) {
             </Stack>
 
             <Center>
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Next</Button>
             </Center>
           </Stack>
         </Container>

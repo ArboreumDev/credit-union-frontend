@@ -22,8 +22,8 @@ import {
   SwarmAiResponse,
   SupporterStatus,
 } from "lib/types"
-import { Currency } from "../../common/Currency"
-import { AcceptLoanOffer } from "../../../lib/gql_api_actions"
+import { Currency } from "components/common/Currency"
+import { AcceptLoanOffer } from "lib/gql_api_actions"
 
 interface Params {
   loanRequest: LoanRequest

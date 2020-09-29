@@ -1,9 +1,5 @@
 import {
-  Box,
   Center,
-  Container,
-  Flex,
-  Heading,
   Stack,
   Stat,
   StatGroup,
@@ -11,20 +7,17 @@ import {
   StatNumber,
   Text,
 } from "@chakra-ui/core"
+import { LoanRequest, SupporterStatus } from "lib/types"
 import { CgFileDocument } from "react-icons/cg"
-import { LoanRequest, LoanRequestStatus, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
 import AddSupporter from "../CreateLoan/AddSupporter"
-import SupportersList, { Supporter } from "../CreateLoan/SupportersList"
+import SupportersList from "../CreateLoan/SupportersList"
 
-interface Params {
+interface Props {
   loanRequest: LoanRequest
 }
 
-const BLoanRequestInitiated = ({ loanRequest }: Params) => {
-  const addSupporter = (supporter: Supporter) => {
-    console.log(supporter)
-  }
+const BLoanRequestInitiated = ({ loanRequest }: Props) => {
   return (
     <Stack spacing={10}>
       <Stack>
@@ -57,7 +50,7 @@ const BLoanRequestInitiated = ({ loanRequest }: Params) => {
         ]}
         loanRequest={loanRequest}
       />
-      <AddSupporter addSupporter={addSupporter} />
+      <AddSupporter loanRequest={loanRequest} />
     </Stack>
   )
 }

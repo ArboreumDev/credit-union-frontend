@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import { useForm } from "react-hook-form"
+import { AddSupporter as AddSupporterAction } from "lib/gql_api_actions"
+import { LoanRequest } from "lib/types"
 
 interface FormData {
   name: string
@@ -17,15 +19,15 @@ interface FormData {
   amount: number
 }
 interface Props {
-  addSupporter: (Supporter) => void
+  loanRequest: LoanRequest
 }
-export default function AddSupporter({ addSupporter }: Props) {
+export default function AddSupporter({ loanRequest }: Props) {
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
 
   const onSubmit = (data: FormData) => {
     console.log(data)
-    addSupporter({
-      name: data.name,
+    AddSupporterAction.fetch({
+      requestId: loanRequest.request_id,
       email: data.email,
       amount: data.amount,
     })

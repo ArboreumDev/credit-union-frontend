@@ -171,19 +171,3 @@ export const transformRequestToDashboardFormat = (loanRequest: any) => {
     }
   }
 }
-
-export const addAndConfirmSupporter = async (
-  dbClient: DbClient,
-  requestId: string,
-  supporterId: string,
-  amount: number
-) => {
-  await dbClient.addSupporters(requestId, [supporterId], [amount])
-  const data = await dbClient.updateSupporter(
-    requestId,
-    supporterId,
-    SupporterStatus.confirmed,
-    amount
-  )
-  return data
-}
