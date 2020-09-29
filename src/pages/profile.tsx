@@ -60,7 +60,7 @@ export const Profile = ({ user }: Props) => {
       {user.user_type === UserType.Borrower && (
         <Box>
           <Heading as="h4" size="md">
-            Transactions
+            Transactions (for demo)
           </Heading>
           <Box h="10px" />
           <Stack>

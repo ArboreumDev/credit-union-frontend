@@ -26,26 +26,26 @@ const BLoanRequestInitiated = ({ loanRequest }: Params) => {
     console.log(supporter)
   }
   return (
-    <Stack padding="10px">
-      <Center>
-        <Text fontSize="100px">
-          <CgFileDocument />
-        </Text>
-      </Center>
-      <Box h="30px" />
-      <StatGroup>
-        <Stat>
-          <StatLabel>Amount</StatLabel>
-          <StatNumber>
-            <Currency amount={loanRequest.amount} />
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Purpose</StatLabel>
-          <StatNumber>{loanRequest.purpose}</StatNumber>
-        </Stat>
-      </StatGroup>
-      <Box h="30px" />
+    <Stack spacing={10}>
+      <Stack>
+        <Center>
+          <Text fontSize="100px">
+            <CgFileDocument />
+          </Text>
+        </Center>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Amount</StatLabel>
+            <StatNumber>
+              <Currency amount={loanRequest.amount} />
+            </StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Purpose</StatLabel>
+            <StatNumber>{loanRequest.purpose}</StatNumber>
+          </Stat>
+        </StatGroup>
+      </Stack>
       <SupportersList
         supporters={[
           {
@@ -57,7 +57,6 @@ const BLoanRequestInitiated = ({ loanRequest }: Params) => {
         ]}
         loanRequest={loanRequest}
       />
-      <Box h="30px" />
       <AddSupporter addSupporter={addSupporter} />
     </Stack>
   )
