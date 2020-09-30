@@ -49,7 +49,7 @@ describe("Basic loan request flow for an accepted loan", () => {
   const amount = 100
   const pledgeAmount = amount * MIN_SUPPORT_RATIO
   const purpose = "go see the movies"
-  let request_id: string
+  let requestId: string
   // var testOutput;
   const borrower1: User_Insert_Input = BORROWER1
   const lender1: User_Insert_Input = LENDER1
@@ -76,7 +76,7 @@ describe("Basic loan request flow for an accepted loan", () => {
         purpose
       )
       // const request = data.update_loan_requests_by_pk
-      request_id = request.request_id
+      requestId = request.request_id
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
       expect(request.status).toBe(LoanRequestStatus.initiated)
@@ -84,17 +84,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the swarmai module can respond to loan requests", async () => {
-      const { loanRequest } = await dbClient.sdk.GetLoanRequest({
-        requestId: request_id,
-      })
-      const riskInfo = await dbClient.getRiskInput(request_id)
-      const res = await SwarmAI.calculateLoanOffer(
-        loanRequest.request_id,
-        loanRequest.amount,
-        riskInfo.supporterInfo,
-        riskInfo.borrowerInfo
-      )
-      expect(res.loan_request_info.request_id).toBe(request_id)
+      const res = await dbClient.calculateLoanRequestOffer(requestId)
+      expect(res.loan_request_info.request_id).toBe(requestId)
       expect(res).toHaveProperty("corpus_share")
       expect(res).toHaveProperty("loan_info.borrower_apr")
     })
@@ -103,19 +94,19 @@ describe("Basic loan request flow for an accepted loan", () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
       await sdk.AddSupporter({
         supporter: {
-          request_id,
+          request_id: requestId,
           supporter_id: SUPPORTER1.id,
           pledge_amount: pledgeAmount / 2,
         },
       })
       await dbClient.updateSupporter(
-        request_id,
+        requestId,
         SUPPORTER1.id,
         SupporterStatus.confirmed,
         amount
       )
       const { loanRequest } = await sdk.GetLoanRequest({
-        requestId: request_id,
+        requestId: requestId,
       })
       expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
     })
@@ -124,19 +115,19 @@ describe("Basic loan request flow for an accepted loan", () => {
       await sdk.CreateUser({ user: SUPPORTER2 })
       await sdk.AddSupporter({
         supporter: {
-          request_id,
+          request_id: requestId,
           supporter_id: SUPPORTER2.id,
           pledge_amount: pledgeAmount / 2,
         },
       })
       await dbClient.updateSupporter(
-        request_id,
+        requestId,
         SUPPORTER2.id,
         SupporterStatus.confirmed,
         amount
       )
       const { loanRequest } = await sdk.GetLoanRequest({
-        requestId: request_id,
+        requestId: requestId,
       })
 
       // The AI has collected the input and stores possible terms of the loan in the db
@@ -154,7 +145,7 @@ describe("Basic loan request flow for an accepted loan", () => {
 
   describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
-      const data = await dbClient.acceptLoanOffer(request_id, "latestOffer")
+      const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
       expect(data.update_loan_requests_by_pk.status).toBe(
         LoanRequestStatus.active
       )
@@ -217,11 +208,11 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     // skipped until we have properly dealt with how exiting loans are stored
     test.skip("the loan shows up in subsequent queries to the corpus Data", async () => {
-      const { optimizer_context } = await dbClient.getSwarmAiInput(request_id)
+      const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
       expect(
         optimizer_context.loans_in_corpus
           .map((x) => x.loanId)
-          .includes(request_id)
+          .includes(requestId)
       ).toBeTruthy
     })
   })

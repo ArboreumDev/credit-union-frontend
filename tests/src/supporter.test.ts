@@ -11,6 +11,7 @@ import {
 } from "../fixtures/basic_network"
 import { addNetwork } from "../../src/lib/network_helpers"
 import { getUserPortfolio } from "./test_helpers"
+import SwarmAI from "gql/swarmai_client"
 
 global.fetch = require("node-fetch")
 
@@ -38,7 +39,7 @@ describe("Basic loan request flow for an accepted loan", () => {
   const pledgeAmount1 = amount / 2
   const pledgeAmount2 = amount / 4
   const purpose = "go see another movie"
-  let request_id: string
+  let requestId: string
   let balancesBefore
 
   beforeAll(async () => {
@@ -52,7 +53,7 @@ describe("Basic loan request flow for an accepted loan", () => {
       amount,
       purpose
     )
-    request_id = request.request_id
+    requestId = request.request_id
   })
 
   test("suppporters that exist on the network can be added to the loan", async () => {
@@ -60,20 +61,20 @@ describe("Basic loan request flow for an accepted loan", () => {
     await sdk.CreateUser({ user: SUPPORTER2 })
     await dbClient.sdk.AddSupporter({
       supporter: {
-        request_id: request_id,
+        request_id: requestId,
         supporter_id: SUPPORTER1.id,
         pledge_amount: pledgeAmount1,
       },
     })
     await dbClient.sdk.AddSupporter({
       supporter: {
-        request_id: request_id,
+        request_id: requestId,
         supporter_id: SUPPORTER2.id,
         pledge_amount: pledgeAmount2,
       },
     })
 
-    const { loanRequest } = await sdk.GetLoanRequest({ requestId: request_id })
+    const { loanRequest } = await sdk.GetLoanRequest({ requestId: requestId })
     expect(loanRequest.supporters[0].supporter_id).toBe(SUPPORTER1.id)
     expect(loanRequest.supporters[0].status).toBe(SupporterStatus.unknown)
     expect(loanRequest.supporters[0].pledge_amount).toBe(pledgeAmount1)
@@ -107,7 +108,7 @@ describe("Basic loan request flow for an accepted loan", () => {
 
   test("supporters can accept (or reject) a pledge-request", async () => {
     const { supporter } = await sdk.UpdateSupporter({
-      request_id,
+      request_id: requestId,
       supporter_id: SUPPORTER1.id,
       pledge_amount: 40,
       status: SupporterStatus.confirmed,
@@ -117,7 +118,15 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
 
   test("only confirmed supporters are included in the loan-request-calculation", async () => {
-    const { loan_request_info } = await dbClient.getSwarmAiInput(request_id)
+    const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
+    const riskInfo = await dbClient.getRiskInput(requestId)
+    const { loan_request_info } = await SwarmAI.generateLoanOfferRequest({
+      requestId: loanRequest.request_id,
+      loanAmount: loanRequest.amount,
+      supporters: riskInfo.supporterInfo,
+      borrowerInfo: riskInfo.borrowerInfo,
+    })
+
     const loanSupporters = loan_request_info.supporters.map(
       (x) => x.supporter_id
     )
@@ -126,8 +135,12 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
 
   test("confirmed supporters have their balance reduced if a loan is accepted", async () => {
-    await dbClient.calculateLoanRequestOffer(request_id)
-    await dbClient.acceptLoanOffer(request_id)
+    const aiResponse = await dbClient.calculateLoanRequestOffer(requestId)
+    await sdk.UpdateLoanRequestWithOffer({
+      requestId,
+      newOffer: { latestOffer: aiResponse },
+    })
+    await dbClient.acceptLoanOffer(requestId)
     const { user } = await sdk.GetAllUsers()
     const balancesAfter = getUserPortfolio(user)
     expect(SUPPORTER1.balance).toBeGreaterThan(

@@ -22,36 +22,44 @@ export default class SwarmAI {
     return fetchJSON(url, payload)
   }
 
-  static async calculateLoanOffer(
-    requestId: string,
-    amount: number,
-    supporterInfo: SupporterInfo[],
+  static async calculateLoanOffer(params: {
+    requestId: string
+    loanAmount: number
+    supporters: SupporterInfo[]
     borrowerInfo: BorrowerInfo
-  ): Promise<SwarmAiResponse> {
-    const payload = SwarmAI.generateLoanOfferRequest(
-      requestId,
-      amount,
-      borrowerInfo,
-      supporterInfo
-    )
+  }): Promise<SwarmAiResponse> {
+    const payload = {
+      request_msg: SwarmAI.generateLoanOfferRequest(params),
+    }
     const url = SWARMAI_URL + "/loan/request"
-    return fetchJSON(url, { request_msg: payload })
+    return fetchJSON(url, payload)
   }
 
-  static generateLoanOfferRequest(
-    requestId: string,
-    loanAmount: number,
-    borrowerInfo: BorrowerInfo,
-    supporters: SupporterInfo[],
+  static generateLoanOfferRequest({
+    requestId,
+    loanAmount,
+    borrowerInfo,
+    supporters,
     borrowerCollateral = 0,
-    tenor: number = DEFAULT_LOAN_TENOR
-  ): SwarmAiRequestMessage {
+    tenor = DEFAULT_LOAN_TENOR,
+  }: {
+    requestId: string
+    loanAmount: number
+    borrowerInfo: BorrowerInfo
+    supporters: SupporterInfo[]
+    borrowerCollateral?: number
+    tenor?: number
+  }): SwarmAiRequestMessage {
+    // ============ optimizer context =============================
+    // not needed while we use backup model
+    // read more here: https://github.com/ArboreumDev/frontend/blob/65db3a62778d9cc84ee859dd29562b469f7adf2c/src/gql/db_client.ts#L218
+
     return {
       loan_request_info: {
         borrower_info: borrowerInfo,
         request_id: requestId,
         tenor: tenor,
-        borrower_collateral: 0,
+        borrower_collateral: borrowerCollateral,
         amount: loanAmount,
         supporters: supporters,
       } as LoanRequestInfo,

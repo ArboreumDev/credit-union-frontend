@@ -87,13 +87,13 @@ export default class DbClient {
     return data
   }
   updateSupporter = async (
-    request_id: string,
+    requestId: string,
     supporter_id: string,
     status: SupporterStatus,
     pledge_amount: number
   ) => {
     const { supporter } = await this.sdk.UpdateSupporter({
-      request_id,
+      request_id: requestId,
       supporter_id,
       status,
       pledge_amount,
@@ -107,7 +107,11 @@ export default class DbClient {
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO
     ) {
-      await this.calculateLoanRequestOffer(request_id)
+      const aiResponse = await this.calculateLoanRequestOffer(requestId)
+      return this.sdk.UpdateLoanRequestWithOffer({
+        requestId,
+        newOffer: { latestOffer: aiResponse },
+      })
     }
 
     return supporter
@@ -122,16 +126,11 @@ export default class DbClient {
   calculateLoanRequestOffer = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
     const riskInfo = await this.getRiskInput(requestId)
-    const aiResponse = await SwarmAI.calculateLoanOffer(
-      loanRequest.request_id,
-      loanRequest.amount,
-      riskInfo.supporterInfo,
-      riskInfo.borrowerInfo
-    )
-
-    return this.sdk.UpdateLoanRequestWithOffer({
-      requestId,
-      newOffer: { latestOffer: aiResponse },
+    return await SwarmAI.calculateLoanOffer({
+      requestId: loanRequest.request_id,
+      loanAmount: loanRequest.amount,
+      supporters: riskInfo.supporterInfo,
+      borrowerInfo: riskInfo.borrowerInfo,
     })
   }
 
@@ -190,26 +189,6 @@ export default class DbClient {
   //   })
   //   return failures
   // }
-
-  /**
-   * get all the data that is needed to run the optimizer and format it into the message
-   * it expects
-   * @param requestId
-   */
-  getSwarmAiInput = async (requestId: string) => {
-    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
-    const riskInfo = await this.getRiskInput(requestId)
-    return SwarmAI.generateLoanOfferRequest(
-      loanRequest.request_id,
-      loanRequest.amount,
-      riskInfo.borrowerInfo,
-      riskInfo.supporterInfo
-    )
-
-    // ============ optimizer context =============================
-    // not needed while we use backup model
-    // read more here: https://github.com/ArboreumDev/frontend/blob/65db3a62778d9cc84ee859dd29562b469f7adf2c/src/gql/db_client.ts#L218
-  }
 
   /**
    * summaries the portfolios of all users
