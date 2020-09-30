@@ -1,4 +1,4 @@
-import { DbClient } from "gql/db_client"
+import DbClient from "gql/db_client"
 import {
   AddSupporterMutation,
   AddSupporterMutationVariables,

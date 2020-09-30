@@ -1,7 +1,7 @@
 import { runAction } from "lib/gql_api_actions"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
-import { DbClient } from "../../gql/db_client"
+import DbClient from "../../gql/db_client"
 import { Session } from "../../lib/types"
 
 const dbClient = new DbClient()

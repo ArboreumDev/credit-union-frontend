@@ -5,7 +5,7 @@ import {
   Sdk,
 } from "../gql/sdk"
 import { LoanRequestStatus } from "./types"
-import { DbClient } from "gql/db_client"
+import DbClient from "gql/db_client"
 
 function toFloat8(x: number) {
   return parseFloat(x.toFixed(8))

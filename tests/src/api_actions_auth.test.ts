@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request"
-import { DbClient } from "../../src/gql/db_client"
+import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import {
   CreateLoanRequestMutation,

@@ -3,7 +3,7 @@ import { LogEventTypes } from "lib/constant"
 import { NextApiRequest } from "next"
 import httpMocks from "node-mocks-http"
 import { LogPushHandler } from "pages/api/log"
-import { DbClient } from "../../src/gql/db_client"
+import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { Sdk } from "../../src/gql/sdk"
 

@@ -10,7 +10,7 @@ import {
 } from "../fixtures/basic_network"
 import { EDGE_STATUS } from "../../src/lib/types"
 import { getUserPortfolio } from "./test_helpers"
-import { DbClient } from "../../src/gql/db_client"
+import DbClient from "../../src/gql/db_client"
 
 global.fetch = require("node-fetch")
 

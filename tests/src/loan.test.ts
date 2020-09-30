@@ -1,7 +1,7 @@
 import request, { GraphQLClient } from "graphql-request"
 import { Sdk, getSdk } from "../../src/gql/sdk"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { DbClient } from "../../src/gql/db_client"
+import DbClient from "../../src/gql/db_client"
 import {
   EDGE_STATUS,
   LoanRequestStatus,

@@ -1,12 +1,10 @@
 import { GraphQLClient } from "graphql-request"
-import { fetchJSON } from "lib/api"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
-  DEFAULT_LOAN_TENOR,
-  SWARMAI_URL,
+  DEFAULT_RECOMMENDATION_RISK_PARAMS,
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
-  DEFAULT_RECOMMENDATION_RISK_PARAMS,
+  SWARMAI_URL,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -15,13 +13,10 @@ import {
 import {
   BorrowerInfo,
   DemographicInfo,
-  LoanRequestInfo,
   PortfolioUpdate,
   Scenario,
   SupporterInfo,
   SupporterStatus,
-  SwarmAiRequestMessage,
-  SwarmAiResponse,
   UserInfo,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
