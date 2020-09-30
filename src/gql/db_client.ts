@@ -5,6 +5,7 @@ import {
   DEV_URL,
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
+  DEFAULT_RECOMMENDATION_RISK_PARAMS,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -336,21 +337,21 @@ export class DbClient {
     const confirmedSupporters = loanRequest.supporters.filter(
       (x) => x.status == SupporterStatus.confirmed
     )
-    const { recommendation_risk } = await this.sdk.GetCorpusRecommendationRisks(
-      {
-        userIds: confirmedSupporters.map((x) => x.user.id),
-      }
-    )
+    // NONBACKUP-MODEL code: TODO when create a user, set their recommendation risk to a default value
+    // const { recommendation_risk } = await this.sdk.GetCorpusRecommendationRisks(
+    //   {
+    //     userIds: confirmedSupporters.map((x) => x.user.id),
+    //   }
+    // )
     // create SupporterInfo-objects
-    // TODO account for supporter status
     const supporterInfo = confirmedSupporters.map((supporter) => {
-      const supporterRecRisk = recommendation_risk.filter(
-        (x) => x.recommender_id == supporter.user.id
-      )[0].risk_params
+      // const supporterRecRisk = recommendation_risk.filter(
+      // (x) => x.recommender_id == supporter.user.id
+      // )[0].risk_params || DEFAULT_RECOMMENDATION_RISK_PARAMS
       return {
         supporter_id: supporter.user.id,
         trust_amount: supporter.pledge_amount,
-        recommendation_risk: supporterRecRisk,
+        recommendation_risk: DEFAULT_RECOMMENDATION_RISK_PARAMS,
       } as SupporterInfo
     })
     // create the borrowerInfo-object
