@@ -1,20 +1,5 @@
 import { LogEventTypes } from "./constant"
 
-export const fetcherMutate = (action, payload) => {
-  const base_url = process.env.NEXTAUTH_URL || ""
-  const url = base_url + "/api/gql"
-  console.log(url)
-
-  return fetcher(url, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ actionType: action, payload: payload }),
-  })
-}
-
 export default async function fetcher(...args: Parameters<typeof fetch>) {
   const response = await fetch(...args)
 
@@ -31,15 +16,27 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   throw error
 }
 
-export async function captureLog(event) {
-  return fetcher("/api/log", {
+export async function fetchJSON(url, payload: any) {
+  return fetcher(url, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(event),
+    body: JSON.stringify(payload),
   })
+}
+
+export const fetcherMutate = (action, payload) => {
+  const base_url = process.env.NEXTAUTH_URL || ""
+  const url = base_url + "/api/gql"
+  console.log(url)
+
+  return fetchJSON(url, { actionType: action, payload: payload })
+}
+
+export async function captureLog(event) {
+  return fetchJSON("/api/log", event)
 }
 
 export async function captureFeedback(message: string) {
