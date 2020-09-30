@@ -22,6 +22,7 @@ import { SWARMAI_URL } from "../../src/lib/constant"
 import lender from "../../src/components/dashboard/lender"
 import { lastDayOfDecade } from "date-fns"
 import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
+import SwarmAI from "gql/swarmai_client"
 
 global.fetch = require("node-fetch")
 
@@ -83,9 +84,16 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the swarmai module can respond to loan requests", async () => {
-      const url = SWARMAI_URL + "/loan/request"
-      const payload = await dbClient.getSwarmAiInput(request_id)
-      const res = await dbClient.callSwarmAI(url, { request_msg: payload })
+      const { loanRequest } = await dbClient.sdk.GetLoanRequest({
+        requestId: request_id,
+      })
+      const riskInfo = await dbClient.getRiskInput(request_id)
+      const res = await SwarmAI.calculateLoanOffer(
+        loanRequest.request_id,
+        loanRequest.amount,
+        riskInfo.supporterInfo,
+        riskInfo.borrowerInfo
+      )
       expect(res.loan_request_info.request_id).toBe(request_id)
       expect(res).toHaveProperty("corpus_share")
       expect(res).toHaveProperty("loan_info.borrower_apr")

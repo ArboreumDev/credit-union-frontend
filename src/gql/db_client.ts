@@ -120,7 +120,6 @@ export default class DbClient {
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const url = SWARMAI_URL + "/loan/request"
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
     const riskInfo = await this.getRiskInput(requestId)
     const aiResponse = await SwarmAI.calculateLoanOffer(

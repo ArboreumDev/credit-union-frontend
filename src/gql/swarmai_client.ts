@@ -35,7 +35,7 @@ export default class SwarmAI {
       supporterInfo
     )
     const url = SWARMAI_URL + "/loan/request"
-    return fetchJSON(url, payload)
+    return fetchJSON(url, { request_msg: payload })
   }
 
   static generateLoanOfferRequest(
