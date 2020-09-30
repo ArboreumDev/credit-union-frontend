@@ -1,8 +1,9 @@
 import { GraphQLClient } from "graphql-request"
+import { fetchJSON } from "lib/api"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_LOAN_TENOR,
-  DEV_URL,
+  SWARMAI_URL,
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
@@ -24,6 +25,7 @@ import {
   UserInfo,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
+import SwarmAI from "./swarmai_client"
 
 // import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
 
@@ -32,7 +34,7 @@ import { initializeGQL } from "./graphql_client"
 /**
  * A class to be used in the frontend to send queries to the DB.
  */
-export class DbClient {
+export default class DbClient {
   private static instance: DbClient
 
   public sdk: Sdk
@@ -116,20 +118,6 @@ export class DbClient {
     return supporter
   }
 
-  callSwarmAI = async (url: string, payload: any) => {
-    // const data = { request_msg: sampleAiInput }
-    const params = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-    const res = await (await fetch(url, params)).json()
-    return res
-  }
-
   /**
    * for a given request, create an offer by calling the swarmai-optimizer, and store the result
    * on the loan-request-table under the key 'latestOffer'
@@ -137,9 +125,15 @@ export class DbClient {
    * @param request_id
    */
   calculateLoanRequestOffer = async (requestId: string) => {
-    const url = DEV_URL + "/loan/request"
-    const payload = { request_msg: await this.getSwarmAiInput(requestId) }
-    const aiResponse = (await this.callSwarmAI(url, payload)) as SwarmAiResponse
+    const url = SWARMAI_URL + "/loan/request"
+    const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    const riskInfo = await this.getRiskInput(requestId)
+    const aiResponse = await SwarmAI.calculateLoanOffer(
+      loanRequest.request_id,
+      loanRequest.amount,
+      riskInfo.supporterInfo,
+      riskInfo.borrowerInfo
+    )
 
     return this.sdk.UpdateLoanRequestWithOffer({
       requestId,
@@ -157,15 +151,12 @@ export class DbClient {
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
     // query swarmai to get convert loan-terms to aset-updates for everyone involved
-
     const data = await this.sdk.GetLoanOffer({ request_id })
     const offer_params = data.loan_requests_by_pk
     const systemState = (await this.getSystemSummary()) as Scenario
-    const payload = {
-      system_state: systemState,
-      aiResponse: offer_params.risk_calc_result.latestOffer,
-    }
-    const result = await this.callSwarmAI(DEV_URL + "/loan/accept", payload)
+    const latestOffer = offer_params.risk_calc_result.latestOffer
+
+    const result = await SwarmAI.acceptLoan(systemState, latestOffer)
 
     await this.updatePortfolios(result.updates)
 
@@ -176,10 +167,6 @@ export class DbClient {
         .total_payments.remain
     )
     return this.sdk.StartLoan(variables)
-    // const startedLoan = await this.sdk.StartLoan(variables)
-    // return {
-    //   startedLoan,
-    // }
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
@@ -217,82 +204,17 @@ export class DbClient {
    */
   getSwarmAiInput = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    const riskInfo = await this.getRiskInput(requestId)
+    return SwarmAI.generateLoanOfferRequest(
+      loanRequest.request_id,
+      loanRequest.amount,
+      riskInfo.borrowerInfo,
+      riskInfo.supporterInfo
+    )
 
     // ============ optimizer context =============================
     // not needed while we use backup model
-    // const { loans, corpus, corpusInvestment } = await this.sdk.GetCorpusData({
-    //   statusList: [LoanRequestStatus.live],
-    // })
-    // const totalCorpusShares = corpus.aggregate.sum.corpus_share
-    // const totalCorpusCash = corpus.aggregate.sum.balance || 0
-    // const totalCorpusInvestmentValue =
-    //   corpusInvestment.aggregate.sum.amount_total || 0
-
-    // // Now get the total monetary-value of guarantee that the supporters have in the form of portfolioshares
-    // //      "if you have two supporters one with a 40/60 split
-    // //        and another with 20/80 then you just take 60%*pledgeAmountA+20%pledgeAmountB"
-    // const confirmedSupporters = loanRequest.supporters.filter(
-    //   (x) => x.status == SupporterStatus.confirmed
-    // )
-    // const supporterShareValues = []
-    // confirmedSupporters.forEach((s) => {
-    //   const shareValue = proportion(
-    //     s.user.corpus_share,
-    //     totalCorpusShares,
-    //     totalCorpusInvestmentValue
-    //   )
-    //   const totalValue = shareValue + s.user.balance
-    //   const shareRatio = shareValue / totalValue
-    //   supporterShareValues.push(shareRatio * s.pledge_amount)
-    // })
-    // // sum up all shares
-    // const supporterCorpusShare = supporterShareValues.length
-    //   ? supporterShareValues.reduce((a, b) => a + b)
-    //   : 0
-
-    // use all existing loans in the portfolio to create a list of LiveLoanInfo-objects,
-    // const liveLoanInfo = loans.map((x) => {
-    //   const terms = x.risk_calc_result.latestOffer
-    //   return {
-    //     loan_id: x.request_id,
-    //     amount_owned_portfolio: proportion(terms.corpusShare, 1, terms.amount),
-    //     amount_owned_supporters: proportion(
-    //       1 - terms.corpusShare,
-    //       1,
-    //       terms.amount
-    //     ),
-    //     interest: terms.interest,
-    //     tenor: terms.tenor,
-    //     kumr_params: [terms.kumaraA, terms.kumaraB],
-    //     time_remaining: 5, // TODO
-    //     loan_schedule: "TODO",
-    //   } as LiveLoanInfo
-    // })
-
-    // ============ risk context =============================
-    const riskInfo = await this.getRiskInput(requestId)
-    // create a big SwarmAiRequestMessage-Object
-    return {
-      loan_request_info: {
-        borrower_info: riskInfo.borrowerInfo,
-        request_id: requestId,
-        tenor: DEFAULT_LOAN_TENOR,
-        borrower_collateral: 0,
-        amount: loanRequest.amount,
-        supporters: riskInfo.supporterInfo,
-      } as LoanRequestInfo,
-      // optimizer_context: {
-      // risk_free_apr: DEFAULT_RISK_FREE_INTEREST_RATE,
-      // supporter_corpus_share: supporterCorpusShare || 0,
-      // loans_in_corpus: liveLoanInfo,
-      // corpus_cash: totalCorpusCash,
-      // supporter_cash: totalCorpusCash,
-      // novation: false,
-      // } as OptimizerContext,
-      // risk_assessment_context: {
-      // central_risk_info: DEFAULT_RECOMMENDATION_RISK_PARAMS,
-      // } as RiskInput,
-    } as SwarmAiRequestMessage
+    // read more here: https://github.com/ArboreumDev/frontend/blob/65db3a62778d9cc84ee859dd29562b469f7adf2c/src/gql/db_client.ts#L218
   }
 
   /**

@@ -18,7 +18,7 @@ import {
 import { addNetwork } from "../../src/lib/network_helpers"
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
-import { DEV_URL } from "../../src/lib/constant"
+import { SWARMAI_URL } from "../../src/lib/constant"
 import lender from "../../src/components/dashboard/lender"
 import { lastDayOfDecade } from "date-fns"
 import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
@@ -83,7 +83,7 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the swarmai module can respond to loan requests", async () => {
-      const url = DEV_URL + "/loan/request"
+      const url = SWARMAI_URL + "/loan/request"
       const payload = await dbClient.getSwarmAiInput(request_id)
       const res = await dbClient.callSwarmAI(url, { request_msg: payload })
       expect(res.loan_request_info.request_id).toBe(request_id)
