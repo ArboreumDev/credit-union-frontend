@@ -14,7 +14,7 @@ export async function fetchJSON({
   if (isSSR) {
     url = (process.env.NEXTAUTH_URL ?? "") + url
   }
-  console.log("fetchJSON", url)
+  // console.log("fetchJSON", url)
 
   const response = await fetch(url, {
     method: "POST",
