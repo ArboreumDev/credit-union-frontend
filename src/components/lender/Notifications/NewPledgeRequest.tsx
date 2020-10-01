@@ -2,6 +2,7 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
+  Box,
   Button,
   Collapse,
   Divider,
@@ -118,13 +119,23 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
           </Button>
         </Wrap>
         {pledgeDisabled && (
-          <Text>
-            Please
-            <Link href="/dashboard/invest">add more</Link>
-            funds to make this pledge.
-          </Text>
+          <Box>
+            Please&nbsp;
+            <Link href="/dashboard/invest">
+              <a className="link">add more</a>
+            </Link>
+            &nbsp;funds to make this pledge.
+          </Box>
         )}
       </AlertDescription>
+      <style jsx>
+        {`
+          .link {
+            // color: blue
+            text-decoration: underline;
+          }
+        `}
+      </style>
     </Alert>
   )
 }

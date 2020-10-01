@@ -1,6 +1,5 @@
 import { Box, Text } from "@chakra-ui/core"
 import TabHome, { TabComponent } from "components/common/home/tabs"
-import { useRouter } from "next/router"
 import { Profile } from "pages/profile"
 import { User } from "../../lib/types"
 import AddFundsForm from "./Fund"
@@ -12,10 +11,12 @@ interface Props {
   initPanelIdx?: number
 }
 
-const LenderHome = ({ user, initPanelIdx }: Props) => {
-  const router = useRouter()
-  const { route } = router.query
+export const lenderTabMap = {
+  invest: 1,
+  account: 2,
+}
 
+const LenderHome = ({ user, initPanelIdx }: Props) => {
   const tabs = [
     new TabComponent(
       "Dashboard",

@@ -13,17 +13,12 @@ import {
   StatNumber,
   Text,
 } from "@chakra-ui/core"
+import { Currency } from "components/common/Currency"
+import { dec_to_perc } from "lib/currency"
+import { AcceptLoanOffer } from "lib/gql_api_actions"
+import { LoanRequest } from "lib/types"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { dec_to_perc } from "lib/currency"
-import {
-  CalculatedRisk,
-  LoanRequest,
-  SwarmAiResponse,
-  SupporterStatus,
-} from "lib/types"
-import { Currency } from "components/common/Currency"
-import { AcceptLoanOffer } from "lib/gql_api_actions"
 import LoanModel from "./LoanModel"
 
 interface Params {
