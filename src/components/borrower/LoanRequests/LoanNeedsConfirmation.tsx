@@ -24,18 +24,14 @@ import {
 } from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
+import LoanModel from "./LoanRequestModel"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
-  console.log(loanRequest)
-  const confirmed = loanRequest.supporters.filter(
-    (x) => x.status == SupporterStatus.confirmed
-  ).length
-  const calculatedRisk = loanRequest.risk_calc_result
-    .latestOffer as SwarmAiResponse
+  const loan = new LoanModel(loanRequest)
   return (
     <Stack w="100%">
       <Flex>
@@ -48,45 +44,33 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
         <Box flex={0.5}>Support</Box>
         <Box flex={0.5} textAlign="right">
           <p>
-            {confirmed} out of {loanRequest.supporters.length} have confirmed
+            {loan.confirmedSupporters.length} out of{" "}
+            {loanRequest.supporters.length} have confirmed
           </p>
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Interest Rate</Box>
         <Box flex={0.5} textAlign="right">
-          {dec_to_perc(calculatedRisk.loan_info.borrower_apr)}%
+          {dec_to_perc(loan.borrowerAPR)}%
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Interest Amount</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency
-            amount={
-              calculatedRisk.loan_schedule.borrower_view.total_payments.remain -
-              loanRequest.amount
-            }
-          />
+          <Currency amount={loan.interestAmount} />
         </Box>
       </Flex>
       <Flex>
-        <Box flex={0.5}>
-          Total due in {calculatedRisk.loan_info.tenor} months
-        </Box>
+        <Box flex={0.5}>Total due in {loan.tenor} months</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency
-            amount={
-              calculatedRisk.loan_schedule.borrower_view.total_payments.remain
-            }
-          />
+          <Currency amount={loan.totalAmountToRepay} />
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Monthly Payment Due</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency
-            amount={calculatedRisk.loan_schedule.next_borrower_payment}
-          />
+          <Currency amount={loan.nextPayment} />
         </Box>
       </Flex>
     </Stack>
