@@ -13,7 +13,7 @@ import {
   SUPPORTER1,
   SUPPORTER2,
 } from "../fixtures/basic_network"
-import { getUserPortfolio } from "./test_helpers"
+import { getUserPortfolio, addAndConfirmSupporter } from "./test_helpers"
 
 global.fetch = require("node-fetch")
 
@@ -78,23 +78,18 @@ describe("Basic loan request flow for an accepted loan", () => {
       const res = await dbClient.calculateLoanRequestOffer(requestId)
       expect(res.loan_request_info.request_id).toBe(requestId)
       expect(res).toHaveProperty("corpus_share")
+      expect(res.corpus_share).toBe(1)
       expect(res).toHaveProperty("loan_info.borrower_apr")
     })
 
     test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      await sdk.AddSupporter({
-        supporter: {
-          request_id: requestId,
-          supporter_id: SUPPORTER1.id,
-          pledge_amount: pledgeAmount / 2,
-        },
-      })
-      await dbClient.updateSupporter(
+      await addAndConfirmSupporter(
+        sdk,
+        dbClient,
         requestId,
         SUPPORTER1.id,
-        SupporterStatus.confirmed,
-        amount
+        pledgeAmount / 2
       )
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: requestId,
@@ -104,18 +99,12 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
       await sdk.CreateUser({ user: SUPPORTER2 })
-      await sdk.AddSupporter({
-        supporter: {
-          request_id: requestId,
-          supporter_id: SUPPORTER2.id,
-          pledge_amount: pledgeAmount / 2,
-        },
-      })
-      await dbClient.updateSupporter(
+      await addAndConfirmSupporter(
+        sdk,
+        dbClient,
         requestId,
         SUPPORTER2.id,
-        SupporterStatus.confirmed,
-        amount
+        pledgeAmount / 2
       )
       const { loanRequest } = await sdk.GetLoanRequest({
         requestId: requestId,
@@ -128,9 +117,10 @@ describe("Basic loan request flow for an accepted loan", () => {
 
       // verify how the output of the optimizer is stored in DB:
       expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
-      expect(loanRequest.risk_calc_result.latestOffer.loan_info.amount).toBe(
-        amount
-      )
+      const loanOffer = loanRequest.risk_calc_result.latestOffer
+      expect(loanOffer.loan_info.amount).toBe(amount)
+      expect(loanOffer.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
+      expect(loanOffer.loan_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
     })
   })
 
