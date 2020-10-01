@@ -23,7 +23,7 @@ export default async function handler(
         "text/html",
         null
       )
-      PostToSlack("FinancePeer Upload: " + Location + "  " + data.slice(0, 20))
+      PostToSlack("File Upload: " + Location + "  " + data.slice(0, 20))
       res.status(200).json({ location: Location })
     } catch (error) {
       console.log(error)

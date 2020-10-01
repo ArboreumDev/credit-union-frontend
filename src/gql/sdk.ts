@@ -7307,8 +7307,10 @@ export const UpdateLoanRequestWithOfferDocument = gql`
   mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
     request: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
-      _set: { status: "awaiting_borrower_confirmation" }
-      _append: { risk_calc_result: $newOffer }
+      _set: {
+        status: "awaiting_borrower_confirmation"
+        risk_calc_result: $newOffer
+      }
     ) {
       request_id
       purpose

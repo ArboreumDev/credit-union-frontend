@@ -30,6 +30,7 @@ interface Params {
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
+  console.log(loanRequest)
   const confirmed = loanRequest.supporters.filter(
     (x) => x.status == SupporterStatus.confirmed
   ).length

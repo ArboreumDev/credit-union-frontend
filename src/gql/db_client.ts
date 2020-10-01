@@ -1,4 +1,5 @@
 import { GraphQLClient } from "graphql-request"
+import { fetchJSON } from "lib/api"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
@@ -107,11 +108,17 @@ export default class DbClient {
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO
     ) {
+      console.log("Calculating loan request offer", requestId)
       const aiResponse = await this.calculateLoanRequestOffer(requestId)
-      return this.sdk.UpdateLoanRequestWithOffer({
+      const payload = {
         requestId,
         newOffer: { latestOffer: aiResponse },
-      })
+      }
+
+      // upload for debugging purposes
+      fetchJSON("/api/integration/fp", payload)
+
+      return this.sdk.UpdateLoanRequestWithOffer(payload)
     }
 
     return supporter

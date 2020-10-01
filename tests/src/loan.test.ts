@@ -1,28 +1,19 @@
-import request, { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
-import { initializeGQL } from "../../src/gql/graphql_client"
+import { GraphQLClient } from "graphql-request"
 import DbClient from "../../src/gql/db_client"
-import {
-  EDGE_STATUS,
-  LoanRequestStatus,
-  SupporterStatus,
-} from "../../src/lib/types"
+import { initializeGQL } from "../../src/gql/graphql_client"
+import { getSdk, Sdk, User_Insert_Input } from "../../src/gql/sdk"
+import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
+import { addNetwork } from "../../src/lib/network_helpers"
+import { LoanRequestStatus, SupporterStatus } from "../../src/lib/types"
 import {
   BASIC_NETWORK,
+  BORROWER1,
   LENDER1,
   LENDER2,
-  BORROWER1,
   SUPPORTER1,
   SUPPORTER2,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/lib/network_helpers"
-import { User_Insert_Input } from "../../src/gql/sdk"
 import { getUserPortfolio } from "./test_helpers"
-import { SWARMAI_URL } from "../../src/lib/constant"
-import lender from "../../src/components/dashboard/lender"
-import { lastDayOfDecade } from "date-fns"
-import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
-import SwarmAI from "gql/swarmai_client"
 
 global.fetch = require("node-fetch")
 
