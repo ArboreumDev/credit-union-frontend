@@ -164,19 +164,24 @@ export class AcceptRejectPledge extends Action {
 
 export class AcceptLoanOffer extends Action {
   static Name = "AcceptLoan"
-  static InputType: string
+  static InputType: {
+    request_id: string
+  }
   static ReturnType: StartLoanMutation
   minAuthLevel = AUTH_TYPE.USER
 
   isUserAllowed() {
-    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+    const userHasLoan = this.user.loan_requests
+      .map((lr) => lr.request_id)
+      .includes(this.payload.request_id)
+    return super.isUserAllowed() && userHasLoan
   }
 
   run() {
     return this.dbClient.acceptLoanOffer(this.payload.request_id)
   }
 
-  static fetch(payload: any) {
+  static fetch(payload: typeof AcceptLoanOffer.InputType) {
     return fetcherMutate(AcceptLoanOffer.Name, payload)
   }
 }
