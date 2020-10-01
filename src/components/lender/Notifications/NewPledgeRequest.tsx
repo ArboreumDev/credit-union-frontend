@@ -11,16 +11,19 @@ import {
 } from "@chakra-ui/core"
 import { AcceptRejectPledge } from "lib/gql_api_actions"
 import { PledgeRequest, SupporterStatus } from "lib/types"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
+import ModifyPledgeAmount from "./ModifyPledgeAmount"
 
 interface Params {
   pledgeRequest: PledgeRequest
+  pledgeDisabled?: boolean
 }
 
-export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
+export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
   const router = useRouter()
   const [show, setShow] = useState(false)
   const loanRequest = pledgeRequest.loan_request
@@ -100,24 +103,27 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
             onClick={() => submitPledge(SupporterStatus.confirmed)}
             colorScheme="blue"
             w="280px"
+            disabled={pledgeDisabled}
           >
             I approve of the pledge amount
           </Button>
-          <Button
-            onClick={() => submitPledge(SupporterStatus.rejected)}
-            colorScheme="blue"
-            w="280px"
-          >
-            I wish to change pledge amount
-          </Button>
+          <ModifyPledgeAmount pledgeRequest={pledgeRequest} />
           <Button
             onClick={() => submitPledge(SupporterStatus.rejected)}
             colorScheme="red"
             w="280px"
+            disabled={pledgeDisabled}
           >
             I cannot pledge for this person
           </Button>
         </Wrap>
+        {pledgeDisabled && (
+          <Text>
+            Please
+            <Link href="/dashboard/invest">add more</Link>
+            funds to make this pledge.
+          </Text>
+        )}
       </AlertDescription>
     </Alert>
   )

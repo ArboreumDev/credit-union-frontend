@@ -22,7 +22,11 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       (
         <Box>
           {user.pledge_requests.map((pr, idx) => (
-            <NewPledgeRequest key={idx + `_nlr`} pledgeRequest={pr} />
+            <NewPledgeRequest
+              key={idx + `_nlr`}
+              pledgeRequest={pr}
+              pledgeDisabled={user.balance < pr.pledge_amount}
+            />
           ))}
           <LenderDashboard user={user} />
         </Box>
