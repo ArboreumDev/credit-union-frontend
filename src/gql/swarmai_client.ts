@@ -19,7 +19,7 @@ export default class SwarmAI {
       aiResponse: latestOffer,
     }
     const url = SWARMAI_URL + "/loan/accept"
-    return fetchJSON(url, payload)
+    return fetchJSON({ url, payload })
   }
 
   static async calculateLoanOffer(params: {
@@ -32,7 +32,7 @@ export default class SwarmAI {
       request_msg: SwarmAI.generateLoanOfferRequest(params),
     }
     const url = SWARMAI_URL + "/loan/request"
-    return fetchJSON(url, payload)
+    return fetchJSON({ url, payload })
   }
 
   static generateLoanOfferRequest({

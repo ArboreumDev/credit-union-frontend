@@ -1,10 +1,34 @@
 import { LogEventTypes } from "./constant"
 
-export default async function fetcher(...args: Parameters<typeof fetch>) {
-  const response = await fetch(...args)
+export async function fetchJSON({
+  url,
+  payload,
+  isSSR,
+  isNoParseRes,
+}: {
+  url: string
+  payload: any
+  isSSR?: boolean
+  isNoParseRes?: boolean
+}) {
+  if (isSSR) {
+    url = (process.env.NEXTAUTH_URL ?? "") + url
+  }
+  console.log("fetchJSON", url)
 
-  // if the server replies, there's always some data in json
-  // if there's a network error, it will throw at the previous line
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (isNoParseRes)
+    return {
+      status: response.status,
+    }
+
   const data = await response.json()
 
   if (response.ok) {
@@ -16,27 +40,15 @@ export default async function fetcher(...args: Parameters<typeof fetch>) {
   throw error
 }
 
-export async function fetchJSON(url, payload: any) {
-  return fetcher(url, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+export const fetcherMutate = (action, payload) => {
+  return fetchJSON({
+    url: "/api/gql",
+    payload: { actionType: action, payload: payload },
   })
 }
 
-export const fetcherMutate = (action, payload) => {
-  const base_url = process.env.NEXTAUTH_URL || ""
-  const url = base_url + "/api/gql"
-  console.log(url)
-
-  return fetchJSON(url, { actionType: action, payload: payload })
-}
-
 export async function captureLog(event) {
-  return fetchJSON("/api/log", event)
+  return fetchJSON({ url: "/api/log", payload: event })
 }
 
 export async function captureFeedback(message: string) {

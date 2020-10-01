@@ -28,16 +28,13 @@ AWS.config.setPromisesDependency(null)
 const s3 = new AWS.S3()
 
 export const PostToSlack = async (message: string) => {
-  const response = await fetchJSON(SLACK_WEBHOOK_URL, {
-    text: `[${process.env.ENVIRONMENT}] ${message}`,
+  const response = fetchJSON({
+    url: SLACK_WEBHOOK_URL,
+    payload: {
+      text: `[${process.env.ENVIRONMENT}] ${message}`,
+    },
+    isNoParseRes: true,
   })
-  if (!response.ok) {
-    return console.error(
-      "Slack post failed",
-      response.status,
-      await response.json()
-    )
-  }
 }
 
 export const UploadToS3 = async (

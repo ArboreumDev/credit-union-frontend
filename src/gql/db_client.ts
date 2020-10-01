@@ -108,15 +108,14 @@ export default class DbClient {
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO
     ) {
-      console.log("Calculating loan request offer", requestId)
       const aiResponse = await this.calculateLoanRequestOffer(requestId)
       const payload = {
         requestId,
         newOffer: { latestOffer: aiResponse },
       }
-
+      console.log("Calculated loan request offer", payload)
       // upload for debugging purposes
-      fetchJSON("/api/integration/fp", payload)
+      fetchJSON({ url: "/api/integration/fp", payload, isSSR: true })
 
       return this.sdk.UpdateLoanRequestWithOffer(payload)
     }
