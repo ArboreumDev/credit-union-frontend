@@ -3,18 +3,9 @@ import { dec_to_perc } from "lib/currency"
 import { LoanRequest, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
 
-export interface Supporter {
-  user: {
-    name: string
-    email: string
-  }
-  pledge_amount: number
-  status: SupporterStatus
-}
-
 interface Props {
   loanRequest: LoanRequest
-  supporters: Supporter[]
+  supporters: LoanRequest["supporters"]
 }
 
 const Dot = (props: { color?: string }) => (

@@ -106,11 +106,15 @@ export class Fixtures {
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
     amount: 90000,
-    // supporters: []
     supporters: [
       {
         pledge_amount: 100,
         status: "confirmed",
+        user: {
+          id: "12312",
+          name: "gaurav",
+          email: "gp@arboreum.dev",
+        },
       },
     ],
   }
