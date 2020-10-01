@@ -17,6 +17,7 @@ import { Currency } from "components/common/Currency"
 import { dec_to_perc } from "lib/currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
 import { LoanRequest } from "lib/types"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import LoanModel from "./LoanModel"
@@ -73,9 +74,15 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
 }
 
 export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
+  const router = useRouter()
+
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
     AcceptLoanOffer.fetch({ request_id: loanRequest.request_id })
+      .then(async (res) => {
+        router.push("/dashboard")
+      })
+      .catch((err) => console.error(err))
   }
   const rejectLoan = () => {
     console.log("reject loan", JSON.stringify(loanRequest))
