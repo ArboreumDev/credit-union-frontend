@@ -184,8 +184,22 @@ export type SwarmAiResponse = {
   loan_schedule?: LoanSchedule
 }
 
+export type PaidRemain = {
+  paid: number
+  remain: number
+}
+
+export type BorrowerView = {
+  total_payments: PaidRemain
+  corpus_principal: PaidRemain
+  supporter_principal: PaidRemain
+  corpus_interest: PaidRemain
+  supporter_interest: PaidRemain
+  borrower_collateral: PaidRemain
+}
+
 export type LoanSchedule = {
-  borrower_view: any
+  borrower_view: BorrowerView
   next_borrower_payment: number
   supporter_view?: any
   corpus_view?: any

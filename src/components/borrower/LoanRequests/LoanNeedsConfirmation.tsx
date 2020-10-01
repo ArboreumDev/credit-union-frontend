@@ -24,7 +24,7 @@ import {
 } from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
-import LoanModel from "./LoanRequestModel"
+import LoanModel from "./LoanModel"
 
 interface Params {
   loanRequest: LoanRequest

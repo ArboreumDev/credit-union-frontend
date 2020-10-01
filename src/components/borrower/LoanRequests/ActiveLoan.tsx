@@ -19,19 +19,31 @@ import { Currency } from "../../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../../common/Details"
 import { Column, Row, Table } from "../../common/Table"
 import UpcomingRepayment from "../Notifications/UpcomingRepayment"
+import LoanModel from "./LoanModel"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
-const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
+const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   { key: "Status", value: "To Be disbursed" },
-  { key: "Loan Amount", value: "₹1,20,000" },
-  { key: "Repaid", value: "₹10,000" },
-  { key: "Outstanding Principal", value: "₹1,10,000" },
-  { key: "Outstanding Interest", value: "₹7,700" },
+  { key: "Loan Amount", value: <Currency amount={loan.amount} /> },
+  { key: "Repaid", value: <Currency amount={loan.amountRepaid} /> },
+  {
+    key: "Outstanding Principal",
+    // TODO: Fix these when adding repayment logic
+    value: <Currency amount={loan.amount + loan.interestAmount} />,
+  },
+  {
+    key: "Outstanding Interest",
+    value: <Currency amount={loan.interestAmount} />,
+  },
   { key: "Last Repayment Date", value: "30 August 2020" },
-  { key: "Next Repayment Amount", value: "₹10,000", color: "red.500" },
+  {
+    key: "Next Repayment Amount",
+    value: <Currency amount={loan.nextPayment} />,
+    color: "red.500",
+  },
   {
     key: "Next Repayment Due Date",
     value: "30 September 2020",
@@ -39,13 +51,14 @@ const getTableObjectFromLoanRequest = (loan: LoanRequest): KeyValueRows[] => [
   },
   {
     key: "Late Payment Fee",
-    value: "₹200",
+    value: <Currency amount={200} />,
     color: "red.500",
   },
 ]
 
-const BActiveLoan = ({ loanRequest: loan }: Params) => {
-  const amt = loan.risk_calc_result.latestOffer.loan_info.amount
+const BActiveLoan = ({ loanRequest }: Params) => {
+  const loan = new LoanModel(loanRequest)
+  const amt = loan.amount
   return (
     <>
       <Stack>
@@ -81,11 +94,11 @@ const BActiveLoan = ({ loanRequest: loan }: Params) => {
             <Center>
               <CircularProgress
                 size="120px"
-                value={dec_to_perc(10000 / amt)}
+                value={loan.percRepaid}
                 color="green.400"
               >
                 <CircularProgressLabel maxW="80px" fontSize="20px">
-                  {dec_to_perc(10000 / amt)}% Repaid
+                  {loan.percRepaid}% Repaid
                 </CircularProgressLabel>
               </CircularProgress>
             </Center>

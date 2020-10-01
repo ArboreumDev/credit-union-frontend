@@ -12,16 +12,23 @@ import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
 
 export default class LoanModel {
-  constructor(public loan: LoanRequest) {}
+  constructor(public _loan: LoanRequest) {}
+
+  get amount() {
+    return this._loan.amount
+  }
+  get purpose() {
+    return this._loan.purpose
+  }
 
   get confirmedSupporters() {
-    return this.loan.supporters.filter(
+    return this._loan.supporters.filter(
       (x) => x.status == SupporterStatus.confirmed
     )
   }
 
   get calculatedRisk() {
-    return this.loan.risk_calc_result.latestOffer as SwarmAiResponse
+    return this._loan.risk_calc_result.latestOffer as SwarmAiResponse
   }
 
   get loanInfo() {
@@ -33,11 +40,23 @@ export default class LoanModel {
   }
 
   get interestAmount() {
-    return this.loanInfo.borrower_apr * this.loan.amount
+    return this.loanInfo.borrower_apr * this.amount
   }
 
   get totalAmountToRepay() {
-    return this.loan.amount + this.loanInfo.borrower_apr * this.loan.amount
+    // TODO: Should use borrowerview.total_paynents for this?
+    return this.amount + this.loanInfo.borrower_apr * this.amount
+  }
+
+  get borrowerView() {
+    return this.calculatedRisk.loan_schedule.borrower_view
+  }
+
+  get amountRepaid() {
+    return this.borrowerView.total_payments.paid
+  }
+  get percRepaid() {
+    return dec_to_perc(this.amountRepaid / this.amount)
   }
 
   /**
