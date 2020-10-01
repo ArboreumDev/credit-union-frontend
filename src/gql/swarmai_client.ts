@@ -8,6 +8,22 @@ import {
   SwarmAiRequestMessage,
   SwarmAiResponse,
 } from "lib/types"
+import { PostToSlack } from "pages/api/upload"
+
+async function fetcher(url: string, payload: any, caller?: string) {
+  async function log(message, payload) {
+    // upload for debugging purposes
+    await PostToSlack(message)
+    // fetchJSON({ url: "/api/integration/fp", payload, isSSR: true })
+  }
+  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`, payload)
+
+  const res = await fetchJSON({ url, payload })
+  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`, res)
+
+  // return res
+  return fetchJSON({ url, payload })
+}
 
 export default class SwarmAI {
   static async acceptLoan(
@@ -19,7 +35,7 @@ export default class SwarmAI {
       aiResponse: latestOffer,
     }
     const url = SWARMAI_URL + "/loan/accept"
-    return fetchJSON({ url, payload })
+    return fetcher(url, payload, "acceptLoan")
   }
 
   static async calculateLoanOffer(params: {
@@ -32,7 +48,7 @@ export default class SwarmAI {
       request_msg: SwarmAI.generateLoanOfferRequest(params),
     }
     const url = SWARMAI_URL + "/loan/request"
-    return fetchJSON({ url, payload })
+    return fetcher(url, payload, "calculateLoanOffer")
   }
 
   static generateLoanOfferRequest({
