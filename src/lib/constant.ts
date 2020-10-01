@@ -28,3 +28,10 @@ export enum LogEventTypes {
 
 export const SLACK_WEBHOOK_URL =
   "https://hooks.slack.com/services/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"
+
+// TODO: use actual user demographics when in production
+export const USER_DEMOGRAPHIC = {
+  yearsOfEducation: 3,
+  income: 300,
+  creditScore: 600,
+}
