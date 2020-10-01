@@ -189,12 +189,12 @@ describe("Basic loan request flow for an accepted loan", () => {
 
     // skipped until we have properly dealt with how exiting loans are stored
     test.skip("the loan shows up in subsequent queries to the corpus Data", async () => {
-      const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
-      expect(
-        optimizer_context.loans_in_corpus
-          .map((x) => x.loanId)
-          .includes(requestId)
-      ).toBeTruthy
+      // const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
+      // expect(
+      //   optimizer_context.loans_in_corpus
+      //     .map((x) => x.loanId)
+      //     .includes(requestId)
+      // ).toBeTruthy
     })
   })
 })
