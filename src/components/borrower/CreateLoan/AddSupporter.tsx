@@ -69,7 +69,7 @@ export default function AddSupporter({ loanRequest }: Props) {
                 ref={register({ required: true })}
               />
             </Box>
-            <Center flex={0.6}>
+            <Center flex={0.8}>
               <AmountInput
                 passName={`amount`}
                 passRef={register({ required: true })}
