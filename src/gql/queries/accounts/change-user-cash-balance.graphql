@@ -4,7 +4,7 @@ mutation ChangeUserCashBalance (
 ) {
   user: update_user_by_pk (
     pk_columns: {id: $userId}
-    _inc: {balance: $delta}
+    _inc: {balance: $delta, corpus_share:$delta}
   )
   {
     balance

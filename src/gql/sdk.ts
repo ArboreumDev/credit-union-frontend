@@ -6999,7 +6999,7 @@ export const ChangeUserCashBalanceDocument = gql`
   mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
     user: update_user_by_pk(
       pk_columns: { id: $userId }
-      _inc: { balance: $delta }
+      _inc: { balance: $delta, corpus_share: $delta }
     ) {
       balance
     }

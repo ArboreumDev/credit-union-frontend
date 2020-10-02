@@ -130,7 +130,7 @@ export class ChangeBalance extends Action {
   run() {
     return this.dbClient.sdk.ChangeUserCashBalance({
       userId: this.user.id,
-      delta: this.payload.delta,
+      delta: this.payload.delta / 2,
     })
   }
 
