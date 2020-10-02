@@ -1,24 +1,19 @@
-import request, { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
+import { GraphQLClient } from "graphql-request"
+import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import { DbClient } from "../../src/gql/db_client"
-import {
-  EDGE_STATUS,
-  LoanRequestStatus,
-  SupporterStatus,
-} from "../../src/lib/types"
+import { getSdk, Sdk, User_Insert_Input } from "../../src/gql/sdk"
+import { MIN_SUPPORT_RATIO } from "../../src/lib/constant"
+import { addNetwork } from "../../src/lib/network_helpers"
+import { LoanRequestStatus, SupporterStatus } from "../../src/lib/types"
 import {
   BASIC_NETWORK,
+  BORROWER1,
   LENDER1,
   LENDER2,
-  BORROWER1,
   SUPPORTER1,
+  SUPPORTER2,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/lib/network_helpers"
-import { addAndConfirmSupporter } from "../../src/lib/loan_helpers"
-import { User_Insert_Input } from "../../src/gql/sdk"
-import { getUserPortfolio } from "./test_helpers"
-import lender from "../../src/components/dashboard/lender"
+import { getUserPortfolio, addAndConfirmSupporter } from "./test_helpers"
 
 global.fetch = require("node-fetch")
 
@@ -43,9 +38,9 @@ afterAll(async () => {
 describe("Basic loan request flow for an accepted loan", () => {
   let dbClient: DbClient
   const amount = 100
-  const pledgeAmount = amount / 2
+  const pledgeAmount = amount * MIN_SUPPORT_RATIO
   const purpose = "go see the movies"
-  let request_id: string
+  let requestId: string
   // var testOutput;
   const borrower1: User_Insert_Input = BORROWER1
   const lender1: User_Insert_Input = LENDER1
@@ -65,67 +60,87 @@ describe("Basic loan request flow for an accepted loan", () => {
   })
 
   describe("A borrower user requests a loan...", () => {
-    test("A loan request with status 'initiated' is created", async () => {
+    test("A loan request with is created and the swarmai responds with an offer", async () => {
       const { request } = await dbClient.createLoanRequest(
         borrower1.id,
         amount,
         purpose
       )
-      request_id = request.request_id
+      // const request = data.update_loan_requests_by_pk
+      requestId = request.request_id
       expect(request.amount).toBe(amount)
       expect(request.purpose).toBe(purpose)
       expect(request.status).toBe(LoanRequestStatus.initiated)
+      expect(request.risk_calc_result.latestOffer).toBeUndefined
     })
 
-    test("The AI collects the input and stores and provides possible terms of the loan", async () => {
-      // lets add and confirm a supporter so that the loan is more interesting
+    test("the swarmai module can respond to loan requests", async () => {
+      const res = await dbClient.calculateLoanRequestOffer(requestId)
+      expect(res.loan_request_info.request_id).toBe(requestId)
+      expect(res).toHaveProperty("corpus_share")
+      expect(res.corpus_share).toBe(1)
+      expect(res).toHaveProperty("loan_info.borrower_apr")
+    })
+
+    test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
       await sdk.CreateUser({ user: SUPPORTER1 })
-      await addAndConfirmSupporter(sdk, request_id, SUPPORTER1.id, pledgeAmount)
-      // upon certain conditions that are currently skipped for this initial version (e.g. when guarantors have confirmed)
-      // we trigger the calculation of a loan offer. The flow is as follows:
-      // - collecting inputs for the swarm-ai (risk-info, loan-amount, network-state...)
-      // const riskInput = await dbClient.getRiskInput(request_id)
-      // const optimizerInput = await dbClient.getOptimizerInput(request_id)
-      // console.log(JSON.stringify(optimizerInput))
-      // console.log(optimizerInput.loan_request_info.supporters)
-      // - formatting it such that the optimzer can use it and dropping it to the AWS-S3 bucket
-      // - the bucket then calls back into our backend and stores the offer-parameters (interest, guarantor-breakdown,...)
-      //    as a json on the loan_request entry (currently the call to the AI-container is mocked though)
-      // - the loan-request status is updated to signal the borrower that they have a loan offer
-      const { updatedRequest } = await dbClient.calculateLoanRequestOffer(
-        request_id
+      await addAndConfirmSupporter(
+        sdk,
+        dbClient,
+        requestId,
+        SUPPORTER1.id,
+        pledgeAmount / 2
       )
-      expect(updatedRequest.status).toBe(
+      const { loanRequest } = await sdk.GetLoanRequest({
+        requestId: requestId,
+      })
+      expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
+    })
+
+    test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
+      await sdk.CreateUser({ user: SUPPORTER2 })
+      await addAndConfirmSupporter(
+        sdk,
+        dbClient,
+        requestId,
+        SUPPORTER2.id,
+        pledgeAmount / 2
+      )
+      const { loanRequest } = await sdk.GetLoanRequest({
+        requestId: requestId,
+      })
+
+      // The AI has collected the input and stores possible terms of the loan in the db
+      expect(loanRequest.status).toBe(
         LoanRequestStatus.awaiting_borrower_confirmation
       )
 
       // verify how the output of the optimizer is stored in DB:
-      expect(updatedRequest.risk_calc_result).toHaveProperty("latestOffer")
-      expect(updatedRequest.risk_calc_result.latestOffer.amount).toBe(amount)
+      expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
+      const loanOffer = loanRequest.risk_calc_result.latestOffer
+      expect(loanOffer.loan_info.amount).toBe(amount)
+      expect(loanOffer.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
+      expect(loanOffer.loan_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
     })
   })
+
   describe("When the borrower accepts a loan offer...", () => {
     test("triggers creation of payables, receivables", async () => {
-      const { startedLoan } = await dbClient.acceptLoanOffer(
-        request_id,
-        "latestOffer"
-      )
-      expect(startedLoan.update_loan_requests_by_pk.status).toBe(
+      const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
+      expect(data.update_loan_requests_by_pk.status).toBe(
         LoanRequestStatus.active
       )
 
       // payable should make sense
-      expect(startedLoan.insert_payables_one.amount_total).toBeGreaterThan(
-        amount
-      )
-      expect(startedLoan.insert_payables_one.amount_paid).toBe(0)
+      expect(data.insert_payables_one.amount_total).toBeGreaterThan(amount)
+      expect(data.insert_payables_one.amount_paid).toBe(0)
 
       // receivable should match payable
-      expect(startedLoan.insert_receivables_one.amount_total).toBe(
-        startedLoan.insert_payables_one.amount_total
+      expect(data.insert_receivables_one.amount_total).toBe(
+        data.insert_payables_one.amount_total
       )
-      expect(startedLoan.insert_receivables_one.amount_received).toBe(
-        startedLoan.insert_payables_one.amount_paid
+      expect(data.insert_receivables_one.amount_received).toBe(
+        data.insert_payables_one.amount_paid
       )
     })
 
@@ -141,8 +156,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     })
 
     test("the users balances are updated accordingly", async () => {
-      const { user } = await sdk.GetAllUsers()
-      balancesAfter = getUserPortfolio(user)
+      const { user: allUsers } = await sdk.GetAllUsers()
+      balancesAfter = getUserPortfolio(allUsers)
 
       // sanity-check that lender 2 has brought more than lender 1
       expect(lender1.balance).toBeGreaterThan(lender2.balance)
@@ -166,15 +181,20 @@ describe("Basic loan request flow for an accepted loan", () => {
       const diffLender2 =
         balancesBefore[lender2.id].cash - balancesAfter[lender2.id].cash
       expect(diffLender1).toBeGreaterThan(diffLender2)
+
+      expect(SUPPORTER1.balance).toBeGreaterThan(
+        balancesAfter[SUPPORTER1.id].cash
+      )
     })
 
-    test("the loan shows up in subsequent queries to the corpus Data", async () => {
-      const { optimizer_context } = await dbClient.getOptimizerInput(request_id)
-      expect(
-        optimizer_context.loans_in_corpus
-          .map((x) => x.loanId)
-          .includes(request_id)
-      ).toBeTruthy
+    // skipped until we have properly dealt with how exiting loans are stored
+    test.skip("the loan shows up in subsequent queries to the corpus Data", async () => {
+      // const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
+      // expect(
+      //   optimizer_context.loans_in_corpus
+      //     .map((x) => x.loanId)
+      //     .includes(requestId)
+      // ).toBeTruthy
     })
   })
 })

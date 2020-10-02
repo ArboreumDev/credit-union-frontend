@@ -21,6 +21,10 @@ beforeAll(async () => {
   await sdk.ResetDB()
 })
 
+afterAll(async () => {
+  await sdk.ResetDB()
+})
+
 describe("An entire network can be added from a fixture", () => {
   beforeAll(async () => {
     await addNetwork(sdk, BASIC_NETWORK)

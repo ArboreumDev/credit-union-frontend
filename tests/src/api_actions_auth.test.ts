@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request"
-import { DbClient } from "../../src/gql/db_client"
+import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import {
   CreateLoanRequestMutation,
@@ -42,12 +42,12 @@ describe("Create new user", () => {
     const payload: typeof CreateUser.InputType = {
       user: BORROWER1,
     }
-    const res: CreateUserMutation = await runAction(
+    const res: CreateUserMutation = (await runAction(
       CreateUser.Name,
       undefined,
       payload,
       dbClient
-    )
+    )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
   })
 })
@@ -70,13 +70,13 @@ describe("Create new loan | user is Authorized", () => {
   test("new loan", async () => {
     const session = getMockSession(BORROWER1)
 
-    const res: typeof CreateLoan.ReturnType = await runAction(
+    const res: typeof CreateLoan.ReturnType = (await runAction(
       CreateLoan.Name,
       session,
       payload,
       dbClient
-    )
-    expect(res.insert_loan_requests_one.amount === payload.request.amount)
+    )) as typeof CreateLoan.ReturnType
+    expect(res.request.amount === payload.request.amount)
   })
 })
 

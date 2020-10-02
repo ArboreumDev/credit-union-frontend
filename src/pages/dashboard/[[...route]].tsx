@@ -1,5 +1,3 @@
-import { Center } from "@chakra-ui/core"
-import { stringType } from "aws-sdk/clients/iam"
 import useUser from "lib/useUser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
@@ -37,6 +35,13 @@ export const getDashboardComponent = (user: User, idx?: number) => (
 const Dashboard = () => {
   const { user } = useUser()
   const router = useRouter()
+  const { route } = router.query
+
+  let initPanelIdx = 0
+  if (route) {
+    const tabIdx = route[0] in lenderTabMap ? lenderTabMap[route[0]] : 0
+    initPanelIdx = tabIdx
+  }
 
   if (!user) return <AppBar />
   return (
@@ -44,7 +49,7 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      {getDashboardComponent(user)}
+      {getDashboardComponent(user, initPanelIdx)}
     </div>
   )
 }

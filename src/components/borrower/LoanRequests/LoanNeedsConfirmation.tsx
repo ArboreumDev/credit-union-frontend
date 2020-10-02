@@ -13,18 +13,21 @@ import {
   StatNumber,
   Text,
 } from "@chakra-ui/core"
+import { Currency } from "components/common/Currency"
+import { dec_to_perc } from "lib/currency"
+import { AcceptLoanOffer } from "lib/gql_api_actions"
+import { LoanRequest } from "lib/types"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
-import { dec_to_perc } from "lib/currency"
-import { CalculatedRisk, LoanRequest } from "lib/types"
-import { Currency } from "../../common/Currency"
+import LoanModel from "./LoanModel"
 
 interface Params {
   loanRequest: LoanRequest
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
-  const calculatedRisk = loanRequest.risk_calc_result as CalculatedRisk
+  const loan = new LoanModel(loanRequest)
   return (
     <Stack w="100%">
       <Flex>
@@ -34,29 +37,36 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
         </Box>
       </Flex>
       <Flex>
+        <Box flex={0.5}>Support</Box>
+        <Box flex={0.5} textAlign="right">
+          <p>
+            {loan.confirmedSupporters.length} out of{" "}
+            {loanRequest.supporters.length} have confirmed
+          </p>
+        </Box>
+      </Flex>
+      <Flex>
         <Box flex={0.5}>Interest Rate</Box>
         <Box flex={0.5} textAlign="right">
-          {dec_to_perc(calculatedRisk.interestRate)}%
+          {dec_to_perc(loan.borrowerAPR)}%
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Interest Amount</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={calculatedRisk.totalDue - loanRequest.amount} />
+          <Currency amount={loan.interestAmount} />
         </Box>
       </Flex>
       <Flex>
-        <Box flex={0.5}>Total due in {calculatedRisk.loanTerm} months</Box>
+        <Box flex={0.5}>Total due in {loan.tenor} months</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={calculatedRisk.totalDue} />
+          <Currency amount={loan.totalAmountToRepay} />
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Monthly Payment Due</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency
-            amount={calculatedRisk.totalDue / calculatedRisk.loanTerm}
-          />
+          <Currency amount={loan.nextPayment} />
         </Box>
       </Flex>
     </Stack>
@@ -64,8 +74,15 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
 }
 
 export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
+  const router = useRouter()
+
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
+    AcceptLoanOffer.fetch({ request_id: loanRequest.request_id })
+      .then(async (res) => {
+        router.push("/dashboard")
+      })
+      .catch((err) => console.error(err))
   }
   const rejectLoan = () => {
     console.log("reject loan", JSON.stringify(loanRequest))

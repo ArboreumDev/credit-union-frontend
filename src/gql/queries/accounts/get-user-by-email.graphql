@@ -11,6 +11,7 @@ query GetUserByEmail($email: String!) {
     kyc_approved
     demographic_info
     loan_requests {
+      request_id
       confirmation_date
       payback_status
       purpose
@@ -19,6 +20,15 @@ query GetUserByEmail($email: String!) {
       created_at
       amount
       purpose
+      supporters {
+        pledge_amount
+        status
+        user {
+          id
+          name
+          email
+        }
+      }
     }
     pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
       ...pledgeFields

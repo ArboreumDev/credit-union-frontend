@@ -8,5 +8,6 @@ query GetAllUsers {
     user_number
     corpus_share
     kyc_approved
+    demographic_info
   }
 }

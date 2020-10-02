@@ -1,9 +1,13 @@
-import { DbClient } from "gql/db_client"
+import DbClient from "gql/db_client"
 import {
+  AddSupporterMutation,
+  AddSupporterMutationVariables,
   ChangeUserCashBalanceMutationVariables,
-  CreateLoanRequestMutation,
   CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,
+  StartLoanMutation,
+  UpdateLoanRequestWithOfferMutation,
+  UpdateSupporterMutationVariables,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { Session, UserType } from "./types"
@@ -71,22 +75,12 @@ export class CreateUser extends Action {
 export class CreateLoan extends Action {
   static Name = "CreateLoan"
   static InputType: CreateLoanRequestMutationVariables
-  static ReturnType: CreateLoanRequestMutation
+  static ReturnType: UpdateLoanRequestWithOfferMutation
 
   minAuthLevel = AUTH_TYPE.USER
 
   run() {
-    try {
-      // add call to swarmai here
-    } catch (err) {
-      console.error(err)
-    }
-    return this.dbClient.sdk.CreateLoanRequest({
-      request: {
-        ...this.payload.request,
-        borrower_id: this.user.id,
-      },
-    })
+    return this.dbClient.sdk.CreateLoanRequest(this.payload)
   }
 
   isUserAllowed() {
@@ -100,6 +94,27 @@ export class CreateLoan extends Action {
 
   static fetch(payload: typeof CreateLoan.InputType) {
     return fetcherMutate(CreateLoan.Name, payload)
+  }
+}
+
+export class AddSupporter extends Action {
+  static Name = "AddSupporter"
+  static InputType: {
+    requestId: string
+    email: string
+    amount: number
+  }
+  static ReturnType: AddSupporterMutation
+
+  minAuthLevel = AUTH_TYPE.USER
+
+  run() {
+    const _p = this.payload as typeof AddSupporter.InputType
+    return this.dbClient.addSupporter(_p.requestId, _p.email, _p.amount)
+  }
+
+  static fetch(payload: typeof AddSupporter.InputType) {
+    return fetcherMutate(AddSupporter.Name, payload)
   }
 }
 
@@ -126,7 +141,7 @@ export class ChangeBalance extends Action {
 
 export class AcceptRejectPledge extends Action {
   static Name = "AcceptRejectPledge"
-  static InputType: ChangeUserCashBalanceMutationVariables // TODO
+  static InputType: UpdateSupporterMutationVariables
   minAuthLevel = AUTH_TYPE.USER
 
   isUserAllowed() {
@@ -134,12 +149,12 @@ export class AcceptRejectPledge extends Action {
   }
 
   run() {
-    // TODO Add accept logic here
-    // return this.dbClient.sdk.ChangeUserCashBalance({
-    //   userId: this.user.id,
-    //   delta: this.payload.delta,
-    // })
-    return null
+    return this.dbClient.updateSupporter(
+      this.payload.request_id,
+      this.user.id,
+      this.payload.status, // see types.SupporterStatus
+      this.payload.pledge_amount
+    )
   }
 
   static fetch(payload: typeof AcceptRejectPledge.InputType) {
@@ -147,12 +162,38 @@ export class AcceptRejectPledge extends Action {
   }
 }
 
+export class AcceptLoanOffer extends Action {
+  static Name = "AcceptLoan"
+  static InputType: {
+    request_id: string
+  }
+  static ReturnType: StartLoanMutation
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    const userHasLoan = this.user.loan_requests
+      .map((lr) => lr.request_id)
+      .includes(this.payload.request_id)
+    return super.isUserAllowed() && userHasLoan
+  }
+
+  run() {
+    return this.dbClient.acceptLoanOffer(this.payload.request_id)
+  }
+
+  static fetch(payload: typeof AcceptLoanOffer.InputType) {
+    return fetcherMutate(AcceptLoanOffer.Name, payload)
+  }
+}
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
+  [AddSupporter.Name]: AddSupporter,
   [ChangeBalance.Name]: ChangeBalance,
   [AcceptRejectPledge.Name]: AcceptRejectPledge,
+  [AcceptLoanOffer.Name]: AcceptLoanOffer,
 }
 
 export function runAction(

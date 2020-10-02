@@ -2,7 +2,7 @@ import { Box, Center, Flex, Text, Stack } from "@chakra-ui/core"
 
 export type KeyValueMap = {
   key: string
-  value: string
+  value: any
   color?: string
 }
 

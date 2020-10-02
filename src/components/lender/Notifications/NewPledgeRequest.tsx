@@ -1,8 +1,8 @@
 import {
   Alert,
   AlertDescription,
-  AlertIcon,
   AlertTitle,
+  Box,
   Button,
   Collapse,
   Divider,
@@ -10,19 +10,36 @@ import {
   Text,
   Wrap,
 } from "@chakra-ui/core"
-import { CalculatedRisk, PledgeRequest } from "lib/types"
+import { AcceptRejectPledge } from "lib/gql_api_actions"
+import { PledgeRequest, SupporterStatus } from "lib/types"
+import Link from "next/link"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
+import ModifyPledgeAmount from "./ModifyPledgeAmount"
 
 interface Params {
   pledgeRequest: PledgeRequest
+  pledgeDisabled?: boolean
 }
 
-export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
+export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
+  const router = useRouter()
   const [show, setShow] = useState(false)
   const loanRequest = pledgeRequest.loan_request
-  const riskCalcResult = loanRequest.risk_calc_result as CalculatedRisk
+  const submitPledge = (status: SupporterStatus) => {
+    AcceptRejectPledge.fetch({
+      request_id: pledgeRequest.request_id,
+      supporter_id: pledgeRequest.loan_request.user.email,
+      status: status,
+      pledge_amount: pledgeRequest.pledge_amount,
+    })
+      .then(async (res) => {
+        router.push("/")
+      })
+      .catch((err) => console.error(err))
+  }
 
   return (
     <Alert
@@ -68,7 +85,10 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
               </Row>
               <Row>
                 <TextColumn>Loan Term</TextColumn>
-                <TextColumn>{riskCalcResult.loanTerm} months</TextColumn>
+                <TextColumn>
+                  {loanRequest.risk_calc_result?.latestOffer.loan_info.tenor}{" "}
+                  months
+                </TextColumn>
               </Row>
             </Table>
           </AlertDescription>
@@ -80,17 +100,42 @@ export const NewPledgeRequest = ({ pledgeRequest }: Params) => {
 
       <AlertDescription marginTop="20px">
         <Wrap justify="center">
-          <Button colorScheme="blue" w="280px">
+          <Button
+            onClick={() => submitPledge(SupporterStatus.confirmed)}
+            colorScheme="blue"
+            w="280px"
+            disabled={pledgeDisabled}
+          >
             I approve of the pledge amount
           </Button>
-          <Button colorScheme="blue" w="280px">
-            I wish to change pledge amount
-          </Button>
-          <Button colorScheme="red" w="280px">
+          <ModifyPledgeAmount pledgeRequest={pledgeRequest} />
+          <Button
+            onClick={() => submitPledge(SupporterStatus.rejected)}
+            colorScheme="red"
+            w="280px"
+            disabled={pledgeDisabled}
+          >
             I cannot pledge for this person
           </Button>
         </Wrap>
+        {pledgeDisabled && (
+          <Box>
+            Please&nbsp;
+            <Link href="/dashboard/invest">
+              <a className="link">add more</a>
+            </Link>
+            &nbsp;funds to make this pledge.
+          </Box>
+        )}
       </AlertDescription>
+      <style jsx>
+        {`
+          .link {
+            // color: blue
+            text-decoration: underline;
+          }
+        `}
+      </style>
     </Alert>
   )
 }

@@ -714,12 +714,12 @@ export type Encumbrances = {
   /** An aggregated array relationship */
   encumbrance_participants_aggregate: Encumbrance_Participants_Aggregate
   expected_dissolve_amount: Scalars["numeric"]
-  guarantor_id: Scalars["uuid"]
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
   pay_frequency: Scalars["Int"]
   status: Scalars["String"]
+  supporter_id: Scalars["uuid"]
   updated_at: Scalars["timestamptz"]
   /** An object relationship */
   user: User
@@ -826,11 +826,11 @@ export type Encumbrances_Bool_Exp = {
   encumbrance_id?: Maybe<Uuid_Comparison_Exp>
   encumbrance_participants?: Maybe<Encumbrance_Participants_Bool_Exp>
   expected_dissolve_amount?: Maybe<Numeric_Comparison_Exp>
-  guarantor_id?: Maybe<Uuid_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   pay_frequency?: Maybe<Int_Comparison_Exp>
   status?: Maybe<String_Comparison_Exp>
+  supporter_id?: Maybe<Uuid_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
 }
@@ -863,11 +863,11 @@ export type Encumbrances_Insert_Input = {
     Encumbrance_Participants_Arr_Rel_Insert_Input
   >
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
 }
@@ -883,10 +883,10 @@ export type Encumbrances_Max_Fields = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -900,10 +900,10 @@ export type Encumbrances_Max_Order_By = {
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -918,10 +918,10 @@ export type Encumbrances_Min_Fields = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -935,10 +935,10 @@ export type Encumbrances_Min_Order_By = {
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
 
@@ -977,11 +977,11 @@ export type Encumbrances_Order_By = {
     Encumbrance_Participants_Aggregate_Order_By
   >
   expected_dissolve_amount?: Maybe<Order_By>
-  guarantor_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   pay_frequency?: Maybe<Order_By>
   status?: Maybe<Order_By>
+  supporter_id?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
 }
@@ -1010,13 +1010,13 @@ export enum Encumbrances_Select_Column {
   /** column name */
   ExpectedDissolveAmount = "expected_dissolve_amount",
   /** column name */
-  GuarantorId = "guarantor_id",
-  /** column name */
   LoanId = "loan_id",
   /** column name */
   PayFrequency = "pay_frequency",
   /** column name */
   Status = "status",
+  /** column name */
+  SupporterId = "supporter_id",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -1031,10 +1031,10 @@ export type Encumbrances_Set_Input = {
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
-  guarantor_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   pay_frequency?: Maybe<Scalars["Int"]>
   status?: Maybe<Scalars["String"]>
+  supporter_id?: Maybe<Scalars["uuid"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
@@ -1133,13 +1133,13 @@ export enum Encumbrances_Update_Column {
   /** column name */
   ExpectedDissolveAmount = "expected_dissolve_amount",
   /** column name */
-  GuarantorId = "guarantor_id",
-  /** column name */
   LoanId = "loan_id",
   /** column name */
   PayFrequency = "pay_frequency",
   /** column name */
   Status = "status",
+  /** column name */
+  SupporterId = "supporter_id",
   /** column name */
   UpdatedAt = "updated_at",
 }
@@ -5364,7 +5364,7 @@ export type Supporters_Bool_Exp = {
 /** unique or primary key constraints on table "supporters" */
 export enum Supporters_Constraint {
   /** unique or primary key constraint */
-  GuarantorsPkey = "guarantors_pkey",
+  SupportersPkey = "supporters_pkey",
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -6480,6 +6480,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "user_number"
       | "corpus_share"
       | "kyc_approved"
+      | "demographic_info"
     >
   >
 }
@@ -6540,6 +6541,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
             Loan_Requests,
+            | "request_id"
             | "confirmation_date"
             | "payback_status"
             | "purpose"
@@ -6547,7 +6549,19 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "status"
             | "created_at"
             | "amount"
-          >
+          > & {
+              supporters: Array<
+                { __typename?: "supporters" } & Pick<
+                  Supporters,
+                  "pledge_amount" | "status"
+                > & {
+                    user: { __typename?: "user" } & Pick<
+                      User,
+                      "id" | "name" | "email"
+                    >
+                  }
+              >
+            }
         >
         pledge_requests: Array<
           { __typename?: "supporters" } & PledgeFieldsFragment
@@ -6598,20 +6612,16 @@ export type InsertEventMutation = { __typename?: "mutation_root" } & {
   >
 }
 
-export type AddSupportersMutationVariables = Exact<{
-  supporters: Array<Supporters_Insert_Input>
+export type AddSupporterMutationVariables = Exact<{
+  supporter: Supporters_Insert_Input
 }>
 
-export type AddSupportersMutation = { __typename?: "mutation_root" } & {
-  supporters?: Maybe<
-    { __typename?: "supporters_mutation_response" } & {
-      returning: Array<
-        { __typename?: "supporters" } & Pick<
-          Supporters,
-          "status" | "supporter_id" | "pledge_amount"
-        >
-      >
-    }
+export type AddSupporterMutation = { __typename?: "mutation_root" } & {
+  insert_supporters_one?: Maybe<
+    { __typename?: "supporters" } & Pick<
+      Supporters,
+      "status" | "supporter_id" | "pledge_amount"
+    >
   >
 }
 
@@ -6620,7 +6630,7 @@ export type CreateLoanRequestMutationVariables = Exact<{
 }>
 
 export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
-  insert_loan_requests_one?: Maybe<
+  request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "amount" | "purpose" | "status" | "risk_calc_result"
@@ -6738,7 +6748,7 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
           > & {
               user: { __typename?: "user" } & Pick<
                 User,
-                "id" | "corpus_share" | "balance"
+                "id" | "email" | "corpus_share" | "balance"
               >
             }
         >
@@ -6805,10 +6815,10 @@ export type UpdateLoanRequestWithOfferMutationVariables = Exact<{
 export type UpdateLoanRequestWithOfferMutation = {
   __typename?: "mutation_root"
 } & {
-  update_loan_requests_by_pk?: Maybe<
+  request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "status" | "risk_calc_result"
+      "request_id" | "purpose" | "amount" | "status" | "risk_calc_result"
     >
   >
 }
@@ -6825,7 +6835,19 @@ export type UpdateSupporterMutation = { __typename?: "mutation_root" } & {
     { __typename?: "supporters" } & Pick<
       Supporters,
       "supporter_id" | "status" | "pledge_amount"
-    >
+    > & {
+        supported_request: { __typename?: "loan_requests" } & Pick<
+          Loan_Requests,
+          "amount"
+        > & {
+            supporters: Array<
+              { __typename?: "supporters" } & Pick<
+                Supporters,
+                "status" | "pledge_amount"
+              >
+            >
+          }
+      }
   >
 }
 
@@ -7008,6 +7030,7 @@ export const GetAllUsersDocument = gql`
       user_number
       corpus_share
       kyc_approved
+      demographic_info
     }
   }
 `
@@ -7051,6 +7074,7 @@ export const GetUserByEmailDocument = gql`
       kyc_approved
       demographic_info
       loan_requests {
+        request_id
         confirmation_date
         payback_status
         purpose
@@ -7059,6 +7083,15 @@ export const GetUserByEmailDocument = gql`
         created_at
         amount
         purpose
+        supporters {
+          pledge_amount
+          status
+          user {
+            id
+            name
+            email
+          }
+        }
       }
       pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
         ...pledgeFields
@@ -7105,20 +7138,18 @@ export const InsertEventDocument = gql`
     }
   }
 `
-export const AddSupportersDocument = gql`
-  mutation AddSupporters($supporters: [supporters_insert_input!]!) {
-    supporters: insert_supporters(objects: $supporters) {
-      returning {
-        status
-        supporter_id
-        pledge_amount
-      }
+export const AddSupporterDocument = gql`
+  mutation AddSupporter($supporter: supporters_insert_input!) {
+    insert_supporters_one(object: $supporter) {
+      status
+      supporter_id
+      pledge_amount
     }
   }
 `
 export const CreateLoanRequestDocument = gql`
   mutation CreateLoanRequest($request: loan_requests_insert_input!) {
-    insert_loan_requests_one(object: $request) {
+    request: insert_loan_requests_one(object: $request) {
       request_id
       amount
       purpose
@@ -7209,6 +7240,7 @@ export const GetLoanRequestDocument = gql`
         pledge_amount
         user {
           id
+          email
           corpus_share
           balance
         }
@@ -7273,12 +7305,16 @@ export const StartLoanDocument = gql`
 `
 export const UpdateLoanRequestWithOfferDocument = gql`
   mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
-    update_loan_requests_by_pk(
+    request: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
-      _set: { status: "awaiting_borrower_confirmation" }
-      _append: { risk_calc_result: $newOffer }
+      _set: {
+        status: "awaiting_borrower_confirmation"
+        risk_calc_result: $newOffer
+      }
     ) {
       request_id
+      purpose
+      amount
       status
       risk_calc_result
     }
@@ -7298,6 +7334,13 @@ export const UpdateSupporterDocument = gql`
       supporter_id
       status
       pledge_amount
+      supported_request: loan_request {
+        amount
+        supporters {
+          status
+          pledge_amount
+        }
+      }
     }
   }
 `
@@ -7464,12 +7507,12 @@ export function getSdk(
         )
       )
     },
-    AddSupporters(
-      variables: AddSupportersMutationVariables
-    ): Promise<AddSupportersMutation> {
+    AddSupporter(
+      variables: AddSupporterMutationVariables
+    ): Promise<AddSupporterMutation> {
       return withWrapper(() =>
-        client.request<AddSupportersMutation>(
-          print(AddSupportersDocument),
+        client.request<AddSupporterMutation>(
+          print(AddSupporterDocument),
           variables
         )
       )

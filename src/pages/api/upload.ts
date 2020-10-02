@@ -1,4 +1,5 @@
 import AWS from "aws-sdk"
+import { fetchJSON } from "lib/api"
 import { SLACK_WEBHOOK_URL } from "lib/constant"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -27,22 +28,13 @@ AWS.config.setPromisesDependency(null)
 const s3 = new AWS.S3()
 
 export const PostToSlack = async (message: string) => {
-  const response = await fetch(SLACK_WEBHOOK_URL, {
-    body: JSON.stringify({
+  const response = fetchJSON({
+    url: SLACK_WEBHOOK_URL,
+    payload: {
       text: `[${process.env.ENVIRONMENT}] ${message}`,
-    }),
-    headers: {
-      "Content-Type": "application/json",
     },
-    method: "POST",
+    isNoParseRes: true,
   })
-  if (!response.ok) {
-    return console.error(
-      "Slack post failed",
-      response.status,
-      await response.json()
-    )
-  }
 }
 
 export const UploadToS3 = async (
