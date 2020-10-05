@@ -18,7 +18,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const session = await getGodSession(req.cookies[CURRENT_USER_EMAIL])
+    const session = (await getGodSession(
+      req.cookies[CURRENT_USER_EMAIL]
+    )) as Session
     const { actionType, payload } = req.body as GqlRequest
     try {
       const data = await runAction(actionType, session, payload, dbClient)
