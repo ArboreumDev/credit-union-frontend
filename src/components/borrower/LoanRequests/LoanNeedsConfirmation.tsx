@@ -46,9 +46,9 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
         </Box>
       </Flex>
       <Flex>
-        <Box flex={0.5}>Interest Rate</Box>
-        <Box flex={0.5} textAlign="right">
-          {dec_to_perc(loan.borrowerAPR)}%
+        <Box flex={1}>
+          You will pay {dec_to_perc(loan.borrowerAPR)}% of the loan amount as
+          interest.{" "}
         </Box>
       </Flex>
       <Flex>

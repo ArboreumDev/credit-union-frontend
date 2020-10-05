@@ -9,7 +9,7 @@ interface Props {
 const loanStatusToText = {
   [LoanRequestStatus.initiated]: "Processing",
   [LoanRequestStatus.awaiting_borrower_confirmation]: "Processing",
-  [LoanRequestStatus.active]: "In progress",
+  [LoanRequestStatus.active]: "Active",
   [LoanRequestStatus.settled]: "Completed",
 }
 
