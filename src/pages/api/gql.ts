@@ -2,9 +2,9 @@ import { fetchJSON } from "lib/api"
 import { CURRENT_USER_EMAIL } from "lib/constant"
 import { runAction } from "lib/gql_api_actions"
 import { NextApiRequest, NextApiResponse } from "next"
-import { getSession } from "next-auth/client"
 import DbClient from "../../gql/db_client"
 import { Session } from "../../lib/types"
+import { getGodSession } from "./auth/god"
 
 const dbClient = new DbClient()
 
@@ -18,11 +18,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const session = await fetchJSON({
-      url: "/api/auth/god",
-      payload: { email: req.cookies[CURRENT_USER_EMAIL] },
-      isSSR: true,
-    })
+    const session = await getGodSession(req.cookies[CURRENT_USER_EMAIL])
     const { actionType, payload } = req.body as GqlRequest
     try {
       const data = await runAction(actionType, session, payload, dbClient)
