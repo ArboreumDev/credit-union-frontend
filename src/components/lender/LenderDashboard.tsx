@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Divider,
   Flex,
   Heading,
   HStack,
@@ -35,12 +36,17 @@ const Asset = (title: string, amount: number) => (
 const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   <Flex>
     <Box flex={0.7}>
-      <Text color={color} fontWeight="bold" fontSize="lg">
+      <Text color={color} fontWeight="semibold" fontSize="lg">
         {title}
       </Text>
     </Box>
     <Box flex={1}>
-      <Progress color={color} h="25px" value={percentage} />
+      <Progress
+        marginTop="5px"
+        size="lg"
+        colorScheme="gray"
+        value={percentage}
+      />
     </Box>
     <Box flex={0.4} textAlign="right">
       <Text color={color} fontSize="lg">
@@ -83,7 +89,7 @@ const LenderDashboard = ({ user }: Props) => {
         <>
           <Heading size="md">Asset Allocation</Heading>
           <Wrap w="100%" spacing={[8, 0, 0, 0]}>
-            <Center minW={320} maxW="sm">
+            <Center minW={280} maxW="sm">
               <Box w={160}>
                 <DynamicDoughnut
                   amounts={[
@@ -94,14 +100,15 @@ const LenderDashboard = ({ user }: Props) => {
                 />
               </Box>
             </Center>
+            <Divider display={["none", "block"]} orientation="vertical" />
             <Center minW={320} maxW="sm">
               <Stack w="100%" spacing={6}>
-                {AllocatedAsset("Invested", lender.percInvested, "blue.500")}
+                {AllocatedAsset("Invested", lender.percInvested, "teal.500")}
                 {AllocatedAsset("Pledged", lender.percPledged, "green.500")}
                 {AllocatedAsset(
                   "Uninvested",
                   lender.percUninvested,
-                  "gray.500"
+                  "gray.400"
                 )}
               </Stack>
             </Center>
