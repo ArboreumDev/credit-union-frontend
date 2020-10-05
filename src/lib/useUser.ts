@@ -1,4 +1,4 @@
-import { LAST_REDIRECT_PAGE } from "lib/constant"
+import { CURRENT_USER_EMAIL, LAST_REDIRECT_PAGE } from "lib/constant"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import useSWR from "swr"
@@ -17,7 +17,11 @@ function getRedirectLocation(session: Session, currentPage: string) {
     else return "/dashboard"
   }
 }
-const fetcher = (url) => fetch(url).then((r) => r.json())
+const fetcher = (url) =>
+  fetchJSON({
+    url: "/api/auth/god",
+    payload: { email: localStorage.getItem(CURRENT_USER_EMAIL) },
+  }).then((r) => r)
 
 export default function useUser() {
   // Fast redirect from home
@@ -28,7 +32,7 @@ export default function useUser() {
 
   const currentPage = window.location.pathname
   const session = data as Session
-  const isDemo = () => /^\/demo.*$/.test(currentPage)
+  const isDemo = () => /^\/demo.*$/.test(currentPage) || currentPage === "/god"
 
   useEffect(() => {
     if (!isDemo() && session) {

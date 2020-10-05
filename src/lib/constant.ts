@@ -12,6 +12,7 @@ export const ANALYTICS_WEBSITE_IDS = {
 export const USER_TYPE_KEY = "userType"
 export const LAST_REDIRECT_PAGE = "lastPage"
 export const COMPANY_NAME = "companyName"
+export const CURRENT_USER_EMAIL = "currentUserEmail"
 
 export const DEFAULT_COMPANY_NAME = "XCorp"
 
