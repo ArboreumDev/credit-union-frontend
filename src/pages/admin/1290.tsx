@@ -2,6 +2,8 @@ import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 import { GetServerSideProps } from "next"
+import { Box, Heading, Input, Stack } from "@chakra-ui/core"
+import { COMPANY_NAME } from "lib/constant"
 
 export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   // Only use code like this when UI needs to refresh
@@ -10,14 +12,28 @@ export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
   // if (!data) return <div>loading...</div>;
   const users = props.user
   return (
-    <div>
-      {users.map((user) => (
-        <p key={user.id}>
-          {user.name} | KYC={"" + user.kyc_approved} |{" "}
-          <a href={"/admin/toggle_kyc/" + user.email}>toggle kyc </a>
-        </p>
-      ))}
-    </div>
+    <Box>
+      <Stack>
+        <Box>
+          <Heading>Users</Heading>
+          {users.map((user) => (
+            <p key={user.id}>
+              {user.name} | KYC={"" + user.kyc_approved} |{" "}
+              <a href={"/admin/toggle_kyc/" + user.email}>toggle kyc </a>
+            </p>
+          ))}
+        </Box>
+        <hr />
+        <Box>
+          Set company name:{" "}
+          <Input
+            onChange={(ev) =>
+              localStorage.setItem(COMPANY_NAME, ev.target.value)
+            }
+          ></Input>
+        </Box>
+      </Stack>
+    </Box>
   )
 }
 

@@ -7,9 +7,15 @@ export const ANALYTICS_WEBSITE_IDS = {
   production: "c0dca8db-6303-4e1b-bb29-3422514663e9",
   preview: "90f23cc8-c238-4f5c-876a-c83f66335036",
 }
+
+// Local Storage Keys
 export const USER_TYPE_KEY = "userType"
 export const LAST_REDIRECT_PAGE = "lastPage"
+export const COMPANY_NAME = "companyName"
 
+export const DEFAULT_COMPANY_NAME = "XCorp"
+
+// Hardcoded loan vars. TODO: move to swarmai?
 export const MIN_SUPPORT_RATIO = 0.2 // this will be pilot-specific -> refactor to pilot.env file
 export const DEFAULT_LOAN_TENOR = 6 // in months
 export const DEFAULT_RISK_FREE_INTEREST_RATE = 0.5
