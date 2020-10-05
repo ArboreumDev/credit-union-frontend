@@ -26,13 +26,14 @@ const AppBar = () => (
       </HStack>
     </Flex>
     <Box flex="1"></Box>
-    <HStack className="navButtons">
+    <HStack display={["none", "none", "block"]} className="navButtons">
       <CompanyX />
       <FeedbackPopover />
       <SupportPopover />
     </HStack>
-    <DrawerButton />
-
+    <Box display={["block", "block", "none"]}>
+      <DrawerButton />
+    </Box>
     <style jsx>
       {`
         button {
@@ -42,24 +43,6 @@ const AppBar = () => (
           cursor: pointer;
           overflow: hidden;
           outline: none;
-        }
-      `}
-    </style>
-    <style jsx global>
-      {`
-        .drawerButton {
-          display: block !important;
-        }
-        .navButtons {
-          display: none !important;
-        }
-        @media only screen and (min-width: 500px) {
-          .navButtons {
-            display: block !important;
-          }
-          .drawerButton {
-            display: none !important;
-          }
         }
       `}
     </style>
