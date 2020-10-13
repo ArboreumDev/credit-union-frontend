@@ -84,7 +84,7 @@ export default function AddSupporter({ loanRequest }: Props) {
             Supporter is my...
             <Input
               placeholder="e.g. manager, team mate, old team mate, etc."
-              name="known_since"
+              name="supporter_relation"
               size="md"
               ref={register({ required: true })}
             />

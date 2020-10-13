@@ -13,7 +13,7 @@ import { PostToSlack } from "pages/api/upload"
 async function fetcher(url: string, payload: any, caller?: string) {
   async function log(message, payload) {
     // upload for debugging purposes
-    await PostToSlack(message)
+    if (process.env.ENVIRONMENT) await PostToSlack(message)
     // fetchJSON({ url: "/api/integration/fp", payload, isSSR: true })
   }
   log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`, payload)

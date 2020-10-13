@@ -1,20 +1,15 @@
 import { GraphQLClient } from "graphql-request"
 import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
-import {
-  CreateLoanRequestMutation,
-  CreateUserMutation,
-  CreateUserMutationVariables,
-  Loan_Requests_Insert_Input,
-  Sdk,
-} from "../../src/gql/sdk"
+import { CreateUserMutation, Sdk } from "../../src/gql/sdk"
 import {
   ACTION_ERRORS,
+  AddSupporter,
   CreateLoan,
   CreateUser,
   runAction,
 } from "../../src/lib/gql_api_actions"
-import { BORROWER1, LENDER1 } from "../fixtures/basic_network"
+import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 
 global.fetch = require("node-fetch")
@@ -53,22 +48,25 @@ describe("Create new user", () => {
 })
 
 describe("Create new loan | user is Authorized", () => {
-  const payload: typeof CreateLoan.InputType = {
-    request: {
-      amount: 100,
-      borrower_id: BORROWER1.id,
-    },
-  }
+  let loanRequestId: string
 
   beforeAll(async () => {
     // add users
     await sdk.CreateUser({ user: BORROWER1 })
+    await sdk.CreateUser({ user: SUPPORTER1 })
   })
   afterAll(async () => {
     await sdk.ResetDB()
   })
   test("new loan", async () => {
     const session = getMockSession(BORROWER1)
+
+    const payload: typeof CreateLoan.InputType = {
+      request: {
+        amount: 100,
+        borrower_id: BORROWER1.id,
+      },
+    }
 
     const res: typeof CreateLoan.ReturnType = (await runAction(
       CreateLoan.Name,
@@ -77,6 +75,26 @@ describe("Create new loan | user is Authorized", () => {
       dbClient
     )) as typeof CreateLoan.ReturnType
     expect(res.request.amount === payload.request.amount)
+    loanRequestId = res.request.request_id
+  })
+  test("add supporter", async () => {
+    const session = getMockSession(BORROWER1)
+    const payload: typeof AddSupporter.InputType = {
+      requestId: loanRequestId,
+      amount: 20,
+      email: SUPPORTER1.email,
+      info: {
+        supporter_relation: "manager",
+        known_since: "Aug 2013",
+      },
+    }
+    const res: typeof AddSupporter.ReturnType = (await runAction(
+      AddSupporter.Name,
+      session,
+      payload,
+      dbClient
+    )) as typeof AddSupporter.ReturnType
+    expect(res.insert_supporters_one.pledge_amount === payload.amount)
   })
 })
 
