@@ -6639,7 +6639,7 @@ export type AddSupporterMutation = { __typename?: "mutation_root" } & {
   insert_supporters_one?: Maybe<
     { __typename?: "supporters" } & Pick<
       Supporters,
-      "status" | "supporter_id" | "pledge_amount"
+      "status" | "supporter_id" | "pledge_amount" | "info"
     >
   >
 }
@@ -7163,6 +7163,7 @@ export const AddSupporterDocument = gql`
       status
       supporter_id
       pledge_amount
+      info
     }
   }
 `

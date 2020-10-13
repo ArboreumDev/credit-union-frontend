@@ -95,6 +95,10 @@ describe("Create new loan | user is Authorized", () => {
       dbClient
     )) as typeof AddSupporter.ReturnType
     expect(res.insert_supporters_one.pledge_amount === payload.amount)
+    expect(
+      res.insert_supporters_one.info.supporter_relation ===
+        payload.info.supporter_relation
+    )
   })
 })
 
