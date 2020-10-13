@@ -70,7 +70,8 @@ CREATE TABLE public.supporters (
     status text DEFAULT 'unknown' NOT NULL,
     invest_in_corpus boolean DEFAULT True NOT NULL,
     participation_request_time timestamp with time zone DEFAULT now() NOT NULL,
-    guarantee_division jsonb DEFAULT jsonb_build_object()
+    guarantee_division jsonb DEFAULT jsonb_build_object(),
+    info jsonb DEFAULT jsonb_build_object()
 );
 CREATE TABLE public.loan_participants (
     loan_id uuid NOT NULL,

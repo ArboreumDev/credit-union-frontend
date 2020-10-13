@@ -103,6 +103,7 @@ export class AddSupporter extends Action {
     requestId: string
     email: string
     amount: number
+    info: any
   }
   static ReturnType: AddSupporterMutation
 
