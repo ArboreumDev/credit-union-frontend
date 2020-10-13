@@ -1,11 +1,11 @@
 import { GraphQLClient } from "graphql-request"
 import { LogEventTypes } from "lib/constant"
-import { NextApiRequest } from "next"
-import httpMocks from "node-mocks-http"
-import { LogPushHandler } from "pages/api/log"
+import { logEvent } from "lib/logger"
 import DbClient from "../../src/gql/db_client"
 import { initializeGQL } from "../../src/gql/graphql_client"
 import { Sdk } from "../../src/gql/sdk"
+import { BORROWER1 } from "../fixtures/basic_network"
+import { getMockSession } from "../fixtures/session"
 
 global.fetch = require("node-fetch")
 
@@ -28,21 +28,16 @@ describe("Create new log event", () => {
     await sdk.ResetDB()
   })
 
-  test.skip("push", async () => {
+  test("push", async () => {
     const feedbackEvent: any = {
       eventType: LogEventTypes.ClientFeedback,
       eventData: {
         message: "hi its nice",
       },
     }
-    const req = httpMocks.createRequest<NextApiRequest>({
-      body: feedbackEvent,
-      headers: {
-        ip: "10.0.0.1",
-      },
-    })
+    const session = null //getMockSession(BORROWER1)
 
-    const event = await LogPushHandler(req)
+    const event = await logEvent(session, feedbackEvent, {}, dbClient)
     expect(event.data.message === feedbackEvent.eventData.message)
   })
 })

@@ -1,5 +1,6 @@
 import { fetchJSON } from "lib/api"
 import { DEFAULT_LOAN_TENOR, SWARMAI_URL } from "lib/constant"
+import log from "lib/logger"
 import {
   BorrowerInfo,
   LoanRequestInfo,
@@ -8,18 +9,12 @@ import {
   SwarmAiRequestMessage,
   SwarmAiResponse,
 } from "lib/types"
-import { PostToSlack } from "pages/api/upload"
 
 async function fetcher(url: string, payload: any, caller?: string) {
-  async function log(message, payload) {
-    // upload for debugging purposes
-    if (process.env.ENVIRONMENT) await PostToSlack(message)
-    // fetchJSON({ url: "/api/integration/fp", payload, isSSR: true })
-  }
-  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`, payload)
+  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
 
   const res = await fetchJSON({ url, payload })
-  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`, res)
+  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
 
   // return res
   return fetchJSON({ url, payload })
