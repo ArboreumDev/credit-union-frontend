@@ -14,6 +14,9 @@ db:
 	yarn metadata
 	yarn seeds
 
+reset-db:
+	yarn jest -i tests/src/api_log_handlers.test.ts
+
 jest-test:
     # Use this to reset the DB when in dev mode
 	yarn test:ci
@@ -26,3 +29,5 @@ test: docker-down docker-up sleep db jest-test docker-down
 test-watch: docker-up db
 	yarn test
 
+seeds: reset-db
+	yarn seeds
