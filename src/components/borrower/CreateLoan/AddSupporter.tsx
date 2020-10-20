@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Input,
+  Select,
   Stack,
   Text,
 } from "@chakra-ui/core"
@@ -32,6 +33,7 @@ export default function AddSupporter({ loanRequest }: Props) {
       requestId: loanRequest.request_id,
       email: data.email,
       amount: data.amount,
+      info: data,
     })
       .then(async (res) => {
         router.push("/dashboard")
@@ -52,30 +54,41 @@ export default function AddSupporter({ loanRequest }: Props) {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing="10px" minW="280px">
-          <Flex>
-            {/* <Box flex={1}>
-              <Input
-                placeholder="Name"
-                name={`name`}
-                size="lg"
-                ref={register({ required: true })}
-              />
-            </Box> */}
-            <Box flex={1}>
-              <Input
-                placeholder="Email"
-                name={`email`}
-                size="md"
-                ref={register({ required: true })}
-              />
-            </Box>
-            <Center flex={0.8}>
-              <AmountInput
-                passName={`amount`}
-                passRef={register({ required: true })}
-              />
-            </Center>
-          </Flex>
+          <AmountInput
+            passName="amount"
+            passRef={register({ required: true })}
+          />
+          <Input
+            placeholder="Name"
+            name="name"
+            size="md"
+            ref={register({ required: true })}
+          />
+          <Input
+            placeholder="Email"
+            name="email"
+            size="md"
+            ref={register({ required: true })}
+          />
+          <Box flex={1}>
+            I have known the supporter since
+            <Input
+              placeholder="e.g. September 2005"
+              name="known_since"
+              size="md"
+              ref={register({ required: true })}
+            />
+          </Box>
+
+          <Box flex={1}>
+            Supporter is my...
+            <Input
+              placeholder="e.g. manager, team mate, old team mate, etc."
+              name="supporter_relation"
+              size="md"
+              ref={register({ required: true })}
+            />
+          </Box>
 
           <Center>
             <Button type="submit">Add Supporter</Button>

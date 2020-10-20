@@ -103,6 +103,7 @@ export class AddSupporter extends Action {
     requestId: string
     email: string
     amount: number
+    info: any
   }
   static ReturnType: AddSupporterMutation
 
@@ -110,7 +111,12 @@ export class AddSupporter extends Action {
 
   run() {
     const _p = this.payload as typeof AddSupporter.InputType
-    return this.dbClient.addSupporter(_p.requestId, _p.email, _p.amount)
+    return this.dbClient.addSupporter(
+      _p.requestId,
+      _p.email,
+      _p.amount,
+      _p.info
+    )
   }
 
   static fetch(payload: typeof AddSupporter.InputType) {

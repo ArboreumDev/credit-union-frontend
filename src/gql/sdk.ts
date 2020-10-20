@@ -5262,6 +5262,7 @@ export type Subscription_RootUser_By_PkArgs = {
 export type Supporters = {
   __typename?: "supporters"
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus: Scalars["Boolean"]
   /** An object relationship */
   loan_request: Loan_Requests
@@ -5276,6 +5277,11 @@ export type Supporters = {
 
 /** columns and relationships of "supporters" */
 export type SupportersGuarantee_DivisionArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** columns and relationships of "supporters" */
+export type SupportersInfoArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
@@ -5326,6 +5332,7 @@ export type Supporters_Aggregate_Order_By = {
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Supporters_Append_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
 }
 
 /** input type for inserting array relation for remote table "supporters" */
@@ -5351,6 +5358,7 @@ export type Supporters_Bool_Exp = {
   _not?: Maybe<Supporters_Bool_Exp>
   _or?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
   guarantee_division?: Maybe<Jsonb_Comparison_Exp>
+  info?: Maybe<Jsonb_Comparison_Exp>
   invest_in_corpus?: Maybe<Boolean_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   participation_request_time?: Maybe<Timestamptz_Comparison_Exp>
@@ -5370,16 +5378,19 @@ export enum Supporters_Constraint {
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Supporters_Delete_At_Path_Input = {
   guarantee_division?: Maybe<Array<Maybe<Scalars["String"]>>>
+  info?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Supporters_Delete_Elem_Input = {
   guarantee_division?: Maybe<Scalars["Int"]>
+  info?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Supporters_Delete_Key_Input = {
   guarantee_division?: Maybe<Scalars["String"]>
+  info?: Maybe<Scalars["String"]>
 }
 
 /** input type for incrementing integer column in table "supporters" */
@@ -5390,6 +5401,7 @@ export type Supporters_Inc_Input = {
 /** input type for inserting data into table "supporters" */
 export type Supporters_Insert_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
@@ -5463,6 +5475,7 @@ export type Supporters_On_Conflict = {
 /** ordering options when selecting data from "supporters" */
 export type Supporters_Order_By = {
   guarantee_division?: Maybe<Order_By>
+  info?: Maybe<Order_By>
   invest_in_corpus?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   participation_request_time?: Maybe<Order_By>
@@ -5482,12 +5495,15 @@ export type Supporters_Pk_Columns_Input = {
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Supporters_Prepend_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "supporters" */
 export enum Supporters_Select_Column {
   /** column name */
   GuaranteeDivision = "guarantee_division",
+  /** column name */
+  Info = "info",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
@@ -5505,6 +5521,7 @@ export enum Supporters_Select_Column {
 /** input type for updating data in table "supporters" */
 export type Supporters_Set_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
   pledge_amount?: Maybe<Scalars["float8"]>
@@ -5561,6 +5578,8 @@ export type Supporters_Sum_Order_By = {
 export enum Supporters_Update_Column {
   /** column name */
   GuaranteeDivision = "guarantee_division",
+  /** column name */
+  Info = "info",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
@@ -6620,7 +6639,7 @@ export type AddSupporterMutation = { __typename?: "mutation_root" } & {
   insert_supporters_one?: Maybe<
     { __typename?: "supporters" } & Pick<
       Supporters,
-      "status" | "supporter_id" | "pledge_amount"
+      "status" | "supporter_id" | "pledge_amount" | "info"
     >
   >
 }
@@ -7144,6 +7163,7 @@ export const AddSupporterDocument = gql`
       status
       supporter_id
       pledge_amount
+      info
     }
   }
 `

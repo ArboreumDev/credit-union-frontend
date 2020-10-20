@@ -12,7 +12,10 @@ db:
 	# TODO: handle this within a docker container, so hasura command works without any setup
 	yarn migrate
 	yarn metadata
-	# yarn seeds
+	yarn seeds
+
+reset-db:
+	yarn jest -i tests/src/api_log_handlers.test.ts
 
 jest-test:
     # Use this to reset the DB when in dev mode
@@ -26,3 +29,5 @@ test: docker-down docker-up sleep db jest-test docker-down
 test-watch: docker-up db
 	yarn test
 
+seeds: reset-db
+	yarn seeds

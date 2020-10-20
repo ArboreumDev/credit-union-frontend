@@ -76,13 +76,19 @@ export default class DbClient {
     // potentially do other stuff here (notify us...)
     return { request }
   }
-  addSupporter = async (requestId: string, email: string, amount: number) => {
+  addSupporter = async (
+    requestId: string,
+    email: string,
+    amount: number,
+    info?: any
+  ) => {
     const user = await this.getUserByEmail(email)
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
         supporter_id: user.id,
         pledge_amount: amount,
+        info: info,
       },
     })
     return data

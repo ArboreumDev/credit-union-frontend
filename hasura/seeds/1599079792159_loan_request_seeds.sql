@@ -1,1 +1,0 @@
-INSERT INTO public.loan_requests (borrower_id, created_at, amount, status, request_id, purpose, risk_calc_result, confirmation_date, payback_status) VALUES ('230cff88-a594-4922-90cd-05938de5bdd0', '2020-09-02 20:49:04.168811+00', 5000, 'initiated', '2560cf5f-eab8-4705-92dd-bced9596d7f9', 'School', NULL, NULL, NULL);

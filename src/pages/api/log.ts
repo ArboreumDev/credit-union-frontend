@@ -1,23 +1,8 @@
 import DbClient from "gql/db_client"
+import { logEvent } from "lib/logger"
 import { Session } from "lib/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
-import { PostToSlack } from "./upload"
-
-export async function LogPushHandler(req: NextApiRequest) {
-  const session = (await getSession({ req })) as Session
-
-  const dbClient = new DbClient()
-  const { eventType, eventData } = req.body
-  const userId =
-    session && session.user && session.user.id ? session.user.id : null
-  PostToSlack(
-    `Event: ${eventType} | ${
-      session?.user?.name || "Anonymous"
-    } | ${JSON.stringify(eventData)}`
-  )
-  return dbClient.logEvent(eventType, eventData, req.headers, userId)
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,8 +10,9 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const dbClient = new DbClient()
+    const session = (await getSession({ req })) as Session
     try {
-      const data = await LogPushHandler(req)
+      const data = await logEvent(session, req.body, req.headers, dbClient)
       res.status(200).json(data)
     } catch (error) {
       console.log(error)
