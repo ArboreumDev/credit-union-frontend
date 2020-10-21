@@ -1,5 +1,5 @@
 import { fetchJSON } from "lib/api"
-import { DEFAULT_LOAN_TENOR, SWARMAI_URL } from "lib/constant"
+import { DEFAULT_LOAN_TENOR } from "lib/constant"
 import log from "lib/logger"
 import {
   BorrowerInfo,
@@ -20,20 +20,19 @@ async function fetcher(url: string, payload: any, caller?: string) {
   return fetchJSON({ url, payload })
 }
 
-export default class SwarmAI {
-  static async acceptLoan(
-    systemState: Scenario,
-    latestOffer: any
-  ): Promise<any> {
+export default class SwarmAIClient {
+  constructor(private _url: string) {}
+
+  async acceptLoan(systemState: Scenario, latestOffer: any): Promise<any> {
     const payload = {
       system_state: systemState,
       aiResponse: latestOffer,
     }
-    const url = SWARMAI_URL + "/loan/accept"
+    const url = this._url + "/loan/accept"
     return fetcher(url, payload, "acceptLoan")
   }
 
-  static async make_repayment(
+  async make_repayment(
     systemState: Scenario,
     loan_id: string,
     amount: number
@@ -43,24 +42,24 @@ export default class SwarmAI {
       loan_id,
       amount,
     }
-    const url = SWARMAI_URL + "/loan/repay"
+    const url = this._url + "/loan/repay"
     return fetcher(url, payload, "repayLoan")
   }
 
-  static async calculateLoanOffer(params: {
+  async calculateLoanOffer(params: {
     requestId: string
     loanAmount: number
     supporters: SupporterInfo[]
     borrowerInfo: BorrowerInfo
   }): Promise<SwarmAiResponse> {
     const payload = {
-      request_msg: SwarmAI.generateLoanOfferRequest(params),
+      request_msg: this.generateLoanOfferRequest(params),
     }
-    const url = SWARMAI_URL + "/loan/request"
+    const url = this._url + "/loan/request"
     return fetcher(url, payload, "calculateLoanOffer")
   }
 
-  static generateLoanOfferRequest({
+  generateLoanOfferRequest({
     requestId,
     loanAmount,
     borrowerInfo,

@@ -1,11 +1,9 @@
 import { GraphQLClient } from "graphql-request"
-import { fetchJSON } from "lib/api"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
-  SWARMAI_URL,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -21,11 +19,7 @@ import {
   UserInfo,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
-import SwarmAI from "./swarmai_client"
-
-// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
-
-// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
+import SwarmAIClient from "./swarmai_client"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -34,14 +28,17 @@ export default class DbClient {
   private static instance: DbClient
 
   public sdk: Sdk
-  public client: GraphQLClient
+  public gqlClient: GraphQLClient
+  public swarmAIClient: SwarmAIClient
 
-  constructor(_client?: GraphQLClient) {
+  constructor(_client?: GraphQLClient, _swarmai_client?: SwarmAIClient) {
     if (DbClient.instance) {
       return DbClient.instance
     }
-    this.client = _client || initializeGQL()
-    this.sdk = getSdk(this.client)
+    this.gqlClient = _client || initializeGQL()
+    this.swarmAIClient =
+      _swarmai_client || new SwarmAIClient(process.env.SWARMAI_URL)
+    this.sdk = getSdk(this.gqlClient)
     DbClient.instance = this
   }
 
@@ -135,7 +132,7 @@ export default class DbClient {
   calculateLoanRequestOffer = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
     const riskInfo = await this.getRiskInput(requestId)
-    return await SwarmAI.calculateLoanOffer({
+    return await this.swarmAIClient.calculateLoanOffer({
       requestId: loanRequest.request_id,
       loanAmount: loanRequest.amount,
       supporters: riskInfo.supporterInfo,
@@ -158,7 +155,7 @@ export default class DbClient {
     const systemState = (await this.getSystemSummary()) as Scenario
     const latestOffer = offer_params.risk_calc_result.latestOffer
 
-    const result = await SwarmAI.acceptLoan(systemState, latestOffer)
+    const result = await this.swarmAIClient.acceptLoan(systemState, latestOffer)
 
     await this.updatePortfolios(result.updates)
 
@@ -173,14 +170,18 @@ export default class DbClient {
 
   make_repayment = async (loan_id: string, amount: number) => {
     const systemState = (await this.getSystemSummary()) as Scenario
-    const result = await SwarmAI.make_repayment(systemState, loan_id, amount)
+    const result = await this.swarmAIClient.make_repayment(
+      systemState,
+      loan_id,
+      amount
+    )
     await this.updatePortfolios(result.updates)
     // TODO show transactions in transaction table
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
     const updateMutation = generateUpdateAsSingleTransaction(updates)
-    const data = await this.client.request(updateMutation)
+    const data = await this.gqlClient.request(updateMutation)
     return data
   }
 

@@ -1,4 +1,3 @@
-import SwarmAI from "gql/swarmai_client"
 import { addNetwork } from "../../src/lib/network_helpers"
 import { SupporterStatus } from "../../src/lib/types"
 import {
@@ -105,7 +104,9 @@ describe("Basic loan request flow for an accepted loan", () => {
   test("only confirmed supporters are included in the loan-request-calculation", async () => {
     const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
     const riskInfo = await dbClient.getRiskInput(requestId)
-    const { loan_request_info } = await SwarmAI.generateLoanOfferRequest({
+    const {
+      loan_request_info,
+    } = await dbClient.swarmAIClient.generateLoanOfferRequest({
       requestId: loanRequest.request_id,
       loanAmount: loanRequest.amount,
       supporters: riskInfo.supporterInfo,

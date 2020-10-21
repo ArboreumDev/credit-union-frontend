@@ -1,6 +1,5 @@
 import { RiskParams } from "./types"
 
-export const SWARMAI_URL = "http://dev1.arbo.link:3001"
 // for local development
 // export const DEV_URL = "http://127.0.0.1:3001"
 export const ANALYTICS_WEBSITE_IDS = {
