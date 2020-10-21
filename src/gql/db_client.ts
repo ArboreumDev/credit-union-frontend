@@ -171,6 +171,13 @@ export default class DbClient {
     return this.sdk.StartLoan(variables)
   }
 
+  make_repayment = async (loan_id: string, amount: number) => {
+    const systemState = (await this.getSystemSummary()) as Scenario
+    const result = await SwarmAI.make_repayment(systemState, loan_id, amount)
+    await this.updatePortfolios(result.updates)
+    // TODO show transactions in transaction table
+  }
+
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
     const updateMutation = generateUpdateAsSingleTransaction(updates)
     const data = await this.client.request(updateMutation)

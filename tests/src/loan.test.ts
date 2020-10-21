@@ -197,4 +197,28 @@ describe("Basic loan request flow for an accepted loan", () => {
       // ).toBeTruthy
     })
   })
+  describe("When the borrower makes a repayment", () => {
+    test("balances of borrower is decreased and  supporter/lender balance is increased", async () => {
+      const { user: allUsers } = await sdk.GetAllUsers()
+      balancesBefore = getUserPortfolio(allUsers)
+
+      const repayment = 1000
+      await dbClient.make_repayment(requestId, repayment)
+
+      balancesAfter = getUserPortfolio(allUsers)
+      expect(balancesBefore[lender1.id]).toBeGreaterThan(
+        balancesAfter[lender1.id]
+      )
+      expect(balancesBefore[SUPPORTER1.id]).toBeGreaterThan(
+        balancesAfter[SUPPORTER1.id]
+      )
+      expect(balancesBefore[borrower1.id]).toBeLessThan(
+        balancesAfter[borrower1.id]
+      )
+    })
+
+    test.skip(
+      "all users see transactions related to the repayment in their transactionlist"
+    )
+  })
 })

@@ -33,6 +33,20 @@ export default class SwarmAI {
     return fetcher(url, payload, "acceptLoan")
   }
 
+  static async make_repayment(
+    systemState: Scenario,
+    loan_id: string,
+    amount: number
+  ): Promise<any> {
+    const payload = {
+      system_state: systemState,
+      loan_id,
+      amount,
+    }
+    const url = SWARMAI_URL + "/loan/repay"
+    return fetcher(url, payload, "repayLoan")
+  }
+
   static async calculateLoanOffer(params: {
     requestId: string
     loanAmount: number
