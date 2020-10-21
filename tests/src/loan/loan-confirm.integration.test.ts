@@ -18,12 +18,14 @@ let requestId: string
 let balancesBefore
 
 beforeAll(async () => {
+  // Add users
   await sdk.ResetDB()
   await sdk.CreateUser({ user: BORROWER1 })
   await sdk.CreateUser({ user: LENDER1 })
   await sdk.CreateUser({ user: LENDER2 })
   await sdk.CreateUser({ user: SUPPORTER2 })
 
+  // Create loan request
   const { request } = await dbClient.createLoanRequest(
     BORROWER1.id,
     amount,
@@ -31,6 +33,7 @@ beforeAll(async () => {
   )
   requestId = request.request_id
 
+  // confirm supporter and trigger the loan offer generation
   await addAndConfirmSupporter(
     dbClient,
     requestId,
@@ -48,6 +51,8 @@ afterAll(async () => {
 describe("Loan Request Flow: confirm loan offer", () => {
   test("triggers creation of payables, receivables", async () => {
     const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
+
+    // loan request status should be active
     expect(data.update_loan_requests_by_pk.status).toBe(
       LoanRequestStatus.active
     )
