@@ -7,7 +7,7 @@ import {
   SUPPORTER2,
 } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
-import { getUserPortfolio } from "./test_helpers"
+import { getUserPortfolio } from "./common/test_helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()

@@ -1,7 +1,7 @@
-import { SupporterStatus } from "../../src/lib/types"
+import { SupporterStatus } from "../../../src/lib/types"
 
 export const getUserPortfolio = (userList) => {
-  let ret = {}
+  const ret = {}
   userList.forEach((user) => {
     ret[user.id] = { cash: user.balance, share: user.corpus_share }
   })
