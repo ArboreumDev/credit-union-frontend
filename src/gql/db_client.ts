@@ -235,6 +235,7 @@ export default class DbClient {
       users: userDict,
       loans: [],
       loan_requests: [],
+      loan_offers: [],
     } as Scenario
   }
 
