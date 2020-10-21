@@ -1,23 +1,10 @@
-import { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
-import { initializeGQL } from "../../src/gql/graphql_client"
+import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
+import { addNetwork, setupScenario } from "../../src/lib/network_helpers"
 import { EDGE_STATUS } from "../../src/lib/types"
 import { BASIC_NETWORK } from "../fixtures/basic_network"
-import { addNetwork, setupScenario } from "../../src/lib/network_helpers"
-import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
-const basicCorpus = require("../fixtures/basicCorpus.json")
-
-global.fetch = require("node-fetch")
-
-const TEST_API_URL = "http://localhost:8080/v1/graphql"
-const TEST_ADMIN_SECRET = "myadminsecretkey"
-
-let client: GraphQLClient
-let sdk: Sdk
+import { sdk } from "./common/utils"
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
-  sdk = getSdk(client)
   await sdk.ResetDB()
 })
 

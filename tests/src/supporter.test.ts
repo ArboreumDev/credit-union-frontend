@@ -1,7 +1,5 @@
-import { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
-import { initializeGQL } from "../../src/gql/graphql_client"
-import DbClient from "../../src/gql/db_client"
+import SwarmAI from "gql/swarmai_client"
+import { addNetwork } from "../../src/lib/network_helpers"
 import { SupporterStatus } from "../../src/lib/types"
 import {
   BASIC_NETWORK,
@@ -9,23 +7,10 @@ import {
   SUPPORTER1,
   SUPPORTER2,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/lib/network_helpers"
+import { dbClient, sdk } from "./common/utils"
 import { getUserPortfolio } from "./test_helpers"
-import SwarmAI from "gql/swarmai_client"
-
-global.fetch = require("node-fetch")
-
-const TEST_API_URL = "http://localhost:8080/v1/graphql"
-const TEST_ADMIN_SECRET = "myadminsecretkey"
-
-let client: GraphQLClient
-let sdk: Sdk
-let dbClient: DbClient
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
-  sdk = getSdk(client)
-  dbClient = new DbClient(client)
   await sdk.ResetDB()
 })
 

@@ -1,31 +1,16 @@
-import { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
-import { initializeGQL } from "../../src/gql/graphql_client"
+import { EDGE_STATUS } from "../../src/lib/types"
 import {
-  LENDER1,
   BORROWER1,
-  LENDER2,
   EDGE1,
   EDGE2,
+  LENDER1,
+  LENDER2,
 } from "../fixtures/basic_network"
-import { EDGE_STATUS } from "../../src/lib/types"
+import { dbClient, sdk } from "./common/utils"
 import { getUserPortfolio } from "./test_helpers"
-import DbClient from "../../src/gql/db_client"
-
-global.fetch = require("node-fetch")
-
-const TEST_API_URL = "http://localhost:8080/v1/graphql"
-const TEST_ADMIN_SECRET = "myadminsecretkey"
-
-let client: GraphQLClient
-let sdk: Sdk
-let dbClient: DbClient
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
-  sdk = getSdk(client)
   await sdk.ResetDB()
-  dbClient = new DbClient(client)
 })
 
 afterAll(async () => {
