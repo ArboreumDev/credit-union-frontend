@@ -1,16 +1,27 @@
 import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { LoanRequestStatus } from "lib/types"
-import { BORROWER1, SUPPORTER2 } from "../../fixtures/basic_network"
-import { addAndConfirmSupporter } from "../common/test_helpers.ts"
+import {
+  BORROWER1,
+  LENDER1,
+  LENDER2,
+  SUPPORTER2,
+} from "../../fixtures/basic_network"
+import {
+  addAndConfirmSupporter,
+  getUserPortfolio,
+} from "../common/test_helpers"
 import { dbClient, sdk } from "../common/utils"
 
 const amount = 100
 const purpose = "go see the movies"
 let requestId: string
+let balancesBefore
 
 beforeAll(async () => {
   await sdk.ResetDB()
   await sdk.CreateUser({ user: BORROWER1 })
+  await sdk.CreateUser({ user: LENDER1 })
+  await sdk.CreateUser({ user: LENDER2 })
   await sdk.CreateUser({ user: SUPPORTER2 })
 
   const { request } = await dbClient.createLoanRequest(
@@ -19,43 +30,116 @@ beforeAll(async () => {
     purpose
   )
   requestId = request.request_id
+
+  await addAndConfirmSupporter(
+    dbClient,
+    requestId,
+    SUPPORTER2.id,
+    amount * MIN_SUPPORT_RATIO
+  )
+  const allUsers = await dbClient.allUsers
+  balancesBefore = getUserPortfolio(allUsers)
 })
 
 afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Loan Request Flow", () => {
-  test("the swarmai module can respond to loan requests", async () => {
-    const res = await dbClient.calculateLoanRequestOffer(requestId)
-    expect(res.loan_request_info.request_id).toBe(requestId)
-    expect(res).toHaveProperty("corpus_share")
-    expect(res.corpus_share).toBe(1)
-    expect(res).toHaveProperty("loan_info.borrower_apr")
-  })
-
-  test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
-    await addAndConfirmSupporter(
-      sdk,
-      dbClient,
-      requestId,
-      SUPPORTER2.id,
-      amount * MIN_SUPPORT_RATIO
-    )
-    const { loanRequest } = await sdk.GetLoanRequest({
-      requestId: requestId,
-    })
-
-    // The AI has collected the input and stores possible terms of the loan in the db
-    expect(loanRequest.status).toBe(
-      LoanRequestStatus.awaiting_borrower_confirmation
+describe("Loan Request Flow: confirm loan offer", () => {
+  test("triggers creation of payables, receivables", async () => {
+    const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
+    expect(data.update_loan_requests_by_pk.status).toBe(
+      LoanRequestStatus.active
     )
 
-    // verify how the output of the optimizer is stored in DB:
-    expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
-    const loanOffer = loanRequest.risk_calc_result.latestOffer
-    expect(loanOffer.loan_info.amount).toBe(amount)
-    expect(loanOffer.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
-    expect(loanOffer.loan_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
+    // payable should make sense
+    expect(data.insert_payables_one.amount_total).toBeGreaterThan(amount)
+    expect(data.insert_payables_one.amount_paid).toBe(0)
+
+    // receivable should match payable
+    expect(data.insert_receivables_one.amount_total).toBe(
+      data.insert_payables_one.amount_total
+    )
+    expect(data.insert_receivables_one.amount_received).toBe(
+      data.insert_payables_one.amount_paid
+    )
   })
+
+  test.skip("The borrower user can see their repayment plan in the frontend", async () => {
+    const user = await dbClient.getUserByEmail(BORROWER1.email)
+    const loanRequest = user.loan_requests[0]
+    // TODO check lr payables
+  })
+
+  test.skip("The lender sees an updated breakdown of their portfolio ", async () => {
+    const user = await dbClient.getUserByEmail(LENDER1.email)
+    const loanRequest = user.loan_requests[0]
+  })
+
+  test("the users balances are updated accordingly", async () => {
+    const allUsers = await dbClient.allUsers
+    const balancesAfter = getUserPortfolio(allUsers)
+
+    // sanity-check that lender 2 has brought more than lender 1
+    expect(LENDER1.balance).toBeGreaterThan(LENDER2.balance)
+
+    // verify balances have been reduced
+    expect(balancesBefore[LENDER1.id].cash).toBeGreaterThan(
+      balancesAfter[LENDER1.id].cash
+    )
+    expect(balancesBefore[LENDER2.id].cash).toBeGreaterThan(
+      balancesAfter[LENDER2.id].cash
+    )
+
+    // verify lender 1 has received a bigger share than lender 2, as they brought more cash
+    expect(balancesAfter[LENDER1.id].share).toBeGreaterThan(
+      balancesAfter[LENDER2.id].share
+    )
+
+    // verify that more cash has been taken from lender 1 than from lender 2
+    const diffLender1 =
+      balancesBefore[LENDER1.id].cash - balancesAfter[LENDER1.id].cash
+    const diffLender2 =
+      balancesBefore[LENDER2.id].cash - balancesAfter[LENDER2.id].cash
+    expect(diffLender1).toBeGreaterThan(diffLender2)
+
+    expect(SUPPORTER2.balance).toBeGreaterThan(
+      balancesAfter[SUPPORTER2.id].cash
+    )
+  })
+
+  // skipped until we have properly dealt with how exiting loans are stored
+  test.skip("the loan shows up in subsequent queries to the corpus Data", async () => {
+    // const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
+    // expect(
+    //   optimizer_context.loans_in_corpus
+    //     .map((x) => x.loanId)
+    //     .includes(requestId)
+    // ).toBeTruthy
+  })
+})
+
+describe("When the borrower makes a repayment", () => {
+  test.skip("balances of borrower is decreased and  supporter/lender balance is increased", async () => {
+    const allUsers = await dbClient.allUsers
+    balancesBefore = getUserPortfolio(allUsers)
+
+    const repayment = 1000
+    await dbClient.make_repayment(requestId, repayment)
+
+    const balancesAfter = getUserPortfolio(allUsers)
+    expect(balancesBefore[LENDER1.id]).toBeGreaterThan(
+      balancesAfter[LENDER1.id]
+    )
+    expect(balancesBefore[SUPPORTER2.id]).toBeGreaterThan(
+      balancesAfter[SUPPORTER2.id]
+    )
+    expect(balancesBefore[BORROWER1.id]).toBeLessThan(
+      balancesAfter[BORROWER1.id]
+    )
+  })
+
+  // test.skip(
+  //   "all users see transactions related to the repayment in their transactionlist"
+  // )
 })

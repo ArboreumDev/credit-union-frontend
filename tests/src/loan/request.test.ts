@@ -35,7 +35,6 @@ describe("Loan Request Flow", () => {
   test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
     await sdk.CreateUser({ user: SUPPORTER1 })
     await addAndConfirmSupporter(
-      sdk,
       dbClient,
       requestId,
       SUPPORTER1.id,

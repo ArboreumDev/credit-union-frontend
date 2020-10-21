@@ -36,7 +36,6 @@ describe("Loan Request Flow", () => {
 
   test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
     await addAndConfirmSupporter(
-      sdk,
       dbClient,
       requestId,
       SUPPORTER2.id,
