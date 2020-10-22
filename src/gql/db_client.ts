@@ -93,6 +93,14 @@ export default class DbClient {
     })
     return data
   }
+  calculateAndUpdateLoanOffer = async (requestId: string) => {
+    const aiResponse = await this.calculateLoanRequestOffer(requestId)
+    const payload = {
+      requestId,
+      newOffer: { latestOffer: aiResponse },
+    }
+    return this.sdk.UpdateLoanRequestWithOffer(payload)
+  }
   updateSupporter = async (
     requestId: string,
     supporter_id: string,
@@ -114,13 +122,7 @@ export default class DbClient {
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO
     ) {
-      const aiResponse = await this.calculateLoanRequestOffer(requestId)
-      const payload = {
-        requestId,
-        newOffer: { latestOffer: aiResponse },
-      }
-
-      return this.sdk.UpdateLoanRequestWithOffer(payload)
+      return this.calculateAndUpdateLoanOffer(requestId)
     }
 
     return supporter
