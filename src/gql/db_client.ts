@@ -207,14 +207,21 @@ export default class DbClient {
   //   return failures
   // }
 
+  get allUsers() {
+    return (async () => {
+      const { user: allUsers } = await this.sdk.GetAllUsers()
+      return allUsers
+    })()
+  }
+
   /**
    * summaries the portfolios of all users
    * and TODO loan rquests
    * and TODO all loans in the system
    */
   getSystemSummary = async () => {
-    const data = await this.sdk.GetAllUsers()
-    const users = data.user.map((u) => {
+    const allUsers = await this.allUsers
+    const users = allUsers.map((u) => {
       return {
         id: u.id,
         balance: u.balance,

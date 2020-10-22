@@ -7,7 +7,7 @@ import {
   SUPPORTER2,
 } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
-import { getUserPortfolio } from "./test_helpers"
+import { getUserPortfolio } from "./common/test_helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -30,8 +30,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     // add a basic network from a fixture and initialize pointers to
     // an exisiting borrower and two lenders
     await addNetwork(sdk, BASIC_NETWORK)
-    const { user } = await sdk.GetAllUsers()
-    balancesBefore = getUserPortfolio(user)
+    const allUsers = await dbClient.allUsers
+    balancesBefore = getUserPortfolio(allUsers)
     const { request } = await dbClient.createLoanRequest(
       BORROWER1.id,
       amount,
@@ -127,8 +127,8 @@ describe("Basic loan request flow for an accepted loan", () => {
       newOffer: { latestOffer: aiResponse },
     })
     await dbClient.acceptLoanOffer(requestId)
-    const { user } = await sdk.GetAllUsers()
-    const balancesAfter = getUserPortfolio(user)
+    const allUsers = await dbClient.allUsers
+    const balancesAfter = getUserPortfolio(allUsers)
     expect(SUPPORTER1.balance).toBeGreaterThan(
       balancesAfter[SUPPORTER1.id].cash
     )

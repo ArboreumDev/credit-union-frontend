@@ -2,7 +2,7 @@ import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
 import { addNetwork, setupScenario } from "../../src/lib/network_helpers"
 import { EDGE_STATUS } from "../../src/lib/types"
 import { BASIC_NETWORK } from "../fixtures/basic_network"
-import { sdk } from "./common/utils"
+import { dbClient, sdk } from "./common/utils"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -22,8 +22,8 @@ describe("An entire network can be added from a fixture", () => {
   })
 
   test("users from fixture have been added", async () => {
-    const { user } = await sdk.GetAllUsers()
-    const usermails = user.map((x) => x.email)
+    const allUsers = await dbClient.allUsers
+    const usermails = allUsers.map((x) => x.email)
     Object.values(BASIC_NETWORK.nodes).forEach((user) => {
       expect(usermails).toContain(user.email)
     })
@@ -55,7 +55,7 @@ describe("An entire network can be added from a JSON output by the simulator", (
 
   test("add scenraio", async () => {
     await setupScenario(sdk, "basicCorpus")
-    const { user } = await sdk.GetAllUsers()
-    expect(user.length).toBe(30)
+    const allUsers = await dbClient.allUsers
+    expect(allUsers.length).toBe(30)
   })
 })

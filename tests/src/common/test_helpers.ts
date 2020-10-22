@@ -1,7 +1,8 @@
-import { SupporterStatus } from "../../src/lib/types"
+import DbClient from "gql/db_client"
+import { SupporterStatus } from "../../../src/lib/types"
 
 export const getUserPortfolio = (userList) => {
-  let ret = {}
+  const ret = {}
   userList.forEach((user) => {
     ret[user.id] = { cash: user.balance, share: user.corpus_share }
   })
@@ -9,13 +10,12 @@ export const getUserPortfolio = (userList) => {
 }
 
 export const addAndConfirmSupporter = async (
-  sdk,
-  dbClient,
-  request_id,
-  supporter_id,
-  pledge_amount
+  dbClient: DbClient,
+  request_id: string,
+  supporter_id: string,
+  pledge_amount: number
 ) => {
-  await sdk.AddSupporter({
+  await dbClient.sdk.AddSupporter({
     supporter: {
       request_id,
       supporter_id,
