@@ -17,6 +17,9 @@ import {
   SupporterInfo,
   SupporterStatus,
   UserInfo,
+  LoanRequestInfo,
+  LoanInfo,
+  LoanRequestStatus,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
@@ -238,11 +241,25 @@ export default class DbClient {
     users.forEach((user) => {
       userDict[user.id] = user
     })
+    // get loan-requests
+    const { loanRequests } = await this.sdk.GetLoanRequests()
+    console.log(loanRequests[0].risk_calc_result.latestOffer)
+    const loan_requests = loanRequests.map((lr) => {
+      return lr.risk_calc_result.latestOffer
+        .loan_request_info as LoanRequestInfo
+    })
+    // get info on live loans from the object saved on the loan request
+    const loans = []
+    loanRequests.forEach((lr) => {
+      if (lr.status == LoanRequestStatus.active) {
+        loans.push(lr.risk_calc_result.latestOffer.loan_info as LoanInfo)
+      }
+    })
 
     return {
       users: userDict,
-      loans: [],
-      loan_requests: [],
+      loans,
+      loan_requests,
       loan_offers: [],
     } as Scenario
   }

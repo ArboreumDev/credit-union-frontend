@@ -1,0 +1,21 @@
+query GetLoanRequests {
+  loanRequests: loan_requests {
+    request_id
+    amount
+    status
+    risk_calc_result
+    borrowerInfo: user {
+      id
+      demographic_info
+    }
+    supporters (
+      where: {status: {_eq: "confirmed"}}
+    ) {
+      supporter_id
+      pledge_amount
+      demographic_info: user {
+        demographic_info
+      }
+    }
+  }
+}

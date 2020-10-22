@@ -6776,6 +6776,33 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
   >
 }
 
+export type GetLoanRequestsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLoanRequestsQuery = { __typename?: "query_root" } & {
+  loanRequests: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "amount" | "status" | "risk_calc_result"
+    > & {
+        borrowerInfo: { __typename?: "user" } & Pick<
+          User,
+          "id" | "demographic_info"
+        >
+        supporters: Array<
+          { __typename?: "supporters" } & Pick<
+            Supporters,
+            "supporter_id" | "pledge_amount"
+          > & {
+              demographic_info: { __typename?: "user" } & Pick<
+                User,
+                "demographic_info"
+              >
+            }
+        >
+      }
+  >
+}
+
 export type GetLoansByBorrowerAndStatusQueryVariables = Exact<{
   borrower_id: Scalars["uuid"]
   statusList: Array<Scalars["loan_request_status"]>
@@ -7271,6 +7298,27 @@ export const GetLoanRequestDocument = gql`
     }
   }
 `
+export const GetLoanRequestsDocument = gql`
+  query GetLoanRequests {
+    loanRequests: loan_requests {
+      request_id
+      amount
+      status
+      risk_calc_result
+      borrowerInfo: user {
+        id
+        demographic_info
+      }
+      supporters(where: { status: { _eq: "confirmed" } }) {
+        supporter_id
+        pledge_amount
+        demographic_info: user {
+          demographic_info
+        }
+      }
+    }
+  }
+`
 export const GetLoansByBorrowerAndStatusDocument = gql`
   query GetLoansByBorrowerAndStatus(
     $borrower_id: uuid!
@@ -7593,6 +7641,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetLoanRequestQuery>(
           print(GetLoanRequestDocument),
+          variables
+        )
+      )
+    },
+    GetLoanRequests(
+      variables?: GetLoanRequestsQueryVariables
+    ): Promise<GetLoanRequestsQuery> {
+      return withWrapper(() =>
+        client.request<GetLoanRequestsQuery>(
+          print(GetLoanRequestsDocument),
           variables
         )
       )
