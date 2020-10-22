@@ -25,7 +25,6 @@ export function RepaymentsForm({ user }: Props) {
   const onSubmit = (formData: FormData) => {
     console.log(formData)
     MakeRepayment.fetch({
-      request_id: formData.requestId,
       amount: formData.amount,
     })
       .then((res) => {

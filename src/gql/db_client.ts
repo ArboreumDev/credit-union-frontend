@@ -182,6 +182,7 @@ export default class DbClient {
     )
     await this.updatePortfolios(result.updates)
     // TODO show transactions in transaction table
+    return { status: "done" }
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {

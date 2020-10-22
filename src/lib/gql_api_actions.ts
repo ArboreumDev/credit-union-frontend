@@ -195,24 +195,14 @@ export class AcceptLoanOffer extends Action {
 export class MakeRepayment extends Action {
   static Name = "MakeRepayment"
   static InputType: {
-    request_id: string
     amount: number
   }
   static ReturnType: StartLoanMutation
   minAuthLevel = AUTH_TYPE.USER
 
-  isUserAllowed() {
-    const userHasLoan = this.user.loan_requests
-      .map((lr) => lr.request_id)
-      .includes(this.payload.request_id)
-    return super.isUserAllowed() && userHasLoan
-  }
-
   run() {
-    return this.dbClient.make_repayment(
-      this.payload.request_id,
-      this.payload.amount
-    )
+    const userLoanId = this.user.loan_requests[0].request_id
+    return this.dbClient.make_repayment(userLoanId, this.payload.amount)
   }
 
   static fetch(payload: typeof MakeRepayment.InputType) {
