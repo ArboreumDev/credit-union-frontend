@@ -1,3 +1,4 @@
+import borrower from "components/dashboard/borrower"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { LoanRequestStatus } from "lib/types"
 import {
@@ -114,7 +115,9 @@ describe("Loan Request Flow: confirm loan offer", () => {
   })
 
   // skipped until we have properly dealt with how exiting loans are stored
-  test.skip("the loan shows up in subsequent queries to the corpus Data", async () => {
+  test("the loan shows up in subsequent queries to the corpus Data", async () => {
+    const scenario = await dbClient.getSystemSummary()
+    expect(scenario.loans.map((l) => l.request_id)).toContain(requestId)
     // const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
     // expect(
     //   optimizer_context.loans_in_corpus
@@ -122,25 +125,27 @@ describe("Loan Request Flow: confirm loan offer", () => {
     //     .includes(requestId)
     // ).toBeTruthy
   })
-})
+  // })
 
-describe("When the borrower makes a repayment", () => {
-  test.skip("balances of borrower is decreased and  supporter/lender balance is increased", async () => {
+  // describe("When the borrower makes a repayment", () => {
+  test("balances of borrower is decreased and  supporter/lender balance is increased", async () => {
+    const repayment = 1000
+    await sdk.ChangeUserCashBalance({ userId: BORROWER1.id, delta: repayment })
     const allUsers = await dbClient.allUsers
     balancesBefore = getUserPortfolio(allUsers)
 
-    const repayment = 1000
     await dbClient.make_repayment(requestId, repayment)
 
-    const balancesAfter = getUserPortfolio(allUsers)
-    expect(balancesBefore[LENDER1.id]).toBeGreaterThan(
-      balancesAfter[LENDER1.id]
+    const allUsersAfter = await dbClient.allUsers
+    const balancesAfter = getUserPortfolio(allUsersAfter)
+    expect(balancesBefore[LENDER1.id].cash).toBeLessThan(
+      balancesAfter[LENDER1.id].cash
     )
-    expect(balancesBefore[SUPPORTER2.id]).toBeGreaterThan(
-      balancesAfter[SUPPORTER2.id]
+    expect(balancesBefore[SUPPORTER2.id].cash).toBeLessThan(
+      balancesAfter[SUPPORTER2.id].cash
     )
-    expect(balancesBefore[BORROWER1.id]).toBeLessThan(
-      balancesAfter[BORROWER1.id]
+    expect(balancesBefore[BORROWER1.id].cash).toBeGreaterThan(
+      balancesAfter[BORROWER1.id].cash
     )
   })
 

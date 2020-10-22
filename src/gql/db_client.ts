@@ -243,7 +243,6 @@ export default class DbClient {
     })
     // get loan-requests
     const { loanRequests } = await this.sdk.GetLoanRequests()
-    console.log(loanRequests[0].risk_calc_result.latestOffer)
     const loan_requests = loanRequests.map((lr) => {
       return lr.risk_calc_result.latestOffer
         .loan_request_info as LoanRequestInfo
