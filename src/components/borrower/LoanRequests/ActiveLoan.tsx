@@ -11,6 +11,7 @@ import {
   StatNumber,
 } from "@chakra-ui/core"
 import { LoanRequest } from "lib/types"
+import { useRouter } from "next/router"
 import { Currency } from "../../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../../common/Details"
 import { Column, Row } from "../../common/Table"
@@ -52,6 +53,7 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
 ]
 
 const BActiveLoan = ({ loanRequest }: Params) => {
+  const router = useRouter()
   const loan = new LoanModel(loanRequest)
   const amt = loan.amount
   return (
@@ -105,7 +107,12 @@ const BActiveLoan = ({ loanRequest }: Params) => {
         <Box h="30px" />
 
         <Center>
-          <Button colorScheme="blue">Make Repayment</Button>
+          <Button
+            colorScheme="blue"
+            onClick={() => router.push("/dashboard/repay")}
+          >
+            Make Repayment
+          </Button>
         </Center>
       </Stack>
     </>

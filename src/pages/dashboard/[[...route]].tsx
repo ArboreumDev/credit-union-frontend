@@ -18,10 +18,7 @@ const getBorrowerHome = (user: User, initPanelIdx?: number) => {
 const lenderTabMap = {
   invest: 1,
   account: 2,
-}
-const borrowerTabMap = {
   repay: 2,
-  account: 1,
 }
 
 export const getDashboardComponent = (user: User, idx?: number) => (
