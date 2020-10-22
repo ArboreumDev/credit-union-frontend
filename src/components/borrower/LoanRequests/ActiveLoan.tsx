@@ -4,21 +4,16 @@ import {
   Center,
   CircularProgress,
   CircularProgressLabel,
-  Container,
   Heading,
   Stack,
   Stat,
   StatLabel,
   StatNumber,
-  Text,
 } from "@chakra-ui/core"
-import { CgFileDocument } from "react-icons/cg"
-import { dec_to_perc } from "lib/currency"
 import { LoanRequest } from "lib/types"
 import { Currency } from "../../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../../common/Details"
-import { Column, Row, Table } from "../../common/Table"
-import UpcomingRepayment from "../Notifications/UpcomingRepayment"
+import { Column, Row } from "../../common/Table"
 import LoanModel from "./LoanModel"
 
 interface Params {
