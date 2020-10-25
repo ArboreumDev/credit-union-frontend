@@ -20,6 +20,7 @@ import {
   LoanRequestInfo,
   LoanInfo,
   LoanRequestStatus,
+  SystemUpdate,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
@@ -160,9 +161,13 @@ export default class DbClient {
     const systemState = (await this.getSystemSummary()) as Scenario
     const latestOffer = offer_params.risk_calc_result.latestOffer
 
-    const result = await this.swarmAIClient.acceptLoan(systemState, latestOffer)
+    const updated = (await this.swarmAIClient.acceptLoan(
+      systemState,
+      latestOffer
+    )) as SystemUpdate
 
-    await this.updatePortfolios(result.updates)
+    await this.updatePortfolios(updated.accounts.updates)
+    // TODO save loan under risk_calc_result
 
     // -> create payables receivables based on loan offer parameters
     const variables = createStartLoanInputVariables(
@@ -175,12 +180,13 @@ export default class DbClient {
 
   make_repayment = async (loan_id: string, amount: number) => {
     const systemState = (await this.getSystemSummary()) as Scenario
-    const result = await this.swarmAIClient.make_repayment(
+    const updated = await this.swarmAIClient.make_repayment(
       systemState,
       loan_id,
       amount
     )
-    await this.updatePortfolios(result.updates)
+    await this.updatePortfolios(updated.accounts.updates)
+
     // TODO show transactions in transaction table
     return { status: "done" }
   }
@@ -246,15 +252,15 @@ export default class DbClient {
     })
     // get loan-requests
     const { loanRequests } = await this.sdk.GetLoanRequests()
-    const loan_requests = loanRequests.map((lr) => {
-      return lr.risk_calc_result.latestOffer
-        .loan_request_info as LoanRequestInfo
-    })
     // get info on live loans from the object saved on the loan request
-    const loans = []
+    const loan_requests = {}
+    const loans = {}
     loanRequests.forEach((lr) => {
+      loan_requests[lr.request_id] = lr.risk_calc_result.latestOffer
+        .loan_request_info as LoanRequestInfo
       if (lr.status == LoanRequestStatus.active) {
-        loans.push(lr.risk_calc_result.latestOffer.loan_info as LoanInfo)
+        loans[lr.request_id] = lr.risk_calc_result.latestOffer
+          .loan_info as LoanInfo
       }
     })
 
@@ -262,7 +268,7 @@ export default class DbClient {
       users: userDict,
       loans,
       loan_requests,
-      loan_offers: [],
+      loan_offers: {},
     } as Scenario
   }
 

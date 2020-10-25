@@ -104,6 +104,7 @@ export type Scenario = {
   users: any // TODO should be Dict[str, UserInfo]
   loans: any // TODO
   loan_requests: any // TODO
+  loan_offers: any
 }
 
 export type SupporterInfo = {
@@ -239,5 +240,16 @@ export type PortfolioUpdate = {
 
 export type AccountsUpdate = {
   updates: any //PortfolioUpdate[]
-  transactions: any
+  transactions?: any
+}
+
+export type LoansUpdate = {
+  loan_offers: any
+  loan_requests: any
+  loans: any
+}
+
+export type SystemUpdate = {
+  loans: LoansUpdate
+  accounts: AccountsUpdate
 }

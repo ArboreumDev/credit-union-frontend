@@ -116,16 +116,9 @@ describe("Loan Request Flow: confirm loan offer", () => {
 
   // skipped until we have properly dealt with how exiting loans are stored
   test("the loan shows up in subsequent queries to the corpus Data", async () => {
-    const scenario = await dbClient.getSystemSummary()
-    expect(scenario.loans.map((l) => l.request_id)).toContain(requestId)
-    // const { optimizer_context } = await dbClient.getSwarmAiInput(requestId)
-    // expect(
-    //   optimizer_context.loans_in_corpus
-    //     .map((x) => x.loanId)
-    //     .includes(requestId)
-    // ).toBeTruthy
+    const system = await dbClient.getSystemSummary()
+    expect(system.loans).toHaveProperty(requestId)
   })
-  // })
 
   // describe("When the borrower makes a repayment", () => {
   test("Make repayment", async () => {

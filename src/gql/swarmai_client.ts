@@ -23,10 +23,13 @@ async function fetcher(url: string, payload: any, caller?: string) {
 export default class SwarmAIClient {
   constructor(private _url: string) {}
 
-  async acceptLoan(systemState: Scenario, latestOffer: any): Promise<any> {
+  async acceptLoan(
+    systemState: Scenario,
+    latestOffer: LoanOffer
+  ): Promise<SystemUpdate> {
     const payload = {
       system_state: systemState,
-      aiResponse: latestOffer,
+      loan_offer: latestOffer,
     }
     const url = this._url + "/loan/accept"
     return fetcher(url, payload, "acceptLoan")
@@ -36,7 +39,7 @@ export default class SwarmAIClient {
     systemState: Scenario,
     loan_id: string,
     amount: number
-  ): Promise<any> {
+  ): Promise<SystemUpdate> {
     const payload = {
       system_state: systemState,
       loan_id,
@@ -51,7 +54,7 @@ export default class SwarmAIClient {
     loanAmount: number
     supporters: SupporterInfo[]
     borrowerInfo: BorrowerInfo
-  }): Promise<SwarmAiResponse> {
+  }): Promise<SystemUpdate> {
     const payload = {
       request_msg: this.generateLoanOfferRequest(params),
     }
