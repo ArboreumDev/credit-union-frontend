@@ -1,12 +1,11 @@
 # Frontend
 
-React + Typescript + Next.js
-
-## Features
-
-- Graphql API using Hasura
-- Auth using NextAuth
-  - It creates all the necessary tables and schema for you.
+- React
+- Typescript
+- Next.js
+- Hasura
+- graphql-codegen
+- ChakraUI
 
 ## Development
 
