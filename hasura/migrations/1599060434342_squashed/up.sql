@@ -5,7 +5,7 @@ CREATE TABLE public.user (
     name character varying(40) NOT NULL,
     email character varying(40) NOT NULL,
     demographic_info jsonb DEFAULT jsonb_build_object(),
-    phone character varying DEFAULT '+91-1231345432'::character varying NOT NULL,
+    phone character varying DEFAULT '+91-1231345432'::character varying NOT NULL
 );
 
 ALTER TABLE ONLY public."user"

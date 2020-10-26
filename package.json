@@ -8,8 +8,7 @@
     "test": "jest --watch --runInBand",
     "test:ci": "jest --ci --runInBand",
     "migrate": "cd hasura && hasura migrate apply",
-    "metadata": "cd hasura && hasura metadata apply",
-    "seeds": "cd hasura && hasura seeds apply"
+    "metadata": "cd hasura && hasura metadata apply"
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.3",

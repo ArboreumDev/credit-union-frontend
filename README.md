@@ -40,14 +40,8 @@ To run manually:
 ## Check if there are any build errors:
 
 `yarn build`
+`vercel`
 
 ## Migrations
 
 If there are changes to migrations, make sure the down migration file works well.
-
-## Seeds
-
-To automatically create seeds from the current db state:
-`hasura seeds create user_seed --from-table user`
-`hasura seeds create loan_request_seeds --from-table loan_requests`
-etc.
