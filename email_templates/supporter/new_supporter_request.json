@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Supporter_NewRequest",
-    "SubjectPart": "You've Received A Supporter Request",
-    "HtmlPart": "Hi {{name}},<p>You have received a request to act as a supporter of {{borrower}} in the {{company}} Credit Program.</p><p>They are asking you to make a maximum of {{pledge_amount}} available to them for a loan application.</p><p>Please log in to the Credit Program portal to approve, reject or adjust this request.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

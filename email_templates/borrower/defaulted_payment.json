@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Borrower_DefaultedPayment",
-    "SubjectPart": "Missed Loan Repayment",
-    "HtmlPart": "Hi {{name}},<p>Recently, you took out a loan of {{loan_amount}} through the {{company}} Credit Program.</p><p>We were unable to process your most recent repayment of {{loan_repayments}}, which was due on the {{loan_repaydate}}.</p><p>If you have not already informed HR of this missed payment, please do so as soon as possible to avoid funds being garnished from your salary.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

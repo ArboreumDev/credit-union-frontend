@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Borrower_ApprovedSupporter",
-    "SubjectPart": "One Of Your Supporters Has Agreed To Help!",
-    "HtmlPart": "Hi {{name}},<p>Good news! {{supporter}} has agreed to act as your supporter in the {{company}} Credit Program.</p><p>They have pledged a maximum of {{amount}} to support any loan application you make.</p><p>Please log in to the Credit Program portal if you wish to add more supporters or make a loan application.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

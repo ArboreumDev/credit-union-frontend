@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Supporter_ApprovedRequest",
-    "SubjectPart": "You've Agreed To Be A Supporter!",
-    "HtmlPart": "Hi {{name}},<p>You have agreed to act as a supporter for {{borrower}} in the {{company}} Credit Program.</p><p>You have pledged {{pledge_amount}} as a maximum amount to support any loan application that {{borrower}} makes through the Program.</p><p>Please log in to the Credit Program portal if you wish to adjust your maximum pledge.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Borrower_CompletedRepayment",
-    "SubjectPart": "Loan Fully Repaid",
-    "HtmlPart": "Hi {{name}},<p>Recently, you took out a loan of {{loan_amount}} through the {{company}} Credit Program.</p><p>This email is a confirmation that you have repaid the loan in full with interest, and that any of your supporters' funds that were being held in escrow have been released to them.</p><p>Thank you for taking part in the program, and for your timely repayments!</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "General_AccountOnboarded",
-    "SubjectPart": "KYC Checks Complete!",
-    "HtmlPart": "Hi {{name}},<p>Good news! Your KYC checks have passed, and you're now fully onboarded onto the {{company}} Credit Program.</p><p>You can now log in and start lending, borrowing or supporting your colleagues.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}

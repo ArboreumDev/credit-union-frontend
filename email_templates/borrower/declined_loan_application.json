@@ -1,8 +1,0 @@
-{
-  "Template": {
-    "TemplateName": "Borrower_DeclinedApplication",
-    "SubjectPart": "Loan Application: Insufficient Support",
-    "HtmlPart": "Hi {{name}},<p>Recently, you applied for a loan of {{loan_amount}} through the {{company}} Credit Program.</p><p>We're sorry to have to tell you that your application has not received sufficient approval from your supporters to be processed.</p><p>Please log in to the Credit Program portal to either add additional supporters, or make a new loan application with an adjusted amount.</p><p>Best wishes,</p><p>Arboreum, on behalf of {{company}}</p>",
-    "TextPart": ""
-  }
-}
