@@ -1,5 +1,11 @@
 import { MIN_SUPPORT_RATIO } from "lib/constant"
-import { LoanRequestStatus } from "lib/types"
+import {
+  LoanRequestStatus,
+  LoanInfo,
+  LoanOffer,
+  SystemUpdate,
+  LoanRequestInfo,
+} from "lib/types"
 import { BORROWER1, SUPPORTER2 } from "../../fixtures/basic_network"
 import { addAndConfirmSupporter } from "../common/test_helpers"
 import { dbClient, sdk } from "../common/utils"
@@ -27,11 +33,25 @@ afterAll(async () => {
 
 describe("Loan Request Flow", () => {
   test("the swarmai module can respond to loan requests", async () => {
-    const res = await dbClient.calculateLoanRequestOffer(requestId)
-    expect(res.loan_request_info.request_id).toBe(requestId)
-    expect(res).toHaveProperty("corpus_share")
-    expect(res.corpus_share).toBe(1)
-    expect(res).toHaveProperty("loan_info.borrower_apr")
+    const res: SystemUpdate = await dbClient.calculateLoanRequestOffer(
+      requestId
+    )
+    const loan = res.loans.loan_offers[requestId]
+    expect(loan.init_info.request_id).toBe(requestId)
+    expect(loan.init_info).toHaveProperty("corpus_share")
+    expect(loan.init_info.corpus_share).toBe(1)
+    expect(loan).toHaveProperty("init_info.borrower_apr")
+  })
+
+  test("a calculated offer is saved with the original request", async () => {
+    const { request } = await dbClient.calculateAndUpdateLoanOffer(requestId)
+    const loan_offer = request.risk_calc_result["latestOffer"] as LoanOffer
+    const request_data = request.risk_calc_result[
+      "requestData"
+    ] as LoanRequestInfo
+    expect(loan_offer.init_info.request_id).toBe(requestId)
+    expect(loan_offer.init_info).toHaveProperty("borrower_apr")
+    expect(request_data.request_id).toBe(requestId)
   })
 
   test("Any pledge that brings support above 20%, triggers a loan offer and advances the loan state", async () => {
@@ -52,9 +72,9 @@ describe("Loan Request Flow", () => {
 
     // verify how the output of the optimizer is stored in DB:
     expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
-    const loanOffer = loanRequest.risk_calc_result.latestOffer
-    expect(loanOffer.loan_info.amount).toBe(amount)
-    expect(loanOffer.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
-    expect(loanOffer.loan_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
+    const loanOffer = loanRequest.risk_calc_result.latestOffer as LoanOffer
+    expect(loanOffer.init_info.amount).toBe(amount)
+    expect(loanOffer.init_info.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
+    expect(loanOffer.init_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
   })
 })

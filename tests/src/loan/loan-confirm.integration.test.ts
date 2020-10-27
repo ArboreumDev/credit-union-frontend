@@ -127,7 +127,8 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const allUsers = await dbClient.allUsers
     balancesBefore = getUserPortfolio(allUsers)
 
-    await dbClient.make_repayment(requestId, repayment)
+    const request = await dbClient.make_repayment(requestId, repayment)
+    console.log(request)
 
     const allUsersAfter = await dbClient.allUsers
     const balancesAfter = getUserPortfolio(allUsersAfter)
@@ -140,6 +141,11 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(balancesBefore[BORROWER1.id].cash).toBeGreaterThan(
       balancesAfter[BORROWER1.id].cash
     )
+    // REFACTOR: call amount principle
+    expect(
+      request.loan.schedule.borrower_view["total_payments"]["remain"]
+    ).toBeLessThan(amount)
+    expect(request.loan.init_info["repayments"]).toStrictEqual([1000])
   })
 
   // test.skip(
