@@ -6,6 +6,7 @@ import { PostToSlack } from "pages/api/upload"
 
 export default async function log(message) {
   if (process.env.ENVIRONMENT) await PostToSlack(message)
+  // console.log(message)
 }
 
 export async function logEvent(
