@@ -3,10 +3,8 @@ mutation CreateUser($user: user_insert_input!) {
     id
     created_at
     email
-    user_type
     name
     phone
     demographic_info
-    user_number
   }
 }

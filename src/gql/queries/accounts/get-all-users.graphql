@@ -1,13 +1,10 @@
 query GetAllUsers {
   user {
     id
+    created_at
     email
     name
-    user_type
-    balance
-    user_number
-    corpus_share
-    kyc_approved
+    phone
     demographic_info
   }
 }
