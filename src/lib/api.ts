@@ -36,7 +36,7 @@ export async function fetchJSON({
   }
 
   const error = new Error(response.statusText)
-  console.error(response)
+  console.error(JSON.stringify(data))
   throw error
 }
 
