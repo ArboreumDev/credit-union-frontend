@@ -113,7 +113,7 @@ describe("Basic loan request flow for an accepted loan", () => {
       borrowerInfo: riskInfo.borrowerInfo,
     })
 
-    const loanSupporters = loan_request_info.supporters.map(
+    const loanSupporters = loan_request_info.terms.supporters.map(
       (x) => x.supporter_id
     )
     expect(loanSupporters).toContain(SUPPORTER1.id)

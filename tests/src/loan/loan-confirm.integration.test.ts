@@ -144,7 +144,7 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(
       request.loan.schedule.borrower_view["total_payments"]["remain"]
     ).toBeLessThan(amount)
-    expect(request.loan.init_info["repayments"]).toStrictEqual([1000])
+    expect(request.loan["state"]["repayments"]).toStrictEqual([1000])
   })
 
   // test.skip(

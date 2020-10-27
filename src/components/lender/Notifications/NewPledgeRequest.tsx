@@ -86,8 +86,7 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
               <Row>
                 <TextColumn>Loan Term</TextColumn>
                 <TextColumn>
-                  {loanRequest.risk_calc_result?.latestOffer.init_info.tenor}{" "}
-                  months
+                  {loanRequest.risk_calc_result?.latestOffer.terms.tenor} months
                 </TextColumn>
               </Row>
             </Table>

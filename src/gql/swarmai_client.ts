@@ -7,6 +7,7 @@ import {
   Scenario,
   SupporterInfo,
   LoanOffer,
+  RequestedTerms,
   SwarmAiRequestMessage,
   SystemUpdate,
 } from "lib/types"
@@ -49,6 +50,7 @@ export default class SwarmAIClient {
     const url = this._url + "/loan/repay"
     return fetcher(url, payload, "repayLoan")
   }
+  g
 
   async calculateLoanOffer(params: {
     requestId: string
@@ -84,12 +86,15 @@ export default class SwarmAIClient {
 
     return {
       loan_request_info: {
-        borrower_info: borrowerInfo,
         request_id: requestId,
-        tenor: tenor,
-        borrower_collateral: borrowerCollateral,
-        amount: loanAmount,
-        supporters: supporters,
+        terms: {
+          request_id: requestId,
+          borrower_info: borrowerInfo,
+          tenor: tenor,
+          amount: loanAmount,
+          borrower_collateral: borrowerCollateral,
+          supporters: supporters,
+        } as RequestedTerms,
       } as LoanRequestInfo,
       // optimizer_context: {
       // risk_free_apr: DEFAULT_RISK_FREE_INTEREST_RATE,

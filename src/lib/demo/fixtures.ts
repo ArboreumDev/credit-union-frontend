@@ -85,7 +85,9 @@ export class Fixtures {
       },
     },
     latestOffer: {
-      init_info: {
+      request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
+      terms: {
+        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
         borrower_info: {
           borrower_id: "546a77b0-be3f-4071-8727-fb7fe24947dd",
           demographic_info: {
@@ -94,7 +96,7 @@ export class Fixtures {
             credit_score: 600.0,
           },
         },
-        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
+        supporters: [],
         tenor: 6.0,
         amount: 50000.0,
         borrower_collateral: 0.0,
@@ -104,13 +106,18 @@ export class Fixtures {
         supporter_apr: 0.159798,
         corpus_share: 0.7,
         supporter_share: 0.3,
-        supporter_cash_encumbered: 0.0,
-        supporter_portfolio_encumbered: 0.0,
-        repayments: [],
         supporter_lag: 1,
         penalty_apr: 0.055,
       },
+      state: {
+        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
+        borrower_collateral: 0.0,
+        supporter_cash_encumbered: 0.0,
+        supporter_portfolio_encumbered: 0.0,
+        repayments: [],
+      },
       schedule: {
+        // request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
         borrower_view: {
           total_payments: {
             paid: 0.0,

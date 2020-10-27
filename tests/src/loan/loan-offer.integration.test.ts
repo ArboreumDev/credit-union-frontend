@@ -37,10 +37,10 @@ describe("Loan Request Flow", () => {
       requestId
     )
     const loan = res.loans.loan_offers[requestId]
-    expect(loan.init_info.request_id).toBe(requestId)
-    expect(loan.init_info).toHaveProperty("corpus_share")
-    expect(loan.init_info.corpus_share).toBe(1)
-    expect(loan).toHaveProperty("init_info.borrower_apr")
+    expect(loan.request_id).toBe(requestId)
+    expect(loan.terms).toHaveProperty("corpus_share")
+    expect(loan.terms.corpus_share).toBe(1)
+    expect(loan).toHaveProperty("terms.borrower_apr")
   })
 
   test("a calculated offer is saved with the original request", async () => {
@@ -49,8 +49,8 @@ describe("Loan Request Flow", () => {
     const request_data = request.risk_calc_result[
       "requestData"
     ] as LoanRequestInfo
-    expect(loan_offer.init_info.request_id).toBe(requestId)
-    expect(loan_offer.init_info).toHaveProperty("borrower_apr")
+    expect(loan_offer.request_id).toBe(requestId)
+    expect(loan_offer.terms).toHaveProperty("borrower_apr")
     expect(request_data.request_id).toBe(requestId)
   })
 
@@ -73,8 +73,8 @@ describe("Loan Request Flow", () => {
     // verify how the output of the optimizer is stored in DB:
     expect(loanRequest.risk_calc_result).toHaveProperty("latestOffer")
     const loanOffer = loanRequest.risk_calc_result.latestOffer as LoanOffer
-    expect(loanOffer.init_info.amount).toBe(amount)
-    expect(loanOffer.init_info.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
-    expect(loanOffer.init_info.supporter_share).toBe(MIN_SUPPORT_RATIO)
+    expect(loanOffer.terms.amount).toBe(amount)
+    expect(loanOffer.terms.corpus_share).toBe(1 - MIN_SUPPORT_RATIO)
+    expect(loanOffer.terms.supporter_share).toBe(MIN_SUPPORT_RATIO)
   })
 })

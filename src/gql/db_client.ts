@@ -18,7 +18,6 @@ import {
   SupporterStatus,
   UserInfo,
   LoanRequestInfo,
-  LoanInitInfo,
   LoanInfo,
   LoanOffer,
   LoanRequestStatus,

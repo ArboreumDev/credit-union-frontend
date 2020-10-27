@@ -1,14 +1,7 @@
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
-import {
-  CalculatedRisk,
-  LoanRequest,
-  SupporterStatus,
-  LoanInfo,
-  LoanInitInfo,
-  LoanOffer,
-} from "lib/types"
+import { LoanRequest, SupporterStatus, LoanInfo } from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
 
@@ -38,7 +31,7 @@ export default class LoanModel {
 
   get borrowerAPR() {
     console.log(this.loanInfo)
-    return this.loanInfo.init_info.borrower_apr
+    return this.loanInfo.terms.borrower_apr
   }
 
   get interestAmount() {
@@ -70,7 +63,7 @@ export default class LoanModel {
    * Loan tenor in months
    */
   get tenor() {
-    return this.loanInfo.init_info.tenor
+    return this.loanInfo.terms.tenor
   }
 
   get nextPayment() {
