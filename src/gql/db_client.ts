@@ -42,7 +42,8 @@ export default class DbClient {
     }
     this.gqlClient = _client || initializeGQL()
     this.swarmAIClient =
-      _swarmai_client || new SwarmAIClient(process.env.SWARMAI_URL)
+      _swarmai_client ||
+      new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3001")
     this.sdk = getSdk(this.gqlClient)
     DbClient.instance = this
   }
@@ -323,11 +324,7 @@ export default class DbClient {
     // create the borrowerInfo-object
     const borrowerInfo = {
       borrower_id: loanRequest.borrower_id,
-      demographic_info: {
-        credit_score: loanRequest.user.demographic_info.creditScore,
-        education_years: loanRequest.user.demographic_info.yearsOfEducation,
-        income: loanRequest.user.demographic_info.income,
-      } as DemographicInfo,
+      demographic_info: loanRequest.user.demographic_info as DemographicInfo,
     } as BorrowerInfo
     return {
       supporterInfo,
