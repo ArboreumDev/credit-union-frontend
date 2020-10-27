@@ -18,49 +18,11 @@ export type PledgeRequest = User["pledge_requests"][0]
 
 // TODO @djudjuu
 export type CalculatedRisk = {
-  latestOffer: {
-    loan_info: {
-      tenor: number
-      amount: number
-      corpus_apr: number
-      repayments: any[]
-      request_id: string
-      penalty_apr: number
-      borrower_apr: number
-      supporter_portfolio_encumbered: number
-      borrower_info: any
-      supporter_apr: number
-      supporter_lag: number
-      supporter_share: number
-      borrower_collateral: number
-      num_annual_cmpnd_prds: number
-      supporter_cash_encumbered: number
-    }
-    corpus_share: number
-    loan_schedule: {
-      corpus_view: any
-      borrower_view: {
-        total_payments: {
-          paid: number
-          remain: number
-        }
-        corpus_interest: {
-          paid: number
-          remain: number
-        }
-        corpus_principal: {
-          paid: number
-          remain: number
-        }
-        supporter_interest: any
-        borrower_collateral: any
-        supporter_principal: any
-      }
-      supporter_view: any
-      next_borrower_payment: number
-    }
-    loan_request_info: any
+  latestOffer?: {
+    init_info: LoanInitInfo
+    schedule: LoanScheduleSummary
   }
+  request_data?: any
 }
 
 type BetaParms = [number, number]
@@ -130,8 +92,9 @@ export type LiveLoanInfo = {
   loan_schedule: any
 }
 
-export type LoanInfo = {
+export type LoanInitInfo = {
   request_id: string
+  borrower_info: BorrowerInfo
   tenor: number
   amount: number
   num_annual_cmpnd_prds: number
@@ -140,6 +103,7 @@ export type LoanInfo = {
   corpus_apr: number
   supporter_apr: number
   supporter_share: number
+  corpus_share: number
   supporter_cash_encumbered: number
   supporter_portfolio_encumbered: number
   supporter_lag: number
@@ -178,12 +142,13 @@ export type SwarmAiRequestMessage = {
   optimizer_context?: OptimizerContext
 }
 
-export type SwarmAiResponse = {
-  loan_request_info: LoanRequestInfo
-  corpus_share: number
-  loan_info: LoanInfo
-  loan_schedule?: LoanSchedule
+export type LoanInfo = {
+  // init_info: LoanRequestInfo
+  init_info: LoanInitInfo
+  schedule?: LoanScheduleSummary
 }
+
+export type LoanOffer = LoanInfo
 
 export type PaidRemain = {
   paid: number
@@ -199,7 +164,7 @@ export type BorrowerView = {
   borrower_collateral: PaidRemain
 }
 
-export type LoanSchedule = {
+export type LoanScheduleSummary = {
   borrower_view: BorrowerView
   next_borrower_payment: number
   supporter_view?: any
