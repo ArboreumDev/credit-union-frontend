@@ -88,7 +88,8 @@ CREATE TABLE public.loan_requests (
     purpose text,
     risk_calc_result jsonb,
     confirmation_date timestamp with time zone,
-    payback_status text
+    payback_status text,
+    loan jsonb NULL
 );
 CREATE TABLE public.loan_risk (
     request_id uuid NOT NULL,
