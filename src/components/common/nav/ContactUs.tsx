@@ -31,7 +31,7 @@ export default function Contactus({
   text = "Contact Us",
 }: ContactProps) {
   return (
-    <Mailto email="contact@arboreum.dev" subject={subject} body={body}>
+    <Mailto email="contact@mail.dev" subject={subject} body={body}>
       {text}
     </Mailto>
   )
