@@ -18,10 +18,7 @@ export type PledgeRequest = User["pledge_requests"][0]
 
 // TODO @djudjuu
 export type CalculatedRisk = {
-  latestOffer?: {
-    init_info: LoanInitInfo
-    schedule: LoanScheduleSummary
-  }
+  latestOffer?: LoanInfo
   request_data?: any
 }
 
@@ -83,35 +80,71 @@ export type BorrowerInfo = {
 }
 
 export type LiveLoanInfo = {
-  loan_id: string
-  interest: number
-  kumr_params: KumrParams
-  amount_owned_portfolio: number
-  amount_owned_supporters: number
-  time_remaining: number
-  loan_schedule: any
+  // loan_id: string
+  // interest: number
+  // kumr_params: KumrParams
+  // amount_owned_portfolio: number
+  // amount_owned_supporters: number
+  // time_remaining: number
+  // loan_schedule: any
 }
 
-export type LoanInitInfo = {
+export type RequestedTerms = {
   request_id: string
+  // filled by borrower
   borrower_info: BorrowerInfo
   tenor: number
   amount: number
-  num_annual_cmpnd_prds: number
-  borrower_apr: number
+  supporters: SupporterInfo[]
+  // filled by system
   borrower_collateral: number
-  corpus_apr: number
-  supporter_apr: number
-  supporter_share: number
+  num_annual_cmpnd_prds?: number
+}
+
+export type OfferedTerms = {
+  request_id: string
+  // original params from the borrower
+  borrower_info: BorrowerInfo
+  tenor: number
+  amount: number
+  supporters: SupporterInfo[]
+  num_annual_cmpnd_prds: number
+  borrower_collateral: number
+  // offered by system in response
   corpus_share: number
+  corpus_apr: number
+  supporter_share: number
+  supporter_apr: number
+  borrower_apr: number
+  penalty_apr: number
+  supporter_lag: number
+}
+
+// mathces LoanRequest in the swarmai-repo
+export type LoanRequestInfo = {
+  request_id: string
+  terms: RequestedTerms
+  risk_params?: RiskParams
+}
+
+export type LoanState = {
+  request_id: string
+  borrower_collateral: number
   supporter_cash_encumbered: number
   supporter_portfolio_encumbered: number
-  supporter_lag: number
-  penalty_apr: number
-  repayments?: number[]
-  loan_schedule?: any
-  desired_irr?: number
+  repayments: number[]
+  // loan_schedule?: any
+  // desired_irr?: number
 }
+
+export type LoanInfo = {
+  request_id: string
+  terms: OfferedTerms
+  state: LoanState
+  schedule: LoanScheduleSummary
+}
+
+export type LoanOffer = LoanInfo
 
 export type RiskInput = {
   central_risk_info: RiskParams
@@ -126,29 +159,11 @@ export type OptimizerContext = {
   risk_free_apr?: number
 }
 
-export type LoanRequestInfo = {
-  borrower_info: BorrowerInfo
-  request_id: string
-  tenor: number
-  amount: number
-  borrower_collateral: number
-  supporters: SupporterInfo[]
-  risk_params?: RiskParams
-}
-
 export type SwarmAiRequestMessage = {
   loan_request_info: LoanRequestInfo
   risk_assessment_context?: RiskInput
   optimizer_context?: OptimizerContext
 }
-
-export type LoanInfo = {
-  // init_info: LoanRequestInfo
-  init_info: LoanInitInfo
-  schedule?: LoanScheduleSummary
-}
-
-export type LoanOffer = LoanInfo
 
 export type PaidRemain = {
   paid: number
