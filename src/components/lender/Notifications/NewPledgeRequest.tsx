@@ -38,7 +38,10 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
       .then(async (res) => {
         router.push("/")
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err)
+        router.push("/")
+      })
   }
 
   return (
