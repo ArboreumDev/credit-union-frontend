@@ -128,7 +128,6 @@ describe("Loan Request Flow: confirm loan offer", () => {
     balancesBefore = getUserPortfolio(allUsers)
 
     const request = await dbClient.make_repayment(requestId, repayment)
-    console.log(request)
 
     const allUsersAfter = await dbClient.allUsers
     const balancesAfter = getUserPortfolio(allUsersAfter)

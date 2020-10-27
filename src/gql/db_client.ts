@@ -146,6 +146,7 @@ export default class DbClient {
    */
   calculateLoanRequestOffer = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    // TODO refactor this be named more appropriately
     const riskInfo = await this.getRiskInput(requestId)
     return await this.swarmAIClient.calculateLoanOffer({
       requestId: loanRequest.request_id,
