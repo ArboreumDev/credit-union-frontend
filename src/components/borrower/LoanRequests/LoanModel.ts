@@ -4,9 +4,9 @@ import { dec_to_perc } from "lib/currency"
 import {
   CalculatedRisk,
   LoanRequest,
-  SwarmAiResponse,
   SupporterStatus,
   LoanInfo,
+  LoanOffer,
 } from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
@@ -28,11 +28,11 @@ export default class LoanModel {
   }
 
   get calculatedRisk() {
-    return this._loan.risk_calc_result.latestOffer as SwarmAiResponse
+    return this._loan.risk_calc_result.latestOffer as LoanOffer
   }
 
   get loanInfo() {
-    return this.calculatedRisk.loan_info
+    return this.calculatedRisk.init_info
   }
 
   get borrowerAPR() {

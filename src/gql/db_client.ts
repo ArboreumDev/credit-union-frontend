@@ -18,7 +18,9 @@ import {
   SupporterStatus,
   UserInfo,
   LoanRequestInfo,
+  LoanInitInfo,
   LoanInfo,
+  LoanOffer,
   LoanRequestStatus,
   SystemUpdate,
 } from "../lib/types"
@@ -94,14 +96,20 @@ export default class DbClient {
     })
     return data
   }
+
   calculateAndUpdateLoanOffer = async (requestId: string) => {
-    const aiResponse = await this.calculateLoanRequestOffer(requestId)
+    const { loans, accounts } = await this.calculateLoanRequestOffer(requestId)
     const payload = {
       requestId,
-      newOffer: { latestOffer: aiResponse },
+      newData: {
+        latestOffer: loans.loan_offers[requestId],
+        requestData: loans.loan_requests[requestId],
+      },
     }
+    // console.log('udpated', payload)
     return this.sdk.UpdateLoanRequestWithOffer(payload)
   }
+
   updateSupporter = async (
     requestId: string,
     supporter_id: string,
@@ -156,39 +164,46 @@ export default class DbClient {
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
     // query swarmai to get convert loan-terms to aset-updates for everyone involved
-    const data = await this.sdk.GetLoanOffer({ request_id })
-    const offer_params = data.loan_requests_by_pk
+    const { request } = await this.sdk.GetLoanOffer({ request_id })
+    // const offer_params = data.loan_requests_by_pk
     const systemState = (await this.getSystemSummary()) as Scenario
-    const latestOffer = offer_params.risk_calc_result.latestOffer
+    const latestOffer = request.risk_calc_result.latestOffer as LoanOffer
 
     const updated = (await this.swarmAIClient.acceptLoan(
       systemState,
       latestOffer
     )) as SystemUpdate
+    const realizedLoan = updated.loans.loans[request_id]
 
     await this.updatePortfolios(updated.accounts.updates)
-    // TODO save loan under risk_calc_result
+    await this.sdk.UpdateLoanRequestWithLoanData({
+      requestId: request_id,
+      loanData: realizedLoan,
+    })
 
     // -> create payables receivables based on loan offer parameters
     const variables = createStartLoanInputVariables(
       request_id,
-      offer_params.risk_calc_result.latestOffer.loan_schedule.borrower_view
-        .total_payments.remain
+      realizedLoan.schedule.borrower_view.total_payments.remain
     )
     return this.sdk.StartLoan(variables)
   }
 
   make_repayment = async (loan_id: string, amount: number) => {
     const systemState = (await this.getSystemSummary()) as Scenario
-    const updated = await this.swarmAIClient.make_repayment(
+    const { loans, accounts } = (await this.swarmAIClient.make_repayment(
       systemState,
       loan_id,
       amount
-    )
-    await this.updatePortfolios(updated.accounts.updates)
+    )) as SystemUpdate
+    await this.updatePortfolios(accounts.updates)
+    const { request } = await this.sdk.UpdateLoanRequestWithLoanData({
+      requestId: loan_id,
+      loanData: loans.loans[loan_id],
+    })
 
     // TODO show transactions in transaction table
-    return { status: "done" }
+    return request
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
@@ -255,12 +270,17 @@ export default class DbClient {
     // get info on live loans from the object saved on the loan request
     const loan_requests = {}
     const loans = {}
+    const loan_offers = {}
     loanRequests.forEach((lr) => {
-      loan_requests[lr.request_id] = lr.risk_calc_result.latestOffer
-        .loan_request_info as LoanRequestInfo
+      loan_requests[lr.request_id] = lr.risk_calc_result[
+        "requestData"
+      ] as LoanRequestInfo
       if (lr.status == LoanRequestStatus.active) {
-        loans[lr.request_id] = lr.risk_calc_result.latestOffer
-          .loan_info as LoanInfo
+        loans[lr.request_id] = lr.loan as LoanInfo
+      } else {
+        loan_offers[lr.request_id] = lr.risk_calc_result[
+          "latestOffer"
+        ] as LoanInfo
       }
     })
 
@@ -268,7 +288,7 @@ export default class DbClient {
       users: userDict,
       loans,
       loan_requests,
-      loan_offers: {},
+      loan_offers,
     } as Scenario
   }
 

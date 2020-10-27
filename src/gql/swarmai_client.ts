@@ -6,8 +6,9 @@ import {
   LoanRequestInfo,
   Scenario,
   SupporterInfo,
+  LoanOffer,
   SwarmAiRequestMessage,
-  SwarmAiResponse,
+  SystemUpdate,
 } from "lib/types"
 
 async function fetcher(url: string, payload: any, caller?: string) {
