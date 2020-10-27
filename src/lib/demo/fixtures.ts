@@ -1,4 +1,10 @@
-import { User, LoanRequest, LoanRequestStatus, CalculatedRisk } from "../types"
+import {
+  User,
+  LoanRequest,
+  LoanRequestStatus,
+  CalculatedRisk,
+  LoanInfo,
+} from "../types"
 
 export class Fixtures {
   static Lender: User = {
@@ -36,7 +42,7 @@ export class Fixtures {
     kyc_approved: true,
   }
   static RiskCalcResult: CalculatedRisk = {
-    latestOffer: {
+    request_data: {
       loan_request_info: {
         borrower_info: {
           borrower_id: "546a77b0-be3f-4071-8727-fb7fe24947dd",
@@ -77,8 +83,9 @@ export class Fixtures {
         novation: false,
         apr_delta: 1.1,
       },
-      corpus_share: 0.7,
-      loan_info: {
+    },
+    latestOffer: {
+      init_info: {
         borrower_info: {
           borrower_id: "546a77b0-be3f-4071-8727-fb7fe24947dd",
           demographic_info: {
@@ -95,6 +102,7 @@ export class Fixtures {
         borrower_apr: 0.162128,
         corpus_apr: 0.164458,
         supporter_apr: 0.159798,
+        corpus_share: 0.7,
         supporter_share: 0.3,
         supporter_cash_encumbered: 0.0,
         supporter_portfolio_encumbered: 0.0,
@@ -102,7 +110,7 @@ export class Fixtures {
         supporter_lag: 1,
         penalty_apr: 0.055,
       },
-      loan_schedule: {
+      schedule: {
         borrower_view: {
           total_payments: {
             paid: 0.0,

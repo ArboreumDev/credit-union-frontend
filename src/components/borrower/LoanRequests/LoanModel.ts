@@ -6,6 +6,7 @@ import {
   LoanRequest,
   SupporterStatus,
   LoanInfo,
+  LoanInitInfo,
   LoanOffer,
 } from "lib/types"
 import { Currency } from "components/common/Currency"
@@ -28,28 +29,34 @@ export default class LoanModel {
   }
 
   get calculatedRisk() {
-    return this._loan.risk_calc_result.latestOffer as LoanOffer
+    return this._loan.risk_calc_result
   }
 
   get loanInfo() {
-    return this.calculatedRisk.init_info
+    return this.calculatedRisk.latestOffer as LoanInfo
   }
 
   get borrowerAPR() {
-    return this.loanInfo.borrower_apr
+    console.log(this.loanInfo)
+    return this.loanInfo.init_info.borrower_apr
   }
 
   get interestAmount() {
-    return this.loanInfo.borrower_apr * this.amount
+    const corpus_interest =
+      this.borrowerView.corpus_interest.remain +
+      this.borrowerView.corpus_interest.paid
+    const supporter_interest =
+      this.borrowerView.supporter_interest.remain +
+      this.borrowerView.supporter_interest.paid
+    return corpus_interest + supporter_interest
   }
 
   get totalAmountToRepay() {
-    // TODO: Should use borrowerview.total_paynents for this?
-    return this.amount + this.loanInfo.borrower_apr * this.amount
+    return this.borrowerView.total_payments.remain
   }
 
   get borrowerView() {
-    return this.calculatedRisk.loan_schedule.borrower_view
+    return this.loanInfo.schedule.borrower_view
   }
 
   get amountRepaid() {
@@ -63,10 +70,10 @@ export default class LoanModel {
    * Loan tenor in months
    */
   get tenor() {
-    return this.loanInfo.tenor
+    return this.loanInfo.init_info.tenor
   }
 
   get nextPayment() {
-    return this.calculatedRisk.loan_schedule.next_borrower_payment
+    return this.loanInfo.schedule.next_borrower_payment
   }
 }
