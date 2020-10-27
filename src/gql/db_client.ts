@@ -74,6 +74,7 @@ export default class DbClient {
         amount,
         purpose,
         risk_calc_result: {},
+        loan: {},
       },
     })
     // potentially do other stuff here (notify us...)
