@@ -1,6 +1,6 @@
 import borrower from "components/dashboard/borrower"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
-import { LoanRequestStatus, CalculatedRisk } from "lib/types"
+import { LoanRequestStatus, CalculatedRisk, LoanInfo } from "lib/types"
 import {
   BORROWER1,
   LENDER1,
@@ -141,15 +141,16 @@ describe("Loan Request Flow: confirm loan offer", () => {
       balancesAfter[BORROWER1.id].cash
     )
 
-    const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
-    const riskCalcRes = loanRequest.risk_calc_result as CalculatedRisk
-    // TODO make sure calc riskCalcRes is updated accordingly @djudjuu
-
-    // REFACTOR: call amount principle
+    // verify that dbClient returns updated loan
     expect(
       request.loan.schedule.borrower_view["total_payments"]["remain"]
     ).toBeLessThan(amount)
     expect(request.loan["state"]["repayments"]).toStrictEqual([1000])
+
+    // verify the DB is updated accordingly
+    const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
+    const loan = loanRequest.loan as LoanInfo
+    expect(loan.state.repayments).toStrictEqual([1000])
   })
 
   // test.skip(
