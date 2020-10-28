@@ -6584,6 +6584,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "payback_status"
             | "purpose"
             | "risk_calc_result"
+            | "loan"
             | "status"
             | "created_at"
             | "amount"
@@ -7166,6 +7167,7 @@ export const GetUserByEmailDocument = gql`
         payback_status
         purpose
         risk_calc_result
+        loan
         status
         created_at
         amount

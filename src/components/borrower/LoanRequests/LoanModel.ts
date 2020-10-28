@@ -1,7 +1,12 @@
 import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
-import { LoanRequest, SupporterStatus, LoanInfo } from "lib/types"
+import {
+  LoanRequest,
+  SupporterStatus,
+  LoanInfo,
+  LoanRequestStatus,
+} from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
 
@@ -26,7 +31,13 @@ export default class LoanModel {
   }
 
   get loanInfo() {
-    return this.calculatedRisk.latestOffer as LoanInfo
+    if (
+      this._loan.status in [LoanRequestStatus.active, LoanRequestStatus.settled]
+    ) {
+      return this._loan.loan as LoanInfo
+    } else {
+      return this.calculatedRisk.latestOffer as LoanInfo
+    }
   }
 
   get borrowerAPR() {
