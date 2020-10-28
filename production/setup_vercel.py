@@ -24,14 +24,14 @@ with open('./production/.env.json') as f:
         print (f"{i}. {k}: {v}")
 
     # Get Input
-    print ('enter variable to update. (0=Update All)')
+    print ('enter variable to update. (100=Update All)')
     i = int(input())
-    if i==0:
+    if i==100:
         for i, (k, v) in enumerate(items):
             update_var(k,v,env)
 
     # Update vars
-    if 0 < i < len(items):
+    if -1 < i < len(items):
         k, v = items[i]
         update_var(k,v,env)
         
