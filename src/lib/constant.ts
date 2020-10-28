@@ -36,7 +36,7 @@ export const SLACK_WEBHOOK_URL =
 
 // TODO: use actual user demographics when in production
 export const USER_DEMOGRAPHIC = {
-  yearsOfEducation: 3,
+  education_years: 3,
   income: 300,
-  creditScore: 600,
+  credit_score: 600,
 }

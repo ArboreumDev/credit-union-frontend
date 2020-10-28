@@ -17,9 +17,9 @@ export const LENDER1: User = {
   email: "rick@galaxy.io",
   user_type: "lender",
   demographic_info: {
-    yearsOfEducation: 50,
+    education_years: 50,
     income: 400000.0,
-    creditScore: 1200,
+    credit_score: 1200,
   },
   user_number: 1,
   balance: 1000,
@@ -32,9 +32,9 @@ export const LENDER2: User = {
   email: "summer@highschool.io",
   user_type: "lender",
   demographic_info: {
-    yearsOfEducation: 5,
+    education_years: 5,
     income: 400.0,
-    creditScore: 500,
+    credit_score: 500,
   },
 
   user_number: 2,
@@ -48,9 +48,9 @@ export const BORROWER1: User = {
   email: "morty@galaxy.io",
   user_type: "borrower",
   demographic_info: {
-    yearsOfEducation: 3,
+    education_years: 3,
     income: 300,
-    creditScore: 450,
+    credit_score: 450,
   },
   user_number: 3,
   balance: 10,
@@ -67,9 +67,9 @@ export const SUPPORTER1: User = {
   phone: "1234",
   user_type: "lender",
   demographic_info: {
-    yearsOfEducation: 10,
+    education_years: 10,
     income: 400.0,
-    creditScore: 800,
+    credit_score: 800,
   },
   user_number: 4,
   balance: 200,
@@ -86,9 +86,9 @@ export const SUPPORTER2: User = {
   phone: "4321",
   user_type: "lender",
   demographic_info: {
-    yearsOfEducation: 10,
+    education_years: 10,
     income: 600.0,
-    creditScore: 800,
+    credit_score: 800,
   },
 
   user_number: 5,
@@ -113,9 +113,9 @@ export const SUPPORTER3: User = {
   phone: "4321scrunch",
   user_type: "lender",
   demographic_info: {
-    yearsOfEducation: 1,
+    education_years: 1,
     income: 100.0,
-    creditScore: 300,
+    credit_score: 300,
   },
 
   user_number: 6,

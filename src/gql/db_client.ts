@@ -324,11 +324,7 @@ export default class DbClient {
     // create the borrowerInfo-object
     const borrowerInfo = {
       borrower_id: loanRequest.borrower_id,
-      demographic_info: {
-        income: loanRequest.user.demographic_info.income,
-        credit_score: loanRequest.user.demographic_info.creditScore,
-        education_years: loanRequest.user.demographic_info.yearsOfEducation,
-      } as DemographicInfo,
+      demographic_info: loanRequest.user.demographic_info as DemographicInfo,
     } as BorrowerInfo
     return {
       supporterInfo,
