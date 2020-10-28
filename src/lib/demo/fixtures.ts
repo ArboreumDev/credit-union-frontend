@@ -41,113 +41,79 @@ export class Fixtures {
     ...Fixtures.Borrower,
     kyc_approved: true,
   }
-  static RiskCalcResult: CalculatedRisk = {
-    request_data: {
-      loan_request_info: {
-        borrower_info: {
-          borrower_id: "546a77b0-be3f-4071-8727-fb7fe24947dd",
-          demographic_info: {
-            education_years: 3,
-            income: 300,
-            credit_score: 600.0,
-          },
-        },
-        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
-        tenor: 6.0,
-        amount: 50000.0,
-        borrower_collateral: 0.0,
-        num_annual_cmpnd_prds: 12,
-        supporters: [
-          {
-            supporter_id: "c4b0ae0e-f26e-4e33-b1af-e0c209b9761f",
-            recommendation_risk: {
-              kumr_params: [4.0, 5.0],
-              beta_params: [5, 2],
-            },
-            demographic_info: null,
-            trust_amount: 5000.0,
-            apr_delta: 1.1,
-          },
-          {
-            supporter_id: "16e8c3b2-fe99-4ec8-82e4-fc0c44cfa37e",
-            recommendation_risk: {
-              kumr_params: [4.0, 5.0],
-              beta_params: [5, 2],
-            },
-            demographic_info: null,
-            trust_amount: 10000.0,
-            apr_delta: 1.1,
-          },
-        ],
-        risk_params: null,
-        novation: false,
-        apr_delta: 1.1,
-      },
+  static LoanReqInfo: LoanInfo = {
+    state: {
+      repayments: [1000, 500, 6000, 965.74, 965.74, 300],
+      request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
+      borrower_collateral: 0,
+      supporter_cash_encumbered: 0,
+      supporter_portfolio_encumbered: 0,
     },
-    latestOffer: {
-      request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
-      terms: {
-        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
-        borrower_info: {
-          borrower_id: "546a77b0-be3f-4071-8727-fb7fe24947dd",
-          demographic_info: {
-            education_years: 3,
-            income: 300,
-            credit_score: 600.0,
+    terms: {
+      tenor: 6,
+      amount: 10000,
+      corpus_apr: 0.139308,
+      request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
+      supporters: [
+        {
+          apr_delta: 1.1,
+          supporter_id: "230cff88-a594-4922-90cd-05938de5bdd0",
+          trust_amount: 2000,
+          demographic_info: null,
+          recommendation_risk: {
+            beta_params: [5, 2],
+            kumr_params: [4, 5],
           },
         },
-        supporters: [],
-        tenor: 6.0,
-        amount: 50000.0,
-        borrower_collateral: 0.0,
-        num_annual_cmpnd_prds: 12,
-        borrower_apr: 0.162128,
-        corpus_apr: 0.164458,
-        supporter_apr: 0.159798,
-        corpus_share: 0.7,
-        supporter_share: 0.3,
-        supporter_lag: 1,
-        penalty_apr: 0.055,
-      },
-      state: {
-        request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
-        borrower_collateral: 0.0,
-        supporter_cash_encumbered: 0.0,
-        supporter_portfolio_encumbered: 0.0,
-        repayments: [],
-      },
-      schedule: {
-        // request_id: "4e065ae6-5629-4171-8e49-9b6a5920054e",
-        borrower_view: {
-          total_payments: {
-            paid: 0.0,
-            remain: 52404.705623999995,
-          },
-          corpus_principal: {
-            paid: 0.0,
-            remain: 35000.0,
-          },
-          supporter_principal: {
-            paid: 0.0,
-            remain: 15000.0,
-          },
-          corpus_interest: {
-            paid: 0.0,
-            remain: 1697.883253,
-          },
-          supporter_interest: {
-            paid: 0.0,
-            remain: 706.822368,
-          },
-          borrower_collateral: {
-            paid: 0.0,
-            remain: 0.0,
-          },
+      ],
+      penalty_apr: 0.055,
+      borrower_apr: 0.137887,
+      corpus_share: 0.8,
+      borrower_info: {
+        borrower_id: "8653118e-7a00-4c4f-be53-0b2e04485db0",
+        demographic_info: {
+          income: 300,
+          credit_score: 600,
+          education_years: 3,
         },
-        next_borrower_payment: 8734.117604,
-        supporter_view: null,
-        corpus_view: null,
       },
+      supporter_apr: 0.136466,
+      supporter_lag: 1,
+      supporter_share: 0.2,
+      borrower_collateral: 0,
+      num_annual_cmpnd_prds: 12,
+    },
+    schedule: {
+      request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
+      corpus_view: null,
+      borrower_view: {
+        total_payments: {
+          paid: 9731.48,
+          remain: 0,
+        },
+        corpus_interest: {
+          paid: 303.516101,
+          remain: 1.412561,
+        },
+        corpus_principal: {
+          paid: 7878.321882,
+          remain: 121.678118,
+        },
+        supporter_interest: {
+          paid: 89.42048700000001,
+          remain: 3.082502,
+        },
+        borrower_collateral: {
+          paid: 0,
+          remain: 0,
+        },
+        supporter_principal: {
+          paid: 1728.943341,
+          remain: 271.056659,
+        },
+      },
+      supporter_view: null,
+      next_borrower_payment: 0,
     },
   }
 
@@ -156,7 +122,8 @@ export class Fixtures {
     confirmation_date: null,
     payback_status: null,
     purpose: "Home Repair",
-    risk_calc_result: Fixtures.RiskCalcResult,
+    loan: Fixtures.LoanReqInfo,
+    risk_calc_result: Fixtures.LoanReqInfo,
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
     amount: 90000,
