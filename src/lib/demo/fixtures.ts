@@ -123,7 +123,7 @@ export class Fixtures {
     payback_status: null,
     purpose: "Home Repair",
     loan: Fixtures.LoanReqInfo,
-    risk_calc_result: Fixtures.LoanReqInfo,
+    risk_calc_result: { latestOffer: Fixtures.LoanReqInfo },
     status: "initiated",
     created_at: "2020-08-29T04:12:41.393094+00:00",
     amount: 90000,
