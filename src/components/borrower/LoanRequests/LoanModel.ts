@@ -32,17 +32,23 @@ export default class LoanModel {
 
   get loanInfo() {
     if (
-      this._loan.status in [LoanRequestStatus.active, LoanRequestStatus.settled]
+      [LoanRequestStatus.active, LoanRequestStatus.settled].includes(
+        this._loan.status
+      )
     ) {
       return this._loan.loan as LoanInfo
     } else {
+      console.log(this._loan.status)
       return this.calculatedRisk.latestOffer as LoanInfo
     }
   }
 
   get borrowerAPR() {
-    console.log(this.loanInfo)
     return this.loanInfo.terms.borrower_apr
+  }
+
+  get borrowerView() {
+    return this.loanInfo.schedule.borrower_view
   }
 
   get interestAmount() {
@@ -59,17 +65,19 @@ export default class LoanModel {
     return this.borrowerView.total_payments.remain
   }
 
-  get borrowerView() {
-    return this.loanInfo.schedule.borrower_view
-  }
-
   get amountRepaid() {
     return this.borrowerView.total_payments.paid
   }
   get percRepaid() {
     return dec_to_perc(this.amountRepaid / this.amount)
   }
-
+  get outstandingPrincipal() {
+    return this.borrowerView.total_payments.remain
+  }
+  get outstandingInterest() {
+    const bv = this.borrowerView
+    return bv.corpus_interest.remain + bv.supporter_interest.remain
+  }
   /**
    * Loan tenor in months
    */

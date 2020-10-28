@@ -28,11 +28,11 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   {
     key: "Outstanding Principal",
     // TODO: Fix these when adding repayment logic
-    value: <Currency amount={loan.amount + loan.interestAmount} />,
+    value: <Currency amount={loan.outstandingPrincipal} />,
   },
   {
     key: "Outstanding Interest",
-    value: <Currency amount={loan.interestAmount} />,
+    value: <Currency amount={loan.interestAmount + 1} />,
   },
   { key: "Last Repayment Date", value: "30 August 2020" },
   {
