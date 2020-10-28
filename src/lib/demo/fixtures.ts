@@ -42,6 +42,7 @@ export class Fixtures {
     kyc_approved: true,
   }
   static LoanReqInfo: LoanInfo = {
+    request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
     state: {
       repayments: [1000, 500, 6000, 965.74, 965.74, 300],
       request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
@@ -84,7 +85,6 @@ export class Fixtures {
       num_annual_cmpnd_prds: 12,
     },
     schedule: {
-      request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
       corpus_view: null,
       borrower_view: {
         total_payments: {

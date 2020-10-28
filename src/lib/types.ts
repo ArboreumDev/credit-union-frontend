@@ -185,7 +185,6 @@ export type LoanScheduleSummary = {
   next_borrower_payment: number
   supporter_view?: any
   corpus_view?: any
-  request_id?: string
 }
 
 // =========== End of risk module types ========
