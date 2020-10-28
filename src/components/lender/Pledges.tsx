@@ -25,7 +25,7 @@ const PledgeInvestments = ({ pledges }: Props) => (
       <Box verticalAlign="center" flex="1">
         Loan Status
       </Box>
-      <Box flex="1">Currency</Box>
+      <Box flex="1">Amount</Box>
     </Flex>
     {pledges.map((pledge) => (
       <Flex key={pledge.request_id}>
