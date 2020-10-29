@@ -1,4 +1,5 @@
 import DbClient from "gql/db_client"
+import DecentroClient from "gql/decentro_client"
 import { initializeGQL } from "gql/graphql_client"
 import SwarmAIClient from "gql/swarmai_client"
 
@@ -14,3 +15,9 @@ const swarmAIClient = new SwarmAIClient("http://0.0.0.0:3001")
 
 export const dbClient = new DbClient(client, swarmAIClient)
 export const sdk = dbClient.sdk
+export const decentro = new DecentroClient(
+  "https://in.staging.decentro.tech",
+  "arboreum_staging",
+  "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+  "KDTtCWDkcIfVKEEZlYCNMljnFM8SwM0L"
+)
