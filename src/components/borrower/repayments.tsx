@@ -1,12 +1,15 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import AppBar from "components/common/nav/AppBar"
+import { MakeRepayment } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import useUser from "lib/useUser"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 type FormData = {
+  requestId: string
   amount: number
 }
 
@@ -15,21 +18,19 @@ interface Props {
 }
 
 export function RepaymentsForm({ user }: Props) {
+  const router = useRouter()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const [nSup, supCount] = useState(1)
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-    // const payload: XXX-TODO = {
-    //   lender_id: user.id,
-    //   amount: data.amount
-    // }
-    // Call mutation
-    // fetcher("CreateLoanRequestMutation", payload)
-    //   .then((res) => {
-    //     location.reload()
-    //   })
-    //   .catch((err) => console.error(err))
+  const onSubmit = (formData: FormData) => {
+    console.log(formData)
+    MakeRepayment.fetch({
+      amount: formData.amount,
+    })
+      .then((res) => {
+        router.push("/dashboard")
+      })
+      .catch((err) => console.error(err))
   }
 
   return (

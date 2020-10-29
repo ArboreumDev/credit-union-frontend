@@ -1,6 +1,5 @@
 import { RiskParams } from "./types"
 
-export const SWARMAI_URL = "http://dev1.arbo.link:3001"
 // for local development
 // export const DEV_URL = "http://127.0.0.1:3001"
 export const ANALYTICS_WEBSITE_IDS = {
@@ -37,7 +36,7 @@ export const SLACK_WEBHOOK_URL =
 
 // TODO: use actual user demographics when in production
 export const USER_DEMOGRAPHIC = {
-  yearsOfEducation: 3,
+  education_years: 3,
   income: 300,
-  creditScore: 600,
+  credit_score: 600,
 }

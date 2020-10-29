@@ -8,8 +8,6 @@ sleep:
 	@sleep 5
 
 db:
-	echo "setting up hasura"
-	# TODO: handle this within a docker container, so hasura command works without any setup
 	yarn migrate
 	yarn metadata
 	yarn seeds

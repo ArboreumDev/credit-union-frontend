@@ -1,11 +1,9 @@
 import { GraphQLClient } from "graphql-request"
-import { fetchJSON } from "lib/api"
 import { getSdk, Sdk } from "../../src/gql/sdk"
 import {
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
-  SWARMAI_URL,
 } from "../lib/constant"
 import {
   createStartLoanInputVariables,
@@ -19,13 +17,14 @@ import {
   SupporterInfo,
   SupporterStatus,
   UserInfo,
+  LoanRequestInfo,
+  LoanInfo,
+  LoanOffer,
+  LoanRequestStatus,
+  SystemUpdate,
 } from "../lib/types"
 import { initializeGQL } from "./graphql_client"
-import SwarmAI from "./swarmai_client"
-
-// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
-
-// import { getNodesFromEdgeList } from "../../src/utils/network_helpers"
+import SwarmAIClient from "./swarmai_client"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -34,14 +33,18 @@ export default class DbClient {
   private static instance: DbClient
 
   public sdk: Sdk
-  public client: GraphQLClient
+  public gqlClient: GraphQLClient
+  public swarmAIClient: SwarmAIClient
 
-  constructor(_client?: GraphQLClient) {
+  constructor(_client?: GraphQLClient, _swarmai_client?: SwarmAIClient) {
     if (DbClient.instance) {
       return DbClient.instance
     }
-    this.client = _client || initializeGQL()
-    this.sdk = getSdk(this.client)
+    this.gqlClient = _client || initializeGQL()
+    this.swarmAIClient =
+      _swarmai_client ||
+      new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3001")
+    this.sdk = getSdk(this.gqlClient)
     DbClient.instance = this
   }
 
@@ -71,6 +74,7 @@ export default class DbClient {
         amount,
         purpose,
         risk_calc_result: {},
+        loan: {},
       },
     })
     // potentially do other stuff here (notify us...)
@@ -93,6 +97,20 @@ export default class DbClient {
     })
     return data
   }
+
+  calculateAndUpdateLoanOffer = async (requestId: string) => {
+    const { loans, accounts } = await this.calculateLoanRequestOffer(requestId)
+    const payload = {
+      requestId,
+      newData: {
+        latestOffer: loans.loan_offers[requestId],
+        requestData: loans.loan_requests[requestId],
+      },
+    }
+    // console.log('udpated', payload)
+    return this.sdk.UpdateLoanRequestWithOffer(payload)
+  }
+
   updateSupporter = async (
     requestId: string,
     supporter_id: string,
@@ -114,13 +132,7 @@ export default class DbClient {
       totalSupport >=
       supporter.supported_request.amount * MIN_SUPPORT_RATIO
     ) {
-      const aiResponse = await this.calculateLoanRequestOffer(requestId)
-      const payload = {
-        requestId,
-        newOffer: { latestOffer: aiResponse },
-      }
-
-      return this.sdk.UpdateLoanRequestWithOffer(payload)
+      return this.calculateAndUpdateLoanOffer(requestId)
     }
 
     return supporter
@@ -134,8 +146,9 @@ export default class DbClient {
    */
   calculateLoanRequestOffer = async (requestId: string) => {
     const { loanRequest } = await this.sdk.GetLoanRequest({ requestId })
+    // TODO refactor this be named more appropriately
     const riskInfo = await this.getRiskInput(requestId)
-    return await SwarmAI.calculateLoanOffer({
+    return await this.swarmAIClient.calculateLoanOffer({
       requestId: loanRequest.request_id,
       loanAmount: loanRequest.amount,
       supporters: riskInfo.supporterInfo,
@@ -153,27 +166,51 @@ export default class DbClient {
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
     // query swarmai to get convert loan-terms to aset-updates for everyone involved
-    const data = await this.sdk.GetLoanOffer({ request_id })
-    const offer_params = data.loan_requests_by_pk
+    const { request } = await this.sdk.GetLoanOffer({ request_id })
+    // const offer_params = data.loan_requests_by_pk
     const systemState = (await this.getSystemSummary()) as Scenario
-    const latestOffer = offer_params.risk_calc_result.latestOffer
+    const latestOffer = request.risk_calc_result.latestOffer as LoanOffer
 
-    const result = await SwarmAI.acceptLoan(systemState, latestOffer)
+    const updated = (await this.swarmAIClient.acceptLoan(
+      systemState,
+      latestOffer
+    )) as SystemUpdate
+    const realizedLoan = updated.loans.loans[request_id]
 
-    await this.updatePortfolios(result.updates)
+    await this.updatePortfolios(updated.accounts.updates)
+    await this.sdk.UpdateLoanRequestWithLoanData({
+      requestId: request_id,
+      loanData: realizedLoan,
+    })
 
     // -> create payables receivables based on loan offer parameters
     const variables = createStartLoanInputVariables(
       request_id,
-      offer_params.risk_calc_result.latestOffer.loan_schedule.borrower_view
-        .total_payments.remain
+      realizedLoan.schedule.borrower_view.total_payments.remain
     )
     return this.sdk.StartLoan(variables)
   }
 
+  make_repayment = async (loan_id: string, amount: number) => {
+    const systemState = (await this.getSystemSummary()) as Scenario
+    const { loans, accounts } = (await this.swarmAIClient.make_repayment(
+      systemState,
+      loan_id,
+      amount
+    )) as SystemUpdate
+    await this.updatePortfolios(accounts.updates)
+    const { request } = await this.sdk.UpdateLoanRequestWithLoanData({
+      requestId: loan_id,
+      loanData: loans.loans[loan_id],
+    })
+
+    // TODO show transactions in transaction table
+    return request
+  }
+
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
     const updateMutation = generateUpdateAsSingleTransaction(updates)
-    const data = await this.client.request(updateMutation)
+    const data = await this.gqlClient.request(updateMutation)
     return data
   }
 
@@ -199,14 +236,21 @@ export default class DbClient {
   //   return failures
   // }
 
+  get allUsers() {
+    return (async () => {
+      const { user: allUsers } = await this.sdk.GetAllUsers()
+      return allUsers
+    })()
+  }
+
   /**
    * summaries the portfolios of all users
    * and TODO loan rquests
    * and TODO all loans in the system
    */
   getSystemSummary = async () => {
-    const data = await this.sdk.GetAllUsers()
-    const users = data.user.map((u) => {
+    const allUsers = await this.allUsers
+    const users = allUsers.map((u) => {
       return {
         id: u.id,
         balance: u.balance,
@@ -223,11 +267,30 @@ export default class DbClient {
     users.forEach((user) => {
       userDict[user.id] = user
     })
+    // get loan-requests
+    const { loanRequests } = await this.sdk.GetLoanRequests()
+    // get info on live loans from the object saved on the loan request
+    const loan_requests = {}
+    const loans = {}
+    const loan_offers = {}
+    loanRequests.forEach((lr) => {
+      loan_requests[lr.request_id] = lr.risk_calc_result[
+        "requestData"
+      ] as LoanRequestInfo
+      if (lr.status == LoanRequestStatus.active) {
+        loans[lr.request_id] = lr.loan as LoanInfo
+      } else {
+        loan_offers[lr.request_id] = lr.risk_calc_result[
+          "latestOffer"
+        ] as LoanInfo
+      }
+    })
 
     return {
       users: userDict,
-      loans: [],
-      loan_requests: [],
+      loans,
+      loan_requests,
+      loan_offers,
     } as Scenario
   }
 
@@ -261,11 +324,7 @@ export default class DbClient {
     // create the borrowerInfo-object
     const borrowerInfo = {
       borrower_id: loanRequest.borrower_id,
-      demographic_info: {
-        credit_score: loanRequest.user.demographic_info.creditScore,
-        education_years: loanRequest.user.demographic_info.yearsOfEducation,
-        income: loanRequest.user.demographic_info.income,
-      } as DemographicInfo,
+      demographic_info: loanRequest.user.demographic_info as DemographicInfo,
     } as BorrowerInfo
     return {
       supporterInfo,

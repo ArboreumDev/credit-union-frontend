@@ -6,6 +6,7 @@ query GetLoanRequest($requestId: uuid!) {
     amount
     status
     risk_calc_result
+    loan
     payback_status
     supporters {
       status

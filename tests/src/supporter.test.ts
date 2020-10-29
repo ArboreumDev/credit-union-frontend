@@ -1,7 +1,4 @@
-import { GraphQLClient } from "graphql-request"
-import { Sdk, getSdk } from "../../src/gql/sdk"
-import { initializeGQL } from "../../src/gql/graphql_client"
-import DbClient from "../../src/gql/db_client"
+import { addNetwork } from "../../src/lib/network_helpers"
 import { SupporterStatus } from "../../src/lib/types"
 import {
   BASIC_NETWORK,
@@ -9,23 +6,10 @@ import {
   SUPPORTER1,
   SUPPORTER2,
 } from "../fixtures/basic_network"
-import { addNetwork } from "../../src/lib/network_helpers"
-import { getUserPortfolio } from "./test_helpers"
-import SwarmAI from "gql/swarmai_client"
-
-global.fetch = require("node-fetch")
-
-const TEST_API_URL = "http://localhost:8080/v1/graphql"
-const TEST_ADMIN_SECRET = "myadminsecretkey"
-
-let client: GraphQLClient
-let sdk: Sdk
-let dbClient: DbClient
+import { dbClient, sdk } from "./common/utils"
+import { getUserPortfolio } from "./common/test_helpers"
 
 beforeAll(async () => {
-  client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
-  sdk = getSdk(client)
-  dbClient = new DbClient(client)
   await sdk.ResetDB()
 })
 
@@ -46,8 +30,8 @@ describe("Basic loan request flow for an accepted loan", () => {
     // add a basic network from a fixture and initialize pointers to
     // an exisiting borrower and two lenders
     await addNetwork(sdk, BASIC_NETWORK)
-    const { user } = await sdk.GetAllUsers()
-    balancesBefore = getUserPortfolio(user)
+    const allUsers = await dbClient.allUsers
+    balancesBefore = getUserPortfolio(allUsers)
     const { request } = await dbClient.createLoanRequest(
       BORROWER1.id,
       amount,
@@ -120,31 +104,19 @@ describe("Basic loan request flow for an accepted loan", () => {
   test("only confirmed supporters are included in the loan-request-calculation", async () => {
     const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
     const riskInfo = await dbClient.getRiskInput(requestId)
-    const { loan_request_info } = await SwarmAI.generateLoanOfferRequest({
+    const {
+      loan_request_info,
+    } = await dbClient.swarmAIClient.generateLoanOfferRequest({
       requestId: loanRequest.request_id,
       loanAmount: loanRequest.amount,
       supporters: riskInfo.supporterInfo,
       borrowerInfo: riskInfo.borrowerInfo,
     })
 
-    const loanSupporters = loan_request_info.supporters.map(
+    const loanSupporters = loan_request_info.terms.supporters.map(
       (x) => x.supporter_id
     )
     expect(loanSupporters).toContain(SUPPORTER1.id)
     expect(loanSupporters).not.toContain(SUPPORTER2.id)
-  })
-
-  test("confirmed supporters have their balance reduced if a loan is accepted", async () => {
-    const aiResponse = await dbClient.calculateLoanRequestOffer(requestId)
-    await sdk.UpdateLoanRequestWithOffer({
-      requestId,
-      newOffer: { latestOffer: aiResponse },
-    })
-    await dbClient.acceptLoanOffer(requestId)
-    const { user } = await sdk.GetAllUsers()
-    const balancesAfter = getUserPortfolio(user)
-    expect(SUPPORTER1.balance).toBeGreaterThan(
-      balancesAfter[SUPPORTER1.id].cash
-    )
   })
 })

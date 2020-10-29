@@ -38,7 +38,10 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
       .then(async (res) => {
         router.push("/")
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err)
+        router.push("/")
+      })
   }
 
   return (
@@ -86,8 +89,7 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
               <Row>
                 <TextColumn>Loan Term</TextColumn>
                 <TextColumn>
-                  {loanRequest.risk_calc_result?.latestOffer.loan_info.tenor}{" "}
-                  months
+                  {loanRequest.risk_calc_result?.latestOffer.terms.tenor} months
                 </TextColumn>
               </Row>
             </Table>

@@ -4,21 +4,17 @@ import {
   Center,
   CircularProgress,
   CircularProgressLabel,
-  Container,
   Heading,
   Stack,
   Stat,
   StatLabel,
   StatNumber,
-  Text,
 } from "@chakra-ui/core"
-import { CgFileDocument } from "react-icons/cg"
-import { dec_to_perc } from "lib/currency"
 import { LoanRequest } from "lib/types"
+import { useRouter } from "next/router"
 import { Currency } from "../../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../../common/Details"
-import { Column, Row, Table } from "../../common/Table"
-import UpcomingRepayment from "../Notifications/UpcomingRepayment"
+import { Column, Row } from "../../common/Table"
 import LoanModel from "./LoanModel"
 
 interface Params {
@@ -32,11 +28,11 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   {
     key: "Outstanding Principal",
     // TODO: Fix these when adding repayment logic
-    value: <Currency amount={loan.amount + loan.interestAmount} />,
+    value: <Currency amount={loan.outstandingPrincipal} />,
   },
   {
     key: "Outstanding Interest",
-    value: <Currency amount={loan.interestAmount} />,
+    value: <Currency amount={loan.interestAmount + 1} />,
   },
   { key: "Last Repayment Date", value: "30 August 2020" },
   {
@@ -57,6 +53,7 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
 ]
 
 const BActiveLoan = ({ loanRequest }: Params) => {
+  const router = useRouter()
   const loan = new LoanModel(loanRequest)
   const amt = loan.amount
   return (
@@ -110,7 +107,12 @@ const BActiveLoan = ({ loanRequest }: Params) => {
         <Box h="30px" />
 
         <Center>
-          <Button colorScheme="blue">Make Repayment</Button>
+          <Button
+            colorScheme="blue"
+            onClick={() => router.push("/dashboard/repay")}
+          >
+            Make Repayment
+          </Button>
         </Center>
       </Stack>
     </>

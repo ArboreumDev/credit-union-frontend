@@ -6,6 +6,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const allUsers = await dbClient.sdk.GetAllUsers()
+  const allUsers = await dbClient.allUsers
   res.status(200).json(allUsers)
 }
