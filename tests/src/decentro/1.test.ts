@@ -1,5 +1,21 @@
 import { CurrencyCode, Notification } from "gql/wallet/decentro_client"
-import { decentro } from "../common/utils"
+import DecentroKYCClient from "gql/wallet/decentro_kyc_client"
+import DecentroClient from "gql/wallet/decentro_client"
+
+global.fetch = require("node-fetch")
+
+export const decentro = new DecentroClient(
+  "https://in.staging.decentro.tech",
+  "arboreum_staging",
+  "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+  "KDTtCWDkcIfVKEEZlYCNMljnFM8SwM0L"
+)
+export const decentroKYCClient = new DecentroKYCClient(
+  "https://in.staging.decentro.tech",
+  "arboreum_staging",
+  "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+  "csnlWlPHXnfDxEporJP9qzksYqtG37iC"
+)
 
 describe("Decentro tests", () => {
   test("create account", async () => {
@@ -22,7 +38,6 @@ describe("Decentro tests", () => {
       callback_url: "some_callback_url",
     }
     const res = await decentro.createAccount(req)
-    console.log(res)
     expect(res.minimumBalance).toBe(req.minimum_balance)
   })
 })
