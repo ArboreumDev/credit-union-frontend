@@ -2,7 +2,7 @@ import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 import { GetServerSideProps } from "next"
-import { Box, Heading, Input, Stack } from "@chakra-ui/core"
+import { Box, Button, Heading, Input, Stack } from "@chakra-ui/core"
 import { COMPANY_NAME } from "lib/constant"
 import DbClient from "gql/db_client"
 
@@ -15,6 +15,7 @@ export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
   return (
     <Box>
       <Stack>
+        <a href="/admin/reset_db">Reset DB</a>
         <Box>
           <Heading>Users</Heading>
           {users.map((user) => (
