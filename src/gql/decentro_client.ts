@@ -34,7 +34,7 @@ export default class DecentroClient {
     )
   }
 
-  async create_virtual_account(params: {
+  async create_account(params: {
     type: string
     bank_code: string
     name: string
@@ -55,6 +55,7 @@ export default class DecentroClient {
     const endpoint = "/core_banking/account_linking/create_virtual_account"
     return this.fetcher.post(endpoint, params)
   }
+
   async get_balance(params: {
     account_number: string
     customer_id: string
