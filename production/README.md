@@ -37,11 +37,30 @@ When ready to scale, we can use AWS. Making it secure seemed like a hassle, so I
 
 # Vercel
 
-Make env files
+Make json file like
 
-- `production/.env.production`
-- `production/.env.preview`
+- `production/.env.json`
+
+```json
+{
+  "DATABASE_URL": "DATABASE_URL",
+  "NEXTAUTH_URL": "NEXTAUTH_URL",
+  "HASURA_ADMIN_SECRET": "HASURA_ADMIN_SECRET",
+  "GRAPHQL_ENDPOINT": "GRAPHQL_ENDPOINT",
+  "GOOGLE_CLIENT_ID": "GOOGLE_CLIENT_ID",
+  "GOOGLE_CLIENT_SECRET": "GOOGLE_CLIENT_SECRET",
+  "EMAIL_SERVER_PORT": "EMAIL_SERVER_PORT",
+  "EMAIL_FROM": "EMAIL_FROM",
+  "EMAIL_SERVER_USER": "EMAIL_SERVER_USER",
+  "EMAIL_SERVER_PASSWORD": "EMAIL_SERVER_PASSWORD",
+  "EMAIL_SERVER_HOST": "EMAIL_SERVER_HOST",
+  "AWS_ACCESS_KEY_ID_APP": "AWS_ACCESS_KEY_ID_APP",
+  "AWS_SECRET_ACCESS_KEY_APP": "AWS_SECRET_ACCESS_KEY_APP",
+  "ENVIRONMENT": "ENVIRONMENT",
+  "SWARMAI_URL": "SWARMAI_URL"
+}
+```
 
 ```
-ENVIRONMENT=production sh production/setup_vercel.sh
+python production/setup_vercel.py
 ```
