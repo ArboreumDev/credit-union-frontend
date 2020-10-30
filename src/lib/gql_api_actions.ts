@@ -1,7 +1,6 @@
 import DbClient from "gql/db_client"
 import {
   AddSupporterMutation,
-  AddSupporterMutationVariables,
   ChangeUserCashBalanceMutationVariables,
   CreateLoanRequestMutationVariables,
   CreateUserMutationVariables,

@@ -21,7 +21,7 @@ describe("Decentro tests", () => {
       sms_notification: Notification.true,
       callback_url: "some_callback_url",
     }
-    const res = await decentro.create_account(req)
+    const res = await decentro.createAccount(req)
     console.log(res)
     expect(res.minimumBalance).toBe(req.minimum_balance)
   })

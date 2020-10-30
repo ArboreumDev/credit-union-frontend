@@ -1,4 +1,5 @@
 import { Fetcher } from "lib/api"
+import { Bank } from "./bank"
 
 export enum CurrencyCode {
   INR = "INR",
@@ -8,7 +9,7 @@ export enum Notification {
   false = 0,
 }
 
-export default class DecentroClient {
+export default class DecentroClient extends Bank {
   private fetcher: Fetcher
 
   constructor(
@@ -17,6 +18,7 @@ export default class DecentroClient {
     client_secret: string,
     module_secret: string
   ) {
+    super()
     this.fetcher = new Fetcher(
       {
         "Content-Type": "application/json",
@@ -28,7 +30,7 @@ export default class DecentroClient {
     )
   }
 
-  async create_account(params: {
+  async createAccount(params: {
     type: string
     bank_code: string
     name: string
@@ -50,7 +52,7 @@ export default class DecentroClient {
     return this.fetcher.post(endpoint, params)
   }
 
-  async get_balance(params: {
+  async getBalance(params: {
     account_number: string
     customer_id: string
     mobile_number: string
