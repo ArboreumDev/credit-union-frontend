@@ -24,7 +24,7 @@ import {
   LoanRequestStatus,
   SystemUpdate,
 } from "../lib/types"
-import DecentroClient from "./decentro_client"
+import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
 

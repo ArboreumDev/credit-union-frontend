@@ -1,5 +1,5 @@
 import DbClient from "gql/db_client"
-import DecentroClient from "gql/decentro_client"
+import DecentroClient from "gql/wallet/decentro_client"
 import { initializeGQL } from "gql/graphql_client"
 import SwarmAIClient from "gql/swarmai_client"
 

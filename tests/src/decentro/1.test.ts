@@ -1,4 +1,4 @@
-import { CurrencyCode, Notification } from "gql/decentro_client"
+import { CurrencyCode, Notification } from "gql/wallet/decentro_client"
 import { decentro } from "../common/utils"
 
 describe("Decentro tests", () => {
