@@ -50,7 +50,7 @@ export class Fetcher {
     } catch (error) {
       data = null
     }
-    console.log(response.status)
+
     if (![200, 201].includes(response.status)) {
       return generateErrorResponse(
         "The server responded with an unexpected status.",

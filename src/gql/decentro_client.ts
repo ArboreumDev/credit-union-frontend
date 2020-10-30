@@ -44,7 +44,7 @@ export default class DecentroClient {
     address: string
     kyc_verified: number
     kyc_check_decentro: number
-    minimum_balance: string
+    minimum_balance: number
     transaction_limit: number
     currency_code: CurrencyCode
     customer_id: string

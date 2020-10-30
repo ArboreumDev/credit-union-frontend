@@ -2,7 +2,6 @@ import { LAST_REDIRECT_PAGE } from "lib/constant"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import useSWR from "swr"
-import { fetchJSON } from "./api"
 import { Session } from "./types"
 
 // inspired by https://github.com/vercel/next.js/blob/7203f500916d336f4e1cbcd162baff624c9cd969/examples/with-iron-session/lib/useUser.js#L5
