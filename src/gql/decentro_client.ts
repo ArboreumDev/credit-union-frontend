@@ -1,4 +1,4 @@
-import { Fetcher, fetcher } from "lib/api"
+import { Fetcher } from "lib/api"
 
 export enum CurrencyCode {
   INR = "INR",
@@ -6,12 +6,6 @@ export enum CurrencyCode {
 export enum Notification {
   true = 1,
   false = 0,
-}
-
-function objectToQueryString(obj) {
-  return Object.keys(obj)
-    .map((key) => key + "=" + obj[key])
-    .join("&")
 }
 
 export default class DecentroClient {
