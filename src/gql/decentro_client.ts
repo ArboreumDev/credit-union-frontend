@@ -1,52 +1,66 @@
+import { Fetcher, fetcher } from "lib/api"
+
+export enum CurrencyCode {
+  INR = "INR",
+}
+export enum Notification {
+  true = 1,
+  false = 0,
+}
+
+function objectToQueryString(obj) {
+  return Object.keys(obj)
+    .map((key) => key + "=" + obj[key])
+    .join("&")
+}
+
 export default class DecentroClient {
+  private fetcher: Fetcher
+
   constructor(
-    private base_url: string,
-    private client_id: string,
-    private client_secret: string,
-    private module_secret: string
-  ) {}
-
-  private async _fetch(url: string, payload) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
+    baseURL: string,
+    client_id: string,
+    client_secret: string,
+    module_secret: string
+  ) {
+    this.fetcher = new Fetcher(
+      {
         "Content-Type": "application/json",
-        client_id: this.client_id,
-        client_secret: this.client_secret,
-        module_secret: this.module_secret,
+        client_id: client_id,
+        client_secret: client_secret,
+        module_secret: module_secret,
       },
-      body: JSON.stringify(payload),
-    })
-    const data = await response.json()
-    if (response.ok) {
-      return data
-    }
-
-    const error = new Error(response.statusText)
-    console.error(JSON.stringify(data))
-    throw error
+      baseURL
+    )
   }
-  async create_virtual_account() {
-    const url =
-      this.base_url + "/core_banking/account_linking/create_virtual_account"
 
-    return this._fetch(url, {
-      type: "virtual",
-      bank_code: "yesb",
-      name: "somefirst somelast",
-      pan_number: "abcdefg",
-      email_address: "some_email@mail.com",
-      mobile_number: "9999999999",
-      address: "some_physical_address",
-      kyc_verified: 1,
-      kyc_check_decentro: 0,
-      minimum_balance: "100",
-      transaction_limit: "100000",
-      currency_code: "INR",
-      customer_id: "MER0001",
-      email_notification: 1,
-      sms_notification: 1,
-      callback_url: "some_callback_url",
-    })
+  async create_virtual_account(params: {
+    type: string
+    bank_code: string
+    name: string
+    pan_number: string
+    email_address: string
+    mobile_number: string
+    address: string
+    kyc_verified: number
+    kyc_check_decentro: number
+    minimum_balance: string
+    transaction_limit: number
+    currency_code: CurrencyCode
+    customer_id: string
+    email_notification: Notification
+    sms_notification: Notification
+    callback_url: string
+  }) {
+    const endpoint = "/core_banking/account_linking/create_virtual_account"
+    return this.fetcher.post(endpoint, params)
+  }
+  async get_balance(params: {
+    account_number: string
+    customer_id: string
+    mobile_number: string
+  }) {
+    const endpoint = "/core_banking/money_transfer/get_balance"
+    this.fetcher.get(endpoint, params)
   }
 }
