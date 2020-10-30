@@ -1,5 +1,6 @@
+import { PostToSlack } from "lib/logger"
 import { NextApiRequest, NextApiResponse } from "next"
-import { PostToSlack, UploadToS3 } from "../upload"
+import { UploadToS3 } from "../upload"
 
 export const config = {
   api: {

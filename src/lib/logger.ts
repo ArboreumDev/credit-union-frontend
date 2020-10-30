@@ -1,14 +1,19 @@
 import DbClient from "gql/db_client"
 import { IncomingHttpHeaders } from "http"
-import { LogEventTypes } from "lib/constant"
+import { LogEventTypes, SLACK_WEBHOOK_URL } from "lib/constant"
 import { Session } from "lib/types"
-import { PostToSlack } from "pages/api/upload"
+import { Fetcher } from "./api"
 
-export default async function log(message) {
-  if (process.env.ENVIRONMENT) {
-    process.env.ENVIRONMENT === "production" && (await PostToSlack(message))
-    process.env.ENVIRONMENT === "preview" && console.log(message)
-  }
+export const PostToSlack = async (message: string, env?: string) => {
+  const response = new Fetcher().post(SLACK_WEBHOOK_URL, {
+    text: `[${env ?? process.env.ENVIRONMENT}] ${message}`,
+  })
+}
+
+export default async function log(message: string, env?: string) {
+  env = env ?? process.env.ENVIRONMENT
+  env === "production" && (await PostToSlack(message))
+  env === "preview" && console.log(message)
 }
 
 export async function logEvent(

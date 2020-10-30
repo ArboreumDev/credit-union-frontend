@@ -1,43 +1,98 @@
 import { LogEventTypes } from "./constant"
 
-export async function fetchJSON({
-  url,
-  payload,
-  isSSR,
-  isNoParseRes,
-}: {
-  url: string
-  payload: any
-  isSSR?: boolean
-  isNoParseRes?: boolean
-}) {
-  if (isSSR) {
-    url = (process.env.NEXTAUTH_URL ?? "") + url
+function objectToQueryString(obj) {
+  return Object.keys(obj)
+    .map((key) => key + "=" + obj[key])
+    .join("&")
+}
+function generateErrorResponse(message, data: any) {
+  return {
+    status: "error",
+    message,
+    data,
   }
-  // console.log("fetchJSON", url)
+}
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
+interface FetchParams {
+  url: string
+  params: any
+  headers: any
+  method: string
+}
+
+export class Fetcher {
+  headers: any
+
+  constructor(headers?: any, private baseURL?: string) {
+    this.headers = headers ?? {
       "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
+    }
+  }
 
-  if (isNoParseRes)
-    return {
-      status: response.status,
+  static _fetch = async ({ url, params, headers, method }: FetchParams) => {
+    const options: RequestInit = {
+      method,
+      headers,
+    }
+    if (params) {
+      if (method === "GET") {
+        url += "?" + objectToQueryString(params)
+      } else {
+        options.body = JSON.stringify(params)
+      }
     }
 
-  const data = await response.json()
+    const response = await fetch(url, options)
 
-  if (response.ok) {
+    let data = null
+    try {
+      data = await response.json()
+    } catch (error) {
+      data = null
+    }
+    console.log(response.status)
+    if (![200, 201].includes(response.status)) {
+      return generateErrorResponse(
+        "The server responded with an unexpected status.",
+        data
+      )
+    }
+
     return data
   }
 
-  const error = new Error(response.statusText)
-  console.error(JSON.stringify(data))
-  throw error
+  fetch(url, params, method = "GET") {
+    if (this.baseURL) url = this.baseURL + url
+    return Fetcher._fetch({ url, params, headers: this.headers, method })
+  }
+
+  get(url, params) {
+    return this.fetch(url, params)
+  }
+
+  post(url, params) {
+    return this.fetch(url, params, "POST")
+  }
+
+  update(url, params) {
+    return this.fetch(url, params, "PUT")
+  }
+
+  remove(url, params) {
+    return this.fetch(url, params, "DELETE")
+  }
+}
+
+export async function fetchJSON({
+  url,
+  payload,
+}: {
+  url: string
+  payload: any
+}) {
+  const fetcher = new Fetcher()
+
+  return await fetcher.post(url, payload)
 }
 
 export const fetcherMutate = (action, payload) => {
