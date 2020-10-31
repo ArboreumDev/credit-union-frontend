@@ -1,6 +1,6 @@
 import { GraphQLClient } from "graphql-request"
 import { getSdk, Sdk } from "../../src/gql/sdk"
-import { decentro } from "../../tests/src/common/utils"
+
 import {
   DEFAULT_RECOMMENDATION_RISK_PARAMS,
   LogEventTypes as LogEventType,
@@ -48,7 +48,6 @@ export default class DbClient {
       _swarmai_client ||
       new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3001")
     this.sdk = getSdk(this.gqlClient)
-    this.decentroClient = decentro
     DbClient.instance = this
   }
 
