@@ -1,4 +1,5 @@
-import { Box, Center, Flex, Heading, Stack } from "@chakra-ui/core"
+import { Box, Button, Center, Flex, Heading, Stack } from "@chakra-ui/core"
+import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { dec_to_perc } from "lib/currency"
 import { LoanRequest, SupporterStatus } from "lib/types"
 import { Currency } from "../../common/Currency"
@@ -59,6 +60,14 @@ const SupportersList = ({ loanRequest, supporters }: Props) => (
         <Center w="55px">{supporterStatusToTextMap[s.status]}</Center>
       </Flex>
     ))}
+
+    {supporters.reduce(
+      (a, b) => a + (b.status === SupporterStatus.confirmed && b.pledge_amount),
+      0
+    ) >=
+      loanRequest.amount * MIN_SUPPORT_RATIO && (
+      <Button>Process loan request</Button>
+    )}
   </Stack>
 )
 

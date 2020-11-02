@@ -1,0 +1,7 @@
+query GetLastLiveLoan {
+  last_live_loan: loan_requests(where: { status: { _eq: "live" } }){
+      request_id
+      status
+    	loan
+    }
+}

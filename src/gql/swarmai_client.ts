@@ -1,57 +1,71 @@
 import { fetchJSON } from "lib/api"
-import { DEFAULT_LOAN_TENOR, SWARMAI_URL } from "lib/constant"
+import { DEFAULT_LOAN_TENOR } from "lib/constant"
+import log from "lib/logger"
 import {
   BorrowerInfo,
   LoanRequestInfo,
   Scenario,
   SupporterInfo,
+  LoanOffer,
+  RequestedTerms,
   SwarmAiRequestMessage,
-  SwarmAiResponse,
+  SystemUpdate,
 } from "lib/types"
-import { PostToSlack } from "pages/api/upload"
 
 async function fetcher(url: string, payload: any, caller?: string) {
-  async function log(message, payload) {
-    // upload for debugging purposes
-    await PostToSlack(message)
-    // fetchJSON({ url: "/api/integration/fp", payload, isSSR: true })
-  }
-  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`, payload)
+  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
 
   const res = await fetchJSON({ url, payload })
-  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`, res)
+  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
 
   // return res
   return fetchJSON({ url, payload })
 }
 
-export default class SwarmAI {
-  static async acceptLoan(
+export default class SwarmAIClient {
+  constructor(private _url: string) {}
+
+  async acceptLoan(
     systemState: Scenario,
-    latestOffer: any
-  ): Promise<any> {
+    latestOffer: LoanOffer
+  ): Promise<SystemUpdate> {
     const payload = {
       system_state: systemState,
-      aiResponse: latestOffer,
+      loan_offer: latestOffer,
     }
-    const url = SWARMAI_URL + "/loan/accept"
+    const url = this._url + "/loan/accept"
     return fetcher(url, payload, "acceptLoan")
   }
 
-  static async calculateLoanOffer(params: {
+  async make_repayment(
+    systemState: Scenario,
+    loan_id: string,
+    amount: number
+  ): Promise<SystemUpdate> {
+    const payload = {
+      system_state: systemState,
+      loan_id,
+      amount,
+    }
+    const url = this._url + "/loan/repay"
+    return fetcher(url, payload, "repayLoan")
+  }
+  g
+
+  async calculateLoanOffer(params: {
     requestId: string
     loanAmount: number
     supporters: SupporterInfo[]
     borrowerInfo: BorrowerInfo
-  }): Promise<SwarmAiResponse> {
+  }): Promise<SystemUpdate> {
     const payload = {
-      request_msg: SwarmAI.generateLoanOfferRequest(params),
+      request_msg: this.generateLoanOfferRequest(params),
     }
-    const url = SWARMAI_URL + "/loan/request"
+    const url = this._url + "/loan/request"
     return fetcher(url, payload, "calculateLoanOffer")
   }
 
-  static generateLoanOfferRequest({
+  generateLoanOfferRequest({
     requestId,
     loanAmount,
     borrowerInfo,
@@ -72,12 +86,15 @@ export default class SwarmAI {
 
     return {
       loan_request_info: {
-        borrower_info: borrowerInfo,
         request_id: requestId,
-        tenor: tenor,
-        borrower_collateral: borrowerCollateral,
-        amount: loanAmount,
-        supporters: supporters,
+        terms: {
+          request_id: requestId,
+          borrower_info: borrowerInfo,
+          tenor: tenor,
+          amount: loanAmount,
+          borrower_collateral: borrowerCollateral,
+          supporters: supporters,
+        } as RequestedTerms,
       } as LoanRequestInfo,
       // optimizer_context: {
       // risk_free_apr: DEFAULT_RISK_FREE_INTEREST_RATE,

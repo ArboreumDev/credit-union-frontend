@@ -103,6 +103,7 @@ export class AddSupporter extends Action {
     requestId: string
     email: string
     amount: number
+    info: any
   }
   static ReturnType: AddSupporterMutation
 
@@ -110,7 +111,12 @@ export class AddSupporter extends Action {
 
   run() {
     const _p = this.payload as typeof AddSupporter.InputType
-    return this.dbClient.addSupporter(_p.requestId, _p.email, _p.amount)
+    return this.dbClient.addSupporter(
+      _p.requestId,
+      _p.email,
+      _p.amount,
+      _p.info
+    )
   }
 
   static fetch(payload: typeof AddSupporter.InputType) {
@@ -186,6 +192,24 @@ export class AcceptLoanOffer extends Action {
   }
 }
 
+export class MakeRepayment extends Action {
+  static Name = "MakeRepayment"
+  static InputType: {
+    amount: number
+  }
+  static ReturnType: StartLoanMutation
+  minAuthLevel = AUTH_TYPE.USER
+
+  run() {
+    const userLoanId = this.user.loan_requests[0].request_id
+    return this.dbClient.make_repayment(userLoanId, this.payload.amount)
+  }
+
+  static fetch(payload: typeof MakeRepayment.InputType) {
+    return fetcherMutate(MakeRepayment.Name, payload)
+  }
+}
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
@@ -194,6 +218,7 @@ export const ACTIONS = {
   [ChangeBalance.Name]: ChangeBalance,
   [AcceptRejectPledge.Name]: AcceptRejectPledge,
   [AcceptLoanOffer.Name]: AcceptLoanOffer,
+  [MakeRepayment.Name]: MakeRepayment,
 }
 
 export function runAction(

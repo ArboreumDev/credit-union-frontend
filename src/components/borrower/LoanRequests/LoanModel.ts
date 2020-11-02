@@ -2,11 +2,10 @@ import { useForm } from "react-hook-form"
 import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
 import {
-  CalculatedRisk,
   LoanRequest,
-  SwarmAiResponse,
   SupporterStatus,
   LoanInfo,
+  LoanRequestStatus,
 } from "lib/types"
 import { Currency } from "components/common/Currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"
@@ -28,28 +27,42 @@ export default class LoanModel {
   }
 
   get calculatedRisk() {
-    return this._loan.risk_calc_result.latestOffer as SwarmAiResponse
+    return this._loan.risk_calc_result
   }
 
   get loanInfo() {
-    return this.calculatedRisk.loan_info
+    if (
+      [LoanRequestStatus.active, LoanRequestStatus.settled].includes(
+        this._loan.status
+      )
+    ) {
+      return this._loan.loan as LoanInfo
+    } else {
+      console.log(this._loan.status)
+      return this.calculatedRisk.latestOffer as LoanInfo
+    }
   }
 
   get borrowerAPR() {
-    return this.loanInfo.borrower_apr
-  }
-
-  get interestAmount() {
-    return this.loanInfo.borrower_apr * this.amount
-  }
-
-  get totalAmountToRepay() {
-    // TODO: Should use borrowerview.total_paynents for this?
-    return this.amount + this.loanInfo.borrower_apr * this.amount
+    return this.loanInfo.terms.borrower_apr
   }
 
   get borrowerView() {
-    return this.calculatedRisk.loan_schedule.borrower_view
+    return this.loanInfo.schedule.borrower_view
+  }
+
+  get interestAmount() {
+    const corpus_interest =
+      this.borrowerView.corpus_interest.remain +
+      this.borrowerView.corpus_interest.paid
+    const supporter_interest =
+      this.borrowerView.supporter_interest.remain +
+      this.borrowerView.supporter_interest.paid
+    return corpus_interest + supporter_interest
+  }
+
+  get totalAmountToRepay() {
+    return this.borrowerView.total_payments.remain
   }
 
   get amountRepaid() {
@@ -58,15 +71,21 @@ export default class LoanModel {
   get percRepaid() {
     return dec_to_perc(this.amountRepaid / this.amount)
   }
-
+  get outstandingPrincipal() {
+    return this.borrowerView.total_payments.remain
+  }
+  get outstandingInterest() {
+    const bv = this.borrowerView
+    return bv.corpus_interest.remain + bv.supporter_interest.remain
+  }
   /**
    * Loan tenor in months
    */
   get tenor() {
-    return this.loanInfo.tenor
+    return this.loanInfo.terms.tenor
   }
 
   get nextPayment() {
-    return this.calculatedRisk.loan_schedule.next_borrower_payment
+    return this.loanInfo.schedule.next_borrower_payment
   }
 }

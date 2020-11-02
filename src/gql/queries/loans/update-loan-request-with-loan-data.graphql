@@ -1,0 +1,9 @@
+mutation UpdateLoanRequestWithLoanData($requestId: uuid!, $loanData: jsonb!) {
+  request: update_loan_requests_by_pk(
+    pk_columns: { request_id: $requestId }
+    _set: {loan: $loanData }
+  ) {
+    request_id
+    loan
+  }
+}

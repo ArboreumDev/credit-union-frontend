@@ -1799,6 +1799,7 @@ export type Loan_Requests = {
   encumbrances: Array<Encumbrances>
   /** An aggregated array relationship */
   encumbrances_aggregate: Encumbrances_Aggregate
+  loan?: Maybe<Scalars["jsonb"]>
   /** An array relationship */
   loan_participants: Array<Loan_Participants>
   /** An aggregated array relationship */
@@ -1844,6 +1845,11 @@ export type Loan_RequestsEncumbrances_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Encumbrances_Order_By>>
   where?: Maybe<Encumbrances_Bool_Exp>
+}
+
+/** columns and relationships of "loan_requests" */
+export type Loan_RequestsLoanArgs = {
+  path?: Maybe<Scalars["String"]>
 }
 
 /** columns and relationships of "loan_requests" */
@@ -1987,6 +1993,7 @@ export type Loan_Requests_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Loan_Requests_Append_Input = {
+  loan?: Maybe<Scalars["jsonb"]>
   risk_calc_result?: Maybe<Scalars["jsonb"]>
 }
 
@@ -2017,6 +2024,7 @@ export type Loan_Requests_Bool_Exp = {
   confirmation_date?: Maybe<Timestamptz_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   encumbrances?: Maybe<Encumbrances_Bool_Exp>
+  loan?: Maybe<Jsonb_Comparison_Exp>
   loan_participants?: Maybe<Loan_Participants_Bool_Exp>
   loan_risks?: Maybe<Loan_Risk_Bool_Exp>
   payables?: Maybe<Payables_Bool_Exp>
@@ -2038,16 +2046,19 @@ export enum Loan_Requests_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Loan_Requests_Delete_At_Path_Input = {
+  loan?: Maybe<Array<Maybe<Scalars["String"]>>>
   risk_calc_result?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Loan_Requests_Delete_Elem_Input = {
+  loan?: Maybe<Scalars["Int"]>
   risk_calc_result?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Loan_Requests_Delete_Key_Input = {
+  loan?: Maybe<Scalars["String"]>
   risk_calc_result?: Maybe<Scalars["String"]>
 }
 
@@ -2063,6 +2074,7 @@ export type Loan_Requests_Insert_Input = {
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   encumbrances?: Maybe<Encumbrances_Arr_Rel_Insert_Input>
+  loan?: Maybe<Scalars["jsonb"]>
   loan_participants?: Maybe<Loan_Participants_Arr_Rel_Insert_Input>
   loan_risks?: Maybe<Loan_Risk_Arr_Rel_Insert_Input>
   payables?: Maybe<Payables_Arr_Rel_Insert_Input>
@@ -2151,6 +2163,7 @@ export type Loan_Requests_Order_By = {
   confirmation_date?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   encumbrances_aggregate?: Maybe<Encumbrances_Aggregate_Order_By>
+  loan?: Maybe<Order_By>
   loan_participants_aggregate?: Maybe<Loan_Participants_Aggregate_Order_By>
   loan_risks_aggregate?: Maybe<Loan_Risk_Aggregate_Order_By>
   payables_aggregate?: Maybe<Payables_Aggregate_Order_By>
@@ -2171,6 +2184,7 @@ export type Loan_Requests_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Loan_Requests_Prepend_Input = {
+  loan?: Maybe<Scalars["jsonb"]>
   risk_calc_result?: Maybe<Scalars["jsonb"]>
 }
 
@@ -2184,6 +2198,8 @@ export enum Loan_Requests_Select_Column {
   ConfirmationDate = "confirmation_date",
   /** column name */
   CreatedAt = "created_at",
+  /** column name */
+  Loan = "loan",
   /** column name */
   PaybackStatus = "payback_status",
   /** column name */
@@ -2202,6 +2218,7 @@ export type Loan_Requests_Set_Input = {
   borrower_id?: Maybe<Scalars["uuid"]>
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
+  loan?: Maybe<Scalars["jsonb"]>
   payback_status?: Maybe<Scalars["String"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
@@ -2263,6 +2280,8 @@ export enum Loan_Requests_Update_Column {
   ConfirmationDate = "confirmation_date",
   /** column name */
   CreatedAt = "created_at",
+  /** column name */
+  Loan = "loan",
   /** column name */
   PaybackStatus = "payback_status",
   /** column name */
@@ -5262,6 +5281,7 @@ export type Subscription_RootUser_By_PkArgs = {
 export type Supporters = {
   __typename?: "supporters"
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus: Scalars["Boolean"]
   /** An object relationship */
   loan_request: Loan_Requests
@@ -5276,6 +5296,11 @@ export type Supporters = {
 
 /** columns and relationships of "supporters" */
 export type SupportersGuarantee_DivisionArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** columns and relationships of "supporters" */
+export type SupportersInfoArgs = {
   path?: Maybe<Scalars["String"]>
 }
 
@@ -5326,6 +5351,7 @@ export type Supporters_Aggregate_Order_By = {
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Supporters_Append_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
 }
 
 /** input type for inserting array relation for remote table "supporters" */
@@ -5351,6 +5377,7 @@ export type Supporters_Bool_Exp = {
   _not?: Maybe<Supporters_Bool_Exp>
   _or?: Maybe<Array<Maybe<Supporters_Bool_Exp>>>
   guarantee_division?: Maybe<Jsonb_Comparison_Exp>
+  info?: Maybe<Jsonb_Comparison_Exp>
   invest_in_corpus?: Maybe<Boolean_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   participation_request_time?: Maybe<Timestamptz_Comparison_Exp>
@@ -5370,16 +5397,19 @@ export enum Supporters_Constraint {
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Supporters_Delete_At_Path_Input = {
   guarantee_division?: Maybe<Array<Maybe<Scalars["String"]>>>
+  info?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Supporters_Delete_Elem_Input = {
   guarantee_division?: Maybe<Scalars["Int"]>
+  info?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Supporters_Delete_Key_Input = {
   guarantee_division?: Maybe<Scalars["String"]>
+  info?: Maybe<Scalars["String"]>
 }
 
 /** input type for incrementing integer column in table "supporters" */
@@ -5390,6 +5420,7 @@ export type Supporters_Inc_Input = {
 /** input type for inserting data into table "supporters" */
 export type Supporters_Insert_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
@@ -5463,6 +5494,7 @@ export type Supporters_On_Conflict = {
 /** ordering options when selecting data from "supporters" */
 export type Supporters_Order_By = {
   guarantee_division?: Maybe<Order_By>
+  info?: Maybe<Order_By>
   invest_in_corpus?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   participation_request_time?: Maybe<Order_By>
@@ -5482,12 +5514,15 @@ export type Supporters_Pk_Columns_Input = {
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Supporters_Prepend_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "supporters" */
 export enum Supporters_Select_Column {
   /** column name */
   GuaranteeDivision = "guarantee_division",
+  /** column name */
+  Info = "info",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
@@ -5505,6 +5540,7 @@ export enum Supporters_Select_Column {
 /** input type for updating data in table "supporters" */
 export type Supporters_Set_Input = {
   guarantee_division?: Maybe<Scalars["jsonb"]>
+  info?: Maybe<Scalars["jsonb"]>
   invest_in_corpus?: Maybe<Scalars["Boolean"]>
   participation_request_time?: Maybe<Scalars["timestamptz"]>
   pledge_amount?: Maybe<Scalars["float8"]>
@@ -5561,6 +5597,8 @@ export type Supporters_Sum_Order_By = {
 export enum Supporters_Update_Column {
   /** column name */
   GuaranteeDivision = "guarantee_division",
+  /** column name */
+  Info = "info",
   /** column name */
   InvestInCorpus = "invest_in_corpus",
   /** column name */
@@ -6546,6 +6584,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "payback_status"
             | "purpose"
             | "risk_calc_result"
+            | "loan"
             | "status"
             | "created_at"
             | "amount"
@@ -6620,7 +6659,7 @@ export type AddSupporterMutation = { __typename?: "mutation_root" } & {
   insert_supporters_one?: Maybe<
     { __typename?: "supporters" } & Pick<
       Supporters,
-      "status" | "supporter_id" | "pledge_amount"
+      "status" | "supporter_id" | "pledge_amount" | "info"
     >
   >
 }
@@ -6690,6 +6729,17 @@ export type GetCorpusRecommendationRisksQuery = {
   >
 }
 
+export type GetLastLiveLoanQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLastLiveLoanQuery = { __typename?: "query_root" } & {
+  last_live_loan: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "status" | "loan"
+    >
+  >
+}
+
 export type GetLenderAllocationInputQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -6717,7 +6767,7 @@ export type GetLoanOfferQueryVariables = Exact<{
 }>
 
 export type GetLoanOfferQuery = { __typename?: "query_root" } & {
-  loan_requests_by_pk?: Maybe<
+  request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "borrower_id" | "risk_calc_result" | "amount"
@@ -6739,6 +6789,7 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
       | "amount"
       | "status"
       | "risk_calc_result"
+      | "loan"
       | "payback_status"
     > & {
         supporters: Array<
@@ -6753,6 +6804,33 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
             }
         >
         user: { __typename?: "user" } & Pick<User, "demographic_info">
+      }
+  >
+}
+
+export type GetLoanRequestsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLoanRequestsQuery = { __typename?: "query_root" } & {
+  loanRequests: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "amount" | "status" | "risk_calc_result" | "loan"
+    > & {
+        borrowerInfo: { __typename?: "user" } & Pick<
+          User,
+          "id" | "demographic_info"
+        >
+        supporters: Array<
+          { __typename?: "supporters" } & Pick<
+            Supporters,
+            "supporter_id" | "pledge_amount"
+          > & {
+              demographic_info: { __typename?: "user" } & Pick<
+                User,
+                "demographic_info"
+              >
+            }
+        >
       }
   >
 }
@@ -6807,9 +6885,25 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type UpdateLoanRequestWithLoanDataMutationVariables = Exact<{
+  requestId: Scalars["uuid"]
+  loanData: Scalars["jsonb"]
+}>
+
+export type UpdateLoanRequestWithLoanDataMutation = {
+  __typename?: "mutation_root"
+} & {
+  request?: Maybe<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "loan"
+    >
+  >
+}
+
 export type UpdateLoanRequestWithOfferMutationVariables = Exact<{
   requestId: Scalars["uuid"]
-  newOffer: Scalars["jsonb"]
+  newData: Scalars["jsonb"]
 }>
 
 export type UpdateLoanRequestWithOfferMutation = {
@@ -6818,7 +6912,12 @@ export type UpdateLoanRequestWithOfferMutation = {
   request?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "purpose" | "amount" | "status" | "risk_calc_result"
+      | "request_id"
+      | "loan"
+      | "purpose"
+      | "amount"
+      | "status"
+      | "risk_calc_result"
     >
   >
 }
@@ -7079,6 +7178,7 @@ export const GetUserByEmailDocument = gql`
         payback_status
         purpose
         risk_calc_result
+        loan
         status
         created_at
         amount
@@ -7144,6 +7244,7 @@ export const AddSupporterDocument = gql`
       status
       supporter_id
       pledge_amount
+      info
     }
   }
 `
@@ -7196,6 +7297,15 @@ export const GetCorpusRecommendationRisksDocument = gql`
     }
   }
 `
+export const GetLastLiveLoanDocument = gql`
+  query GetLastLiveLoan {
+    last_live_loan: loan_requests(where: { status: { _eq: "live" } }) {
+      request_id
+      status
+      loan
+    }
+  }
+`
 export const GetLenderAllocationInputDocument = gql`
   query GetLenderAllocationInput {
     lenders: user(where: { user_type: { _eq: "lender" } }) {
@@ -7216,7 +7326,7 @@ export const GetLenderAllocationInputDocument = gql`
 `
 export const GetLoanOfferDocument = gql`
   query GetLoanOffer($request_id: uuid!) {
-    loan_requests_by_pk(request_id: $request_id) {
+    request: loan_requests_by_pk(request_id: $request_id) {
       request_id
       borrower_id
       risk_calc_result
@@ -7233,6 +7343,7 @@ export const GetLoanRequestDocument = gql`
       amount
       status
       risk_calc_result
+      loan
       payback_status
       supporters {
         status
@@ -7247,6 +7358,28 @@ export const GetLoanRequestDocument = gql`
       }
       user {
         demographic_info
+      }
+    }
+  }
+`
+export const GetLoanRequestsDocument = gql`
+  query GetLoanRequests {
+    loanRequests: loan_requests {
+      request_id
+      amount
+      status
+      risk_calc_result
+      loan
+      borrowerInfo: user {
+        id
+        demographic_info
+      }
+      supporters(where: { status: { _eq: "confirmed" } }) {
+        supporter_id
+        pledge_amount
+        demographic_info: user {
+          demographic_info
+        }
       }
     }
   }
@@ -7303,16 +7436,28 @@ export const StartLoanDocument = gql`
     }
   }
 `
+export const UpdateLoanRequestWithLoanDataDocument = gql`
+  mutation UpdateLoanRequestWithLoanData($requestId: uuid!, $loanData: jsonb!) {
+    request: update_loan_requests_by_pk(
+      pk_columns: { request_id: $requestId }
+      _set: { loan: $loanData }
+    ) {
+      request_id
+      loan
+    }
+  }
+`
 export const UpdateLoanRequestWithOfferDocument = gql`
-  mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newOffer: jsonb!) {
+  mutation UpdateLoanRequestWithOffer($requestId: uuid!, $newData: jsonb!) {
     request: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
       _set: {
         status: "awaiting_borrower_confirmation"
-        risk_calc_result: $newOffer
+        risk_calc_result: $newData
       }
     ) {
       request_id
+      loan
       purpose
       amount
       status
@@ -7547,6 +7692,16 @@ export function getSdk(
         )
       )
     },
+    GetLastLiveLoan(
+      variables?: GetLastLiveLoanQueryVariables
+    ): Promise<GetLastLiveLoanQuery> {
+      return withWrapper(() =>
+        client.request<GetLastLiveLoanQuery>(
+          print(GetLastLiveLoanDocument),
+          variables
+        )
+      )
+    },
     GetLenderAllocationInput(
       variables?: GetLenderAllocationInputQueryVariables
     ): Promise<GetLenderAllocationInputQuery> {
@@ -7577,6 +7732,16 @@ export function getSdk(
         )
       )
     },
+    GetLoanRequests(
+      variables?: GetLoanRequestsQueryVariables
+    ): Promise<GetLoanRequestsQuery> {
+      return withWrapper(() =>
+        client.request<GetLoanRequestsQuery>(
+          print(GetLoanRequestsDocument),
+          variables
+        )
+      )
+    },
     GetLoansByBorrowerAndStatus(
       variables: GetLoansByBorrowerAndStatusQueryVariables
     ): Promise<GetLoansByBorrowerAndStatusQuery> {
@@ -7592,6 +7757,16 @@ export function getSdk(
     ): Promise<StartLoanMutation> {
       return withWrapper(() =>
         client.request<StartLoanMutation>(print(StartLoanDocument), variables)
+      )
+    },
+    UpdateLoanRequestWithLoanData(
+      variables: UpdateLoanRequestWithLoanDataMutationVariables
+    ): Promise<UpdateLoanRequestWithLoanDataMutation> {
+      return withWrapper(() =>
+        client.request<UpdateLoanRequestWithLoanDataMutation>(
+          print(UpdateLoanRequestWithLoanDataDocument),
+          variables
+        )
       )
     },
     UpdateLoanRequestWithOffer(

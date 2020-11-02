@@ -2,18 +2,20 @@ import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 import { GetServerSideProps } from "next"
-import { Box, Heading, Input, Stack } from "@chakra-ui/core"
+import { Box, Button, Heading, Input, Stack } from "@chakra-ui/core"
 import { COMPANY_NAME } from "lib/constant"
+import DbClient from "gql/db_client"
 
-export default function Hello(props: { user: GetAllUsersQuery["user"] }) {
+export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
   // Only use code like this when UI needs to refresh
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
-  const users = props.user
+  const users = props.allUsers
   return (
     <Box>
       <Stack>
+        <a href="/admin/reset_db">Reset DB</a>
         <Box>
           <Heading>Users</Heading>
           {users.map((user) => (
@@ -41,8 +43,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO after JWT is implemented
   // check for session and if the user is one of the admin users
 
-  const sdk = getSdk(initializeGQL())
-  const { user } = await sdk.GetAllUsers()
+  const dbClient = new DbClient()
+  const allUsers = await dbClient.allUsers
 
-  return { props: { user } }
+  return { props: { allUsers } }
 }
