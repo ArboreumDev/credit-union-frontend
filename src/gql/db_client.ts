@@ -87,6 +87,14 @@ export default class DbClient {
     info?: any
   ) => {
     const user = await this.getUserByEmail(email)
+    if (!user) {
+      const u = await this.sdk.CreateUser({
+        user: {
+          email,
+        },
+      })
+      user.id = u.insert_user_one.id
+    }
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
