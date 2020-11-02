@@ -1,5 +1,5 @@
 import { dec_to_perc } from "lib/currency"
-import { User } from "lib/types"
+import { LoanRequestStatus, User } from "lib/types"
 
 export default class LenderModel {
   constructor(public user: User) {}
@@ -14,6 +14,7 @@ export default class LenderModel {
 
   get totalPledgeAmount() {
     return this.user.pledges
+      .filter((p) => p.loan_request.status === LoanRequestStatus.active)
       .map((p) => p.pledge_amount)
       .reduce((a, b) => a + b, 0)
   }
