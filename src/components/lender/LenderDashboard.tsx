@@ -81,7 +81,7 @@ const LenderDashboard = ({ user }: Props) => {
       <Stack>
         <Wrap w="100%">
           {Asset("Invested", lender.invested)}
-          {Asset("Pledged", lender.totalPledgeAmount)}
+          {Asset("Pledged", lender.pledged)}
           {Asset("Uninvested", lender.uninvested)}
         </Wrap>
       </Stack>
@@ -94,7 +94,7 @@ const LenderDashboard = ({ user }: Props) => {
                 <DynamicDoughnut
                   amounts={[
                     lender.invested,
-                    lender.totalPledgeAmount,
+                    lender.totalPledgeUnconfirmedAmount,
                     lender.uninvested,
                   ]}
                 />
