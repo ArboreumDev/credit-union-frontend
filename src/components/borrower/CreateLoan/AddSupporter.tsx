@@ -73,7 +73,7 @@ export default function AddSupporter({ loanRequest }: Props) {
           <Box flex={1}>
             I have known the supporter since
             <Input
-              placeholder="e.g. September 2005"
+              placeholder="e.g. September 2015"
               name="known_since"
               size="md"
               ref={register({ required: true })}
