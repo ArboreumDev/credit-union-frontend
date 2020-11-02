@@ -23,7 +23,7 @@ export default class LenderModel {
   }
 
   get APY() {
-    return dec_to_perc(0.163)
+    return dec_to_perc(0)
   }
   get percInvested() {
     return dec_to_perc(this.invested / this.totalAssets)
