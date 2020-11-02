@@ -6729,6 +6729,17 @@ export type GetCorpusRecommendationRisksQuery = {
   >
 }
 
+export type GetLastLiveLoanQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLastLiveLoanQuery = { __typename?: "query_root" } & {
+  last_live_loan: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "status" | "loan"
+    >
+  >
+}
+
 export type GetLenderAllocationInputQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -7286,6 +7297,15 @@ export const GetCorpusRecommendationRisksDocument = gql`
     }
   }
 `
+export const GetLastLiveLoanDocument = gql`
+  query GetLastLiveLoan {
+    last_live_loan: loan_requests(where: { status: { _eq: "live" } }) {
+      request_id
+      status
+      loan
+    }
+  }
+`
 export const GetLenderAllocationInputDocument = gql`
   query GetLenderAllocationInput {
     lenders: user(where: { user_type: { _eq: "lender" } }) {
@@ -7668,6 +7688,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetCorpusRecommendationRisksQuery>(
           print(GetCorpusRecommendationRisksDocument),
+          variables
+        )
+      )
+    },
+    GetLastLiveLoan(
+      variables?: GetLastLiveLoanQueryVariables
+    ): Promise<GetLastLiveLoanQuery> {
+      return withWrapper(() =>
+        client.request<GetLastLiveLoanQuery>(
+          print(GetLastLiveLoanDocument),
           variables
         )
       )
