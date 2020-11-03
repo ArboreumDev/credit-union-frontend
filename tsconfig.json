@@ -17,11 +17,5 @@
     "baseUrl": "./src/"
   },
   "exclude": ["node_modules"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "setupTests.js",
-    "src/pages/api/auth/[...nextauth].ts._"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "setupTests.js"]
 }
