@@ -6606,6 +6606,12 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           { __typename?: "supporters" } & PledgeFieldsFragment
         >
         pledges: Array<{ __typename?: "supporters" } & PledgeFieldsFragment>
+        active_loans: Array<
+          { __typename?: "loan_participants" } & Pick<
+            Loan_Participants,
+            "loan_id" | "lender_amount" | "percentage"
+          >
+        >
       }
   >
 }
@@ -6854,6 +6860,7 @@ export type StartLoanMutationVariables = Exact<{
   request_id: Scalars["uuid"]
   payable: Payables_Insert_Input
   receivable: Receivables_Insert_Input
+  lenders: Array<Loan_Participants_Insert_Input>
 }>
 
 export type StartLoanMutation = { __typename?: "mutation_root" } & {
@@ -6871,6 +6878,16 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
       Receivables,
       "amount_total" | "amount_received" | "status"
     >
+  >
+  lenders?: Maybe<
+    { __typename?: "loan_participants_mutation_response" } & {
+      returning: Array<
+        { __typename?: "loan_participants" } & Pick<
+          Loan_Participants,
+          "lender_id"
+        >
+      >
+    }
   >
 }
 
@@ -7188,6 +7205,13 @@ export const GetUserByEmailDocument = gql`
       pledges: supporters(where: { status: { _eq: "confirmed" } }) {
         ...pledgeFields
       }
+      active_loans: loan_participants(
+        where: { loan_request: { status: { _eq: "live" } } }
+      ) {
+        loan_id
+        lender_amount
+        percentage
+      }
     }
   }
   ${PledgeFieldsFragmentDoc}
@@ -7397,6 +7421,7 @@ export const StartLoanDocument = gql`
     $request_id: uuid!
     $payable: payables_insert_input!
     $receivable: receivables_insert_input!
+    $lenders: [loan_participants_insert_input!]!
   ) {
     update_loan_requests_by_pk(
       pk_columns: { request_id: $request_id }
@@ -7413,6 +7438,11 @@ export const StartLoanDocument = gql`
       amount_total
       amount_received
       status
+    }
+    lenders: insert_loan_participants(objects: $lenders) {
+      returning {
+        lender_id
+      }
     }
   }
 `
