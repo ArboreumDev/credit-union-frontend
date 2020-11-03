@@ -133,9 +133,6 @@
     - name: loan_request
       using:
         foreign_key_constraint_on: loan_id
-    - name: user
-      using:
-        foreign_key_constraint_on: receiver_id
 - table:
     schema: public
     name: recommendation_risk
@@ -209,13 +206,6 @@
           table:
             schema: public
             name: loan_risk
-    - name: receivables
-      using:
-        foreign_key_constraint_on:
-          column: receiver_id
-          table:
-            schema: public
-            name: receivables
     - name: recommendation_risks
       using:
         foreign_key_constraint_on:
