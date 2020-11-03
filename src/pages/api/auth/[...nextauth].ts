@@ -13,7 +13,7 @@ const options = {
       name: "Arboreum",
       credentials: {
         username: { label: "Email", type: "text", placeholder: "" },
-        // password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
         const user = {

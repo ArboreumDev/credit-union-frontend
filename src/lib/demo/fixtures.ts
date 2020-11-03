@@ -88,8 +88,8 @@ export class Fixtures {
       corpus_view: null,
       borrower_view: {
         total_payments: {
-          paid: 9731.48,
-          remain: 0,
+          paid: 0,
+          remain: 94797.07053,
         },
         corpus_interest: {
           paid: 303.516101,
@@ -113,7 +113,7 @@ export class Fixtures {
         },
       },
       supporter_view: null,
-      next_borrower_payment: 0,
+      next_borrower_payment: 15799.51,
     },
   }
 
