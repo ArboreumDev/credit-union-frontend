@@ -12,6 +12,7 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  Tooltip,
 } from "@chakra-ui/core"
 import { Currency } from "components/common/Currency"
 import { dec_to_perc } from "lib/currency"
@@ -106,14 +107,24 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
       <Box>
         <StatGroup>
           <Stat>
-            <StatLabel>Amount</StatLabel>
-            <StatNumber>
+            <StatLabel fontSize="md">
+              <Tooltip label="Amount">Amount</Tooltip>
+            </StatLabel>
+            <StatNumber fontSize="2xl">
               <Currency amount={loanRequest.amount} />
             </StatNumber>
           </Stat>
           <Stat>
-            <StatLabel>Purpose</StatLabel>
-            <StatNumber>{loanRequest.purpose}</StatNumber>
+            <StatLabel fontSize="md">
+              <Tooltip label="Purpose">Purpose</Tooltip>
+            </StatLabel>
+            <StatNumber fontSize="2xl">{loanRequest.purpose}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel fontSize="md">
+              <Tooltip label="Annual Percentage Yield">IRR</Tooltip>
+            </StatLabel>
+            <StatNumber fontSize="2xl">13.5%</StatNumber>
           </Stat>
         </StatGroup>
         <Box h="20px" />
