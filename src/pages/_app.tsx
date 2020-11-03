@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS>
       <Head>
-        <title>Arboreum</title>
+        <title>Arboreum Sandbox</title>
         <meta name="description" content="Invest. Borrow."></meta>
         {typeof window !== "undefined" && (
           <>
