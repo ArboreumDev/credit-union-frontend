@@ -3,8 +3,8 @@ import { RiskParams } from "./types"
 // for local development
 // export const DEV_URL = "http://127.0.0.1:3001"
 export const ANALYTICS_WEBSITE_IDS = {
-  production: "c0dca8db-6303-4e1b-bb29-3422514663e9",
-  preview: "90f23cc8-c238-4f5c-876a-c83f66335036",
+  production: "d4c4d702-272d-443c-b194-c185f90c9753",
+  preview: "fc4f0d9b-431a-4c3f-b81f-def8c2d0bb58",
 }
 
 // Local Storage Keys
