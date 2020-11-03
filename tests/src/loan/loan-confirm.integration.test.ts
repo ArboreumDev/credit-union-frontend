@@ -65,12 +65,13 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(data.insert_payables_one.amount_paid).toBe(0)
 
     // receivable should match payable
-    expect(data.insert_receivables_one.amount_total).toBe(
-      data.insert_payables_one.amount_total
-    )
-    expect(data.insert_receivables_one.amount_received).toBe(
-      data.insert_payables_one.amount_paid
-    )
+    const totalRemainReceivable =
+      data.corpus.amount_total + data.supporter.amount_total
+    const totalReceivedOnReceivable =
+      data.corpus.amount_received + data.supporter.amount_received
+
+    expect(totalRemainReceivable).toBe(data.insert_payables_one.amount_total)
+    expect(totalReceivedOnReceivable).toBe(data.insert_payables_one.amount_paid)
   })
 
   test.skip("The borrower user can see their repayment plan in the frontend", async () => {

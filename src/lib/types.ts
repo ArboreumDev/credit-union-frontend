@@ -12,6 +12,11 @@ export enum UserType {
   Lender = "lender",
 }
 
+export enum Receiver {
+  Corpus = "corpus",
+  Supporter = "supporter",
+}
+
 export type User = GetUserByEmailQuery["user"][0]
 export type LoanRequest = User["loan_requests"][0]
 export type PledgeRequest = User["pledge_requests"][0]

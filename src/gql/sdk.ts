@@ -1472,12 +1472,12 @@ export type Jsonb_Comparison_Exp = {
 /** columns and relationships of "loan_participants" */
 export type Loan_Participants = {
   __typename?: "loan_participants"
-  lender_amount: Scalars["Int"]
+  lender_amount: Scalars["float8"]
   lender_id: Scalars["uuid"]
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
-  percentage?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["float8"]>
   /** An object relationship */
   user: User
 }
@@ -1550,11 +1550,11 @@ export type Loan_Participants_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Loan_Participants_Bool_Exp>>>
   _not?: Maybe<Loan_Participants_Bool_Exp>
   _or?: Maybe<Array<Maybe<Loan_Participants_Bool_Exp>>>
-  lender_amount?: Maybe<Int_Comparison_Exp>
+  lender_amount?: Maybe<Float8_Comparison_Exp>
   lender_id?: Maybe<Uuid_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
-  percentage?: Maybe<Int_Comparison_Exp>
+  percentage?: Maybe<Float8_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
 }
 
@@ -1566,27 +1566,27 @@ export enum Loan_Participants_Constraint {
 
 /** input type for incrementing integer column in table "loan_participants" */
 export type Loan_Participants_Inc_Input = {
-  lender_amount?: Maybe<Scalars["Int"]>
-  percentage?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
+  percentage?: Maybe<Scalars["float8"]>
 }
 
 /** input type for inserting data into table "loan_participants" */
 export type Loan_Participants_Insert_Input = {
-  lender_amount?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
-  percentage?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["float8"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
 }
 
 /** aggregate max on columns */
 export type Loan_Participants_Max_Fields = {
   __typename?: "loan_participants_max_fields"
-  lender_amount?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  percentage?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["float8"]>
 }
 
 /** order by max() on columns of table "loan_participants" */
@@ -1600,10 +1600,10 @@ export type Loan_Participants_Max_Order_By = {
 /** aggregate min on columns */
 export type Loan_Participants_Min_Fields = {
   __typename?: "loan_participants_min_fields"
-  lender_amount?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  percentage?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["float8"]>
 }
 
 /** order by min() on columns of table "loan_participants" */
@@ -1666,10 +1666,10 @@ export enum Loan_Participants_Select_Column {
 
 /** input type for updating data in table "loan_participants" */
 export type Loan_Participants_Set_Input = {
-  lender_amount?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
-  percentage?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["float8"]>
 }
 
 /** aggregate stddev on columns */
@@ -1714,8 +1714,8 @@ export type Loan_Participants_Stddev_Samp_Order_By = {
 /** aggregate sum on columns */
 export type Loan_Participants_Sum_Fields = {
   __typename?: "loan_participants_sum_fields"
-  lender_amount?: Maybe<Scalars["Int"]>
-  percentage?: Maybe<Scalars["Int"]>
+  lender_amount?: Maybe<Scalars["float8"]>
+  percentage?: Maybe<Scalars["float8"]>
 }
 
 /** order by sum() on columns of table "loan_participants" */
@@ -4257,11 +4257,9 @@ export type Receivables = {
   /** An object relationship */
   loan_request: Loan_Requests
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
+  receiver?: Maybe<Scalars["String"]>
   status?: Maybe<Scalars["String"]>
   updated_at: Scalars["timestamptz"]
-  /** An object relationship */
-  user?: Maybe<User>
 }
 
 /** aggregated selection of "receivables" */
@@ -4346,10 +4344,9 @@ export type Receivables_Bool_Exp = {
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
   receive_frequency?: Maybe<Int_Comparison_Exp>
-  receiver_id?: Maybe<Uuid_Comparison_Exp>
+  receiver?: Maybe<String_Comparison_Exp>
   status?: Maybe<String_Comparison_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
-  user?: Maybe<User_Bool_Exp>
 }
 
 /** unique or primary key constraints on table "receivables" */
@@ -4378,10 +4375,9 @@ export type Receivables_Insert_Input = {
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
+  receiver?: Maybe<Scalars["String"]>
   status?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
-  user?: Maybe<User_Obj_Rel_Insert_Input>
 }
 
 /** aggregate max on columns */
@@ -4396,7 +4392,7 @@ export type Receivables_Max_Fields = {
   last_received?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
+  receiver?: Maybe<Scalars["String"]>
   status?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
@@ -4412,7 +4408,7 @@ export type Receivables_Max_Order_By = {
   last_received?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   receive_frequency?: Maybe<Order_By>
-  receiver_id?: Maybe<Order_By>
+  receiver?: Maybe<Order_By>
   status?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
@@ -4429,7 +4425,7 @@ export type Receivables_Min_Fields = {
   last_received?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
+  receiver?: Maybe<Scalars["String"]>
   status?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
@@ -4445,7 +4441,7 @@ export type Receivables_Min_Order_By = {
   last_received?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   receive_frequency?: Maybe<Order_By>
-  receiver_id?: Maybe<Order_By>
+  receiver?: Maybe<Order_By>
   status?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
 }
@@ -4484,10 +4480,9 @@ export type Receivables_Order_By = {
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
   receive_frequency?: Maybe<Order_By>
-  receiver_id?: Maybe<Order_By>
+  receiver?: Maybe<Order_By>
   status?: Maybe<Order_By>
   updated_at?: Maybe<Order_By>
-  user?: Maybe<User_Order_By>
 }
 
 /** primary key columns input for table: "receivables" */
@@ -4516,7 +4511,7 @@ export enum Receivables_Select_Column {
   /** column name */
   ReceiveFrequency = "receive_frequency",
   /** column name */
-  ReceiverId = "receiver_id",
+  Receiver = "receiver",
   /** column name */
   Status = "status",
   /** column name */
@@ -4534,7 +4529,7 @@ export type Receivables_Set_Input = {
   last_received?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver_id?: Maybe<Scalars["uuid"]>
+  receiver?: Maybe<Scalars["String"]>
   status?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
 }
@@ -4628,7 +4623,7 @@ export enum Receivables_Update_Column {
   /** column name */
   ReceiveFrequency = "receive_frequency",
   /** column name */
-  ReceiverId = "receiver_id",
+  Receiver = "receiver",
   /** column name */
   Status = "status",
   /** column name */
@@ -5715,10 +5710,6 @@ export type User = {
   name: Scalars["String"]
   phone: Scalars["String"]
   /** An array relationship */
-  receivables: Array<Receivables>
-  /** An aggregated array relationship */
-  receivables_aggregate: Receivables_Aggregate
-  /** An array relationship */
   recommendationRisksByRecommenderId: Array<Recommendation_Risk>
   /** An aggregated array relationship */
   recommendationRisksByRecommenderId_aggregate: Recommendation_Risk_Aggregate
@@ -5864,24 +5855,6 @@ export type UserLoan_Risks_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>
   order_by?: Maybe<Array<Loan_Risk_Order_By>>
   where?: Maybe<Loan_Risk_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserReceivablesArgs = {
-  distinct_on?: Maybe<Array<Receivables_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Receivables_Order_By>>
-  where?: Maybe<Receivables_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserReceivables_AggregateArgs = {
-  distinct_on?: Maybe<Array<Receivables_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<Receivables_Order_By>>
-  where?: Maybe<Receivables_Bool_Exp>
 }
 
 /** columns and relationships of "user" */
@@ -6035,7 +6008,6 @@ export type User_Bool_Exp = {
   min_interest_rate?: Maybe<Float_Comparison_Exp>
   name?: Maybe<String_Comparison_Exp>
   phone?: Maybe<String_Comparison_Exp>
-  receivables?: Maybe<Receivables_Bool_Exp>
   recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
   recommendation_risks?: Maybe<Recommendation_Risk_Bool_Exp>
   supporters?: Maybe<Supporters_Bool_Exp>
@@ -6098,7 +6070,6 @@ export type User_Insert_Input = {
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
   phone?: Maybe<Scalars["String"]>
-  receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
   recommendationRisksByRecommenderId?: Maybe<
     Recommendation_Risk_Arr_Rel_Insert_Input
   >
@@ -6213,7 +6184,6 @@ export type User_Order_By = {
   min_interest_rate?: Maybe<Order_By>
   name?: Maybe<Order_By>
   phone?: Maybe<Order_By>
-  receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
   recommendationRisksByRecommenderId_aggregate?: Maybe<
     Recommendation_Risk_Aggregate_Order_By
   >
@@ -6859,7 +6829,8 @@ export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
 export type StartLoanMutationVariables = Exact<{
   request_id: Scalars["uuid"]
   payable: Payables_Insert_Input
-  receivable: Receivables_Insert_Input
+  receivable_corpus: Receivables_Insert_Input
+  receivable_supporter: Receivables_Insert_Input
   lenders: Array<Loan_Participants_Insert_Input>
 }>
 
@@ -6873,7 +6844,13 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
   insert_payables_one?: Maybe<
     { __typename?: "payables" } & Pick<Payables, "amount_total" | "amount_paid">
   >
-  insert_receivables_one?: Maybe<
+  corpus?: Maybe<
+    { __typename?: "receivables" } & Pick<
+      Receivables,
+      "amount_total" | "amount_received" | "status"
+    >
+  >
+  supporter?: Maybe<
     { __typename?: "receivables" } & Pick<
       Receivables,
       "amount_total" | "amount_received" | "status"
@@ -7420,7 +7397,8 @@ export const StartLoanDocument = gql`
   mutation StartLoan(
     $request_id: uuid!
     $payable: payables_insert_input!
-    $receivable: receivables_insert_input!
+    $receivable_corpus: receivables_insert_input!
+    $receivable_supporter: receivables_insert_input!
     $lenders: [loan_participants_insert_input!]!
   ) {
     update_loan_requests_by_pk(
@@ -7434,7 +7412,12 @@ export const StartLoanDocument = gql`
       amount_total
       amount_paid
     }
-    insert_receivables_one(object: $receivable) {
+    corpus: insert_receivables_one(object: $receivable_corpus) {
+      amount_total
+      amount_received
+      status
+    }
+    supporter: insert_receivables_one(object: $receivable_supporter) {
       amount_total
       amount_received
       status

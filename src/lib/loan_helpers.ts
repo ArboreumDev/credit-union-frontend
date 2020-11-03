@@ -1,6 +1,6 @@
 import { LoanInfo, PortfolioUpdate } from "./types"
 import { Loan_Participants_Insert_Input, Sdk } from "../gql/sdk"
-import { LoanRequestStatus } from "./types"
+import { LoanRequestStatus, Receiver } from "./types"
 import DbClient from "gql/db_client"
 
 function toFloat8(x: number) {
@@ -70,18 +70,27 @@ export const createStartLoanInputVariables = (
       } as Loan_Participants_Insert_Input)
     }
   })
-
   // receivable to lenders, saves the total amount to be repaid (including interest)
-  const totalOwedAmount =
-    realizedLoan.schedule.borrower_view.total_payments.remain
-  const receivable = {
+  const schedule = realizedLoan.schedule.borrower_view
+  const totalOwedAmountCorpus =
+    schedule.corpus_principal.remain + schedule.corpus_interest.remain
+  const receivableCorpus = {
     loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
+    amount_total: totalOwedAmountCorpus,
+    amount_remain: totalOwedAmountCorpus,
+    receiver: Receiver.Corpus,
   }
   // receivable to supporters
-  // TODO
+  const totalOwedAmountSupporter =
+    schedule.supporter_interest.remain + schedule.supporter_principal.remain
+  const receivableSupporter = {
+    loan_id: request_id,
+    amount_total: totalOwedAmountSupporter,
+    amount_remain: totalOwedAmountSupporter,
+    receiver: Receiver.Supporter,
+  }
   // payable of the borrower, saves the total amount to be repaid
+  const totalOwedAmount = totalOwedAmountCorpus + totalOwedAmountSupporter
   const payable = {
     loan_id: request_id,
     amount_total: totalOwedAmount,
@@ -92,7 +101,8 @@ export const createStartLoanInputVariables = (
   return {
     request_id,
     payable,
-    receivable,
+    receivable_corpus: receivableCorpus,
+    receivable_supporter: receivableSupporter,
     lenders,
   }
 }
