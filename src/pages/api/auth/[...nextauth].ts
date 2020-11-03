@@ -10,16 +10,16 @@ const options = {
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
+      name: "Arboreum",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "" },
-        password: { label: "Password", type: "password" },
+        username: { label: "Email", type: "text", placeholder: "" },
+        // password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
         const user = {
           id: 1,
           name: "",
-          email: credentials.username + "@mail.com",
+          email: credentials.username,
         }
 
         if (user) {
