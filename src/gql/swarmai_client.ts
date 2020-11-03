@@ -1,4 +1,4 @@
-import { fetchJSON } from "lib/api"
+import { Fetcher, fetchJSON } from "lib/api"
 import { DEFAULT_LOAN_TENOR } from "lib/constant"
 import log from "lib/logger"
 import {
@@ -12,18 +12,22 @@ import {
   SystemUpdate,
 } from "lib/types"
 
-async function fetcher(url: string, payload: any, caller?: string) {
-  log(`${caller} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
-
-  const res = await fetchJSON({ url, payload })
-  log(`${caller} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
-
-  // return res
-  return fetchJSON({ url, payload })
-}
-
 export default class SwarmAIClient {
-  constructor(private _url: string) {}
+  private fetcher: Fetcher
+
+  constructor(baseURL: string) {
+    this.fetcher = new Fetcher(null, baseURL)
+  }
+
+  async fetch(endpoint: string, payload: any) {
+    log(`${endpoint} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
+
+    const res = await this.fetcher.post(endpoint, payload)
+
+    log(`${endpoint} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
+
+    return res
+  }
 
   async acceptLoan(
     systemState: Scenario,
@@ -33,8 +37,8 @@ export default class SwarmAIClient {
       system_state: systemState,
       loan_offer: latestOffer,
     }
-    const url = this._url + "/loan/accept"
-    return fetcher(url, payload, "acceptLoan")
+
+    return this.fetch("/loan/accept", payload)
   }
 
   async make_repayment(
@@ -47,8 +51,8 @@ export default class SwarmAIClient {
       loan_id,
       amount,
     }
-    const url = this._url + "/loan/repay"
-    return fetcher(url, payload, "repayLoan")
+
+    return this.fetch("/loan/repay", payload)
   }
   g
 
@@ -61,8 +65,8 @@ export default class SwarmAIClient {
     const payload = {
       request_msg: this.generateLoanOfferRequest(params),
     }
-    const url = this._url + "/loan/request"
-    return fetcher(url, payload, "calculateLoanOffer")
+
+    return this.fetch("/loan/request", payload)
   }
 
   generateLoanOfferRequest({

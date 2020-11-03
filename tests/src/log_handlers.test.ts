@@ -1,5 +1,5 @@
 import { LogEventTypes } from "lib/constant"
-import { logEvent } from "lib/logger"
+import { logEvent, PostToSlack } from "lib/logger"
 import { dbClient, sdk } from "./common/utils"
 
 beforeAll(async () => {
@@ -22,5 +22,11 @@ describe("Create new log event", () => {
 
     const event = await logEvent(session, feedbackEvent, {}, dbClient)
     expect(event.data.message === feedbackEvent.eventData.message)
+  })
+})
+
+describe("Log in slack", () => {
+  test("log", async () => {
+    PostToSlack("log_handlers.test.ts | test log message", "testing")
   })
 })

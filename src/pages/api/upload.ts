@@ -1,6 +1,5 @@
 import AWS from "aws-sdk"
-import { fetchJSON } from "lib/api"
-import { SLACK_WEBHOOK_URL } from "lib/constant"
+import { PostToSlack } from "lib/logger"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export const config = {
@@ -26,16 +25,6 @@ AWS.config.setPromisesDependency(null)
 
 // Create S3 service object
 const s3 = new AWS.S3()
-
-export const PostToSlack = async (message: string) => {
-  const response = fetchJSON({
-    url: SLACK_WEBHOOK_URL,
-    payload: {
-      text: `[${process.env.ENVIRONMENT}] ${message}`,
-    },
-    isNoParseRes: true,
-  })
-}
 
 export const UploadToS3 = async (
   bucket: string,
