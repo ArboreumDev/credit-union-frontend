@@ -6585,20 +6585,23 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             Loan_Participants,
             "loan_id" | "lender_amount" | "percentage"
           > & {
-              loan_request: { __typename?: "loan_requests" } & {
-                to_corpus: Array<
-                  { __typename?: "receivables" } & Pick<
-                    Receivables,
-                    "amount_remain" | "receiver"
+              loan_request: { __typename?: "loan_requests" } & Pick<
+                Loan_Requests,
+                "loan"
+              > & {
+                  to_corpus: Array<
+                    { __typename?: "receivables" } & Pick<
+                      Receivables,
+                      "amount_remain" | "receiver"
+                    >
                   >
-                >
-                to_supporter: Array<
-                  { __typename?: "receivables" } & Pick<
-                    Receivables,
-                    "amount_remain" | "receiver"
+                  to_supporter: Array<
+                    { __typename?: "receivables" } & Pick<
+                      Receivables,
+                      "amount_remain" | "receiver"
+                    >
                   >
-                >
-              }
+                }
             }
         >
       }
@@ -7208,6 +7211,7 @@ export const GetUserByEmailDocument = gql`
         lender_amount
         percentage
         loan_request {
+          loan
           to_corpus: receivables(where: { receiver: { _eq: "corpus" } }) {
             amount_remain
             receiver

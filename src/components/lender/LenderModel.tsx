@@ -1,5 +1,10 @@
 import { dec_to_perc } from "lib/currency"
-import { LoanRequestStatus, User } from "lib/types"
+import {
+  LoanRequestStatus,
+  User,
+  LoanScheduleSummary,
+  Receiver,
+} from "lib/types"
 
 export default class LenderModel {
   constructor(public user: User) {}
@@ -46,20 +51,38 @@ export default class LenderModel {
     return 0.2
   }
 
+  // helper function to get extract the total outstanding to supporter or corpus from a loanschedule summary
+  outstandingTo(s: LoanScheduleSummary, receiver: Receiver) {
+    if (receiver == Receiver.Corpus) {
+      return (
+        s.borrower_view.corpus_interest.remain +
+        s.borrower_view.corpus_principal.remain
+      )
+    } else {
+      return (
+        s.borrower_view.supporter_interest.remain +
+        s.borrower_view.supporter_principal.remain
+      )
+    }
+  }
+
   get lenderAPY() {
     // apy is a average of all apr the lender is involved in, weighted by the amount that is still outstanding on the loan
-    // NOTE: this is a hack, in reality it should be the same sum, but taken over all loans, where they
-    // are not a supporter, but for that we need to either
+    // TODO: this is suboptimal, in reality it should be the same sum, but taken over ALL loans where the user is not a not a supporter,
+    //  but for that we need to either
     //  - pass down all live-loans
     //  - or compute it somewhere up and then pass it down
     const totalOutstanding = this.user.active_loans
-      .map((l) => l.loan_request.to_corpus[0].amount_remain)
+      .map((l) =>
+        this.outstandingTo(l.loan_request.loan.schedule, Receiver.Corpus)
+      )
       .reduce((a, b) => a + b, 0)
 
     const weightedAverage = this.user.active_loans
       .map(
         (l) =>
-          (l.percentage * l.loan_request.to_corpus[0].amount_remain) /
+          (l.percentage *
+            this.outstandingTo(l.loan_request.loan.schedule, Receiver.Corpus)) /
           totalOutstanding
       )
       .reduce((a, b) => a + b, 0)
