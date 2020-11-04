@@ -56,7 +56,6 @@ beforeAll(async () => {
     const user = scenario.state.users[id]
     delete user.encumbered_cash
     delete user.encumbered_portfolio
-    users[id] = user
     await sdk.CreateUser({ user })
   }
 })
