@@ -1,8 +1,15 @@
 ﻿// generted from simple.json -> https://jvilk.com/MakeTypes/ -> tweaks
 
+export enum ActionType {
+  GENERATE_LOAN_OFFER = "GENERATE_LOAN_OFFER",
+  ADJUST_BALANCES = "ADJUST_BALANCES",
+  CONFIRM_LOAN_OFFER = "CONFIRM_LOAN_OFFER",
+  REPAY_LOAN = "REPAY_LOAN",
+}
+
 export interface System {
   state: State
-  actions?: Action[]
+  actions: Action[]
 }
 export interface State {
   users: Users
@@ -39,7 +46,7 @@ export interface DemographicInfoBorrower {
   credit_score: number
 }
 export interface Action {
-  action_type: string
+  action_type: ActionType
   payload: any
 }
 export interface Terms {
