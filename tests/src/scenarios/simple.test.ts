@@ -1,16 +1,11 @@
-import * as simple from "../../fixtures/scenarios/simple.json"
-import { ActionType, System, User } from "./types"
-import { uuidv4 } from "./utils"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
+import * as simple from "../../fixtures/scenarios/simple.json"
+import { addAndConfirmSupporter } from "../common/test_helpers"
+import { dbClient, sdk } from "../common/utils"
+import { ActionType, System } from "./types"
 
 const scenario = simple as System
-
-import { dbClient, sdk } from "../common/utils"
-import { Scenario, UserInfo } from "lib/types"
-import { addAndConfirmSupporter } from "../common/test_helpers"
-import { userInfo } from "os"
-
-const users: { [id: string]: User } = {}
+const users = scenario.state.users
 const lrMap = {}
 
 async function adjustBalances({ userId, balanceDelta }) {
