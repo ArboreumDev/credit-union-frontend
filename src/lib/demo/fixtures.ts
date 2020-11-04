@@ -20,6 +20,7 @@ export class Fixtures {
     loan_requests: [],
     pledge_requests: [],
     pledges: [],
+    active_loans: [],
   }
 
   static Borrower: User = {
@@ -35,6 +36,7 @@ export class Fixtures {
     loan_requests: [],
     pledge_requests: [],
     pledges: [],
+    active_loans: [],
   }
 
   static BorrowerKYCConfirmed: User = {
