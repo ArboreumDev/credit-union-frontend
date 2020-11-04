@@ -150,7 +150,7 @@ describe("Loan Request Flow: confirm loan offer", () => {
   })
 
   // describe("When the borrower makes a repayment", () => {
-  test.skip("Make repayment", async () => {
+  test("Make repayment", async () => {
     const repayment = 1000
     await sdk.ChangeUserCashBalance({ userId: BORROWER1.id, delta: repayment })
     const allUsers = await dbClient.allUsers
