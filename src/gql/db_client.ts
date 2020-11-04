@@ -90,6 +90,16 @@ export default class DbClient {
     info?: any
   ) => {
     const user = await this.getUserByEmail(email)
+
+    // TODO: #133 Add supporter if it doesn't exists
+    // if (!user) {
+    //   const u = await this.sdk.CreateUser({
+    //     user: {
+    //       email,
+    //     },
+    //   })
+    //   user.id = u.insert_user_one.id
+    // }
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
@@ -277,15 +287,27 @@ export default class DbClient {
     const loans = {}
     const loan_offers = {}
     loanRequests.forEach((lr) => {
-      loan_requests[lr.request_id] = lr.risk_calc_result[
-        "requestData"
-      ] as LoanRequestInfo
-      if (lr.status == LoanRequestStatus.active) {
-        loans[lr.request_id] = lr.loan as LoanInfo
-      } else {
-        loan_offers[lr.request_id] = lr.risk_calc_result[
-          "latestOffer"
-        ] as LoanInfo
+      // exclude loan-requests where the borrower is still collecting supporters
+      switch (lr.status) {
+        case LoanRequestStatus.active:
+          // should be registered in loans
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
+        case LoanRequestStatus.awaiting_borrower_confirmation:
+          // should be registered in loan_offers
+          loan_offers[lr.request_id] = lr.risk_calc_result[
+            "latestOffer"
+          ] as LoanInfo
+          // we could also still keep them as loan-requests, but that doesnt really make sense
+          loan_requests[lr.request_id] = lr.risk_calc_result[
+            "requestData"
+          ] as LoanRequestInfo
+          break
+        case LoanRequestStatus.initiated:
+          // borrower is yet collecting information
+          break
+        default:
+          throw "unprocessed request status"
       }
     })
 

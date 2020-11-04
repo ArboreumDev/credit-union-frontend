@@ -15,8 +15,11 @@ import {
   Wrap,
 } from "@chakra-ui/core"
 import DynamicDoughnut from "components/dashboard/doughnut"
+import DbClient from "gql/db_client"
+import { initializeGQL } from "gql/graphql_client"
 import { dec_to_perc } from "lib/currency"
-import { User } from "../../lib/types"
+import { useEffect, useState } from "react"
+import { LoanInfo, User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
 import PledgeInvestments from "./Pledges"
@@ -58,6 +61,23 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
+  const [lenderAPY, setAPY] = useState(0)
+
+  useEffect(() => {
+    const fetchAPY = async () => {
+      const TEST_API_URL = "http://localhost:8080/v1/graphql"
+      const TEST_ADMIN_SECRET = "myadminsecretkey"
+      const client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
+      const dbClient = new DbClient(client)
+      const { last_live_loan } = await dbClient.sdk.GetLastLiveLoan()
+      console.log(last_live_loan)
+      if (last_live_loan.length) {
+        const loan = last_live_loan[0].loan as LoanInfo
+        if (loan) setAPY(dec_to_perc(loan.terms.corpus_apr))
+      }
+    }
+    fetchAPY()
+  }, [])
 
   return (
     <Stack w="100%" spacing={8}>
@@ -73,7 +93,7 @@ const LenderDashboard = ({ user }: Props) => {
             <StatLabel fontSize="lg">
               <Tooltip label="Annual Percentage Yield">APY</Tooltip>
             </StatLabel>
-            <StatNumber fontSize="3xl">{lender.APY}%</StatNumber>
+            <StatNumber fontSize="3xl">{lenderAPY}%</StatNumber>
           </Stat>
         )}
       </HStack>
@@ -81,7 +101,7 @@ const LenderDashboard = ({ user }: Props) => {
       <Stack>
         <Wrap w="100%">
           {Asset("Invested", lender.invested)}
-          {Asset("Pledged", lender.totalPledgeAmount)}
+          {Asset("Pledged", lender.pledged)}
           {Asset("Uninvested", lender.uninvested)}
         </Wrap>
       </Stack>
@@ -94,7 +114,7 @@ const LenderDashboard = ({ user }: Props) => {
                 <DynamicDoughnut
                   amounts={[
                     lender.invested,
-                    lender.totalPledgeAmount,
+                    lender.totalPledgeUnconfirmedAmount,
                     lender.uninvested,
                   ]}
                 />
