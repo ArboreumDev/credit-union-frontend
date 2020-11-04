@@ -2,9 +2,9 @@
   "state": {
     "users": {
       "l1": {
-        "id": "l1",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf1",
         "balance": 0.0,
-        "name": "lender1",
+        "name": "l1",
         "email": "lender1@mail.com",
         "user_type": "lender",
         "demographic_info": {
@@ -17,9 +17,9 @@
         "encumbered_portfolio": 0
       },
       "l2": {
-        "id": "l2",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf2",
         "balance": 10000.0,
-        "name": "lender2",
+        "name": "l2",
         "email": "lender2@mail.com",
         "user_type": "lender",
         "demographic_info": {
@@ -32,9 +32,9 @@
         "encumbered_portfolio": 0
       },
       "l3": {
-        "id": "l3",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf3",
         "balance": 10000.0,
-        "name": "lender3",
+        "name": "l3",
         "email": "lender3@mail.com",
         "user_type": "lender",
         "demographic_info": {
@@ -47,9 +47,9 @@
         "encumbered_portfolio": 0
       },
       "l4": {
-        "id": "l4",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf4",
         "balance": 10000.0,
-        "name": "lender4",
+        "name": "l4",
         "email": "lender4@mail.com",
         "user_type": "lender",
         "demographic_info": {
@@ -62,9 +62,9 @@
         "encumbered_portfolio": 0
       },
       "l5": {
-        "id": "l5",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf5",
         "balance": 0.0,
-        "name": "lender5",
+        "name": "l5",
         "email": "lender5@mail.com",
         "user_type": "lender",
         "demographic_info": {
@@ -77,9 +77,9 @@
         "encumbered_portfolio": 0
       },
       "b1": {
-        "id": "b1",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf6",
         "balance": 0.0,
-        "name": "borrower1",
+        "name": "b1",
         "email": "borrower1@mail.com",
         "user_type": "borrower",
         "demographic_info": {
@@ -92,9 +92,9 @@
         "encumbered_portfolio": 0
       },
       "b2": {
-        "id": "b2",
+        "id": "3576df66-ef1c-4e82-ad21-70943dcecaf7",
         "balance": 0.0,
-        "name": "borrower2",
+        "name": "b2",
         "email": "borrower2@mail.com",
         "user_type": "borrower",
         "demographic_info": {
