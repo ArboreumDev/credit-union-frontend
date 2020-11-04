@@ -123,13 +123,10 @@
       "action_type": "GENERATE_LOAN_OFFER",
       "payload": {
         "userId": "b1",
+        "loan_id": "lr1",
         "amount": 20000,
         "supporters": { "l4": 5000 }
       }
-    },
-    {
-      "action_type": "CONFIRM_LOAN_OFFER",
-      "payload": "lr1"
     },
     {
       "action_type": "REPAY_LOAN",

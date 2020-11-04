@@ -11,6 +11,7 @@ import { addAndConfirmSupporter } from "../common/test_helpers"
 import { userInfo } from "os"
 
 const users: { [id: string]: User } = {}
+const lrMap = {}
 
 async function adjustBalances({ userId, balanceDelta }) {
   const user = users[userId]
@@ -20,13 +21,16 @@ async function adjustBalances({ userId, balanceDelta }) {
   })
 }
 
-async function generateOffer({ userId, amount, supporters }) {
+async function generateOffer({ userId, loan_id, amount, supporters }) {
   const user = users[userId]
+
   const { request } = await dbClient.createLoanRequest(
     user.id,
     amount,
     "purpose"
   )
+  lrMap[loan_id] = request.request_id
+
   // confirm supporter and trigger the loan offer generation
   for (const sId in supporters) {
     const supporter = users[sId]
@@ -39,11 +43,15 @@ async function generateOffer({ userId, amount, supporters }) {
   }
 }
 
+async function repayLoan({ loan_id, amount }) {
+  const requestId = lrMap[loan_id]
+  const request = await dbClient.make_repayment(requestId, amount)
+}
+
 export const actionTypeHandlerMap = {
   [ActionType.GENERATE_LOAN_OFFER]: generateOffer,
   [ActionType.ADJUST_BALANCES]: adjustBalances,
-  // [ActionType.CONFIRM_LOAN_OFFER]: confirm_loan_offer,
-  // [ActionType.REPAY_LOAN]: repay_loan,
+  [ActionType.REPAY_LOAN]: repayLoan,
 }
 
 beforeAll(async () => {
@@ -72,6 +80,9 @@ describe("Adding users and connections", () => {
     await actionTypeHandlerMap[action.action_type](action.payload)
 
     action = scenario.actions[1]
+    await actionTypeHandlerMap[action.action_type](action.payload)
+
+    action = scenario.actions[2]
     await actionTypeHandlerMap[action.action_type](action.payload)
 
     const after = await dbClient.getSystemSummary()
