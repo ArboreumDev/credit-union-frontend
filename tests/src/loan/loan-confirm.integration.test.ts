@@ -131,6 +131,7 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const supporter = await dbClient.getUserByEmail(SUPPORTER2.email)
     expect(supporter.active_loans.map((l) => l.loan_id)).toContain(requestId)
     console.log(supporter)
+    console.log(lender.active_loans[0].loan_request.to_supporter)
 
     // verify their terms differ
     const lenderEntry = lender.active_loans.filter(
@@ -149,7 +150,7 @@ describe("Loan Request Flow: confirm loan offer", () => {
   })
 
   // describe("When the borrower makes a repayment", () => {
-  test("Make repayment", async () => {
+  test.skip("Make repayment", async () => {
     const repayment = 1000
     await sdk.ChangeUserCashBalance({ userId: BORROWER1.id, delta: repayment })
     const allUsers = await dbClient.allUsers
