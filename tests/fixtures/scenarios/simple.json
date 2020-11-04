@@ -122,34 +122,9 @@
     {
       "action_type": "GENERATE_LOAN_OFFER",
       "payload": {
-        "request_id": "lr1",
-        "terms": {
-          "request_id": "lr1",
-          "borrower_info": {
-            "borrower_id": "b1",
-            "demographic_info": {
-              "education_years": 18,
-              "income": 48000,
-              "credit_score": 842.0
-            }
-          },
-          "tenor": 6.0,
-          "amount": 20000.0,
-          "borrower_collateral": 7889.0,
-          "num_annual_cmpnd_prds": 12,
-          "supporters": [
-            {
-              "supporter_id": "l4",
-              "recommendation_risk": {
-                "kumr_params": [16.949847030201536, 8.553278883166213],
-                "beta_params": [16.949847030201536, 8.553278883166213]
-              },
-              "demographic_info": null,
-              "trust_amount": 5000.0,
-              "apr_delta": 1.1
-            }
-          ]
-        }
+        "userId": "b1",
+        "amount": 20000,
+        "supporters": { "l4": 5000 }
       }
     },
     {
