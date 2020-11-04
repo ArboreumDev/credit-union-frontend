@@ -2833,6 +2833,7 @@ export type Mutation_RootDelete_ReceivablesArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Receivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver: Scalars["String"]
 }
 
 /** mutation root */
@@ -4171,6 +4172,7 @@ export type Query_RootReceivables_AggregateArgs = {
 /** query root */
 export type Query_RootReceivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver: Scalars["String"]
 }
 
 /** query root */
@@ -4257,7 +4259,7 @@ export type Receivables = {
   /** An object relationship */
   loan_request: Loan_Requests
   receive_frequency?: Maybe<Scalars["Int"]>
-  receiver?: Maybe<Scalars["String"]>
+  receiver: Scalars["String"]
   status?: Maybe<Scalars["String"]>
   updated_at: Scalars["timestamptz"]
 }
@@ -4488,6 +4490,7 @@ export type Receivables_Order_By = {
 /** primary key columns input for table: "receivables" */
 export type Receivables_Pk_Columns_Input = {
   loan_id: Scalars["uuid"]
+  receiver: Scalars["String"]
 }
 
 /** select columns of table "receivables" */
@@ -5200,6 +5203,7 @@ export type Subscription_RootReceivables_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootReceivables_By_PkArgs = {
   loan_id: Scalars["uuid"]
+  receiver: Scalars["String"]
 }
 
 /** subscription root */
@@ -6580,7 +6584,22 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           { __typename?: "loan_participants" } & Pick<
             Loan_Participants,
             "loan_id" | "lender_amount" | "percentage"
-          >
+          > & {
+              loan_request: { __typename?: "loan_requests" } & {
+                to_corpus: Array<
+                  { __typename?: "receivables" } & Pick<
+                    Receivables,
+                    "amount_remain" | "receiver"
+                  >
+                >
+                to_supporter: Array<
+                  { __typename?: "receivables" } & Pick<
+                    Receivables,
+                    "amount_remain" | "receiver"
+                  >
+                >
+              }
+            }
         >
       }
   >
@@ -7188,6 +7207,16 @@ export const GetUserByEmailDocument = gql`
         loan_id
         lender_amount
         percentage
+        loan_request {
+          to_corpus: receivables(where: { receiver: { _eq: "corpus" } }) {
+            amount_remain
+            receiver
+          }
+          to_supporter: receivables(where: { receiver: { _eq: "supporter" } }) {
+            amount_remain
+            receiver
+          }
+        }
       }
     }
   }
