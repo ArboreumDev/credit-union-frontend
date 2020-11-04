@@ -1,6 +1,6 @@
 INSERT INTO public."user" (id, created_at, updated_at, name, email, min_interest_rate, max_exposure, user_type, balance, demographic_info, phone, user_number, corpus_share, kyc_approved) VALUES 
  ('8653118e-7a00-4c4f-be53-0b2e04485db0', '2020-09-01 16:24:32.225944+00', '2020-09-01 16:24:32.225944+00', 'Gaurav Paruthi', 'gparuthi@gmail.com', NULL, NULL, 'borrower', 0, '{"income":300,"credit_score":600,"education_years":3}', '7342723929', 1, 0, false),
- ('230cff88-a594-4922-90cd-05938de5bdd0', '2020-09-01 18:05:33.10771+00', '2020-09-02 20:38:30.446776+00', 'gp', 'gp@arboreum.dev', NULL, NULL, 'lender', 20000, '{}', '12312', 4, 0, true),
+ ('230cff88-a594-4922-90cd-05938de5bdd0', '2020-09-01 18:05:33.10771+00', '2020-09-02 20:38:30.446776+00', 'gp', 'gp@arboreum.dev', NULL, NULL, 'lender', 23000, '{}', '12312', 4, 0, true),
  ('130cff88-a594-4922-90cd-05938de5bdd0', '2020-09-01 18:05:33.10771+00', '2020-09-02 20:38:30.446776+00', 'Julius Faber', 'julius@arboreum.dev', NULL, NULL, 'lender', 0, '{}', '1231211', 5, 0, true),
   ('8653118e-7a00-4c4f-be53-0b2e04485db1', '2020-09-01 16:24:32.225944+00', '2020-09-01 16:24:32.225944+00', 'Amitabh Bachann', 'amitabh@mail.com', NULL, NULL, 'borrower', 0, '{"income":300,"credit_score":600,"education_years":3}', '7342723929', 6, 0, true),
   ('230cff88-a594-4922-90cd-05938de5bdd2', '2020-09-01 18:05:33.10771+00', '2020-09-02 20:38:30.446776+00', 'Deepika Padukone', 'deepika@mail.com', NULL, NULL, 'lender', 30000, '{}', '12312', 7, 0, true),
