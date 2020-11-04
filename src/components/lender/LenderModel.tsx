@@ -46,6 +46,6 @@ export default class LenderModel {
     return dec_to_perc(this.uninvested / this.totalAssets)
   }
   get percPledged() {
-    return dec_to_perc(this.totalPledgeUnconfirmedAmount / this.totalAssets)
+    return dec_to_perc(this.pledged / this.totalAssets)
   }
 }
