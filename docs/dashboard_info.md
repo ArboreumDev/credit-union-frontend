@@ -9,10 +9,12 @@ Currently shown in the dashboard:
 - **total assets**: invested + uninvested
 - **Invested**: Money that has been lent out but not yet paid back, WITHOUT interest => `user.corpus_share`
 - **Uninvested**: `users.balance`
-- **APY**: this needs to take into account that loans have different return aprs and are expected to return different amounts.
-  => sum of `loan_requests.loan.terms.corpus_apr` where they lender is not acting as supporter, weighted by `receivables.amount_remain`
+- **APY**: This needs to take into account that loans have different return aprs and are expected to return different amounts.
+  => sum of `loan_requests.loan.terms.corpus_apr` where they lender is not acting as supporter, weighted by total outstanding principal TOP
 
-thus:weighted sum `loan_participants.percentage` (`loan_participants.loan_amount` as weight)
+(where TOP can be taken from `loan_requests.loan.schedule.borrower_view.corpus_principal+corpus_interest` or from `receivables.amount_remain` where `receivable.receiver` = 'corpus`)
+
+simply hack for now that only relies on data fetchable via the `user`-entry: weighted sum `loan_participants.percentage` with `loan_participants.loan_amount` as weight
 
 Other potentially interesing values:
 

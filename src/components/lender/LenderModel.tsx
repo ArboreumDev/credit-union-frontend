@@ -37,8 +37,36 @@ export default class LenderModel {
   }
 
   get APY() {
-    return dec_to_perc(0.163)
+    // TODO supporter APY
+    return this.lenderAPY
   }
+
+  get supporterAPY() {
+    // TODO
+    return 0.2
+  }
+
+  get lenderAPY() {
+    // apy is a average of all apr the lender is involved in, weighted by the amount that is still outstanding on the loan
+    // NOTE: this is a hack, in reality it should be the same sum, but taken over all loans, where they
+    // are not a supporter, but for that we need to either
+    //  - pass down all live-loans
+    //  - or compute it somewhere up and then pass it down
+    const totalOutstanding = this.user.active_loans
+      .map((l) => l.loan_request.to_corpus[0].amount_remain)
+      .reduce((a, b) => a + b, 0)
+
+    const weightedAverage = this.user.active_loans
+      .map(
+        (l) =>
+          (l.percentage * l.loan_request.to_corpus[0].amount_remain) /
+          totalOutstanding
+      )
+      .reduce((a, b) => a + b, 0)
+
+    return dec_to_perc(weightedAverage)
+  }
+
   get percInvested() {
     return dec_to_perc(this.invested / this.totalAssets)
   }
