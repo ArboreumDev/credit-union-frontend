@@ -1,0 +1,170 @@
+{
+  "state": {
+    "users": {
+      "l1": {
+        "id": "l1",
+        "balance": 0.0,
+        "name": "lender1",
+        "email": "lender1@mail.com",
+        "user_type": "lender",
+        "demographic_info": {
+          "education_years": null,
+          "income": null,
+          "credit_score": null
+        },
+        "corpus_share": 0.0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "l2": {
+        "id": "l2",
+        "balance": 10000.0,
+        "name": "lender2",
+        "email": "lender2@mail.com",
+        "user_type": "lender",
+        "demographic_info": {
+          "education_years": null,
+          "income": null,
+          "credit_score": null
+        },
+        "corpus_share": 0.0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "l3": {
+        "id": "l3",
+        "balance": 10000.0,
+        "name": "lender3",
+        "email": "lender3@mail.com",
+        "user_type": "lender",
+        "demographic_info": {
+          "education_years": null,
+          "income": null,
+          "credit_score": null
+        },
+        "corpus_share": 0.0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "l4": {
+        "id": "l4",
+        "balance": 10000.0,
+        "name": "lender4",
+        "email": "lender4@mail.com",
+        "user_type": "lender",
+        "demographic_info": {
+          "education_years": null,
+          "income": null,
+          "credit_score": null
+        },
+        "corpus_share": 0.0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "l5": {
+        "id": "l5",
+        "balance": 0.0,
+        "name": "lender5",
+        "email": "lender5@mail.com",
+        "user_type": "lender",
+        "demographic_info": {
+          "education_years": null,
+          "income": null,
+          "credit_score": null
+        },
+        "corpus_share": 0.0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "b1": {
+        "id": "b1",
+        "balance": 0.0,
+        "name": "borrower1",
+        "email": "borrower1@mail.com",
+        "user_type": "borrower",
+        "demographic_info": {
+          "education_years": 18,
+          "income": 48000,
+          "credit_score": 842.0
+        },
+        "corpus_share": 0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      },
+      "b2": {
+        "id": "b2",
+        "balance": 0.0,
+        "name": "borrower2",
+        "email": "borrower2@mail.com",
+        "user_type": "borrower",
+        "demographic_info": {
+          "education_years": 8,
+          "income": 8000,
+          "credit_score": 599.0
+        },
+        "corpus_share": 0,
+        "encumbered_cash": 0,
+        "encumbered_portfolio": 0
+      }
+    },
+    "loan_requests": [],
+    "loans": [],
+    "lenders": ["l1", "l2", "l3", "l4"],
+    "borrowers": ["b1", "b2"],
+    "supporters": ["l1", "l2", "l4", "l5"],
+    "loan_offers": {}
+  },
+  "actions": [
+    {
+      "action_type": "ADJUST_BALANCES",
+      "payload": {
+        "userId": "l1",
+        "balanceDelta": 20000
+      }
+    },
+    {
+      "action_type": "GENERATE_LOAN_OFFER",
+      "payload": {
+        "request_id": "lr1",
+        "terms": {
+          "request_id": "lr1",
+          "borrower_info": {
+            "borrower_id": "b1",
+            "demographic_info": {
+              "education_years": 18,
+              "income": 48000,
+              "credit_score": 842.0
+            }
+          },
+          "tenor": 6.0,
+          "amount": 20000.0,
+          "borrower_collateral": 7889.0,
+          "num_annual_cmpnd_prds": 12,
+          "supporters": [
+            {
+              "supporter_id": "l4",
+              "recommendation_risk": {
+                "kumr_params": [16.949847030201536, 8.553278883166213],
+                "beta_params": [16.949847030201536, 8.553278883166213]
+              },
+              "demographic_info": null,
+              "trust_amount": 5000.0,
+              "apr_delta": 1.1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "action_type": "CONFIRM_LOAN_OFFER",
+      "payload": "lr1"
+    },
+    {
+      "action_type": "REPAY_LOAN",
+      "payload": {
+        "loan_id": "lr1",
+        "amount": 5000
+      }
+    }
+  ]
+}
