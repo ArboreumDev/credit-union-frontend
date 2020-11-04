@@ -109,9 +109,6 @@
     },
     "loan_requests": [],
     "loans": [],
-    "lenders": ["l1", "l2", "l3", "l4"],
-    "borrowers": ["b1", "b2"],
-    "supporters": ["l1", "l2", "l4", "l5"],
     "loan_offers": {}
   },
   "actions": [
