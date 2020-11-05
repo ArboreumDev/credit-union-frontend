@@ -9,7 +9,7 @@ function getRedirectLocation(session: Session, currentPage: string) {
   if (!session || !session.user) return "/"
   console.log(session)
   const user = session.user
-  if (!user.user_type) return "/onboarding"
+  if (!user.user_type || !user.onboarded) return "/onboarding"
   if (user.user_type) {
     if (currentPage === "/profile" || currentPage.includes("/dashboard"))
       return currentPage

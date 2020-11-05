@@ -7116,7 +7116,13 @@ export const ChangeUserCashBalanceDocument = gql`
 `
 export const CreateUserDocument = gql`
   mutation CreateUser($user: user_insert_input!) {
-    insert_user_one(object: $user) {
+    insert_user_one(
+      object: $user
+      on_conflict: {
+        constraint: user_email_key
+        update_columns: [name, phone, onboarded]
+      }
+    ) {
       id
       created_at
       email
