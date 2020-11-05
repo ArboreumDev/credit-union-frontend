@@ -104,31 +104,29 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
         </Text>
       </Center>
       <Box h="10px" />
-      <Box>
-        <StatGroup>
-          <Stat>
-            <StatLabel fontSize="md">
-              <Tooltip label="Amount">Amount</Tooltip>
-            </StatLabel>
-            <StatNumber fontSize="2xl">
-              <Currency amount={loanRequest.amount} />
-            </StatNumber>
-          </Stat>
-          <Stat>
-            <StatLabel fontSize="md">
-              <Tooltip label="Purpose">Purpose</Tooltip>
-            </StatLabel>
-            <StatNumber fontSize="2xl">{loanRequest.purpose}</StatNumber>
-          </Stat>
-          <Stat>
-            <StatLabel fontSize="md">
-              <Tooltip label="Annual Percentage Yield">IRR</Tooltip>
-            </StatLabel>
-            <StatNumber fontSize="2xl">13.5%</StatNumber>
-          </Stat>
-        </StatGroup>
+      <Stack>
+        <Stat>
+          <StatLabel fontSize="md">
+            <Tooltip label="Amount">Amount</Tooltip>
+          </StatLabel>
+          <StatNumber fontSize="2xl">
+            <Currency amount={loanRequest.amount} />
+          </StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel fontSize="md">
+            <Tooltip label="Purpose">Purpose</Tooltip>
+          </StatLabel>
+          <StatNumber fontSize="2xl">{loanRequest.purpose}</StatNumber>
+        </Stat>
+        <Stat>
+          <StatLabel fontSize="md">
+            <Tooltip label="Annual Percentage Yield">IRR</Tooltip>
+          </StatLabel>
+          <StatNumber fontSize="2xl">13.5%</StatNumber>
+        </Stat>
         <Box h="20px" />
-      </Box>
+      </Stack>
       <Center>
         <LoanRequestTable loanRequest={loanRequest} />
       </Center>
