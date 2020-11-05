@@ -88,23 +88,28 @@ export default class DbClient {
     requestId: string,
     email: string,
     amount: number,
+    name: string,
     info?: any
   ) => {
     const user = await this.getUserByEmail(email)
+    let userId
 
     if (!user) {
       const u = await this.sdk.CreateUser({
         user: {
           email,
           user_type: UserType.Lender,
+          onboarded: false,
+          name,
         },
       })
-      user.id = u.insert_user_one.id
-    }
+      userId = u.insert_user_one.id
+    } else userId = user.id
+
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
-        supporter_id: user.id,
+        supporter_id: userId,
         pledge_amount: amount,
         info: info,
       },
