@@ -17,6 +17,7 @@ export function getMockSession(user: User_Insert_Input): Session {
       loan_requests: null,
       pledge_requests: null,
       pledges: null,
+      active_loans: [],
     },
   }
 }
