@@ -170,17 +170,15 @@ export default class DbClient {
   }
 
   /**
-   * After seeing an offer, the borrower can accept it (or change it by adding guarantors, or adjusting the amount)
-   * Calling this function takes offer from loan_request.risk_calc_result and translates it to payables, receivables, encumbrances,...
-   * Also, advances loan_request status to 'live'
-   * It creates a batch of transactions to be fulfilled TODO
-   * It updates the balances of the lenders
+   * After seeing an offer, the borrower can accept it
+   *  - advances loan_request status to 'live'
+   *  - It updates the balances & shares of the lenders, supporters & the borrower
+   *  - saves the loan & its state
+   *  - It creates a batch of transactions to be fulfilled TODO
    * @param offer_key which of the possible different offers on the request should be executed
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
-    // query swarmai to get convert loan-terms to aset-updates for everyone involved
     const { request } = await this.sdk.GetLoanOffer({ request_id })
-    // const offer_params = data.loan_requests_by_pk
     const systemState = (await this.getSystemSummary()) as Scenario
     const latestOffer = request.risk_calc_result.latestOffer as LoanOffer
 
@@ -196,12 +194,7 @@ export default class DbClient {
       loanData: realizedLoan,
     })
 
-    // -> create payables receivables based on loan offer parameters
-    const variables = createStartLoanInputVariables(
-      request_id,
-      realizedLoan.schedule.borrower_view.total_payments.remain
-    )
-    return this.sdk.StartLoan(variables)
+    return this.sdk.StartLoan({ request_id })
   }
 
   make_repayment = async (loan_id: string, amount: number) => {
