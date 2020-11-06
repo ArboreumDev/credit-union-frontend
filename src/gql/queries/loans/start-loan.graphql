@@ -2,6 +2,7 @@ mutation StartLoan(
   $request_id: uuid!
   $payable: payables_insert_input!
   $receivable: receivables_insert_input!
+  $lenders: [loan_participants_insert_input!]!
 ) # $balanceUpdate: ??
 # $guarantors: [guarantorDetailsInput!]!
 {
@@ -21,5 +22,10 @@ mutation StartLoan(
     amount_total
     amount_received
     status
+  }
+  lenders: insert_loan_participants (objects: $lenders) {
+    returning {
+      lender_id
+    }
   }
 }
