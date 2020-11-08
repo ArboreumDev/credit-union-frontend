@@ -188,18 +188,23 @@ export default class DbClient {
       systemState,
       latestOffer
     )) as SystemUpdate
-    const realizedLoan = updated.loans.loans[request_id]
+    const realizedLoan: LoanInfo = updated.loans.loans[request_id]
 
+    // change balances & TODO corpus_shares
     await this.updatePortfolios(updated.accounts.updates)
+
+    // store newly returned LoanInfo on loan-request.loan
     await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: request_id,
       loanData: realizedLoan,
     })
 
-    // -> create payables receivables based on loan offer parameters
+    // register lenders with their spent amount in loan_participants
+    // & create payables & receivables based on loanInfo.schedule
     const variables = createStartLoanInputVariables(
       request_id,
-      realizedLoan.schedule.borrower_view.total_payments.remain
+      realizedLoan,
+      updated.accounts.updates
     )
     return this.sdk.StartLoan(variables)
   }
