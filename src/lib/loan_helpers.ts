@@ -67,28 +67,8 @@ export const createStartLoanInputVariables = (
     }
   })
 
-  // receivable to lenders, saves the total amount to be repaid (including interest)
-  const totalOwedAmount =
-    realizedLoan.schedule.borrower_view.total_payments.remain
-  const receivable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-  }
-  // receivable to supporters
-  // TODO
-  // payable of the borrower, saves the total amount to be repaid
-  const payable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-    amount_paid: 0,
-    pay_priority: 1,
-  }
   return {
     request_id,
-    payable,
-    receivable,
     lenders,
   }
 }
@@ -143,49 +123,4 @@ const generateUserBalanceUpdate = (
           corpus_share
         },`
   )
-}
-
-/**
- * transforms result of sdk.GetLoansByBorrowerAndStatus to a neat
- * object that can be used in the frontend
- */
-export const transformRequestToDashboardFormat = (loanRequest: any) => {
-  // const liveRequest = loanRequests.filter(x => x.status == LoanRequestStatus.live)[0]
-  if (loanRequest.status === LoanRequestStatus.active) {
-    // there can only be one request at the moment
-    return {
-      loanId: loanRequest.request_id,
-      status: loanRequest.status,
-      loanAmount: loanRequest.amount,
-      outstanding: {
-        principal: "TODO how do we calculate that?",
-        interest: "TODO how do we calculate that?",
-        total: loanRequest.payables[0].amount_remain || "todo",
-      },
-      amountRepaid: loanRequest.payables[0].amount_paid || 0,
-      nextPayment: {
-        nextDate:
-          "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
-        nextAmount: "TODO remainAmount / # of remaining payments",
-      },
-      lastPaid: loanRequest.payables[0].last_paid || "no payment yet",
-    }
-  } else if (
-    loanRequest.status === LoanRequestStatus.awaiting_borrower_confirmation
-  ) {
-    const offer = loanRequest.risk_calc_result.latestOffer
-    return {
-      loanId: loanRequest.request_id,
-      status: loanRequest.status,
-      desired_principal: loanRequest.amount,
-      offerParams: {
-        raw: loanRequest.risk_calc_result.latestOffer,
-        offered_principal: offer.amount,
-        interest: offer.interest,
-        totalAmount: offer.amount + offer.interest,
-        monthly: "TODO",
-        dueDate: "TDODO always in 6 months?",
-      },
-    }
-  }
 }

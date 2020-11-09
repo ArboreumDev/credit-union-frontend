@@ -52,31 +52,18 @@ afterAll(async () => {
 })
 
 describe("Loan Request Flow: confirm loan offer", () => {
-  test("triggers creation of payables, receivables", async () => {
+  test("sets loans status to live/active", async () => {
     const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
 
     // loan request status should be active
     expect(data.update_loan_requests_by_pk.status).toBe(
       LoanRequestStatus.active
     )
-
-    // payable should make sense
-    expect(data.insert_payables_one.amount_total).toBeGreaterThan(amount)
-    expect(data.insert_payables_one.amount_paid).toBe(0)
-
-    // receivable should match payable
-    expect(data.insert_receivables_one.amount_total).toBe(
-      data.insert_payables_one.amount_total
-    )
-    expect(data.insert_receivables_one.amount_received).toBe(
-      data.insert_payables_one.amount_paid
-    )
   })
 
   test.skip("The borrower user can see their repayment plan in the frontend", async () => {
     const user = await dbClient.getUserByEmail(BORROWER1.email)
     const loanRequest = user.loan_requests[0]
-    // TODO check lr payables
   })
 
   test.skip("The lender sees an updated breakdown of their portfolio ", async () => {
