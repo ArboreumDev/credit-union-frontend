@@ -1,9 +1,5 @@
-import { PortfolioUpdate, SupporterStatus } from "./types"
-import {
-  GetLoansByBorrowerAndStatusDocument,
-  GetLoansByBorrowerAndStatusQuery,
-  Sdk,
-} from "../gql/sdk"
+import { LoanInfo, PortfolioUpdate } from "./types"
+import { Loan_Participants_Insert_Input, Sdk } from "../gql/sdk"
 import { LoanRequestStatus } from "./types"
 import DbClient from "gql/db_client"
 
@@ -54,24 +50,26 @@ export const lenderBalanceToShareInLoan = (
 
 export const createStartLoanInputVariables = (
   request_id: string,
-  totalOwedAmount: number
+  realizedLoan: LoanInfo,
+  updates: PortfolioUpdate[]
 ) => {
-  const receivable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-  }
-  const payable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-    amount_paid: 0,
-    pay_priority: 1,
-  }
+  // input to loan_participants: register who has contributed how much
+  // note: anyone who has given away money is a lender here, so supporters too
+  const supporter_ids = realizedLoan.terms.supporters.map((x) => x.supporter_id)
+  const lenders = []
+  updates.forEach((update: PortfolioUpdate) => {
+    if (update.userId !== realizedLoan.terms.borrower_info.borrower_id) {
+      lenders.push({
+        lender_amount: -update.balanceDelta,
+        lender_id: update.userId,
+        loan_id: realizedLoan.request_id,
+      } as Loan_Participants_Insert_Input)
+    }
+  })
+
   return {
     request_id,
-    payable,
-    receivable,
+    lenders,
   }
 }
 

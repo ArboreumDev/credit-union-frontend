@@ -186,15 +186,24 @@ export default class DbClient {
       systemState,
       latestOffer
     )) as SystemUpdate
-    const realizedLoan = updated.loans.loans[request_id]
+    const realizedLoan: LoanInfo = updated.loans.loans[request_id]
 
+    // change balances & TODO corpus_shares
     await this.updatePortfolios(updated.accounts.updates)
+
+    // store newly returned LoanInfo on loan-request.loan
     await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: request_id,
       loanData: realizedLoan,
     })
 
-    return this.sdk.StartLoan({ request_id })
+    // register lenders with their spent amount in loan_participants
+    const variables = createStartLoanInputVariables(
+      request_id,
+      realizedLoan,
+      updated.accounts.updates
+    )
+    return this.sdk.StartLoan(variables)
   }
 
   make_repayment = async (loan_id: string, amount: number) => {

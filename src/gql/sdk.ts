@@ -1472,11 +1472,12 @@ export type Jsonb_Comparison_Exp = {
 /** columns and relationships of "loan_participants" */
 export type Loan_Participants = {
   __typename?: "loan_participants"
-  lender_amount: Scalars["float8"]
+  lender_amount: Scalars["Int"]
   lender_id: Scalars["uuid"]
   loan_id: Scalars["uuid"]
   /** An object relationship */
   loan_request: Loan_Requests
+  percentage?: Maybe<Scalars["Int"]>
   /** An object relationship */
   user: User
 }
@@ -1535,11 +1536,13 @@ export type Loan_Participants_Arr_Rel_Insert_Input = {
 export type Loan_Participants_Avg_Fields = {
   __typename?: "loan_participants_avg_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by avg() on columns of table "loan_participants" */
 export type Loan_Participants_Avg_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** Boolean expression to filter rows from the table "loan_participants". All fields are combined with a logical 'AND'. */
@@ -1547,10 +1550,11 @@ export type Loan_Participants_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Loan_Participants_Bool_Exp>>>
   _not?: Maybe<Loan_Participants_Bool_Exp>
   _or?: Maybe<Array<Maybe<Loan_Participants_Bool_Exp>>>
-  lender_amount?: Maybe<Float8_Comparison_Exp>
+  lender_amount?: Maybe<Int_Comparison_Exp>
   lender_id?: Maybe<Uuid_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Loan_Requests_Bool_Exp>
+  percentage?: Maybe<Int_Comparison_Exp>
   user?: Maybe<User_Bool_Exp>
 }
 
@@ -1562,24 +1566,27 @@ export enum Loan_Participants_Constraint {
 
 /** input type for incrementing integer column in table "loan_participants" */
 export type Loan_Participants_Inc_Input = {
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["Int"]>
 }
 
 /** input type for inserting data into table "loan_participants" */
 export type Loan_Participants_Insert_Input = {
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
+  percentage?: Maybe<Scalars["Int"]>
   user?: Maybe<User_Obj_Rel_Insert_Input>
 }
 
 /** aggregate max on columns */
 export type Loan_Participants_Max_Fields = {
   __typename?: "loan_participants_max_fields"
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
+  percentage?: Maybe<Scalars["Int"]>
 }
 
 /** order by max() on columns of table "loan_participants" */
@@ -1587,14 +1594,16 @@ export type Loan_Participants_Max_Order_By = {
   lender_amount?: Maybe<Order_By>
   lender_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
 export type Loan_Participants_Min_Fields = {
   __typename?: "loan_participants_min_fields"
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
+  percentage?: Maybe<Scalars["Int"]>
 }
 
 /** order by min() on columns of table "loan_participants" */
@@ -1602,6 +1611,7 @@ export type Loan_Participants_Min_Order_By = {
   lender_amount?: Maybe<Order_By>
   lender_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** response of any mutation on the table "loan_participants" */
@@ -1632,6 +1642,7 @@ export type Loan_Participants_Order_By = {
   lender_id?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
+  percentage?: Maybe<Order_By>
   user?: Maybe<User_Order_By>
 }
 
@@ -1649,57 +1660,68 @@ export enum Loan_Participants_Select_Column {
   LenderId = "lender_id",
   /** column name */
   LoanId = "loan_id",
+  /** column name */
+  Percentage = "percentage",
 }
 
 /** input type for updating data in table "loan_participants" */
 export type Loan_Participants_Set_Input = {
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
   lender_id?: Maybe<Scalars["uuid"]>
   loan_id?: Maybe<Scalars["uuid"]>
+  percentage?: Maybe<Scalars["Int"]>
 }
 
 /** aggregate stddev on columns */
 export type Loan_Participants_Stddev_Fields = {
   __typename?: "loan_participants_stddev_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev() on columns of table "loan_participants" */
 export type Loan_Participants_Stddev_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate stddev_pop on columns */
 export type Loan_Participants_Stddev_Pop_Fields = {
   __typename?: "loan_participants_stddev_pop_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_pop() on columns of table "loan_participants" */
 export type Loan_Participants_Stddev_Pop_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate stddev_samp on columns */
 export type Loan_Participants_Stddev_Samp_Fields = {
   __typename?: "loan_participants_stddev_samp_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_samp() on columns of table "loan_participants" */
 export type Loan_Participants_Stddev_Samp_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate sum on columns */
 export type Loan_Participants_Sum_Fields = {
   __typename?: "loan_participants_sum_fields"
-  lender_amount?: Maybe<Scalars["float8"]>
+  lender_amount?: Maybe<Scalars["Int"]>
+  percentage?: Maybe<Scalars["Int"]>
 }
 
 /** order by sum() on columns of table "loan_participants" */
 export type Loan_Participants_Sum_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** update columns of table "loan_participants" */
@@ -1710,39 +1732,47 @@ export enum Loan_Participants_Update_Column {
   LenderId = "lender_id",
   /** column name */
   LoanId = "loan_id",
+  /** column name */
+  Percentage = "percentage",
 }
 
 /** aggregate var_pop on columns */
 export type Loan_Participants_Var_Pop_Fields = {
   __typename?: "loan_participants_var_pop_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_pop() on columns of table "loan_participants" */
 export type Loan_Participants_Var_Pop_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate var_samp on columns */
 export type Loan_Participants_Var_Samp_Fields = {
   __typename?: "loan_participants_var_samp_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_samp() on columns of table "loan_participants" */
 export type Loan_Participants_Var_Samp_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** aggregate variance on columns */
 export type Loan_Participants_Variance_Fields = {
   __typename?: "loan_participants_variance_fields"
   lender_amount?: Maybe<Scalars["Float"]>
+  percentage?: Maybe<Scalars["Float"]>
 }
 
 /** order by variance() on columns of table "loan_participants" */
 export type Loan_Participants_Variance_Order_By = {
   lender_amount?: Maybe<Order_By>
+  percentage?: Maybe<Order_By>
 }
 
 /** expression to compare columns of type loan_request_status. All fields are combined with logical 'AND'. */
@@ -6576,6 +6606,12 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           { __typename?: "supporters" } & PledgeFieldsFragment
         >
         pledges: Array<{ __typename?: "supporters" } & PledgeFieldsFragment>
+        active_loans: Array<
+          { __typename?: "loan_participants" } & Pick<
+            Loan_Participants,
+            "loan_id" | "lender_amount"
+          >
+        >
       }
   >
 }
@@ -6821,6 +6857,7 @@ export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
 
 export type StartLoanMutationVariables = Exact<{
   request_id: Scalars["uuid"]
+  lenders: Array<Loan_Participants_Insert_Input>
 }>
 
 export type StartLoanMutation = { __typename?: "mutation_root" } & {
@@ -6829,6 +6866,16 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
       Loan_Requests,
       "request_id" | "status"
     >
+  >
+  lenders?: Maybe<
+    { __typename?: "loan_participants_mutation_response" } & {
+      returning: Array<
+        { __typename?: "loan_participants" } & Pick<
+          Loan_Participants,
+          "lender_id"
+        >
+      >
+    }
   >
 }
 
@@ -7146,6 +7193,12 @@ export const GetUserByEmailDocument = gql`
       pledges: supporters(where: { status: { _eq: "confirmed" } }) {
         ...pledgeFields
       }
+      active_loans: loan_participants(
+        where: { loan_request: { status: { _eq: "live" } } }
+      ) {
+        loan_id
+        lender_amount
+      }
     }
   }
   ${PledgeFieldsFragmentDoc}
@@ -7352,13 +7405,21 @@ export const GetLoansByBorrowerAndStatusDocument = gql`
   }
 `
 export const StartLoanDocument = gql`
-  mutation StartLoan($request_id: uuid!) {
+  mutation StartLoan(
+    $request_id: uuid!
+    $lenders: [loan_participants_insert_input!]!
+  ) {
     update_loan_requests_by_pk(
       pk_columns: { request_id: $request_id }
       _set: { status: "live" }
     ) {
       request_id
       status
+    }
+    lenders: insert_loan_participants(objects: $lenders) {
+      returning {
+        lender_id
+      }
     }
   }
 `

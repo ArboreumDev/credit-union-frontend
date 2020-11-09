@@ -1,10 +1,12 @@
 import borrower from "components/dashboard/borrower"
+import request from "graphql-request"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { LoanRequestStatus, CalculatedRisk, LoanInfo } from "lib/types"
 import {
   BORROWER1,
   LENDER1,
   LENDER2,
+  SUPPORTER1,
   SUPPORTER2,
 } from "../../fixtures/basic_network"
 import {
@@ -105,6 +107,29 @@ describe("Loan Request Flow: confirm loan offer", () => {
   test("the loan shows up in subsequent queries to the corpus Data", async () => {
     const system = await dbClient.getSystemSummary()
     expect(system.loans).toHaveProperty(requestId)
+  })
+
+  test("lenders and supporters are registered with the loan, their contributed amount and the apr", async () => {
+    // verify both lender and supporter have an entry with the loan
+    const lender = await dbClient.getUserByEmail(LENDER1.email)
+    expect(lender.active_loans.map((l) => l.loan_id)).toContain(requestId)
+
+    const supporter = await dbClient.getUserByEmail(SUPPORTER2.email)
+    expect(supporter.active_loans.map((l) => l.loan_id)).toContain(requestId)
+
+    // verify their terms differ
+    const lenderEntry = lender.active_loans.filter(
+      (l) => l.loan_id == requestId
+    )[0]
+    const supporterEntry = supporter.active_loans.filter(
+      (l) => l.loan_id == requestId
+    )[0]
+
+    // verify that amount is correct
+    expect(supporterEntry.lender_amount).toBe(
+      supporter.pledges.filter((p) => p.request_id == requestId)[0]
+        .pledge_amount
+    )
   })
 
   // describe("When the borrower makes a repayment", () => {
