@@ -5,6 +5,7 @@ import {
   BORROWER1,
   SUPPORTER1,
   SUPPORTER2,
+  SUPPORTER3,
 } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
 import { getUserPortfolio } from "./common/test_helpers"
@@ -22,6 +23,7 @@ describe("Basic loan request flow for an accepted loan", () => {
   const amount = 100
   const pledgeAmount1 = amount / 2
   const pledgeAmount2 = amount / 4
+  const pledgeAmount3 = 10
   const purpose = "go see another movie"
   let requestId: string
   let balancesBefore
@@ -64,19 +66,22 @@ describe("Basic loan request flow for an accepted loan", () => {
     expect(loanRequest.supporters[0].pledge_amount).toBe(pledgeAmount1)
   })
 
-  test.skip("users can register supporters that are not on the network yet", async () => {
-    // those should be put into the system by adding an edge of status unknown with the
-    // other_user_mail field set to the other user
-    // TODO add loan request with unknown supporter email
-    //  - TODO dbClient createLoanRequest needs to check if supporter exists
-    //     -> yes: create entry in supporters table
-    //     -> no: create entry in edges table with status unknown
-    // TODO after we have created a new user, check edges tables for unknown-edges and
-    // create the create the corresponding pledge-requests
-    // TEST structure
-    // create loan-request with SUPPorter3-email as supporterInfo
-    // create user (SUPPORTER3)
-    // verify new user sees pledge-request on dashboard
+  test("users can register supporters that are not on the network yet", async () => {
+    await dbClient.addSupporter(
+      requestId,
+      SUPPORTER3.email,
+      pledgeAmount3,
+      "SomeName"
+    )
+    // new user signs up
+    await sdk.CreateUser({ user: SUPPORTER3 })
+
+    // verify user is registered with the correct name
+    const user = await dbClient.getUserByEmail(SUPPORTER3.email)
+    expect(user.name).toBe(SUPPORTER3.name)
+
+    // verify user sees the pledge-request
+    expect(user.pledge_requests[0].pledge_amount).toBe(pledgeAmount3)
   })
 
   test("supporters see the request for a pledge with basic info in their dashboard", async () => {

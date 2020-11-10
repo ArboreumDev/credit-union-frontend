@@ -1,9 +1,7 @@
 mutation StartLoan(
   $request_id: uuid!
-  $payable: payables_insert_input!
-  $receivable: receivables_insert_input!
-) # $balanceUpdate: ??
-# $guarantors: [guarantorDetailsInput!]!
+  $lenders: [loan_participants_insert_input!]!
+)
 {
   update_loan_requests_by_pk(
     pk_columns: { request_id: $request_id }
@@ -12,14 +10,9 @@ mutation StartLoan(
     request_id
     status
   }
-  insert_payables_one(object: $payable) {
-    amount_total
-    amount_paid
-  }
-  # TODO decrease lender-balances
-  insert_receivables_one(object: $receivable) {
-    amount_total
-    amount_received
-    status
+  lenders: insert_loan_participants (objects: $lenders) {
+    returning {
+      lender_id
+    }
   }
 }

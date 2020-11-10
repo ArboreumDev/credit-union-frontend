@@ -28,13 +28,13 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   {
     key: "Outstanding Principal",
     // TODO: Fix these when adding repayment logic
-    value: <Currency amount={loan.outstandingPrincipal} />,
+    value: <Currency amount={loan.totalOutStandingDebt} />,
   },
   {
     key: "Outstanding Interest",
     value: <Currency amount={loan.interestAmount + 1} />,
   },
-  { key: "Last Repayment Date", value: "30 August 2020" },
+  { key: "Last Repayment Date", value: "30th October 2020" },
   {
     key: "Next Repayment Amount",
     value: <Currency amount={loan.nextPayment} />,
@@ -42,7 +42,7 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   },
   {
     key: "Next Repayment Due Date",
-    value: "30 September 2020",
+    value: "30th November 2020",
     color: "red.500",
   },
   {

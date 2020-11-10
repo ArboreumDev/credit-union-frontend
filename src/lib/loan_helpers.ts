@@ -1,9 +1,5 @@
-import { PortfolioUpdate, SupporterStatus } from "./types"
-import {
-  GetLoansByBorrowerAndStatusDocument,
-  GetLoansByBorrowerAndStatusQuery,
-  Sdk,
-} from "../gql/sdk"
+import { LoanInfo, PortfolioUpdate } from "./types"
+import { Loan_Participants_Insert_Input, Sdk } from "../gql/sdk"
 import { LoanRequestStatus } from "./types"
 import DbClient from "gql/db_client"
 
@@ -54,24 +50,26 @@ export const lenderBalanceToShareInLoan = (
 
 export const createStartLoanInputVariables = (
   request_id: string,
-  totalOwedAmount: number
+  realizedLoan: LoanInfo,
+  updates: PortfolioUpdate[]
 ) => {
-  const receivable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-  }
-  const payable = {
-    loan_id: request_id,
-    amount_total: totalOwedAmount,
-    amount_remain: totalOwedAmount,
-    amount_paid: 0,
-    pay_priority: 1,
-  }
+  // input to loan_participants: register who has contributed how much
+  // note: anyone who has given away money is a lender here, so supporters too
+  const supporter_ids = realizedLoan.terms.supporters.map((x) => x.supporter_id)
+  const lenders = []
+  updates.forEach((update: PortfolioUpdate) => {
+    if (update.userId !== realizedLoan.terms.borrower_info.borrower_id) {
+      lenders.push({
+        lender_amount: -update.balanceDelta,
+        lender_id: update.userId,
+        loan_id: realizedLoan.request_id,
+      } as Loan_Participants_Insert_Input)
+    }
+  })
+
   return {
     request_id,
-    payable,
-    receivable,
+    lenders,
   }
 }
 
@@ -125,49 +123,4 @@ const generateUserBalanceUpdate = (
           corpus_share
         },`
   )
-}
-
-/**
- * transforms result of sdk.GetLoansByBorrowerAndStatus to a neat
- * object that can be used in the frontend
- */
-export const transformRequestToDashboardFormat = (loanRequest: any) => {
-  // const liveRequest = loanRequests.filter(x => x.status == LoanRequestStatus.live)[0]
-  if (loanRequest.status === LoanRequestStatus.active) {
-    // there can only be one request at the moment
-    return {
-      loanId: loanRequest.request_id,
-      status: loanRequest.status,
-      loanAmount: loanRequest.amount,
-      outstanding: {
-        principal: "TODO how do we calculate that?",
-        interest: "TODO how do we calculate that?",
-        total: loanRequest.payables[0].amount_remain || "todo",
-      },
-      amountRepaid: loanRequest.payables[0].amount_paid || 0,
-      nextPayment: {
-        nextDate:
-          "TODO end of current month if lastPayment was last month, else end of next month that it bigger than due date",
-        nextAmount: "TODO remainAmount / # of remaining payments",
-      },
-      lastPaid: loanRequest.payables[0].last_paid || "no payment yet",
-    }
-  } else if (
-    loanRequest.status === LoanRequestStatus.awaiting_borrower_confirmation
-  ) {
-    const offer = loanRequest.risk_calc_result.latestOffer
-    return {
-      loanId: loanRequest.request_id,
-      status: loanRequest.status,
-      desired_principal: loanRequest.amount,
-      offerParams: {
-        raw: loanRequest.risk_calc_result.latestOffer,
-        offered_principal: offer.amount,
-        interest: offer.interest,
-        totalAmount: offer.amount + offer.interest,
-        monthly: "TODO",
-        dueDate: "TDODO always in 6 months?",
-      },
-    }
-  }
 }

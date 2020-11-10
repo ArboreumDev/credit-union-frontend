@@ -10,6 +10,7 @@ query GetUserByEmail($email: String!) {
     created_at
     kyc_approved
     demographic_info
+    onboarded
     loan_requests {
       request_id
       confirmation_date
@@ -36,6 +37,10 @@ query GetUserByEmail($email: String!) {
     }
     pledges: supporters(where: { status: { _eq: "confirmed" } }) {
       ...pledgeFields
+    }
+    active_loans: loan_participants(where: { loan_request: { status: {_eq: "live" } } }) {
+      loan_id
+      lender_amount
     }
   }
 }

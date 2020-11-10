@@ -23,6 +23,7 @@ import {
   LoanOffer,
   LoanRequestStatus,
   SystemUpdate,
+  UserType,
 } from "../lib/types"
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
@@ -87,13 +88,28 @@ export default class DbClient {
     requestId: string,
     email: string,
     amount: number,
+    name: string,
     info?: any
   ) => {
     const user = await this.getUserByEmail(email)
+    let userId
+
+    if (!user) {
+      const u = await this.sdk.CreateUser({
+        user: {
+          email,
+          user_type: UserType.Lender,
+          onboarded: false,
+          name,
+        },
+      })
+      userId = u.insert_user_one.id
+    } else userId = user.id
+
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
-        supporter_id: user.id,
+        supporter_id: userId,
         pledge_amount: amount,
         info: info,
       },
@@ -160,17 +176,15 @@ export default class DbClient {
   }
 
   /**
-   * After seeing an offer, the borrower can accept it (or change it by adding guarantors, or adjusting the amount)
-   * Calling this function takes offer from loan_request.risk_calc_result and translates it to payables, receivables, encumbrances,...
-   * Also, advances loan_request status to 'live'
-   * It creates a batch of transactions to be fulfilled TODO
-   * It updates the balances of the lenders
+   * After seeing an offer, the borrower can accept it
+   *  - advances loan_request status to 'live'
+   *  - It updates the balances & shares of the lenders, supporters & the borrower
+   *  - saves the loan & its state
+   *  - It creates a batch of transactions to be fulfilled TODO
    * @param offer_key which of the possible different offers on the request should be executed
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
-    // query swarmai to get convert loan-terms to aset-updates for everyone involved
     const { request } = await this.sdk.GetLoanOffer({ request_id })
-    // const offer_params = data.loan_requests_by_pk
     const systemState = (await this.getSystemSummary()) as Scenario
     const latestOffer = request.risk_calc_result.latestOffer as LoanOffer
 
@@ -178,18 +192,22 @@ export default class DbClient {
       systemState,
       latestOffer
     )) as SystemUpdate
-    const realizedLoan = updated.loans.loans[request_id]
+    const realizedLoan: LoanInfo = updated.loans.loans[request_id]
 
+    // change balances & TODO corpus_shares
     await this.updatePortfolios(updated.accounts.updates)
+
+    // store newly returned LoanInfo on loan-request.loan
     await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: request_id,
       loanData: realizedLoan,
     })
 
-    // -> create payables receivables based on loan offer parameters
+    // register lenders with their spent amount in loan_participants
     const variables = createStartLoanInputVariables(
       request_id,
-      realizedLoan.schedule.borrower_view.total_payments.remain
+      realizedLoan,
+      updated.accounts.updates
     )
     return this.sdk.StartLoan(variables)
   }
@@ -277,15 +295,27 @@ export default class DbClient {
     const loans = {}
     const loan_offers = {}
     loanRequests.forEach((lr) => {
-      loan_requests[lr.request_id] = lr.risk_calc_result[
-        "requestData"
-      ] as LoanRequestInfo
-      if (lr.status == LoanRequestStatus.active) {
-        loans[lr.request_id] = lr.loan as LoanInfo
-      } else {
-        loan_offers[lr.request_id] = lr.risk_calc_result[
-          "latestOffer"
-        ] as LoanInfo
+      // exclude loan-requests where the borrower is still collecting supporters
+      switch (lr.status) {
+        case LoanRequestStatus.active:
+          // should be registered in loans
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
+        case LoanRequestStatus.awaiting_borrower_confirmation:
+          // should be registered in loan_offers
+          loan_offers[lr.request_id] = lr.risk_calc_result[
+            "latestOffer"
+          ] as LoanInfo
+          // we could also still keep them as loan-requests, but that doesnt really make sense
+          loan_requests[lr.request_id] = lr.risk_calc_result[
+            "requestData"
+          ] as LoanRequestInfo
+          break
+        case LoanRequestStatus.initiated:
+          // borrower is yet collecting information
+          break
+        default:
+          throw "unprocessed request status"
       }
     })
 

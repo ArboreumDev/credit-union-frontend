@@ -61,17 +61,15 @@ export default class LoanModel {
     return corpus_interest + supporter_interest
   }
 
-  get totalAmountToRepay() {
-    return this.borrowerView.total_payments.remain
+  get percRepaid() {
+    return dec_to_perc(
+      this.amountRepaid / (this.totalOutStandingDebt + this.amountRepaid)
+    )
   }
-
   get amountRepaid() {
     return this.borrowerView.total_payments.paid
   }
-  get percRepaid() {
-    return dec_to_perc(this.amountRepaid / this.amount)
-  }
-  get outstandingPrincipal() {
+  get totalOutStandingDebt() {
     return this.borrowerView.total_payments.remain
   }
   get outstandingInterest() {

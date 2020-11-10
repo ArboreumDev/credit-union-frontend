@@ -16,7 +16,7 @@ import { LoanRequest } from "lib/types"
 import { useRouter } from "next/router"
 
 interface FormData {
-  // name: string
+  name: string
   email: string
   amount: number
 }
@@ -33,6 +33,7 @@ export default function AddSupporter({ loanRequest }: Props) {
       requestId: loanRequest.request_id,
       email: data.email,
       amount: data.amount,
+      name: data.name,
       info: data,
     })
       .then(async (res) => {
@@ -73,7 +74,7 @@ export default function AddSupporter({ loanRequest }: Props) {
           <Box flex={1}>
             I have known the supporter since
             <Input
-              placeholder="e.g. September 2005"
+              placeholder="e.g. September 2015"
               name="known_since"
               size="md"
               ref={register({ required: true })}

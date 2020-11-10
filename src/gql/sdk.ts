@@ -5713,6 +5713,7 @@ export type User = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name: Scalars["String"]
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone: Scalars["String"]
   /** An array relationship */
   receivables: Array<Receivables>
@@ -6034,6 +6035,7 @@ export type User_Bool_Exp = {
   max_exposure?: Maybe<Float_Comparison_Exp>
   min_interest_rate?: Maybe<Float_Comparison_Exp>
   name?: Maybe<String_Comparison_Exp>
+  onboarded?: Maybe<Boolean_Comparison_Exp>
   phone?: Maybe<String_Comparison_Exp>
   receivables?: Maybe<Receivables_Bool_Exp>
   recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
@@ -6097,6 +6099,7 @@ export type User_Insert_Input = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
   recommendationRisksByRecommenderId?: Maybe<
@@ -6212,6 +6215,7 @@ export type User_Order_By = {
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   name?: Maybe<Order_By>
+  onboarded?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
   recommendationRisksByRecommenderId_aggregate?: Maybe<
@@ -6257,6 +6261,8 @@ export enum User_Select_Column {
   /** column name */
   Name = "name",
   /** column name */
+  Onboarded = "onboarded",
+  /** column name */
   Phone = "phone",
   /** column name */
   UpdatedAt = "updated_at",
@@ -6278,6 +6284,7 @@ export type User_Set_Input = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user_number?: Maybe<Scalars["Int"]>
@@ -6395,6 +6402,8 @@ export enum User_Update_Column {
   MinInterestRate = "min_interest_rate",
   /** column name */
   Name = "name",
+  /** column name */
+  Onboarded = "onboarded",
   /** column name */
   Phone = "phone",
   /** column name */
@@ -6575,6 +6584,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "created_at"
       | "kyc_approved"
       | "demographic_info"
+      | "onboarded"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -6606,6 +6616,12 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           { __typename?: "supporters" } & PledgeFieldsFragment
         >
         pledges: Array<{ __typename?: "supporters" } & PledgeFieldsFragment>
+        active_loans: Array<
+          { __typename?: "loan_participants" } & Pick<
+            Loan_Participants,
+            "loan_id" | "lender_amount"
+          >
+        >
       }
   >
 }
@@ -6729,6 +6745,17 @@ export type GetCorpusRecommendationRisksQuery = {
   >
 }
 
+export type GetLastLiveLoanQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLastLiveLoanQuery = { __typename?: "query_root" } & {
+  last_live_loan: Array<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "request_id" | "status" | "loan"
+    >
+  >
+}
+
 export type GetLenderAllocationInputQueryVariables = Exact<{
   [key: string]: never
 }>
@@ -6834,26 +6861,13 @@ export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "amount" | "status" | "risk_calc_result"
-    > & {
-        payables: Array<
-          { __typename?: "payables" } & Pick<
-            Payables,
-            | "pay_frequency"
-            | "due_date"
-            | "last_paid"
-            | "amount_total"
-            | "amount_paid"
-            | "amount_remain"
-          >
-        >
-      }
+    >
   >
 }
 
 export type StartLoanMutationVariables = Exact<{
   request_id: Scalars["uuid"]
-  payable: Payables_Insert_Input
-  receivable: Receivables_Insert_Input
+  lenders: Array<Loan_Participants_Insert_Input>
 }>
 
 export type StartLoanMutation = { __typename?: "mutation_root" } & {
@@ -6863,14 +6877,15 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
       "request_id" | "status"
     >
   >
-  insert_payables_one?: Maybe<
-    { __typename?: "payables" } & Pick<Payables, "amount_total" | "amount_paid">
-  >
-  insert_receivables_one?: Maybe<
-    { __typename?: "receivables" } & Pick<
-      Receivables,
-      "amount_total" | "amount_received" | "status"
-    >
+  lenders?: Maybe<
+    { __typename?: "loan_participants_mutation_response" } & {
+      returning: Array<
+        { __typename?: "loan_participants" } & Pick<
+          Loan_Participants,
+          "lender_id"
+        >
+      >
+    }
   >
 }
 
@@ -7095,7 +7110,13 @@ export const ChangeUserCashBalanceDocument = gql`
 `
 export const CreateUserDocument = gql`
   mutation CreateUser($user: user_insert_input!) {
-    insert_user_one(object: $user) {
+    insert_user_one(
+      object: $user
+      on_conflict: {
+        constraint: user_email_key
+        update_columns: [name, phone, onboarded]
+      }
+    ) {
       id
       created_at
       email
@@ -7161,6 +7182,7 @@ export const GetUserByEmailDocument = gql`
       created_at
       kyc_approved
       demographic_info
+      onboarded
       loan_requests {
         request_id
         confirmation_date
@@ -7187,6 +7209,12 @@ export const GetUserByEmailDocument = gql`
       }
       pledges: supporters(where: { status: { _eq: "confirmed" } }) {
         ...pledgeFields
+      }
+      active_loans: loan_participants(
+        where: { loan_request: { status: { _eq: "live" } } }
+      ) {
+        loan_id
+        lender_amount
       }
     }
   }
@@ -7286,6 +7314,15 @@ export const GetCorpusRecommendationRisksDocument = gql`
     }
   }
 `
+export const GetLastLiveLoanDocument = gql`
+  query GetLastLiveLoan {
+    last_live_loan: loan_requests(where: { status: { _eq: "live" } }) {
+      request_id
+      status
+      loan
+    }
+  }
+`
 export const GetLenderAllocationInputDocument = gql`
   query GetLenderAllocationInput {
     lenders: user(where: { user_type: { _eq: "lender" } }) {
@@ -7381,22 +7418,13 @@ export const GetLoansByBorrowerAndStatusDocument = gql`
       amount
       status
       risk_calc_result
-      payables {
-        pay_frequency
-        due_date
-        last_paid
-        amount_total
-        amount_paid
-        amount_remain
-      }
     }
   }
 `
 export const StartLoanDocument = gql`
   mutation StartLoan(
     $request_id: uuid!
-    $payable: payables_insert_input!
-    $receivable: receivables_insert_input!
+    $lenders: [loan_participants_insert_input!]!
   ) {
     update_loan_requests_by_pk(
       pk_columns: { request_id: $request_id }
@@ -7405,14 +7433,10 @@ export const StartLoanDocument = gql`
       request_id
       status
     }
-    insert_payables_one(object: $payable) {
-      amount_total
-      amount_paid
-    }
-    insert_receivables_one(object: $receivable) {
-      amount_total
-      amount_received
-      status
+    lenders: insert_loan_participants(objects: $lenders) {
+      returning {
+        lender_id
+      }
     }
   }
 `
@@ -7668,6 +7692,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetCorpusRecommendationRisksQuery>(
           print(GetCorpusRecommendationRisksDocument),
+          variables
+        )
+      )
+    },
+    GetLastLiveLoan(
+      variables?: GetLastLiveLoanQueryVariables
+    ): Promise<GetLastLiveLoanQuery> {
+      return withWrapper(() =>
+        client.request<GetLastLiveLoanQuery>(
+          print(GetLastLiveLoanDocument),
           variables
         )
       )

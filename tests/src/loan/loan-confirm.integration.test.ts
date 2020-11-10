@@ -1,10 +1,12 @@
 import borrower from "components/dashboard/borrower"
+import request from "graphql-request"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { LoanRequestStatus, CalculatedRisk, LoanInfo } from "lib/types"
 import {
   BORROWER1,
   LENDER1,
   LENDER2,
+  SUPPORTER1,
   SUPPORTER2,
 } from "../../fixtures/basic_network"
 import {
@@ -50,31 +52,18 @@ afterAll(async () => {
 })
 
 describe("Loan Request Flow: confirm loan offer", () => {
-  test("triggers creation of payables, receivables", async () => {
+  test("sets loans status to live/active", async () => {
     const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
 
     // loan request status should be active
     expect(data.update_loan_requests_by_pk.status).toBe(
       LoanRequestStatus.active
     )
-
-    // payable should make sense
-    expect(data.insert_payables_one.amount_total).toBeGreaterThan(amount)
-    expect(data.insert_payables_one.amount_paid).toBe(0)
-
-    // receivable should match payable
-    expect(data.insert_receivables_one.amount_total).toBe(
-      data.insert_payables_one.amount_total
-    )
-    expect(data.insert_receivables_one.amount_received).toBe(
-      data.insert_payables_one.amount_paid
-    )
   })
 
   test.skip("The borrower user can see their repayment plan in the frontend", async () => {
     const user = await dbClient.getUserByEmail(BORROWER1.email)
     const loanRequest = user.loan_requests[0]
-    // TODO check lr payables
   })
 
   test.skip("The lender sees an updated breakdown of their portfolio ", async () => {
@@ -118,6 +107,29 @@ describe("Loan Request Flow: confirm loan offer", () => {
   test("the loan shows up in subsequent queries to the corpus Data", async () => {
     const system = await dbClient.getSystemSummary()
     expect(system.loans).toHaveProperty(requestId)
+  })
+
+  test("lenders and supporters are registered with the loan, their contributed amount and the apr", async () => {
+    // verify both lender and supporter have an entry with the loan
+    const lender = await dbClient.getUserByEmail(LENDER1.email)
+    expect(lender.active_loans.map((l) => l.loan_id)).toContain(requestId)
+
+    const supporter = await dbClient.getUserByEmail(SUPPORTER2.email)
+    expect(supporter.active_loans.map((l) => l.loan_id)).toContain(requestId)
+
+    // verify their terms differ
+    const lenderEntry = lender.active_loans.filter(
+      (l) => l.loan_id == requestId
+    )[0]
+    const supporterEntry = supporter.active_loans.filter(
+      (l) => l.loan_id == requestId
+    )[0]
+
+    // verify that amount is correct
+    expect(supporterEntry.lender_amount).toBe(
+      supporter.pledges.filter((p) => p.request_id == requestId)[0]
+        .pledge_amount
+    )
   })
 
   // describe("When the borrower makes a repayment", () => {
