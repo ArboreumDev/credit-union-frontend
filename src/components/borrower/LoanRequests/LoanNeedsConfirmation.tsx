@@ -61,7 +61,7 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
       <Flex>
         <Box flex={0.5}>Total due in {loan.tenor} months</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={loan.outstandingPrincipal} />
+          <Currency amount={loan.totalOutStandingDebt} />
         </Box>
       </Flex>
       <Flex>

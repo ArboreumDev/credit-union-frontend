@@ -63,7 +63,7 @@ export default class LoanModel {
 
   get percRepaid() {
     return dec_to_perc(
-      this.amountRepaid / (this.outstandingPrincipal + this.amountRepaid)
+      this.amountRepaid / (this.totalOutStandingDebt + this.amountRepaid)
     )
   }
   get amountRepaid() {
