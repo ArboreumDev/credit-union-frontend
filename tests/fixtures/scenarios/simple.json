@@ -125,7 +125,18 @@
         "userId": "b1",
         "loan_id": "lr1",
         "amount": 20000,
-        "supporters": { "l4": 5000 }
+        "supporters": [
+          {
+            "id": "l4",
+            "pledge_amount": 5000
+          }
+        ]
+      }
+    },
+    {
+      "action_type": "ACCEPT_LOAN",
+      "payload": {
+        "loan_id": "lr1"
       }
     },
     {

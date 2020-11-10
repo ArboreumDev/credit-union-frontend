@@ -110,7 +110,7 @@ export default class DbClient {
         requestData: loans.loan_requests[requestId],
       },
     }
-    // console.log('udpated', payload)
+    // console.log('loanoffer udpated', requestId)
     return this.sdk.UpdateLoanRequestWithOffer(payload)
   }
 

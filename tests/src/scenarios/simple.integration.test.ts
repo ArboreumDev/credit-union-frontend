@@ -27,15 +27,15 @@ async function generateOffer({ userId, loan_id, amount, supporters }) {
   lrMap[loan_id] = request.request_id
 
   // confirm supporter and trigger the loan offer generation
-  for (const sId in supporters) {
-    const supporter = users[sId]
-    await addAndConfirmSupporter(
-      dbClient,
-      request.request_id,
-      supporter.id,
-      amount * MIN_SUPPORT_RATIO
-    )
-  }
+  supporters.map(
+    async (s) =>
+      await addAndConfirmSupporter(
+        dbClient,
+        request.request_id,
+        users[s.id].id,
+        s.pledge_amount
+      )
+  )
 }
 
 async function repayLoan({ loan_id, amount }) {
@@ -43,9 +43,15 @@ async function repayLoan({ loan_id, amount }) {
   const request = await dbClient.make_repayment(requestId, amount)
 }
 
+async function acceptLoan({ loan_id }) {
+  const requestId = lrMap[loan_id]
+  await dbClient.acceptLoanOffer(requestId, "latestOffer")
+}
+
 export const actionTypeHandlerMap = {
   [ActionType.GENERATE_LOAN_OFFER]: generateOffer,
   [ActionType.ADJUST_BALANCES]: adjustBalances,
+  [ActionType.ACCEPT_LOAN]: acceptLoan,
   [ActionType.REPAY_LOAN]: repayLoan,
 }
 

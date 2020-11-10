@@ -5,6 +5,7 @@ export enum ActionType {
   ADJUST_BALANCES = "ADJUST_BALANCES",
   CONFIRM_LOAN_OFFER = "CONFIRM_LOAN_OFFER",
   REPAY_LOAN = "REPAY_LOAN",
+  ACCEPT_LOAN = "ACCEPT_LOAN",
 }
 
 export interface System {
