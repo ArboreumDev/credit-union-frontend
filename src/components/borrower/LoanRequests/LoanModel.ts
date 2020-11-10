@@ -69,7 +69,7 @@ export default class LoanModel {
   get amountRepaid() {
     return this.borrowerView.total_payments.paid
   }
-  get outstandingPrincipal() {
+  get totalOutStandingDebt() {
     return this.borrowerView.total_payments.remain
   }
   get outstandingInterest() {
