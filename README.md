@@ -21,7 +21,7 @@ Can't change source after debug has started.
 
 Debugging test example:
 
-`node --inspect node_modules/.bin/jest --watch --runInBand tests/src/scenarios/simple.test.ts`
+`node --inspect node_modules/.bin/jest --watch --runInBand tests/src/scenarios/simple.integration.test.ts`
 
 ### Add graphql queries
 
