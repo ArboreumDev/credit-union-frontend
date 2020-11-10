@@ -10,6 +10,7 @@ query GetUserByEmail($email: String!) {
     created_at
     kyc_approved
     demographic_info
+    onboarded
     loan_requests {
       request_id
       confirmation_date

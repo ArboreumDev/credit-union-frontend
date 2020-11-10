@@ -5713,6 +5713,7 @@ export type User = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name: Scalars["String"]
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone: Scalars["String"]
   /** An array relationship */
   receivables: Array<Receivables>
@@ -6034,6 +6035,7 @@ export type User_Bool_Exp = {
   max_exposure?: Maybe<Float_Comparison_Exp>
   min_interest_rate?: Maybe<Float_Comparison_Exp>
   name?: Maybe<String_Comparison_Exp>
+  onboarded?: Maybe<Boolean_Comparison_Exp>
   phone?: Maybe<String_Comparison_Exp>
   receivables?: Maybe<Receivables_Bool_Exp>
   recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
@@ -6097,6 +6099,7 @@ export type User_Insert_Input = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
   recommendationRisksByRecommenderId?: Maybe<
@@ -6212,6 +6215,7 @@ export type User_Order_By = {
   max_exposure?: Maybe<Order_By>
   min_interest_rate?: Maybe<Order_By>
   name?: Maybe<Order_By>
+  onboarded?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
   recommendationRisksByRecommenderId_aggregate?: Maybe<
@@ -6257,6 +6261,8 @@ export enum User_Select_Column {
   /** column name */
   Name = "name",
   /** column name */
+  Onboarded = "onboarded",
+  /** column name */
   Phone = "phone",
   /** column name */
   UpdatedAt = "updated_at",
@@ -6278,6 +6284,7 @@ export type User_Set_Input = {
   max_exposure?: Maybe<Scalars["Float"]>
   min_interest_rate?: Maybe<Scalars["Float"]>
   name?: Maybe<Scalars["String"]>
+  onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user_number?: Maybe<Scalars["Int"]>
@@ -6395,6 +6402,8 @@ export enum User_Update_Column {
   MinInterestRate = "min_interest_rate",
   /** column name */
   Name = "name",
+  /** column name */
+  Onboarded = "onboarded",
   /** column name */
   Phone = "phone",
   /** column name */
@@ -6575,6 +6584,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "created_at"
       | "kyc_approved"
       | "demographic_info"
+      | "onboarded"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -7100,7 +7110,13 @@ export const ChangeUserCashBalanceDocument = gql`
 `
 export const CreateUserDocument = gql`
   mutation CreateUser($user: user_insert_input!) {
-    insert_user_one(object: $user) {
+    insert_user_one(
+      object: $user
+      on_conflict: {
+        constraint: user_email_key
+        update_columns: [name, phone, onboarded]
+      }
+    ) {
       id
       created_at
       email
@@ -7166,6 +7182,7 @@ export const GetUserByEmailDocument = gql`
       created_at
       kyc_approved
       demographic_info
+      onboarded
       loan_requests {
         request_id
         confirmation_date

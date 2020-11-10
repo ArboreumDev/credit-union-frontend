@@ -149,7 +149,8 @@ CREATE TABLE public."user" (
     phone character varying DEFAULT '+91-1231345432'::character varying NOT NULL,
     user_number integer NOT NULL,
     corpus_share double precision DEFAULT 0,
-    kyc_approved boolean DEFAULT false
+    kyc_approved boolean DEFAULT false,
+    onboarded boolean DEFAULT false
 );
 CREATE SEQUENCE public.user_user_number_seq
     AS integer

@@ -23,6 +23,7 @@ import {
   LoanOffer,
   LoanRequestStatus,
   SystemUpdate,
+  UserType,
 } from "../lib/types"
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
@@ -87,23 +88,28 @@ export default class DbClient {
     requestId: string,
     email: string,
     amount: number,
+    name: string,
     info?: any
   ) => {
     const user = await this.getUserByEmail(email)
+    let userId
 
-    // TODO: #133 Add supporter if it doesn't exists
-    // if (!user) {
-    //   const u = await this.sdk.CreateUser({
-    //     user: {
-    //       email,
-    //     },
-    //   })
-    //   user.id = u.insert_user_one.id
-    // }
+    if (!user) {
+      const u = await this.sdk.CreateUser({
+        user: {
+          email,
+          user_type: UserType.Lender,
+          onboarded: false,
+          name,
+        },
+      })
+      userId = u.insert_user_one.id
+    } else userId = user.id
+
     const data = await this.sdk.AddSupporter({
       supporter: {
         request_id: requestId,
-        supporter_id: user.id,
+        supporter_id: userId,
         pledge_amount: amount,
         info: info,
       },
