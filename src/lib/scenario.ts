@@ -97,7 +97,7 @@ export class Scenario {
 
   async repayLoan({ loan_id, amount }) {
     const requestId = this.lrMap[loan_id]
-    const request = await this.dbClient.make_repayment(requestId, amount)
+    await this.dbClient.make_repayment(requestId, amount)
   }
 
   async acceptLoan({ loan_id }) {

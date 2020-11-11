@@ -47,7 +47,6 @@ describe("Adding users and connections", () => {
 
     // create loan offer
     const clo_action = scenario.actions[1]
-    const requestId = scenario.lrMap[clo_action.payload.loan_id]
     await scenario.execute(clo_action)
     state = await dbClient.getSystemSummary()
     expect(Object.keys(state.loan_offers).length).toBe(1)
