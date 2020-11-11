@@ -134,12 +134,19 @@ describe("Loan Request Flow: confirm loan offer", () => {
 
   // describe("When the borrower makes a repayment", () => {
   test("Make repayment", async () => {
-    const repayment = 1000
-    await sdk.ChangeUserCashBalance({ userId: BORROWER1.id, delta: repayment })
+    const data = await sdk.GetLoanRequest({ requestId })
+    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment // ['schedule']['next_borrower_payment']
+    await sdk.ChangeUserCashBalance({
+      userId: BORROWER1.id,
+      delta: ideal_repayment,
+    })
     const allUsers = await dbClient.allUsers
     balancesBefore = getUserPortfolio(allUsers)
 
-    const request = await dbClient.make_repayment(requestId, repayment)
+    const updated_request = await dbClient.make_repayment(
+      requestId,
+      ideal_repayment
+    )
 
     const allUsersAfter = await dbClient.allUsers
     const balancesAfter = getUserPortfolio(allUsersAfter)
@@ -155,14 +162,16 @@ describe("Loan Request Flow: confirm loan offer", () => {
 
     // verify that dbClient returns updated loan
     expect(
-      request.loan.schedule.borrower_view["total_payments"]["remain"]
+      updated_request.loan.schedule.borrower_view["total_payments"]["remain"]
     ).toBeLessThan(amount)
-    expect(request.loan["state"]["repayments"]).toStrictEqual([1000])
+    expect(updated_request.loan["state"]["repayments"]).toStrictEqual([
+      ideal_repayment,
+    ])
 
     // verify the DB is updated accordingly
     const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
     const loan = loanRequest.loan as LoanInfo
-    expect(loan.state.repayments).toStrictEqual([1000])
+    expect(loan.state.repayments).toStrictEqual([ideal_repayment])
   })
 
   // test.skip(
