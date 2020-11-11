@@ -1,0 +1,113 @@
+import DbClient from "gql/db_client"
+import { User_Insert_Input } from "gql/sdk"
+import { addAndConfirmSupporter } from "../../tests/src/common/test_helpers"
+import { uuidv4 } from "../../tests/src/scenarios/utils"
+
+export interface System {
+  users: User[]
+  actions: Action[]
+}
+
+export interface User {
+  balance: number
+  name: string
+  email: string
+  user_type: string
+}
+export interface DemographicInfo {
+  education_years?: null
+  income?: null
+  credit_score?: null
+}
+export enum ActionType {
+  GENERATE_LOAN_OFFER = "GENERATE_LOAN_OFFER",
+  ADJUST_BALANCES = "ADJUST_BALANCES",
+  CONFIRM_LOAN_OFFER = "CONFIRM_LOAN_OFFER",
+  REPAY_LOAN = "REPAY_LOAN",
+}
+
+export interface Action {
+  action_type: ActionType
+  payload: any
+}
+
+export class Scenario {
+  uidMap: { [uid: string]: User_Insert_Input } = {}
+  lrMap = {}
+  constructor(
+    public users: User[],
+    public actions: Action[],
+    private dbClient: DbClient
+  ) {}
+
+  static fromJSON(scenario: System, dbClient: DbClient) {
+    return new Scenario(scenario.users, scenario.actions, dbClient)
+  }
+
+  async initUsers() {
+    for (const u of this.users) {
+      const user: User_Insert_Input = {
+        ...u,
+        id: uuidv4(),
+      }
+      this.uidMap[u.name] = user
+      await this.dbClient.sdk.CreateUser({ user })
+    }
+  }
+
+  async adjustBalances({ userId, balanceDelta }) {
+    const user = this.uidMap[userId]
+    await this.dbClient.sdk.ChangeUserCashBalance({
+      userId: user.id,
+      delta: balanceDelta,
+    })
+  }
+
+  async generateOffer({ userId, loan_id, amount, supporters }) {
+    const user = this.uidMap[userId]
+
+    const { request } = await this.dbClient.createLoanRequest(
+      user.id,
+      amount,
+      "purpose"
+    )
+    this.lrMap[loan_id] = request.request_id
+
+    // confirm supporter and trigger the loan offer generation
+    supporters.map(
+      async (s) =>
+        await addAndConfirmSupporter(
+          this.dbClient,
+          request.request_id,
+          this.uidMap[s.id].id,
+          s.pledge_amount
+        )
+    )
+  }
+
+  async repayLoan({ loan_id, amount }) {
+    const requestId = this.lrMap[loan_id]
+    const request = await this.dbClient.make_repayment(requestId, amount)
+  }
+
+  async acceptLoan({ loan_id }) {
+    const requestId = this.lrMap[loan_id]
+    await this.dbClient.acceptLoanOffer(requestId, "latestOffer")
+  }
+
+  async execute(action: Action) {
+    return {
+      [ActionType.GENERATE_LOAN_OFFER]: this.generateOffer,
+      [ActionType.ADJUST_BALANCES]: this.adjustBalances,
+      [ActionType.CONFIRM_LOAN_OFFER]: this.acceptLoan,
+      [ActionType.REPAY_LOAN]: this.repayLoan,
+    }[action.action_type]
+  }
+  async addAction(action: Action) {
+    this.actions.push(action)
+    return action
+  }
+  async toJSON() {
+    return { users: this.users, actions: this.actions }
+  }
+}

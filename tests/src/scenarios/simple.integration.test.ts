@@ -1,91 +1,47 @@
-import { MIN_SUPPORT_RATIO } from "lib/constant"
+import { Action, ActionType, Scenario } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
-import { addAndConfirmSupporter } from "../common/test_helpers"
 import { dbClient, sdk } from "../common/utils"
-import { ActionType, System } from "./types"
-
-const scenario = simple as System
-const users = scenario.state.users
-const lrMap = {}
-
-async function adjustBalances({ userId, balanceDelta }) {
-  const user = users[userId]
-  await sdk.ChangeUserCashBalance({
-    userId: user.id,
-    delta: balanceDelta,
-  })
-}
-
-async function generateOffer({ userId, loan_id, amount, supporters }) {
-  const user = users[userId]
-
-  const { request } = await dbClient.createLoanRequest(
-    user.id,
-    amount,
-    "purpose"
-  )
-  lrMap[loan_id] = request.request_id
-
-  // confirm supporter and trigger the loan offer generation
-  supporters.map(
-    async (s) =>
-      await addAndConfirmSupporter(
-        dbClient,
-        request.request_id,
-        users[s.id].id,
-        s.pledge_amount
-      )
-  )
-}
-
-async function repayLoan({ loan_id, amount }) {
-  const requestId = lrMap[loan_id]
-  const request = await dbClient.make_repayment(requestId, amount)
-}
-
-async function acceptLoan({ loan_id }) {
-  const requestId = lrMap[loan_id]
-  await dbClient.acceptLoanOffer(requestId, "latestOffer")
-}
-
-export const actionTypeHandlerMap = {
-  [ActionType.GENERATE_LOAN_OFFER]: generateOffer,
-  [ActionType.ADJUST_BALANCES]: adjustBalances,
-  [ActionType.ACCEPT_LOAN]: acceptLoan,
-  [ActionType.REPAY_LOAN]: repayLoan,
-}
 
 beforeAll(async () => {
   await sdk.ResetDB()
-  //   setup scenario
-  for (const id in scenario.state.users) {
-    const user = scenario.state.users[id]
-    delete user.encumbered_cash
-    delete user.encumbered_portfolio
-    await sdk.CreateUser({ user })
-  }
 })
 
 afterAll(async () => {
-  await sdk.ResetDB()
+  // await sdk.ResetDB()
 })
-let action
+
 describe("Adding users and connections", () => {
-  test("check scenario", async () => {
+  test("create scenario", async () => {
+    const scenario = new Scenario(simple.users, [], dbClient)
+    scenario.addAction(simple.actions[0] as Action)
+    scenario.addAction(simple.actions[1] as Action)
+    scenario.addAction(simple.actions[2] as Action)
+    scenario.addAction(simple.actions[3] as Action)
+
+    expect(scenario.actions).toStrictEqual(simple.actions)
+  })
+
+  test("actions", async () => {
+    const scenario = new Scenario(
+      simple.users,
+      simple.actions as Action[],
+      dbClient
+    )
+    await scenario.initUsers()
     const allUsers = await dbClient.allUsers
-    expect(allUsers.length).toBe(Object.keys(scenario.state.users).length)
-    const before = await dbClient.getSystemSummary()
 
-    action = scenario.actions[0]
-    await actionTypeHandlerMap[action.action_type](action.payload)
+    expect(allUsers.length).toBe(scenario.users.length)
 
-    action = scenario.actions[1]
-    await actionTypeHandlerMap[action.action_type](action.payload)
+    let state = await dbClient.getSystemSummary()
 
-    action = scenario.actions[2]
-    await actionTypeHandlerMap[action.action_type](action.payload)
-
-    const after = await dbClient.getSystemSummary()
-    console.log(after)
+    // console.log(state)
+    // console.log(scenario.uidMap)
+    // scenario.actions.slice(0, 1).map(async (action) => {
+    //   console.log(action.action_type)
+    //   console.log(action.payload)
+    //   await scenario.execute(action.action_type, action.payload)
+    // })
+    state = await dbClient.getSystemSummary()
+    console.log(state)
   })
 })
