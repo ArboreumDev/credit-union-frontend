@@ -1,13 +1,13 @@
-import { Action, Scenario } from "lib/scenario"
+import { Action, Scenario, System } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import { dbClient, sdk } from "../common/utils"
 
-beforeAll(async () => {
+beforeEach(async () => {
   await sdk.ResetDB()
 })
 
 afterAll(async () => {
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Adding users and connections", () => {
@@ -62,5 +62,19 @@ describe("Adding users and connections", () => {
     state = await dbClient.getSystemSummary()
     const loan = Object.values(state.loans)[0]
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
+  })
+  test("simple scenario", async () => {
+    const scenario = Scenario.fromJSON(simple as System, dbClient)
+    await scenario.initUsers()
+
+    for (const action of scenario.actions) {
+      await scenario.execute(action)
+    }
+
+    const state = await dbClient.getSystemSummary()
+    const loan = Object.values(state.loans)[0]
+    expect(loan.state.repayments).toStrictEqual([
+      scenario.actions[scenario.actions.length - 1].payload.amount,
+    ])
   })
 })
