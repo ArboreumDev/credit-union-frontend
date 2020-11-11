@@ -1,4 +1,6 @@
+import request from "graphql-request"
 import { Action, ActionType, Scenario } from "lib/scenario"
+import { LoanInfo } from "lib/types"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import { dbClient, sdk } from "../common/utils"
 
@@ -34,14 +36,34 @@ describe("Adding users and connections", () => {
 
     let state = await dbClient.getSystemSummary()
 
-    // console.log(state)
-    // console.log(scenario.uidMap)
-    // scenario.actions.slice(0, 1).map(async (action) => {
-    //   console.log(action.action_type)
-    //   console.log(action.payload)
-    //   await scenario.execute(action.action_type, action.payload)
-    // })
+    // change balance test
+    const cb_action = scenario.actions[0]
+    await scenario.execute(cb_action)
     state = await dbClient.getSystemSummary()
-    console.log(state)
+    const user = Object.values(state.users).filter(
+      (u) => u.name == cb_action.payload.userId
+    )[0]
+    expect(user.balance).toBe(cb_action.payload.balanceDelta)
+
+    // create loan offer
+    const clo_action = scenario.actions[1]
+    const requestId = scenario.lrMap[clo_action.payload.loan_id]
+    await scenario.execute(clo_action)
+    state = await dbClient.getSystemSummary()
+    expect(Object.keys(state.loan_offers).length).toBe(1)
+
+    // accept loan offer
+    const accept_action = scenario.actions[2]
+    await scenario.execute(accept_action)
+    state = await dbClient.getSystemSummary()
+    expect(Object.keys(state.loan_offers).length).toBe(0)
+    expect(Object.keys(state.loans).length).toBe(1)
+
+    // repay loan offer
+    const repay_action = scenario.actions[3]
+    await scenario.execute(repay_action)
+    state = await dbClient.getSystemSummary()
+    const loan = Object.values(state.loans)[0]
+    expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
 })
