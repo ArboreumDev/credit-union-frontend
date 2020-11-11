@@ -8,6 +8,17 @@ export enum Notification {
   true = 1,
   false = 0,
 }
+export enum KYCDocumentType {
+  VOTERID = "VOTERID",
+  ADHAAR = "ADHAAR",
+  PAN = "PAN",
+  DRIVING_LICENSE = "DRIVING_LICENSE",
+}
+
+export enum KYCPurpose {
+  BORROWER = "apply for loan on arboreum platform",
+  LENDER = "register as lender on arboreum platform",
+}
 
 export default class DecentroClient extends Bank {
   private fetcher: Fetcher
@@ -58,6 +69,17 @@ export default class DecentroClient extends Bank {
     mobile_number: string
   }) {
     const endpoint = "/core_banking/money_transfer/get_balance"
+    this.fetcher.get(endpoint, params)
+  }
+
+  async kyc(params: {
+    referenceId: string
+    document_type: KYCDocumentType
+    id_number: string
+    consent: string = "Y"
+    purpose: KYCPurpose
+  }) {
+    const endpoint = "/kyc/public_registry/validate"
     this.fetcher.get(endpoint, params)
   }
 }
