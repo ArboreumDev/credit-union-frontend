@@ -1,0 +1,421 @@
+{
+  "info": {
+    "_postman_id": "e2b526fc-b25b-4017-a08b-e88d725db692",
+    "name": "common API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login By Api and grant Client_id and Client Secret",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "abhijeet@rupeecircle.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "test123",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "rohit@rupeecircle.com",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "password",
+                  "value": "Rohit@2019",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{hostname}}/api/{{version}}/clientSecretDetails",
+              "host": ["{{hostname}}"],
+              "path": ["api", "{{version}}", "clientSecretDetails"]
+            }
+          },
+          "response": [
+            {
+              "name": "Login By Api and grant Client_id and Client Secret",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "akash",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "organization",
+                      "value": "akash",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "akash@gmail.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "empire123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/login",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "8000",
+                  "path": ["api", "login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Feb 2020 13:50:47 GMT"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 10 Feb 2020 13:50:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/7.2.27-6+ubuntu18.04.1+deb.sury.org+1"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "60"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "59"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"_id\": \"5e415c9d833fd8080768ab06\",\n    \"user_id\": \"5e380030437eb02ab7388f78\",\n    \"name\": \"akash_second\",\n    \"secret\": \"Qon2t8CQYMfVopd71Ko0sAAaPxZJaoiQLsg5ZUqe\",\n    \"redirect\": \"http://127.0.0.1:8000/callback\",\n    \"personal_access_client\": false,\n    \"password_client\": false,\n    \"revoked\": false,\n    \"updated_at\": \"2020-02-10 13:50:47\",\n    \"created_at\": \"2020-02-10 13:37:33\"\n}"
+            }
+          ]
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Common API",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "personal_detail[housing_type]",
+              "value": "OWNED",
+              "type": "text"
+            },
+            {
+              "key": "personal_detail[employment_type]",
+              "value": "SELF_EMPLOYED",
+              "type": "text"
+            },
+            {
+              "key": "personal_detail[net_monthly_income]",
+              "value": "12000",
+              "type": "text"
+            },
+            {
+              "key": "personal_detail[pincode]",
+              "value": "400078",
+              "type": "text"
+            },
+            {
+              "key": "dob",
+              "value": "2000-11-29 17:16:18",
+              "type": "text"
+            },
+            {
+              "key": "first_name",
+              "value": "sandbox",
+              "type": "text"
+            },
+            {
+              "key": "last_name",
+              "value": "abhijeetTest",
+              "type": "text"
+            },
+            {
+              "key": "partner_id",
+              "value": "PINSTI192",
+              "type": "text"
+            },
+            {
+              "key": "mobile",
+              "value": "2224212292",
+              "type": "text"
+            },
+            {
+              "key": "pan_no",
+              "value": "ADASA4192H",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[personal_details][gender]",
+              "value": "MALE",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[personal_details][work_experience]",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[personal_details][marital_status]",
+              "value": "MARRIED",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[residence_details][current_address][current_living_since]",
+              "value": "Jul-2020",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[residence_details][current_address][line1]",
+              "value": "Mangnet Mall, Ishwar Nagar",
+              "type": "text"
+            },
+            {
+              "key": "personal_residence_detail[residence_details][current_address][line2]",
+              "value": "sdfdd",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "education_employment_detail[employment_details][start_date_of_current_company]",
+              "value": "Jan-2020",
+              "type": "text"
+            },
+            {
+              "key": "education_employment_detail[employment_details][company_name]",
+              "value": "sigma",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[sigma_loanrequest_number]",
+              "value": "123asd",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[sigma_user_id]",
+              "value": "12asd1asd",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[order_id]",
+              "value": "111",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[product_code]",
+              "value": "test",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[number_previous_purchases]",
+              "value": "123",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[value_previous_purchases]",
+              "value": "123",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[loan_amount_applied]",
+              "value": "70000",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[emi_tenure_requested]",
+              "value": "6",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[aadhar]",
+              "value": "111111111232",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[attachment_salaryslip_count]",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[attachment_rentagreement_count]",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[attachment_aadharcard_count]",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "vendor_detail[attachment_elecbill_count]",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "documents[self_employed][PHOTOGRAPH]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Logo-230X52.jpg"
+            },
+            {
+              "key": "documents[self_employed][ELECTRICITY_BILL]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Logo-230X52.jpg"
+            },
+            {
+              "key": "documents[self_employed][BANK_STATEMENT][0]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[self_employed][AADHAR_CARD]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[self_employed][ITR_LAST_3YEAR][0]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[self_employed][PAN_CARD]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[self_employed][RENT_AGREEMENT][0]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][PHOTOGRAPH]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Logo-230X52.jpg"
+            },
+            {
+              "key": "documents[salaried][PAN_CARD]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][ELECTRICITY_BILL]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][BANK_STATEMENT][0]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][SALARY_SLIP]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][AADHAR_CARD]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][SALARY_SLIP][1]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            },
+            {
+              "key": "documents[salaried][RATION_CARD]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf",
+              "disabled": true
+            },
+            {
+              "key": "documents[salaried][RENT_AGREEMENT][0]",
+              "type": "file",
+              "src": "/home/rupeecircle/Downloads/Dummy Document.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{hostname}}/api/{{version}}/registration",
+          "host": ["{{hostname}}"],
+          "path": ["api", "{{version}}", "registration"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
