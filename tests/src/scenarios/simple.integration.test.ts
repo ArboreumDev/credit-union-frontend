@@ -10,7 +10,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Adding users and connections", () => {
+describe("Scenario unit tests", () => {
   test("create scenario", async () => {
     const scenario = new Scenario(simple.users, [], dbClient)
     scenario.addAction(simple.actions[0] as Action)
@@ -63,18 +63,18 @@ describe("Adding users and connections", () => {
     const loan = Object.values(state.loans)[0]
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
-  test("simple scenario", async () => {
-    const scenario = Scenario.fromJSON(simple as System, dbClient)
-    await scenario.initUsers()
+})
+test("simple scenario", async () => {
+  const scenario = Scenario.fromJSON(simple as System, dbClient)
+  await scenario.initUsers()
 
-    for (const action of scenario.actions) {
-      await scenario.execute(action)
-    }
+  for (const action of scenario.actions) {
+    await scenario.execute(action)
+  }
 
-    const state = await dbClient.getSystemSummary()
-    const loan = Object.values(state.loans)[0]
-    expect(loan.state.repayments).toStrictEqual([
-      scenario.actions[scenario.actions.length - 1].payload.amount,
-    ])
-  })
+  const state = await dbClient.getSystemSummary()
+  const loan = Object.values(state.loans)[0]
+  expect(loan.state.repayments).toStrictEqual([
+    scenario.actions[scenario.actions.length - 1].payload.amount,
+  ])
 })
