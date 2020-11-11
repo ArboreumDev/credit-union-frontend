@@ -1,7 +1,6 @@
 import DbClient from "gql/db_client"
 import { User_Insert_Input } from "gql/sdk"
 import { addAndConfirmSupporter } from "../../tests/src/common/test_helpers"
-import { uuidv4 } from "../../tests/src/scenarios/utils"
 
 export interface System {
   users: User[]
@@ -29,6 +28,15 @@ export enum ActionType {
 export interface Action {
   action_type: ActionType
   payload: any
+}
+
+// from stack overflow
+export function uuidv4() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
 }
 
 export class Scenario {
