@@ -118,6 +118,8 @@ export default class DbClient {
   }
 
   calculateAndUpdateLoanOffer = async (requestId: string) => {
+    // this was not returning the loan and somehow the error was returned from swarmAI was not being
+    // logged
     const { loans, accounts } = await this.calculateLoanRequestOffer(requestId)
     const payload = {
       requestId,
