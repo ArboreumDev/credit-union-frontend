@@ -29,12 +29,12 @@ beforeAll(async () => {
   await sdk.CreateUser({ user: SUPPORTER2 })
 
   // Create loan request
-  const { request } = await dbClient.createLoanRequest(
+  const { loanRequest } = await dbClient.createLoanRequest(
     BORROWER1.id,
     amount,
     purpose
   )
-  requestId = request.request_id
+  requestId = loanRequest.request_id
 
   // confirm supporter and trigger the loan offer generation
   await addAndConfirmSupporter(

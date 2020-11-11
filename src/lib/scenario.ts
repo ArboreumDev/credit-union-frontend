@@ -74,12 +74,12 @@ export class Scenario {
   async generateOffer({ userId, loan_id, amount, supporters }) {
     const user = this.uidMap[userId]
 
-    const { request } = await this.dbClient.createLoanRequest(
+    const { loanRequest } = await this.dbClient.createLoanRequest(
       user.id,
       amount,
       "purpose"
     )
-    this.lrMap[loan_id] = request.request_id
+    this.lrMap[loan_id] = loanRequest.request_id
 
     // confirm supporter and trigger the loan offer generation
     for (const s of supporters) {
@@ -87,7 +87,7 @@ export class Scenario {
       // async (s) =>
       await addAndConfirmSupporter(
         this.dbClient,
-        request.request_id,
+        loanRequest.request_id,
         this.uidMap[s.id].id,
         s.pledge_amount
       )

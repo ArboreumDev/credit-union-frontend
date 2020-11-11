@@ -19,17 +19,17 @@ describe("Loan Request Flow", () => {
 
   test("New loan request", async () => {
     const purpose = "go see the movies"
-    const { request } = await dbClient.createLoanRequest(
+    const { loanRequest } = await dbClient.createLoanRequest(
       BORROWER1.id,
       amount,
       purpose
     )
-    // const request = data.update_loan_requests_by_pk
-    requestId = request.request_id
-    expect(request.amount).toBe(amount)
-    expect(request.purpose).toBe(purpose)
-    expect(request.status).toBe(LoanRequestStatus.initiated)
-    expect(request.risk_calc_result.latestOffer).toBeUndefined
+
+    requestId = loanRequest.request_id
+    expect(loanRequest.amount).toBe(amount)
+    expect(loanRequest.purpose).toBe(purpose)
+    expect(loanRequest.status).toBe(LoanRequestStatus.initiated)
+    expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
   })
 
   test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {

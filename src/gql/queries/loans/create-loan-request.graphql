@@ -1,5 +1,5 @@
 mutation CreateLoanRequest($request: loan_requests_insert_input!) {
-  request: insert_loan_requests_one(object: $request) {
+  loanRequest: insert_loan_requests_one(object: $request) {
     request_id
     amount
     purpose
