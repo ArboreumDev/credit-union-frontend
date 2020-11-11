@@ -34,13 +34,21 @@
       "balance": 0,
       "name": "b1",
       "email": "borrower1@mail.com",
-      "user_type": "borrower"
+      "user_type": "borrower",
+      "demographic_info": {
+        "income": 20000,
+        "credit_score": 600
+      }
     },
     {
       "balance": 0,
       "name": "b2",
       "email": "borrower2@mail.com",
-      "user_type": "borrower"
+      "user_type": "borrower",
+      "demographic_info": {
+        "income": 30000,
+        "credit_score": 700
+      }
     }
   ],
   "actions": [
