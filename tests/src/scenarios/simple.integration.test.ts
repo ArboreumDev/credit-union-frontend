@@ -1,6 +1,4 @@
-import request from "graphql-request"
-import { Action, ActionType, Scenario } from "lib/scenario"
-import { LoanInfo } from "lib/types"
+import { Action, Scenario } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import { dbClient, sdk } from "../common/utils"
 

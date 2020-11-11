@@ -60,7 +60,7 @@ export type UserInfo = {
 }
 
 export type Scenario = {
-  users: any // TODO should be Dict[str, UserInfo]
+  users: { [uid: string]: UserInfo }
   loans: any // TODO
   loan_requests: any // TODO
   loan_offers: any
