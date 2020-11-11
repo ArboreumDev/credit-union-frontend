@@ -60,8 +60,8 @@ describe("Create new loan | user is Authorized", () => {
       payload,
       dbClient
     )) as typeof CreateLoan.ReturnType
-    expect(res.request.amount === payload.request.amount)
-    loanRequestId = res.request.request_id
+    expect(res.loanRequest.amount === payload.request.amount)
+    loanRequestId = res.loanRequest.request_id
   })
   test("add supporter", async () => {
     const session = getMockSession(BORROWER1)
