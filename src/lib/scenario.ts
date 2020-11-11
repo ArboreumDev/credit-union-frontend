@@ -82,15 +82,17 @@ export class Scenario {
     this.lrMap[loan_id] = request.request_id
 
     // confirm supporter and trigger the loan offer generation
-    supporters.map(
-      async (s) =>
-        await addAndConfirmSupporter(
-          this.dbClient,
-          request.request_id,
-          this.uidMap[s.id].id,
-          s.pledge_amount
-        )
-    )
+    for (const s of supporters) {
+      // supporters.map(
+      // async (s) =>
+      await addAndConfirmSupporter(
+        this.dbClient,
+        request.request_id,
+        this.uidMap[s.id].id,
+        s.pledge_amount
+      )
+      // )
+    }
   }
 
   async repayLoan({ loan_id, amount }) {
@@ -104,13 +106,21 @@ export class Scenario {
   }
 
   async execute(action: Action) {
-    return {
-      [ActionType.GENERATE_LOAN_OFFER]: this.generateOffer,
-      [ActionType.ADJUST_BALANCES]: this.adjustBalances,
-      [ActionType.CONFIRM_LOAN_OFFER]: this.acceptLoan,
-      [ActionType.REPAY_LOAN]: this.repayLoan,
-    }[action.action_type]
+    switch (action.action_type) {
+      case ActionType.ADJUST_BALANCES:
+        return this.adjustBalances(action.payload)
+      case ActionType.GENERATE_LOAN_OFFER:
+        return this.generateOffer(action.payload)
+      case ActionType.CONFIRM_LOAN_OFFER:
+        return this.acceptLoan(action.payload)
+      case ActionType.REPAY_LOAN:
+        return this.repayLoan(action.payload)
+      default:
+        console.log("unknown action")
+        throw Error
+    }
   }
+
   async addAction(action: Action) {
     this.actions.push(action)
     return action
