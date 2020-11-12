@@ -60,7 +60,7 @@
       }
     },
     {
-      "action_type": "GENERATE_LOAN_OFFER",
+      "action_type": "CONFIRM_LOAN",
       "payload": {
         "userId": "b1",
         "loan_id": "lr1",
@@ -71,12 +71,6 @@
             "pledge_amount": 5000
           }
         ]
-      }
-    },
-    {
-      "action_type": "CONFIRM_LOAN_OFFER",
-      "payload": {
-        "loan_id": "lr1"
       }
     },
     {

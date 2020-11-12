@@ -19,9 +19,8 @@ export interface DemographicInfo {
   credit_score?: null
 }
 export enum ActionType {
-  GENERATE_LOAN_OFFER = "GENERATE_LOAN_OFFER",
   ADJUST_BALANCES = "ADJUST_BALANCES",
-  CONFIRM_LOAN_OFFER = "CONFIRM_LOAN_OFFER",
+  CONFIRM_LOAN = "CONFIRM_LOAN",
   REPAY_LOAN = "REPAY_LOAN",
 }
 
@@ -71,7 +70,12 @@ export class Scenario {
     })
   }
 
-  async generateOffer({ userId, loan_id, amount, supporters }) {
+  async repayLoan({ loan_id, amount }) {
+    const requestId = this.lrMap[loan_id]
+    await this.dbClient.make_repayment(requestId, amount)
+  }
+
+  async confirmLoan({ userId, amount, loan_id, supporters }) {
     const user = this.uidMap[userId]
 
     const { loanRequest } = await this.dbClient.createLoanRequest(
@@ -83,36 +87,22 @@ export class Scenario {
 
     // confirm supporter and trigger the loan offer generation
     for (const s of supporters) {
-      // supporters.map(
-      // async (s) =>
       await addAndConfirmSupporter(
         this.dbClient,
         loanRequest.request_id,
         this.uidMap[s.id].id,
         s.pledge_amount
       )
-      // )
     }
-  }
-
-  async repayLoan({ loan_id, amount }) {
-    const requestId = this.lrMap[loan_id]
-    await this.dbClient.make_repayment(requestId, amount)
-  }
-
-  async acceptLoan({ loan_id }) {
-    const requestId = this.lrMap[loan_id]
-    await this.dbClient.acceptLoanOffer(requestId, "latestOffer")
+    await this.dbClient.acceptLoanOffer(loanRequest.request_id, "latestOffer")
   }
 
   async execute(action: Action) {
     switch (action.action_type) {
       case ActionType.ADJUST_BALANCES:
         return this.adjustBalances(action.payload)
-      case ActionType.GENERATE_LOAN_OFFER:
-        return this.generateOffer(action.payload)
-      case ActionType.CONFIRM_LOAN_OFFER:
-        return this.acceptLoan(action.payload)
+      case ActionType.CONFIRM_LOAN:
+        return this.confirmLoan(action.payload)
       case ActionType.REPAY_LOAN:
         return this.repayLoan(action.payload)
       default:
