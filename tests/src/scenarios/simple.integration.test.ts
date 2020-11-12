@@ -60,10 +60,7 @@ let generated_json
 test("simple scenario", async () => {
   const scenario = Scenario.fromJSON(simple as System, dbClient)
   await scenario.initUsers()
-
-  for (const action of scenario.actions) {
-    await scenario.executeAction(action)
-  }
+  await scenario.executeAll()
 
   const state = await dbClient.getSystemSummary()
   const loan = Object.values(state.loans)[0]
@@ -80,8 +77,5 @@ test("from generated", async () => {
     dbClient
   )
   await scenario.initUsers()
-
-  for (const action of scenario.actions) {
-    await scenario.executeAction(action)
-  }
+  await scenario.executeAll()
 })
