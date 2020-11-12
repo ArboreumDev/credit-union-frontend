@@ -1,32 +1,26 @@
 {
   "users": [
     {
-      "balance": 0,
       "email": "l1",
       "user_type": "lender"
     },
     {
-      "balance": 10000,
       "email": "l2",
       "user_type": "lender"
     },
     {
-      "balance": 10000,
       "email": "l3",
       "user_type": "lender"
     },
     {
-      "balance": 10000,
       "email": "l4",
       "user_type": "lender"
     },
     {
-      "balance": 0,
       "email": "l5",
       "user_type": "lender"
     },
     {
-      "balance": 0,
       "email": "b1",
       "user_type": "borrower",
       "demographic_info": {
@@ -35,7 +29,6 @@
       }
     },
     {
-      "balance": 0,
       "email": "b2",
       "user_type": "borrower",
       "demographic_info": {
@@ -49,6 +42,13 @@
       "action_type": "ADJUST_BALANCES",
       "payload": {
         "userEmail": "l1",
+        "balanceDelta": 20000
+      }
+    },
+    {
+      "action_type": "ADJUST_BALANCES",
+      "payload": {
+        "userEmail": "l4",
         "balanceDelta": 20000
       }
     },
