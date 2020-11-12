@@ -35,7 +35,41 @@ export default class DecentroKYCClient extends KYCProvider {
     )
   }
 
-  async doKYCOnImage(file: File) {
-    return true
+  async doKYCOnImage(params: {
+    file: File
+    userId: string
+    document_type: KYCDocumentType
+    purpose: KYCPurpose
+  }) {
+    const endpoint = "/kyc/scan_extract/ocr"
+    const req = {
+      reference_id: params.userId + "-" + Date.now(),
+      document: params.file,
+      document_type: params.document_type,
+      consent_purpose: params.purpose,
+      consent: "Y",
+      kyc_validate: 1,
+    }
+    console.log(req)
+    return this.fetcher.post(endpoint, req)
+  }
+
+  async doKYCOnIDNumber(params: {
+    userId: string
+    idNumber: string
+    document_type: KYCDocumentType
+    purpose: KYCPurpose
+  }) {
+    const endpoint = "/kyc/public_registry/validate"
+    const req = {
+      reference_id: params.userId + "-" + Date.now(),
+      id_number: params.idNumber,
+      document_type: params.document_type,
+      consent_purpose: params.purpose,
+      consent: "Y",
+      kyc_validate: 1,
+    }
+    console.log(req)
+    return this.fetcher.post(endpoint, req)
   }
 }
