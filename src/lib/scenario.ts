@@ -135,7 +135,7 @@ export class Scenario {
     )
   }
 
-  async execute(action: Action) {
+  async executeAction(action: Action) {
     switch (action.action_type) {
       case ActionType.ADJUST_BALANCES:
         return this.adjustBalances(action.payload)
@@ -147,6 +147,10 @@ export class Scenario {
         console.log("unknown action")
         throw Error
     }
+  }
+
+  async executeAll() {
+    for (const action of this.actions) await this.executeAction(action)
   }
 
   async addAction(action: Action) {

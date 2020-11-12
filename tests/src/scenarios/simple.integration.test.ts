@@ -33,24 +33,24 @@ describe("Scenario unit tests", () => {
 
     // change balance test
     const cb_action = scenario.actions[0]
-    await scenario.execute(cb_action)
+    await scenario.executeAction(cb_action)
     state = await dbClient.getSystemSummary()
     const user = Object.values(state.users).filter(
       (u) => u.email == cb_action.payload.userEmail
     )[0]
     expect(user.balance).toBe(cb_action.payload.balanceDelta)
-    await scenario.execute(scenario.actions[1])
+    await scenario.executeAction(scenario.actions[1])
 
     // create loan offer
     const clo_action = scenario.actions[2]
-    await scenario.execute(clo_action)
+    await scenario.executeAction(clo_action)
     state = await dbClient.getSystemSummary()
     expect(Object.keys(state.loan_offers).length).toBe(0)
     expect(Object.keys(state.loans).length).toBe(1)
 
     // repay loan offer
     const repay_action = scenario.actions[3]
-    await scenario.execute(repay_action)
+    await scenario.executeAction(repay_action)
     state = await dbClient.getSystemSummary()
     const loan = Object.values(state.loans)[0]
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
@@ -62,7 +62,7 @@ test("simple scenario", async () => {
   await scenario.initUsers()
 
   for (const action of scenario.actions) {
-    await scenario.execute(action)
+    await scenario.executeAction(action)
   }
 
   const state = await dbClient.getSystemSummary()
@@ -82,6 +82,6 @@ test("from generated", async () => {
   await scenario.initUsers()
 
   for (const action of scenario.actions) {
-    await scenario.execute(action)
+    await scenario.executeAction(action)
   }
 })

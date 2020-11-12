@@ -12,6 +12,10 @@ import {
   SystemUpdate,
 } from "lib/types"
 
+export enum SwarmAIErrors {
+  NOT_ENOUGH_BALANCE_IN_SYSTEM = "NOT_ENOUGH_BALANCE_IN_SYSTEM",
+}
+
 export default class SwarmAIClient {
   private fetcher: Fetcher
 
@@ -21,12 +25,14 @@ export default class SwarmAIClient {
 
   async fetch(endpoint: string, payload: any) {
     log(`${endpoint} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
-
-    const res = await this.fetcher.post(endpoint, payload)
-
-    log(`${endpoint} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
-
-    return res
+    try {
+      const res = await this.fetcher.post(endpoint, payload)
+      log(`${endpoint} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
+      return res
+    } catch (error) {
+      // TODO: #153 Check for SwarmAI error codes here @djudjuu
+      throw SwarmAIErrors.NOT_ENOUGH_BALANCE_IN_SYSTEM
+    }
   }
 
   async acceptLoan(
