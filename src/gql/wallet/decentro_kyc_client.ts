@@ -1,5 +1,18 @@
 import { Fetcher } from "lib/api"
+import { fileURLToPath } from "url"
 import { Bank, KYCProvider } from "./bank"
+
+export enum KYCDocumentType {
+  VOTERID = "VOTERID",
+  ADHAAR = "ADHAAR",
+  PAN = "PAN",
+  DRIVING_LICENSE = "DRIVING_LICENSE",
+}
+
+export enum KYCPurpose {
+  BORROWER = "apply for loan on arboreum platform",
+  LENDER = "register as lender on arboreum platform",
+}
 
 export default class DecentroKYCClient extends KYCProvider {
   private fetcher: Fetcher
