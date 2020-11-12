@@ -7467,7 +7467,10 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
               >
             }
         >
-        user: { __typename?: "user" } & Pick<User, "demographic_info">
+        user: { __typename?: "user" } & Pick<
+          User,
+          "id" | "email" | "demographic_info"
+        >
       }
   >
 }
@@ -7730,6 +7733,12 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
   delete_user?: Maybe<
     { __typename?: "user_mutation_response" } & Pick<
       User_Mutation_Response,
+      "affected_rows"
+    >
+  >
+  delete_scenario_actions?: Maybe<
+    { __typename?: "scenario_actions_mutation_response" } & Pick<
+      Scenario_Actions_Mutation_Response,
       "affected_rows"
     >
   >
@@ -8037,6 +8046,8 @@ export const GetLoanRequestDocument = gql`
         }
       }
       user {
+        id
+        email
         demographic_info
       }
     }
@@ -8242,6 +8253,9 @@ export const ResetDbDocument = gql`
       affected_rows
     }
     delete_user(where: {}) {
+      affected_rows
+    }
+    delete_scenario_actions(where: {}) {
       affected_rows
     }
   }
