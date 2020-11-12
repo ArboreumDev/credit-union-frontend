@@ -18,42 +18,43 @@ describe("Scenario unit tests", () => {
     expect(scenario.actions).toStrictEqual(simple.actions)
   })
 
-  //   test("actions", async () => {
-  //     const scenario = new Scenario(
-  //       simple.users,
-  //       simple.actions as Action[],
-  //       dbClient
-  //     )
-  //     await scenario.initUsers()
-  //     const allUsers = await dbClient.allUsers
+  test("actions", async () => {
+    const scenario = new Scenario(
+      simple.users,
+      simple.actions as Action[],
+      dbClient
+    )
+    await scenario.initUsers()
+    const allUsers = await dbClient.allUsers
 
-  //     expect(allUsers.length).toBe(scenario.users.length)
+    expect(allUsers.length).toBe(scenario.users.length)
 
-  //     let state = await dbClient.getSystemSummary()
+    let state = await dbClient.getSystemSummary()
 
-  //     // change balance test
-  //     const cb_action = scenario.actions[0]
-  //     await scenario.execute(cb_action)
-  //     state = await dbClient.getSystemSummary()
-  //     const user = Object.values(state.users).filter(
-  //       (u) => u.email == cb_action.payload.userEmail
-  //     )[0]
-  //     expect(user.balance).toBe(cb_action.payload.balanceDelta)
+    // change balance test
+    const cb_action = scenario.actions[0]
+    await scenario.execute(cb_action)
+    state = await dbClient.getSystemSummary()
+    const user = Object.values(state.users).filter(
+      (u) => u.email == cb_action.payload.userEmail
+    )[0]
+    expect(user.balance).toBe(cb_action.payload.balanceDelta)
+    await scenario.execute(scenario.actions[1])
 
-  //     // create loan offer
-  //     const clo_action = scenario.actions[1]
-  //     await scenario.execute(clo_action)
-  //     state = await dbClient.getSystemSummary()
-  //     expect(Object.keys(state.loan_offers).length).toBe(0)
-  //     expect(Object.keys(state.loans).length).toBe(1)
+    // create loan offer
+    const clo_action = scenario.actions[2]
+    await scenario.execute(clo_action)
+    state = await dbClient.getSystemSummary()
+    expect(Object.keys(state.loan_offers).length).toBe(0)
+    expect(Object.keys(state.loans).length).toBe(1)
 
-  //     // repay loan offer
-  //     const repay_action = scenario.actions[2]
-  //     await scenario.execute(repay_action)
-  //     state = await dbClient.getSystemSummary()
-  //     const loan = Object.values(state.loans)[0]
-  //     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
-  //   })
+    // repay loan offer
+    const repay_action = scenario.actions[3]
+    await scenario.execute(repay_action)
+    state = await dbClient.getSystemSummary()
+    const loan = Object.values(state.loans)[0]
+    expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
+  })
 })
 let generated_json
 test("simple scenario", async () => {
