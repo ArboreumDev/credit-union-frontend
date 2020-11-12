@@ -1,0 +1,7 @@
+mutation InsertScenarioAction($action: scenario_actions_insert_input!) {
+  insert_scenario_actions_one(object: $action) {
+    id,
+    action_type,
+    payload
+  }
+}

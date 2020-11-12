@@ -82,6 +82,164 @@ export type String_Comparison_Exp = {
   _similar?: Maybe<Scalars["String"]>
 }
 
+/** columns and relationships of "action_type" */
+export type Action_Type = {
+  __typename?: "action_type"
+  comment: Scalars["String"]
+  value: Scalars["String"]
+}
+
+/** aggregated selection of "action_type" */
+export type Action_Type_Aggregate = {
+  __typename?: "action_type_aggregate"
+  aggregate?: Maybe<Action_Type_Aggregate_Fields>
+  nodes: Array<Action_Type>
+}
+
+/** aggregate fields of "action_type" */
+export type Action_Type_Aggregate_Fields = {
+  __typename?: "action_type_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Action_Type_Max_Fields>
+  min?: Maybe<Action_Type_Min_Fields>
+}
+
+/** aggregate fields of "action_type" */
+export type Action_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Action_Type_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "action_type" */
+export type Action_Type_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Action_Type_Max_Order_By>
+  min?: Maybe<Action_Type_Min_Order_By>
+}
+
+/** input type for inserting array relation for remote table "action_type" */
+export type Action_Type_Arr_Rel_Insert_Input = {
+  data: Array<Action_Type_Insert_Input>
+  on_conflict?: Maybe<Action_Type_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "action_type". All fields are combined with a logical 'AND'. */
+export type Action_Type_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Action_Type_Bool_Exp>>>
+  _not?: Maybe<Action_Type_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Action_Type_Bool_Exp>>>
+  comment?: Maybe<String_Comparison_Exp>
+  value?: Maybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "action_type" */
+export enum Action_Type_Constraint {
+  /** unique or primary key constraint */
+  ActionTypePkey = "action_type_pkey",
+}
+
+export enum Action_Type_Enum {
+  AdjustBalances = "ADJUST_BALANCES",
+  ConfirmLoan = "CONFIRM_LOAN",
+  RepayLoan = "REPAY_LOAN",
+}
+
+/** expression to compare columns of type action_type_enum. All fields are combined with logical 'AND'. */
+export type Action_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Action_Type_Enum>
+  _in?: Maybe<Array<Action_Type_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Action_Type_Enum>
+  _nin?: Maybe<Array<Action_Type_Enum>>
+}
+
+/** input type for inserting data into table "action_type" */
+export type Action_Type_Insert_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** aggregate max on columns */
+export type Action_Type_Max_Fields = {
+  __typename?: "action_type_max_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by max() on columns of table "action_type" */
+export type Action_Type_Max_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Action_Type_Min_Fields = {
+  __typename?: "action_type_min_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by min() on columns of table "action_type" */
+export type Action_Type_Min_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "action_type" */
+export type Action_Type_Mutation_Response = {
+  __typename?: "action_type_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Action_Type>
+}
+
+/** input type for inserting object relation for remote table "action_type" */
+export type Action_Type_Obj_Rel_Insert_Input = {
+  data: Action_Type_Insert_Input
+  on_conflict?: Maybe<Action_Type_On_Conflict>
+}
+
+/** on conflict condition type for table "action_type" */
+export type Action_Type_On_Conflict = {
+  constraint: Action_Type_Constraint
+  update_columns: Array<Action_Type_Update_Column>
+  where?: Maybe<Action_Type_Bool_Exp>
+}
+
+/** ordering options when selecting data from "action_type" */
+export type Action_Type_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "action_type" */
+export type Action_Type_Pk_Columns_Input = {
+  value: Scalars["String"]
+}
+
+/** select columns of table "action_type" */
+export enum Action_Type_Select_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
+/** input type for updating data in table "action_type" */
+export type Action_Type_Set_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** update columns of table "action_type" */
+export enum Action_Type_Update_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
 /** expression to compare columns of type date. All fields are combined with logical 'AND'. */
 export type Date_Comparison_Exp = {
   _eq?: Maybe<Scalars["date"]>
@@ -2538,6 +2696,10 @@ export enum Loan_Risk_Update_Column {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: "mutation_root"
+  /** delete data from the table: "action_type" */
+  delete_action_type?: Maybe<Action_Type_Mutation_Response>
+  /** delete single row from the table: "action_type" */
+  delete_action_type_by_pk?: Maybe<Action_Type>
   /** delete data from the table: "edges" */
   delete_edges?: Maybe<Edges_Mutation_Response>
   /** delete single row from the table: "edges" */
@@ -2584,6 +2746,10 @@ export type Mutation_Root = {
   delete_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** delete single row from the table: "recommendation_risk" */
   delete_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
+  /** delete data from the table: "scenario_actions" */
+  delete_scenario_actions?: Maybe<Scenario_Actions_Mutation_Response>
+  /** delete single row from the table: "scenario_actions" */
+  delete_scenario_actions_by_pk?: Maybe<Scenario_Actions>
   /** delete data from the table: "supporters" */
   delete_supporters?: Maybe<Supporters_Mutation_Response>
   /** delete single row from the table: "supporters" */
@@ -2592,6 +2758,10 @@ export type Mutation_Root = {
   delete_user?: Maybe<User_Mutation_Response>
   /** delete single row from the table: "user" */
   delete_user_by_pk?: Maybe<User>
+  /** insert data into the table: "action_type" */
+  insert_action_type?: Maybe<Action_Type_Mutation_Response>
+  /** insert a single row into the table: "action_type" */
+  insert_action_type_one?: Maybe<Action_Type>
   /** insert data into the table: "edges" */
   insert_edges?: Maybe<Edges_Mutation_Response>
   /** insert a single row into the table: "edges" */
@@ -2638,6 +2808,10 @@ export type Mutation_Root = {
   insert_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** insert a single row into the table: "recommendation_risk" */
   insert_recommendation_risk_one?: Maybe<Recommendation_Risk>
+  /** insert data into the table: "scenario_actions" */
+  insert_scenario_actions?: Maybe<Scenario_Actions_Mutation_Response>
+  /** insert a single row into the table: "scenario_actions" */
+  insert_scenario_actions_one?: Maybe<Scenario_Actions>
   /** insert data into the table: "supporters" */
   insert_supporters?: Maybe<Supporters_Mutation_Response>
   /** insert a single row into the table: "supporters" */
@@ -2646,6 +2820,10 @@ export type Mutation_Root = {
   insert_user?: Maybe<User_Mutation_Response>
   /** insert a single row into the table: "user" */
   insert_user_one?: Maybe<User>
+  /** update data of the table: "action_type" */
+  update_action_type?: Maybe<Action_Type_Mutation_Response>
+  /** update single row of the table: "action_type" */
+  update_action_type_by_pk?: Maybe<Action_Type>
   /** update data of the table: "edges" */
   update_edges?: Maybe<Edges_Mutation_Response>
   /** update single row of the table: "edges" */
@@ -2692,6 +2870,10 @@ export type Mutation_Root = {
   update_recommendation_risk?: Maybe<Recommendation_Risk_Mutation_Response>
   /** update single row of the table: "recommendation_risk" */
   update_recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
+  /** update data of the table: "scenario_actions" */
+  update_scenario_actions?: Maybe<Scenario_Actions_Mutation_Response>
+  /** update single row of the table: "scenario_actions" */
+  update_scenario_actions_by_pk?: Maybe<Scenario_Actions>
   /** update data of the table: "supporters" */
   update_supporters?: Maybe<Supporters_Mutation_Response>
   /** update single row of the table: "supporters" */
@@ -2700,6 +2882,16 @@ export type Mutation_Root = {
   update_user?: Maybe<User_Mutation_Response>
   /** update single row of the table: "user" */
   update_user_by_pk?: Maybe<User>
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Action_TypeArgs = {
+  where: Action_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Action_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** mutation root */
@@ -2816,6 +3008,16 @@ export type Mutation_RootDelete_Recommendation_Risk_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootDelete_Scenario_ActionsArgs = {
+  where: Scenario_Actions_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Scenario_Actions_By_PkArgs = {
+  id: Scalars["Int"]
+}
+
+/** mutation root */
 export type Mutation_RootDelete_SupportersArgs = {
   where: Supporters_Bool_Exp
 }
@@ -2834,6 +3036,18 @@ export type Mutation_RootDelete_UserArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Action_TypeArgs = {
+  objects: Array<Action_Type_Insert_Input>
+  on_conflict?: Maybe<Action_Type_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Action_Type_OneArgs = {
+  object: Action_Type_Insert_Input
+  on_conflict?: Maybe<Action_Type_On_Conflict>
 }
 
 /** mutation root */
@@ -2969,6 +3183,18 @@ export type Mutation_RootInsert_Recommendation_Risk_OneArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootInsert_Scenario_ActionsArgs = {
+  objects: Array<Scenario_Actions_Insert_Input>
+  on_conflict?: Maybe<Scenario_Actions_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Scenario_Actions_OneArgs = {
+  object: Scenario_Actions_Insert_Input
+  on_conflict?: Maybe<Scenario_Actions_On_Conflict>
+}
+
+/** mutation root */
 export type Mutation_RootInsert_SupportersArgs = {
   objects: Array<Supporters_Insert_Input>
   on_conflict?: Maybe<Supporters_On_Conflict>
@@ -2990,6 +3216,18 @@ export type Mutation_RootInsert_UserArgs = {
 export type Mutation_RootInsert_User_OneArgs = {
   object: User_Insert_Input
   on_conflict?: Maybe<User_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Action_TypeArgs = {
+  _set?: Maybe<Action_Type_Set_Input>
+  where: Action_Type_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Action_Type_By_PkArgs = {
+  _set?: Maybe<Action_Type_Set_Input>
+  pk_columns: Action_Type_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -3176,6 +3414,30 @@ export type Mutation_RootUpdate_Recommendation_Risk_By_PkArgs = {
   _prepend?: Maybe<Recommendation_Risk_Prepend_Input>
   _set?: Maybe<Recommendation_Risk_Set_Input>
   pk_columns: Recommendation_Risk_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Scenario_ActionsArgs = {
+  _append?: Maybe<Scenario_Actions_Append_Input>
+  _delete_at_path?: Maybe<Scenario_Actions_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Scenario_Actions_Delete_Elem_Input>
+  _delete_key?: Maybe<Scenario_Actions_Delete_Key_Input>
+  _inc?: Maybe<Scenario_Actions_Inc_Input>
+  _prepend?: Maybe<Scenario_Actions_Prepend_Input>
+  _set?: Maybe<Scenario_Actions_Set_Input>
+  where: Scenario_Actions_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Scenario_Actions_By_PkArgs = {
+  _append?: Maybe<Scenario_Actions_Append_Input>
+  _delete_at_path?: Maybe<Scenario_Actions_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Scenario_Actions_Delete_Elem_Input>
+  _delete_key?: Maybe<Scenario_Actions_Delete_Key_Input>
+  _inc?: Maybe<Scenario_Actions_Inc_Input>
+  _prepend?: Maybe<Scenario_Actions_Prepend_Input>
+  _set?: Maybe<Scenario_Actions_Set_Input>
+  pk_columns: Scenario_Actions_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -3830,6 +4092,12 @@ export type Payables_Variance_Order_By = {
 /** query root */
 export type Query_Root = {
   __typename?: "query_root"
+  /** fetch data from the table: "action_type" */
+  action_type: Array<Action_Type>
+  /** fetch aggregated fields from the table: "action_type" */
+  action_type_aggregate: Action_Type_Aggregate
+  /** fetch data from the table: "action_type" using primary key columns */
+  action_type_by_pk?: Maybe<Action_Type>
   /** fetch data from the table: "edges" */
   edges: Array<Edges>
   /** fetch aggregated fields from the table: "edges" */
@@ -3896,6 +4164,12 @@ export type Query_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
+  /** fetch data from the table: "scenario_actions" */
+  scenario_actions: Array<Scenario_Actions>
+  /** fetch aggregated fields from the table: "scenario_actions" */
+  scenario_actions_aggregate: Scenario_Actions_Aggregate
+  /** fetch data from the table: "scenario_actions" using primary key columns */
+  scenario_actions_by_pk?: Maybe<Scenario_Actions>
   /** fetch data from the table: "supporters" */
   supporters: Array<Supporters>
   /** fetch aggregated fields from the table: "supporters" */
@@ -3908,6 +4182,29 @@ export type Query_Root = {
   user_aggregate: User_Aggregate
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>
+}
+
+/** query root */
+export type Query_RootAction_TypeArgs = {
+  distinct_on?: Maybe<Array<Action_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Action_Type_Order_By>>
+  where?: Maybe<Action_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootAction_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Action_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Action_Type_Order_By>>
+  where?: Maybe<Action_Type_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootAction_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** query root */
@@ -4164,6 +4461,29 @@ export type Query_RootRecommendation_Risk_AggregateArgs = {
 /** query root */
 export type Query_RootRecommendation_Risk_By_PkArgs = {
   recommender_id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootScenario_ActionsArgs = {
+  distinct_on?: Maybe<Array<Scenario_Actions_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Scenario_Actions_Order_By>>
+  where?: Maybe<Scenario_Actions_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootScenario_Actions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Scenario_Actions_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Scenario_Actions_Order_By>>
+  where?: Maybe<Scenario_Actions_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootScenario_Actions_By_PkArgs = {
+  id: Scalars["Int"]
 }
 
 /** query root */
@@ -4861,9 +5181,302 @@ export enum Recommendation_Risk_Update_Column {
   UpdatedAt = "updated_at",
 }
 
+/** columns and relationships of "scenario_actions" */
+export type Scenario_Actions = {
+  __typename?: "scenario_actions"
+  action_type: Action_Type_Enum
+  id: Scalars["Int"]
+  payload: Scalars["jsonb"]
+}
+
+/** columns and relationships of "scenario_actions" */
+export type Scenario_ActionsPayloadArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** aggregated selection of "scenario_actions" */
+export type Scenario_Actions_Aggregate = {
+  __typename?: "scenario_actions_aggregate"
+  aggregate?: Maybe<Scenario_Actions_Aggregate_Fields>
+  nodes: Array<Scenario_Actions>
+}
+
+/** aggregate fields of "scenario_actions" */
+export type Scenario_Actions_Aggregate_Fields = {
+  __typename?: "scenario_actions_aggregate_fields"
+  avg?: Maybe<Scenario_Actions_Avg_Fields>
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Scenario_Actions_Max_Fields>
+  min?: Maybe<Scenario_Actions_Min_Fields>
+  stddev?: Maybe<Scenario_Actions_Stddev_Fields>
+  stddev_pop?: Maybe<Scenario_Actions_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Scenario_Actions_Stddev_Samp_Fields>
+  sum?: Maybe<Scenario_Actions_Sum_Fields>
+  var_pop?: Maybe<Scenario_Actions_Var_Pop_Fields>
+  var_samp?: Maybe<Scenario_Actions_Var_Samp_Fields>
+  variance?: Maybe<Scenario_Actions_Variance_Fields>
+}
+
+/** aggregate fields of "scenario_actions" */
+export type Scenario_Actions_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Scenario_Actions_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "scenario_actions" */
+export type Scenario_Actions_Aggregate_Order_By = {
+  avg?: Maybe<Scenario_Actions_Avg_Order_By>
+  count?: Maybe<Order_By>
+  max?: Maybe<Scenario_Actions_Max_Order_By>
+  min?: Maybe<Scenario_Actions_Min_Order_By>
+  stddev?: Maybe<Scenario_Actions_Stddev_Order_By>
+  stddev_pop?: Maybe<Scenario_Actions_Stddev_Pop_Order_By>
+  stddev_samp?: Maybe<Scenario_Actions_Stddev_Samp_Order_By>
+  sum?: Maybe<Scenario_Actions_Sum_Order_By>
+  var_pop?: Maybe<Scenario_Actions_Var_Pop_Order_By>
+  var_samp?: Maybe<Scenario_Actions_Var_Samp_Order_By>
+  variance?: Maybe<Scenario_Actions_Variance_Order_By>
+}
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Scenario_Actions_Append_Input = {
+  payload?: Maybe<Scalars["jsonb"]>
+}
+
+/** input type for inserting array relation for remote table "scenario_actions" */
+export type Scenario_Actions_Arr_Rel_Insert_Input = {
+  data: Array<Scenario_Actions_Insert_Input>
+  on_conflict?: Maybe<Scenario_Actions_On_Conflict>
+}
+
+/** aggregate avg on columns */
+export type Scenario_Actions_Avg_Fields = {
+  __typename?: "scenario_actions_avg_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by avg() on columns of table "scenario_actions" */
+export type Scenario_Actions_Avg_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** Boolean expression to filter rows from the table "scenario_actions". All fields are combined with a logical 'AND'. */
+export type Scenario_Actions_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
+  _not?: Maybe<Scenario_Actions_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
+  action_type?: Maybe<Action_Type_Enum_Comparison_Exp>
+  id?: Maybe<Int_Comparison_Exp>
+  payload?: Maybe<Jsonb_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "scenario_actions" */
+export enum Scenario_Actions_Constraint {
+  /** unique or primary key constraint */
+  ScenarioActionsPkey = "scenario_actions_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Scenario_Actions_Delete_At_Path_Input = {
+  payload?: Maybe<Array<Maybe<Scalars["String"]>>>
+}
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Scenario_Actions_Delete_Elem_Input = {
+  payload?: Maybe<Scalars["Int"]>
+}
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Scenario_Actions_Delete_Key_Input = {
+  payload?: Maybe<Scalars["String"]>
+}
+
+/** input type for incrementing integer column in table "scenario_actions" */
+export type Scenario_Actions_Inc_Input = {
+  id?: Maybe<Scalars["Int"]>
+}
+
+/** input type for inserting data into table "scenario_actions" */
+export type Scenario_Actions_Insert_Input = {
+  action_type?: Maybe<Action_Type_Enum>
+  id?: Maybe<Scalars["Int"]>
+  payload?: Maybe<Scalars["jsonb"]>
+}
+
+/** aggregate max on columns */
+export type Scenario_Actions_Max_Fields = {
+  __typename?: "scenario_actions_max_fields"
+  id?: Maybe<Scalars["Int"]>
+}
+
+/** order by max() on columns of table "scenario_actions" */
+export type Scenario_Actions_Max_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Scenario_Actions_Min_Fields = {
+  __typename?: "scenario_actions_min_fields"
+  id?: Maybe<Scalars["Int"]>
+}
+
+/** order by min() on columns of table "scenario_actions" */
+export type Scenario_Actions_Min_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "scenario_actions" */
+export type Scenario_Actions_Mutation_Response = {
+  __typename?: "scenario_actions_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Scenario_Actions>
+}
+
+/** input type for inserting object relation for remote table "scenario_actions" */
+export type Scenario_Actions_Obj_Rel_Insert_Input = {
+  data: Scenario_Actions_Insert_Input
+  on_conflict?: Maybe<Scenario_Actions_On_Conflict>
+}
+
+/** on conflict condition type for table "scenario_actions" */
+export type Scenario_Actions_On_Conflict = {
+  constraint: Scenario_Actions_Constraint
+  update_columns: Array<Scenario_Actions_Update_Column>
+  where?: Maybe<Scenario_Actions_Bool_Exp>
+}
+
+/** ordering options when selecting data from "scenario_actions" */
+export type Scenario_Actions_Order_By = {
+  action_type?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+  payload?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "scenario_actions" */
+export type Scenario_Actions_Pk_Columns_Input = {
+  id: Scalars["Int"]
+}
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Scenario_Actions_Prepend_Input = {
+  payload?: Maybe<Scalars["jsonb"]>
+}
+
+/** select columns of table "scenario_actions" */
+export enum Scenario_Actions_Select_Column {
+  /** column name */
+  ActionType = "action_type",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Payload = "payload",
+}
+
+/** input type for updating data in table "scenario_actions" */
+export type Scenario_Actions_Set_Input = {
+  action_type?: Maybe<Action_Type_Enum>
+  id?: Maybe<Scalars["Int"]>
+  payload?: Maybe<Scalars["jsonb"]>
+}
+
+/** aggregate stddev on columns */
+export type Scenario_Actions_Stddev_Fields = {
+  __typename?: "scenario_actions_stddev_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev() on columns of table "scenario_actions" */
+export type Scenario_Actions_Stddev_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate stddev_pop on columns */
+export type Scenario_Actions_Stddev_Pop_Fields = {
+  __typename?: "scenario_actions_stddev_pop_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev_pop() on columns of table "scenario_actions" */
+export type Scenario_Actions_Stddev_Pop_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate stddev_samp on columns */
+export type Scenario_Actions_Stddev_Samp_Fields = {
+  __typename?: "scenario_actions_stddev_samp_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by stddev_samp() on columns of table "scenario_actions" */
+export type Scenario_Actions_Stddev_Samp_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate sum on columns */
+export type Scenario_Actions_Sum_Fields = {
+  __typename?: "scenario_actions_sum_fields"
+  id?: Maybe<Scalars["Int"]>
+}
+
+/** order by sum() on columns of table "scenario_actions" */
+export type Scenario_Actions_Sum_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** update columns of table "scenario_actions" */
+export enum Scenario_Actions_Update_Column {
+  /** column name */
+  ActionType = "action_type",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Payload = "payload",
+}
+
+/** aggregate var_pop on columns */
+export type Scenario_Actions_Var_Pop_Fields = {
+  __typename?: "scenario_actions_var_pop_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by var_pop() on columns of table "scenario_actions" */
+export type Scenario_Actions_Var_Pop_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate var_samp on columns */
+export type Scenario_Actions_Var_Samp_Fields = {
+  __typename?: "scenario_actions_var_samp_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by var_samp() on columns of table "scenario_actions" */
+export type Scenario_Actions_Var_Samp_Order_By = {
+  id?: Maybe<Order_By>
+}
+
+/** aggregate variance on columns */
+export type Scenario_Actions_Variance_Fields = {
+  __typename?: "scenario_actions_variance_fields"
+  id?: Maybe<Scalars["Float"]>
+}
+
+/** order by variance() on columns of table "scenario_actions" */
+export type Scenario_Actions_Variance_Order_By = {
+  id?: Maybe<Order_By>
+}
+
 /** subscription root */
 export type Subscription_Root = {
   __typename?: "subscription_root"
+  /** fetch data from the table: "action_type" */
+  action_type: Array<Action_Type>
+  /** fetch aggregated fields from the table: "action_type" */
+  action_type_aggregate: Action_Type_Aggregate
+  /** fetch data from the table: "action_type" using primary key columns */
+  action_type_by_pk?: Maybe<Action_Type>
   /** fetch data from the table: "edges" */
   edges: Array<Edges>
   /** fetch aggregated fields from the table: "edges" */
@@ -4930,6 +5543,12 @@ export type Subscription_Root = {
   recommendation_risk_aggregate: Recommendation_Risk_Aggregate
   /** fetch data from the table: "recommendation_risk" using primary key columns */
   recommendation_risk_by_pk?: Maybe<Recommendation_Risk>
+  /** fetch data from the table: "scenario_actions" */
+  scenario_actions: Array<Scenario_Actions>
+  /** fetch aggregated fields from the table: "scenario_actions" */
+  scenario_actions_aggregate: Scenario_Actions_Aggregate
+  /** fetch data from the table: "scenario_actions" using primary key columns */
+  scenario_actions_by_pk?: Maybe<Scenario_Actions>
   /** fetch data from the table: "supporters" */
   supporters: Array<Supporters>
   /** fetch aggregated fields from the table: "supporters" */
@@ -4942,6 +5561,29 @@ export type Subscription_Root = {
   user_aggregate: User_Aggregate
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>
+}
+
+/** subscription root */
+export type Subscription_RootAction_TypeArgs = {
+  distinct_on?: Maybe<Array<Action_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Action_Type_Order_By>>
+  where?: Maybe<Action_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootAction_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Action_Type_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Action_Type_Order_By>>
+  where?: Maybe<Action_Type_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootAction_Type_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** subscription root */
@@ -5198,6 +5840,29 @@ export type Subscription_RootRecommendation_Risk_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootRecommendation_Risk_By_PkArgs = {
   recommender_id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootScenario_ActionsArgs = {
+  distinct_on?: Maybe<Array<Scenario_Actions_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Scenario_Actions_Order_By>>
+  where?: Maybe<Scenario_Actions_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootScenario_Actions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Scenario_Actions_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Scenario_Actions_Order_By>>
+  where?: Maybe<Scenario_Actions_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootScenario_Actions_By_PkArgs = {
+  id: Scalars["Int"]
 }
 
 /** subscription root */
@@ -6637,6 +7302,19 @@ export type InsertEventMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type InsertScenarioActionMutationVariables = Exact<{
+  action: Scenario_Actions_Insert_Input
+}>
+
+export type InsertScenarioActionMutation = { __typename?: "mutation_root" } & {
+  insert_scenario_actions_one?: Maybe<
+    { __typename?: "scenario_actions" } & Pick<
+      Scenario_Actions,
+      "id" | "action_type" | "payload"
+    >
+  >
+}
+
 export type AddSupporterMutationVariables = Exact<{
   supporter: Supporters_Insert_Input
 }>
@@ -6844,8 +7522,14 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
   update_loan_requests_by_pk?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "status"
-    >
+      "request_id" | "status" | "amount"
+    > & {
+        supporters: Array<
+          { __typename?: "supporters" } & Pick<Supporters, "pledge_amount"> & {
+              user: { __typename?: "user" } & Pick<User, "email">
+            }
+        >
+      }
   >
   lenders?: Maybe<
     { __typename?: "loan_participants_mutation_response" } & {
@@ -7225,6 +7909,15 @@ export const InsertEventDocument = gql`
     }
   }
 `
+export const InsertScenarioActionDocument = gql`
+  mutation InsertScenarioAction($action: scenario_actions_insert_input!) {
+    insert_scenario_actions_one(object: $action) {
+      id
+      action_type
+      payload
+    }
+  }
+`
 export const AddSupporterDocument = gql`
   mutation AddSupporter($supporter: supporters_insert_input!) {
     insert_supporters_one(object: $supporter) {
@@ -7402,6 +8095,13 @@ export const StartLoanDocument = gql`
     ) {
       request_id
       status
+      amount
+      supporters {
+        pledge_amount
+        user {
+          email
+        }
+      }
     }
     lenders: insert_loan_participants(objects: $lenders) {
       returning {
@@ -7622,6 +8322,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<InsertEventMutation>(
           print(InsertEventDocument),
+          variables
+        )
+      )
+    },
+    InsertScenarioAction(
+      variables: InsertScenarioActionMutationVariables
+    ): Promise<InsertScenarioActionMutation> {
+      return withWrapper(() =>
+        client.request<InsertScenarioActionMutation>(
+          print(InsertScenarioActionDocument),
           variables
         )
       )
