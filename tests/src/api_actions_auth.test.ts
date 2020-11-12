@@ -106,22 +106,22 @@ describe("Create new loan | user is Unauthorized", () => {
   })
   test("no session | unauthorized loan", async () => {
     expect(
-      runAction(CreateLoan.Name, undefined, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
+      await runAction(CreateLoan.Name, undefined, payload, dbClient)
+    ).toEqual(ACTION_ERRORS.Unauthorized)
   })
 
   test("no session | invalid loan", async () => {
     expect(
       // @ts-ignore
-      runAction("invalid", undefined, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Invalid)
+      await runAction("invalid", undefined, payload, dbClient)
+    ).toEqual(ACTION_ERRORS.Invalid)
   })
 
   test("illegal user | unauthorized loan", async () => {
     const session = getMockSession(LENDER1)
 
     expect(
-      runAction(CreateLoan.Name, session, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
+      await runAction(CreateLoan.Name, session, payload, dbClient)
+    ).toEqual(ACTION_ERRORS.Unauthorized)
   })
 })

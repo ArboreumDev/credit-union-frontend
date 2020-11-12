@@ -7,6 +7,7 @@ import {
   StartLoanMutation,
   UpdateLoanRequestWithOfferMutation,
   UpdateSupporterMutationVariables,
+  Action_Type_Enum,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { Session, UserType } from "./types"
@@ -41,7 +42,7 @@ export abstract class Action {
     protected payload: any
   ) {}
   abstract minAuthLevel: AUTH_TYPE
-  abstract run(): Promise<any>
+  abstract async run(): Promise<any>
 
   get user() {
     return this.session.user
@@ -62,8 +63,8 @@ export class CreateUser extends Action {
   static InputType: CreateUserMutationVariables
   minAuthLevel = AUTH_TYPE.ANY
 
-  run() {
-    return this.dbClient.sdk.CreateUser(this.payload)
+  async run() {
+    return await this.dbClient.sdk.CreateUser(this.payload)
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
@@ -78,8 +79,8 @@ export class CreateLoan extends Action {
 
   minAuthLevel = AUTH_TYPE.USER
 
-  run() {
-    return this.dbClient.sdk.CreateLoanRequest(this.payload)
+  async run() {
+    return await this.dbClient.sdk.CreateLoanRequest(this.payload)
   }
 
   isUserAllowed() {
@@ -109,9 +110,9 @@ export class AddSupporter extends Action {
 
   minAuthLevel = AUTH_TYPE.USER
 
-  run() {
+  async run() {
     const _p = this.payload as typeof AddSupporter.InputType
-    return this.dbClient.addSupporter(
+    return await this.dbClient.addSupporter(
       _p.requestId,
       _p.email,
       _p.amount,
@@ -134,10 +135,19 @@ export class ChangeBalance extends Action {
     return super.isUserAllowed() && this.user.user_type == UserType.Lender
   }
 
-  run() {
-    return this.dbClient.sdk.ChangeUserCashBalance({
+  async run() {
+    await this.dbClient.sdk.ChangeUserCashBalance({
       userId: this.user.id,
       delta: this.payload.delta,
+    })
+    return await this.dbClient.sdk.InsertScenarioAction({
+      action: {
+        action_type: Action_Type_Enum.AdjustBalances,
+        payload: {
+          userEmail: this.user.email,
+          balanceDelta: this.payload.delta,
+        },
+      },
     })
   }
 
@@ -155,8 +165,8 @@ export class AcceptRejectPledge extends Action {
     return super.isUserAllowed() && this.user.user_type == UserType.Lender
   }
 
-  run() {
-    return this.dbClient.updateSupporter(
+  async run() {
+    return await this.dbClient.updateSupporter(
       this.payload.request_id,
       this.user.id,
       this.payload.status, // see types.SupporterStatus
@@ -184,8 +194,25 @@ export class AcceptLoanOffer extends Action {
     return super.isUserAllowed() && userHasLoan
   }
 
-  run() {
-    return this.dbClient.acceptLoanOffer(this.payload.request_id)
+  async run() {
+    const {
+      update_loan_requests_by_pk: loan,
+    } = await this.dbClient.acceptLoanOffer(this.payload.request_id)
+
+    return await this.dbClient.sdk.InsertScenarioAction({
+      action: {
+        action_type: Action_Type_Enum.ConfirmLoan,
+        payload: {
+          userEmail: this.user.email,
+          loan_id: this.payload.request_id,
+          amount: loan.amount,
+          supporters: loan.supporters.map((s) => ({
+            email: s.user.email,
+            pledge_amount: s.pledge_amount,
+          })),
+        },
+      },
+    })
   }
 
   static fetch(payload: typeof AcceptLoanOffer.InputType) {
@@ -201,9 +228,19 @@ export class MakeRepayment extends Action {
   static ReturnType: StartLoanMutation
   minAuthLevel = AUTH_TYPE.USER
 
-  run() {
+  async run() {
     const userLoanId = this.user.loan_requests[0].request_id
-    return this.dbClient.make_repayment(userLoanId, this.payload.amount)
+    await this.dbClient.make_repayment(userLoanId, this.payload.amount)
+    return await this.dbClient.sdk.InsertScenarioAction({
+      action: {
+        action_type: Action_Type_Enum.RepayLoan,
+        payload: {
+          userEmail: this.user.email,
+          loan_id: userLoanId,
+          amount: this.payload.amount,
+        },
+      },
+    })
   }
 
   static fetch(payload: typeof MakeRepayment.InputType) {
@@ -222,7 +259,7 @@ export const ACTIONS = {
   [MakeRepayment.Name]: MakeRepayment,
 }
 
-export function runAction(
+export async function runAction(
   actionType: string,
   session: Session,
   payload: any,
@@ -230,7 +267,7 @@ export function runAction(
 ) {
   if (actionType in ACTIONS) {
     const action = new ACTIONS[actionType](session, dbClient, payload)
-    if (action.isUserAllowed()) return action.run()
-    else return Promise.reject(ACTION_ERRORS.Unauthorized)
-  } else return Promise.reject(ACTION_ERRORS.Invalid)
+    if (action.isUserAllowed()) return await action.run()
+    else return ACTION_ERRORS.Unauthorized
+  } else return ACTION_ERRORS.Invalid
 }
