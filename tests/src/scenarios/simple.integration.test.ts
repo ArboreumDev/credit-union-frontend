@@ -74,7 +74,7 @@ test("simple scenario", async () => {
 })
 
 test("from generated", async () => {
-  console.log(generated_json)
+  // console.log(generated_json)
   const scenario = Scenario.fromJSON(
     JSON.parse(generated_json) as System,
     dbClient

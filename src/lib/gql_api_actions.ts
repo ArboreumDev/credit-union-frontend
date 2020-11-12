@@ -13,8 +13,8 @@ import { fetcherMutate } from "./api"
 import { Session, UserType } from "./types"
 
 export const ACTION_ERRORS = {
-  Unauthorized: new Error("Unauthorized"),
-  Invalid: new Error("Invalid"),
+  Unauthorized: "UNAUTHORIZED",
+  Invalid: "INVALID",
 }
 
 enum AUTH_TYPE {
@@ -268,6 +268,6 @@ export async function runAction(
   if (actionType in ACTIONS) {
     const action = new ACTIONS[actionType](session, dbClient, payload)
     if (action.isUserAllowed()) return await action.run()
-    else return ACTION_ERRORS.Unauthorized
-  } else return ACTION_ERRORS.Invalid
+    else throw ACTION_ERRORS.Unauthorized
+  } else throw ACTION_ERRORS.Invalid
 }

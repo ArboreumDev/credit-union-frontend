@@ -105,23 +105,29 @@ describe("Create new loan | user is Unauthorized", () => {
     await sdk.ResetDB()
   })
   test("no session | unauthorized loan", async () => {
-    expect(
+    try {
       await runAction(CreateLoan.Name, undefined, payload, dbClient)
-    ).toEqual(ACTION_ERRORS.Unauthorized)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Unauthorized)
+    }
   })
 
   test("no session | invalid loan", async () => {
-    expect(
+    try {
       // @ts-ignore
       await runAction("invalid", undefined, payload, dbClient)
-    ).toEqual(ACTION_ERRORS.Invalid)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Invalid)
+    }
   })
 
   test("illegal user | unauthorized loan", async () => {
     const session = getMockSession(LENDER1)
 
-    expect(
+    try {
       await runAction(CreateLoan.Name, session, payload, dbClient)
-    ).toEqual(ACTION_ERRORS.Unauthorized)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Unauthorized)
+    }
   })
 })
