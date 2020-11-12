@@ -1,6 +1,10 @@
 import { CurrencyCode, Notification } from "gql/wallet/decentro_client"
-import DecentroKYCClient from "gql/wallet/decentro_kyc_client"
+import DecentroKYCClient, {
+  KYCDocumentType,
+  KYCPurpose,
+} from "gql/wallet/decentro_kyc_client"
 import DecentroClient from "gql/wallet/decentro_client"
+import { readFileSync } from "fs"
 
 global.fetch = require("node-fetch")
 
@@ -39,5 +43,31 @@ describe("Decentro tests", () => {
     }
     const res = await decentro.createAccount(req)
     expect(res.minimumBalance).toBe(req.minimum_balance)
+  })
+
+  test.skip("do kyc on image", async () => {
+    // const mock_pan = readFileSync('../decentro/pan mock.jpg','utf-8')
+    // TODO make this work ^^
+    const req = {
+      file: "", //mock_pan,
+      userId: "someID",
+      document_type: KYCDocumentType.PAN,
+      purpose: KYCPurpose.BORROWER,
+    }
+    const res = await decentroKYCClient.doKYCOnImage(req)
+    console.log(res)
+    expect(res.ocrResult.cardNo).toBe("BNZPM2501F")
+  })
+
+  test("kyc from id number", async () => {
+    const req = {
+      userId: "someID",
+      idNumber: "BNZPM2501F",
+      document_type: KYCDocumentType.PAN,
+      purpose: KYCPurpose.BORROWER,
+    }
+    const res = await decentroKYCClient.doKYCOnIDNumber(req)
+    console.log(res)
+    expect(res.kycResult.name).toBe("DURAISAMY MANIKANDAN")
   })
 })
