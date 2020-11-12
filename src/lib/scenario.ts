@@ -1,6 +1,12 @@
 import DbClient from "gql/db_client"
 import { User_Insert_Input } from "gql/sdk"
 import { addAndConfirmSupporter } from "../../tests/src/common/test_helpers"
+import {
+  AcceptLoanOffer,
+  ChangeBalance,
+  CreateLoan,
+  runAction,
+} from "./gql_api_actions"
 
 export interface System {
   users: User[]
@@ -58,17 +64,28 @@ export class Scenario {
         id: uuidv4(),
         name: u.email,
       }
-      this.uidMap[u.email] = user
       await this.dbClient.sdk.CreateUser({ user })
     }
   }
 
+  async getUser(email) {
+    return this.dbClient.getUserByEmail(email)
+  }
+
   async adjustBalances({ userEmail, balanceDelta }) {
-    const user = this.uidMap[userEmail]
+    const user = await this.getUser(userEmail)
+
+    const payload: typeof CreateLoan.InputType = {
+      request: {
+        amount: balanceDelta,
+        borrower_id: user.id,
+      },
+    }
     await this.dbClient.sdk.ChangeUserCashBalance({
       userId: user.id,
       delta: balanceDelta,
     })
+    // runAction(ChangeBalance.Name, {user: {id: user.id}}, payload, this.dbClient)
   }
 
   async repayLoan({ loan_id, amount }) {
@@ -77,7 +94,7 @@ export class Scenario {
   }
 
   async confirmLoan({ userEmail, amount, loan_id, supporters }) {
-    const user = this.uidMap[userEmail]
+    const user = await this.getUser(userEmail)
 
     const { loanRequest } = await this.dbClient.createLoanRequest(
       user.id,
@@ -91,11 +108,16 @@ export class Scenario {
       await addAndConfirmSupporter(
         this.dbClient,
         loanRequest.request_id,
-        this.uidMap[s.email].id,
+        (await this.getUser(s.email)).id,
         s.pledge_amount
       )
     }
     await this.dbClient.acceptLoanOffer(loanRequest.request_id, "latestOffer")
+
+    // const payload: typeof AcceptLoanOffer.InputType = {
+    //   request_id: loanRequest.request_id
+    // }
+    // runAction(AcceptLoanOffer.Name, undefined, payload, this.dbClient)
   }
 
   async execute(action: Action) {
