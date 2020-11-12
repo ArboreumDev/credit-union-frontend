@@ -56,14 +56,15 @@ export class Scenario {
       const user: User_Insert_Input = {
         ...u,
         id: uuidv4(),
+        name: u.email,
       }
-      this.uidMap[u.name] = user
+      this.uidMap[u.email] = user
       await this.dbClient.sdk.CreateUser({ user })
     }
   }
 
-  async adjustBalances({ userId, balanceDelta }) {
-    const user = this.uidMap[userId]
+  async adjustBalances({ userEmail, balanceDelta }) {
+    const user = this.uidMap[userEmail]
     await this.dbClient.sdk.ChangeUserCashBalance({
       userId: user.id,
       delta: balanceDelta,
@@ -75,8 +76,8 @@ export class Scenario {
     await this.dbClient.make_repayment(requestId, amount)
   }
 
-  async confirmLoan({ userId, amount, loan_id, supporters }) {
-    const user = this.uidMap[userId]
+  async confirmLoan({ userEmail, amount, loan_id, supporters }) {
+    const user = this.uidMap[userEmail]
 
     const { loanRequest } = await this.dbClient.createLoanRequest(
       user.id,

@@ -2,38 +2,32 @@
   "users": [
     {
       "balance": 0,
-      "name": "l1",
-      "email": "lender1@mail.com",
+      "email": "l1",
       "user_type": "lender"
     },
     {
       "balance": 10000,
-      "name": "l2",
-      "email": "lender2@mail.com",
+      "email": "l2",
       "user_type": "lender"
     },
     {
       "balance": 10000,
-      "name": "l3",
-      "email": "lender3@mail.com",
+      "email": "l3",
       "user_type": "lender"
     },
     {
       "balance": 10000,
-      "name": "l4",
-      "email": "lender4@mail.com",
+      "email": "l4",
       "user_type": "lender"
     },
     {
       "balance": 0,
-      "name": "l5",
-      "email": "lender5@mail.com",
+      "email": "l5",
       "user_type": "lender"
     },
     {
       "balance": 0,
-      "name": "b1",
-      "email": "borrower1@mail.com",
+      "email": "b1",
       "user_type": "borrower",
       "demographic_info": {
         "income": 20000,
@@ -42,8 +36,7 @@
     },
     {
       "balance": 0,
-      "name": "b2",
-      "email": "borrower2@mail.com",
+      "email": "b2",
       "user_type": "borrower",
       "demographic_info": {
         "income": 30000,
@@ -55,14 +48,14 @@
     {
       "action_type": "ADJUST_BALANCES",
       "payload": {
-        "userId": "l1",
+        "userEmail": "l1",
         "balanceDelta": 20000
       }
     },
     {
       "action_type": "CONFIRM_LOAN",
       "payload": {
-        "userId": "b1",
+        "userEmail": "b1",
         "loan_id": "lr1",
         "amount": 20000,
         "supporters": [

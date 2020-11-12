@@ -38,7 +38,7 @@ describe("Scenario unit tests", () => {
     await scenario.execute(cb_action)
     state = await dbClient.getSystemSummary()
     const user = Object.values(state.users).filter(
-      (u) => u.name == cb_action.payload.userId
+      (u) => u.email == cb_action.payload.userEmail
     )[0]
     expect(user.balance).toBe(cb_action.payload.balanceDelta)
 
