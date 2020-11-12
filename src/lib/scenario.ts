@@ -45,7 +45,6 @@ export function uuidv4() {
 }
 
 export class Scenario {
-  uidMap: { [uid: string]: User_Insert_Input } = {}
   lrMap = {}
   constructor(
     public users: User[],
@@ -72,20 +71,23 @@ export class Scenario {
     return this.dbClient.getUserByEmail(email)
   }
 
+  getSession(user) {
+    return { user, accessToken: null, expires: null }
+  }
+
   async adjustBalances({ userEmail, balanceDelta }) {
     const user = await this.getUser(userEmail)
 
-    const payload: typeof CreateLoan.InputType = {
-      request: {
-        amount: balanceDelta,
-        borrower_id: user.id,
-      },
-    }
-    await this.dbClient.sdk.ChangeUserCashBalance({
-      userId: user.id,
+    const payload: typeof ChangeBalance.InputType = {
       delta: balanceDelta,
-    })
-    // runAction(ChangeBalance.Name, {user: {id: user.id}}, payload, this.dbClient)
+      userId: user.id,
+    }
+    await runAction(
+      ChangeBalance.Name,
+      this.getSession(user),
+      payload,
+      this.dbClient
+    )
   }
 
   async repayLoan({ loan_id, amount }) {
