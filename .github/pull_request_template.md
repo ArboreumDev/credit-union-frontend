@@ -1,1 +1,1 @@
--[ ] yarn test with swarmai development branch passes
+- [ ] yarn test with swarmai development branch passes
