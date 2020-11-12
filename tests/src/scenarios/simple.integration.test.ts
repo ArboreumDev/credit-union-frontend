@@ -7,7 +7,7 @@ beforeEach(async () => {
 })
 
 afterAll(async () => {
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Scenario unit tests", () => {
