@@ -155,6 +155,14 @@ export class Scenario {
     return action
   }
   async toJSON() {
-    return { users: this.users, actions: this.actions }
+    const { scenario_actions } = await this.dbClient.sdk.GetAllActions()
+    return {
+      users: (await this.dbClient.allUsers).map((u) => ({
+        email: u.email,
+        user_type: u.user_type,
+        demographic_info: u.demographic_info,
+      })),
+      actions: scenario_actions,
+    }
   }
 }
