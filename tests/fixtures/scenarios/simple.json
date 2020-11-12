@@ -2,6 +2,7 @@
   "users": [
     {
       "email": "l1",
+      "name": "lender 1",
       "user_type": "lender"
     },
     {

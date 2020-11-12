@@ -14,8 +14,7 @@ export interface System {
 }
 
 export interface User {
-  balance: number
-  name: string
+  name?: string
   email: string
   user_type: string
 }
@@ -61,7 +60,7 @@ export class Scenario {
       const user: User_Insert_Input = {
         ...u,
         id: uuidv4(),
-        name: u.email,
+        name: u.name ?? u.email,
       }
       await this.dbClient.sdk.CreateUser({ user })
     }
@@ -158,6 +157,7 @@ export class Scenario {
     const { scenario_actions } = await this.dbClient.sdk.GetAllActions()
     return {
       users: (await this.dbClient.allUsers).map((u) => ({
+        name: u.name,
         email: u.email,
         user_type: u.user_type,
         demographic_info: u.demographic_info,
