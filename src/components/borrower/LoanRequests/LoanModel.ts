@@ -1,14 +1,10 @@
-import { useForm } from "react-hook-form"
-import { AiOutlineFileDone } from "react-icons/ai"
 import { dec_to_perc } from "lib/currency"
 import {
-  LoanRequest,
-  SupporterStatus,
   LoanInfo,
+  LoanRequest,
   LoanRequestStatus,
+  SupporterStatus,
 } from "lib/types"
-import { Currency } from "components/common/Currency"
-import { AcceptLoanOffer } from "lib/gql_api_actions"
 
 export default class LoanModel {
   constructor(public _loan: LoanRequest) {}

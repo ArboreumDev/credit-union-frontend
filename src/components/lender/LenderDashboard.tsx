@@ -112,11 +112,7 @@ const LenderDashboard = ({ user }: Props) => {
             <Center minW={280} maxW="sm">
               <Box w={160}>
                 <DynamicDoughnut
-                  amounts={[
-                    lender.invested,
-                    lender.totalPledgeUnconfirmedAmount,
-                    lender.uninvested,
-                  ]}
+                  amounts={[lender.invested, lender.pledged, lender.uninvested]}
                 />
               </Box>
             </Center>

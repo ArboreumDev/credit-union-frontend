@@ -19,6 +19,10 @@ React + Typescript + Next.js
 Modify `package.json` to debug: `"dev": "NODE_OPTIONS='--inspect' next",`
 Can't change source after debug has started.
 
+Debugging test example:
+
+`node --inspect node_modules/.bin/jest "--testPathIgnorePatterns=[]" --watch --runInBand tests/src/scenarios/simple.integration.test.ts`
+
 ### Add graphql queries
 
 - Add queries to `/src/gql/queries/<query_type>/<query_name>.graphql`

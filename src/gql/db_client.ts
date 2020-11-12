@@ -72,7 +72,7 @@ export default class DbClient {
     amount: number,
     purpose: string
   ) => {
-    const { request } = await this.sdk.CreateLoanRequest({
+    const { loanRequest } = await this.sdk.CreateLoanRequest({
       request: {
         borrower_id,
         amount,
@@ -82,7 +82,7 @@ export default class DbClient {
       },
     })
     // potentially do other stuff here (notify us...)
-    return { request }
+    return { loanRequest }
   }
   addSupporter = async (
     requestId: string,
@@ -118,6 +118,8 @@ export default class DbClient {
   }
 
   calculateAndUpdateLoanOffer = async (requestId: string) => {
+    // this was not returning the loan and somehow the error was returned from swarmAI was not being
+    // logged
     const { loans, accounts } = await this.calculateLoanRequestOffer(requestId)
     const payload = {
       requestId,
@@ -126,7 +128,7 @@ export default class DbClient {
         requestData: loans.loan_requests[requestId],
       },
     }
-    // console.log('udpated', payload)
+    // console.log('loanoffer udpated', requestId)
     return this.sdk.UpdateLoanRequestWithOffer(payload)
   }
 
@@ -184,9 +186,9 @@ export default class DbClient {
    * @param offer_key which of the possible different offers on the request should be executed
    */
   acceptLoanOffer = async (request_id: string, offer_key = "latestOffer") => {
-    const { request } = await this.sdk.GetLoanOffer({ request_id })
+    const { loanRequest } = await this.sdk.GetLoanOffer({ request_id })
     const systemState = (await this.getSystemSummary()) as Scenario
-    const latestOffer = request.risk_calc_result.latestOffer as LoanOffer
+    const latestOffer = loanRequest.risk_calc_result.latestOffer as LoanOffer
 
     const updated = (await this.swarmAIClient.acceptLoan(
       systemState,
@@ -220,13 +222,13 @@ export default class DbClient {
       amount
     )) as SystemUpdate
     await this.updatePortfolios(accounts.updates)
-    const { request } = await this.sdk.UpdateLoanRequestWithLoanData({
+    const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: loan_id,
       loanData: loans.loans[loan_id],
     })
 
     // TODO show transactions in transaction table
-    return request
+    return loanRequest
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {

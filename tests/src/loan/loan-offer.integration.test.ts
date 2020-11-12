@@ -19,12 +19,12 @@ beforeAll(async () => {
   await sdk.CreateUser({ user: BORROWER1 })
   await sdk.CreateUser({ user: SUPPORTER2 })
 
-  const { request } = await dbClient.createLoanRequest(
+  const { loanRequest } = await dbClient.createLoanRequest(
     BORROWER1.id,
     amount,
     purpose
   )
-  requestId = request.request_id
+  requestId = loanRequest.request_id
 })
 
 afterAll(async () => {
@@ -44,9 +44,11 @@ describe("Loan Request Flow", () => {
   })
 
   test("a calculated offer is saved with the original request", async () => {
-    const { request } = await dbClient.calculateAndUpdateLoanOffer(requestId)
-    const loan_offer = request.risk_calc_result["latestOffer"] as LoanOffer
-    const request_data = request.risk_calc_result[
+    const { loanRequest } = await dbClient.calculateAndUpdateLoanOffer(
+      requestId
+    )
+    const loan_offer = loanRequest.risk_calc_result["latestOffer"] as LoanOffer
+    const request_data = loanRequest.risk_calc_result[
       "requestData"
     ] as LoanRequestInfo
     expect(loan_offer.request_id).toBe(requestId)

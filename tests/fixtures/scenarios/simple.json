@@ -1,0 +1,90 @@
+{
+  "users": [
+    {
+      "balance": 0,
+      "name": "l1",
+      "email": "lender1@mail.com",
+      "user_type": "lender"
+    },
+    {
+      "balance": 10000,
+      "name": "l2",
+      "email": "lender2@mail.com",
+      "user_type": "lender"
+    },
+    {
+      "balance": 10000,
+      "name": "l3",
+      "email": "lender3@mail.com",
+      "user_type": "lender"
+    },
+    {
+      "balance": 10000,
+      "name": "l4",
+      "email": "lender4@mail.com",
+      "user_type": "lender"
+    },
+    {
+      "balance": 0,
+      "name": "l5",
+      "email": "lender5@mail.com",
+      "user_type": "lender"
+    },
+    {
+      "balance": 0,
+      "name": "b1",
+      "email": "borrower1@mail.com",
+      "user_type": "borrower",
+      "demographic_info": {
+        "income": 20000,
+        "credit_score": 600
+      }
+    },
+    {
+      "balance": 0,
+      "name": "b2",
+      "email": "borrower2@mail.com",
+      "user_type": "borrower",
+      "demographic_info": {
+        "income": 30000,
+        "credit_score": 700
+      }
+    }
+  ],
+  "actions": [
+    {
+      "action_type": "ADJUST_BALANCES",
+      "payload": {
+        "userId": "l1",
+        "balanceDelta": 20000
+      }
+    },
+    {
+      "action_type": "GENERATE_LOAN_OFFER",
+      "payload": {
+        "userId": "b1",
+        "loan_id": "lr1",
+        "amount": 20000,
+        "supporters": [
+          {
+            "id": "l4",
+            "pledge_amount": 5000
+          }
+        ]
+      }
+    },
+    {
+      "action_type": "CONFIRM_LOAN_OFFER",
+      "payload": {
+        "loan_id": "lr1"
+      }
+    },
+    {
+      "action_type": "REPAY_LOAN",
+      "payload": {
+        "loan_id": "lr1",
+        "amount": 5000
+      }
+    }
+  ]
+}

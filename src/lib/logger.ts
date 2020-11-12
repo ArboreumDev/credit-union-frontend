@@ -13,7 +13,7 @@ export const PostToSlack = async (message: string, env?: string) => {
 export default async function log(message: string, env?: string) {
   env = env ?? process.env.ENVIRONMENT
   env === "production" && (await PostToSlack(message))
-  env === "preview" && console.log(message)
+  // console.log(message)
 }
 
 export async function logEvent(

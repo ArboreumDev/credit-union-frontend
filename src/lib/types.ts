@@ -60,10 +60,10 @@ export type UserInfo = {
 }
 
 export type Scenario = {
-  users: any // TODO should be Dict[str, UserInfo]
-  loans: any // TODO
-  loan_requests: any // TODO
-  loan_offers: any
+  users: { [id: string]: UserInfo }
+  loans: { [id: string]: LoanInfo }
+  loan_requests: { [id: string]: LoanRequestInfo }
+  loan_offers: { [id: string]: LoanInfo }
 }
 
 export type SupporterInfo = {

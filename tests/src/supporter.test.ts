@@ -34,12 +34,12 @@ describe("Basic loan request flow for an accepted loan", () => {
     await addNetwork(sdk, BASIC_NETWORK)
     const allUsers = await dbClient.allUsers
     balancesBefore = getUserPortfolio(allUsers)
-    const { request } = await dbClient.createLoanRequest(
+    const { loanRequest } = await dbClient.createLoanRequest(
       BORROWER1.id,
       amount,
       purpose
     )
-    requestId = request.request_id
+    requestId = loanRequest.request_id
   })
 
   test("suppporters that exist on the network can be added to the loan", async () => {

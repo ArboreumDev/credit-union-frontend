@@ -1,5 +1,5 @@
 query GetLoanOffer($request_id: uuid!) {
-  request: loan_requests_by_pk(request_id: $request_id) {
+  loanRequest: loan_requests_by_pk(request_id: $request_id) {
     request_id
     borrower_id
     risk_calc_result
