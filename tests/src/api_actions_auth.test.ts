@@ -1,11 +1,11 @@
-import { CreateUserMutation } from "../../src/gql/sdk"
+import { CreateUserMutation } from "gql/sdk"
 import {
   ACTION_ERRORS,
   AddSupporter,
   CreateLoan,
   CreateUser,
   runAction,
-} from "../../src/lib/gql_api_actions"
+} from "lib/gql_api_actions"
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 import { dbClient, sdk } from "./common/utils"
