@@ -7289,6 +7289,17 @@ export type ApproveKycMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
 }
 
+export type GetAllActionsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllActionsQuery = { __typename?: "query_root" } & {
+  scenario_actions: Array<
+    { __typename?: "scenario_actions" } & Pick<
+      Scenario_Actions,
+      "id" | "action_type" | "payload"
+    >
+  >
+}
+
 export type InsertEventMutationVariables = Exact<{
   event: Events_Insert_Input
 }>
@@ -7904,6 +7915,15 @@ export const ApproveKycDocument = gql`
     }
   }
 `
+export const GetAllActionsDocument = gql`
+  query GetAllActions {
+    scenario_actions {
+      id
+      action_type
+      payload
+    }
+  }
+`
 export const InsertEventDocument = gql`
   mutation InsertEvent($event: events_insert_input!) {
     insert_events_one(object: $event) {
@@ -8328,6 +8348,16 @@ export function getSdk(
     ): Promise<ApproveKycMutation> {
       return withWrapper(() =>
         client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
+      )
+    },
+    GetAllActions(
+      variables?: GetAllActionsQueryVariables
+    ): Promise<GetAllActionsQuery> {
+      return withWrapper(() =>
+        client.request<GetAllActionsQuery>(
+          print(GetAllActionsDocument),
+          variables
+        )
       )
     },
     InsertEvent(
