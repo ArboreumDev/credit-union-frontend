@@ -60,7 +60,7 @@
         "amount": 20000,
         "supporters": [
           {
-            "id": "l4",
+            "email": "l4",
             "pledge_amount": 5000
           }
         ]

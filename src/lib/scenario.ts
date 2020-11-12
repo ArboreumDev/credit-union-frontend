@@ -91,7 +91,7 @@ export class Scenario {
       await addAndConfirmSupporter(
         this.dbClient,
         loanRequest.request_id,
-        this.uidMap[s.id].id,
+        this.uidMap[s.email].id,
         s.pledge_amount
       )
     }
