@@ -93,9 +93,11 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
+      uploadRequest.file_name = Date.now() + "-" + uploadRequest.file_name
       await uploadS3(uploadRequest)
-      const kycCheck = await checkKYC(uploadRequest)
       PostToSlack("New user KYC Upload: " + Location)
+
+      const kycCheck = await checkKYC(uploadRequest)
       if (kycCheck.kycStatus === "SUCCESS") res.status(200).json({ Location })
       res.status(401).json({ status: KYCStatus.KYC_CHECK_FAILED })
     } catch (e) {
