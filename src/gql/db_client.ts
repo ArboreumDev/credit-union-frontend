@@ -1,4 +1,5 @@
 import { GraphQLClient } from "graphql-request"
+
 import { getSdk, Sdk } from "../../src/gql/sdk"
 
 import {
@@ -28,6 +29,12 @@ import {
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
+import {
+  acresToLoanTerms,
+  FarmerBaseInfo,
+  FarmerData,
+  get_otp,
+} from "../../tests/src/yazali/yazali_fixtures"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -381,5 +388,17 @@ export default class DbClient {
     }
     const res = await this.sdk.InsertEvent({ event })
     return res.insert_events_one
+  }
+
+  addFarmer = async (farmer: FarmerBaseInfo) => {
+    // we could probably do it all in one graphql-query, but I thought having it in a dbClient method
+    // would be more future-proof
+    const data = {
+      info: farmer,
+      terms: acresToLoanTerms(farmer.acres),
+      otp: get_otp(),
+      kyc: false,
+    } as FarmerData
+    return this.sdk.CreateFarmer({ farmer: { data, phone: farmer.phone } })
   }
 }
