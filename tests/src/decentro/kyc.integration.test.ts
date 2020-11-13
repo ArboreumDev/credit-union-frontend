@@ -1,11 +1,9 @@
-import { CurrencyCode, Notification } from "gql/wallet/decentro_client"
+import FormData from "form-data"
+import { readFileSync } from "fs"
 import DecentroKYCClient, {
   KYCDocumentType,
   KYCPurpose,
 } from "gql/wallet/decentro_kyc_client"
-import DecentroClient from "gql/wallet/decentro_client"
-import { createReadStream, readFileSync } from "fs"
-import FormData from "form-data"
 
 global.fetch = require("node-fetch")
 
