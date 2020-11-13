@@ -44,7 +44,7 @@ export default function Onboarding({ user, userType }: Params) {
     console.log(data)
     CreateUser.fetch({
       user: {
-        name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
+        name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
         email: user.email,
         user_type: userType,
         phone: data.phone,
