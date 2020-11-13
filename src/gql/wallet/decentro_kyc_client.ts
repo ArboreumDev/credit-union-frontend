@@ -41,17 +41,27 @@ export default class DecentroKYCClient extends KYCProvider {
     document_type: KYCDocumentType
     purpose: KYCPurpose
   }) {
-    const endpoint = "/kyc/scan_extract/ocr"
-    const req = {
-      reference_id: params.userId + "-" + Date.now(),
-      document: params.file,
-      document_type: params.document_type,
-      consent_purpose: params.purpose,
-      consent: "Y",
-      kyc_validate: 1,
-    }
-    console.log(req)
-    return this.fetcher.post(endpoint, req)
+    const form = new FormData()
+    form.append("reference_id", "arbo-" + Date.now())
+    form.append("document_type", "pan")
+    form.append("consent", "Y")
+    form.append("consent_purpose", "for bank account purpose only")
+    form.append("document", params.file)
+    form.append("kyc_validate", "1")
+
+    return fetch("https://in.staging.decentro.tech/kyc/scan_extract/ocr", {
+      method: "POST",
+      body: form,
+      headers: {
+        module_secret: "csnlWlPHXnfDxEporJP9qzksYqtG37iC",
+        client_id: "arboreum_staging",
+        client_secret: "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+      },
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   async doKYCOnIDNumber(params: {
