@@ -1,0 +1,7 @@
+query GetAllActions {
+  scenario_actions {
+    id
+    action_type
+    payload
+  }
+}

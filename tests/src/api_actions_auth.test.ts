@@ -1,11 +1,11 @@
-import { CreateUserMutation } from "../../src/gql/sdk"
+import { CreateUserMutation } from "gql/sdk"
 import {
   ACTION_ERRORS,
   AddSupporter,
   CreateLoan,
   CreateUser,
   runAction,
-} from "../../src/lib/gql_api_actions"
+} from "lib/gql_api_actions"
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 import { dbClient, sdk } from "./common/utils"
@@ -105,23 +105,29 @@ describe("Create new loan | user is Unauthorized", () => {
     await sdk.ResetDB()
   })
   test("no session | unauthorized loan", async () => {
-    expect(
-      runAction(CreateLoan.Name, undefined, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
+    try {
+      await runAction(CreateLoan.Name, undefined, payload, dbClient)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Unauthorized)
+    }
   })
 
   test("no session | invalid loan", async () => {
-    expect(
+    try {
       // @ts-ignore
-      runAction("invalid", undefined, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Invalid)
+      await runAction("invalid", undefined, payload, dbClient)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Invalid)
+    }
   })
 
   test("illegal user | unauthorized loan", async () => {
     const session = getMockSession(LENDER1)
 
-    expect(
-      runAction(CreateLoan.Name, session, payload, dbClient)
-    ).rejects.toEqual(ACTION_ERRORS.Unauthorized)
+    try {
+      await runAction(CreateLoan.Name, session, payload, dbClient)
+    } catch (e) {
+      expect(e).toMatch(ACTION_ERRORS.Unauthorized)
+    }
   })
 })

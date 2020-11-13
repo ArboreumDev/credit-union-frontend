@@ -35,4 +35,7 @@ mutation ResetDB {
   delete_user(where: {}) {
     affected_rows
   }
+  delete_scenario_actions(where: {}) {
+    affected_rows
+  }
 }

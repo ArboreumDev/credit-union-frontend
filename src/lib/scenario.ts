@@ -1,6 +1,12 @@
 import DbClient from "gql/db_client"
 import { User_Insert_Input } from "gql/sdk"
 import { addAndConfirmSupporter } from "../../tests/src/common/test_helpers"
+import {
+  AcceptLoanOffer,
+  ChangeBalance,
+  MakeRepayment,
+  runAction,
+} from "./gql_api_actions"
 
 export interface System {
   users: User[]
@@ -8,8 +14,7 @@ export interface System {
 }
 
 export interface User {
-  balance: number
-  name: string
+  name?: string
   email: string
   user_type: string
 }
@@ -19,9 +24,8 @@ export interface DemographicInfo {
   credit_score?: null
 }
 export enum ActionType {
-  GENERATE_LOAN_OFFER = "GENERATE_LOAN_OFFER",
   ADJUST_BALANCES = "ADJUST_BALANCES",
-  CONFIRM_LOAN_OFFER = "CONFIRM_LOAN_OFFER",
+  CONFIRM_LOAN = "CONFIRM_LOAN",
   REPAY_LOAN = "REPAY_LOAN",
 }
 
@@ -40,7 +44,6 @@ export function uuidv4() {
 }
 
 export class Scenario {
-  uidMap: { [uid: string]: User_Insert_Input } = {}
   lrMap = {}
   constructor(
     public users: User[],
@@ -57,22 +60,53 @@ export class Scenario {
       const user: User_Insert_Input = {
         ...u,
         id: uuidv4(),
+        name: u.name ?? u.email,
       }
-      this.uidMap[u.name] = user
       await this.dbClient.sdk.CreateUser({ user })
     }
   }
 
-  async adjustBalances({ userId, balanceDelta }) {
-    const user = this.uidMap[userId]
-    await this.dbClient.sdk.ChangeUserCashBalance({
-      userId: user.id,
-      delta: balanceDelta,
-    })
+  async getUser(email) {
+    return this.dbClient.getUserByEmail(email)
   }
 
-  async generateOffer({ userId, loan_id, amount, supporters }) {
-    const user = this.uidMap[userId]
+  getSession(user) {
+    return { user, accessToken: null, expires: null }
+  }
+
+  runAction(cls, user, payload: any) {
+    return runAction(cls.Name, this.getSession(user), payload, this.dbClient)
+  }
+
+  async adjustBalances({ userEmail, balanceDelta }) {
+    const user = await this.getUser(userEmail)
+
+    const payload: typeof ChangeBalance.InputType = {
+      delta: balanceDelta,
+      userId: user.id,
+    }
+    return this.runAction(ChangeBalance, user, payload)
+  }
+
+  async repayLoan({ loan_id, amount }) {
+    const requestId = this.lrMap[loan_id]
+
+    const { loanRequest } = await this.dbClient.sdk.GetLoanRequest({
+      requestId,
+    })
+
+    const payload: typeof MakeRepayment.InputType = {
+      amount,
+    }
+    await this.runAction(
+      MakeRepayment,
+      await this.getUser(loanRequest.user.email),
+      payload
+    )
+  }
+
+  async confirmLoan({ userEmail, amount, loan_id, supporters }) {
+    const user = await this.getUser(userEmail)
 
     const { loanRequest } = await this.dbClient.createLoanRequest(
       user.id,
@@ -83,36 +117,30 @@ export class Scenario {
 
     // confirm supporter and trigger the loan offer generation
     for (const s of supporters) {
-      // supporters.map(
-      // async (s) =>
       await addAndConfirmSupporter(
         this.dbClient,
         loanRequest.request_id,
-        this.uidMap[s.id].id,
+        (await this.getUser(s.email)).id,
         s.pledge_amount
       )
-      // )
     }
+
+    const payload: typeof AcceptLoanOffer.InputType = {
+      request_id: loanRequest.request_id,
+    }
+    await this.runAction(
+      AcceptLoanOffer,
+      await this.getUser(userEmail),
+      payload
+    )
   }
 
-  async repayLoan({ loan_id, amount }) {
-    const requestId = this.lrMap[loan_id]
-    await this.dbClient.make_repayment(requestId, amount)
-  }
-
-  async acceptLoan({ loan_id }) {
-    const requestId = this.lrMap[loan_id]
-    await this.dbClient.acceptLoanOffer(requestId, "latestOffer")
-  }
-
-  async execute(action: Action) {
+  async executeAction(action: Action) {
     switch (action.action_type) {
       case ActionType.ADJUST_BALANCES:
         return this.adjustBalances(action.payload)
-      case ActionType.GENERATE_LOAN_OFFER:
-        return this.generateOffer(action.payload)
-      case ActionType.CONFIRM_LOAN_OFFER:
-        return this.acceptLoan(action.payload)
+      case ActionType.CONFIRM_LOAN:
+        return this.confirmLoan(action.payload)
       case ActionType.REPAY_LOAN:
         return this.repayLoan(action.payload)
       default:
@@ -121,11 +149,24 @@ export class Scenario {
     }
   }
 
+  async executeAll() {
+    for (const action of this.actions) await this.executeAction(action)
+  }
+
   async addAction(action: Action) {
     this.actions.push(action)
     return action
   }
   async toJSON() {
-    return { users: this.users, actions: this.actions }
+    const { scenario_actions } = await this.dbClient.sdk.GetAllActions()
+    return {
+      users: (await this.dbClient.allUsers).map((u) => ({
+        name: u.name,
+        email: u.email,
+        user_type: u.user_type,
+        demographic_info: u.demographic_info,
+      })),
+      actions: scenario_actions,
+    }
   }
 }

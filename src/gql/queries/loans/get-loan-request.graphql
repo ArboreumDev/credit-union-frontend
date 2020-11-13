@@ -20,6 +20,8 @@ query GetLoanRequest($requestId: uuid!) {
       }
     }
     user {
+      id
+      email
       demographic_info
     }
   }

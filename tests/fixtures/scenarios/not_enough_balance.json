@@ -2,23 +2,10 @@
   "users": [
     {
       "email": "l1",
-      "name": "lender 1",
       "user_type": "lender"
     },
     {
-      "email": "l2",
-      "user_type": "lender"
-    },
-    {
-      "email": "l3",
-      "user_type": "lender"
-    },
-    {
-      "email": "l4",
-      "user_type": "lender"
-    },
-    {
-      "email": "l5",
+      "email": "s1",
       "user_type": "lender"
     },
     {
@@ -28,29 +15,14 @@
         "income": 20000,
         "credit_score": 600
       }
-    },
-    {
-      "email": "b2",
-      "user_type": "borrower",
-      "demographic_info": {
-        "income": 30000,
-        "credit_score": 700
-      }
     }
   ],
   "actions": [
     {
       "action_type": "ADJUST_BALANCES",
       "payload": {
-        "userEmail": "l1",
-        "balanceDelta": 20000
-      }
-    },
-    {
-      "action_type": "ADJUST_BALANCES",
-      "payload": {
-        "userEmail": "l4",
-        "balanceDelta": 20000
+        "userEmail": "s1",
+        "balanceDelta": 5000
       }
     },
     {
@@ -61,7 +33,7 @@
         "amount": 20000,
         "supporters": [
           {
-            "email": "l4",
+            "email": "s1",
             "pledge_amount": 5000
           }
         ]

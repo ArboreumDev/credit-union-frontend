@@ -1,5 +1,9 @@
 - table:
     schema: public
+    name: action_type
+  is_enum: true
+- table:
+    schema: public
     name: edges
   object_relationships:
     - name: from_user
@@ -146,6 +150,9 @@
     - name: userByNeighborId
       using:
         foreign_key_constraint_on: recommender_id
+- table:
+    schema: public
+    name: scenario_actions
 - table:
     schema: public
     name: supporters

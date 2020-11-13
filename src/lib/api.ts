@@ -52,7 +52,7 @@ export class Fetcher {
     }
 
     if (![200, 201].includes(response.status)) {
-      return generateErrorResponse(
+      throw generateErrorResponse(
         "The server responded with an unexpected status.",
         data
       )
