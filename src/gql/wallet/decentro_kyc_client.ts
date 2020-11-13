@@ -1,6 +1,7 @@
 import { Fetcher } from "lib/api"
 import { fileURLToPath } from "url"
 import { Bank, KYCProvider } from "./bank"
+import FormData from "form-data"
 
 export enum KYCDocumentType {
   VOTERID = "VOTERID",
@@ -14,7 +15,7 @@ export enum KYCPurpose {
   LENDER = "register as lender on arboreum platform",
 }
 
-export default class DecentroKYCClient extends KYCProvider {
+export default class DecentroKYCClient {
   private fetcher: Fetcher
 
   constructor(
@@ -23,7 +24,6 @@ export default class DecentroKYCClient extends KYCProvider {
     client_secret: string,
     module_secret: string
   ) {
-    super()
     this.fetcher = new Fetcher(
       {
         "Content-Type": "application/json",
@@ -35,33 +35,21 @@ export default class DecentroKYCClient extends KYCProvider {
     )
   }
 
-  async doKYCOnImage(params: {
-    file: File
-    userId: string
-    document_type: KYCDocumentType
-    purpose: KYCPurpose
-  }) {
-    const form = new FormData()
-    form.append("reference_id", "arbo-" + Date.now())
-    form.append("document_type", "pan")
-    form.append("consent", "Y")
-    form.append("consent_purpose", "for bank account purpose only")
-    form.append("document", params.file)
-    form.append("kyc_validate", "1")
-
-    return fetch("https://in.staging.decentro.tech/kyc/scan_extract/ocr", {
-      method: "POST",
-      body: form,
-      headers: {
-        module_secret: "csnlWlPHXnfDxEporJP9qzksYqtG37iC",
-        client_id: "arboreum_staging",
-        client_secret: "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
-      },
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error(error)
-      })
+  async doKYCOnImage(formdata: FormData) {
+    const resp = await fetch(
+      "https://in.staging.decentro.tech/kyc/scan_extract/ocr",
+      {
+        method: "POST",
+        headers: {
+          module_secret: "csnlWlPHXnfDxEporJP9qzksYqtG37iC",
+          client_id: "arboreum_staging",
+          client_secret: "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+        },
+        // @ts-ignore
+        body: formdata,
+      }
+    )
+    return resp.json()
   }
 
   async doKYCOnIDNumber(params: {

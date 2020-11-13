@@ -4,7 +4,8 @@ import DecentroKYCClient, {
   KYCPurpose,
 } from "gql/wallet/decentro_kyc_client"
 import DecentroClient from "gql/wallet/decentro_client"
-import { readFileSync } from "fs"
+import { createReadStream, readFileSync } from "fs"
+import FormData from "form-data"
 
 global.fetch = require("node-fetch")
 
@@ -14,23 +15,27 @@ export const decentroKYCClient = new DecentroKYCClient(
   "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
   "csnlWlPHXnfDxEporJP9qzksYqtG37iC"
 )
-
 describe("Decentro tests", () => {
   test("do kyc on image", async () => {
     const path = require("path")
-    const file = readFileSync(path.resolve(__dirname, "pan_mock.jpg"), "utf-8")
-    const req = {
-      file, //mock_pan,
-      userId: "someID",
-      document_type: KYCDocumentType.PAN,
-      purpose: KYCPurpose.BORROWER,
-    }
-    const res = await decentroKYCClient.doKYCOnImage(req)
+    const file = readFileSync(path.resolve(__dirname, "pan_mock.jpg"))
+
+    const formdata = new FormData()
+    formdata.append("reference_id", "arbo" + new Date())
+    formdata.append("document_type", "pan")
+    formdata.append("consent", "Y")
+    formdata.append("consent_purpose", "for bank account purpose only")
+    formdata.append("document", file, {
+      filename: "bar.jpg",
+      contentType: "image/jpeg",
+    })
+    formdata.append("kyc_validate", "1")
+    const res = await decentroKYCClient.doKYCOnImage(formdata)
     console.log(res)
     expect(res.kycResult.name).toBe("DURAISAMY MANIKANDAN")
   })
 
-  test.skip("kyc from id number", async () => {
+  test("kyc from id number", async () => {
     const req = {
       userId: "someID",
       idNumber: "BNZPM2501F",
