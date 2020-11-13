@@ -1,11 +1,6 @@
-import AWS from "aws-sdk"
-import DecentroKYCClient, {
-  decentroKYCClient,
-  KYCStatus,
-} from "gql/wallet/decentro_kyc_client"
-import { PostToSlack } from "lib/logger"
-import { NextApiRequest, NextApiResponse } from "next"
 import FormData from "form-data"
+import { decentroKYCClient, KYCStatus } from "gql/wallet/decentro_kyc_client"
+import { NextApiRequest, NextApiResponse } from "next"
 import { UploadRequest } from "./upload"
 
 export const config = {
@@ -17,9 +12,6 @@ export const config = {
 }
 
 async function checkKYC(uploadRequest: UploadRequest) {
-  const key =
-    "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
-
   const formdata = new FormData()
   formdata.append("reference_id", "arbo" + new Date())
   formdata.append("document_type", "pan")

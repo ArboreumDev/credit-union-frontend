@@ -20,7 +20,7 @@ import { useRouter } from "next/dist/client/router"
 import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { AiOutlineMail } from "react-icons/ai"
-import Dropzone from "./Dropzone"
+import UploadingDropzone from "./UploadingDropzone"
 
 type FormData = {
   firstname: string
@@ -127,23 +127,23 @@ export default function Onboarding({ user, userType }: Params) {
             {userType == UserType.Borrower && (
               <div>
                 <Box>
-                  <Dropzone email={user.email}>
+                  <UploadingDropzone key={"user_uploads/" + user.email}>
                     <p>Drop KYC documents here: </p>
                     <UnorderedList>
                       <ListItem>Passport</ListItem>
                       <ListItem>Aadhar Card</ListItem>
                       <ListItem>PAN Card</ListItem>
                     </UnorderedList>
-                  </Dropzone>
+                  </UploadingDropzone>
                 </Box>
                 <Box>
-                  <Dropzone email={user.email}>
+                  <UploadingDropzone key={"user_uploads/" + user.email}>
                     <p>Upload financial documents here: </p>
                     <UnorderedList>
                       <ListItem>Latest Income Tax Returns</ListItem>
                       <ListItem>Bank Statement for last 6 months</ListItem>
                     </UnorderedList>
-                  </Dropzone>
+                  </UploadingDropzone>
                 </Box>
               </div>
             )}

@@ -51,7 +51,7 @@ export const UploadToS3 = async (
 }
 
 export type UploadRequest = {
-  email: string
+  key: string
   file_name: string
   ctype: string
   data: string
@@ -59,7 +59,7 @@ export type UploadRequest = {
 
 async function uploadS3(uploadRequest: UploadRequest) {
   const key =
-    "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
+    "user_uploads/" + uploadRequest.key + "/" + uploadRequest.file_name
 
   const { Location } = await UploadToS3(
     "uploads-all-arboreum",
