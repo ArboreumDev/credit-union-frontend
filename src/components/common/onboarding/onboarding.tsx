@@ -20,7 +20,7 @@ import { useRouter } from "next/dist/client/router"
 import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { AiOutlineMail } from "react-icons/ai"
-import Dropzone from "./Dropzone"
+import UploadingDropzone from "./UploadingDropzone"
 
 type FormData = {
   firstname: string
@@ -44,7 +44,7 @@ export default function Onboarding({ user, userType }: Params) {
     console.log(data)
     CreateUser.fetch({
       user: {
-        name: data.firstname + " " + data.lastname, // TODO: Change DB to have separate first and last names
+        name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
         email: user.email,
         user_type: userType,
         phone: data.phone,
@@ -127,23 +127,29 @@ export default function Onboarding({ user, userType }: Params) {
             {userType == UserType.Borrower && (
               <div>
                 <Box>
-                  <Dropzone email={user.email}>
+                  <UploadingDropzone
+                    endpoint="/api/upload"
+                    key={"user_uploads/" + user.email}
+                  >
                     <p>Drop KYC documents here: </p>
                     <UnorderedList>
                       <ListItem>Passport</ListItem>
                       <ListItem>Aadhar Card</ListItem>
                       <ListItem>PAN Card</ListItem>
                     </UnorderedList>
-                  </Dropzone>
+                  </UploadingDropzone>
                 </Box>
                 <Box>
-                  <Dropzone email={user.email}>
+                  <UploadingDropzone
+                    endpoint="/api/upload"
+                    key={"user_uploads/" + user.email}
+                  >
                     <p>Upload financial documents here: </p>
                     <UnorderedList>
                       <ListItem>Latest Income Tax Returns</ListItem>
                       <ListItem>Bank Statement for last 6 months</ListItem>
                     </UnorderedList>
-                  </Dropzone>
+                  </UploadingDropzone>
                 </Box>
               </div>
             )}

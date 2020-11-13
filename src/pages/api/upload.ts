@@ -1,6 +1,11 @@
 import AWS from "aws-sdk"
+import DecentroKYCClient, {
+  decentroKYCClient,
+  KYCStatus,
+} from "gql/wallet/decentro_kyc_client"
 import { PostToSlack } from "lib/logger"
 import { NextApiRequest, NextApiResponse } from "next"
+import FormData from "form-data"
 
 export const config = {
   api: {
@@ -46,10 +51,24 @@ export const UploadToS3 = async (
 }
 
 export type UploadRequest = {
-  email: string
+  key: string
   file_name: string
   ctype: string
   data: string
+}
+
+async function uploadS3(uploadRequest: UploadRequest) {
+  const key =
+    "user_uploads/" + uploadRequest.key + "/" + uploadRequest.file_name
+
+  const { Location } = await UploadToS3(
+    "uploads-all-arboreum",
+    key,
+    Buffer.from(uploadRequest.data, "base64"),
+    uploadRequest.ctype,
+    "base64"
+  )
+  return Location
 }
 
 export default async function handler(
@@ -59,21 +78,13 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
-      const key =
-        "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
-
-      const { Location } = await UploadToS3(
-        "uploads-all-arboreum",
-        key,
-        Buffer.from(uploadRequest.data, "base64"),
-        uploadRequest.ctype,
-        "base64"
-      )
-      PostToSlack("New user KYC Upload: " + Location)
-      res.status(200).json({ Location })
+      uploadRequest.file_name = Date.now() + "-" + uploadRequest.file_name
+      const location = await uploadS3(uploadRequest)
+      PostToSlack("New user KYC Upload: " + location)
+      res.status(200).json({ location })
     } catch (e) {
       console.log(e)
-      res.status(500).json({ e })
+      res.status(500).json({ status: e })
     }
   }
 }

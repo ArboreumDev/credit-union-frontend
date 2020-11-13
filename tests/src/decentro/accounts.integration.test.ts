@@ -1,6 +1,7 @@
-import { CurrencyCode, Notification } from "gql/wallet/decentro_client"
-import DecentroKYCClient from "gql/wallet/decentro_kyc_client"
-import DecentroClient from "gql/wallet/decentro_client"
+import DecentroClient, {
+  CurrencyCode,
+  Notification,
+} from "gql/wallet/decentro_client"
 
 global.fetch = require("node-fetch")
 
@@ -9,12 +10,6 @@ export const decentro = new DecentroClient(
   "arboreum_staging",
   "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
   "KDTtCWDkcIfVKEEZlYCNMljnFM8SwM0L"
-)
-export const decentroKYCClient = new DecentroKYCClient(
-  "https://in.staging.decentro.tech",
-  "arboreum_staging",
-  "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
-  "csnlWlPHXnfDxEporJP9qzksYqtG37iC"
 )
 
 describe("Decentro tests", () => {

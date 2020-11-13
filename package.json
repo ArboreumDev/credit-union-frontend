@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.3",
+    "@chakra-ui/icons": "^1.0.0-rc.8",
     "@chakra-ui/theme": "^1.0.0-rc.3",
     "@use-it/event-listener": "^0.1.5",
     "aws-sdk": "^2.725.0",
     "chart.js": "^2.9.3",
     "dataloader": "^2.0.0",
     "date-fns": "^2.16.1",
+    "form-data": "^3.0.0",
     "graphql-request": "^2.0.0",
     "micro-cors": "^0.1.1",
     "next": "9.5.3",
@@ -54,8 +56,8 @@
     "husky": "^4.2.5",
     "jest": "^26.1.0",
     "lint-staged": ">=10",
-    "prettier": "2.0.5",
-    "node-mocks-http": "^1.9.0"
+    "node-mocks-http": "^1.9.0",
+    "prettier": "2.0.5"
   },
   "license": "ISC",
   "husky": {
