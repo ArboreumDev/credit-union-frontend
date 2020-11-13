@@ -45,7 +45,7 @@ export default async function handler(
       else res.status(200).json({ status: KYCStatus.KYC_CHECK_FAILED })
     } catch (e) {
       console.log(e)
-      res.status(500).json({ e })
+      res.status(500).json({ status: e })
     }
   }
 }

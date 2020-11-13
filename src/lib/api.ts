@@ -92,7 +92,7 @@ export async function fetchJSON({
 }) {
   const fetcher = new Fetcher()
 
-  return await fetcher.post(url, payload)
+  return fetcher.post(url, payload)
 }
 
 export const fetcherMutate = (action, payload) => {

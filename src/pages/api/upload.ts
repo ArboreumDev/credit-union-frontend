@@ -84,7 +84,7 @@ export default async function handler(
       res.status(200).json({ location })
     } catch (e) {
       console.log(e)
-      res.status(500).json({ e })
+      res.status(500).json({ status: e })
     }
   }
 }
