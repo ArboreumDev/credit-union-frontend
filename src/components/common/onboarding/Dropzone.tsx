@@ -1,5 +1,3 @@
-import { Spinner } from "@chakra-ui/core"
-import Axios from "axios"
 import { UploadRequest } from "pages/api/upload"
 import { useState } from "react"
 import Dropzone from "react-dropzone"
@@ -12,30 +10,27 @@ const toBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-const FileDropzone = (props: { email: string; children: any }) => {
-  const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
+const FileDropzone = (props: {
+  key: string
+  onDrag: (data: UploadRequest) => void
+  children: any
+}) => {
+  const [files, setFiles] = useState<string[]>([])
+
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {
-        setFiles((files) => ({ ...files, [file.name]: false }))
+        setFiles([...files, file.name])
         const fdata = (await toBase64(file)) as string
         const ctype = fdata.split(",")[0]
         const b64data = fdata.split(",")[1]
         const data: UploadRequest = {
-          email: props.email,
+          key: props.key,
           file_name: file.name,
           ctype: ctype,
           data: b64data,
         }
-
-        await Axios.post("/api/upload", data, {
-          method: "POST",
-        })
-          .then((res) => {
-            console.log(res.data)
-            setFiles((files) => ({ ...files, [file.name]: true }))
-          })
-          .catch((error) => console.log(error))
+        props.onDrag(data)
       })
     }
   }
@@ -49,26 +44,6 @@ const FileDropzone = (props: { email: string; children: any }) => {
           </div>
         )}
       </Dropzone>
-      <div>
-        <ul>
-          {Object.keys(uploadedFiles).map((file, id) => (
-            <li key={"uliload_" + id}>
-              {!uploadedFiles[file] && <Spinner />} {file}{" "}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <style jsx>
-        {`
-          .dropzone {
-            padding: 20px;
-            height: 150px;
-            border-style: dashed;
-            border-width: 2px;
-          }
-        `}
-      </style>
     </div>
   )
 }
