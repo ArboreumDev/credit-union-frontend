@@ -1,4 +1,4 @@
-import { Box, Spinner } from "@chakra-ui/core"
+import { Box, Spinner, Stack } from "@chakra-ui/core"
 import { CheckIcon } from "@chakra-ui/icons"
 import { fetchJSON } from "lib/api"
 import { UploadRequest } from "pages/api/upload"
@@ -7,44 +7,44 @@ import FileDropzone from "./Dropzone"
 
 interface FileStatus {
   [f: string]: {
-    uploaded: boolean
+    done: boolean
   }
 }
 interface Props {
+  endpoint: string
   key: string
   children: any
 }
-export function UploadingDropzone({ key, children }: Props) {
+export function UploadingDropzone({ key, children, endpoint }: Props) {
   const [files, setFiles] = useState<FileStatus>({})
 
   const onFileDrop = async (data: UploadRequest) => {
-    setFiles({ ...files, [data.file_name]: { uploaded: false } })
+    setFiles({ ...files, [data.file_name]: { done: false } })
     try {
       const res = await fetchJSON({
-        url: "/api/upload",
+        url: endpoint,
         payload: data,
       })
       console.log(res)
-      setFiles({ ...files, [data.file_name]: { uploaded: true } })
+      setFiles({ ...files, [data.file_name]: { done: true } })
     } catch (error) {
       console.log(error)
     }
   }
   return (
     <Box>
-      <FileDropzone key={key} onDrag={onFileDrop}>
-        {children}
-      </FileDropzone>
-      <div>
-        <ul>
-          {Object.keys(files).map((filename) => (
-            <li key={"uliload_" + filename}>
-              {files[filename].uploaded ? <CheckIcon /> : <Spinner />}
-              {" | "} {filename}{" "}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Box padding={2} borderStyle="dashed" borderWidth={2}>
+        <FileDropzone key={key} onDrag={onFileDrop}>
+          {children}
+        </FileDropzone>
+      </Box>
+      <Stack>
+        {Object.keys(files).map((filename) => (
+          <Box key={"id_" + filename}>
+            {files[filename].done ? <CheckIcon /> : <Spinner />} {filename}{" "}
+          </Box>
+        ))}
+      </Stack>
     </Box>
   )
 }

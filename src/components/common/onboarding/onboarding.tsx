@@ -127,7 +127,10 @@ export default function Onboarding({ user, userType }: Params) {
             {userType == UserType.Borrower && (
               <div>
                 <Box>
-                  <UploadingDropzone key={"user_uploads/" + user.email}>
+                  <UploadingDropzone
+                    endpoint="/api/upload"
+                    key={"user_uploads/" + user.email}
+                  >
                     <p>Drop KYC documents here: </p>
                     <UnorderedList>
                       <ListItem>Passport</ListItem>
@@ -137,7 +140,10 @@ export default function Onboarding({ user, userType }: Params) {
                   </UploadingDropzone>
                 </Box>
                 <Box>
-                  <UploadingDropzone key={"user_uploads/" + user.email}>
+                  <UploadingDropzone
+                    endpoint="/api/upload"
+                    key={"user_uploads/" + user.email}
+                  >
                     <p>Upload financial documents here: </p>
                     <UnorderedList>
                       <ListItem>Latest Income Tax Returns</ListItem>

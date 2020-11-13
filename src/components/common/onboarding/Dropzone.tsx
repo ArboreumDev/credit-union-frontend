@@ -44,17 +44,6 @@ const FileDropzone = (props: {
           </div>
         )}
       </Dropzone>
-
-      <style jsx>
-        {`
-          .dropzone {
-            padding: 20px;
-            height: 150px;
-            border-style: dashed;
-            border-width: 2px;
-          }
-        `}
-      </style>
     </div>
   )
 }
