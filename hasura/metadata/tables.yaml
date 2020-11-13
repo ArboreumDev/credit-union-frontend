@@ -244,3 +244,10 @@
           table:
             schema: public
             name: supporters
+- table:
+    schema: public
+    name: yazali
+- table:
+    schema: public
+    name: yazali_status
+  is_enum: true
