@@ -68,22 +68,7 @@ async function uploadS3(uploadRequest: UploadRequest) {
     uploadRequest.ctype,
     "base64"
   )
-}
-
-async function checkKYC(uploadRequest: UploadRequest) {
-  const key =
-    "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
-
-  const formdata = new FormData()
-  formdata.append("reference_id", "arbo" + new Date())
-  formdata.append("document_type", "pan")
-  formdata.append("consent", "Y")
-  formdata.append("consent_purpose", "for bank account purpose only")
-  formdata.append("document", Buffer.from(uploadRequest.data, "base64"), {
-    filename: uploadRequest.file_name,
-    contentType: uploadRequest.ctype,
-  })
-  return decentroKYCClient.doKYCOnImage(formdata)
+  return Location
 }
 
 export default async function handler(
@@ -94,12 +79,9 @@ export default async function handler(
     try {
       const uploadRequest: UploadRequest = req.body
       uploadRequest.file_name = Date.now() + "-" + uploadRequest.file_name
-      await uploadS3(uploadRequest)
-      PostToSlack("New user KYC Upload: " + Location)
-
-      const kycCheck = await checkKYC(uploadRequest)
-      if (kycCheck.kycStatus === "SUCCESS") res.status(200).json({ Location })
-      res.status(401).json({ status: KYCStatus.KYC_CHECK_FAILED })
+      const location = await uploadS3(uploadRequest)
+      PostToSlack("New user KYC Upload: " + location)
+      res.status(200).json({ location })
     } catch (e) {
       console.log(e)
       res.status(500).json({ e })

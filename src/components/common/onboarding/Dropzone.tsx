@@ -1,5 +1,6 @@
 import { Spinner } from "@chakra-ui/core"
 import Axios from "axios"
+import { fetchJSON } from "lib/api"
 import { UploadRequest } from "pages/api/upload"
 import { useState } from "react"
 import Dropzone from "react-dropzone"
@@ -11,13 +12,28 @@ const toBase64 = (file) =>
     reader.onload = () => resolve(reader.result)
     reader.onerror = (error) => reject(error)
   })
-
+interface Uploaded {
+  uploaded: boolean
+  kyc_checked: boolean
+}
 const FileDropzone = (props: { email: string; children: any }) => {
-  const [uploadedFiles, setFiles] = useState<{ [filname: string]: boolean }>({})
+  const [uploadedFiles, setFiles] = useState<{ [filname: string]: Uploaded }>(
+    {}
+  )
+
+  function setOneFile(filename: string, kyc?: boolean, uploaded?: boolean) {
+    const val: Uploaded = uploadedFiles[filename] || {
+      kyc_checked: false,
+      uploaded: false,
+    }
+    if (kyc) val.kyc_checked = true
+    if (uploaded) val.uploaded = true
+    setFiles((files) => ({ ...files, [filename]: val }))
+  }
   const onDrop = (acceptedFiles: Array<File>) => {
     if (acceptedFiles) {
       acceptedFiles.forEach(async (file) => {
-        setFiles((files) => ({ ...files, [file.name]: false }))
+        setOneFile(file.name, false, false)
         const fdata = (await toBase64(file)) as string
         const ctype = fdata.split(",")[0]
         const b64data = fdata.split(",")[1]
@@ -28,14 +44,26 @@ const FileDropzone = (props: { email: string; children: any }) => {
           data: b64data,
         }
 
-        await Axios.post("/api/upload", data, {
-          method: "POST",
-        })
-          .then((res) => {
-            console.log(res.data)
-            setFiles((files) => ({ ...files, [file.name]: true }))
+        try {
+          const res = await fetchJSON({
+            url: "/api/upload",
+            payload: data,
           })
-          .catch((error) => console.log(error))
+          console.log(res.data)
+          setOneFile(file.name, undefined, true)
+        } catch (error) {
+          console.log(error)
+        }
+        try {
+          const res = await fetchJSON({
+            url: "/api/kyc",
+            payload: data,
+          })
+          console.log(res.data)
+          setOneFile(file.name, true, false)
+        } catch (error) {
+          console.log(error)
+        }
       })
     }
   }
@@ -53,7 +81,8 @@ const FileDropzone = (props: { email: string; children: any }) => {
         <ul>
           {Object.keys(uploadedFiles).map((file, id) => (
             <li key={"uliload_" + id}>
-              {!uploadedFiles[file] && <Spinner />} {file}{" "}
+              {!uploadedFiles[file].uploaded && <Spinner />}{" "}
+              {!uploadedFiles[file].kyc_checked && <Spinner />} {file}{" "}
             </li>
           ))}
         </ul>
