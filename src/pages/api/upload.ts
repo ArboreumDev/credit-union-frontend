@@ -1,6 +1,11 @@
 import AWS from "aws-sdk"
+import DecentroKYCClient, {
+  decentroKYCClient,
+  KYCStatus,
+} from "gql/wallet/decentro_kyc_client"
 import { PostToSlack } from "lib/logger"
 import { NextApiRequest, NextApiResponse } from "next"
+import FormData from "form-data"
 
 export const config = {
   api: {
@@ -52,6 +57,35 @@ export type UploadRequest = {
   data: string
 }
 
+async function uploadS3(uploadRequest: UploadRequest) {
+  const key =
+    "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
+
+  const { Location } = await UploadToS3(
+    "uploads-all-arboreum",
+    key,
+    Buffer.from(uploadRequest.data, "base64"),
+    uploadRequest.ctype,
+    "base64"
+  )
+}
+
+async function checkKYC(uploadRequest: UploadRequest) {
+  const key =
+    "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
+
+  const formdata = new FormData()
+  formdata.append("reference_id", "arbo" + new Date())
+  formdata.append("document_type", "pan")
+  formdata.append("consent", "Y")
+  formdata.append("consent_purpose", "for bank account purpose only")
+  formdata.append("document", Buffer.from(uploadRequest.data, "base64"), {
+    filename: uploadRequest.file_name,
+    contentType: uploadRequest.ctype,
+  })
+  return decentroKYCClient.doKYCOnImage(formdata)
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -59,18 +93,11 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const uploadRequest: UploadRequest = req.body
-      const key =
-        "user_uploads/" + uploadRequest.email + "/" + uploadRequest.file_name
-
-      const { Location } = await UploadToS3(
-        "uploads-all-arboreum",
-        key,
-        Buffer.from(uploadRequest.data, "base64"),
-        uploadRequest.ctype,
-        "base64"
-      )
+      await uploadS3(uploadRequest)
+      const kycCheck = await checkKYC(uploadRequest)
       PostToSlack("New user KYC Upload: " + Location)
-      res.status(200).json({ Location })
+      if (kycCheck.kycStatus === "SUCCESS") res.status(200).json({ Location })
+      res.status(401).json({ status: KYCStatus.KYC_CHECK_FAILED })
     } catch (e) {
       console.log(e)
       res.status(500).json({ e })

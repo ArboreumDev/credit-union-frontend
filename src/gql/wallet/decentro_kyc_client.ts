@@ -15,36 +15,20 @@ export enum KYCPurpose {
   LENDER = "register as lender on arboreum platform",
 }
 
-export default class DecentroKYCClient {
-  private fetcher: Fetcher
+export enum KYCStatus {
+  KYC_CHECK_SUCCESS = "KYC_CHECK_SUCCESS",
+  KYC_CHECK_FAILED = "KYC_CHECK_FAILED",
+}
 
-  constructor(
-    baseURL: string,
-    client_id: string,
-    client_secret: string,
-    module_secret: string
-  ) {
-    this.fetcher = new Fetcher(
-      {
-        "Content-Type": "application/json",
-        client_id: client_id,
-        client_secret: client_secret,
-        module_secret: module_secret,
-      },
-      baseURL
-    )
-  }
+export default class DecentroKYCClient {
+  constructor(private headers) {}
 
   async doKYCOnImage(formdata: FormData) {
     const resp = await fetch(
       "https://in.staging.decentro.tech/kyc/scan_extract/ocr",
       {
         method: "POST",
-        headers: {
-          module_secret: "csnlWlPHXnfDxEporJP9qzksYqtG37iC",
-          client_id: "arboreum_staging",
-          client_secret: "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
-        },
+        headers: this.headers,
         // @ts-ignore
         body: formdata,
       }
@@ -58,7 +42,8 @@ export default class DecentroKYCClient {
     document_type: KYCDocumentType
     purpose: KYCPurpose
   }) {
-    const endpoint = "/kyc/public_registry/validate"
+    const endpoint =
+      "https://in.staging.decentro.tech/kyc/scan_extract/ocr/kyc/public_registry/validate"
     const req = {
       reference_id: params.userId + "-" + Date.now(),
       id_number: params.idNumber,
@@ -67,7 +52,13 @@ export default class DecentroKYCClient {
       consent: "Y",
       kyc_validate: 1,
     }
-    console.log(req)
-    return this.fetcher.post(endpoint, req)
+    const fetcher = new Fetcher(this.headers)
+    return fetcher.post(endpoint, req)
   }
 }
+
+export const decentroKYCClient = new DecentroKYCClient({
+  module_secret: "csnlWlPHXnfDxEporJP9qzksYqtG37iC",
+  client_id: "arboreum_staging",
+  client_secret: "5aoTBWhjzeOz4GNI7zocGXV3XgozyejA",
+})
