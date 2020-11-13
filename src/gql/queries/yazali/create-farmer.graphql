@@ -1,0 +1,8 @@
+mutation CreateFarmer($farmer: yazali_insert_input!) {
+  farmer: insert_yazali_one(object: $farmer) {
+    id
+    status
+    data
+    phone
+  }
+}
