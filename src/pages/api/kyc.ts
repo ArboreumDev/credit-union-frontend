@@ -41,11 +41,16 @@ export default async function handler(
       const uploadRequest: UploadRequest = req.body
       const kycCheck = await checkKYC(uploadRequest)
       if (kycCheck.kycStatus === "SUCCESS")
-        res.status(200).json({ status: KYCStatus.KYC_CHECK_SUCCESS })
-      else res.status(200).json({ status: KYCStatus.KYC_CHECK_FAILED })
+        res
+          .status(200)
+          .json({ status: KYCStatus.KYC_CHECK_SUCCESS, data: kycCheck })
+      else
+        res
+          .status(200)
+          .json({ status: KYCStatus.KYC_CHECK_FAILED, data: kycCheck })
     } catch (e) {
       console.log(e)
-      res.status(500).json({ status: e })
+      res.status(500).json({ status: KYCStatus.KYC_CHECK_FAILED, error: e })
     }
   }
 }

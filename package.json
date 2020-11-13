@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.3",
+    "@chakra-ui/icons": "^1.0.0-rc.8",
     "@chakra-ui/theme": "^1.0.0-rc.3",
     "@use-it/event-listener": "^0.1.5",
     "aws-sdk": "^2.725.0",
