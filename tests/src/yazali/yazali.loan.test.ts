@@ -20,18 +20,11 @@ describe("Yazali Loan Flow", () => {
       farmer1.data.terms.principal
     )
 
+    // verify otp's are different
     expect(res2.farmer.otp).not.toBe(farmer1.data.otp)
   })
-
-  //   test("Yazali starts loan process", async () => {
-  //       // a password is created and its hashed vesion is stored on the loan
-  //       // loan.status = awaiting_farmer_confirmation
-  //   })
-  //   test("yazali enters the OTP to start the loan", async () => {
-  //       // entering a wrong password does not advance the loan state
-  //       // entering a correct password sets loan.status to 'awaiting_disbursal'
-  //   })
-  //   test("the loan is sent to rupee-circle for disbursal", async () => {
-  //       // we register a loan application with RC (part dummy data, part real data)
-  //   })
+  test("get farmers", async () => {
+    const { farmers } = await sdk.GetAllFarmers()
+    expect(farmers.length).toBe(2)
+  })
 })

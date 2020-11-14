@@ -139,8 +139,11 @@ export enum Action_Type_Constraint {
 }
 
 export enum Action_Type_Enum {
+  /** Change balance for users */
   AdjustBalances = "ADJUST_BALANCES",
+  /** Adds supporters, generates the loan offer, and then accepts it */
   ConfirmLoan = "CONFIRM_LOAN",
+  /** Make repayment */
   RepayLoan = "REPAY_LOAN",
 }
 
@@ -2758,6 +2761,14 @@ export type Mutation_Root = {
   delete_user?: Maybe<User_Mutation_Response>
   /** delete single row from the table: "user" */
   delete_user_by_pk?: Maybe<User>
+  /** delete data from the table: "yazali" */
+  delete_yazali?: Maybe<Yazali_Mutation_Response>
+  /** delete single row from the table: "yazali" */
+  delete_yazali_by_pk?: Maybe<Yazali>
+  /** delete data from the table: "yazali_status" */
+  delete_yazali_status?: Maybe<Yazali_Status_Mutation_Response>
+  /** delete single row from the table: "yazali_status" */
+  delete_yazali_status_by_pk?: Maybe<Yazali_Status>
   /** insert data into the table: "action_type" */
   insert_action_type?: Maybe<Action_Type_Mutation_Response>
   /** insert a single row into the table: "action_type" */
@@ -2820,6 +2831,14 @@ export type Mutation_Root = {
   insert_user?: Maybe<User_Mutation_Response>
   /** insert a single row into the table: "user" */
   insert_user_one?: Maybe<User>
+  /** insert data into the table: "yazali" */
+  insert_yazali?: Maybe<Yazali_Mutation_Response>
+  /** insert a single row into the table: "yazali" */
+  insert_yazali_one?: Maybe<Yazali>
+  /** insert data into the table: "yazali_status" */
+  insert_yazali_status?: Maybe<Yazali_Status_Mutation_Response>
+  /** insert a single row into the table: "yazali_status" */
+  insert_yazali_status_one?: Maybe<Yazali_Status>
   /** update data of the table: "action_type" */
   update_action_type?: Maybe<Action_Type_Mutation_Response>
   /** update single row of the table: "action_type" */
@@ -2882,6 +2901,14 @@ export type Mutation_Root = {
   update_user?: Maybe<User_Mutation_Response>
   /** update single row of the table: "user" */
   update_user_by_pk?: Maybe<User>
+  /** update data of the table: "yazali" */
+  update_yazali?: Maybe<Yazali_Mutation_Response>
+  /** update single row of the table: "yazali" */
+  update_yazali_by_pk?: Maybe<Yazali>
+  /** update data of the table: "yazali_status" */
+  update_yazali_status?: Maybe<Yazali_Status_Mutation_Response>
+  /** update single row of the table: "yazali_status" */
+  update_yazali_status_by_pk?: Maybe<Yazali_Status>
 }
 
 /** mutation root */
@@ -3036,6 +3063,26 @@ export type Mutation_RootDelete_UserArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_YazaliArgs = {
+  where: Yazali_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Yazali_By_PkArgs = {
+  id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Yazali_StatusArgs = {
+  where: Yazali_Status_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Yazali_Status_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** mutation root */
@@ -3216,6 +3263,30 @@ export type Mutation_RootInsert_UserArgs = {
 export type Mutation_RootInsert_User_OneArgs = {
   object: User_Insert_Input
   on_conflict?: Maybe<User_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_YazaliArgs = {
+  objects: Array<Yazali_Insert_Input>
+  on_conflict?: Maybe<Yazali_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Yazali_OneArgs = {
+  object: Yazali_Insert_Input
+  on_conflict?: Maybe<Yazali_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Yazali_StatusArgs = {
+  objects: Array<Yazali_Status_Insert_Input>
+  on_conflict?: Maybe<Yazali_Status_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Yazali_Status_OneArgs = {
+  object: Yazali_Status_Insert_Input
+  on_conflict?: Maybe<Yazali_Status_On_Conflict>
 }
 
 /** mutation root */
@@ -3486,6 +3557,40 @@ export type Mutation_RootUpdate_User_By_PkArgs = {
   _prepend?: Maybe<User_Prepend_Input>
   _set?: Maybe<User_Set_Input>
   pk_columns: User_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_YazaliArgs = {
+  _append?: Maybe<Yazali_Append_Input>
+  _delete_at_path?: Maybe<Yazali_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Yazali_Delete_Elem_Input>
+  _delete_key?: Maybe<Yazali_Delete_Key_Input>
+  _prepend?: Maybe<Yazali_Prepend_Input>
+  _set?: Maybe<Yazali_Set_Input>
+  where: Yazali_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Yazali_By_PkArgs = {
+  _append?: Maybe<Yazali_Append_Input>
+  _delete_at_path?: Maybe<Yazali_Delete_At_Path_Input>
+  _delete_elem?: Maybe<Yazali_Delete_Elem_Input>
+  _delete_key?: Maybe<Yazali_Delete_Key_Input>
+  _prepend?: Maybe<Yazali_Prepend_Input>
+  _set?: Maybe<Yazali_Set_Input>
+  pk_columns: Yazali_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Yazali_StatusArgs = {
+  _set?: Maybe<Yazali_Status_Set_Input>
+  where: Yazali_Status_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Yazali_Status_By_PkArgs = {
+  _set?: Maybe<Yazali_Status_Set_Input>
+  pk_columns: Yazali_Status_Pk_Columns_Input
 }
 
 /** expression to compare columns of type numeric. All fields are combined with logical 'AND'. */
@@ -4182,6 +4287,18 @@ export type Query_Root = {
   user_aggregate: User_Aggregate
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>
+  /** fetch data from the table: "yazali" */
+  yazali: Array<Yazali>
+  /** fetch aggregated fields from the table: "yazali" */
+  yazali_aggregate: Yazali_Aggregate
+  /** fetch data from the table: "yazali" using primary key columns */
+  yazali_by_pk?: Maybe<Yazali>
+  /** fetch data from the table: "yazali_status" */
+  yazali_status: Array<Yazali_Status>
+  /** fetch aggregated fields from the table: "yazali_status" */
+  yazali_status_aggregate: Yazali_Status_Aggregate
+  /** fetch data from the table: "yazali_status" using primary key columns */
+  yazali_status_by_pk?: Maybe<Yazali_Status>
 }
 
 /** query root */
@@ -4531,6 +4648,52 @@ export type Query_RootUser_AggregateArgs = {
 /** query root */
 export type Query_RootUser_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootYazaliArgs = {
+  distinct_on?: Maybe<Array<Yazali_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Order_By>>
+  where?: Maybe<Yazali_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootYazali_AggregateArgs = {
+  distinct_on?: Maybe<Array<Yazali_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Order_By>>
+  where?: Maybe<Yazali_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootYazali_By_PkArgs = {
+  id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootYazali_StatusArgs = {
+  distinct_on?: Maybe<Array<Yazali_Status_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Status_Order_By>>
+  where?: Maybe<Yazali_Status_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootYazali_Status_AggregateArgs = {
+  distinct_on?: Maybe<Array<Yazali_Status_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Status_Order_By>>
+  where?: Maybe<Yazali_Status_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootYazali_Status_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** columns and relationships of "receivables" */
@@ -5561,6 +5724,18 @@ export type Subscription_Root = {
   user_aggregate: User_Aggregate
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>
+  /** fetch data from the table: "yazali" */
+  yazali: Array<Yazali>
+  /** fetch aggregated fields from the table: "yazali" */
+  yazali_aggregate: Yazali_Aggregate
+  /** fetch data from the table: "yazali" using primary key columns */
+  yazali_by_pk?: Maybe<Yazali>
+  /** fetch data from the table: "yazali_status" */
+  yazali_status: Array<Yazali_Status>
+  /** fetch aggregated fields from the table: "yazali_status" */
+  yazali_status_aggregate: Yazali_Status_Aggregate
+  /** fetch data from the table: "yazali_status" using primary key columns */
+  yazali_status_by_pk?: Maybe<Yazali_Status>
 }
 
 /** subscription root */
@@ -5910,6 +6085,52 @@ export type Subscription_RootUser_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootUser_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootYazaliArgs = {
+  distinct_on?: Maybe<Array<Yazali_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Order_By>>
+  where?: Maybe<Yazali_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootYazali_AggregateArgs = {
+  distinct_on?: Maybe<Array<Yazali_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Order_By>>
+  where?: Maybe<Yazali_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootYazali_By_PkArgs = {
+  id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootYazali_StatusArgs = {
+  distinct_on?: Maybe<Array<Yazali_Status_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Status_Order_By>>
+  where?: Maybe<Yazali_Status_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootYazali_Status_AggregateArgs = {
+  distinct_on?: Maybe<Array<Yazali_Status_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Yazali_Status_Order_By>>
+  where?: Maybe<Yazali_Status_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootYazali_Status_By_PkArgs = {
+  value: Scalars["String"]
 }
 
 /** columns and relationships of "supporters" */
@@ -7119,6 +7340,394 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars["uuid"]>>
 }
 
+/** columns and relationships of "yazali" */
+export type Yazali = {
+  __typename?: "yazali"
+  created_at: Scalars["timestamptz"]
+  data: Scalars["jsonb"]
+  id: Scalars["uuid"]
+  phone: Scalars["String"]
+  status: Yazali_Status_Enum
+  updated_at: Scalars["timestamptz"]
+}
+
+/** columns and relationships of "yazali" */
+export type YazaliDataArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** aggregated selection of "yazali" */
+export type Yazali_Aggregate = {
+  __typename?: "yazali_aggregate"
+  aggregate?: Maybe<Yazali_Aggregate_Fields>
+  nodes: Array<Yazali>
+}
+
+/** aggregate fields of "yazali" */
+export type Yazali_Aggregate_Fields = {
+  __typename?: "yazali_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Yazali_Max_Fields>
+  min?: Maybe<Yazali_Min_Fields>
+}
+
+/** aggregate fields of "yazali" */
+export type Yazali_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Yazali_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "yazali" */
+export type Yazali_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Yazali_Max_Order_By>
+  min?: Maybe<Yazali_Min_Order_By>
+}
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Yazali_Append_Input = {
+  data?: Maybe<Scalars["jsonb"]>
+}
+
+/** input type for inserting array relation for remote table "yazali" */
+export type Yazali_Arr_Rel_Insert_Input = {
+  data: Array<Yazali_Insert_Input>
+  on_conflict?: Maybe<Yazali_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "yazali". All fields are combined with a logical 'AND'. */
+export type Yazali_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Yazali_Bool_Exp>>>
+  _not?: Maybe<Yazali_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Yazali_Bool_Exp>>>
+  created_at?: Maybe<Timestamptz_Comparison_Exp>
+  data?: Maybe<Jsonb_Comparison_Exp>
+  id?: Maybe<Uuid_Comparison_Exp>
+  phone?: Maybe<String_Comparison_Exp>
+  status?: Maybe<Yazali_Status_Enum_Comparison_Exp>
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "yazali" */
+export enum Yazali_Constraint {
+  /** unique or primary key constraint */
+  YazaliOtpKey = "yazali_otp_key",
+  /** unique or primary key constraint */
+  YazaliPkey = "yazali_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Yazali_Delete_At_Path_Input = {
+  data?: Maybe<Array<Maybe<Scalars["String"]>>>
+}
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Yazali_Delete_Elem_Input = {
+  data?: Maybe<Scalars["Int"]>
+}
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Yazali_Delete_Key_Input = {
+  data?: Maybe<Scalars["String"]>
+}
+
+/** input type for inserting data into table "yazali" */
+export type Yazali_Insert_Input = {
+  created_at?: Maybe<Scalars["timestamptz"]>
+  data?: Maybe<Scalars["jsonb"]>
+  id?: Maybe<Scalars["uuid"]>
+  phone?: Maybe<Scalars["String"]>
+  status?: Maybe<Yazali_Status_Enum>
+  updated_at?: Maybe<Scalars["timestamptz"]>
+}
+
+/** aggregate max on columns */
+export type Yazali_Max_Fields = {
+  __typename?: "yazali_max_fields"
+  created_at?: Maybe<Scalars["timestamptz"]>
+  id?: Maybe<Scalars["uuid"]>
+  phone?: Maybe<Scalars["String"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
+}
+
+/** order by max() on columns of table "yazali" */
+export type Yazali_Max_Order_By = {
+  created_at?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+  phone?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Yazali_Min_Fields = {
+  __typename?: "yazali_min_fields"
+  created_at?: Maybe<Scalars["timestamptz"]>
+  id?: Maybe<Scalars["uuid"]>
+  phone?: Maybe<Scalars["String"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
+}
+
+/** order by min() on columns of table "yazali" */
+export type Yazali_Min_Order_By = {
+  created_at?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+  phone?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "yazali" */
+export type Yazali_Mutation_Response = {
+  __typename?: "yazali_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Yazali>
+}
+
+/** input type for inserting object relation for remote table "yazali" */
+export type Yazali_Obj_Rel_Insert_Input = {
+  data: Yazali_Insert_Input
+  on_conflict?: Maybe<Yazali_On_Conflict>
+}
+
+/** on conflict condition type for table "yazali" */
+export type Yazali_On_Conflict = {
+  constraint: Yazali_Constraint
+  update_columns: Array<Yazali_Update_Column>
+  where?: Maybe<Yazali_Bool_Exp>
+}
+
+/** ordering options when selecting data from "yazali" */
+export type Yazali_Order_By = {
+  created_at?: Maybe<Order_By>
+  data?: Maybe<Order_By>
+  id?: Maybe<Order_By>
+  phone?: Maybe<Order_By>
+  status?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "yazali" */
+export type Yazali_Pk_Columns_Input = {
+  id: Scalars["uuid"]
+}
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Yazali_Prepend_Input = {
+  data?: Maybe<Scalars["jsonb"]>
+}
+
+/** select columns of table "yazali" */
+export enum Yazali_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Data = "data",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Phone = "phone",
+  /** column name */
+  Status = "status",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** input type for updating data in table "yazali" */
+export type Yazali_Set_Input = {
+  created_at?: Maybe<Scalars["timestamptz"]>
+  data?: Maybe<Scalars["jsonb"]>
+  id?: Maybe<Scalars["uuid"]>
+  phone?: Maybe<Scalars["String"]>
+  status?: Maybe<Yazali_Status_Enum>
+  updated_at?: Maybe<Scalars["timestamptz"]>
+}
+
+/** columns and relationships of "yazali_status" */
+export type Yazali_Status = {
+  __typename?: "yazali_status"
+  comment: Scalars["String"]
+  value: Scalars["String"]
+}
+
+/** aggregated selection of "yazali_status" */
+export type Yazali_Status_Aggregate = {
+  __typename?: "yazali_status_aggregate"
+  aggregate?: Maybe<Yazali_Status_Aggregate_Fields>
+  nodes: Array<Yazali_Status>
+}
+
+/** aggregate fields of "yazali_status" */
+export type Yazali_Status_Aggregate_Fields = {
+  __typename?: "yazali_status_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<Yazali_Status_Max_Fields>
+  min?: Maybe<Yazali_Status_Min_Fields>
+}
+
+/** aggregate fields of "yazali_status" */
+export type Yazali_Status_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Yazali_Status_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "yazali_status" */
+export type Yazali_Status_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<Yazali_Status_Max_Order_By>
+  min?: Maybe<Yazali_Status_Min_Order_By>
+}
+
+/** input type for inserting array relation for remote table "yazali_status" */
+export type Yazali_Status_Arr_Rel_Insert_Input = {
+  data: Array<Yazali_Status_Insert_Input>
+  on_conflict?: Maybe<Yazali_Status_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "yazali_status". All fields are combined with a logical 'AND'. */
+export type Yazali_Status_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Yazali_Status_Bool_Exp>>>
+  _not?: Maybe<Yazali_Status_Bool_Exp>
+  _or?: Maybe<Array<Maybe<Yazali_Status_Bool_Exp>>>
+  comment?: Maybe<String_Comparison_Exp>
+  value?: Maybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "yazali_status" */
+export enum Yazali_Status_Constraint {
+  /** unique or primary key constraint */
+  YazaliStatusPkey = "yazali_status_pkey",
+}
+
+export enum Yazali_Status_Enum {
+  /** laon application is being processed */
+  AwaitingDisbursal = "AWAITING_DISBURSAL",
+  /** farmer needs to confirm loan via OTP */
+  AwaitingFarmerConfirmation = "AWAITING_FARMER_CONFIRMATION",
+  /** loan is past due and not fully repaid */
+  AwaitingRepayment = "AWAITING_REPAYMENT",
+  /** loan is fully repaid */
+  Completed = "COMPLETED",
+  /** basic farmer data is registered */
+  Initiated = "INITIATED",
+  /** loan has been disbursed */
+  Live = "LIVE",
+  /** farmer is kyc and is registered with P2P */
+  Ready = "READY",
+}
+
+/** expression to compare columns of type yazali_status_enum. All fields are combined with logical 'AND'. */
+export type Yazali_Status_Enum_Comparison_Exp = {
+  _eq?: Maybe<Yazali_Status_Enum>
+  _in?: Maybe<Array<Yazali_Status_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Yazali_Status_Enum>
+  _nin?: Maybe<Array<Yazali_Status_Enum>>
+}
+
+/** input type for inserting data into table "yazali_status" */
+export type Yazali_Status_Insert_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** aggregate max on columns */
+export type Yazali_Status_Max_Fields = {
+  __typename?: "yazali_status_max_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by max() on columns of table "yazali_status" */
+export type Yazali_Status_Max_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Yazali_Status_Min_Fields = {
+  __typename?: "yazali_status_min_fields"
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** order by min() on columns of table "yazali_status" */
+export type Yazali_Status_Min_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "yazali_status" */
+export type Yazali_Status_Mutation_Response = {
+  __typename?: "yazali_status_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<Yazali_Status>
+}
+
+/** input type for inserting object relation for remote table "yazali_status" */
+export type Yazali_Status_Obj_Rel_Insert_Input = {
+  data: Yazali_Status_Insert_Input
+  on_conflict?: Maybe<Yazali_Status_On_Conflict>
+}
+
+/** on conflict condition type for table "yazali_status" */
+export type Yazali_Status_On_Conflict = {
+  constraint: Yazali_Status_Constraint
+  update_columns: Array<Yazali_Status_Update_Column>
+  where?: Maybe<Yazali_Status_Bool_Exp>
+}
+
+/** ordering options when selecting data from "yazali_status" */
+export type Yazali_Status_Order_By = {
+  comment?: Maybe<Order_By>
+  value?: Maybe<Order_By>
+}
+
+/** primary key columns input for table: "yazali_status" */
+export type Yazali_Status_Pk_Columns_Input = {
+  value: Scalars["String"]
+}
+
+/** select columns of table "yazali_status" */
+export enum Yazali_Status_Select_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
+/** input type for updating data in table "yazali_status" */
+export type Yazali_Status_Set_Input = {
+  comment?: Maybe<Scalars["String"]>
+  value?: Maybe<Scalars["String"]>
+}
+
+/** update columns of table "yazali_status" */
+export enum Yazali_Status_Update_Column {
+  /** column name */
+  Comment = "comment",
+  /** column name */
+  Value = "value",
+}
+
+/** update columns of table "yazali" */
+export enum Yazali_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Data = "data",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Phone = "phone",
+  /** column name */
+  Status = "status",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
 export type ChangeUserCashBalanceMutationVariables = Exact<{
   userId: Scalars["uuid"]
   delta: Scalars["float8"]
@@ -7753,6 +8362,42 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
       "affected_rows"
     >
   >
+  delete_yazali?: Maybe<
+    { __typename?: "yazali_mutation_response" } & Pick<
+      Yazali_Mutation_Response,
+      "affected_rows"
+    >
+  >
+}
+
+export type CreateFarmerMutationVariables = Exact<{
+  farmer: Yazali_Insert_Input
+}>
+
+export type CreateFarmerMutation = { __typename?: "mutation_root" } & {
+  farmer?: Maybe<
+    { __typename?: "yazali" } & Pick<Yazali, "id" | "status" | "data" | "phone">
+  >
+}
+
+export type GetAllFarmersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllFarmersQuery = { __typename?: "query_root" } & {
+  farmers: Array<
+    { __typename?: "yazali" } & Pick<Yazali, "id" | "data" | "phone" | "status">
+  >
+}
+
+export type UpdateFarmerMutationVariables = Exact<{
+  farmerId: Scalars["uuid"]
+  newData?: Maybe<Scalars["jsonb"]>
+  status?: Maybe<Yazali_Status_Enum>
+}>
+
+export type UpdateFarmerMutation = { __typename?: "mutation_root" } & {
+  farmer?: Maybe<
+    { __typename?: "yazali" } & Pick<Yazali, "id" | "data" | "status">
+  >
 }
 
 export const PledgeFieldsFragmentDoc = gql`
@@ -8278,6 +8923,45 @@ export const ResetDbDocument = gql`
     delete_scenario_actions(where: {}) {
       affected_rows
     }
+    delete_yazali(where: {}) {
+      affected_rows
+    }
+  }
+`
+export const CreateFarmerDocument = gql`
+  mutation CreateFarmer($farmer: yazali_insert_input!) {
+    farmer: insert_yazali_one(object: $farmer) {
+      id
+      status
+      data
+      phone
+    }
+  }
+`
+export const GetAllFarmersDocument = gql`
+  query GetAllFarmers {
+    farmers: yazali {
+      id
+      data
+      phone
+      status
+    }
+  }
+`
+export const UpdateFarmerDocument = gql`
+  mutation UpdateFarmer(
+    $farmerId: uuid!
+    $newData: jsonb
+    $status: yazali_status_enum
+  ) {
+    farmer: update_yazali_by_pk(
+      pk_columns: { id: $farmerId }
+      _set: { data: $newData, status: $status }
+    ) {
+      id
+      data
+      status
+    }
   }
 `
 
@@ -8547,6 +9231,36 @@ export function getSdk(
     ResetDB(variables?: ResetDbMutationVariables): Promise<ResetDbMutation> {
       return withWrapper(() =>
         client.request<ResetDbMutation>(print(ResetDbDocument), variables)
+      )
+    },
+    CreateFarmer(
+      variables: CreateFarmerMutationVariables
+    ): Promise<CreateFarmerMutation> {
+      return withWrapper(() =>
+        client.request<CreateFarmerMutation>(
+          print(CreateFarmerDocument),
+          variables
+        )
+      )
+    },
+    GetAllFarmers(
+      variables?: GetAllFarmersQueryVariables
+    ): Promise<GetAllFarmersQuery> {
+      return withWrapper(() =>
+        client.request<GetAllFarmersQuery>(
+          print(GetAllFarmersDocument),
+          variables
+        )
+      )
+    },
+    UpdateFarmer(
+      variables: UpdateFarmerMutationVariables
+    ): Promise<UpdateFarmerMutation> {
+      return withWrapper(() =>
+        client.request<UpdateFarmerMutation>(
+          print(UpdateFarmerDocument),
+          variables
+        )
       )
     },
   }

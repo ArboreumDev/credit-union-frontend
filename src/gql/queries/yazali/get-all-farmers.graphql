@@ -1,0 +1,8 @@
+query GetAllFarmers {
+  farmers: yazali {
+    id
+    data
+    phone
+    status
+  }
+}

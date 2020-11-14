@@ -1,0 +1,10 @@
+mutation UpdateFarmer ($farmerId: uuid!, $newData: jsonb, $status: yazali_status_enum) {
+  farmer: update_yazali_by_pk (
+    pk_columns: {id: $farmerId}
+    _set: {data: $newData, status: $status}
+  ) {
+    id
+    data
+    status
+  }
+}

@@ -38,4 +38,7 @@ mutation ResetDB {
   delete_scenario_actions(where: {}) {
     affected_rows
   }
+  delete_yazali(where: {}) {
+    affected_rows
+  }
 }
