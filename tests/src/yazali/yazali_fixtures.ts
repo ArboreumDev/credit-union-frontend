@@ -1,5 +1,13 @@
 const DEFAULT_TENOR = 6
 
+export type YazaliStatus =
+  | "INITIATED"
+  | "READY"
+  | "AWAITING_FARMER_CONFIRMATION"
+  | "AWAITING_DISBURSAL"
+  | "LIVE"
+  | "AWAITING_REPAYMENT"
+  | "COMPLETED"
 // to be stored on yazali.data
 export type FarmerData = {
   info: FarmerBaseInfo

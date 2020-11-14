@@ -1,6 +1,6 @@
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE TABLE "public"."yazali"("id" uuid NOT NULL DEFAULT gen_random_uuid(), "data" jsonb NOT NULL DEFAULT jsonb_build_object(), "loan_amount" float8, "status" text NOT NULL DEFAULT 'initiated', "otp" text, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") );
+CREATE TABLE "public"."yazali"("id" uuid NOT NULL DEFAULT gen_random_uuid(), "data" jsonb NOT NULL DEFAULT jsonb_build_object(), "loan_amount" float8, "status" text NOT NULL DEFAULT 'INITIATED', "otp" text, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") );
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -31,3 +31,12 @@ ALTER TABLE "public"."yazali" DROP COLUMN "loan_amount" CASCADE;
 ALTER TABLE "public"."yazali" ALTER COLUMN "otp" SET NOT NULL;
 ALTER TABLE "public"."yazali" ADD CONSTRAINT "yazali_otp_key" UNIQUE ("otp");
 alter table "public"."yazali" rename column "otp" to "phone";
+
+INSERT INTO yazali_status (value, comment) VALUES
+  ('INITIATED', 'basic farmer data is registered'),
+  ('READY', 'farmer is kyc and is registered with P2P'),
+  ('AWAITING_FARMER_CONFIRMATION', 'farmer needs to confirm loan via OTP'),
+  ('AWAITING_DISBURSAL', 'laon application is being processed'),
+  ('LIVE', 'loan has been disbursed'),
+  ('AWAITING_REPAYMENT', 'loan is past due and not fully repaid'),
+  ('COMPLETED', 'loan is fully repaid');
