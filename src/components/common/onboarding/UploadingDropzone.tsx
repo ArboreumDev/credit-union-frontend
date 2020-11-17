@@ -12,10 +12,10 @@ interface FileStatus {
 }
 interface Props {
   endpoint: string
-  key: string
+  s3Key: string
   children: any
 }
-export function UploadingDropzone({ key, children, endpoint }: Props) {
+export function UploadingDropzone({ s3Key, children, endpoint }: Props) {
   const [files, setFiles] = useState<FileStatus>({})
 
   const onFileDrop = async (data: UploadRequest) => {
@@ -34,7 +34,7 @@ export function UploadingDropzone({ key, children, endpoint }: Props) {
   return (
     <Box>
       <Box padding={2} borderStyle="dashed" borderWidth={2}>
-        <FileDropzone key={key} onDrag={onFileDrop}>
+        <FileDropzone s3Key={s3Key} onDrag={onFileDrop}>
           {children}
         </FileDropzone>
       </Box>
