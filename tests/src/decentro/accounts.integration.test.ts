@@ -13,7 +13,7 @@ export const decentro = new DecentroClient(
 )
 
 describe("Decentro tests", () => {
-  test("create account", async () => {
+  test.skip("create account", async () => {
     const req = {
       type: "virtual",
       bank_code: "yesb",
