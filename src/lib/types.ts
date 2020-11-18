@@ -222,6 +222,7 @@ export type PortfolioUpdate = {
 export type AccountsUpdate = {
   updates: any //PortfolioUpdate[]
   transactions?: any
+  escrows: any
 }
 
 export type LoansUpdate = {
