@@ -134,6 +134,7 @@ export type LoanState = {
   supporter_cash_encumbered: number
   supporter_portfolio_encumbered: number
   repayments: number[]
+  escrow: number
   // loan_schedule?: any
   // desired_irr?: number
 }
@@ -222,7 +223,7 @@ export type PortfolioUpdate = {
 export type AccountsUpdate = {
   updates: any //PortfolioUpdate[]
   transactions?: any
-  escrows: any
+  escrow_deltas: any
 }
 
 export type LoansUpdate = {
