@@ -11,7 +11,7 @@ const toBase64 = (file) =>
   })
 
 const FileDropzone = (props: {
-  key: string
+  s3Key: string
   onDrag: (data: UploadRequest) => void
   children: any
 }) => {
@@ -25,7 +25,7 @@ const FileDropzone = (props: {
         const ctype = fdata.split(",")[0]
         const b64data = fdata.split(",")[1]
         const data: UploadRequest = {
-          key: props.key,
+          s3Key: props.s3Key,
           file_name: file.name,
           ctype: ctype,
           data: b64data,

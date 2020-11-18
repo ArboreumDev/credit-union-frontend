@@ -168,8 +168,8 @@ export class Fixtures {
 
   static LenderWithInvestments = {
     ...Fixtures.Lender,
-    balance: 10000,
-    corpus_share: 1000,
+    balance: 50000,
+    corpus_share: 40000,
     pledges: [
       {
         request_id: "loan_req_id",

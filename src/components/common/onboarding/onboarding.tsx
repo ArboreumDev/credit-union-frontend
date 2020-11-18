@@ -129,7 +129,7 @@ export default function Onboarding({ user, userType }: Params) {
                 <Box>
                   <UploadingDropzone
                     endpoint="/api/upload"
-                    key={"user_uploads/" + user.email}
+                    s3Key={"user_uploads/" + user.email}
                   >
                     <p>Drop KYC documents here: </p>
                     <UnorderedList>
@@ -142,7 +142,7 @@ export default function Onboarding({ user, userType }: Params) {
                 <Box>
                   <UploadingDropzone
                     endpoint="/api/upload"
-                    key={"user_uploads/" + user.email}
+                    s3Key={"user_uploads/" + user.email}
                   >
                     <p>Upload financial documents here: </p>
                     <UnorderedList>

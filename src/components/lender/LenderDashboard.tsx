@@ -61,7 +61,7 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
-  const [lenderAPY, setAPY] = useState(0)
+  const [lenderAPY, setAPY] = useState(lender.APY)
 
   useEffect(() => {
     const fetchAPY = async () => {
@@ -70,13 +70,16 @@ const LenderDashboard = ({ user }: Props) => {
       const client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
       const dbClient = new DbClient(client)
       const { last_live_loan } = await dbClient.sdk.GetLastLiveLoan()
-      console.log(last_live_loan)
       if (last_live_loan.length) {
         const loan = last_live_loan[0].loan as LoanInfo
         if (loan) setAPY(dec_to_perc(loan.terms.corpus_apr))
       }
     }
-    fetchAPY()
+    try {
+      fetchAPY()
+    } catch (error) {
+      console.log(error, "Cannot query SwarmAI to fetch actual APY for user.")
+    }
   }, [])
 
   return (

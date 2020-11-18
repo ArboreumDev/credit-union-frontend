@@ -34,7 +34,6 @@ export default class LoanModel {
     ) {
       return this._loan.loan as LoanInfo
     } else {
-      console.log(this._loan.status)
       return this.calculatedRisk.latestOffer as LoanInfo
     }
   }
