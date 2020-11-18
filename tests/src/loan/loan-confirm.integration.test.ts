@@ -134,7 +134,7 @@ describe("Loan Request Flow: confirm loan offer", () => {
   // describe("When the borrower makes a repayment", () => {
   test("Make first repayment", async () => {
     const data = await sdk.GetLoanRequest({ requestId })
-    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment // ['schedule']['next_borrower_payment']
+    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment
     await sdk.ChangeUserCashBalance({
       userId: BORROWER1.id,
       delta: ideal_repayment,
@@ -185,13 +185,18 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const allUsers = await dbClient.allUsers
     balancesBefore = getUserPortfolio(allUsers)
 
-    await dbClient.make_repayment(requestId, ideal_repayment)
+    const updated_request = await dbClient.make_repayment(
+      requestId,
+      ideal_repayment
+    )
     const allUsersAfter = await dbClient.allUsers
     const balancesAfter = getUserPortfolio(allUsersAfter)
     // now supporter balance increases too
     expect(balancesBefore[SUPPORTER2.id].cash).toBeLessThan(
       balancesAfter[SUPPORTER2.id].cash
     )
+    // escrow is again nonzero, as second payment is now being withheld
+    expect(updated_request.balance).toBeGreaterThan(0)
   })
 
   // test.skip(
