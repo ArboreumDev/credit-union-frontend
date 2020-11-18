@@ -85,7 +85,6 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(balancesBefore[LENDER2.id].cash).toBeGreaterThan(
       balancesAfter[LENDER2.id].cash
     )
-
     // verify lender 1 has received a bigger share than lender 2, as they brought more cash
     expect(balancesAfter[LENDER1.id].share).toBeGreaterThan(
       balancesAfter[LENDER2.id].share
@@ -133,9 +132,9 @@ describe("Loan Request Flow: confirm loan offer", () => {
   })
 
   // describe("When the borrower makes a repayment", () => {
-  test("Make repayment", async () => {
+  test("Make first repayment", async () => {
     const data = await sdk.GetLoanRequest({ requestId })
-    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment // ['schedule']['next_borrower_payment']
+    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment
     await sdk.ChangeUserCashBalance({
       userId: BORROWER1.id,
       delta: ideal_repayment,
@@ -150,15 +149,20 @@ describe("Loan Request Flow: confirm loan offer", () => {
 
     const allUsersAfter = await dbClient.allUsers
     const balancesAfter = getUserPortfolio(allUsersAfter)
+    // lender should increase
     expect(balancesBefore[LENDER1.id].cash).toBeLessThan(
       balancesAfter[LENDER1.id].cash
     )
-    expect(balancesBefore[SUPPORTER2.id].cash).toBeLessThan(
-      balancesAfter[SUPPORTER2.id].cash
-    )
+    // borrower should decrease
     expect(balancesBefore[BORROWER1.id].cash).toBeGreaterThan(
       balancesAfter[BORROWER1.id].cash
     )
+    // supporter should stay same (first payment withheld)
+    expect(balancesBefore[SUPPORTER2.id].cash).toBe(
+      balancesAfter[SUPPORTER2.id].cash
+    )
+    // should be stored on loan
+    expect(updated_request.balance).toBeGreaterThan(0)
 
     // verify that dbClient returns updated loan
     expect(
@@ -172,6 +176,27 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
     const loan = loanRequest.loan as LoanInfo
     expect(loan.state.repayments).toStrictEqual([ideal_repayment])
+  })
+
+  test("make second repayment", async () => {
+    const data = await sdk.GetLoanRequest({ requestId })
+    const ideal_repayment = data.loanRequest.loan.schedule.next_borrower_payment // ['schedule']['next_borrower_payment']
+
+    const allUsers = await dbClient.allUsers
+    balancesBefore = getUserPortfolio(allUsers)
+
+    const updated_request = await dbClient.make_repayment(
+      requestId,
+      ideal_repayment
+    )
+    const allUsersAfter = await dbClient.allUsers
+    const balancesAfter = getUserPortfolio(allUsersAfter)
+    // now supporter balance increases too
+    expect(balancesBefore[SUPPORTER2.id].cash).toBeLessThan(
+      balancesAfter[SUPPORTER2.id].cash
+    )
+    // escrow is again nonzero, as second payment is now being withheld
+    expect(updated_request.balance).toBeGreaterThan(0)
   })
 
   // test.skip(

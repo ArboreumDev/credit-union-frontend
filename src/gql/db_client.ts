@@ -222,6 +222,11 @@ export default class DbClient {
       amount
     )) as SystemUpdate
     await this.updatePortfolios(accounts.updates)
+    // update loan-accounts
+    await this.sdk.UpdateLoanBalance({
+      requestId: loan_id,
+      delta: accounts.escrow_deltas[loan_id],
+    })
     const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: loan_id,
       loanData: loans.loans[loan_id],

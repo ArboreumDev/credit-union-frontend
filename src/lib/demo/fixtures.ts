@@ -51,6 +51,7 @@ export class Fixtures {
       borrower_collateral: 0,
       supporter_cash_encumbered: 0,
       supporter_portfolio_encumbered: 0,
+      escrow: 0,
     },
     terms: {
       tenor: 6,

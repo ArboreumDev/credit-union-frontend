@@ -1,1 +1,0 @@
-CREATE TABLE "public"."scenario_actions"("id" serial NOT NULL, "action_type" text NOT NULL, "payload" jsonb NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("action_type") REFERENCES "public"."action_type"("value") ON UPDATE restrict ON DELETE restrict, UNIQUE ("id"));
