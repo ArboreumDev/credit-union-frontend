@@ -75,7 +75,11 @@ const LenderDashboard = ({ user }: Props) => {
         if (loan) setAPY(dec_to_perc(loan.terms.corpus_apr))
       }
     }
-    fetchAPY()
+    try {
+      fetchAPY()
+    } catch (error) {
+      console.log(error, "Cannot query SwarmAI to fetch actual APY for user.")
+    }
   }, [])
 
   return (
