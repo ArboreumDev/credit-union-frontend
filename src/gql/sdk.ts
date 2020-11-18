@@ -139,8 +139,11 @@ export enum Action_Type_Constraint {
 }
 
 export enum Action_Type_Enum {
+  /** Change balance for users */
   AdjustBalances = "ADJUST_BALANCES",
+  /** Adds supporters, generates the loan offer, and then accepts it */
   ConfirmLoan = "CONFIRM_LOAN",
+  /** Make repayment */
   RepayLoan = "REPAY_LOAN",
 }
 
@@ -1920,6 +1923,7 @@ export type Loan_Request_Status_Comparison_Exp = {
 export type Loan_Requests = {
   __typename?: "loan_requests"
   amount: Scalars["Int"]
+  balance?: Maybe<Scalars["float8"]>
   borrower_id: Scalars["uuid"]
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at: Scalars["timestamptz"]
@@ -2135,11 +2139,13 @@ export type Loan_Requests_Arr_Rel_Insert_Input = {
 export type Loan_Requests_Avg_Fields = {
   __typename?: "loan_requests_avg_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by avg() on columns of table "loan_requests" */
 export type Loan_Requests_Avg_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** Boolean expression to filter rows from the table "loan_requests". All fields are combined with a logical 'AND'. */
@@ -2148,6 +2154,7 @@ export type Loan_Requests_Bool_Exp = {
   _not?: Maybe<Loan_Requests_Bool_Exp>
   _or?: Maybe<Array<Maybe<Loan_Requests_Bool_Exp>>>
   amount?: Maybe<Int_Comparison_Exp>
+  balance?: Maybe<Float8_Comparison_Exp>
   borrower_id?: Maybe<Uuid_Comparison_Exp>
   confirmation_date?: Maybe<Timestamptz_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
@@ -2193,11 +2200,13 @@ export type Loan_Requests_Delete_Key_Input = {
 /** input type for incrementing integer column in table "loan_requests" */
 export type Loan_Requests_Inc_Input = {
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
 }
 
 /** input type for inserting data into table "loan_requests" */
 export type Loan_Requests_Insert_Input = {
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -2220,6 +2229,7 @@ export type Loan_Requests_Insert_Input = {
 export type Loan_Requests_Max_Fields = {
   __typename?: "loan_requests_max_fields"
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -2231,6 +2241,7 @@ export type Loan_Requests_Max_Fields = {
 /** order by max() on columns of table "loan_requests" */
 export type Loan_Requests_Max_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
   borrower_id?: Maybe<Order_By>
   confirmation_date?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
@@ -2243,6 +2254,7 @@ export type Loan_Requests_Max_Order_By = {
 export type Loan_Requests_Min_Fields = {
   __typename?: "loan_requests_min_fields"
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -2254,6 +2266,7 @@ export type Loan_Requests_Min_Fields = {
 /** order by min() on columns of table "loan_requests" */
 export type Loan_Requests_Min_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
   borrower_id?: Maybe<Order_By>
   confirmation_date?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
@@ -2287,6 +2300,7 @@ export type Loan_Requests_On_Conflict = {
 /** ordering options when selecting data from "loan_requests" */
 export type Loan_Requests_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
   borrower_id?: Maybe<Order_By>
   confirmation_date?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
@@ -2321,6 +2335,8 @@ export enum Loan_Requests_Select_Column {
   /** column name */
   Amount = "amount",
   /** column name */
+  Balance = "balance",
+  /** column name */
   BorrowerId = "borrower_id",
   /** column name */
   ConfirmationDate = "confirmation_date",
@@ -2343,6 +2359,7 @@ export enum Loan_Requests_Select_Column {
 /** input type for updating data in table "loan_requests" */
 export type Loan_Requests_Set_Input = {
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
   confirmation_date?: Maybe<Scalars["timestamptz"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -2358,50 +2375,60 @@ export type Loan_Requests_Set_Input = {
 export type Loan_Requests_Stddev_Fields = {
   __typename?: "loan_requests_stddev_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev() on columns of table "loan_requests" */
 export type Loan_Requests_Stddev_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** aggregate stddev_pop on columns */
 export type Loan_Requests_Stddev_Pop_Fields = {
   __typename?: "loan_requests_stddev_pop_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_pop() on columns of table "loan_requests" */
 export type Loan_Requests_Stddev_Pop_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** aggregate stddev_samp on columns */
 export type Loan_Requests_Stddev_Samp_Fields = {
   __typename?: "loan_requests_stddev_samp_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by stddev_samp() on columns of table "loan_requests" */
 export type Loan_Requests_Stddev_Samp_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** aggregate sum on columns */
 export type Loan_Requests_Sum_Fields = {
   __typename?: "loan_requests_sum_fields"
   amount?: Maybe<Scalars["Int"]>
+  balance?: Maybe<Scalars["float8"]>
 }
 
 /** order by sum() on columns of table "loan_requests" */
 export type Loan_Requests_Sum_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** update columns of table "loan_requests" */
 export enum Loan_Requests_Update_Column {
   /** column name */
   Amount = "amount",
+  /** column name */
+  Balance = "balance",
   /** column name */
   BorrowerId = "borrower_id",
   /** column name */
@@ -2426,33 +2453,39 @@ export enum Loan_Requests_Update_Column {
 export type Loan_Requests_Var_Pop_Fields = {
   __typename?: "loan_requests_var_pop_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_pop() on columns of table "loan_requests" */
 export type Loan_Requests_Var_Pop_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** aggregate var_samp on columns */
 export type Loan_Requests_Var_Samp_Fields = {
   __typename?: "loan_requests_var_samp_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by var_samp() on columns of table "loan_requests" */
 export type Loan_Requests_Var_Samp_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** aggregate variance on columns */
 export type Loan_Requests_Variance_Fields = {
   __typename?: "loan_requests_variance_fields"
   amount?: Maybe<Scalars["Float"]>
+  balance?: Maybe<Scalars["Float"]>
 }
 
 /** order by variance() on columns of table "loan_requests" */
 export type Loan_Requests_Variance_Order_By = {
   amount?: Maybe<Order_By>
+  balance?: Maybe<Order_By>
 }
 
 /** columns and relationships of "loan_risk" */
@@ -7229,6 +7262,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
             | "payback_status"
             | "purpose"
             | "risk_calc_result"
+            | "balance"
             | "loan"
             | "status"
             | "created_at"
@@ -7465,6 +7499,7 @@ export type GetLoanRequestQuery = { __typename?: "query_root" } & {
       | "status"
       | "risk_calc_result"
       | "loan"
+      | "balance"
       | "payback_status"
     > & {
         supporters: Array<
@@ -7557,6 +7592,20 @@ export type StartLoanMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type UpdateLoanBalanceMutationVariables = Exact<{
+  requestId: Scalars["uuid"]
+  delta?: Maybe<Scalars["float8"]>
+}>
+
+export type UpdateLoanBalanceMutation = { __typename?: "mutation_root" } & {
+  request?: Maybe<
+    { __typename?: "loan_requests" } & Pick<
+      Loan_Requests,
+      "balance" | "request_id"
+    >
+  >
+}
+
 export type UpdateLoanRequestWithLoanDataMutationVariables = Exact<{
   requestId: Scalars["uuid"]
   loanData: Scalars["jsonb"]
@@ -7568,7 +7617,7 @@ export type UpdateLoanRequestWithLoanDataMutation = {
   loanRequest?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "loan"
+      "request_id" | "loan" | "balance"
     >
   >
 }
@@ -7863,6 +7912,7 @@ export const GetUserByEmailDocument = gql`
         payback_status
         purpose
         risk_calc_result
+        balance
         loan
         status
         created_at
@@ -8053,6 +8103,7 @@ export const GetLoanRequestDocument = gql`
       status
       risk_calc_result
       loan
+      balance
       payback_status
       supporters {
         status
@@ -8141,6 +8192,17 @@ export const StartLoanDocument = gql`
     }
   }
 `
+export const UpdateLoanBalanceDocument = gql`
+  mutation UpdateLoanBalance($requestId: uuid!, $delta: float8) {
+    request: update_loan_requests_by_pk(
+      pk_columns: { request_id: $requestId }
+      _inc: { balance: $delta }
+    ) {
+      balance
+      request_id
+    }
+  }
+`
 export const UpdateLoanRequestWithLoanDataDocument = gql`
   mutation UpdateLoanRequestWithLoanData($requestId: uuid!, $loanData: jsonb!) {
     loanRequest: update_loan_requests_by_pk(
@@ -8149,6 +8211,7 @@ export const UpdateLoanRequestWithLoanDataDocument = gql`
     ) {
       request_id
       loan
+      balance
     }
   }
 `
@@ -8485,6 +8548,16 @@ export function getSdk(
     ): Promise<StartLoanMutation> {
       return withWrapper(() =>
         client.request<StartLoanMutation>(print(StartLoanDocument), variables)
+      )
+    },
+    UpdateLoanBalance(
+      variables: UpdateLoanBalanceMutationVariables
+    ): Promise<UpdateLoanBalanceMutation> {
+      return withWrapper(() =>
+        client.request<UpdateLoanBalanceMutation>(
+          print(UpdateLoanBalanceDocument),
+          variables
+        )
       )
     },
     UpdateLoanRequestWithLoanData(

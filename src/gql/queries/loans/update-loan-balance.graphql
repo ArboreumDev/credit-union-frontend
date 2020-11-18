@@ -1,0 +1,9 @@
+mutation UpdateLoanBalance($requestId: uuid!, $delta: float8) {
+  request: update_loan_requests_by_pk(
+    pk_columns: {request_id: $requestId}
+    _inc: {balance: $delta}
+  ) {
+    balance
+    request_id
+  }
+}

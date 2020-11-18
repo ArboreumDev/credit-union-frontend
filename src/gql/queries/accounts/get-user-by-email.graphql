@@ -17,6 +17,7 @@ query GetUserByEmail($email: String!) {
       payback_status
       purpose
       risk_calc_result
+      balance
       loan
       status
       created_at
