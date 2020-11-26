@@ -2,11 +2,14 @@ import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 import { GetServerSideProps } from "next"
-import { Box, Button, Heading, Input, Stack } from "@chakra-ui/core"
+import { Box, Button, Code, Heading, Input, Stack } from "@chakra-ui/core"
 import { COMPANY_NAME } from "lib/constant"
 import DbClient from "gql/db_client"
 
-export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
+export default function Hello(props: {
+  allUsers: GetAllUsersQuery["user"]
+  scenario: any
+}) {
   // Only use code like this when UI needs to refresh
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
@@ -35,6 +38,10 @@ export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
           ></Input>
         </Box>
       </Stack>
+      <Box>
+        Scenario:
+        <Code>{JSON.stringify(props.scenario)}</Code>
+      </Box>
     </Box>
   )
 }
@@ -45,6 +52,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbClient = new DbClient()
   const allUsers = await dbClient.allUsers
-
-  return { props: { allUsers } }
+  const scenario = await dbClient.generateScenarioObject()
+  return { props: { allUsers, scenario } }
 }
