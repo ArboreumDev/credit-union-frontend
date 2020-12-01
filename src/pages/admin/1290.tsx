@@ -1,10 +1,36 @@
-import * as React from "react"
 import { initializeGQL } from "../../gql/graphql_client"
 import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
 import { GetServerSideProps } from "next"
-import { Box, Button, Code, Heading, Input, Stack } from "@chakra-ui/core"
+import {
+  Box,
+  Button,
+  Code,
+  Heading,
+  Input,
+  Stack,
+  Textarea,
+} from "@chakra-ui/core"
 import { COMPANY_NAME } from "lib/constant"
 import DbClient from "gql/db_client"
+import { useState } from "react"
+import JSONInput from "react-json-ide"
+import locale from "react-json-ide/locale/en"
+import { fetchJSON } from "lib/api"
+
+export function TEdit(props: { code: any; onSubmit: any }) {
+  const [code, setState] = useState(JSON.stringify(props.code))
+
+  return (
+    <div>
+      <Textarea
+        height={70}
+        value={code}
+        onChange={(v) => setState(v.target.value)}
+      />
+      <Button onClick={() => props.onSubmit(code)}>Save</Button>
+    </div>
+  )
+}
 
 export default function Hello(props: {
   allUsers: GetAllUsersQuery["user"]
@@ -15,6 +41,7 @@ export default function Hello(props: {
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
   const users = props.allUsers
+
   return (
     <Box>
       <Stack>
@@ -40,7 +67,12 @@ export default function Hello(props: {
       </Stack>
       <Box>
         Scenario:
-        <Code>{JSON.stringify(props.scenario)}</Code>
+        <TEdit
+          code={props.scenario}
+          onSubmit={(json: string) =>
+            fetchJSON({ url: "/api/admin/set_scenario", payload: { json } })
+          }
+        />
       </Box>
     </Box>
   )

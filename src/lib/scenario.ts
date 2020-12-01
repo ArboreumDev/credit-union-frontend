@@ -74,7 +74,7 @@ export class Scenario {
     return { user, accessToken: null, expires: null }
   }
 
-  runAction(cls, user, payload: any) {
+  _runAction(cls, user, payload: any) {
     return runAction(cls.Name, this.getSession(user), payload, this.dbClient)
   }
 
@@ -85,7 +85,7 @@ export class Scenario {
       delta: balanceDelta,
       userId: user.id,
     }
-    return this.runAction(ChangeBalance, user, payload)
+    return this._runAction(ChangeBalance, user, payload)
   }
 
   async repayLoan({ loan_id, amount }) {
@@ -98,20 +98,20 @@ export class Scenario {
     const payload: typeof MakeRepayment.InputType = {
       amount,
     }
-    await this.runAction(
+    await this._runAction(
       MakeRepayment,
       await this.getUser(loanRequest.user.email),
       payload
     )
   }
 
-  async confirmLoan({ userEmail, amount, loan_id, supporters }) {
+  async confirmLoan({ userEmail, amount, loan_id, supporters, purpose }) {
     const user = await this.getUser(userEmail)
 
     const { loanRequest } = await this.dbClient.createLoanRequest(
       user.id,
       amount,
-      "purpose"
+      purpose ?? "purpose"
     )
     this.lrMap[loan_id] = loanRequest.request_id
 
@@ -128,7 +128,7 @@ export class Scenario {
     const payload: typeof AcceptLoanOffer.InputType = {
       request_id: loanRequest.request_id,
     }
-    await this.runAction(
+    await this._runAction(
       AcceptLoanOffer,
       await this.getUser(userEmail),
       payload
