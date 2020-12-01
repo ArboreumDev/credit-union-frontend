@@ -1,21 +1,10 @@
-import { initializeGQL } from "../../gql/graphql_client"
-import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
-import { GetServerSideProps } from "next"
-import {
-  Box,
-  Button,
-  Code,
-  Heading,
-  Input,
-  Stack,
-  Textarea,
-} from "@chakra-ui/core"
-import { COMPANY_NAME } from "lib/constant"
+import { Box, Button, Heading, Input, Stack, Textarea } from "@chakra-ui/core"
 import DbClient from "gql/db_client"
-import { useState } from "react"
-import JSONInput from "react-json-ide"
-import locale from "react-json-ide/locale/en"
 import { fetchJSON } from "lib/api"
+import { COMPANY_NAME } from "lib/constant"
+import { GetServerSideProps } from "next"
+import { useState } from "react"
+import { GetAllUsersQuery } from "../../gql/sdk"
 
 export function TEdit(props: { code: any; onSubmit: any }) {
   const [code, setState] = useState(JSON.stringify(props.code))
