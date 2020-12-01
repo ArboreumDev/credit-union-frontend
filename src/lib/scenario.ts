@@ -61,6 +61,7 @@ export class Scenario {
         ...u,
         id: uuidv4(),
         name: u.name ?? u.email,
+        onboarded: true,
       }
       await this.dbClient.sdk.CreateUser({ user })
     }
