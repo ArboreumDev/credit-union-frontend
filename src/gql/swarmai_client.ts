@@ -31,6 +31,7 @@ export default class SwarmAIClient {
       return res
     } catch (error) {
       // TODO: #153 Check for SwarmAI error codes here @djudjuu
+      // console.error(error)
       throw SwarmAIErrors.NOT_ENOUGH_BALANCE_IN_SYSTEM
     }
   }

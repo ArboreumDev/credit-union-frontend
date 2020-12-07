@@ -1,17 +1,36 @@
-import * as React from "react"
-import { initializeGQL } from "../../gql/graphql_client"
-import { getSdk, User, GetAllUsersQuery } from "../../gql/sdk"
-import { GetServerSideProps } from "next"
-import { Box, Button, Heading, Input, Stack } from "@chakra-ui/core"
-import { COMPANY_NAME } from "lib/constant"
+import { Box, Button, Heading, Input, Stack, Textarea } from "@chakra-ui/core"
 import DbClient from "gql/db_client"
+import { fetchJSON } from "lib/api"
+import { COMPANY_NAME } from "lib/constant"
+import { GetServerSideProps } from "next"
+import { useState } from "react"
+import { GetAllUsersQuery } from "../../gql/sdk"
 
-export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
+export function TEdit(props: { code: any; onSubmit: any }) {
+  const [code, setState] = useState(JSON.stringify(props.code))
+
+  return (
+    <div>
+      <Textarea
+        height={70}
+        value={code}
+        onChange={(v) => setState(v.target.value)}
+      />
+      <Button onClick={() => props.onSubmit(code)}>Save</Button>
+    </div>
+  )
+}
+
+export default function Hello(props: {
+  allUsers: GetAllUsersQuery["user"]
+  scenario: any
+}) {
   // Only use code like this when UI needs to refresh
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
   const users = props.allUsers
+
   return (
     <Box>
       <Stack>
@@ -35,6 +54,15 @@ export default function Hello(props: { allUsers: GetAllUsersQuery["user"] }) {
           ></Input>
         </Box>
       </Stack>
+      <Box>
+        Scenario:
+        <TEdit
+          code={props.scenario}
+          onSubmit={(json: string) =>
+            fetchJSON({ url: "/api/admin/set_scenario", payload: { json } })
+          }
+        />
+      </Box>
     </Box>
   )
 }
@@ -45,6 +73,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbClient = new DbClient()
   const allUsers = await dbClient.allUsers
-
-  return { props: { allUsers } }
+  const scenario = await dbClient.generateScenarioObject()
+  return { props: { allUsers, scenario } }
 }

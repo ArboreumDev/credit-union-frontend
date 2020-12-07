@@ -387,4 +387,17 @@ export default class DbClient {
     const res = await this.sdk.InsertEvent({ event })
     return res.insert_events_one
   }
+
+  generateScenarioObject = async () => {
+    const { scenario_actions } = await this.sdk.GetAllActions()
+    return {
+      users: (await this.allUsers).map((u) => ({
+        name: u.name,
+        email: u.email,
+        user_type: u.user_type,
+        demographic_info: u.demographic_info,
+      })),
+      actions: scenario_actions,
+    }
+  }
 }
