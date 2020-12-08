@@ -47,7 +47,7 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Investments</Heading>
-      <Text>More granular details are coming soon.</Text>
+      <Text>More granular details are coming soon</Text>
     </Box>
 
     <Grid templateColumns="repeat(2, 1fr)" gap={3}>
@@ -230,7 +230,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
                 <Center minW={320} maxW="sm">
                   <Stack w="100%" spacing={6}>
                     {AllocatedAsset("Invested", percInvested, "teal.500")}
-                    {AllocatedAsset("Uninvested", percUninvested, "gray.400")}
+                    {AllocatedAsset("Uninvested", percUninvested, "gray.500")}
                   </Stack>
                 </Center>
               </Wrap>
