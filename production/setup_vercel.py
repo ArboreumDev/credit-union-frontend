@@ -7,7 +7,7 @@ def update_var(k,v,env):
     print(k,v,env)
     rm_cmd = f"vercel env rm -y {k} {env}"
     os.system(rm_cmd)
-    cmd = f"printf %s {v} | vercel env add {k} {env}"
+    cmd = f"printf %s {v} | vercel env add plain {k} {env}"
     os.system(cmd)
 
 print ("Choose env: 1. production, 2. preview")
