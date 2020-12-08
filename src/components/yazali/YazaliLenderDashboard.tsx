@@ -103,7 +103,12 @@ const LenderDashboard = (props: { lenderId: string }) => {
         <title>Lender {user.name} </title>
       </Head>
       <AppBar />
-      {loading && <Spinner />}
+      {loading && (
+        <Center>
+          {" "}
+          <Spinner />
+        </Center>
+      )}
       {!loading && (
         <Box margin={[0, 1, 2, 3]} padding={[2, 3, 4, 5]}>
           <Stack w="100%" spacing={8}>
