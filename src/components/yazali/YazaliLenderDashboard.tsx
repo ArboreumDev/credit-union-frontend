@@ -31,6 +31,41 @@ import React, { useEffect, useState } from "react"
 import { Currency } from "../common/Currency"
 import AppBar from "./AppBar"
 
+interface Investment {
+  amount: number
+  farmer: string
+}
+interface User {
+  invested: number
+  uninvested: number
+  name: string
+  lendings: Investment[]
+}
+
+const PledgeInvestments = (props: { investments: Investment[] }) => (
+  <Stack spacing="15px">
+    <Box>
+      <Heading size="md">Investments</Heading>
+    </Box>
+    <Flex fontWeight="semibold">
+      <Box verticalAlign="center" flex="1">
+        Name
+      </Box>
+      <Box flex="1">Amount</Box>
+    </Flex>
+    {props.investments.map((pledge, idx) => (
+      <Flex key={"inv_" + idx}>
+        <Box verticalAlign="center" flex="1">
+          <Text>{pledge.farmer}</Text>
+        </Box>
+        <Box flex="1">
+          <Currency amount={pledge.amount} />
+        </Box>
+      </Flex>
+    ))}
+  </Stack>
+)
+
 const Asset = (title: string, amount: number) => (
   <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
     <Box flex={0.5}>{title}</Box>
@@ -61,16 +96,13 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
-interface User {
-  invested: number
-  uninvested: number
-  name: string
-}
+
 const LenderDashboard = (props: { lenderId: string }) => {
   const initUser: User = {
     invested: 0,
     uninvested: 0,
     name: "",
+    lendings: [],
   }
   const [user, setLender] = useState(initUser)
   const [loading, setLoading] = useState(true)
@@ -167,6 +199,9 @@ const LenderDashboard = (props: { lenderId: string }) => {
                 </Center>
               </Wrap>
             </>
+            <Box maxW="sm">
+              <PledgeInvestments investments={user.lendings} />
+            </Box>
           </Stack>
         </Box>
       )}
