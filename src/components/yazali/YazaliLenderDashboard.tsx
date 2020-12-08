@@ -77,7 +77,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
 
   useEffect(() => {
     const fetchAPY = async () => {
-      const url = "http://0.0.0.0:8000/lender/" + props.lenderId
+      const url = "http://app.arbo.link:8000/lender/" + props.lenderId
       const user = await fetchJSON({ url })
       setLender(user)
       setLoading(false)
