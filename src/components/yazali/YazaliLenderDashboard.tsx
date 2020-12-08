@@ -77,8 +77,11 @@ const LenderDashboard = (props: { lenderId: string }) => {
 
   useEffect(() => {
     const fetchAPY = async () => {
-      const url = "http://app.arbo.link:8000/lender/" + props.lenderId
-      const user = await fetchJSON({ url })
+      const url = "/api/yazali/lender"
+      const user = await fetchJSON({
+        url,
+        payload: { lenderId: props.lenderId },
+      })
       setLender(user)
       setLoading(false)
     }
