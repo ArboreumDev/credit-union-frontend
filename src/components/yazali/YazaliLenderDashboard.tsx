@@ -47,15 +47,17 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Investments</Heading>
+      <Text>More granular details are coming soon.</Text>
     </Box>
-    <Grid templateColumns="repeat(7, 1fr)" gap={3}>
+
+    <Grid templateColumns="repeat(2, 1fr)" gap={3}>
       <Box verticalAlign="center" width="100%" textAlign="center" bg="gray.100">
         Name
       </Box>
       <Box width="100%" textAlign="center" bg="gray.100">
         Amount
       </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
+      {/* <Box width="100%" textAlign="center" bg="gray.100">
         Investment Date
       </Box>
       <Box width="100%" textAlign="center" bg="gray.100">
@@ -69,18 +71,18 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
       </Box>
       <Box width="100%" textAlign="center" bg="gray.100">
         Maturity Amount
-      </Box>
+      </Box> */}
     </Grid>
 
     {props.investments.map((pledge, idx) => (
-      <Grid key={"inv_" + idx} templateColumns="repeat(7, 1fr)" gap={3}>
+      <Grid key={"inv_" + idx} templateColumns="repeat(2, 1fr)" gap={3}>
         <Box verticalAlign="center" width="100%" textAlign="center">
           <Text>{pledge.farmer}</Text>
         </Box>
         <Box width="100%" textAlign="center">
           <Currency amount={pledge.amount} />
         </Box>
-        <Box width="100%" textAlign="center">
+        {/* <Box width="100%" textAlign="center">
           2020-12-1
         </Box>
         <Box width="100%" textAlign="center">
@@ -94,7 +96,7 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
         </Box>
         <Box width="100%" textAlign="center">
           <Currency amount={pledge.amount + 10} />
-        </Box>
+        </Box> */}
       </Grid>
     ))}
   </Stack>
