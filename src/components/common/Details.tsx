@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Text, Stack } from "@chakra-ui/core"
+import { Box, Center, Flex, Text, Stack } from "@chakra-ui/react"
 
 export type KeyValueMap = {
   key: string

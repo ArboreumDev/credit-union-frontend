@@ -1,4 +1,4 @@
-import { Center, Box } from "@chakra-ui/core"
+import { Center, Box } from "@chakra-ui/react"
 import React from "react"
 import { Line } from "react-chartjs-2"
 

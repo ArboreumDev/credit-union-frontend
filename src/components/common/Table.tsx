@@ -1,4 +1,4 @@
-import { Box, Text, Flex, ResponsiveValue, Stack } from "@chakra-ui/core"
+import { Box, Text, Flex, ResponsiveValue, Stack } from "@chakra-ui/react"
 import { bool } from "aws-sdk/clients/signer"
 import * as CSS from "csstype"
 

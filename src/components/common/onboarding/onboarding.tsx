@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
   UnorderedList,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { USER_DEMOGRAPHIC } from "lib/constant"
 import { CreateUser } from "lib/gql_api_actions"
 import { UserType } from "lib/types"

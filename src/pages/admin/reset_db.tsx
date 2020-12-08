@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/core"
+import { Button } from "@chakra-ui/react"
 import DbClient from "gql/db_client"
 import { GetServerSideProps } from "next"
 

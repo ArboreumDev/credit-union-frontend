@@ -10,7 +10,7 @@ import {
   Input,
   Stack,
   useDisclosure,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import useUser from "lib/useUser"
 import { useRef } from "react"
 import { FiSettings } from "react-icons/fi"

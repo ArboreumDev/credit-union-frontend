@@ -8,7 +8,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Textarea,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { captureFeedback } from "lib/api"
 import { createRef, useRef, useState } from "react"
 

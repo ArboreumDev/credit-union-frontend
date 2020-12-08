@@ -7,7 +7,7 @@ import {
   Select,
   Stack,
   Text,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import AmountInput from "components/common/AmountInput"
 import { CreateLoan } from "lib/gql_api_actions"
 import { User } from "lib/types"

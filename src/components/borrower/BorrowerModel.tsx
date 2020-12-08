@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/core"
+import { Container } from "@chakra-ui/react"
 import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"
 import BActiveLoan from "components/borrower/LoanRequests/ActiveLoan"
 import BLoanNeedsConfirmation from "components/borrower/LoanRequests/LoanNeedsConfirmation"

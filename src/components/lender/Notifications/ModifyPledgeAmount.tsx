@@ -11,7 +11,7 @@ import {
   Stack,
   Text,
   useDisclosure,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import AmountInput from "components/common/AmountInput"
 import { PledgeRequest } from "lib/types"
 import { useForm } from "react-hook-form"

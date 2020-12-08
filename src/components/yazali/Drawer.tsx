@@ -11,7 +11,7 @@ import {
   Stack,
   useColorMode,
   useDisclosure,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import {
   FeedbackPopover,
   SupportPopover,

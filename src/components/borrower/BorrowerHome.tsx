@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/core"
+import { Box } from "@chakra-ui/react"
 import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
 import { User } from "lib/types"

@@ -8,7 +8,7 @@ import {
   Heading,
   Stack,
   Text,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/Withdraw"

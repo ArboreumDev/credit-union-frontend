@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/core"
+import { Button } from "@chakra-ui/react"
 import { Router } from "next/router"
 import { CgLogOut } from "react-icons/cg"
 

@@ -6,7 +6,7 @@ import {
   StatLabel,
   StatNumber,
   Text,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { LoanRequest, SupporterStatus } from "lib/types"
 import { CgFileDocument } from "react-icons/cg"
 import { Currency } from "../../common/Currency"

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
+import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
 import { LoanRequestStatus, PledgeRequest } from "../../lib/types"
 import { Currency } from "../common/Currency"
 

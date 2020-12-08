@@ -18,7 +18,7 @@ import {
   Text,
   Tooltip,
   Wrap,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import {
   FeedbackPopover,
   SupportPopover,

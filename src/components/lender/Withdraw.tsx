@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/core"
+import { Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/react"
 import AmountInput from "components/common/AmountInput"
 import { Currency } from "components/common/Currency"
 import { ChangeBalance } from "lib/gql_api_actions"

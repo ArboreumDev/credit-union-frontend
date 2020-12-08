@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/core"
+import { Button } from "@chakra-ui/react"
 
 async function measureFunction() {
   async function once() {

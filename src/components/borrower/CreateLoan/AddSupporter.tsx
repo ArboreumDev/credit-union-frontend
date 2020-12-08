@@ -8,7 +8,7 @@ import {
   Select,
   Stack,
   Text,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import AmountInput from "components/common/AmountInput"
 import { useForm } from "react-hook-form"
 import { AddSupporter as AddSupporterAction } from "lib/gql_api_actions"

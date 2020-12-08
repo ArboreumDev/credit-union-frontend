@@ -1,4 +1,4 @@
-import { Button, Text } from "@chakra-ui/core"
+import { Button, Text } from "@chakra-ui/react"
 import { COMPANY_NAME, DEFAULT_COMPANY_NAME } from "lib/constant"
 import Link from "next/link"
 

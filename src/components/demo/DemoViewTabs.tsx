@@ -5,7 +5,7 @@ import {
   TabPanels,
   Tabs,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { JStep } from "pages/demo/[userType]/[jstep]"
 
 interface Props {

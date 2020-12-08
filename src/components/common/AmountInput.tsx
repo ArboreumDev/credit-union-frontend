@@ -1,4 +1,4 @@
-import { Input, InputGroup, InputLeftAddon } from "@chakra-ui/core"
+import { Input, InputGroup, InputLeftAddon } from "@chakra-ui/react"
 
 const AmountInput = (props: { passName: string; passRef: any }) => (
   <InputGroup>

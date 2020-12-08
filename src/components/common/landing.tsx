@@ -1,4 +1,4 @@
-import { Center, Stack } from "@chakra-ui/core"
+import { Center, Stack } from "@chakra-ui/react"
 import InvestBorrowButtons from "./onboarding/investBorrowButtons"
 export const Logo = () => (
   <Center margin="40px" h="40px">

@@ -1,4 +1,4 @@
-import { Center, useColorMode } from "@chakra-ui/core"
+import { Center, useColorMode } from "@chakra-ui/react"
 import LenderDashboard from "components/yazali/YazaliLenderDashboard"
 import { User, UserType } from "lib/types"
 import { useRouter } from "next/router"

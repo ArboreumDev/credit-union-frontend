@@ -1,4 +1,9 @@
-import { Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/core"
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from "@chakra-ui/react"
 
 export default function KYCCompleted() {
   return (

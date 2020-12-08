@@ -1,4 +1,4 @@
-import { Center, Stack } from "@chakra-ui/core"
+import { Center, Stack } from "@chakra-ui/react"
 import { Logo } from "components/common/landing"
 import InvestBorrowButtons from "components/common/onboarding/investBorrowButtons"
 import { USER_TYPE_KEY } from "lib/constant"

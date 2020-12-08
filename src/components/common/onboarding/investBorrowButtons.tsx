@@ -1,4 +1,4 @@
-import { Button, HStack } from "@chakra-ui/core"
+import { Button, HStack } from "@chakra-ui/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { USER_TYPE_KEY } from "lib/constant"

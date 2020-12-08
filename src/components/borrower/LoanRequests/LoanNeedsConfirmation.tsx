@@ -13,7 +13,7 @@ import {
   StatNumber,
   Text,
   Tooltip,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { Currency } from "components/common/Currency"
 import { dec_to_perc } from "lib/currency"
 import { AcceptLoanOffer } from "lib/gql_api_actions"

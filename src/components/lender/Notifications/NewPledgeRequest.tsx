@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
   Wrap,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { AcceptRejectPledge } from "lib/gql_api_actions"
 import { PledgeRequest, SupporterStatus } from "lib/types"
 import Link from "next/link"
@@ -66,7 +66,7 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
       <Button variant="link" onClick={() => setShow(!show)}>
         {show ? "Hide" : "Show"} Details
       </Button>
-      <Collapse mt={4} isOpen={show}>
+      <Collapse animateOpacity in={show}>
         <Stack>
           <AlertDescription>
             <Table>

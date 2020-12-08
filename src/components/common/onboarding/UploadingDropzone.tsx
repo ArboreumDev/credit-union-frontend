@@ -1,4 +1,4 @@
-import { Box, Spinner, Stack } from "@chakra-ui/core"
+import { Box, Spinner, Stack } from "@chakra-ui/react"
 import { CheckIcon } from "@chakra-ui/icons"
 import { fetchJSON } from "lib/api"
 import { UploadRequest } from "pages/api/upload"

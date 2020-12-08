@@ -13,7 +13,7 @@ import {
   Text,
   Tooltip,
   Wrap,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import DynamicDoughnut from "components/dashboard/doughnut"
 import DbClient from "gql/db_client"
 import { initializeGQL } from "gql/graphql_client"

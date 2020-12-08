@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, HStack, Text } from "@chakra-ui/core"
+import { Box, Button, Center, Flex, HStack, Text } from "@chakra-ui/react"
 
 import React from "react"
 

@@ -9,7 +9,7 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { LoanRequest } from "lib/types"
 import { useRouter } from "next/router"
 import { Currency } from "../../common/Currency"

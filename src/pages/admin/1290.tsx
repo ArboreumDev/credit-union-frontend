@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Input, Stack, Textarea } from "@chakra-ui/core"
+import { Box, Button, Heading, Input, Stack, Textarea } from "@chakra-ui/react"
 import DbClient from "gql/db_client"
 import { fetchJSON } from "lib/api"
 import { COMPANY_NAME } from "lib/constant"

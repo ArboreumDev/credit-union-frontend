@@ -1,4 +1,4 @@
-import { ChakraProvider } from "@chakra-ui/core"
+import { ChakraProvider } from "@chakra-ui/react"
 import { AppProps, NextWebVitalsMetric } from "next/app"
 import Head from "next/head"
 import * as React from "react"

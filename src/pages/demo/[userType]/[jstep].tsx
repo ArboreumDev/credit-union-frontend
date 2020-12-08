@@ -1,4 +1,4 @@
-import { useEventListener } from "@chakra-ui/core"
+import { useEventListener } from "@chakra-ui/react"
 import LandingPage from "components/common/landing"
 import Onboarding from "components/common/onboarding/onboarding"
 import { Fixtures } from "lib/demo/fixtures"

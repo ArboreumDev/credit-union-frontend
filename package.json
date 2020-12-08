@@ -12,9 +12,8 @@
     "seeds": "cd hasura && hasura seeds apply"
   },
   "dependencies": {
-    "@chakra-ui/core": "^1.0.0-rc.3",
-    "@chakra-ui/icons": "^1.0.0-rc.8",
-    "@chakra-ui/theme": "^1.0.0-rc.3",
+    "@chakra-ui/react": "^1.0.2",
+    "@chakra-ui/icons": "^1.0.2",
     "@use-it/event-listener": "^0.1.6",
     "aws-sdk": "^2.805.0",
     "chart.js": "^2.9.4",

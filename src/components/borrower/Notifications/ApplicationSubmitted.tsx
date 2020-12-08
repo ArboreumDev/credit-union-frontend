@@ -1,4 +1,9 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle } from "@chakra-ui/core"
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from "@chakra-ui/react"
 
 export default function ApplicationSubmitted() {
   return (

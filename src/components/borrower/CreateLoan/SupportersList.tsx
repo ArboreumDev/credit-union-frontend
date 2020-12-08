@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading, Stack } from "@chakra-ui/core"
+import { Box, Button, Center, Flex, Heading, Stack } from "@chakra-ui/react"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { dec_to_perc } from "lib/currency"
 import { LoanRequest, SupporterStatus } from "lib/types"
