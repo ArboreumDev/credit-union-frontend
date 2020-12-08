@@ -165,8 +165,8 @@ const LenderDashboard = (props: { lenderId: string }) => {
   }, [])
 
   const totalAsset = user.invested + user.uninvested
-  const percInvested = dec_to_perc(user.invested / totalAsset)
-  const percUninvested = dec_to_perc(user.uninvested / totalAsset)
+  const percInvested = dec_to_perc(user.invested / totalAsset, 0)
+  const percUninvested = dec_to_perc(user.uninvested / totalAsset, 0)
 
   return (
     <>
