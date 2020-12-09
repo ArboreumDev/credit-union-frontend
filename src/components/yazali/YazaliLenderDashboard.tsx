@@ -49,7 +49,11 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Investments</Heading>
-      <Text>More granular details are coming soon</Text>
+      <Text>
+        More granular details are coming soon. For more for details please visit
+        your{" "}
+        <a href="https://www.rupeecircle.com/login">Rupee Circle Dashboard</a>
+      </Text>
     </Box>
 
     <Grid templateColumns="repeat(2, 1fr)" gap={3}>
@@ -79,7 +83,7 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
     {props.investments.map((pledge, idx) => (
       <Grid key={"inv_" + idx} templateColumns="repeat(2, 1fr)" gap={3}>
         <Box verticalAlign="center" width="100%" textAlign="center">
-          <Text>{pledge.farmer}</Text>
+          <Text>{pledge.borrower}</Text>
         </Box>
         <Box width="100%" textAlign="center">
           <Currency amount={pledge.amount} />
