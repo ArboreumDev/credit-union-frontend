@@ -34,7 +34,9 @@ import AppBar from "./AppBar"
 
 interface Investment {
   amount: number
-  farmer: string
+  borrower: string
+  invested_at?: number
+  maturity_at?: number
 }
 interface User {
   invested: number
