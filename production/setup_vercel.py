@@ -2,6 +2,7 @@
 
 import json
 import os
+import time
 
 def update_var(k,v,env):
     print(k,v,env)
@@ -29,6 +30,7 @@ with open('./production/.env.json') as f:
     if i==100:
         for i, (k, v) in enumerate(items):
             update_var(k,v,env)
+            time.sleep(5)
 
     # Update vars
     if -1 < i < len(items):
