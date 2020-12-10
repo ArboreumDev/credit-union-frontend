@@ -202,7 +202,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
               <Stat>
                 <StatLabel fontSize="lg">Total Assets</StatLabel>
                 <StatNumber fontSize="3xl">
-                  <Currency amount={user.invested} />
+                  <Currency amount={user.invested + user.uninvested} />
                 </StatNumber>
               </Stat>
               {user.uninvested > 0 && (
