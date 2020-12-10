@@ -229,7 +229,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
                   <StatLabel fontSize="lg">
                     <Tooltip label="Annual Percentage Yield">APY</Tooltip>
                   </StatLabel>
-                  <StatNumber fontSize="3xl">{14.4}%</StatNumber>
+                  <StatNumber fontSize="3xl">{14.6}%</StatNumber>
                 </Stat>
               )}
             </HStack>
