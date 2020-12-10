@@ -37,6 +37,7 @@ interface Investment {
   borrower: string
   invested_at?: number
   maturity_at?: number
+  loan_amount: number
 }
 interface User {
   invested: number
@@ -45,25 +46,36 @@ interface User {
   lendings: Investment[]
 }
 
-const PledgeInvestments = (props: { investments: Investment[] }) => (
-  <Stack spacing="15px">
-    <Box>
-      <Heading size="md">Investments</Heading>
-      <Text>
-        More granular details are coming soon. For more for details please visit
-        your{" "}
-        <a href="https://www.rupeecircle.com/login">Rupee Circle Dashboard</a>
-      </Text>
-    </Box>
+const PledgeInvestments = (props: { investments: Investment[] }) => {
+  const n_rows = 3
+  return (
+    <Stack spacing="15px">
+      <Box>
+        <Heading size="md">Investments</Heading>
+        <Text>
+          More granular details are coming soon. For more for details please
+          visit your{" "}
+          <a href="https://www.rupeecircle.com/login">Rupee Circle Dashboard</a>
+        </Text>
+      </Box>
 
-    <Grid templateColumns="repeat(2, 1fr)" gap={3}>
-      <Box verticalAlign="center" width="100%" textAlign="center" bg="gray.100">
-        Name
-      </Box>
+      <Grid templateColumns={"repeat(" + n_rows + ", 1fr)"} gap={3}>
+        <Box
+          verticalAlign="center"
+          width="100%"
+          textAlign="center"
+          bg="gray.100"
+        >
+          Name
+        </Box>
+        <Box width="100%" textAlign="center" bg="gray.100">
+          Amount
+        </Box>
+        <Box width="100%" textAlign="center" bg="gray.100">
+          Total Exposure
+        </Box>
+        {/* 
       <Box width="100%" textAlign="center" bg="gray.100">
-        Amount
-      </Box>
-      {/* <Box width="100%" textAlign="center" bg="gray.100">
         Investment Date
       </Box>
       <Box width="100%" textAlign="center" bg="gray.100">
@@ -78,17 +90,24 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
       <Box width="100%" textAlign="center" bg="gray.100">
         Maturity Amount
       </Box> */}
-    </Grid>
+      </Grid>
 
-    {props.investments.map((pledge, idx) => (
-      <Grid key={"inv_" + idx} templateColumns="repeat(2, 1fr)" gap={3}>
-        <Box verticalAlign="center" width="100%" textAlign="center">
-          <Text>{pledge.borrower}</Text>
-        </Box>
-        <Box width="100%" textAlign="center">
-          <Currency amount={pledge.amount} />
-        </Box>
-        {/* <Box width="100%" textAlign="center">
+      {props.investments.map((pledge, idx) => (
+        <Grid
+          key={"inv_" + idx}
+          templateColumns={"repeat(" + n_rows + ", 1fr)"}
+          gap={3}
+        >
+          <Box verticalAlign="center" width="100%" textAlign="center">
+            <Text>{pledge.borrower}</Text>
+          </Box>
+          <Box width="100%" textAlign="center">
+            <Currency amount={pledge.amount} />
+          </Box>
+          <Box width="100%" textAlign="center">
+            {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
+          </Box>
+          {/* <Box width="100%" textAlign="center">
           2020-12-1
         </Box>
         <Box width="100%" textAlign="center">
@@ -103,10 +122,11 @@ const PledgeInvestments = (props: { investments: Investment[] }) => (
         <Box width="100%" textAlign="center">
           <Currency amount={pledge.amount + 10} />
         </Box> */}
-      </Grid>
-    ))}
-  </Stack>
-)
+        </Grid>
+      ))}
+    </Stack>
+  )
+}
 
 const Asset = (title: string, amount: number) => (
   <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
@@ -182,7 +202,6 @@ const LenderDashboard = (props: { lenderId: string }) => {
       <AppBar />
       {loading && (
         <Center>
-          {" "}
           <Spinner />
         </Center>
       )}
