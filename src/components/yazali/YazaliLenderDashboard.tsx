@@ -52,11 +52,7 @@ const PledgeInvestments = (props: { investments: Investment[] }) => {
     <Stack spacing="15px">
       <Box>
         <Heading size="md">Investments</Heading>
-        <Text>
-          More granular details are coming soon. For more for details please
-          visit your{" "}
-          <a href="https://www.rupeecircle.com/login">Rupee Circle Dashboard</a>
-        </Text>
+        <Text>More granular details are coming soon.</Text>
       </Box>
 
       <Grid templateColumns={"repeat(" + n_rows + ", 1fr)"} gap={3}>
