@@ -1,3 +1,4 @@
+// TODO: reset db and uncomment create new user code below
 describe("My First Test", () => {
   it("Visits the Kitchen Sink", () => {
     cy.visit("https://app.arboreum.dev")
@@ -6,6 +7,7 @@ describe("My First Test", () => {
     cy.get("#input-username-for-credentials-provider").type("gp@arboreum.dev")
 
     cy.contains("Sign in").click()
+    cy.url().should("eq", "")
 
     // cy.get("input[name='firstname']").type("Gaurav")
     // cy.get("input[name='lastname']").type("Paruthi")
