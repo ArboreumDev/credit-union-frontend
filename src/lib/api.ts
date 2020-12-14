@@ -88,7 +88,7 @@ export async function fetchJSON({
   payload,
 }: {
   url: string
-  payload: any
+  payload?: any
 }) {
   const fetcher = new Fetcher()
 
