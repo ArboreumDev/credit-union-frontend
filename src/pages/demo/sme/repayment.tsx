@@ -90,7 +90,7 @@ const Cell = (props: { children: any }) => (
   </Box>
 )
 
-const Row = (props: { invoice: Repayment; k?: string }) => {
+const Row = (props: { invoice: Repayment }) => {
   const i = props.invoice
   const key = "rep" + Math.random() * 1000
   return (
