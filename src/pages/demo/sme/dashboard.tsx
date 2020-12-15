@@ -2,19 +2,11 @@
 // From mocks at https://docs.google.com/presentation/d/1vIBX9ZdYACaZHEg2xb7KGZI7REPnni3Y4wumCzNukNY/edit
 
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
-  Center,
-  Divider,
   Flex,
   Grid,
   Heading,
   HStack,
-  Progress,
-  Spinner,
   Stack,
   Stat,
   StatLabel,
@@ -24,8 +16,6 @@ import {
   Wrap,
 } from "@chakra-ui/core"
 import { Currency } from "components/common/Currency"
-import FileDropzone from "components/common/onboarding/Dropzone"
-import UploadingDropzone from "components/common/onboarding/UploadingDropzone"
 import AppBar from "components/yazali/AppBar"
 import { FiUpload } from "react-icons/fi"
 import { Cell, HeaderCell } from "../../../components/sme/common"

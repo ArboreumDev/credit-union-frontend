@@ -1,26 +1,4 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  Grid,
-  Heading,
-  HStack,
-  Progress,
-  Spinner,
-  Stack,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  Tooltip,
-  Wrap,
-} from "@chakra-ui/core"
+import { Box } from "@chakra-ui/core"
 
 export const HeaderCell = (props: { children: any }) => (
   <Box width="100%" textAlign="center" bg="gray.100">
