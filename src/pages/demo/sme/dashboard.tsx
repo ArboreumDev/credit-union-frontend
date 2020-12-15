@@ -53,13 +53,16 @@ const INVOICES: Invoice[] = [
     photo: "",
   },
 ]
-const col_headers = ["Invoice ID", "Value", "Date", "Photo", "Upload"]
+const col_headers = ["", "Invoice ID", "Value", "Date", "Photo", "Upload"]
 
 const Row = (props: { invoice: Invoice }) => {
   const i = props.invoice
   const key = "rep" + Math.random() * 1000
   return (
     <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
+      <Cell>
+        <input type="checkbox" />
+      </Cell>
       <Cell>
         <Text>{i.invoiceId}</Text>
       </Cell>

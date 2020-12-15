@@ -1,12 +1,17 @@
-import { Box } from "@chakra-ui/core"
+import { Box, Center, Flex } from "@chakra-ui/core"
 
-export const HeaderCell = (props: { children: any }) => (
-  <Box width="100%" textAlign="center" bg="gray.100">
-    {props.children}
-  </Box>
+interface CellProps {
+  children?: any
+  width?: string
+  bg?: string
+}
+
+export const Cell = ({ children, width = "100%", bg = "" }: CellProps) => (
+  <Center width={width} bg={bg}>
+    {children}
+  </Center>
 )
-export const Cell = (props: { children: any }) => (
-  <Box width="100%" margin="auto" justifyContent="center" display="flex">
-    {props.children}
-  </Box>
+
+export const HeaderCell = (props: CellProps) => (
+  <Cell {...props} bg="gray.100" />
 )

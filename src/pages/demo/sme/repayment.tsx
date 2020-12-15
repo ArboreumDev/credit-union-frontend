@@ -61,6 +61,7 @@ const Repayments: Repayment[] = [
 const col_headers = [
   "Invoice ID",
   "Vendor",
+  "Due Date",
   "Amount Repaid",
   "Amount Due",
   "Amount Owed 2 Gurukrupa",
@@ -78,6 +79,9 @@ const Row = (props: { invoice: Repayment }) => {
       </Cell>
       <Cell>
         <Text>{i.vendor}</Text>
+      </Cell>
+      <Cell>
+        <Text>{i.dueDate}</Text>
       </Cell>
       <Cell>
         <Currency amount={i.amount} />
