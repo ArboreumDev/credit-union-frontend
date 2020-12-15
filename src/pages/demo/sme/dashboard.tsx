@@ -111,6 +111,11 @@ const Asset = (title: string, amount: number) => (
   </Flex>
 )
 
+const data = {
+  used: 100000,
+  total: 500000,
+}
+
 const App = () => (
   <>
     <AppBar />
@@ -120,7 +125,7 @@ const App = () => (
           <Stat>
             <StatLabel fontSize="lg">Total Credit Line</StatLabel>
             <StatNumber fontSize="3xl">
-              <Currency amount={500000} />
+              <Currency amount={data.total} />
             </StatNumber>
           </Stat>
 
@@ -136,8 +141,8 @@ const App = () => (
         <Heading size="md">Credit Line Amount</Heading>
         <Stack>
           <Wrap w="100%">
-            {Asset("Used", 40000)}
-            {Asset("Available", 60000)}
+            {Asset("Used", data.used)}
+            {Asset("Available", data.total - data.used)}
           </Wrap>
         </Stack>
         <InvoiceUploadTable invoices={INVOICES} />
