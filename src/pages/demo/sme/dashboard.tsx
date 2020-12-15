@@ -27,6 +27,7 @@ import { Currency } from "components/common/Currency"
 import FileDropzone from "components/common/onboarding/Dropzone"
 import UploadingDropzone from "components/common/onboarding/UploadingDropzone"
 import AppBar from "components/yazali/AppBar"
+import { FiUpload } from "react-icons/fi"
 
 interface Invoice {
   invoiceId: string
@@ -36,6 +37,24 @@ interface Invoice {
 }
 
 const INVOICES: Invoice[] = [
+  {
+    invoiceId: "tx123123",
+    value: 20000,
+    date: "12th Sept 2010",
+    photo: "",
+  },
+  {
+    invoiceId: "tx123123",
+    value: 20000,
+    date: "12th Sept 2010",
+    photo: "",
+  },
+  {
+    invoiceId: "tx123123",
+    value: 20000,
+    date: "12th Sept 2010",
+    photo: "",
+  },
   {
     invoiceId: "tx123123",
     value: 20000,
@@ -70,7 +89,11 @@ const Row = (props: { invoice: Invoice; key?: string }) => {
       <Cell>{i.date}</Cell>
       <Cell>{i.photo}</Cell>
       <Cell>
-        <label htmlFor={`upload-photo-${key}`}>Browse</label>
+        <label htmlFor={`upload-photo-${key}`}>
+          <span style={{ margin: "auto", display: "flex", width: "20px" }}>
+            <FiUpload />
+          </span>
+        </label>
         <input
           style={{ display: "none" }}
           type="file"
