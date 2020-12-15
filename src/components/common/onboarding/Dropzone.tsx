@@ -13,7 +13,7 @@ const toBase64 = (file) =>
 const FileDropzone = (props: {
   s3Key: string
   onDrag: (data: UploadRequest) => void
-  children: any
+  children?: any
 }) => {
   const [files, setFiles] = useState<string[]>([])
 
