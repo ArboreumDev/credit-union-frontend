@@ -42,7 +42,7 @@ export abstract class Action {
     protected payload: any
   ) {}
   abstract minAuthLevel: AUTH_TYPE
-  abstract async run(): Promise<any>
+  abstract run(): Promise<any>
 
   get user() {
     return this.session.user

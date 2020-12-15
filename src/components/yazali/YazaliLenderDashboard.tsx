@@ -154,7 +154,6 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
-
 const LenderDashboard = (props: { lenderId: string }) => {
   const initUser: User = {
     invested: 0,
