@@ -28,6 +28,7 @@ import FileDropzone from "components/common/onboarding/Dropzone"
 import UploadingDropzone from "components/common/onboarding/UploadingDropzone"
 import AppBar from "components/yazali/AppBar"
 import { FiUpload } from "react-icons/fi"
+import { Cell, HeaderCell } from "../../../components/sme/common"
 
 interface Invoice {
   invoiceId: string
@@ -64,20 +65,9 @@ const INVOICES: Invoice[] = [
 ]
 const col_headers = ["Invoice ID", "Value", "Date", "Photo", "Upload"]
 
-const HeaderCell = (props: { children: any }) => (
-  <Box width="100%" textAlign="center" bg="gray.100">
-    {props.children}
-  </Box>
-)
-const Cell = (props: { children: any }) => (
-  <Box width="100%" textAlign="center">
-    {props.children}
-  </Box>
-)
-
-const Row = (props: { invoice: Invoice; key?: string }) => {
+const Row = (props: { invoice: Invoice }) => {
   const i = props.invoice
-  const key = props.key
+  const key = "rep" + Math.random() * 1000
   return (
     <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
       <Cell>

@@ -29,6 +29,7 @@ import FileDropzone from "components/common/onboarding/Dropzone"
 import UploadingDropzone from "components/common/onboarding/UploadingDropzone"
 import AppBar from "components/yazali/AppBar"
 import { FiUpload } from "react-icons/fi"
+import { Cell, HeaderCell } from "../../../components/sme/common"
 
 interface Repayment {
   invoiceId: string
@@ -78,17 +79,6 @@ const col_headers = [
   "Price if repaid now",
   "Repay",
 ]
-
-const HeaderCell = (props: { children: any }) => (
-  <Box width="100%" textAlign="center" bg="gray.100">
-    {props.children}
-  </Box>
-)
-const Cell = (props: { children: any }) => (
-  <Box width="100%" margin="auto" justifyContent="center" display="flex">
-    {props.children}
-  </Box>
-)
 
 const Row = (props: { invoice: Repayment }) => {
   const i = props.invoice
@@ -166,13 +156,6 @@ const App = () => (
             <StatNumber fontSize="3xl">{14.6}%</StatNumber>
           </Stat>
         </HStack>
-        <Heading size="md">Credit Line Amount</Heading>
-        <Stack>
-          <Wrap w="100%">
-            {Asset("Used", 40000)}
-            {Asset("Available", 60000)}
-          </Wrap>
-        </Stack>
         <Heading size="md">Make Repayments</Heading>
         <RepaymentTable repayments={Repayments} />
       </Stack>
