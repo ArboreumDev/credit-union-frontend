@@ -90,9 +90,9 @@ const Cell = (props: { children: any }) => (
   </Box>
 )
 
-const Row = (props: { invoice: Repayment; key?: string }) => {
+const Row = (props: { invoice: Repayment; k?: string }) => {
   const i = props.invoice
-  const key = props.key
+  const key = "rep" + Math.random() * 1000
   return (
     <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
       <Cell>
