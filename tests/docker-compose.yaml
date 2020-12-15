@@ -27,7 +27,7 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       version: "3.3"
   swarmai:
-    image: gparbo/swarmai:latest
+    image: docker.pkg.github.com/arboreumdev/swarmai/swarmai:pr-180-merge
     command: "make dev-api"
     ports:
       - "3001:3001"
