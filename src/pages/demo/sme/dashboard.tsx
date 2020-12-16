@@ -165,7 +165,7 @@ const App = () => (
             amount={10000}
           />
           <Button w="300px" colorScheme="blue">
-            Finace Selected Invoices
+            Finance Selected Invoices
           </Button>
         </Stack>
       </Stack>
