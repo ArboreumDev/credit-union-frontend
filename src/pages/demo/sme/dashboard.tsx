@@ -3,10 +3,12 @@
 
 import {
   Box,
+  Button,
   Flex,
   Grid,
   Heading,
   HStack,
+  Spacer,
   Stack,
   Stat,
   StatLabel,
@@ -18,7 +20,12 @@ import {
 import { Currency } from "components/common/Currency"
 import AppBar from "components/yazali/AppBar"
 import { FiUpload } from "react-icons/fi"
-import { Cell, HeaderCell } from "../../../components/sme/common"
+import {
+  Asset,
+  Cell,
+  HeaderCell,
+  Summary,
+} from "../../../components/sme/common"
 
 interface Invoice {
   invoiceId: string
@@ -31,29 +38,37 @@ const INVOICES: Invoice[] = [
   {
     invoiceId: "tx123123",
     value: 20000,
-    date: "12th Sept 2010",
+    date: "12th March 2021",
     photo: "",
   },
   {
     invoiceId: "tx123123",
     value: 20000,
-    date: "12th Sept 2010",
+    date: "12th March 2021",
     photo: "",
   },
   {
     invoiceId: "tx123123",
     value: 20000,
-    date: "12th Sept 2010",
+    date: "12th March 2021",
     photo: "",
   },
   {
     invoiceId: "tx123123",
     value: 20000,
-    date: "12th Sept 2010",
+    date: "12th March 2021",
     photo: "",
   },
 ]
-const col_headers = ["", "Invoice ID", "Value", "Date", "Photo", "Upload"]
+const col_headers = [
+  "Select",
+  "Invoice ID",
+  "Value",
+  "Date",
+  "Photo",
+  "Upload Invoice",
+  "Approximate Term",
+]
 
 const Row = (props: { invoice: Invoice }) => {
   const i = props.invoice
@@ -83,6 +98,14 @@ const Row = (props: { invoice: Invoice }) => {
           id={`upload-photo-${key}`}
         />
       </Cell>
+      <Cell>
+        <select name="invoice_days">
+          {/* <option value="30"></option> */}
+          <option value="30">30 Days</option>
+          <option value="60">60 Days</option>
+          <option value="120">120 Days</option>
+        </select>
+      </Cell>
     </Grid>
   )
 }
@@ -102,18 +125,9 @@ const InvoiceUploadTable = (props: { invoices: Invoice[] }) => {
   )
 }
 
-const Asset = (title: string, amount: number) => (
-  <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
-    <Box flex={0.5}>{title}</Box>
-    <Box flex={0.5} textAlign="right">
-      <Currency amount={amount} />
-    </Box>
-  </Flex>
-)
-
 const data = {
   used: 100000,
-  total: 500000,
+  total: 1000000,
 }
 
 const App = () => (
@@ -128,24 +142,32 @@ const App = () => (
               <Currency amount={data.total} />
             </StatNumber>
           </Stat>
-
-          <Stat>
-            <StatLabel fontSize="lg">
-              <Tooltip label="Annual Percentage Yield">
-                Credit Line Available
-              </Tooltip>
-            </StatLabel>
-            <StatNumber fontSize="3xl">{14.6}%</StatNumber>
-          </Stat>
         </HStack>
         <Heading size="md">Credit Line Amount</Heading>
-        <Stack>
-          <Wrap w="100%">
-            {Asset("Used", data.used)}
-            {Asset("Available", data.total - data.used)}
-          </Wrap>
-        </Stack>
+        <Wrap w="100%">
+          <Asset title="Used" amount={data.used} />
+          <Asset title="Available" amount={data.total - data.used} />
+        </Wrap>
+        <Heading size="md">Finance Invoices</Heading>
+
+        <Wrap w="100%">
+          <Asset title="Sum of selected invoices" amount={10000} />
+          <Asset title="New Credit Line amount" amount={10000} />
+        </Wrap>
+
         <InvoiceUploadTable invoices={INVOICES} />
+
+        <Stack w="500px">
+          <Summary title="Gurukrupa to receive now" amount={10000} />
+          <Summary title="Gurukrupa to receive when repaid" amount={10000} />
+          <Summary
+            title="Total Per-cent Discount on Invoice(s)"
+            amount={10000}
+          />
+          <Button w="300px" colorScheme="blue">
+            Finace Selected Invoices
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   </>

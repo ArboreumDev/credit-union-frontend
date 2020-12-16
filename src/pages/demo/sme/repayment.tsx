@@ -17,15 +17,13 @@ import {
 } from "@chakra-ui/core"
 import { Currency } from "components/common/Currency"
 import AppBar from "components/yazali/AppBar"
-import { Cell, HeaderCell } from "../../../components/sme/common"
+import { Cell, HeaderCell, Summary } from "../../../components/sme/common"
 
 interface Repayment {
   invoiceId: string
   vendor?: string
-  amount: number
-  amountDue: number
-  amountOwed: number
-  currentPrice: number
+  amountRepaid: number
+  amountDue: number // same as invoice value
   dueDate: string
 }
 
@@ -33,40 +31,33 @@ const Repayments: Repayment[] = [
   {
     invoiceId: "tx3",
     vendor: "test",
-    amount: 20000,
+    amountRepaid: 20000,
     amountDue: 40000,
-    amountOwed: 60000,
-    dueDate: "12th Sept 2010",
-    currentPrice: 20000,
+    dueDate: "12th March 2021",
   },
   {
     invoiceId: "tx2",
     vendor: "test",
-    amount: 20000,
+    amountRepaid: 20000,
     amountDue: 40000,
-    amountOwed: 60000,
-    dueDate: "12th Sept 2010",
-    currentPrice: 20000,
+    dueDate: "12th March 2021",
   },
   {
     invoiceId: "tx4",
     vendor: "test",
-    amount: 20000,
+    amountRepaid: 20000,
     amountDue: 40000,
-    amountOwed: 60000,
-    dueDate: "12th Sept 2010",
-    currentPrice: 20000,
+    dueDate: "12th March 2021",
   },
 ]
 const col_headers = [
   "Invoice ID",
   "Vendor",
   "Due Date",
+  "Total Due",
   "Amount Repaid",
-  "Amount Due",
-  "Amount Owed 2 Gurukrupa",
-  "Price if repaid now",
-  "Repay",
+  "Amount Outstanding",
+  "SME Amount Outstanding",
 ]
 
 const Row = (props: { invoice: Repayment }) => {
@@ -84,19 +75,16 @@ const Row = (props: { invoice: Repayment }) => {
         <Text>{i.dueDate}</Text>
       </Cell>
       <Cell>
-        <Currency amount={i.amount} />
-      </Cell>
-      <Cell>
         <Currency amount={i.amountDue} />
       </Cell>
       <Cell>
-        <Currency amount={i.amountOwed} />
+        <Currency amount={i.amountRepaid} />
       </Cell>
       <Cell>
-        <Currency amount={i.currentPrice} />
+        <Currency amount={i.amountDue - i.amountRepaid} />
       </Cell>
       <Cell>
-        <Button>Repay</Button>
+        <Currency amount={i.amountDue * (0.2 - 0.0384)} />
       </Cell>
     </Grid>
   )
@@ -117,15 +105,6 @@ const RepaymentTable = (props: { repayments: Repayment[] }) => {
   )
 }
 
-const Asset = (title: string, amount: number) => (
-  <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
-    <Box flex={0.5}>{title}</Box>
-    <Box flex={0.5} textAlign="right">
-      <Currency amount={amount} />
-    </Box>
-  </Flex>
-)
-
 const App = () => (
   <>
     <AppBar />
@@ -135,21 +114,24 @@ const App = () => (
           <Stat>
             <StatLabel fontSize="lg">Total Credit Line</StatLabel>
             <StatNumber fontSize="3xl">
-              <Currency amount={500000} />
+              <Currency amount={1000000} />
             </StatNumber>
           </Stat>
-
-          <Stat>
-            <StatLabel fontSize="lg">
-              <Tooltip label="Credit Line Available">
-                Credit Line Available
-              </Tooltip>
-            </StatLabel>
-            <StatNumber fontSize="3xl">{14.6}%</StatNumber>
-          </Stat>
         </HStack>
-        <Heading size="md">Make Repayments</Heading>
+        <Heading size="md">Monitor Financed Invoices</Heading>
         <RepaymentTable repayments={Repayments} />
+
+        <Stack w="500px">
+          <Summary title="Total Amount Outstanding" amount={10000} />
+          <Summary title="Total Amount Repaid" amount={10000} />
+          <Summary
+            title="Total Amount Gurukrupa to rceive when repaid"
+            amount={10000}
+          />
+          <Button w="300px" colorScheme="blue">
+            Finace Selected Invoices
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   </>
