@@ -80,6 +80,7 @@ interface RowProps {
   invoice: Invoice
   onSelect: (id: string, checked: bool) => void
 }
+// TODO: #169 Use chakraui/table when chakraui issues are fixed. Probably at v1.1
 const Row = ({ invoice, onSelect }: RowProps) => {
   const key = "rep" + Math.random() * 1000
   const onChange = (checked: bool) => {
