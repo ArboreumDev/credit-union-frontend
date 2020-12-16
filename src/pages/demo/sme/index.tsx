@@ -1,6 +1,5 @@
 import { Box, Heading, Stack } from "@chakra-ui/core"
-import AppBar from "components/common/nav/AppBar"
-import { COMPANY_NAME } from "lib/constant"
+import AppBar from "components/yazali/AppBar"
 import Link from "next/link"
 import { useEffect } from "react"
 

@@ -4,17 +4,14 @@
 import {
   Box,
   Button,
-  Flex,
   Grid,
   Heading,
   HStack,
-  Spacer,
   Stack,
   Stat,
   StatLabel,
   StatNumber,
   Text,
-  Tooltip,
   Wrap,
 } from "@chakra-ui/core"
 import { bool } from "aws-sdk/clients/signer"
