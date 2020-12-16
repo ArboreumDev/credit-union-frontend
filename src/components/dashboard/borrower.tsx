@@ -1,5 +1,4 @@
 import DynamicDoughnut from "./doughnut_borrower"
-import LineChart from "./linechart"
 
 export default () => {
   return (

@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from "@chakra-ui/core"
 import { Currency } from "components/common/Currency"
+import LineChart from "./linechart"
 import AppBar from "components/yazali/AppBar"
 import { Cell, HeaderCell, Summary } from "../../../components/sme/common"
 
@@ -91,6 +92,11 @@ const Row = (props: { invoice: Repayment }) => {
 }
 
 const RepaymentTable = (props: { repayments: Repayment[] }) => {
+  const repayments = props.repayments
+  const totalDue = repayments.map((r) => r.amountDue).reduce((p, c) => p + c)
+  const totalRepaid = repayments
+    .map((r) => r.amountRepaid)
+    .reduce((p, c) => p + c)
   return (
     <Stack spacing="15px">
       <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
@@ -101,6 +107,17 @@ const RepaymentTable = (props: { repayments: Repayment[] }) => {
       {props.repayments.map((invoice, idx) => (
         <Row key={"inv_" + idx} invoice={invoice} />
       ))}
+      <Stack w="500px">
+        <Summary
+          title="Total Amount Outstanding"
+          amount={totalDue - totalRepaid}
+        />
+        <Summary title="Total Amount Repaid" amount={totalRepaid} />
+        <Summary
+          title="Total Amount Gurukrupa to rceive when repaid"
+          amount={(0.2 - 0.0384) * totalDue}
+        />
+      </Stack>
     </Stack>
   )
 }
@@ -120,18 +137,10 @@ const App = () => (
         </HStack>
         <Heading size="md">Monitor Financed Invoices</Heading>
         <RepaymentTable repayments={Repayments} />
-
-        <Stack w="500px">
-          <Summary title="Total Amount Outstanding" amount={10000} />
-          <Summary title="Total Amount Repaid" amount={10000} />
-          <Summary
-            title="Total Amount Gurukrupa to rceive when repaid"
-            amount={10000}
-          />
-          <Button w="300px" colorScheme="blue">
-            Finace Selected Invoices
-          </Button>
-        </Stack>
+        <Box w="400px">
+          <Heading size="md">Credit Line use overtime</Heading>
+          <LineChart />
+        </Box>
       </Stack>
     </Box>
   </>
