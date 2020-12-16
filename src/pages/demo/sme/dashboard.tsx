@@ -17,14 +17,17 @@ import {
   Tooltip,
   Wrap,
 } from "@chakra-ui/core"
+import { bool } from "aws-sdk/clients/signer"
 import { Currency } from "components/common/Currency"
 import AppBar from "components/yazali/AppBar"
+import { useState } from "react"
 import { FiUpload } from "react-icons/fi"
 import {
   Asset,
   Cell,
   HeaderCell,
   Summary,
+  SummarySimple,
 } from "../../../components/sme/common"
 
 interface Invoice {
@@ -32,29 +35,30 @@ interface Invoice {
   value: number
   date: string
   photo?: string
+  selected?: bool
 }
 
 const INVOICES: Invoice[] = [
   {
-    invoiceId: "tx123123",
+    invoiceId: "tx1",
     value: 20000,
     date: "12th March 2021",
     photo: "",
   },
   {
-    invoiceId: "tx123123",
+    invoiceId: "tx2",
     value: 20000,
     date: "12th March 2021",
     photo: "",
   },
   {
-    invoiceId: "tx123123",
+    invoiceId: "tx3",
     value: 20000,
     date: "12th March 2021",
     photo: "",
   },
   {
-    invoiceId: "tx123123",
+    invoiceId: "tx4",
     value: 20000,
     date: "12th March 2021",
     photo: "",
@@ -70,22 +74,32 @@ const col_headers = [
   "Approximate Term",
 ]
 
-const Row = (props: { invoice: Invoice }) => {
-  const i = props.invoice
+interface RowProps {
+  invoice: Invoice
+  onSelect: (id: string, checked: bool) => void
+}
+const Row = ({ invoice, onSelect }: RowProps) => {
   const key = "rep" + Math.random() * 1000
+  const onChange = (checked: bool) => {
+    onSelect(invoice.invoiceId, checked)
+  }
   return (
     <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
       <Cell>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={invoice.selected}
+          onChange={(ev) => onChange(ev.target.checked)}
+        />
       </Cell>
       <Cell>
-        <Text>{i.invoiceId}</Text>
+        <Text>{invoice.invoiceId}</Text>
       </Cell>
       <Cell>
-        <Currency amount={i.value} />
+        <Currency amount={invoice.value} />
       </Cell>
-      <Cell>{i.date}</Cell>
-      <Cell>{i.photo}</Cell>
+      <Cell>{invoice.date}</Cell>
+      <Cell>{invoice.photo}</Cell>
       <Cell>
         <label htmlFor={`upload-photo-${key}`}>
           <span style={{ margin: "auto", display: "flex", width: "20px" }}>
@@ -111,6 +125,20 @@ const Row = (props: { invoice: Invoice }) => {
 }
 
 const InvoiceUploadTable = (props: { invoices: Invoice[] }) => {
+  const [invoices, setInvoices] = useState(props.invoices)
+  const onInvoiceSelect = (invoiceId: string, selected: bool) => {
+    console.log(invoiceId, selected)
+    const idx = invoices.findIndex((p) => p.invoiceId == invoiceId)
+    const newInv = invoices[idx]
+    newInv.selected = selected
+    invoices.splice(idx, 1, newInv)
+    setInvoices([...invoices])
+  }
+  const selectedInvoiceSum = invoices
+    .map((i) => (i.selected ? i.value : 0))
+    .reduce((a, b) => a + b)
+  const toReceive = 0.8 * selectedInvoiceSum
+  const receiveWhenRepaid = (0.2 - 0.0384) * selectedInvoiceSum
   return (
     <Stack spacing="15px">
       <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
@@ -118,9 +146,23 @@ const InvoiceUploadTable = (props: { invoices: Invoice[] }) => {
           <HeaderCell key={"ch_" + idx}>{name}</HeaderCell>
         ))}
       </Grid>
-      {props.invoices.map((invoice, idx) => (
-        <Row key={"inv_" + idx} invoice={invoice} />
+      {invoices.map((invoice, idx) => (
+        <Row key={"inv_" + idx} invoice={invoice} onSelect={onInvoiceSelect} />
       ))}
+      <Stack w="500px">
+        <Summary title="SME to receive now" amount={toReceive} />
+        <Summary
+          title="SME to receive when repaid"
+          amount={receiveWhenRepaid}
+        />
+        <SummarySimple
+          title="Total Per-cent Discount on Invoice(s)"
+          amount={3.84}
+        />
+        <Button w="300px" colorScheme="blue">
+          Finance Selected Invoices
+        </Button>
+      </Stack>
     </Stack>
   )
 }
@@ -156,18 +198,6 @@ const App = () => (
         </Wrap>
 
         <InvoiceUploadTable invoices={INVOICES} />
-
-        <Stack w="500px">
-          <Summary title="Gurukrupa to receive now" amount={10000} />
-          <Summary title="Gurukrupa to receive when repaid" amount={10000} />
-          <Summary
-            title="Total Per-cent Discount on Invoice(s)"
-            amount={10000}
-          />
-          <Button w="300px" colorScheme="blue">
-            Finance Selected Invoices
-          </Button>
-        </Stack>
       </Stack>
     </Box>
   </>

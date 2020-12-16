@@ -41,10 +41,22 @@ export const Asset = ({ title, amount, width = "auto" }: AssetProps) => (
 
 export const Summary = ({ title, amount, width = "100%" }: AssetProps) => (
   <Flex>
-    {/* {title} = <Currency amount={amount} /> */}
     <Box flex={0.7}>{title}</Box>
     <Box flex={0.3} textAlign="right">
       = <Currency amount={amount} />
+    </Box>
+  </Flex>
+)
+
+export const SummarySimple = ({
+  title,
+  amount,
+  width = "100%",
+}: AssetProps) => (
+  <Flex>
+    <Box flex={0.7}>{title}</Box>
+    <Box flex={0.3} textAlign="right">
+      = {amount}%
     </Box>
   </Flex>
 )
