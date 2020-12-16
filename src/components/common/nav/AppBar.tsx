@@ -27,9 +27,7 @@ const AppBar = () => (
     </Flex>
     <Box flex="1"></Box>
     <HStack display={["none", "none", "block"]} className="navButtons">
-      <Button fontWeight="lighter" variant="ghost">
-        <Text as="samp">TUSKER</Text>
-      </Button>
+      <CompanyX />
       <FeedbackPopover />
       <SupportPopover />
     </HStack>
