@@ -7,6 +7,7 @@ import {
   Center,
   Divider,
   Flex,
+  Grid,
   Heading,
   HStack,
   Progress,
@@ -30,6 +31,98 @@ import Head from "next/head"
 import React, { useEffect, useState } from "react"
 import { Currency } from "../common/Currency"
 import AppBar from "./AppBar"
+
+interface Investment {
+  amount: number
+  borrower: string
+  invested_at?: number
+  maturity_at?: number
+  loan_amount: number
+}
+interface User {
+  invested: number
+  uninvested: number
+  name: string
+  lendings: Investment[]
+}
+
+const PledgeInvestments = (props: { investments: Investment[] }) => {
+  const n_rows = 3
+  return (
+    <Stack spacing="15px">
+      <Box>
+        <Heading size="md">Investments</Heading>
+        <Text>More granular details are coming soon.</Text>
+      </Box>
+
+      <Grid templateColumns={"repeat(" + n_rows + ", 1fr)"} gap={3}>
+        <Box
+          verticalAlign="center"
+          width="100%"
+          textAlign="center"
+          bg="gray.100"
+        >
+          Name
+        </Box>
+        <Box width="100%" textAlign="center" bg="gray.100">
+          Amount
+        </Box>
+        <Box width="100%" textAlign="center" bg="gray.100">
+          Total Exposure
+        </Box>
+        {/* 
+      <Box width="100%" textAlign="center" bg="gray.100">
+        Investment Date
+      </Box>
+      <Box width="100%" textAlign="center" bg="gray.100">
+        ROI
+      </Box>
+      <Box width="100%" textAlign="center" bg="gray.100">
+        Tenor (in months)
+      </Box>
+      <Box width="100%" textAlign="center" bg="gray.100">
+        Maturity Date
+      </Box>
+      <Box width="100%" textAlign="center" bg="gray.100">
+        Maturity Amount
+      </Box> */}
+      </Grid>
+
+      {props.investments.map((pledge, idx) => (
+        <Grid
+          key={"inv_" + idx}
+          templateColumns={"repeat(" + n_rows + ", 1fr)"}
+          gap={3}
+        >
+          <Box verticalAlign="center" width="100%" textAlign="center">
+            <Text>{pledge.borrower}</Text>
+          </Box>
+          <Box width="100%" textAlign="center">
+            <Currency amount={pledge.amount} />
+          </Box>
+          <Box width="100%" textAlign="center">
+            {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
+          </Box>
+          {/* <Box width="100%" textAlign="center">
+          2020-12-1
+        </Box>
+        <Box width="100%" textAlign="center">
+          10
+        </Box>
+        <Box width="100%" textAlign="center">
+          5
+        </Box>
+        <Box width="100%" textAlign="center">
+          2021-3-1
+        </Box>
+        <Box width="100%" textAlign="center">
+          <Currency amount={pledge.amount + 10} />
+        </Box> */}
+        </Grid>
+      ))}
+    </Stack>
+  )
+}
 
 const Asset = (title: string, amount: number) => (
   <Flex minW={300} maxW={400} borderWidth={3} borderRadius="lg" padding={5}>
@@ -61,16 +154,12 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
-interface User {
-  invested: number
-  uninvested: number
-  name: string
-}
 const LenderDashboard = (props: { lenderId: string }) => {
   const initUser: User = {
     invested: 0,
     uninvested: 0,
     name: "",
+    lendings: [],
   }
   const [user, setLender] = useState(initUser)
   const [loading, setLoading] = useState(true)
@@ -97,8 +186,8 @@ const LenderDashboard = (props: { lenderId: string }) => {
   }, [])
 
   const totalAsset = user.invested + user.uninvested
-  const percInvested = dec_to_perc(user.invested / totalAsset)
-  const percUninvested = dec_to_perc(user.uninvested / totalAsset)
+  const percInvested = dec_to_perc(user.invested / totalAsset, 0)
+  const percUninvested = dec_to_perc(user.uninvested / totalAsset, 0)
 
   return (
     <>
@@ -108,7 +197,6 @@ const LenderDashboard = (props: { lenderId: string }) => {
       <AppBar />
       {loading && (
         <Center>
-          {" "}
           <Spinner />
         </Center>
       )}
@@ -128,7 +216,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
               <Stat>
                 <StatLabel fontSize="lg">Total Assets</StatLabel>
                 <StatNumber fontSize="3xl">
-                  <Currency amount={user.invested} />
+                  <Currency amount={user.invested + user.uninvested} />
                 </StatNumber>
               </Stat>
               {user.uninvested > 0 && (
@@ -136,7 +224,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
                   <StatLabel fontSize="lg">
                     <Tooltip label="Annual Percentage Yield">APY</Tooltip>
                   </StatLabel>
-                  <StatNumber fontSize="3xl">{14.4}%</StatNumber>
+                  <StatNumber fontSize="3xl">{14.6}%</StatNumber>
                 </Stat>
               )}
             </HStack>
@@ -162,11 +250,14 @@ const LenderDashboard = (props: { lenderId: string }) => {
                 <Center minW={320} maxW="sm">
                   <Stack w="100%" spacing={6}>
                     {AllocatedAsset("Invested", percInvested, "teal.500")}
-                    {AllocatedAsset("Uninvested", percUninvested, "gray.400")}
+                    {AllocatedAsset("Uninvested", percUninvested, "gray.500")}
                   </Stack>
                 </Center>
               </Wrap>
             </>
+            <Box maxW="xl">
+              <PledgeInvestments investments={user.lendings} />
+            </Box>
           </Stack>
         </Box>
       )}

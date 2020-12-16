@@ -11,8 +11,8 @@ export default function DynamicDoughnut({ amounts }: any) {
     datasets: [
       {
         data: amounts,
-        backgroundColor: ["#009C8A", "#71BF45", "#a3b1c0"],
-        hoverBackgroundColor: ["#009C8A", "#71BF45", "#a3b1c0"],
+        backgroundColor: ["#009C8A", "#a3b1c0", "#71BF45"],
+        hoverBackgroundColor: ["#009C8A", "#a3b1c0", "#71BF45"],
       },
     ],
   }
