@@ -27,6 +27,11 @@ import {
   SummarySimple,
 } from "../../../components/sme/common"
 
+const data = {
+  used: 100000,
+  total: 1000000,
+}
+
 interface Invoice {
   invoiceId: string
   value: number
@@ -138,6 +143,13 @@ const InvoiceUploadTable = (props: { invoices: Invoice[] }) => {
   const receiveWhenRepaid = (0.2 - 0.0384) * selectedInvoiceSum
   return (
     <Stack spacing="15px">
+      <Wrap w="100%">
+        <Asset title="Sum of selected invoices" amount={selectedInvoiceSum} />
+        <Asset
+          title="New Credit Line amount"
+          amount={data.total - data.used - selectedInvoiceSum}
+        />
+      </Wrap>
       <Grid templateColumns={"repeat(" + col_headers.length + ", 1fr)"} gap={3}>
         {col_headers.map((name, idx) => (
           <HeaderCell key={"ch_" + idx}>{name}</HeaderCell>
@@ -164,11 +176,6 @@ const InvoiceUploadTable = (props: { invoices: Invoice[] }) => {
   )
 }
 
-const data = {
-  used: 100000,
-  total: 1000000,
-}
-
 const App = () => (
   <>
     <AppBar />
@@ -188,12 +195,6 @@ const App = () => (
           <Asset title="Available" amount={data.total - data.used} />
         </Wrap>
         <Heading size="md">Finance Invoices</Heading>
-
-        <Wrap w="100%">
-          <Asset title="Sum of selected invoices" amount={10000} />
-          <Asset title="New Credit Line amount" amount={10000} />
-        </Wrap>
-
         <InvoiceUploadTable invoices={INVOICES} />
       </Stack>
     </Box>
