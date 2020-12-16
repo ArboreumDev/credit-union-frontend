@@ -1,4 +1,4 @@
-import { Center, Box } from "@chakra-ui/core"
+import { Center, Box, HStack } from "@chakra-ui/core"
 import React from "react"
 import { Line } from "react-chartjs-2"
 
@@ -32,8 +32,10 @@ const data = {
 
 const LineChart = () => (
   <Box minW="300px">
-    <Center>{/* <h4>Credit Line use overtime</h4> */}</Center>
-    <Line data={data} width={360} height={360} />
+    <HStack>
+      <Line data={data} width={360} height={360} />
+      <img src="https://uploads-all-arboreum.s3.eu-west-2.amazonaws.com/production/user_uploads/user_uploads/test/1608086047901-plot.png" />
+    </HStack>
   </Box>
 )
 
