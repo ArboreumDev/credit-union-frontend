@@ -1020,9 +1020,7 @@ export type Encumbrances_Insert_Input = {
   due_date?: Maybe<Scalars["date"]>
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
-  encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Arr_Rel_Insert_Input
-  >
+  encumbrance_participants?: Maybe<Encumbrance_Participants_Arr_Rel_Insert_Input>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
@@ -1134,9 +1132,7 @@ export type Encumbrances_Order_By = {
   due_date?: Maybe<Order_By>
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
-  encumbrance_participants_aggregate?: Maybe<
-    Encumbrance_Participants_Aggregate_Order_By
-  >
+  encumbrance_participants_aggregate?: Maybe<Encumbrance_Participants_Aggregate_Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
@@ -2738,9 +2734,7 @@ export type Mutation_Root = {
   /** delete single row from the table: "edges" */
   delete_edges_by_pk?: Maybe<Edges>
   /** delete data from the table: "encumbrance_participants" */
-  delete_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  delete_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** delete single row from the table: "encumbrance_participants" */
   delete_encumbrance_participants_by_pk?: Maybe<Encumbrance_Participants>
   /** delete data from the table: "encumbrances" */
@@ -2800,9 +2794,7 @@ export type Mutation_Root = {
   /** insert a single row into the table: "edges" */
   insert_edges_one?: Maybe<Edges>
   /** insert data into the table: "encumbrance_participants" */
-  insert_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  insert_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** insert a single row into the table: "encumbrance_participants" */
   insert_encumbrance_participants_one?: Maybe<Encumbrance_Participants>
   /** insert data into the table: "encumbrances" */
@@ -2862,9 +2854,7 @@ export type Mutation_Root = {
   /** update single row of the table: "edges" */
   update_edges_by_pk?: Maybe<Edges>
   /** update data of the table: "encumbrance_participants" */
-  update_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  update_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** update single row of the table: "encumbrance_participants" */
   update_encumbrance_participants_by_pk?: Maybe<Encumbrance_Participants>
   /** update data of the table: "encumbrances" */
@@ -6395,6 +6385,7 @@ export type User = {
   recommendation_risks: Array<Recommendation_Risk>
   /** An aggregated array relationship */
   recommendation_risks_aggregate: Recommendation_Risk_Aggregate
+  roi?: Maybe<Scalars["jsonb"]>
   /** An array relationship */
   supporters: Array<Supporters>
   /** An aggregated array relationship */
@@ -6590,6 +6581,11 @@ export type UserRecommendation_Risks_AggregateArgs = {
 }
 
 /** columns and relationships of "user" */
+export type UserRoiArgs = {
+  path?: Maybe<Scalars["String"]>
+}
+
+/** columns and relationships of "user" */
 export type UserSupportersArgs = {
   distinct_on?: Maybe<Array<Supporters_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -6654,6 +6650,7 @@ export type User_Aggregate_Order_By = {
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type User_Append_Input = {
   demographic_info?: Maybe<Scalars["jsonb"]>
+  roi?: Maybe<Scalars["jsonb"]>
 }
 
 /** input type for inserting array relation for remote table "user" */
@@ -6708,6 +6705,7 @@ export type User_Bool_Exp = {
   receivables?: Maybe<Receivables_Bool_Exp>
   recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Bool_Exp>
   recommendation_risks?: Maybe<Recommendation_Risk_Bool_Exp>
+  roi?: Maybe<Jsonb_Comparison_Exp>
   supporters?: Maybe<Supporters_Bool_Exp>
   updated_at?: Maybe<Timestamptz_Comparison_Exp>
   user_number?: Maybe<Int_Comparison_Exp>
@@ -6727,16 +6725,19 @@ export enum User_Constraint {
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type User_Delete_At_Path_Input = {
   demographic_info?: Maybe<Array<Maybe<Scalars["String"]>>>
+  roi?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type User_Delete_Elem_Input = {
   demographic_info?: Maybe<Scalars["Int"]>
+  roi?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type User_Delete_Key_Input = {
   demographic_info?: Maybe<Scalars["String"]>
+  roi?: Maybe<Scalars["String"]>
 }
 
 /** input type for incrementing integer column in table "user" */
@@ -6770,10 +6771,9 @@ export type User_Insert_Input = {
   onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
-  recommendationRisksByRecommenderId?: Maybe<
-    Recommendation_Risk_Arr_Rel_Insert_Input
-  >
+  recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
   recommendation_risks?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
+  roi?: Maybe<Scalars["jsonb"]>
   supporters?: Maybe<Supporters_Arr_Rel_Insert_Input>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user_number?: Maybe<Scalars["Int"]>
@@ -6886,10 +6886,9 @@ export type User_Order_By = {
   onboarded?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
-  recommendationRisksByRecommenderId_aggregate?: Maybe<
-    Recommendation_Risk_Aggregate_Order_By
-  >
+  recommendationRisksByRecommenderId_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
   recommendation_risks_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
+  roi?: Maybe<Order_By>
   supporters_aggregate?: Maybe<Supporters_Aggregate_Order_By>
   updated_at?: Maybe<Order_By>
   user_number?: Maybe<Order_By>
@@ -6904,6 +6903,7 @@ export type User_Pk_Columns_Input = {
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type User_Prepend_Input = {
   demographic_info?: Maybe<Scalars["jsonb"]>
+  roi?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "user" */
@@ -6933,6 +6933,8 @@ export enum User_Select_Column {
   /** column name */
   Phone = "phone",
   /** column name */
+  Roi = "roi",
+  /** column name */
   UpdatedAt = "updated_at",
   /** column name */
   UserNumber = "user_number",
@@ -6954,6 +6956,7 @@ export type User_Set_Input = {
   name?: Maybe<Scalars["String"]>
   onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
+  roi?: Maybe<Scalars["jsonb"]>
   updated_at?: Maybe<Scalars["timestamptz"]>
   user_number?: Maybe<Scalars["Int"]>
   user_type?: Maybe<Scalars["user_t"]>
@@ -7075,6 +7078,8 @@ export enum User_Update_Column {
   /** column name */
   Phone = "phone",
   /** column name */
+  Roi = "roi",
+  /** column name */
   UpdatedAt = "updated_at",
   /** column name */
   UserNumber = "user_number",
@@ -7192,6 +7197,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "name"
       | "user_type"
       | "balance"
+      | "roi"
       | "user_number"
       | "corpus_share"
       | "kyc_approved"
@@ -7206,7 +7212,7 @@ export type GetLenderDashboardInfoQueryVariables = Exact<{
 
 export type GetLenderDashboardInfoQuery = { __typename?: "query_root" } & {
   lender?: Maybe<
-    { __typename?: "user" } & Pick<User, "balance" | "corpus_share">
+    { __typename?: "user" } & Pick<User, "balance" | "corpus_share" | "roi">
   >
   corpusInvestment: { __typename?: "receivables_aggregate" } & {
     aggregate?: Maybe<
@@ -7253,6 +7259,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "kyc_approved"
       | "demographic_info"
       | "onboarded"
+      | "roi"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -7321,6 +7328,15 @@ export type ApproveKycMutationVariables = Exact<{
 
 export type ApproveKycMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
+}
+
+export type UpdateUserRoiMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  newRoi: Scalars["jsonb"]
+}>
+
+export type UpdateUserRoiMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "roi">>
 }
 
 export type GetAllActionsQueryVariables = Exact<{ [key: string]: never }>
@@ -7859,6 +7875,7 @@ export const GetAllUsersDocument = gql`
       name
       user_type
       balance
+      roi
       user_number
       corpus_share
       kyc_approved
@@ -7871,6 +7888,7 @@ export const GetLenderDashboardInfoDocument = gql`
     lender: user_by_pk(id: $user_id) {
       balance
       corpus_share
+      roi
     }
     corpusInvestment: receivables_aggregate(
       where: { loan_request: { status: { _eq: "live" } } }
@@ -7906,6 +7924,7 @@ export const GetUserByEmailDocument = gql`
       kyc_approved
       demographic_info
       onboarded
+      roi
       loan_requests {
         request_id
         confirmation_date
@@ -7962,6 +7981,17 @@ export const ApproveKycDocument = gql`
     ) {
       id
       kyc_approved
+    }
+  }
+`
+export const UpdateUserRoiDocument = gql`
+  mutation UpdateUserRoi($userId: uuid!, $newRoi: jsonb!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { roi: $newRoi }
+    ) {
+      id
+      roi
     }
   }
 `
@@ -8411,6 +8441,16 @@ export function getSdk(
     ): Promise<ApproveKycMutation> {
       return withWrapper(() =>
         client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
+      )
+    },
+    UpdateUserRoi(
+      variables: UpdateUserRoiMutationVariables
+    ): Promise<UpdateUserRoiMutation> {
+      return withWrapper(() =>
+        client.request<UpdateUserRoiMutation>(
+          print(UpdateUserRoiDocument),
+          variables
+        )
       )
     },
     GetAllActions(
