@@ -246,7 +246,6 @@ export default class DbClient {
   updateAllRoIs = async (updates: Array<PortfolioUpdate>) => {
     await Promise.all(
       updates.map(async (update) => {
-        console.log("roiis ", update)
         await this.sdk.UpdateUserRoi({
           userId: update.userId,
           newRoi: update.newRoI,
