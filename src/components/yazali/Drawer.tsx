@@ -4,19 +4,17 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Input,
   Stack,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/core"
+import { ColorModeSwitcher } from "components/common/nav/ColorModeSwitcher"
 import {
   FeedbackPopover,
   SupportPopover,
 } from "components/common/nav/FeedbackPopover"
-import useUser from "lib/useUser"
 import { useRef } from "react"
 import { FiSettings } from "react-icons/fi"
 
@@ -49,9 +47,7 @@ export default function DrawerButton() {
               <Stack>
                 <FeedbackPopover />
                 <SupportPopover />
-                <Button onClick={toggleColorMode}>
-                  Toggle {colorMode === "light" ? "Dark" : "Light"}
-                </Button>
+                <ColorModeSwitcher />
               </Stack>
             </DrawerBody>
           </DrawerContent>
