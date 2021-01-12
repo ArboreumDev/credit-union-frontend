@@ -77,8 +77,8 @@ export async function addEdgesFromList(sdk: Sdk, edgeTuples: [EdgeTuple]) {
  */
 export async function addNetwork(sdk: Sdk, network: Network) {
   const addedUsers = await addUsers(sdk, network.nodes)
-  const addedEdges = await addEdgesFromList(sdk, network.edges)
-  return { addedUsers, addedEdges }
+  // const addedEdges = await addEdgesFromList(sdk, network.edges)
+  return { addedUsers }
 }
 
 /**
@@ -91,8 +91,8 @@ export async function setupScenario(sdk: Sdk, scenarioName: string) {
     scenarioName +
     ".json")
   const addedUsers = await addUsers(sdk, network.nodes)
-  const addedEdges = await addEdgesFromList(sdk, network.edges)
-  return { addedUsers, addedEdges }
+  // const addedEdges = await addEdgesFromList(sdk, network.edges)
+  return { addedUsers }
 }
 
 //     /** create an edge insert input given the edge

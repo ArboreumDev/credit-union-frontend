@@ -35,14 +35,6 @@ describe("Adding users and connections", () => {
     expect(user.id === LENDER1.id)
   })
 
-  test("add edges", async () => {
-    await sdk.InsertEdge({ edge: EDGE1 })
-    await sdk.InsertEdge({ edge: EDGE2 })
-
-    const { edges } = await sdk.GetEdgesByStatus({ status: EDGE_STATUS.active })
-    expect(edges.length).toBe(2)
-  })
-
   describe("Setting and updating user balances", () => {
     let balancesAfter
     let balancesBefore
