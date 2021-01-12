@@ -43,11 +43,6 @@ CREATE TABLE public.edges (
     lender_id uuid,
     other_user_email text
 );
-CREATE TABLE public.encumbrance_participants (
-    encumbrance_id uuid NOT NULL,
-    recipient_id uuid NOT NULL,
-    percentage numeric NOT NULL
-);
 CREATE TABLE public.encumbrances (
     loan_id uuid NOT NULL,
     supporter_id uuid NOT NULL,
@@ -165,8 +160,6 @@ ALTER TABLE ONLY public.edges
     ADD CONSTRAINT edges_pkey PRIMARY KEY (edge_id);
 ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_pkey PRIMARY KEY (encumbrance_id);
-ALTER TABLE ONLY public.encumbrance_participants
-    ADD CONSTRAINT guarantee_participants_pkey PRIMARY KEY (encumbrance_id, recipient_id);
 ALTER TABLE ONLY public.supporters
     ADD CONSTRAINT supporters_pkey PRIMARY KEY (request_id, supporter_id);
 ALTER TABLE ONLY public.loan_participants
@@ -209,8 +202,6 @@ ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_supporter_id_fkey FOREIGN KEY (supporter_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.encumbrances
     ADD CONSTRAINT encumbrances_loan_id_fkey FOREIGN KEY (loan_id) REFERENCES public.loan_requests(request_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE ONLY public.encumbrance_participants
-    ADD CONSTRAINT guarantee_participants_encumbrance_id_fkey FOREIGN KEY (encumbrance_id) REFERENCES public.encumbrances(encumbrance_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.supporters
     ADD CONSTRAINT supporters_supporter_id_fkey FOREIGN KEY (supporter_id) REFERENCES public."user"(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.supporters

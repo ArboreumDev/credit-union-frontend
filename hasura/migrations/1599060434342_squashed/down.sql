@@ -1,5 +1,4 @@
 DROP TABLE public.edges CASCADE;
-DROP TABLE public.encumbrance_participants CASCADE;
 DROP TABLE public.encumbrances CASCADE;
 DROP TABLE public.supporters CASCADE;
 DROP TABLE public.loan_participants CASCADE;

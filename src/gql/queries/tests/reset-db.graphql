@@ -20,9 +20,6 @@ mutation ResetDB {
   delete_loan_participants(where: {}) {
     affected_rows
   }
-  delete_encumbrance_participants(where: {}) {
-    affected_rows
-  }
   delete_loan_requests(where: {}) {
     affected_rows
   }
