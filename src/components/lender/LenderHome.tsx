@@ -26,7 +26,7 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
             <NewPledgeRequest
               key={idx + `_nlr`}
               pledgeRequest={pr}
-              pledgeDisabled={user.balance < pr.pledge_amount}
+              availableFunds={user.balance}
             />
           ))}
           <LenderDashboard user={user} />
