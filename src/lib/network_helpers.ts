@@ -1,4 +1,4 @@
-import { Sdk, User_Insert_Input, Edges_Insert_Input } from "../gql/sdk"
+import { Sdk, User_Insert_Input } from "../gql/sdk"
 import { EDGE_STATUS, RiskParams } from "./types"
 const fs = require("fs")
 
@@ -7,16 +7,16 @@ type EdgeTuple = [string, string, number]
 type Network = { [index: string]: any }
 // ======================== HELPERS TO CREATE INPUT AND PARSE OUTPUT ========================
 
-export const generateEdgeInputFromTupleNotation = (
-  edgeList: EdgeTuple
-): Edges_Insert_Input => {
-  return {
-    trust_amount: edgeList[2],
-    status: EDGE_STATUS.active,
-    lender_id: edgeList[0],
-    borrower_id: edgeList[1],
-  } as Edges_Insert_Input
-}
+// export const generateEdgeInputFromTupleNotation = (
+//   edgeList: EdgeTuple
+// ): Edges_Insert_Input => {
+//   return {
+//     trust_amount: edgeList[2],
+//     status: EDGE_STATUS.active,
+//     lender_id: edgeList[0],
+//     borrower_id: edgeList[1],
+//   } as Edges_Insert_Input
+// }
 
 // export const getNodesFromEdgeList = (edgeList) => {
 //   const nodes = edgeList.map(x => x.slice(0,2)).flat()
@@ -60,15 +60,15 @@ export async function addUsers(sdk: Sdk, userList: [User]) {
  * @param edgeTuples edge with list of entire users
  * @returns added_edges [added_edge_object1, ...]
  */
-export async function addEdgesFromList(sdk: Sdk, edgeTuples: [EdgeTuple]) {
-  const addedEdges = []
-  for (const e of edgeTuples) {
-    const insert_edge_input = generateEdgeInputFromTupleNotation(e)
-    const data = await sdk.InsertEdge({ edge: insert_edge_input })
-    addedEdges.push(data.insert_edges.returning[0])
-  }
-  return addedEdges
-}
+// export async function addEdgesFromList(sdk: Sdk, edgeTuples: [EdgeTuple]) {
+//   const addedEdges = []
+//   for (const e of edgeTuples) {
+//     const insert_edge_input = generateEdgeInputFromTupleNotation(e)
+//     const data = await sdk.InsertEdge({ edge: insert_edge_input })
+//     addedEdges.push(data.insert_edges.returning[0])
+//   }
+//   return addedEdges
+// }
 
 /**
  * add a network to the DB, user_numbers should be unique (will not be guaranteed by DB)
