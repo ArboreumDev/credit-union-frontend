@@ -38,11 +38,6 @@ describe("Adding users and connections", () => {
   describe("Setting and updating user balances", () => {
     let balancesAfter
     let balancesBefore
-    test("setting the balance of one account", async () => {
-      await sdk.SetUserCashBalance({ userId: LENDER1.id, amount: 42000 })
-      const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42000)
-    })
 
     test("changing the balance of one account", async () => {
       await sdk.ChangeUserCashBalance({ userId: LENDER1.id, delta: 42 })
