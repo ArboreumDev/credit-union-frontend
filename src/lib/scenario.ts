@@ -7,6 +7,7 @@ import {
   MakeRepayment,
   runAction,
 } from "./gql_api_actions"
+import { LoanRequestStatus, SupporterStatus } from "./types"
 
 export interface System {
   users: User[]
@@ -25,6 +26,7 @@ export interface DemographicInfo {
 }
 export enum ActionType {
   ADJUST_BALANCES = "ADJUST_BALANCES",
+  NEW_LOAN = "NEW_LOAN",
   CONFIRM_LOAN = "CONFIRM_LOAN",
   REPAY_LOAN = "REPAY_LOAN",
 }
@@ -106,6 +108,29 @@ export class Scenario {
     )
   }
 
+  async newLoan({ userEmail, amount, loan_id, supporters, purpose }) {
+    const user = await this.getUser(userEmail)
+
+    const { loanRequest } = await this.dbClient.createLoanRequest(
+      user.id,
+      amount,
+      purpose ?? ""
+    )
+    this.lrMap[loan_id] = loanRequest.request_id
+
+    // confirm supporter and trigger the loan offer generation
+    for (const s of supporters) {
+      await this.dbClient.sdk.AddSupporter({
+        supporter: {
+          status: SupporterStatus.unknown,
+          request_id: loanRequest.request_id,
+          supporter_id: (await this.getUser(s.email)).id,
+          pledge_amount: s.pledge_amount,
+        },
+      })
+    }
+  }
+
   async confirmLoan({ userEmail, amount, loan_id, supporters, purpose }) {
     const user = await this.getUser(userEmail)
 
@@ -144,6 +169,8 @@ export class Scenario {
         return this.confirmLoan(action.payload)
       case ActionType.REPAY_LOAN:
         return this.repayLoan(action.payload)
+      case ActionType.NEW_LOAN:
+        return this.newLoan(action.payload)
       default:
         console.log("unknown action")
         throw Error
