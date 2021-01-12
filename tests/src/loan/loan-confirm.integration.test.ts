@@ -48,7 +48,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  // await sdk.ResetDB()
+  await sdk.ResetDB()
 })
 
 describe("Loan Request Flow: confirm loan offer", () => {
