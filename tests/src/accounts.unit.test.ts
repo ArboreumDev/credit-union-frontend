@@ -42,7 +42,7 @@ describe("Adding users and connections", () => {
     test("changing the balance of one account", async () => {
       await sdk.ChangeUserCashBalance({ userId: LENDER1.id, delta: 42 })
       const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42042)
+      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(1042)
     })
     test("batch updates to multiple accounts", async () => {
       // moving 41 from lender1 to lender lender2
@@ -61,7 +61,7 @@ describe("Adding users and connections", () => {
       await dbClient.updatePortfolios(VALID_UPDATES1)
 
       const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42001)
+      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(1001)
       expect(allUsers.filter((x) => x.id === LENDER2.id)[0].balance).toBe(
         LENDER2.balance + 41
       )
