@@ -4,6 +4,7 @@ query GetLenderDashboardInfo (
     lender: user_by_pk(id: $user_id) {
       balance
       corpus_share
+      roi
     }
     corpusInvestment: receivables_aggregate (
       where: {loan_request: {status: {_eq: "live"}}}
