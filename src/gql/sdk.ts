@@ -7197,6 +7197,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "name"
       | "user_type"
       | "balance"
+      | "roi"
       | "user_number"
       | "corpus_share"
       | "kyc_approved"
@@ -7224,6 +7225,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "kyc_approved"
       | "demographic_info"
       | "onboarded"
+      | "roi"
     > & {
         loan_requests: Array<
           { __typename?: "loan_requests" } & Pick<
@@ -7283,6 +7285,15 @@ export type ApproveKycMutationVariables = Exact<{
 
 export type ApproveKycMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
+}
+
+export type UpdateUserRoiMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  newRoi: Scalars["jsonb"]
+}>
+
+export type UpdateUserRoiMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "roi">>
 }
 
 export type GetAllActionsQueryVariables = Exact<{ [key: string]: never }>
@@ -7709,6 +7720,7 @@ export const GetAllUsersDocument = gql`
       name
       user_type
       balance
+      roi
       user_number
       corpus_share
       kyc_approved
@@ -7730,6 +7742,7 @@ export const GetUserByEmailDocument = gql`
       kyc_approved
       demographic_info
       onboarded
+      roi
       loan_requests {
         request_id
         confirmation_date
@@ -7776,6 +7789,17 @@ export const ApproveKycDocument = gql`
     ) {
       id
       kyc_approved
+    }
+  }
+`
+export const UpdateUserRoiDocument = gql`
+  mutation UpdateUserRoi($userId: uuid!, $newRoi: jsonb!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { roi: $newRoi }
+    ) {
+      id
+      roi
     }
   }
 `
@@ -8123,6 +8147,16 @@ export function getSdk(
     ): Promise<ApproveKycMutation> {
       return withWrapper(() =>
         client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
+      )
+    },
+    UpdateUserRoi(
+      variables: UpdateUserRoiMutationVariables
+    ): Promise<UpdateUserRoiMutation> {
+      return withWrapper(() =>
+        client.request<UpdateUserRoiMutation>(
+          print(UpdateUserRoiDocument),
+          variables
+        )
       )
     },
     GetAllActions(

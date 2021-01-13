@@ -25,15 +25,10 @@ export default class SwarmAIClient {
 
   async fetch(endpoint: string, payload: any) {
     log(`${endpoint} -- req -- ${"```"}${JSON.stringify(payload)}${"```"}`)
-    // try {
+
     const res = await this.fetcher.post(endpoint, payload)
     log(`${endpoint} -- res -- ${"```"}${JSON.stringify(res)}${"```"}`)
     return res
-    // } catch (error) {
-    // TODO: #153 Check for SwarmAI error codes here @djudjuu
-    // throw error
-    // throw SwarmAIErrors.NOT_ENOUGH_BALANCE_IN_SYSTEM
-    // }
   }
 
   async acceptLoan(

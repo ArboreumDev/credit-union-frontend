@@ -77,7 +77,6 @@ export default class DbClient {
         borrower_id,
         amount,
         purpose,
-        risk_calc_result: {},
         loan: {},
       },
     })
@@ -237,9 +236,21 @@ export default class DbClient {
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
+    await this.updateAllRoIs(updates)
     const updateMutation = generateUpdateAsSingleTransaction(updates)
     const data = await this.gqlClient.request(updateMutation)
     return data
+  }
+
+  updateAllRoIs = async (updates: Array<PortfolioUpdate>) => {
+    await Promise.all(
+      updates.map(async (update) => {
+        await this.sdk.UpdateUserRoi({
+          userId: update.userId,
+          newRoi: update.newRoI,
+        })
+      })
+    )
   }
 
   /**

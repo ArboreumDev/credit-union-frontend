@@ -29,7 +29,7 @@ describe("Loan Request Flow", () => {
     expect(loanRequest.amount).toBe(amount)
     expect(loanRequest.purpose).toBe(purpose)
     expect(loanRequest.status).toBe(LoanRequestStatus.initiated)
-    expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
+    expect(loanRequest.risk_calc_result).toBeUndefined
   })
 
   test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
@@ -43,6 +43,6 @@ describe("Loan Request Flow", () => {
     const { loanRequest } = await sdk.GetLoanRequest({
       requestId: requestId,
     })
-    expect(loanRequest.risk_calc_result.latestOffer).toBeUndefined
+    expect(loanRequest.risk_calc_result).toBeUndefined
   })
 })

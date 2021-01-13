@@ -1,4 +1,4 @@
-import { EDGE_STATUS } from "../../src/lib/types"
+import { EDGE_STATUS, RoI, APRInfo, PaidRemain } from "../../src/lib/types"
 import {
   BORROWER1,
   EDGE1,
@@ -8,6 +8,20 @@ import {
 } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
 import { getUserPortfolio } from "./common/test_helpers"
+
+// const ZERO_PAID_REMAIN = new PaidRemain({paid:0, remain:0})
+// const ZERO1_PAID_REMAIN = new PaidRemain(0, 0)
+const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
+
+const NO_ROI = {
+  total_apr: {
+    apr: 0,
+    interest: ZERO_PAID_REMAIN,
+    principal: ZERO_PAID_REMAIN,
+  },
+  apr_on_pledges: {},
+  apr_on_loans: {},
+}
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -51,11 +65,13 @@ describe("Adding users and connections", () => {
           userId: LENDER1.id,
           balanceDelta: -41,
           shareDelta: 0,
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER2.id,
           balanceDelta: 41,
           shareDelta: 0,
+          newRoI: NO_ROI,
         },
       ]
       await dbClient.updatePortfolios(VALID_UPDATES1)
@@ -78,12 +94,14 @@ describe("Adding users and connections", () => {
           balanceDelta: -100000,
           shareDelta: 0,
           alias: "lender1",
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER2.id,
           balanceDelta: 41,
           shareDelta: 0,
           alias: "lender2",
+          newRoI: NO_ROI,
         },
       ]
 
@@ -104,12 +122,14 @@ describe("Adding users and connections", () => {
           balanceDelta: -100010,
           shareDelta: 0,
           alias: "firstTx",
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER1.id,
           balanceDelta: +100000,
           shareDelta: 0,
           alias: "secondTx",
+          newRoI: NO_ROI,
         },
       ]
       // even though the first updates reduces the user balance below 0, the tx go trough
