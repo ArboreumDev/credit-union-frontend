@@ -1,7 +1,7 @@
-import { User_Insert_Input, Edges_Insert_Input } from "../../src/gql/sdk"
+import { User_Insert_Input } from "../../src/gql/sdk"
 import { EDGE_STATUS, UserType, RiskParams } from "../../src/lib/types"
 import {
-  generateEdgeInputFromTupleNotation,
+  // generateEdgeInputFromTupleNotation,
   addRecommendationRiskToUser,
 } from "../../src/lib/network_helpers"
 import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
@@ -138,7 +138,7 @@ export const EDGES: EdgeTuple[] = [
   [LENDER2.id, BORROWER1.id, 40],
 ]
 
-export const EDGE1 = generateEdgeInputFromTupleNotation(EDGES[0])
-export const EDGE2 = generateEdgeInputFromTupleNotation(EDGES[1])
+// export const EDGE1 = generateEdgeInputFromTupleNotation(EDGES[0])
+// export const EDGE2 = generateEdgeInputFromTupleNotation(EDGES[1])
 
-export const BASIC_NETWORK = { nodes: USERS, edges: EDGES }
+export const BASIC_NETWORK = { nodes: USERS }

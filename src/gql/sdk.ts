@@ -7206,40 +7206,6 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
   >
 }
 
-export type GetLenderDashboardInfoQueryVariables = Exact<{
-  user_id: Scalars["uuid"]
-}>
-
-export type GetLenderDashboardInfoQuery = { __typename?: "query_root" } & {
-  lender?: Maybe<
-    { __typename?: "user" } & Pick<User, "balance" | "corpus_share" | "roi">
-  >
-  corpusInvestment: { __typename?: "receivables_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "receivables_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "receivables_sum_fields" } & Pick<
-            Receivables_Sum_Fields,
-            "amount_total" | "amount_remain" | "amount_received"
-          >
-        >
-      }
-    >
-  }
-  corpusShares: { __typename?: "user_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "user_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<
-            User_Sum_Fields,
-            "corpus_share"
-          >
-        >
-      }
-    >
-  }
-}
-
 export type GetUserByEmailQueryVariables = Exact<{
   email: Scalars["String"]
 }>
@@ -7311,15 +7277,6 @@ export type PledgeFieldsFragment = { __typename?: "supporters" } & Pick<
       "purpose" | "amount" | "status" | "risk_calc_result"
     > & { user: { __typename?: "user" } & Pick<User, "email" | "name"> }
   }
-
-export type SetUserCashBalanceMutationVariables = Exact<{
-  userId: Scalars["uuid"]
-  amount: Scalars["float8"]
-}>
-
-export type SetUserCashBalanceMutation = { __typename?: "mutation_root" } & {
-  user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
-}
 
 export type ApproveKycMutationVariables = Exact<{
   userId: Scalars["uuid"]
@@ -7400,43 +7357,6 @@ export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
       "request_id" | "amount" | "purpose" | "status" | "risk_calc_result"
     >
   >
-}
-
-export type GetCorpusDataQueryVariables = Exact<{
-  statusList: Array<Scalars["loan_request_status"]>
-}>
-
-export type GetCorpusDataQuery = { __typename?: "query_root" } & {
-  loans: Array<
-    { __typename?: "loan_requests" } & Pick<
-      Loan_Requests,
-      "request_id" | "risk_calc_result" | "confirmation_date"
-    >
-  >
-  corpus: { __typename?: "user_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "user_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "user_sum_fields" } & Pick<
-            User_Sum_Fields,
-            "balance" | "corpus_share"
-          >
-        >
-      }
-    >
-  }
-  corpusInvestment: { __typename?: "receivables_aggregate" } & {
-    aggregate?: Maybe<
-      { __typename?: "receivables_aggregate_fields" } & {
-        sum?: Maybe<
-          { __typename?: "receivables_sum_fields" } & Pick<
-            Receivables_Sum_Fields,
-            "amount_total" | "amount_remain" | "amount_received"
-          >
-        >
-      }
-    >
-  }
 }
 
 export type GetCorpusRecommendationRisksQueryVariables = Exact<{
@@ -7687,45 +7607,6 @@ export type UpdateSupporterMutation = { __typename?: "mutation_root" } & {
   >
 }
 
-export type GetEdgesByStatusQueryVariables = Exact<{
-  status: Scalars["edge_status"]
-}>
-
-export type GetEdgesByStatusQuery = { __typename?: "query_root" } & {
-  edges: Array<
-    { __typename?: "edges" } & Pick<Edges, "trust_amount"> & {
-        from_user?: Maybe<
-          { __typename?: "user" } & Pick<User, "id" | "user_number" | "name">
-        >
-        to_user?: Maybe<
-          { __typename?: "user" } & Pick<User, "id" | "user_number" | "name">
-        >
-      }
-  >
-}
-
-export type InsertEdgeMutationVariables = Exact<{
-  edge: Edges_Insert_Input
-}>
-
-export type InsertEdgeMutation = { __typename?: "mutation_root" } & {
-  insert_edges?: Maybe<
-    { __typename?: "edges_mutation_response" } & {
-      returning: Array<
-        { __typename?: "edges" } & Pick<
-          Edges,
-          "edge_id" | "status" | "other_user_email" | "trust_amount"
-        > & {
-            from_user?: Maybe<
-              { __typename?: "user" } & Pick<User, "name" | "balance">
-            >
-            to_user?: Maybe<{ __typename?: "user" } & Pick<User, "name">>
-          }
-      >
-    }
-  >
-}
-
 export type DeleteAllUsersMutationVariables = Exact<{ [key: string]: never }>
 
 export type DeleteAllUsersMutation = { __typename?: "mutation_root" } & {
@@ -7740,24 +7621,6 @@ export type DeleteAllUsersMutation = { __typename?: "mutation_root" } & {
 export type ResetDbMutationVariables = Exact<{ [key: string]: never }>
 
 export type ResetDbMutation = { __typename?: "mutation_root" } & {
-  delete_receivables?: Maybe<
-    { __typename?: "receivables_mutation_response" } & Pick<
-      Receivables_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_payables?: Maybe<
-    { __typename?: "payables_mutation_response" } & Pick<
-      Payables_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_encumbrances?: Maybe<
-    { __typename?: "encumbrances_mutation_response" } & Pick<
-      Encumbrances_Mutation_Response,
-      "affected_rows"
-    >
-  >
   delete_supporters?: Maybe<
     { __typename?: "supporters_mutation_response" } & Pick<
       Supporters_Mutation_Response,
@@ -7770,33 +7633,15 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
       "affected_rows"
     >
   >
-  delete_loan_risk?: Maybe<
-    { __typename?: "loan_risk_mutation_response" } & Pick<
-      Loan_Risk_Mutation_Response,
-      "affected_rows"
-    >
-  >
   delete_loan_participants?: Maybe<
     { __typename?: "loan_participants_mutation_response" } & Pick<
       Loan_Participants_Mutation_Response,
       "affected_rows"
     >
   >
-  delete_encumbrance_participants?: Maybe<
-    { __typename?: "encumbrance_participants_mutation_response" } & Pick<
-      Encumbrance_Participants_Mutation_Response,
-      "affected_rows"
-    >
-  >
   delete_loan_requests?: Maybe<
     { __typename?: "loan_requests_mutation_response" } & Pick<
       Loan_Requests_Mutation_Response,
-      "affected_rows"
-    >
-  >
-  delete_edges?: Maybe<
-    { __typename?: "edges_mutation_response" } & Pick<
-      Edges_Mutation_Response,
       "affected_rows"
     >
   >
@@ -7883,33 +7728,6 @@ export const GetAllUsersDocument = gql`
     }
   }
 `
-export const GetLenderDashboardInfoDocument = gql`
-  query GetLenderDashboardInfo($user_id: uuid!) {
-    lender: user_by_pk(id: $user_id) {
-      balance
-      corpus_share
-      roi
-    }
-    corpusInvestment: receivables_aggregate(
-      where: { loan_request: { status: { _eq: "live" } } }
-    ) {
-      aggregate {
-        sum {
-          amount_total
-          amount_remain
-          amount_received
-        }
-      }
-    }
-    corpusShares: user_aggregate {
-      aggregate {
-        sum {
-          corpus_share
-        }
-      }
-    }
-  }
-`
 export const GetUserByEmailDocument = gql`
   query GetUserByEmail($email: String!) {
     user(where: { email: { _eq: $email } }) {
@@ -7962,16 +7780,6 @@ export const GetUserByEmailDocument = gql`
     }
   }
   ${PledgeFieldsFragmentDoc}
-`
-export const SetUserCashBalanceDocument = gql`
-  mutation SetUserCashBalance($userId: uuid!, $amount: float8!) {
-    user: update_user_by_pk(
-      pk_columns: { id: $userId }
-      _set: { balance: $amount }
-    ) {
-      balance
-    }
-  }
 `
 export const ApproveKycDocument = gql`
   mutation ApproveKYC($userId: uuid!, $kycApproved: Boolean!) {
@@ -8045,34 +7853,6 @@ export const CreateLoanRequestDocument = gql`
       purpose
       status
       risk_calc_result
-    }
-  }
-`
-export const GetCorpusDataDocument = gql`
-  query GetCorpusData($statusList: [loan_request_status!]!) {
-    loans: loan_requests(where: { status: { _in: $statusList } }) {
-      request_id
-      risk_calc_result
-      confirmation_date
-    }
-    corpus: user_aggregate(where: { user_type: { _eq: "lender" } }) {
-      aggregate {
-        sum {
-          balance
-          corpus_share
-        }
-      }
-    }
-    corpusInvestment: receivables_aggregate(
-      where: { loan_request: { status: { _eq: "live" } } }
-    ) {
-      aggregate {
-        sum {
-          amount_total
-          amount_remain
-          amount_received
-        }
-      }
     }
   }
 `
@@ -8287,42 +8067,6 @@ export const UpdateSupporterDocument = gql`
     }
   }
 `
-export const GetEdgesByStatusDocument = gql`
-  query GetEdgesByStatus($status: edge_status!) {
-    edges: edges(where: { status: { _eq: $status } }) {
-      from_user {
-        id
-        user_number
-        name
-      }
-      to_user {
-        id
-        user_number
-        name
-      }
-      trust_amount
-    }
-  }
-`
-export const InsertEdgeDocument = gql`
-  mutation InsertEdge($edge: edges_insert_input!) {
-    insert_edges(objects: [$edge]) {
-      returning {
-        edge_id
-        status
-        other_user_email
-        trust_amount
-        from_user {
-          name
-          balance
-        }
-        to_user {
-          name
-        }
-      }
-    }
-  }
-`
 export const DeleteAllUsersDocument = gql`
   mutation DeleteAllUsers {
     delete_user(where: {}) {
@@ -8332,34 +8076,16 @@ export const DeleteAllUsersDocument = gql`
 `
 export const ResetDbDocument = gql`
   mutation ResetDB {
-    delete_receivables(where: {}) {
-      affected_rows
-    }
-    delete_payables(where: {}) {
-      affected_rows
-    }
-    delete_encumbrances(where: {}) {
-      affected_rows
-    }
     delete_supporters(where: {}) {
       affected_rows
     }
     delete_recommendation_risk(where: {}) {
       affected_rows
     }
-    delete_loan_risk(where: {}) {
-      affected_rows
-    }
     delete_loan_participants(where: {}) {
       affected_rows
     }
-    delete_encumbrance_participants(where: {}) {
-      affected_rows
-    }
     delete_loan_requests(where: {}) {
-      affected_rows
-    }
-    delete_edges(where: {}) {
       affected_rows
     }
     delete_events(where: {}) {
@@ -8406,32 +8132,12 @@ export function getSdk(
         client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables)
       )
     },
-    GetLenderDashboardInfo(
-      variables: GetLenderDashboardInfoQueryVariables
-    ): Promise<GetLenderDashboardInfoQuery> {
-      return withWrapper(() =>
-        client.request<GetLenderDashboardInfoQuery>(
-          print(GetLenderDashboardInfoDocument),
-          variables
-        )
-      )
-    },
     GetUserByEmail(
       variables: GetUserByEmailQueryVariables
     ): Promise<GetUserByEmailQuery> {
       return withWrapper(() =>
         client.request<GetUserByEmailQuery>(
           print(GetUserByEmailDocument),
-          variables
-        )
-      )
-    },
-    SetUserCashBalance(
-      variables: SetUserCashBalanceMutationVariables
-    ): Promise<SetUserCashBalanceMutation> {
-      return withWrapper(() =>
-        client.request<SetUserCashBalanceMutation>(
-          print(SetUserCashBalanceDocument),
           variables
         )
       )
@@ -8499,16 +8205,6 @@ export function getSdk(
       return withWrapper(() =>
         client.request<CreateLoanRequestMutation>(
           print(CreateLoanRequestDocument),
-          variables
-        )
-      )
-    },
-    GetCorpusData(
-      variables: GetCorpusDataQueryVariables
-    ): Promise<GetCorpusDataQuery> {
-      return withWrapper(() =>
-        client.request<GetCorpusDataQuery>(
-          print(GetCorpusDataDocument),
           variables
         )
       )
@@ -8628,23 +8324,6 @@ export function getSdk(
           print(UpdateSupporterDocument),
           variables
         )
-      )
-    },
-    GetEdgesByStatus(
-      variables: GetEdgesByStatusQueryVariables
-    ): Promise<GetEdgesByStatusQuery> {
-      return withWrapper(() =>
-        client.request<GetEdgesByStatusQuery>(
-          print(GetEdgesByStatusDocument),
-          variables
-        )
-      )
-    },
-    InsertEdge(
-      variables: InsertEdgeMutationVariables
-    ): Promise<InsertEdgeMutation> {
-      return withWrapper(() =>
-        client.request<InsertEdgeMutation>(print(InsertEdgeDocument), variables)
       )
     },
     DeleteAllUsers(
