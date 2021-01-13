@@ -24,6 +24,7 @@ import {
   LoanRequestStatus,
   SystemUpdate,
   UserType,
+  LoanState,
 } from "../lib/types"
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
@@ -203,6 +204,7 @@ export default class DbClient {
     await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: request_id,
       loanData: realizedLoan,
+      status: LoanRequestStatus.active,
     })
 
     // register lenders with their spent amount in loan_participants
@@ -227,9 +229,18 @@ export default class DbClient {
       requestId: loan_id,
       delta: accounts.escrow_deltas[loan_id],
     })
+    const loan: LoanInfo = loans.loans[loan_id]
+    let newStatus = LoanRequestStatus.active
+    if (loan.state.repayments.length >= loan.terms.tenor) {
+      newStatus =
+        loan.schedule.borrower_view.total_payments.remain <= 10e-7
+          ? LoanRequestStatus.settled
+          : LoanRequestStatus.default
+    }
     const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: loan_id,
-      loanData: loans.loans[loan_id],
+      loanData: loan,
+      status: newStatus,
     })
 
     // TODO show transactions in transaction table

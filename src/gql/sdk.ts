@@ -1020,9 +1020,7 @@ export type Encumbrances_Insert_Input = {
   due_date?: Maybe<Scalars["date"]>
   encumbered_asset_type?: Maybe<Scalars["String"]>
   encumbrance_id?: Maybe<Scalars["uuid"]>
-  encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Arr_Rel_Insert_Input
-  >
+  encumbrance_participants?: Maybe<Encumbrance_Participants_Arr_Rel_Insert_Input>
   expected_dissolve_amount?: Maybe<Scalars["numeric"]>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Loan_Requests_Obj_Rel_Insert_Input>
@@ -1134,9 +1132,7 @@ export type Encumbrances_Order_By = {
   due_date?: Maybe<Order_By>
   encumbered_asset_type?: Maybe<Order_By>
   encumbrance_id?: Maybe<Order_By>
-  encumbrance_participants_aggregate?: Maybe<
-    Encumbrance_Participants_Aggregate_Order_By
-  >
+  encumbrance_participants_aggregate?: Maybe<Encumbrance_Participants_Aggregate_Order_By>
   expected_dissolve_amount?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Loan_Requests_Order_By>
@@ -2738,9 +2734,7 @@ export type Mutation_Root = {
   /** delete single row from the table: "edges" */
   delete_edges_by_pk?: Maybe<Edges>
   /** delete data from the table: "encumbrance_participants" */
-  delete_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  delete_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** delete single row from the table: "encumbrance_participants" */
   delete_encumbrance_participants_by_pk?: Maybe<Encumbrance_Participants>
   /** delete data from the table: "encumbrances" */
@@ -2800,9 +2794,7 @@ export type Mutation_Root = {
   /** insert a single row into the table: "edges" */
   insert_edges_one?: Maybe<Edges>
   /** insert data into the table: "encumbrance_participants" */
-  insert_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  insert_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** insert a single row into the table: "encumbrance_participants" */
   insert_encumbrance_participants_one?: Maybe<Encumbrance_Participants>
   /** insert data into the table: "encumbrances" */
@@ -2862,9 +2854,7 @@ export type Mutation_Root = {
   /** update single row of the table: "edges" */
   update_edges_by_pk?: Maybe<Edges>
   /** update data of the table: "encumbrance_participants" */
-  update_encumbrance_participants?: Maybe<
-    Encumbrance_Participants_Mutation_Response
-  >
+  update_encumbrance_participants?: Maybe<Encumbrance_Participants_Mutation_Response>
   /** update single row of the table: "encumbrance_participants" */
   update_encumbrance_participants_by_pk?: Maybe<Encumbrance_Participants>
   /** update data of the table: "encumbrances" */
@@ -6770,9 +6760,7 @@ export type User_Insert_Input = {
   onboarded?: Maybe<Scalars["Boolean"]>
   phone?: Maybe<Scalars["String"]>
   receivables?: Maybe<Receivables_Arr_Rel_Insert_Input>
-  recommendationRisksByRecommenderId?: Maybe<
-    Recommendation_Risk_Arr_Rel_Insert_Input
-  >
+  recommendationRisksByRecommenderId?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
   recommendation_risks?: Maybe<Recommendation_Risk_Arr_Rel_Insert_Input>
   supporters?: Maybe<Supporters_Arr_Rel_Insert_Input>
   updated_at?: Maybe<Scalars["timestamptz"]>
@@ -6886,9 +6874,7 @@ export type User_Order_By = {
   onboarded?: Maybe<Order_By>
   phone?: Maybe<Order_By>
   receivables_aggregate?: Maybe<Receivables_Aggregate_Order_By>
-  recommendationRisksByRecommenderId_aggregate?: Maybe<
-    Recommendation_Risk_Aggregate_Order_By
-  >
+  recommendationRisksByRecommenderId_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
   recommendation_risks_aggregate?: Maybe<Recommendation_Risk_Aggregate_Order_By>
   supporters_aggregate?: Maybe<Supporters_Aggregate_Order_By>
   updated_at?: Maybe<Order_By>
@@ -7609,6 +7595,7 @@ export type UpdateLoanBalanceMutation = { __typename?: "mutation_root" } & {
 export type UpdateLoanRequestWithLoanDataMutationVariables = Exact<{
   requestId: Scalars["uuid"]
   loanData: Scalars["jsonb"]
+  status: Scalars["loan_request_status"]
 }>
 
 export type UpdateLoanRequestWithLoanDataMutation = {
@@ -7617,7 +7604,7 @@ export type UpdateLoanRequestWithLoanDataMutation = {
   loanRequest?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "loan" | "balance"
+      "request_id" | "loan" | "balance" | "status"
     >
   >
 }
@@ -8204,14 +8191,19 @@ export const UpdateLoanBalanceDocument = gql`
   }
 `
 export const UpdateLoanRequestWithLoanDataDocument = gql`
-  mutation UpdateLoanRequestWithLoanData($requestId: uuid!, $loanData: jsonb!) {
+  mutation UpdateLoanRequestWithLoanData(
+    $requestId: uuid!
+    $loanData: jsonb!
+    $status: loan_request_status!
+  ) {
     loanRequest: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
-      _set: { loan: $loanData }
+      _set: { loan: $loanData, status: $status }
     ) {
       request_id
       loan
       balance
+      status
     }
   }
 `
