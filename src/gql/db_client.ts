@@ -77,7 +77,6 @@ export default class DbClient {
         borrower_id,
         amount,
         purpose,
-        risk_calc_result: {},
         loan: {},
       },
     })
