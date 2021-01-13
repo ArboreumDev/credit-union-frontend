@@ -318,6 +318,12 @@ export default class DbClient {
             "requestData"
           ] as LoanRequestInfo
           break
+        case LoanRequestStatus.settled:
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
+        case LoanRequestStatus.default:
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
         case LoanRequestStatus.initiated:
           // borrower is yet collecting information
           break
