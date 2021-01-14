@@ -4,7 +4,30 @@ import {
   LoanRequestStatus,
   CalculatedRisk,
   LoanInfo,
+  RoI,
 } from "../types"
+
+const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
+
+const NO_ROI: RoI = {
+  total_apr: {
+    apr: 0,
+    interest: ZERO_PAID_REMAIN,
+    principal: ZERO_PAID_REMAIN,
+  },
+  apr_on_pledges: null,
+  apr_on_loans: null,
+}
+
+const ROI1: RoI = {
+  total_apr: {
+    apr: 0.163,
+    interest: ZERO_PAID_REMAIN,
+    principal: ZERO_PAID_REMAIN,
+  },
+  apr_on_pledges: null,
+  apr_on_loans: null,
+}
 
 export class Fixtures {
   static Lender: User = {
@@ -21,6 +44,7 @@ export class Fixtures {
     pledge_requests: [],
     pledges: [],
     active_loans: [],
+    roi: NO_ROI,
   }
 
   static Borrower: User = {
@@ -117,6 +141,10 @@ export class Fixtures {
       },
       supporter_view: null,
       next_borrower_payment: 15799.51,
+      apr: {
+        corpus: 0.17,
+        supporter: 0.16,
+      },
     },
   }
 
@@ -185,6 +213,7 @@ export class Fixtures {
         },
       },
     ],
+    roi: ROI1,
   }
 
   static LenderWithPledgeRequest = {

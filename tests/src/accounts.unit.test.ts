@@ -1,4 +1,4 @@
-import { EDGE_STATUS } from "../../src/lib/types"
+import { EDGE_STATUS, RoI, APRInfo, PaidRemain } from "../../src/lib/types"
 import {
   BORROWER1,
   EDGE1,
@@ -8,6 +8,20 @@ import {
 } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
 import { getUserPortfolio } from "./common/test_helpers"
+
+// const ZERO_PAID_REMAIN = new PaidRemain({paid:0, remain:0})
+// const ZERO1_PAID_REMAIN = new PaidRemain(0, 0)
+const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
+
+const NO_ROI = {
+  total_apr: {
+    apr: 0,
+    interest: ZERO_PAID_REMAIN,
+    principal: ZERO_PAID_REMAIN,
+  },
+  apr_on_pledges: {},
+  apr_on_loans: {},
+}
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -35,27 +49,14 @@ describe("Adding users and connections", () => {
     expect(user.id === LENDER1.id)
   })
 
-  test("add edges", async () => {
-    await sdk.InsertEdge({ edge: EDGE1 })
-    await sdk.InsertEdge({ edge: EDGE2 })
-
-    const { edges } = await sdk.GetEdgesByStatus({ status: EDGE_STATUS.active })
-    expect(edges.length).toBe(2)
-  })
-
   describe("Setting and updating user balances", () => {
     let balancesAfter
     let balancesBefore
-    test("setting the balance of one account", async () => {
-      await sdk.SetUserCashBalance({ userId: LENDER1.id, amount: 42000 })
-      const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42000)
-    })
 
     test("changing the balance of one account", async () => {
       await sdk.ChangeUserCashBalance({ userId: LENDER1.id, delta: 42 })
       const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42042)
+      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(1042)
     })
     test("batch updates to multiple accounts", async () => {
       // moving 41 from lender1 to lender lender2
@@ -64,17 +65,19 @@ describe("Adding users and connections", () => {
           userId: LENDER1.id,
           balanceDelta: -41,
           shareDelta: 0,
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER2.id,
           balanceDelta: 41,
           shareDelta: 0,
+          newRoI: NO_ROI,
         },
       ]
       await dbClient.updatePortfolios(VALID_UPDATES1)
 
       const allUsers = await dbClient.allUsers
-      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(42001)
+      expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(1001)
       expect(allUsers.filter((x) => x.id === LENDER2.id)[0].balance).toBe(
         LENDER2.balance + 41
       )
@@ -91,12 +94,14 @@ describe("Adding users and connections", () => {
           balanceDelta: -100000,
           shareDelta: 0,
           alias: "lender1",
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER2.id,
           balanceDelta: 41,
           shareDelta: 0,
           alias: "lender2",
+          newRoI: NO_ROI,
         },
       ]
 
@@ -117,12 +122,14 @@ describe("Adding users and connections", () => {
           balanceDelta: -100010,
           shareDelta: 0,
           alias: "firstTx",
+          newRoI: NO_ROI,
         },
         {
           userId: LENDER1.id,
           balanceDelta: +100000,
           shareDelta: 0,
           alias: "secondTx",
+          newRoI: NO_ROI,
         },
       ]
       // even though the first updates reduces the user balance below 0, the tx go trough

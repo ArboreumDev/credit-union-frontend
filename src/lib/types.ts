@@ -57,6 +57,7 @@ export type UserInfo = {
   corpus_share?: number
   encumbered_cash?: number
   encumbered_portfolio?: number
+  roi?: RoI
 }
 
 export type Scenario = {
@@ -181,11 +182,17 @@ export type BorrowerView = {
   borrower_collateral: PaidRemain
 }
 
+export type APR = {
+  corpus: number
+  supporter: number
+}
+
 export type LoanScheduleSummary = {
   borrower_view: BorrowerView
   next_borrower_payment: number
   supporter_view?: any
   corpus_view?: any
+  apr: APR
 }
 
 // =========== End of risk module types ========
@@ -214,11 +221,29 @@ export enum SupporterStatus {
   confirmed = "confirmed",
 }
 
+export type APRInfo = {
+  apr: number
+  interest: PaidRemain
+  principal: PaidRemain
+}
+
+export type LoanSummary = {
+  sum: APRInfo
+  loans: any // is a object which maps loan_id => LoanSummary
+}
+
+export type RoI = {
+  total_apr: APRInfo
+  apr_on_pledges: LoanSummary
+  apr_on_loans: LoanSummary
+}
+
 export type PortfolioUpdate = {
   userId: string
   balanceDelta: number
   shareDelta: number
   alias?: string
+  newRoI: RoI
 }
 
 export type AccountsUpdate = {

@@ -35,7 +35,7 @@ export function RepaymentsForm({ user }: Props) {
     <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Text>Please make a repayment</Text>
+          <Text>Please make a repayment for the current time period</Text>
           <AmountInput
             passName="amount"
             passRef={register({ required: true })}

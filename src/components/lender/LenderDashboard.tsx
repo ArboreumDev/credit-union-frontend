@@ -61,26 +61,6 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
-  const [lenderAPY, setAPY] = useState(lender.APY)
-
-  useEffect(() => {
-    const fetchAPY = async () => {
-      const TEST_API_URL = "http://localhost:8080/v1/graphql"
-      const TEST_ADMIN_SECRET = "myadminsecretkey"
-      const client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
-      const dbClient = new DbClient(client)
-      const { last_live_loan } = await dbClient.sdk.GetLastLiveLoan()
-      if (last_live_loan.length) {
-        const loan = last_live_loan[0].loan as LoanInfo
-        if (loan) setAPY(dec_to_perc(loan.terms.corpus_apr))
-      }
-    }
-    try {
-      fetchAPY()
-    } catch (error) {
-      console.log(error, "Cannot query SwarmAI to fetch actual APY for user.")
-    }
-  }, [])
 
   return (
     <Stack w="100%" spacing={8}>
@@ -96,7 +76,7 @@ const LenderDashboard = ({ user }: Props) => {
             <StatLabel fontSize="lg">
               <Tooltip label="Annual Percentage Yield">APY</Tooltip>
             </StatLabel>
-            <StatNumber fontSize="3xl">{lenderAPY}%</StatNumber>
+            <StatNumber fontSize="3xl">{lender.APY}%</StatNumber>
           </Stat>
         )}
       </HStack>
