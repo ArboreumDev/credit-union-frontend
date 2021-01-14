@@ -1,6 +1,7 @@
 import {
   Alert,
   AlertDescription,
+  AlertIcon,
   AlertTitle,
   Box,
   Button,
@@ -14,26 +15,37 @@ import { AcceptRejectPledge } from "lib/gql_api_actions"
 import { PledgeRequest, SupporterStatus } from "lib/types"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Currency } from "../../common/Currency"
 import { Row, Table, TextColumn } from "../../common/Table"
 import ModifyPledgeAmount from "./ModifyPledgeAmount"
 
 interface Params {
   pledgeRequest: PledgeRequest
-  pledgeDisabled?: boolean
+  availableFunds: number
 }
 
-export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
+export const NewPledgeRequest = ({ pledgeRequest, availableFunds }: Params) => {
   const router = useRouter()
-  const [show, setShow] = useState(false)
+
+  const [showDetails, setShowDetails] = useState(false)
+  const [pledgeAmount, setPledgeAmount] = useState(pledgeRequest.pledge_amount)
+  const [pledgeDisabled, setPledgeDisabled] = useState(
+    availableFunds < pledgeAmount
+  )
+
+  useEffect(() => {
+    console.log("here", availableFunds, pledgeAmount)
+    setPledgeDisabled(availableFunds < pledgeAmount)
+  }, [pledgeAmount])
+
   const loanRequest = pledgeRequest.loan_request
   const submitPledge = (status: SupporterStatus) => {
     AcceptRejectPledge.fetch({
       request_id: pledgeRequest.request_id,
       supporter_id: pledgeRequest.loan_request.user.email,
       status: status,
-      pledge_amount: pledgeRequest.pledge_amount,
+      pledge_amount: pledgeAmount,
     })
       .then(async (res) => {
         router.push("/")
@@ -63,17 +75,24 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
         request of amount <Currency amount={loanRequest.amount} />
         <Divider margin="10px" />
       </AlertDescription>
-      <Button variant="link" onClick={() => setShow(!show)}>
-        {show ? "Hide" : "Show"} Details
+      <AlertDescription>
+        Your support will be <Currency amount={pledgeAmount} />
+      </AlertDescription>
+      <Button
+        mt={4}
+        variant="link"
+        onClick={() => setShowDetails(!showDetails)}
+      >
+        {showDetails ? "Hide" : "Show"} Details
       </Button>
-      <Collapse mt={4} isOpen={show}>
+      <Collapse mt={4} isOpen={showDetails}>
         <Stack>
           <AlertDescription>
             <Table>
               <Row>
                 <TextColumn>Your support</TextColumn>
                 <TextColumn>
-                  <Currency amount={pledgeRequest.pledge_amount} />
+                  <Currency amount={pledgeAmount} />
                 </TextColumn>
               </Row>
               <Row>
@@ -110,30 +129,36 @@ export const NewPledgeRequest = ({ pledgeRequest, pledgeDisabled }: Params) => {
           >
             I approve of the pledge amount
           </Button>
-          <ModifyPledgeAmount pledgeRequest={pledgeRequest} />
+          <ModifyPledgeAmount
+            onChangePledgeAmount={setPledgeAmount}
+            pledgeRequest={pledgeRequest}
+          />
           <Button
             onClick={() => submitPledge(SupporterStatus.rejected)}
             colorScheme="red"
             w="280px"
-            disabled={pledgeDisabled}
           >
             I cannot pledge for this person
           </Button>
         </Wrap>
+
         {pledgeDisabled && (
-          <Box>
-            Please&nbsp;
-            <Link href="/dashboard/invest">
-              <a className="link">add more</a>
-            </Link>
-            &nbsp;funds to make this pledge.
-          </Box>
+          <Alert mt={4} status="info">
+            <AlertIcon />
+            <AlertTitle mr={2}>
+              {" "}
+              Please&nbsp;
+              <Link href="/dashboard/invest">
+                <a className="link">add more</a>
+              </Link>
+              &nbsp;funds to make this pledge.
+            </AlertTitle>
+          </Alert>
         )}
       </AlertDescription>
       <style jsx>
         {`
           .link {
-            // color: blue
             text-decoration: underline;
           }
         `}

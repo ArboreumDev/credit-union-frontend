@@ -18,17 +18,23 @@ import { useForm } from "react-hook-form"
 
 interface Props {
   pledgeRequest: PledgeRequest
+  onChangePledgeAmount: (amount: number) => void
 }
 type FormData = {
-  amount: number
+  amount: string
 }
 
-export default function ModifyPledgeAmount({ pledgeRequest }: Props) {
+export default function ModifyPledgeAmount({
+  pledgeRequest,
+  onChangePledgeAmount,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { register, setValue, handleSubmit, errors } = useForm<FormData>()
   const onSubmit = (data: FormData) => {
     console.log(data)
     // Modify pledge amount here
+    onChangePledgeAmount(parseInt(data.amount))
+    onClose()
   }
 
   return (
