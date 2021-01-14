@@ -1,7 +1,7 @@
 import borrower from "components/dashboard/borrower"
 import request from "graphql-request"
 import { MIN_SUPPORT_RATIO } from "lib/constant"
-import { LoanRequestStatus, CalculatedRisk, LoanInfo } from "lib/types"
+import { LoanRequestStatus, RoI, CalculatedRisk, LoanInfo } from "lib/types"
 import {
   BORROWER1,
   LENDER1,
@@ -66,9 +66,22 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const loanRequest = user.loan_requests[0]
   })
 
-  test.skip("The lender sees an updated breakdown of their portfolio ", async () => {
+  test("The lender sees an updated breakdown of their portfolio ", async () => {
     const user = await dbClient.getUserByEmail(LENDER1.email)
     const loanRequest = user.loan_requests[0]
+    const roi = user.roi as RoI
+
+    // verify there is expected earnings
+    expect(roi.total_apr.interest.remain).toBeGreaterThan(0)
+    expect(roi.total_apr.principal.remain).toBeGreaterThan(0)
+    expect(roi.total_apr.apr).toBeGreaterThan(0)
+
+    expect(roi.apr_on_loans.sum.interest.remain).toBeGreaterThan(0)
+    expect(roi.apr_on_loans.sum.principal.remain).toBeGreaterThan(0)
+
+    // but no actual ones
+    expect(roi.total_apr.interest.paid).toBe(0)
+    expect(roi.total_apr.principal.paid).toBe(0)
   })
 
   test("the users balances are updated accordingly", async () => {
@@ -131,6 +144,18 @@ describe("Loan Request Flow: confirm loan offer", () => {
     )
   })
 
+  test("lenders and supporters see nonzero apr and expected returns", async () => {
+    const lender = await dbClient.getUserByEmail(LENDER1.email)
+    const lenderRoi = lender.roi as RoI
+    expect(lenderRoi.total_apr.apr).toBeGreaterThan(0)
+    expect(lenderRoi.total_apr.interest.remain).toBeGreaterThan(0)
+    expect(lenderRoi.total_apr.interest.paid).toBe(0)
+
+    const supporter = await dbClient.getUserByEmail(SUPPORTER2.email)
+    const supporterRoI = supporter.roi as RoI
+    expect(supporterRoI.total_apr.apr).toBeGreaterThan(0)
+  })
+
   // describe("When the borrower makes a repayment", () => {
   test("Make first repayment", async () => {
     const data = await sdk.GetLoanRequest({ requestId })
@@ -176,6 +201,12 @@ describe("Loan Request Flow: confirm loan offer", () => {
     const { loanRequest } = await dbClient.sdk.GetLoanRequest({ requestId })
     const loan = loanRequest.loan as LoanInfo
     expect(loan.state.repayments).toStrictEqual([ideal_repayment])
+
+    // verify there is some interest shown as earned and some as outstanding
+    const lender = await dbClient.getUserByEmail(LENDER1.email)
+    const roi = lender.roi as RoI
+    expect(roi.total_apr.interest.paid).toBeGreaterThan(0)
+    expect(roi.total_apr.interest.remain).toBeGreaterThan(0)
   })
 
   test("make second repayment", async () => {
@@ -197,6 +228,51 @@ describe("Loan Request Flow: confirm loan offer", () => {
     )
     // escrow is again nonzero, as second payment is now being withheld
     expect(updated_request.balance).toBeGreaterThan(0)
+  })
+
+  test("make full repayment", async () => {
+    const data = await sdk.GetLoanRequest({ requestId })
+    let loan = data.loanRequest.loan
+    let ideal_repayment = loan.schedule.next_borrower_payment
+    let updated_request
+    while (loan.state.repayments.length < loan.terms.tenor) {
+      await sdk.ChangeUserCashBalance({
+        userId: BORROWER1.id,
+        delta: ideal_repayment,
+      })
+      updated_request = await dbClient.make_repayment(
+        requestId,
+        ideal_repayment
+      )
+      ideal_repayment = updated_request.loan.schedule.next_borrower_payment
+      loan = updated_request.loan
+    }
+    expect(updated_request.status).toBe(LoanRequestStatus.settled)
+  })
+
+  test.skip("make defaulting repayments", async () => {
+    // # TODO make a new loan
+    // will only work correctly once swarmai-pr to reduce shares is merged
+    const data = await sdk.GetLoanRequest({ requestId })
+    let loan = data.loanRequest.loan
+    let ideal_repayment = loan.schedule.next_borrower_payment
+    let updated_request
+    while (loan.state.repayments.length < loan.terms.tenor) {
+      await sdk.ChangeUserCashBalance({
+        userId: BORROWER1.id,
+        delta: ideal_repayment,
+      })
+      updated_request = await dbClient.make_repayment(
+        requestId,
+        ideal_repayment / 2
+      )
+      ideal_repayment = updated_request.loan.schedule.next_borrower_payment
+      loan = updated_request.loan
+    }
+    console.log(updated_request)
+    console.log(updated_request.loan.state.repayments)
+    console.log(updated_request.loan.schedule.borrower_view)
+    expect(updated_request.status).toBe(LoanRequestStatus.settled)
   })
 
   // test.skip(

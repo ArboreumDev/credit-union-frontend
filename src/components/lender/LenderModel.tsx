@@ -1,5 +1,5 @@
 import { dec_to_perc } from "lib/currency"
-import { LoanRequestStatus, User } from "lib/types"
+import { LoanRequestStatus, User, RoI } from "lib/types"
 
 export default class LenderModel {
   constructor(public user: User) {}
@@ -36,9 +36,22 @@ export default class LenderModel {
     return this.uninvested + this.invested + this.pledged
   }
 
-  get APY() {
-    return dec_to_perc(0.163)
+  get roi() {
+    return this.user.roi as RoI
   }
+
+  get APY() {
+    return dec_to_perc(this.roi.total_apr.apr)
+  }
+
+  get expected_interest() {
+    return this.roi.total_apr.interest.remain
+  }
+
+  get earned_interest() {
+    return this.roi.total_apr.interest.paid
+  }
+
   get percInvested() {
     return dec_to_perc(this.invested / this.totalAssets)
   }

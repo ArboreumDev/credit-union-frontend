@@ -37,11 +37,6 @@ describe("An entire network can be added from a fixture", () => {
       DEFAULT_RECOMMENDATION_RISK_PARAMS
     )
   })
-
-  test("all edges have been added", async () => {
-    const { edges } = await sdk.GetEdgesByStatus({ status: EDGE_STATUS.active })
-    expect(edges.length).toBe(BASIC_NETWORK.edges.length)
-  })
 })
 
 describe("An entire network can be added from a JSON output by the simulator", () => {

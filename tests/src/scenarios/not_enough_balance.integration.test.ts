@@ -17,7 +17,7 @@ test("scenario", async () => {
   try {
     await scenario.executeAll()
   } catch (e) {
-    expect(e).toMatch(SwarmAIErrors.NOT_ENOUGH_BALANCE_IN_SYSTEM)
+    expect(e.data.detail).toContain("ERROR: not enough free cash")
   }
 
   const state = await dbClient.getSystemSummary()
