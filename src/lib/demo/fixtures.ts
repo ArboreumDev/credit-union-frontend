@@ -6,18 +6,7 @@ import {
   LoanInfo,
   RoI,
 } from "../types"
-
-const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
-
-const NO_ROI: RoI = {
-  total_apr: {
-    apr: 0,
-    interest: ZERO_PAID_REMAIN,
-    principal: ZERO_PAID_REMAIN,
-  },
-  apr_on_pledges: null,
-  apr_on_loans: null,
-}
+import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
 
 const ROI1: RoI = {
   total_apr: {

@@ -1,4 +1,4 @@
-import { RiskParams } from "./types"
+import { RiskParams, RoI } from "./types"
 
 // for local development
 // export const DEV_URL = "http://127.0.0.1:3001"
@@ -39,4 +39,16 @@ export const USER_DEMOGRAPHIC = {
   education_years: 3,
   income: 300,
   credit_score: 600,
+}
+
+export const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
+
+export const NO_ROI: RoI = {
+  total_apr: {
+    apr: 0,
+    interest: ZERO_PAID_REMAIN,
+    principal: ZERO_PAID_REMAIN,
+  },
+  apr_on_pledges: null,
+  apr_on_loans: null,
 }
