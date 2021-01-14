@@ -7545,6 +7545,7 @@ export type UpdateLoanBalanceMutation = { __typename?: "mutation_root" } & {
 export type UpdateLoanRequestWithLoanDataMutationVariables = Exact<{
   requestId: Scalars["uuid"]
   loanData: Scalars["jsonb"]
+  status: Scalars["loan_request_status"]
 }>
 
 export type UpdateLoanRequestWithLoanDataMutation = {
@@ -7553,7 +7554,7 @@ export type UpdateLoanRequestWithLoanDataMutation = {
   loanRequest?: Maybe<
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "request_id" | "loan" | "balance"
+      "request_id" | "loan" | "balance" | "status"
     >
   >
 }
@@ -8014,14 +8015,19 @@ export const UpdateLoanBalanceDocument = gql`
   }
 `
 export const UpdateLoanRequestWithLoanDataDocument = gql`
-  mutation UpdateLoanRequestWithLoanData($requestId: uuid!, $loanData: jsonb!) {
+  mutation UpdateLoanRequestWithLoanData(
+    $requestId: uuid!
+    $loanData: jsonb!
+    $status: loan_request_status!
+  ) {
     loanRequest: update_loan_requests_by_pk(
       pk_columns: { request_id: $requestId }
-      _set: { loan: $loanData }
+      _set: { loan: $loanData, status: $status }
     ) {
       request_id
       loan
       balance
+      status
     }
   }
 `

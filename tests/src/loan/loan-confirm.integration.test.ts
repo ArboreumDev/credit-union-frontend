@@ -230,6 +230,51 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(updated_request.balance).toBeGreaterThan(0)
   })
 
+  test("make full repayment", async () => {
+    const data = await sdk.GetLoanRequest({ requestId })
+    let loan = data.loanRequest.loan
+    let ideal_repayment = loan.schedule.next_borrower_payment
+    let updated_request
+    while (loan.state.repayments.length < loan.terms.tenor) {
+      await sdk.ChangeUserCashBalance({
+        userId: BORROWER1.id,
+        delta: ideal_repayment,
+      })
+      updated_request = await dbClient.make_repayment(
+        requestId,
+        ideal_repayment
+      )
+      ideal_repayment = updated_request.loan.schedule.next_borrower_payment
+      loan = updated_request.loan
+    }
+    expect(updated_request.status).toBe(LoanRequestStatus.settled)
+  })
+
+  test.skip("make defaulting repayments", async () => {
+    // # TODO make a new loan
+    // will only work correctly once swarmai-pr to reduce shares is merged
+    const data = await sdk.GetLoanRequest({ requestId })
+    let loan = data.loanRequest.loan
+    let ideal_repayment = loan.schedule.next_borrower_payment
+    let updated_request
+    while (loan.state.repayments.length < loan.terms.tenor) {
+      await sdk.ChangeUserCashBalance({
+        userId: BORROWER1.id,
+        delta: ideal_repayment,
+      })
+      updated_request = await dbClient.make_repayment(
+        requestId,
+        ideal_repayment / 2
+      )
+      ideal_repayment = updated_request.loan.schedule.next_borrower_payment
+      loan = updated_request.loan
+    }
+    console.log(updated_request)
+    console.log(updated_request.loan.state.repayments)
+    console.log(updated_request.loan.schedule.borrower_view)
+    expect(updated_request.status).toBe(LoanRequestStatus.settled)
+  })
+
   // test.skip(
   //   "all users see transactions related to the repayment in their transactionlist"
   // )
