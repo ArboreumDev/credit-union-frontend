@@ -9,7 +9,7 @@ const InvestBorrowButtons = (props: { needSignin?: boolean }) => {
   const targetURL = props.needSignin ? "/api/auth/signin" : "/onboarding"
   const onclick = (userType: UserType) => {
     console.log(userType)
-    localStorage.setItem(USER_TYPE_KEY, userType)
+    sessionStorage.setItem(USER_TYPE_KEY, userType)
     location.replace(targetURL)
   }
   return (

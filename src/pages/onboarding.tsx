@@ -13,7 +13,7 @@ const BorrowerOnboardingPage = () => {
   const router = useRouter()
 
   useEffect(() => {
-    const user_type = localStorage.getItem(USER_TYPE_KEY)
+    const user_type = sessionStorage.getItem(USER_TYPE_KEY)
     if (user_type) setUserType(user_type)
   })
 

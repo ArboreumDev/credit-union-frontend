@@ -49,7 +49,7 @@ export default function Hello(props: {
           Set company name:{" "}
           <Input
             onChange={(ev) =>
-              localStorage.setItem(COMPANY_NAME, ev.target.value)
+              sessionStorage.setItem(COMPANY_NAME, ev.target.value)
             }
           ></Input>
         </Box>

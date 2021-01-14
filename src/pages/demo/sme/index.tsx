@@ -4,9 +4,6 @@ import Link from "next/link"
 import { useEffect } from "react"
 
 const SME = () => {
-  useEffect(() => {
-    // localStorage.setItem(COMPANY_NAME, "TUSKER")
-  }, [])
   return (
     <>
       <AppBar />

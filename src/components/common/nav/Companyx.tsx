@@ -5,7 +5,7 @@ import Link from "next/link"
 export default function CompanyX() {
   let companyName = DEFAULT_COMPANY_NAME
   if (typeof window !== "undefined")
-    companyName = localStorage.getItem(COMPANY_NAME)
+    companyName = sessionStorage.getItem(COMPANY_NAME)
   return (
     <Link href="http://example.com/">
       <Button fontWeight="lighter" variant="ghost">

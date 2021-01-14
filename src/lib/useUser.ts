@@ -33,7 +33,7 @@ export default function useUser() {
     if (!isDemo() && session) {
       const destination = getRedirectLocation(session, currentPage)
       if (destination != currentPage) {
-        localStorage.setItem(LAST_REDIRECT_PAGE, destination)
+        sessionStorage.setItem(LAST_REDIRECT_PAGE, destination)
         router.push(destination)
       }
     }

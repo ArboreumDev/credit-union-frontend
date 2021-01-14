@@ -34,7 +34,7 @@ function App({ Component, pageProps }: AppProps) {
               dangerouslySetInnerHTML={{
                 __html:
                   `
-        lastRedirect = localStorage.getItem('` +
+        lastRedirect = sessionStorage.getItem('` +
                   LAST_REDIRECT_PAGE +
                   `');
         currentPage = location.pathname;
