@@ -15,11 +15,7 @@ import {
   Wrap,
 } from "@chakra-ui/core"
 import DynamicDoughnut from "components/dashboard/doughnut"
-import DbClient from "gql/db_client"
-import { initializeGQL } from "gql/graphql_client"
-import { dec_to_perc } from "lib/currency"
-import { useEffect, useState } from "react"
-import { LoanInfo, User } from "../../lib/types"
+import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
 import PledgeInvestments from "./Pledges"
@@ -114,6 +110,13 @@ const LenderDashboard = ({ user }: Props) => {
           </Wrap>
         </>
       )}
+      <Stack>
+        <Wrap w="100%">
+          {Asset("Invested", lender.invested)}
+          {Asset("Pledged", lender.pledged)}
+          {Asset("Uninvested", lender.uninvested)}
+        </Wrap>
+      </Stack>
 
       {user.pledges?.length > 0 && (
         <Box maxW="sm">

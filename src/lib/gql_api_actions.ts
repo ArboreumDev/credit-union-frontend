@@ -10,6 +10,7 @@ import {
   Action_Type_Enum,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
+import { NO_ROI } from "./constant"
 import { Session, UserType } from "./types"
 
 export const ACTION_ERRORS = {
@@ -64,6 +65,9 @@ export class CreateUser extends Action {
   minAuthLevel = AUTH_TYPE.ANY
 
   async run() {
+    // set default init values
+    this.payload.user.roi = NO_ROI
+
     return await this.dbClient.sdk.CreateUser(this.payload)
   }
 
