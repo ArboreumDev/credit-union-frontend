@@ -110,11 +110,11 @@ const LenderDashboard = ({ user }: Props) => {
           </Wrap>
         </>
       )}
+      <Heading size="md">Earnings</Heading>
       <Stack>
         <Wrap w="100%">
-          {Asset("Invested", lender.invested)}
-          {Asset("Pledged", lender.pledged)}
-          {Asset("Uninvested", lender.uninvested)}
+          {Asset("Expected Interest", lender.expectedInterest)}
+          {Asset("Earned Interest", lender.earnedInterest)}
         </Wrap>
       </Stack>
 

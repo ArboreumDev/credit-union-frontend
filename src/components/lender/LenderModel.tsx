@@ -44,11 +44,11 @@ export default class LenderModel {
     return dec_to_perc(this.roi.total_apr.apr)
   }
 
-  get expected_interest() {
+  get expectedInterest() {
     return this.roi.total_apr.interest.remain
   }
 
-  get earned_interest() {
+  get earnedInterest() {
     return this.roi.total_apr.interest.paid
   }
 
