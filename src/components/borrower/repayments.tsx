@@ -1,6 +1,6 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
-import { MakeRepayment } from "lib/gql_api_actions"
+import { MakeRepayment, ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -22,13 +22,19 @@ export function RepaymentsForm({ user }: Props) {
 
   const onSubmit = (formData: FormData) => {
     console.log(formData)
-    MakeRepayment.fetch({
-      amount: formData.amount,
-    })
-      .then((res) => {
-        router.push("/dashboard")
+    // hack change balance
+    ChangeBalance.fetch({
+      userId: user.id,
+      delta: formData.amount,
+    }).then((res) => {
+      MakeRepayment.fetch({
+        amount: formData.amount,
       })
-      .catch((err) => console.error(err))
+        .then((res) => {
+          router.push("/dashboard")
+        })
+        .catch((err) => console.error(err))
+    })
   }
 
   return (
