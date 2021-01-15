@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "test": "NODE_OPTIONS='--inspect' jest --watch --runInBand --testPathIgnorePatterns=[]",
-    "test:ci": "jest --ci --runInBand",
+    "test:ci": "jest --ci --runInBand --coverage && codecov -t '220959f2-a733-4df5-b96b-abb955e63764'",
     "hasura": "cd hasura && hasura",
     "migrate": "cd hasura && hasura migrate apply",
     "metadata": "cd hasura && hasura metadata apply",
