@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/core"
+import { Box, Container, Heading } from "@chakra-ui/core"
 import CreateLoanForm from "components/borrower/CreateLoan/CreateLoanForm"
 import BActiveLoan from "components/borrower/LoanRequests/ActiveLoan"
 import BLoanNeedsConfirmation from "components/borrower/LoanRequests/LoanNeedsConfirmation"
@@ -39,17 +39,32 @@ export default class BorrowerModel {
       this.hasLoanReq && this.ongoingLoan.status === LoanRequestStatus.active
     )
   }
+  get settledLoans() {
+    return this.loans.filter((l) => l.status === LoanRequestStatus.settled)
+  }
   get mainComponent() {
-    if (!this.hasLoanReq) return <CreateLoanForm user={this.user} />
-    else
-      return (
-        <Container maxW="sm">
-          {BorrowerModel.generateLoanComponent(this.ongoingLoan)}
-        </Container>
-      )
+    return (
+      <Container maxW="sm">
+        {!this.hasActiveLoan && <CreateLoanForm user={this.user} />}
+        {this.hasActiveLoan &&
+          BorrowerModel.generateLoanComponent(this.ongoingLoan)}
+        {this.settledLoans && (
+          <>
+            <Heading size="md">Settled Loans</Heading>
+            {this.settledLoans.map((l) => (
+              <>
+                {l.purpose} | {l.amount} | Supported by:{" "}
+                {l.supporters.map((s) => s.user.name).join(", ")}
+              </>
+            ))}
+          </>
+        )}
+      </Container>
+    )
   }
   get notification() {
-    if (!this.user.kyc_approved) return <ApplicationSubmitted />
+    if (!(this.user.kyc_approved || this.hasLoanReq))
+      return <ApplicationSubmitted />
     if (this.hasActiveLoan) return <UpcomingRepayment />
   }
 }

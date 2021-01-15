@@ -234,6 +234,10 @@ export class MakeRepayment extends Action {
 
   async run() {
     const userLoanId = this.user.loan_requests[0].request_id
+    await this.dbClient.sdk.ChangeUserCashBalance({
+      userId: this.user.id,
+      delta: this.payload.amount,
+    })
     await this.dbClient.make_repayment(userLoanId, this.payload.amount)
     return await this.dbClient.sdk.InsertScenarioAction({
       action: {
