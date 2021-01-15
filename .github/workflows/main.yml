@@ -26,7 +26,9 @@ jobs:
       with:
         node-version: '12.x'
     - name: docker login
-      run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
+      run: |
+        echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
+        docker pull docker.pkg.github.com/arboreumdev/swarmai/swarmai:pr-55-merge
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install dependencies
