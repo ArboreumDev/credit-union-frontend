@@ -8,6 +8,7 @@ mutation CreateUser($user: user_insert_input!) {
     email
     user_type
     name
+    roi
     phone
     demographic_info
     user_number

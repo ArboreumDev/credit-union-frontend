@@ -10,17 +10,17 @@ const Page = (props: { session: Session }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = (await getSession(context)) as Session
 
-  if (session.user.email === "gp@arboreum.dev") {
-    const { email } = context.query
+  // TODO: Add admin authorization check
+  const { email } = context.query
 
-    const dbClient = new DbClient()
-    const user = await dbClient.getUserByEmail(email as string)
-    console.log(email, user)
-    dbClient.sdk.ApproveKYC({
-      userId: user.id,
-      kycApproved: !user.kyc_approved,
-    })
-  }
+  const dbClient = new DbClient()
+  const user = await dbClient.getUserByEmail(email as string)
+  console.log(email, user)
+  dbClient.sdk.ApproveKYC({
+    userId: user.id,
+    kycApproved: !user.kyc_approved,
+  })
+
   return { props: { session } }
 }
 

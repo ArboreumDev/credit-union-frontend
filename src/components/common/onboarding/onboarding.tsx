@@ -13,7 +13,7 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/core"
-import { USER_DEMOGRAPHIC } from "lib/constant"
+import { USER_DEMOGRAPHIC, NO_ROI } from "lib/constant"
 import { CreateUser } from "lib/gql_api_actions"
 import { UserType } from "lib/types"
 import { useRouter } from "next/dist/client/router"
@@ -50,6 +50,7 @@ export default function Onboarding({ user, userType }: Params) {
         phone: data.phone,
         demographic_info: USER_DEMOGRAPHIC,
         onboarded: true,
+        roi: NO_ROI,
       },
     })
       .then((res) => {

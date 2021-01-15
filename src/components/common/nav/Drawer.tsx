@@ -14,6 +14,7 @@ import {
 import useUser from "lib/useUser"
 import { useRef } from "react"
 import { FiSettings } from "react-icons/fi"
+import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import CompanyX from "./Companyx"
 import { FeedbackPopover, SupportPopover } from "./FeedbackPopover"
 import LogoutButton from "./LogoutButton"
@@ -48,6 +49,7 @@ export default function DrawerButton() {
                 <CompanyX />
                 <FeedbackPopover />
                 <SupportPopover />
+                <ColorModeSwitcher />
                 {user && <LogoutButton />}
               </Stack>
             </DrawerBody>

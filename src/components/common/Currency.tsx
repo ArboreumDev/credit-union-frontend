@@ -8,6 +8,7 @@ export const Currency = ({ type = "INR", amount }: Props) => (
       style: "currency",
       currency: type,
       minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     })}
   </span>
 )

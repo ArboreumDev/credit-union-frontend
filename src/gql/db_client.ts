@@ -24,6 +24,7 @@ import {
   LoanRequestStatus,
   SystemUpdate,
   UserType,
+  LoanState,
 } from "../lib/types"
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
@@ -77,7 +78,6 @@ export default class DbClient {
         borrower_id,
         amount,
         purpose,
-        risk_calc_result: {},
         loan: {},
       },
     })
@@ -203,6 +203,7 @@ export default class DbClient {
     await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: request_id,
       loanData: realizedLoan,
+      status: LoanRequestStatus.active,
     })
 
     // register lenders with their spent amount in loan_participants
@@ -227,9 +228,18 @@ export default class DbClient {
       requestId: loan_id,
       delta: accounts.escrow_deltas[loan_id],
     })
+    const loan: LoanInfo = loans.loans[loan_id]
+    let newStatus = LoanRequestStatus.active
+    if (loan.state.repayments.length >= loan.terms.tenor) {
+      newStatus =
+        loan.schedule.borrower_view.total_payments.remain <= 10e-7
+          ? LoanRequestStatus.settled
+          : LoanRequestStatus.default
+    }
     const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: loan_id,
-      loanData: loans.loans[loan_id],
+      loanData: loan,
+      status: newStatus,
     })
 
     // TODO show transactions in transaction table
@@ -237,9 +247,21 @@ export default class DbClient {
   }
 
   updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
+    await this.updateAllRoIs(updates)
     const updateMutation = generateUpdateAsSingleTransaction(updates)
     const data = await this.gqlClient.request(updateMutation)
     return data
+  }
+
+  updateAllRoIs = async (updates: Array<PortfolioUpdate>) => {
+    await Promise.all(
+      updates.map(async (update) => {
+        await this.sdk.UpdateUserRoi({
+          userId: update.userId,
+          newRoi: update.newRoI,
+        })
+      })
+    )
   }
 
   /**
@@ -318,6 +340,12 @@ export default class DbClient {
             "requestData"
           ] as LoanRequestInfo
           break
+        case LoanRequestStatus.settled:
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
+        case LoanRequestStatus.default:
+          loans[lr.request_id] = lr.loan as LoanInfo
+          break
         case LoanRequestStatus.initiated:
           // borrower is yet collecting information
           break
@@ -386,5 +414,18 @@ export default class DbClient {
     }
     const res = await this.sdk.InsertEvent({ event })
     return res.insert_events_one
+  }
+
+  generateScenarioObject = async () => {
+    const { scenario_actions } = await this.sdk.GetAllActions()
+    return {
+      users: (await this.allUsers).map((u) => ({
+        name: u.name,
+        email: u.email,
+        user_type: u.user_type,
+        demographic_info: u.demographic_info,
+      })),
+      actions: scenario_actions,
+    }
   }
 }
