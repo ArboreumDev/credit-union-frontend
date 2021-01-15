@@ -45,7 +45,9 @@ export default class BorrowerModel {
   }
   get hasActiveLoan() {
     return (
-      this.hasLoanReq && this.ongoingLoan.status === LoanRequestStatus.active
+      this.hasLoanReq &&
+      this.ongoingLoan &&
+      this.ongoingLoan.status === LoanRequestStatus.active
     )
   }
   get settledLoans() {
@@ -54,20 +56,20 @@ export default class BorrowerModel {
   get mainComponent() {
     return (
       <Container maxW="sm">
-        {!this.ongoingLoan && <CreateLoanForm user={this.user} />}
-        {this.ongoingLoan &&
-          BorrowerModel.generateLoanComponent(this.ongoingLoan)}
-        {this.settledLoans && (
-          <>
-            <Heading size="md">Settled Loans</Heading>
+        {this.settledLoans.length > 0 && (
+          <Box mb="50px">
+            <Heading size="md">Fulfilled Loans</Heading>
             {this.settledLoans.map((l) => (
               <div key={l.request_id + "_settled"}>
                 {l.purpose} | {l.amount} | Supported by:{" "}
                 {l.supporters.map((s) => s.user.name).join(", ")}
               </div>
             ))}
-          </>
+          </Box>
         )}
+        {!this.ongoingLoan && <CreateLoanForm user={this.user} />}
+        {this.ongoingLoan &&
+          BorrowerModel.generateLoanComponent(this.ongoingLoan)}
       </Container>
     )
   }
