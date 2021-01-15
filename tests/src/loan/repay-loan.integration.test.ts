@@ -123,7 +123,7 @@ describe("Repayments", () => {
   })
 
   test("early exact repayment settles loan", async () => {
-    const full_repayment = loan.schedule.borrower_view.total_payments.remain
+    const full_repayment = loan.schedule.full_single_repay
     const updated_request = await dbClient.make_repayment(
       loan.request_id,
       full_repayment
