@@ -3904,7 +3904,7 @@ export type PledgeFieldsFragment = { __typename?: "supporters" } & Pick<
 > & {
     loan_request: { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
-      "purpose" | "amount" | "status" | "risk_calc_result"
+      "purpose" | "amount" | "status" | "risk_calc_result" | "loan"
     > & { user: { __typename?: "user" } & Pick<User, "email" | "name"> }
   }
 
@@ -4310,6 +4310,7 @@ export const PledgeFieldsFragmentDoc = gql`
         name
       }
       risk_calc_result
+      loan
     }
   }
 `
@@ -4407,7 +4408,18 @@ export const GetUserByEmailDocument = gql`
       pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
         ...pledgeFields
       }
-      pledges: supporters(where: { status: { _eq: "confirmed" } }) {
+      pledges: supporters(
+        where: {
+          _and: {
+            status: { _eq: "confirmed" }
+            loan_request: {
+              status: {
+                _in: ["initiated", "awaiting_borrower_confirmation", "live"]
+              }
+            }
+          }
+        }
+      ) {
         ...pledgeFields
       }
       active_loans: loan_participants(

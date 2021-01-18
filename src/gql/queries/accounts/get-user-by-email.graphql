@@ -42,7 +42,14 @@ query GetUserByEmail($email: String!) {
     pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
       ...pledgeFields
     }
-    pledges: supporters(where: { status: { _eq: "confirmed" } }) {
+    pledges: supporters(
+      where: { 
+        _and: {
+          status: {_eq: "confirmed" }
+          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live"] } }
+        }
+      }
+    ) {
       ...pledgeFields
     }
     active_loans: loan_participants(where: { loan_request: { status: {_eq: "live" } } }) {
