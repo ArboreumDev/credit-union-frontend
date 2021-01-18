@@ -31,12 +31,17 @@ export function RepaymentsForm({ user }: Props) {
       .catch((err) => console.error(err))
   }
 
+  const suggestedNextBorrowerPayment = Math.ceil(
+    user.loans_to_repay[0].loan.schedule.next_borrower_payment
+  )
+
   return (
     <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Text>Please make a repayment for the current time period</Text>
           <AmountInput
+            nextAmount={"" + suggestedNextBorrowerPayment}
             passName="amount"
             passRef={register({ required: true })}
           />
