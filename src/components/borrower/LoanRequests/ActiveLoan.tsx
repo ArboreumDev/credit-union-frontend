@@ -60,7 +60,7 @@ const BActiveLoan = ({ loanRequest }: Params) => {
     <>
       <Stack>
         <Center>
-          <Heading size="lg">Active Loan</Heading>
+          <Heading size="lg">Loan: {loanRequest.status}</Heading>
         </Center>
 
         <Row>

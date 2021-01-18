@@ -1,4 +1,12 @@
-import { Box, Button, Heading, Input, Stack, Textarea } from "@chakra-ui/core"
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Input,
+  Stack,
+  Textarea,
+} from "@chakra-ui/core"
 import DbClient from "gql/db_client"
 import { fetchJSON } from "lib/api"
 import { COMPANY_NAME } from "lib/constant"
@@ -32,7 +40,7 @@ export default function Hello(props: {
   const users = props.allUsers
 
   return (
-    <Box>
+    <Container>
       <Stack>
         <a href="/admin/reset_db">Reset DB</a>
         <Box>
@@ -63,7 +71,7 @@ export default function Hello(props: {
           }
         />
       </Box>
-    </Box>
+    </Container>
   )
 }
 
