@@ -33,29 +33,10 @@ export class Fixtures {
     pledge_requests: [],
     pledges: [],
     active_loans: [],
+    loans_to_repay: [],
     roi: NO_ROI,
   }
 
-  static Borrower: User = {
-    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
-    name: "Amitabh Bachchan",
-    email: "bigb@mail.com",
-    phone: "+91 123-232-1231",
-    user_type: "borrower",
-    balance: 0,
-    corpus_share: 0,
-    created_at: "2020-08-29T04:12:17.878911+00:00",
-    kyc_approved: false,
-    loan_requests: [],
-    pledge_requests: [],
-    pledges: [],
-    active_loans: [],
-  }
-
-  static BorrowerKYCConfirmed: User = {
-    ...Fixtures.Borrower,
-    kyc_approved: true,
-  }
   static LoanReqInfo: LoanInfo = {
     request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
     state: {
@@ -135,6 +116,34 @@ export class Fixtures {
         supporter: 0.16,
       },
     },
+  }
+
+  static Borrower: User = {
+    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
+    name: "Amitabh Bachchan",
+    email: "bigb@mail.com",
+    phone: "+91 123-232-1231",
+    user_type: "borrower",
+    balance: 0,
+    corpus_share: 0,
+    created_at: "2020-08-29T04:12:17.878911+00:00",
+    kyc_approved: false,
+    loan_requests: [],
+    pledge_requests: [],
+    pledges: [],
+    active_loans: [],
+    loans_to_repay: [
+      {
+        status: "live",
+        request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
+        loan: Fixtures.LoanReqInfo,
+      },
+    ],
+  }
+
+  static BorrowerKYCConfirmed: User = {
+    ...Fixtures.Borrower,
+    kyc_approved: true,
   }
 
   static LoanRequest: LoanRequest = {
