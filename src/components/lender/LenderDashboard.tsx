@@ -19,6 +19,7 @@ import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
 import PledgeInvestments from "./Pledges"
+import InvestedLoans from "./Loans"
 
 interface Props {
   user: User
@@ -57,6 +58,7 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
+  console.log("roi", user.roi)
 
   return (
     <Stack w="100%" spacing={8}>
@@ -121,6 +123,12 @@ const LenderDashboard = ({ user }: Props) => {
       {user.pledges?.length > 0 && (
         <Box maxW="sm">
           <PledgeInvestments pledges={user.pledges} />
+        </Box>
+      )}
+
+      {user.active_loans?.length > 0 && (
+        <Box maxW="sm">
+          <InvestedLoans loans={user.active_loans} roi={user.roi} />
         </Box>
       )}
     </Stack>
