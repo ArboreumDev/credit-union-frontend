@@ -26,6 +26,11 @@ services:
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       version: "3.3"
+  swarmai:
+    image: docker.pkg.github.com/arboreumdev/swarmai/swarmai:pr-55-merge
+    command: "make dev-api"
+    ports:
+      - "3001:3001"
 # volumes:
 # db_data:
 
