@@ -33,6 +33,10 @@ Debugging test example:
 - CI like: `cd tests; make test`
 - Watch/ Interactive tests: `cd tests; make test-watch`
 
+To use the swarmai docker, you will first need to login to github package repository as described [here](https://docs.github.com/en/packages/guides/configuring-docker-for-use-with-github-packages).
+
+`cat ~/TOKEN.txt | docker login https://docker.pkg.github.com -u USERNAME --password-stdin`
+
 ## Lint
 
 Linting automatically happen during commits. We use husky and lint-staged to achieve that. Configuration in `package.json`
