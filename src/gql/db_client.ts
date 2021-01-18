@@ -311,6 +311,7 @@ export default class DbClient {
         corpus_share: u.corpus_share,
         encumbered_cash: 0, // TODO
         encumbered_portfolio: 0, // TODO
+        roi: u.roi,
       } as UserInfo
     })
     const userDict = {}
