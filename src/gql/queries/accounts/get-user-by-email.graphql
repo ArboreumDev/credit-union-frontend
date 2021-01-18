@@ -52,9 +52,14 @@ query GetUserByEmail($email: String!) {
     ) {
       ...pledgeFields
     }
-    active_loans: loan_participants(where: { loan_request: { status: {_eq: "live" } } }) {
+    active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
       loan_id
       lender_amount
+      loan_request {
+        status
+        amount
+      }
+
     }
   }
 }

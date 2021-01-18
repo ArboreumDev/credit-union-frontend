@@ -3892,7 +3892,12 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           { __typename?: "loan_participants" } & Pick<
             Loan_Participants,
             "loan_id" | "lender_amount"
-          >
+          > & {
+              loan_request: { __typename?: "loan_requests" } & Pick<
+                Loan_Requests,
+                "status" | "amount"
+              >
+            }
         >
       }
   >
@@ -4423,10 +4428,16 @@ export const GetUserByEmailDocument = gql`
         ...pledgeFields
       }
       active_loans: loan_participants(
-        where: { loan_request: { status: { _eq: "live" } } }
+        where: {
+          loan_request: { status: { _in: ["live", "settled", "defaulted"] } }
+        }
       ) {
         loan_id
         lender_amount
+        loan_request {
+          status
+          amount
+        }
       }
     }
   }
