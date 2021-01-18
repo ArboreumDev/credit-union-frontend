@@ -53,12 +53,14 @@ export const createStartLoanInputVariables = (
   realizedLoan: LoanInfo,
   updates: PortfolioUpdate[]
 ) => {
-  // input to loan_participants: register who has contributed how much
-  // note: anyone who has given away money is a lender here, so supporters too
+  // input to loan_participants: lenders only
   const supporter_ids = realizedLoan.terms.supporters.map((x) => x.supporter_id)
   const lenders = []
   updates.forEach((update: PortfolioUpdate) => {
-    if (update.userId !== realizedLoan.terms.borrower_info.borrower_id) {
+    if (
+      update.userId !== realizedLoan.terms.borrower_info.borrower_id &&
+      !supporter_ids.includes(update.userId)
+    ) {
       lenders.push({
         lender_amount: -update.balanceDelta,
         lender_id: update.userId,
