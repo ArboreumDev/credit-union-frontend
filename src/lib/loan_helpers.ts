@@ -59,7 +59,8 @@ export const createStartLoanInputVariables = (
   updates.forEach((update: PortfolioUpdate) => {
     if (
       update.userId !== realizedLoan.terms.borrower_info.borrower_id &&
-      !supporter_ids.includes(update.userId)
+      !supporter_ids.includes(update.userId) &&
+      Math.abs(update.balanceDelta) !== 0
     ) {
       lenders.push({
         lender_amount: -update.balanceDelta,
