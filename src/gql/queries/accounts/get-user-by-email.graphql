@@ -34,6 +34,11 @@ query GetUserByEmail($email: String!) {
         }
       }
     }
+    loans_to_repay: loan_requests( where: {status: {_in: ["live", "defaulted"]}}) {
+      request_id
+      status
+      loan
+    }
     pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
       ...pledgeFields
     }
@@ -60,5 +65,6 @@ fragment pledgeFields on supporters {
       name
     }
     risk_calc_result
+    loan
   }
 }

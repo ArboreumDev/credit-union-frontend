@@ -233,7 +233,7 @@ export class MakeRepayment extends Action {
   minAuthLevel = AUTH_TYPE.USER
 
   async run() {
-    const userLoanId = this.user.loan_requests[0].request_id
+    const userLoanId = this.user.loans_to_repay[0].request_id
     await this.dbClient.sdk.ChangeUserCashBalance({
       userId: this.user.id,
       delta: this.payload.amount,
