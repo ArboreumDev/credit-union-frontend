@@ -1,1 +1,0 @@
-- [ ] `yarn test` with swarmai `development` branch passes
