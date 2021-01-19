@@ -12,6 +12,7 @@ const loanStatusToText = {
   [LoanRequestStatus.awaiting_borrower_confirmation]: "Processing",
   [LoanRequestStatus.active]: "Active",
   [LoanRequestStatus.settled]: "Completed",
+  [LoanRequestStatus.defaulted]: "Defaulted",
 }
 
 const roi_to_expected = (roi: RoI, loan_id: string) => {

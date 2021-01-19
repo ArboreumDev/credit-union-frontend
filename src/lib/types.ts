@@ -213,7 +213,7 @@ export enum LoanRequestStatus {
   awaiting_borrower_confirmation = "awaiting_borrower_confirmation",
   active = "live",
   settled = "settled",
-  default = "default",
+  defaulted = "defaulted",
 }
 
 export enum SupporterStatus {

@@ -349,7 +349,7 @@ export default class DbClient {
         case LoanRequestStatus.settled:
           loans[lr.request_id] = lr.loan as LoanInfo
           break
-        case LoanRequestStatus.default:
+        case LoanRequestStatus.defaulted:
           loans[lr.request_id] = lr.loan as LoanInfo
           break
         case LoanRequestStatus.initiated:
