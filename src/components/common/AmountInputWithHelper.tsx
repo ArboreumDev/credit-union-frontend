@@ -15,7 +15,8 @@ const HelperButton = ({ inputSetValue, amount, label }: HelperButtonProps) => (
     colorScheme="teal"
     size="xs"
   >
-    {label}: <Currency amount={amount} />
+    {label + "="}
+    <Currency amount={amount} />
   </Button>
 )
 
@@ -24,30 +25,24 @@ interface Props {
   setValue: any
   nextAmount?: number
   maxAmount?: number
+  helpers: { [label: string]: number }
 }
-export const AmountInputWithButtons = ({
+export const AmountInputWithHelper = ({
   passRef,
   setValue,
-  nextAmount,
-  maxAmount,
+  helpers,
 }: Props) => {
   return (
     <>
       <HStack>
-        {nextAmount && (
+        {Object.keys(helpers).map((k) => (
           <HelperButton
-            label="Next"
-            amount={nextAmount}
+            key={k + "helper"}
+            label={k}
+            amount={helpers[k]}
             inputSetValue={setValue}
           />
-        )}
-        {maxAmount && (
-          <HelperButton
-            label="Max"
-            amount={maxAmount}
-            inputSetValue={setValue}
-          />
-        )}
+        ))}
       </HStack>
       <AmountInput passRef={passRef} />
     </>

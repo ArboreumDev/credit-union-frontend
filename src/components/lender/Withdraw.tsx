@@ -1,5 +1,5 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
-import { AmountInputWithButtons } from "components/common/AmountInputWithHelper"
+import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
@@ -38,8 +38,10 @@ export function WithdrawFundsForm({ user }: Props) {
           <Text>Enter the amount you wish to withdraw</Text>
 
           <Box flex={1}>
-            <AmountInputWithButtons
-              maxAmount={Math.round(user.balance)}
+            <AmountInputWithHelper
+              helpers={{
+                "MAX ": Math.round(user.balance),
+              }}
               setValue={setValue}
               passRef={register({ required: true })}
             />
