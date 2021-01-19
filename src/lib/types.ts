@@ -229,8 +229,8 @@ export type APRInfo = {
 }
 
 export type LoanSummary = {
-  sum: APRInfo
-  loans: any // is a object which maps loan_id => LoanSummary
+  sum?: APRInfo
+  loans?: any // is a object which maps loan_id => LoanSummary
 }
 
 export type RoI = {
