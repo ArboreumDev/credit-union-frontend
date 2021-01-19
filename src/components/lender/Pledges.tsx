@@ -11,6 +11,7 @@ const loanStatusToText = {
   [LoanRequestStatus.awaiting_borrower_confirmation]: "Processing",
   [LoanRequestStatus.active]: "Active",
   [LoanRequestStatus.settled]: "Completed",
+  [LoanRequestStatus.defaulted]: "Defaulted",
 }
 
 const PledgeInvestments = ({ pledges }: Props) => (

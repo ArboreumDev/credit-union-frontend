@@ -14,7 +14,11 @@ export default class LenderModel {
 
   get totalPledgeUnconfirmedAmount() {
     return this.user.pledges
-      .filter((p) => p.loan_request.status != LoanRequestStatus.active)
+      .filter(
+        (p) =>
+          p.loan_request.status ==
+          LoanRequestStatus.awaiting_borrower_confirmation
+      )
       .map((p) => p.pledge_amount)
       .reduce((a, b) => a + b, 0)
   }
@@ -45,7 +49,7 @@ export default class LenderModel {
   }
 
   get expectedInterest() {
-    return this.roi.total_apr.interest.remain
+    return Math.abs(this.roi.total_apr.interest.remain)
   }
 
   get earnedInterest() {

@@ -127,18 +127,18 @@ describe("Loan Request Flow: confirm loan offer", () => {
     expect(lender.active_loans.map((l) => l.loan_id)).toContain(requestId)
 
     const supporter = await dbClient.getUserByEmail(SUPPORTER2.email)
-    expect(supporter.active_loans.map((l) => l.loan_id)).toContain(requestId)
+    expect(supporter.pledges.map((l) => l.request_id)).toContain(requestId)
 
     // verify their terms differ
     const lenderEntry = lender.active_loans.filter(
       (l) => l.loan_id == requestId
     )[0]
-    const supporterEntry = supporter.active_loans.filter(
-      (l) => l.loan_id == requestId
+    const supporterEntry = supporter.pledges.filter(
+      (l) => l.request_id == requestId
     )[0]
 
     // verify that amount is correct
-    expect(supporterEntry.lender_amount).toBe(
+    expect(supporterEntry.pledge_amount).toBe(
       supporter.pledges.filter((p) => p.request_id == requestId)[0]
         .pledge_amount
     )

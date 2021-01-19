@@ -15,6 +15,7 @@ export enum UserType {
 export type User = GetUserByEmailQuery["user"][0]
 export type LoanRequest = User["loan_requests"][0]
 export type PledgeRequest = User["pledge_requests"][0]
+export type InvestedLoan = User["active_loans"][0]
 
 // TODO @djudjuu
 export type CalculatedRisk = {
@@ -212,7 +213,7 @@ export enum LoanRequestStatus {
   awaiting_borrower_confirmation = "awaiting_borrower_confirmation",
   active = "live",
   settled = "settled",
-  default = "default",
+  defaulted = "defaulted",
 }
 
 export enum SupporterStatus {
@@ -228,8 +229,8 @@ export type APRInfo = {
 }
 
 export type LoanSummary = {
-  sum: APRInfo
-  loans: any // is a object which maps loan_id => LoanSummary
+  sum?: APRInfo
+  loans?: any // is a object which maps loan_id => LoanSummary
 }
 
 export type RoI = {

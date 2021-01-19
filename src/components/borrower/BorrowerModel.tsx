@@ -51,7 +51,11 @@ export default class BorrowerModel {
     )
   }
   get settledLoans() {
-    return this.loans.filter((l) => l.status === LoanRequestStatus.settled)
+    return this.loans.filter((l) =>
+      [LoanRequestStatus.settled, LoanRequestStatus.defaulted].includes(
+        l.status
+      )
+    )
   }
   get mainComponent() {
     return (
@@ -62,7 +66,7 @@ export default class BorrowerModel {
             {this.settledLoans.map((l) => (
               <div key={l.request_id + "_settled"}>
                 {l.purpose} | {l.amount} | Supported by:{" "}
-                {l.supporters.map((s) => s.user.name).join(", ")}
+                {l.supporters.map((s) => s.user.name).join(", ")} | {l.status}
               </div>
             ))}
           </Box>

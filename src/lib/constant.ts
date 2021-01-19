@@ -49,6 +49,6 @@ export const NO_ROI: RoI = {
     interest: ZERO_PAID_REMAIN,
     principal: ZERO_PAID_REMAIN,
   },
-  apr_on_pledges: null,
-  apr_on_loans: null,
+  apr_on_pledges: {},
+  apr_on_loans: {},
 }

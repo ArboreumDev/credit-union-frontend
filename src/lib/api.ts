@@ -54,7 +54,7 @@ export class Fetcher {
     if (![200, 201].includes(response.status)) {
       throw generateErrorResponse(
         "The server responded with an unexpected status.",
-        data
+        JSON.stringify(data)
       )
     }
 
