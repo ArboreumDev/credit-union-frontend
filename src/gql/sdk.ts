@@ -4403,9 +4403,7 @@ export const GetUserByEmailDocument = gql`
           }
         }
       }
-      loans_to_repay: loan_requests(
-        where: { status: { _in: ["live", "defaulted"] } }
-      ) {
+      loans_to_repay: loan_requests(where: { status: { _in: ["live"] } }) {
         request_id
         status
         loan
