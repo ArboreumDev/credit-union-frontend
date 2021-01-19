@@ -23,6 +23,12 @@ Debugging test example:
 
 `node --inspect node_modules/.bin/jest "--testPathIgnorePatterns=[]" --watch --runInBand tests/src/scenarios/simple.integration.test.ts`
 
+# With custom swarmai
+
+`docker-compose stop swarmai`
+
+and run the usual `make dev-api`
+
 ### Add graphql queries
 
 - Add queries to `/src/gql/queries/<query_type>/<query_name>.graphql`
