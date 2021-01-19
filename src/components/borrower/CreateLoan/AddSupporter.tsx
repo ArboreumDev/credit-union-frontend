@@ -55,10 +55,7 @@ export default function AddSupporter({ loanRequest }: Props) {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing="10px" minW="280px">
-          <AmountInput
-            passName="amount"
-            passRef={register({ required: true })}
-          />
+          <AmountInput passRef={register({ required: true })} />
           <Input
             placeholder="Name"
             name="name"
