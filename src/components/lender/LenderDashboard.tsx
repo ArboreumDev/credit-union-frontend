@@ -127,7 +127,7 @@ const LenderDashboard = ({ user }: Props) => {
       )}
 
       {user.active_loans?.length > 0 && (
-        <Box maxW="sm">
+        <Box maxW="xl">
           <InvestedLoans loans={user.active_loans} roi={user.roi} />
         </Box>
       )}

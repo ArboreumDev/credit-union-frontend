@@ -48,7 +48,7 @@ const InvestedLoans = ({ loans, roi }: Props) => (
     {loans.map((loan) => (
       <Flex key={loan.loan_id}>
         <Box verticalAlign="center" flex="1">
-          <Text>{loan.loan_request.amount}</Text>
+          <Currency amount={loan.loan_request.amount} />
         </Box>
         <Box verticalAlign="center" flex="1">
           <Text>{loanStatusToText[loan.loan_request.status]}</Text>
@@ -60,18 +60,16 @@ const InvestedLoans = ({ loans, roi }: Props) => (
           </Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{"TODO"}</Text>
+          <Text>{"July 2021"}</Text>
         </Box>
         <Box flex="1">
           <Currency
-            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || "?"}
+            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || "0"}
           />
         </Box>
         <Box flex="1">
           <Currency
-            amount={
-              roi.apr_on_loans.loans[loan.loan_id]?.interest.remain || "?"
-            }
+            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.remain || ""}
           />
         </Box>
       </Flex>
