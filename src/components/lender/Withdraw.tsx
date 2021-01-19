@@ -1,6 +1,5 @@
-import { Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/core"
-import AmountInput from "components/common/AmountInput"
-import { Currency } from "components/common/Currency"
+import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
+import { AmountInputWithButtons } from "components/common/AmountInputWithHelper"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
@@ -36,21 +35,18 @@ export function WithdrawFundsForm({ user }: Props) {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Text>
-            Enter the amount you wish to withdraw (Max{" "}
-            <Currency amount={user.balance ?? 0} />)
-          </Text>
-          <Flex>
-            <Box flex={1}>
-              <AmountInput
-                passName="amount"
-                passRef={register({ required: true })}
-              />
-            </Box>
-            <Center flex={0.4}>
-              <Button type="submit">Withdraw</Button>
-            </Center>
-          </Flex>
+          <Text>Enter the amount you wish to withdraw</Text>
+
+          <Box flex={1}>
+            <AmountInputWithButtons
+              maxAmount={Math.round(user.balance)}
+              setValue={setValue}
+              passRef={register({ required: true })}
+            />
+          </Box>
+          <Center flex={0.4}>
+            <Button type="submit">Withdraw</Button>
+          </Center>
         </Stack>
       </form>
     </Box>
