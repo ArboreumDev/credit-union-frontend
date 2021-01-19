@@ -46,7 +46,7 @@ query GetUserByEmail($email: String!) {
       where: { 
         _and: {
           status: {_eq: "confirmed" }
-          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live"] } }
+          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
         }
       }
     ) {

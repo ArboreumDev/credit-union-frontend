@@ -4417,7 +4417,13 @@ export const GetUserByEmailDocument = gql`
             status: { _eq: "confirmed" }
             loan_request: {
               status: {
-                _in: ["initiated", "awaiting_borrower_confirmation", "live"]
+                _in: [
+                  "initiated"
+                  "awaiting_borrower_confirmation"
+                  "live"
+                  "settled"
+                  "defaulted"
+                ]
               }
             }
           }
