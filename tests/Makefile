@@ -1,4 +1,5 @@
 docker-up:
+	docker-compose pull swarmai
 	docker-compose up -d
 
 docker-down:
