@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  HStack,
-} from "@chakra-ui/core"
+import { Button, HStack } from "@chakra-ui/core"
 import AmountInput from "./AmountInput"
 import { Currency } from "./Currency"
 
