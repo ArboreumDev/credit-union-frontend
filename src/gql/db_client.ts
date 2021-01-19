@@ -231,10 +231,15 @@ export default class DbClient {
     const loan: LoanInfo = loans.loans[loan_id]
     let newStatus = LoanRequestStatus.active
     if (loan.state.repayments.length >= loan.terms.tenor) {
-      newStatus =
-        loan.schedule.borrower_view.total_payments.remain <= 10e-7
-          ? LoanRequestStatus.settled
-          : LoanRequestStatus.default
+      const noOutstandingDebt =
+        loan.schedule.borrower_view.total_payments.remain <= 10e-7 &&
+        loan.schedule.borrower_view.corpus_principal.remain <= 10e-7 &&
+        loan.schedule.borrower_view.supporter_principal.remain <= 10e-7 &&
+        loan.schedule.borrower_view.supporter_interest.remain <= 10e-7 &&
+        loan.schedule.borrower_view.corpus_interest.remain <= 10e-7
+      newStatus = noOutstandingDebt
+        ? LoanRequestStatus.settled
+        : LoanRequestStatus.defaulted
     }
     const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
       requestId: loan_id,
