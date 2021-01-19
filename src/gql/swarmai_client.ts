@@ -56,7 +56,6 @@ export default class SwarmAIClient {
 
     return this.fetch("/loan/repay", payload)
   }
-  g
 
   async calculateLoanOffer(params: {
     requestId: string

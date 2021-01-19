@@ -34,15 +34,32 @@ query GetUserByEmail($email: String!) {
         }
       }
     }
+    loans_to_repay: loan_requests( where: {status: {_in: ["live"]}}) {
+      request_id
+      status
+      loan
+    }
     pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
       ...pledgeFields
     }
-    pledges: supporters(where: { status: { _eq: "confirmed" } }) {
+    pledges: supporters(
+      where: { 
+        _and: {
+          status: {_eq: "confirmed" }
+          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
+        }
+      }
+    ) {
       ...pledgeFields
     }
-    active_loans: loan_participants(where: { loan_request: { status: {_eq: "live" } } }) {
+    active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
       loan_id
       lender_amount
+      loan_request {
+        status
+        amount
+      }
+
     }
   }
 }
@@ -60,5 +77,6 @@ fragment pledgeFields on supporters {
       name
     }
     risk_calc_result
+    loan
   }
 }

@@ -17,7 +17,8 @@ test("scenario", async () => {
   try {
     await scenario.executeAll()
   } catch (e) {
-    expect(e.data.detail).toContain("ERROR: not enough free cash")
+    console.log(e)
+    expect(e.data).toContain("ERROR: not enough free cash")
   }
 
   const state = await dbClient.getSystemSummary()

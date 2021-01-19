@@ -55,10 +55,7 @@ export default function ModifyPledgeAmount({
                       How much money would you like to pledge to{" "}
                       {pledgeRequest.loan_request.user.name}?
                     </Text>
-                    <AmountInput
-                      passName="amount"
-                      passRef={register({ required: true })}
-                    />
+                    <AmountInput passRef={register({ required: true })} />
                     <Box h="30px" />
                     <Center>
                       <Button type="submit">Submit</Button>

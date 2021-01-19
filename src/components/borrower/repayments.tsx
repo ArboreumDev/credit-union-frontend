@@ -1,5 +1,5 @@
 import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
-import AmountInput from "components/common/AmountInput"
+import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import { MakeRepayment } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
@@ -31,14 +31,21 @@ export function RepaymentsForm({ user }: Props) {
       .catch((err) => console.error(err))
   }
 
+  const suggestedNextBorrowerPayment = Math.ceil(
+    user.loans_to_repay[0].loan.schedule.next_borrower_payment
+  )
+
   return (
     <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Text>Please make a repayment for the current time period</Text>
-          <AmountInput
-            passName="amount"
+          <AmountInputWithHelper
+            helpers={{
+              Next: suggestedNextBorrowerPayment,
+            }}
             passRef={register({ required: true })}
+            setValue={setValue}
           />
 
           <Box h="30px" />
