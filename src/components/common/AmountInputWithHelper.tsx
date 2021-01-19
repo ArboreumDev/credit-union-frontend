@@ -9,7 +9,12 @@ import {
 import AmountInput from "./AmountInput"
 import { Currency } from "./Currency"
 
-const HelperButton = ({ inputSetValue, amount, label }) => (
+interface HelperButtonProps {
+  inputSetValue: any
+  amount: number
+  label: string
+}
+const HelperButton = ({ inputSetValue, amount, label }: HelperButtonProps) => (
   <Button
     onClick={() => {
       inputSetValue("amount", amount)
@@ -21,12 +26,18 @@ const HelperButton = ({ inputSetValue, amount, label }) => (
   </Button>
 )
 
+interface Props {
+  passRef: any
+  setValue: any
+  nextAmount?: number
+  maxAmount?: number
+}
 export const AmountInputWithButtons = ({
   passRef,
   setValue,
   nextAmount,
   maxAmount,
-}) => {
+}: Props) => {
   return (
     <>
       <HStack>
