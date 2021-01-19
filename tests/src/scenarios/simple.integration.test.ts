@@ -1,5 +1,6 @@
 import { Action, Scenario, System } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
+import * as full_repayment_scenario from "../../fixtures/scenarios/full_repayment.json"
 import { dbClient, sdk } from "../common/utils"
 
 beforeEach(async () => {
@@ -68,6 +69,18 @@ test("simple scenario", async () => {
     scenario.actions[scenario.actions.length - 1].payload.amount,
   ])
   generated_json = JSON.stringify(await scenario.toJSON())
+})
+
+test("full_repayment scenario", async () => {
+  const scenario = Scenario.fromJSON(
+    full_repayment_scenario as System,
+    dbClient
+  )
+  await scenario.initUsers()
+  await scenario.executeAll()
+
+  const state = await dbClient.getSystemSummary()
+  console.log(state)
 })
 
 test("from generated", async () => {
