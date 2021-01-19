@@ -65,14 +65,14 @@ const InvestedLoans = ({ loans, roi }: Props) => (
         </Box>
         <Box flex="1">
           <Currency
-            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || "0"}
+            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || 0}
           />
         </Box>
         <Box flex="1">
           <Currency
             amount={
               Math.abs(roi.apr_on_loans.loans[loan.loan_id]?.interest.remain) ||
-              ""
+              0
             }
           />
         </Box>
