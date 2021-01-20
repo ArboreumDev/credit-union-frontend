@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
-import { LoanRequestStatus, RoI, InvestedLoan } from "../../lib/types"
+import { LoanRequestStatus, RoI, InvestedLoan, LoanInfo } from "../../lib/types"
 import { Currency } from "../common/Currency"
 
 interface Props {
@@ -29,6 +29,13 @@ const roi_to_paid = (roi: RoI, loan_id: string) => {
   )
 }
 
+const get_exposure = (roi: RoI, loan: LoanInfo) => {
+  const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
+  const expectedByUser =
+    roi.apr_on_loans.loans[loan.request_id].principal.remain
+  return expectedByUser ? expectedByUser / totalOutstanding : 0
+}
+
 const InvestedLoans = ({ loans, roi }: Props) => (
   <Stack spacing="15px">
     <Box>
@@ -56,8 +63,9 @@ const InvestedLoans = ({ loans, roi }: Props) => (
         </Box>
         <Box verticalAlign="center" flex="1">
           <Text>
-            {Math.round((100 * loan.lender_amount) / loan.loan_request.amount) +
-              "%"}
+            {Math.round(
+              100 * get_exposure(roi, loan.loan_request.loan as LoanInfo)
+            ) + "%"}
           </Text>
         </Box>
         <Box verticalAlign="center" flex="1">
