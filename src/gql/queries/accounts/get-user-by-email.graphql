@@ -58,6 +58,7 @@ query GetUserByEmail($email: String!) {
       loan_request {
         status
         amount
+        loan
       }
 
     }
