@@ -14,20 +14,17 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Arboreum Sandbox</title>
         <meta name="description" content="Invest. Borrow."></meta>
-        {typeof window !== "undefined" && (
-          <>
-            <script
-              async
-              defer
-              data-website-id={
-                window.location.hostname == "app.arboreum.dev"
-                  ? ANALYTICS_WEBSITE_IDS.production
-                  : ANALYTICS_WEBSITE_IDS.preview
-              }
-              src="https://analytics.arboreum.dev/umami.js"
-            />
-          </>
-        )}
+        {typeof window !== "undefined" &&
+          window.location.hostname == "app.arboreum.dev" && (
+            <>
+              <script
+                async
+                defer
+                data-website-id={ANALYTICS_WEBSITE_IDS.production}
+                src="https://analytics.arboreum.dev/umami.js"
+              />
+            </>
+          )}
         {typeof window !== "undefined" && (
           <>
             <script
