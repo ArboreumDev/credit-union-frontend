@@ -3895,7 +3895,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
           > & {
               loan_request: { __typename?: "loan_requests" } & Pick<
                 Loan_Requests,
-                "status" | "amount"
+                "status" | "amount" | "loan"
               >
             }
         >
@@ -4441,6 +4441,7 @@ export const GetUserByEmailDocument = gql`
         loan_request {
           status
           amount
+          loan
         }
       }
     }
