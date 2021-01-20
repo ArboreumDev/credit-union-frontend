@@ -58,7 +58,7 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 
 const LenderDashboard = ({ user }: Props) => {
   const lender = new LenderModel(user)
-  console.log("roi", user.roi)
+  // console.log("roi", user.roi.apr_on_loans.loans)
 
   return (
     <Stack w="100%" spacing={8}>
