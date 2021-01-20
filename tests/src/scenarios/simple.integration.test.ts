@@ -2,6 +2,7 @@ import { Action, Scenario, System } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import * as full_repayment_scenario from "../../fixtures/scenarios/full_repayment.json"
 import * as full_repayment_default_scenario from "../../fixtures/scenarios/full_repayment_default.json"
+import * as second_loan_reduces_exposure_scenario from "../../fixtures/scenarios/second_loan_reduce_expsoure.json"
 import { dbClient, sdk } from "../common/utils"
 
 beforeEach(async () => {
@@ -94,6 +95,19 @@ test("loan defaults scenario", async () => {
 
   const { loanRequests } = await sdk.GetLoanRequests()
   expect(loanRequests[0].status).toBe("defaulted")
+})
+
+test("second loan exposure scenario", async () => {
+  const scenario = Scenario.fromJSON(
+    second_loan_reduces_exposure_scenario as System,
+    dbClient
+  )
+  await scenario.initUsers()
+  await scenario.executeAll()
+
+  const { loanRequests } = await sdk.GetLoanRequests()
+  expect(loanRequests[0].status).toBe("live")
+  expect(loanRequests[1].status).toBe("live")
 })
 
 test("from generated", async () => {
