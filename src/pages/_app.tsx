@@ -14,7 +14,7 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Arboreum Sandbox</title>
         <meta name="description" content="Invest. Borrow."></meta>
-        {typeof window !== "undefined" && (
+        {/* {typeof window !== "undefined" && (
           <>
             <script
               async
@@ -27,7 +27,7 @@ function App({ Component, pageProps }: AppProps) {
               src="https://analytics.arboreum.dev/umami.js"
             />
           </>
-        )}
+        )} */}
         {typeof window !== "undefined" && (
           <>
             <script
