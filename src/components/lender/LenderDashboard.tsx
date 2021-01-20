@@ -19,7 +19,7 @@ import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
 import PledgeInvestments from "./Pledges"
-import InvestedLoans from "./Loans"
+import InvestedLoans from "./InvestedLoans"
 
 interface Props {
   user: User
