@@ -1,0 +1,62 @@
+---
+users:
+  - name: a b
+    email: amitabh@mail.com
+    user_type: borrower
+  - name: s k
+    email: salman@mail.com
+    user_type: lender
+  - name: b o
+    email: b2
+    user_type: borrower
+  - name: j u
+    email: julius
+    user_type: lender
+  - name: d p
+    email: deepika@mail.com
+    user_type: lender
+actions:
+  - id: 22
+    action_type: ADJUST_BALANCES
+    payload:
+      userEmail: deepika@mail.com
+      balanceDelta: "5000"
+  - id: 23
+    action_type: ADJUST_BALANCES
+    payload:
+      userEmail: salman@mail.com
+      balanceDelta: "15000"
+  - id: 24
+    action_type: CONFIRM_LOAN
+    payload:
+      amount: 20000
+      loan_id: 21149aa7-e21a-488f-8f94-ded794750b63
+      userEmail: amitabh@mail.com
+      supporters:
+        - email: deepika@mail.com
+          pledge_amount: 5000
+  - id: 25
+    action_type: REPAY_LOAN
+    payload:
+      amount: 3464
+      loan_id: 21149aa7-e21a-488f-8f94-ded794750b63
+      userEmail: amitabh@mail.com
+  - id: 26
+    action_type: ADJUST_BALANCES
+    payload:
+      userEmail: deepika@mail.com
+      balanceDelta: "5000"
+  - id: 27
+    action_type: ADJUST_BALANCES
+    payload:
+      userEmail: julius
+      balanceDelta: "30000"
+  - id: 28
+    action_type: CONFIRM_LOAN
+    payload:
+      amount: 20000
+      loan_id: df474374-b519-4f6e-9d57-4a4c74f50616
+      userEmail: b2
+      supporters:
+        - email: deepika@mail.com
+          pledge_amount: 5000
