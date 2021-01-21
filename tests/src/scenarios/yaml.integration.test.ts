@@ -55,3 +55,20 @@ test("second loan exposure scenario", async () => {
   expect(loanRequests[0].status).toBe("live")
   expect(loanRequests[1].status).toBe("live")
 })
+
+test("not enough balance scenario", async () => {
+  try {
+    const scenario = await execScenario(
+      "tests/fixtures/scenarios/not_enough_balance.yaml"
+    )
+  } catch (e) {
+    expect(e.data).toContain("ERROR: not enough free cash")
+  }
+})
+
+test("over fulfill scenario", async () => {
+  const scenario = await execScenario(
+    "tests/fixtures/scenarios/over_fulfill.yaml"
+  )
+  // TODO: should throw error
+})
