@@ -5,6 +5,13 @@ import * as full_repayment_default_scenario from "../../fixtures/scenarios/full_
 import * as second_loan_reduces_exposure_scenario from "../../fixtures/scenarios/second_loan_reduce_expsoure.json"
 import { dbClient, sdk } from "../common/utils"
 
+const execScenario = async (json) => {
+  const scenario = Scenario.fromJSON(json as System, dbClient)
+  await scenario.initUsers()
+  await scenario.executeAll()
+  return scenario
+}
+
 beforeEach(async () => {
   await sdk.ResetDB()
 })
@@ -59,63 +66,39 @@ describe("Scenario unit tests", () => {
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
 })
-let generated_json
+
 test("simple scenario", async () => {
-  const scenario = Scenario.fromJSON(simple as System, dbClient)
-  await scenario.initUsers()
-  await scenario.executeAll()
+  const scenario = await execScenario(simple)
 
   const state = await dbClient.getSystemSummary()
   const loan = Object.values(state.loans)[0]
   expect(loan.state.repayments).toStrictEqual([
     scenario.actions[scenario.actions.length - 1].payload.amount,
   ])
-  generated_json = JSON.stringify(await scenario.toJSON())
 })
 
 test("full_repayment scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    full_repayment_scenario as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
-
+  const scenario = await execScenario(full_repayment_scenario)
   const { loanRequests } = await sdk.GetLoanRequests()
   expect(loanRequests[0].status).toBe("settled")
 })
 
 test("loan defaults scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    full_repayment_default_scenario as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
-
+  const scenario = execScenario(full_repayment_default_scenario as System)
   const { loanRequests } = await sdk.GetLoanRequests()
   expect(loanRequests[0].status).toBe("defaulted")
 })
 
 test("second loan exposure scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    second_loan_reduces_exposure_scenario as System,
-    dbClient
+  const scenario = await execScenario(
+    second_loan_reduces_exposure_scenario as System
   )
-  await scenario.initUsers()
-  await scenario.executeAll()
-
   const { loanRequests } = await sdk.GetLoanRequests()
   expect(loanRequests[0].status).toBe("live")
   expect(loanRequests[1].status).toBe("live")
 })
 
 test("from generated", async () => {
-  // console.log(generated_json)
-  const scenario = Scenario.fromJSON(
-    JSON.parse(generated_json) as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
+  const scenario = await execScenario(simple)
+  JSON.stringify(await scenario.toJSON())
 })
