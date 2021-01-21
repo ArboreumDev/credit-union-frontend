@@ -10,7 +10,7 @@ import {
   Action_Type_Enum,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
-import { NO_ROI } from "./constant"
+import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
 
 export const ACTION_ERRORS = {
@@ -67,6 +67,10 @@ export class CreateUser extends Action {
   async run() {
     // set default init values
     this.payload.user.roi = NO_ROI
+
+    if (!this.payload.user.demographic_info) {
+      this.payload.user.demographic_info = USER_DEMOGRAPHIC
+    }
 
     return await this.dbClient.sdk.CreateUser(this.payload)
   }
