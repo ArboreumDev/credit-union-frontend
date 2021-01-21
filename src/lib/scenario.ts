@@ -10,6 +10,7 @@ import {
   runAction,
 } from "./gql_api_actions"
 import { LoanRequestStatus, SupporterStatus } from "./types"
+import yaml from "js-yaml"
 
 export interface System {
   users: User[]
@@ -54,7 +55,9 @@ export class Scenario {
     public actions: Action[],
     private dbClient: DbClient
   ) {}
-
+  static fromYAML(scenario: string, dbClient: DbClient) {
+    return this.fromJSON(yaml.load(scenario), dbClient)
+  }
   static fromJSON(scenario: System, dbClient: DbClient) {
     return new Scenario(scenario.users, scenario.actions, dbClient)
   }
@@ -189,16 +192,20 @@ export class Scenario {
     this.actions.push(action)
     return action
   }
-  async toJSON() {
-    const { scenario_actions } = await this.dbClient.sdk.GetAllActions()
-    return {
-      users: (await this.dbClient.allUsers).map((u) => ({
-        name: u.name,
-        email: u.email,
-        user_type: u.user_type,
-        demographic_info: u.demographic_info,
-      })),
-      actions: scenario_actions,
-    }
+}
+
+export const scenarioToJSON = async (dbClient: DbClient) => {
+  const { scenario_actions } = await dbClient.sdk.GetAllActions()
+  return {
+    users: (await dbClient.allUsers).map((u) => ({
+      name: u.name,
+      email: u.email,
+      user_type: u.user_type,
+      demographic_info: u.demographic_info,
+    })),
+    actions: scenario_actions,
   }
+}
+export const scenarioToYAML = async (dbClient: DbClient) => {
+  return yaml.dump(await scenarioToJSON(dbClient))
 }

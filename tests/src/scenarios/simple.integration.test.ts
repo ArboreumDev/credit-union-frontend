@@ -1,4 +1,4 @@
-import { Action, Scenario } from "lib/scenario"
+import { Action, Scenario, scenarioToYAML } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import { dbClient, sdk } from "../common/utils"
 
@@ -56,7 +56,7 @@ describe("Scenario unit tests", () => {
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
 })
-let generate_json
+let generate_yaml
 test("simple scenario", async () => {
   const scenario = Scenario.fromJSON(simple as System, dbClient)
   await scenario.initUsers()
@@ -67,10 +67,9 @@ test("simple scenario", async () => {
   expect(loan.state.repayments).toStrictEqual([
     scenario.actions[scenario.actions.length - 1].payload.amount,
   ])
-  generate_json = scenario.toYAML()
+  generate_yaml = scenarioToYAML(dbClient)
 })
 
 test("from generated", async () => {
-  const scenario = await execScenario(simple)
-  JSON.stringify(await scenario.toJSON())
+  const scenario = await Scenario.fromYAML(generate_yaml, dbClient)
 })
