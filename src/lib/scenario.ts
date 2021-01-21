@@ -3,6 +3,7 @@ import { User_Insert_Input } from "gql/sdk"
 import { addAndConfirmSupporter } from "../../tests/src/common/test_helpers"
 import { NO_ROI } from "./constant"
 import {
+  CreateUser,
   AcceptLoanOffer,
   ChangeBalance,
   MakeRepayment,
@@ -67,6 +68,7 @@ export class Scenario {
         onboarded: true,
         roi: NO_ROI,
       }
+      await this._runAction(CreateUser, { email: user.email }, { user })
       await this.dbClient.sdk.CreateUser({ user })
     }
   }

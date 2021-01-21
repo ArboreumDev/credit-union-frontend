@@ -65,11 +65,15 @@ export class CreateUser extends Action {
   minAuthLevel = AUTH_TYPE.ANY
 
   async run() {
-    // set default init values
-    this.payload.user.roi = NO_ROI
+    const user = this.payload.user
 
-    if (!this.payload.user.demographic_info) {
-      this.payload.user.demographic_info = USER_DEMOGRAPHIC
+    user.email = this.session.user.email
+
+    // set default init values
+    user.roi = NO_ROI
+
+    if (!user.demographic_info) {
+      user.demographic_info = USER_DEMOGRAPHIC
     }
 
     return await this.dbClient.sdk.CreateUser(this.payload)
