@@ -84,7 +84,7 @@ test("full_repayment scenario", async () => {
 })
 
 test("loan defaults scenario", async () => {
-  const scenario = execScenario(full_repayment_default_scenario as System)
+  const scenario = await execScenario(full_repayment_default_scenario as System)
   const { loanRequests } = await sdk.GetLoanRequests()
   expect(loanRequests[0].status).toBe("defaulted")
 })
