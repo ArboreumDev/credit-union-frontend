@@ -17,7 +17,6 @@ test("scenario", async () => {
   try {
     await scenario.executeAll()
   } catch (e) {
-    console.log(e)
     expect(e.data).toContain("ERROR: not enough free cash")
   }
 
