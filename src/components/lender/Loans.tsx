@@ -30,10 +30,11 @@ const roi_to_paid = (roi: RoI, loan_id: string) => {
 }
 
 const get_exposure = (roi: RoI, loan: LoanInfo) => {
-  const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
-  const expectedByUser =
-    roi.apr_on_loans.loans[loan.request_id].principal.remain
-  return expectedByUser ? expectedByUser / totalOutstanding : 0
+  // const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
+  // const expectedByUser =
+  //   roi.apr_on_loans.loans[loan.request_id].principal.remain
+  // return expectedByUser ? expectedByUser / totalOutstanding : 0
+  return 0
 }
 
 const InvestedLoans = ({ loans, roi }: Props) => (
@@ -65,7 +66,7 @@ const InvestedLoans = ({ loans, roi }: Props) => (
           <Text>
             {Math.round(
               100 * get_exposure(roi, loan.loan_request.loan as LoanInfo)
-            ) + "%"}
+            ) + "TODO%"}
           </Text>
         </Box>
         <Box verticalAlign="center" flex="1">
