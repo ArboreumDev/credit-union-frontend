@@ -10,7 +10,9 @@
     "hasura": "cd hasura && hasura",
     "migrate": "cd hasura && hasura migrate apply",
     "metadata": "cd hasura && hasura metadata apply",
-    "seeds": "cd hasura && hasura seeds apply"
+    "seeds": "cd hasura && hasura seeds apply",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.3",
@@ -38,11 +40,16 @@
     "typescript": "^4.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "@graphql-codegen/cli": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.8",
     "@graphql-codegen/typescript-graphql-request": "^2.0.3",
     "@graphql-codegen/typescript-operations": "^1.17.12",
+    "@storybook/addon-actions": "^6.1.14",
+    "@storybook/addon-essentials": "^6.1.14",
+    "@storybook/addon-links": "^6.1.14",
+    "@storybook/react": "^6.1.14",
     "@testing-library/jest-dom": "^5.11.6",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
@@ -50,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.2",
     "codecov": "^3.8.1",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
