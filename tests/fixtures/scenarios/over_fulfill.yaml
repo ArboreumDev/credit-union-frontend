@@ -38,6 +38,6 @@ actions:
   - id: 23
     action_type: REPAY_LOAN
     payload:
-      amount: 30000
+      amount: 30000 # this is more than the loan amount
       loan_id: 362f5eb1-ea2a-453e-8c92-a3f746c9fd00
       userEmail: amitabh@mail.com
