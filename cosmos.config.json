@@ -1,0 +1,6 @@
+{
+  "staticPath": "public",
+  "webpack": {
+    "overridePath": "./webpack.override.js"
+  }
+}
