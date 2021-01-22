@@ -70,5 +70,5 @@ test("over fulfill scenario", async () => {
   const scenario = await execScenario(
     "tests/fixtures/scenarios/over_fulfill.yaml"
   )
-  // TODO: should throw error
+  // TODO: should throw error @djudjuu
 })
