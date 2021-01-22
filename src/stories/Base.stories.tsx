@@ -1,6 +1,7 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { ChakraProvider } from "@chakra-ui/core"
+import { ChakraProvider, Button } from "@chakra-ui/core"
 import { Meta, Story } from "@storybook/react/types-6-0"
+import BorrowerHome from "components/borrower/BorrowerHome"
 import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import { Currency } from "components/common/Currency"
 import LenderHome from "components/lender/LenderHome"
@@ -10,13 +11,15 @@ import React from "react"
 
 export default {
   title: "LandingPageStory",
-  argTypes: { onClick: { action: "clicked" } },
-}
+  component: LenderHome,
+} as Meta
 
-const TemplateWithText = (args) => (
+export const LandingPageStory = () => (
   <ChakraProvider resetCSS>
-    <LenderHome user={Fixtures.LenderWithInvestments} />
+    <div>
+      <Currency amount={20000} />
+      {/* <BorrowerHome user={Fixtures.BorrowerLoanLive} /> */}
+      <LenderHome user={Fixtures.LenderWithInvestments} />
+    </div>
   </ChakraProvider>
 )
-
-export const LandingPageStory = () => TemplateWithText.bind({})
