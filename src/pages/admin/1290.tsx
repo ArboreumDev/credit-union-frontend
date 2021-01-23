@@ -10,17 +10,20 @@ import {
 import DbClient from "gql/db_client"
 import { fetchJSON } from "lib/api"
 import { COMPANY_NAME } from "lib/constant"
+import { scenarioToYAML } from "lib/scenario"
 import { GetServerSideProps } from "next"
 import { useState } from "react"
 import { GetAllUsersQuery } from "../../gql/sdk"
 
 export function TEdit(props: { code: any; onSubmit: any }) {
-  const [code, setState] = useState(JSON.stringify(props.code))
-
+  const [code, setState] = useState(props.code)
+  const count = (code.match(/\n/g) || []).length
+  if (typeof window === "undefined") return <></>
   return (
     <div>
       <Textarea
-        height={70}
+        height="auto"
+        rows={count}
         value={code}
         onChange={(v) => setState(v.target.value)}
       />
@@ -66,8 +69,8 @@ export default function Hello(props: {
         Scenario:
         <TEdit
           code={props.scenario}
-          onSubmit={(json: string) =>
-            fetchJSON({ url: "/api/admin/set_scenario", payload: { json } })
+          onSubmit={(yaml: string) =>
+            fetchJSON({ url: "/api/admin/set_scenario", payload: { yaml } })
           }
         />
       </Box>
@@ -81,6 +84,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbClient = new DbClient()
   const allUsers = await dbClient.allUsers
-  const scenario = await dbClient.generateScenarioObject()
+  const scenario = await scenarioToYAML(dbClient)
   return { props: { allUsers, scenario } }
 }

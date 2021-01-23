@@ -1,8 +1,5 @@
-import { Action, Scenario, System } from "lib/scenario"
+import { Action, Scenario, scenarioToJSON, scenarioToYAML } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
-import * as full_repayment_scenario from "../../fixtures/scenarios/full_repayment.json"
-import * as full_repayment_default_scenario from "../../fixtures/scenarios/full_repayment_default.json"
-import * as second_loan_reduces_exposure_scenario from "../../fixtures/scenarios/second_loan_reduce_expsoure.json"
 import { dbClient, sdk } from "../common/utils"
 
 beforeEach(async () => {
@@ -59,63 +56,30 @@ describe("Scenario unit tests", () => {
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
 })
-let generated_json
-test("simple scenario", async () => {
-  const scenario = Scenario.fromJSON(simple as System, dbClient)
-  await scenario.initUsers()
-  await scenario.executeAll()
 
-  const state = await dbClient.getSystemSummary()
-  const loan = Object.values(state.loans)[0]
-  expect(loan.state.repayments).toStrictEqual([
-    scenario.actions[scenario.actions.length - 1].payload.amount,
-  ])
-  generated_json = JSON.stringify(await scenario.toJSON())
-})
+describe("Scenario unit tests", () => {
+  let generate_yaml
+  test("simple scenario", async () => {
+    const scenario = Scenario.fromJSON(simple as System, dbClient)
+    await scenario.initUsers()
+    await scenario.executeAll()
 
-test("full_repayment scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    full_repayment_scenario as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
+    const state = await dbClient.getSystemSummary()
+    const loan = Object.values(state.loans)[0]
+    expect(loan.state.repayments).toStrictEqual([
+      scenario.actions[scenario.actions.length - 1].payload.amount,
+    ])
+    generate_yaml = await scenarioToYAML(dbClient)
+  })
 
-  const { loanRequests } = await sdk.GetLoanRequests()
-  expect(loanRequests[0].status).toBe("settled")
-})
+  test("from generated", async () => {
+    const scenario = await Scenario.fromYAML(generate_yaml, dbClient)
+    await sdk.ResetDB()
+    await scenario.initUsers()
+    await scenario.executeAll()
 
-test("loan defaults scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    full_repayment_default_scenario as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
-
-  const { loanRequests } = await sdk.GetLoanRequests()
-  expect(loanRequests[0].status).toBe("defaulted")
-})
-
-test("second loan exposure scenario", async () => {
-  const scenario = Scenario.fromJSON(
-    second_loan_reduces_exposure_scenario as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
-
-  const { loanRequests } = await sdk.GetLoanRequests()
-  expect(loanRequests[0].status).toBe("live")
-  expect(loanRequests[1].status).toBe("live")
-})
-
-test("from generated", async () => {
-  // console.log(generated_json)
-  const scenario = Scenario.fromJSON(
-    JSON.parse(generated_json) as System,
-    dbClient
-  )
-  await scenario.initUsers()
-  await scenario.executeAll()
+    // This won't be equal because generated json has much more info (action.id, demographic info, loan_ids are UUIDs )
+    // uncomment to compare
+    // expect(await scenarioToJSON(dbClient)).toStrictEqual(simple)
+  })
 })

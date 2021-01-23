@@ -14,9 +14,9 @@ export default async function handler(
     // TODO: Check if the session belongs to admin
     // const session = (await getSession({ req })) as Session
     try {
-      const { json } = req.body
+      const { yaml } = req.body
       if (process.env.ENVIRONMENT === "preview") await dbClient.sdk.ResetDB()
-      const scenario = Scenario.fromJSON(JSON.parse(json) as System, dbClient)
+      const scenario = Scenario.fromYAML(yaml, dbClient)
       await scenario.initUsers()
       await scenario.executeAll()
       res.status(200).json({ status: "success" })
