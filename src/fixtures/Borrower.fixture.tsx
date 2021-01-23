@@ -1,16 +1,10 @@
-import { ChakraProvider } from "@chakra-ui/core"
-// import { getDashboardComponent } from "pages/dashboard/[[...route]]"
-import LenderHome from "components/lender/LenderHome"
-import { Fixtures } from "lib/demo/fixtures"
-import React from "react"
-import { useEventListener } from "@chakra-ui/core"
+import BorrowerHome from "components/borrower/BorrowerHome"
 import LandingPage from "components/common/landing"
 import Onboarding from "components/common/onboarding/onboarding"
+import { Fixtures } from "lib/demo/fixtures"
 import { UserType } from "lib/types"
-import { useRouter } from "next/router"
-import { getDashboardComponent } from "pages/dashboard/[[...route]]"
 import LoginPage from "pages/login"
-import BorrowerHome from "components/borrower/BorrowerHome"
+import React from "react"
 
 export default {
   Landing: <LandingPage />,
