@@ -156,7 +156,7 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
 )
 interface YazaliDashboardProps {
   user: User
-  loading: boolean
+  loading?: boolean
 }
 export const YazaliDashboard = ({ user, loading }: YazaliDashboardProps) => {
   const totalAsset = user.invested + user.uninvested
