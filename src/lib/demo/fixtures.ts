@@ -193,7 +193,7 @@ export class Fixtures {
     loan_requests: [Fixtures.LoanRequestLive],
   }
 
-  static LenderWithInvestments = {
+  static SupporterWithPledge = {
     ...Fixtures.Lender,
     balance: 50000,
     corpus_share: 40000,
@@ -214,8 +214,8 @@ export class Fixtures {
     roi: ROI1,
   }
 
-  static LenderWithPledgeRequest = {
-    ...Fixtures.LenderWithInvestments,
+  static SupporterWithPledgeRequest = {
+    ...Fixtures.SupporterWithPledge,
     pledge_requests: [
       {
         request_id: "loan_req_id",
@@ -226,6 +226,126 @@ export class Fixtures {
           user: {
             email: "bigb@mail.com",
             name: "Amitabh Bachann",
+          },
+        },
+      },
+    ],
+  }
+
+  static LenderWithInvestments = {
+    ...Fixtures.Lender,
+    balance: 50000,
+    corpus_share: 40000,
+    roi: {
+      total_apr: {
+        apr: 0.17615691489362112,
+        interest: { paid: 1806.2560079, remain: 85.34120834 },
+        principal: { paid: 34414.21278758, remain: 5813.53562333 },
+      },
+      apr_on_loans: {
+        sum: {
+          apr: 0.17615691489362112,
+          interest: { paid: 1806.2560079, remain: 85.34120834 },
+          principal: { paid: 34414.21278758, remain: 5813.53562333 },
+        },
+        loans: {
+          "2d3b8514-38c2-461f-a6ec-470a72bae0b5": {
+            apr: 0.1761569148936211,
+            interest: { paid: 1806.2560079000004, remain: 85.34120833589125 },
+            principal: { paid: 34414.21278758, remain: 5813.535623334215 },
+          },
+        },
+      },
+      apr_on_pledges: {
+        sum: {
+          apr: 0,
+          interest: { paid: 0, remain: 0 },
+          principal: { paid: 0, remain: 0 },
+        },
+        loans: {},
+      },
+    },
+    active_loans: [
+      {
+        loan_id: "2d3b8514-38c2-461f-a6ec-470a72bae0b5",
+        lender_amount: 40000,
+        loan_request: {
+          status: "live",
+          amount: 50000,
+          loan: {
+            state: {
+              escrow: 2337.501130999998,
+              repayments: [5800, 8800, 10000, 10000, 10412],
+              request_id: "2d3b8514-38c2-461f-a6ec-470a72bae0b5",
+              borrower_collateral: 0,
+              supporter_cash_encumbered: 0,
+              supporter_portfolio_encumbered: 0,
+            },
+            terms: {
+              tenor: 6,
+              amount: 50000,
+              corpus_apr: 0.17615691489361698,
+              request_id: "2d3b8514-38c2-461f-a6ec-470a72bae0b5",
+              supporters: [
+                {
+                  apr_delta: 1.1,
+                  supporter_id: "7c98f0bb-327a-499f-8f34-459f0e58e7b5",
+                  trust_amount: 10000,
+                  demographic_info: null,
+                  recommendation_risk: {
+                    beta_params: [5, 2],
+                    kumr_params: [4, 5],
+                  },
+                },
+              ],
+              penalty_apr: 0.055,
+              borrower_apr: 0.1734042553191489,
+              corpus_share: 0.8,
+              borrower_info: {
+                borrower_id: "4650b5cf-59e2-4d21-afad-c38dd861a676",
+                demographic_info: {
+                  income: 300,
+                  credit_score: 600,
+                  education_years: 3,
+                },
+              },
+              supporter_apr: 0.17065159574468083,
+              supporter_lag: 1,
+              supporter_share: 0.2,
+              borrower_collateral: 0,
+              num_annual_cmpnd_prds: 12,
+            },
+            schedule: {
+              apr: {
+                corpus: 0.1786346155923633,
+                supporter: 0.19017770362395675,
+              },
+              request_id: "2d3b8514-38c2-461f-a6ec-470a72bae0b5",
+              corpus_view: null,
+              borrower_view: {
+                total_payments: { paid: 45012, remain: 7692.596309800683 },
+                corpus_interest: {
+                  paid: 2028.4432167502582,
+                  remain: 85.34120833589125,
+                },
+                corpus_principal: {
+                  paid: 34186.46437666578,
+                  remain: 5813.535623334215,
+                },
+                supporter_interest: {
+                  paid: 552.0763506701616,
+                  remain: 25.150756214919745,
+                },
+                borrower_collateral: { paid: 0, remain: 0 },
+                supporter_principal: {
+                  paid: 8231.431278084343,
+                  remain: 1768.5687219156566,
+                },
+              },
+              supporter_view: null,
+              next_borrower_payment: 7692.596309800682,
+            },
+            request_id: "2d3b8514-38c2-461f-a6ec-470a72bae0b5",
           },
         },
       },

@@ -12,10 +12,10 @@ export default {
   SignIn: <LoginPage />,
   Onboarding: <Onboarding user={Fixtures.Lender} userType={UserType.Lender} />,
   "Add funds": <LenderHome user={Fixtures.Lender} initPanelIdx={1} />,
-  "With Investment": <LenderHome user={Fixtures.LenderWithInvestments} />,
+  "With Investment": <LenderHome user={Fixtures.SupporterWithPledge} />,
   "With No Investment": <LenderHome user={Fixtures.Lender} />,
   "Supporter with notification": (
-    <LenderHome user={Fixtures.LenderWithPledgeRequest} />
+    <LenderHome user={Fixtures.SupporterWithPledgeRequest} />
   ),
   Profile: <LenderHome user={Fixtures.Lender} initPanelIdx={2} />,
 }
