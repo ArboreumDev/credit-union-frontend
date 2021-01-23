@@ -13,6 +13,8 @@ import LoginPage from "pages/login"
 import BorrowerHome from "components/borrower/BorrowerHome"
 
 export default {
+  Landing: <LandingPage />,
+  SignIn: <LoginPage />,
   Onboarding: (
     <Onboarding user={Fixtures.Borrower} userType={UserType.Borrower} />
   ),

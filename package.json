@@ -1,5 +1,5 @@
 {
-  "name": "with-mobx-state-tree-typescript",
+  "name": "arboreum-frontend",
   "version": "1.0.0",
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next",
