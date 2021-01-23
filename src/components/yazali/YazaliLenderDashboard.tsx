@@ -154,37 +154,11 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
-const LenderDashboard = (props: { lenderId: string }) => {
-  const initUser: User = {
-    invested: 0,
-    uninvested: 0,
-    name: "",
-    lendings: [],
-  }
-  const [user, setLender] = useState(initUser)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchAPY = async () => {
-      const url = "/api/yazali/lender"
-      const user = await fetchJSON({
-        url,
-        payload: { lenderId: props.lenderId },
-      })
-      setLender(user)
-      setLoading(false)
-    }
-    try {
-      console.log("fetching...")
-      fetchAPY()
-    } catch (error) {
-      console.log(
-        error,
-        "Cannot query Notion backend to fetch actual APY for user."
-      )
-    }
-  }, [])
-
+interface YazaliDashboardProps {
+  user: User
+  loading: boolean
+}
+export const YazaliDashboard = ({ user, loading }: YazaliDashboardProps) => {
   const totalAsset = user.invested + user.uninvested
   const percInvested = dec_to_perc(user.invested / totalAsset, 0)
   const percUninvested = dec_to_perc(user.uninvested / totalAsset, 0)
@@ -263,6 +237,41 @@ const LenderDashboard = (props: { lenderId: string }) => {
       )}
     </>
   )
+}
+
+const LenderDashboard = (props: { lenderId: string }) => {
+  const initUser: User = {
+    invested: 0,
+    uninvested: 0,
+    name: "",
+    lendings: [],
+  }
+  const [user, setLender] = useState(initUser)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchAPY = async () => {
+      const url = "/api/yazali/lender"
+      const user = await fetchJSON({
+        url,
+        payload: { lenderId: props.lenderId },
+      })
+      console.log(user)
+      setLender(user)
+      setLoading(false)
+    }
+    try {
+      console.log("fetching...")
+      fetchAPY()
+    } catch (error) {
+      console.log(
+        error,
+        "Cannot query Notion backend to fetch actual APY for user."
+      )
+    }
+  }, [])
+
+  return <YazaliDashboard user={user} loading={loading} />
 }
 
 export default LenderDashboard
