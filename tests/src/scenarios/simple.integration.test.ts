@@ -1,4 +1,4 @@
-import { Action, Scenario, scenarioToYAML } from "lib/scenario"
+import { Action, Scenario, scenarioToJSON, scenarioToYAML } from "lib/scenario"
 import * as simple from "../../fixtures/scenarios/simple.json"
 import { dbClient, sdk } from "../common/utils"
 
@@ -56,20 +56,30 @@ describe("Scenario unit tests", () => {
     expect(loan.state.repayments).toStrictEqual([repay_action.payload.amount])
   })
 })
-let generate_yaml
-test("simple scenario", async () => {
-  const scenario = Scenario.fromJSON(simple as System, dbClient)
-  await scenario.initUsers()
-  await scenario.executeAll()
 
-  const state = await dbClient.getSystemSummary()
-  const loan = Object.values(state.loans)[0]
-  expect(loan.state.repayments).toStrictEqual([
-    scenario.actions[scenario.actions.length - 1].payload.amount,
-  ])
-  generate_yaml = scenarioToYAML(dbClient)
-})
+describe("Scenario unit tests", () => {
+  let generate_yaml
+  test("simple scenario", async () => {
+    const scenario = Scenario.fromJSON(simple as System, dbClient)
+    await scenario.initUsers()
+    await scenario.executeAll()
 
-test("from generated", async () => {
-  const scenario = await Scenario.fromYAML(generate_yaml, dbClient)
+    const state = await dbClient.getSystemSummary()
+    const loan = Object.values(state.loans)[0]
+    expect(loan.state.repayments).toStrictEqual([
+      scenario.actions[scenario.actions.length - 1].payload.amount,
+    ])
+    generate_yaml = await scenarioToYAML(dbClient)
+  })
+
+  test("from generated", async () => {
+    const scenario = await Scenario.fromYAML(generate_yaml, dbClient)
+    await sdk.ResetDB()
+    await scenario.initUsers()
+    await scenario.executeAll()
+
+    // This won't be equal because generated json has much more info (action.id, demographic info, loan_ids are UUIDs )
+    // uncomment to compare
+    // expect(await scenarioToJSON(dbClient)).toStrictEqual(simple)
+  })
 })
