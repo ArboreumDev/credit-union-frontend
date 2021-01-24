@@ -1,4 +1,7 @@
-import { YazaliDashboard } from "components/yazali/YazaliLenderDashboard"
+import {
+  YazaliDashboard,
+  PledgeInvestments,
+} from "components/yazali/YazaliLenderDashboard"
 
 const user = {
   name: "Renu Paruthi",
@@ -6,7 +9,13 @@ const user = {
   invested: 126000,
   APY: 14.6,
   lendings: [
-    { amount: 4000, borrower: "NADENDLA BHANU PRASAD", loan_amount: 40000 },
+    {
+      amount: 4000,
+      borrower: "NADENDLA BHANU PRASAD",
+      loan_amount: 40000,
+      repayments: [{ amount: 1000, date: 1603411200 }],
+      maturity_at: 1603411200,
+    },
     { amount: 8000, borrower: "YAMPARALA Hemanth PRASAD", loan_amount: 56000 },
     {
       amount: 6000,
@@ -51,4 +60,7 @@ const user = {
     },
   ],
 }
-export default <YazaliDashboard user={user} />
+export default {
+  dashboard: <YazaliDashboard user={user} />,
+  pledgesTable: <PledgeInvestments investments={user.lendings} />,
+}

@@ -32,12 +32,18 @@ import React, { useEffect, useState } from "react"
 import { Currency } from "../common/Currency"
 import AppBar from "./AppBar"
 
+interface Repayment {
+  date: number
+  amount: number
+}
+
 interface Investment {
   amount: number
   borrower: string
   invested_at?: number
   maturity_at?: number
   loan_amount: number
+  repayments?: Repayment[]
 }
 interface User {
   invested: number
@@ -46,8 +52,15 @@ interface User {
   lendings: Investment[]
 }
 
-const PledgeInvestments = (props: { investments: Investment[] }) => {
-  const n_rows = 3
+export const PledgeInvestments = (props: { investments: Investment[] }) => {
+  const cols = [
+    "Name",
+    "Amount",
+    "Total Exposure",
+    "Total Repaid",
+    "Maturity Date",
+  ]
+
   return (
     <Stack spacing="15px">
       <Box>
@@ -55,43 +68,18 @@ const PledgeInvestments = (props: { investments: Investment[] }) => {
         <Text>More granular details are coming soon.</Text>
       </Box>
 
-      <Grid templateColumns={"repeat(" + n_rows + ", 1fr)"} gap={3}>
-        <Box
-          verticalAlign="center"
-          width="100%"
-          textAlign="center"
-          bg="gray.100"
-        >
-          Name
-        </Box>
-        <Box width="100%" textAlign="center" bg="gray.100">
-          Amount
-        </Box>
-        <Box width="100%" textAlign="center" bg="gray.100">
-          Total Exposure
-        </Box>
-        {/* 
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Investment Date
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        ROI
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Tenor (in months)
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Maturity Date
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Maturity Amount
-      </Box> */}
+      <Grid templateColumns={"repeat(" + cols.length + ", 1fr)"} gap={3}>
+        {cols.map((c) => (
+          <Box width="100%" textAlign="center" bg="gray.100" key={"col" + c}>
+            {c}
+          </Box>
+        ))}
       </Grid>
 
       {props.investments.map((pledge, idx) => (
         <Grid
           key={"inv_" + idx}
-          templateColumns={"repeat(" + n_rows + ", 1fr)"}
+          templateColumns={"repeat(" + cols.length + ", 1fr)"}
           gap={3}
         >
           <Box verticalAlign="center" width="100%" textAlign="center">
@@ -103,21 +91,14 @@ const PledgeInvestments = (props: { investments: Investment[] }) => {
           <Box width="100%" textAlign="center">
             {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
           </Box>
-          {/* <Box width="100%" textAlign="center">
-          2020-12-1
-        </Box>
-        <Box width="100%" textAlign="center">
-          10
-        </Box>
-        <Box width="100%" textAlign="center">
-          5
-        </Box>
-        <Box width="100%" textAlign="center">
-          2021-3-1
-        </Box>
-        <Box width="100%" textAlign="center">
-          <Currency amount={pledge.amount + 10} />
-        </Box> */}
+          <Box width="100%" textAlign="center">
+            {pledge.repayments &&
+              pledge.repayments.map((r) => r.amount).reduce((x, y) => x + y)}
+          </Box>
+          <Box width="100%" textAlign="center">
+            {pledge.maturity_at && new Date(1603411200).toLocaleDateString()}
+            {!pledge.maturity_at && new Date("03/01/2021").toLocaleDateString()}
+          </Box>
         </Grid>
       ))}
     </Stack>
