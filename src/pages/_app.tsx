@@ -14,17 +14,6 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Arboreum Sandbox</title>
         <meta name="description" content="Invest. Borrow."></meta>
-        {typeof window !== "undefined" &&
-          window.location.hostname == "app.arboreum.dev" && (
-            <>
-              <script
-                async
-                defer
-                data-website-id={ANALYTICS_WEBSITE_IDS.production}
-                src="https://analytics.arboreum.dev/umami.js"
-              />
-            </>
-          )}
         {typeof window !== "undefined" && (
           <>
             <script
