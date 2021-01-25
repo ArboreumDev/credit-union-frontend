@@ -2,10 +2,8 @@ import { RiskParams, RoI } from "./types"
 
 // for local development
 // export const DEV_URL = "http://127.0.0.1:3001"
-export const ANALYTICS_WEBSITE_IDS = {
-  production: "d4c4d702-272d-443c-b194-c185f90c9753",
-  preview: "fc4f0d9b-431a-4c3f-b81f-def8c2d0bb58",
-}
+
+export const GA_TRACKING_ID = "G-F2DRPCK8DM"
 
 // Local Storage Keys
 export const USER_TYPE_KEY = "userType"

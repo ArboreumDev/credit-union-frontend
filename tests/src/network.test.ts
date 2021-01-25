@@ -1,6 +1,5 @@
 import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
 import { addNetwork, setupScenario } from "../../src/lib/network_helpers"
-import { EDGE_STATUS } from "../../src/lib/types"
 import { BASIC_NETWORK } from "../fixtures/basic_network"
 import { dbClient, sdk } from "./common/utils"
 
