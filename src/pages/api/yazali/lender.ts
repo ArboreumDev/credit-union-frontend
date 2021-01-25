@@ -12,7 +12,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { lenderId } = req.body
     try {
-      const url = "http://app.arbo.link:8000/lender/" + lenderId
+      const url = "http://localhost:8081/lender/" + lenderId
       const data = await fetchJSON({ url })
       res.status(200).json(data)
     } catch (error) {

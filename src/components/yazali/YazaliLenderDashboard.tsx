@@ -41,10 +41,13 @@ interface Investment {
   amount: number
   borrower: string
   invested_at?: number
-  maturity_at?: number
+  maturity?: number
   loan_amount: number
-  repayments?: Repayment[]
+  total_repayed_amount: number
+  expected_repayed_amount: number
+  APR: number
 }
+
 interface User {
   invested: number
   uninvested: number
@@ -57,6 +60,7 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
     "Name",
     "Amount",
     "Total Exposure",
+    "Expected Repayment",
     "Total Repaid",
     "Maturity Date",
   ]
@@ -92,12 +96,15 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
             {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
           </Box>
           <Box width="100%" textAlign="center">
-            {pledge.repayments &&
-              pledge.repayments.map((r) => r.amount).reduce((x, y) => x + y)}
+            <Currency amount={pledge.expected_repayed_amount} />
           </Box>
           <Box width="100%" textAlign="center">
-            {pledge.maturity_at && new Date(1603411200).toLocaleDateString()}
-            {!pledge.maturity_at && new Date("03/01/2021").toLocaleDateString()}
+            <Currency amount={pledge.total_repayed_amount} />
+          </Box>
+          <Box width="100%" textAlign="center">
+            {pledge.maturity &&
+              new Date(pledge.maturity * 1000).toLocaleDateString()}
+            {!pledge.maturity && new Date("03/01/2021").toLocaleDateString()}
           </Box>
         </Grid>
       ))}
@@ -210,7 +217,7 @@ export const YazaliDashboard = ({ user, loading }: YazaliDashboardProps) => {
                 </Center>
               </Wrap>
             </>
-            <Box maxW="xl">
+            <Box minW="xl">
               <PledgeInvestments investments={user.lendings} />
             </Box>
           </Stack>
@@ -231,7 +238,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchAPY = async () => {
+    const fetchLender = async () => {
       const url = "/api/yazali/lender"
       const user = await fetchJSON({
         url,
@@ -243,12 +250,9 @@ const LenderDashboard = (props: { lenderId: string }) => {
     }
     try {
       console.log("fetching...")
-      fetchAPY()
+      fetchLender()
     } catch (error) {
-      console.log(
-        error,
-        "Cannot query Notion backend to fetch actual APY for user."
-      )
+      console.log(error, "Cannot query Notion backend for user.")
     }
   }, [])
 
