@@ -1,3 +1,36 @@
+# Vercel
+
+Make json file like
+
+- `production/.env.json`
+
+```json
+{
+  "DATABASE_URL": "DATABASE_URL",
+  "NEXTAUTH_URL": "NEXTAUTH_URL",
+  "HASURA_ADMIN_SECRET": "HASURA_ADMIN_SECRET",
+  "GRAPHQL_ENDPOINT": "GRAPHQL_ENDPOINT",
+  "GOOGLE_CLIENT_ID": "GOOGLE_CLIENT_ID",
+  "GOOGLE_CLIENT_SECRET": "GOOGLE_CLIENT_SECRET",
+  "EMAIL_SERVER_PORT": "EMAIL_SERVER_PORT",
+  "EMAIL_FROM": "EMAIL_FROM",
+  "EMAIL_SERVER_USER": "EMAIL_SERVER_USER",
+  "EMAIL_SERVER_PASSWORD": "EMAIL_SERVER_PASSWORD",
+  "EMAIL_SERVER_HOST": "EMAIL_SERVER_HOST",
+  "AWS_ACCESS_KEY_ID_APP": "AWS_ACCESS_KEY_ID_APP",
+  "AWS_SECRET_ACCESS_KEY_APP": "AWS_SECRET_ACCESS_KEY_APP",
+  "ENVIRONMENT": "ENVIRONMENT",
+  "SWARMAI_URL": "SWARMAI_URL"
+}
+```
+
+## Deploy to vercel
+
+```bash
+python production/setup_vercel.py
+vercel --prod
+```
+
 # Steps to run a fresh production hasura
 
 - Create pg db
@@ -34,33 +67,3 @@ hasura console
 
 Hasura cloud supports 60 reqs/min. Heroku free only allows 17h uptime per day.
 When ready to scale, we can use AWS. Making it secure seemed like a hassle, so I didn't go through with it.
-
-# Vercel
-
-Make json file like
-
-- `production/.env.json`
-
-```json
-{
-  "DATABASE_URL": "DATABASE_URL",
-  "NEXTAUTH_URL": "NEXTAUTH_URL",
-  "HASURA_ADMIN_SECRET": "HASURA_ADMIN_SECRET",
-  "GRAPHQL_ENDPOINT": "GRAPHQL_ENDPOINT",
-  "GOOGLE_CLIENT_ID": "GOOGLE_CLIENT_ID",
-  "GOOGLE_CLIENT_SECRET": "GOOGLE_CLIENT_SECRET",
-  "EMAIL_SERVER_PORT": "EMAIL_SERVER_PORT",
-  "EMAIL_FROM": "EMAIL_FROM",
-  "EMAIL_SERVER_USER": "EMAIL_SERVER_USER",
-  "EMAIL_SERVER_PASSWORD": "EMAIL_SERVER_PASSWORD",
-  "EMAIL_SERVER_HOST": "EMAIL_SERVER_HOST",
-  "AWS_ACCESS_KEY_ID_APP": "AWS_ACCESS_KEY_ID_APP",
-  "AWS_SECRET_ACCESS_KEY_APP": "AWS_SECRET_ACCESS_KEY_APP",
-  "ENVIRONMENT": "ENVIRONMENT",
-  "SWARMAI_URL": "SWARMAI_URL"
-}
-```
-
-```
-python production/setup_vercel.py
-```
