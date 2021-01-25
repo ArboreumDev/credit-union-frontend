@@ -63,6 +63,7 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
     "Expected Repayment",
     "Total Repaid",
     "Maturity Date",
+    "APR",
   ]
 
   return (
@@ -105,6 +106,9 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
             {pledge.maturity &&
               new Date(pledge.maturity * 1000).toLocaleDateString()}
             {!pledge.maturity && new Date("03/01/2021").toLocaleDateString()}
+          </Box>
+          <Box width="100%" textAlign="center">
+            {dec_to_perc(pledge.APR)} %
           </Box>
         </Grid>
       ))}
