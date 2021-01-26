@@ -58,9 +58,9 @@ interface User {
 export const PledgeInvestments = (props: { investments: Investment[] }) => {
   const cols = [
     "Name",
-    "Amount",
+    "Amount Lent",
     "Total Exposure",
-    "Expected Repayment",
+    // "Expected Repayment",
     "Total Repaid",
     "Maturity Date",
     "APR",
@@ -96,9 +96,9 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
           <Box width="100%" textAlign="center">
             {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
           </Box>
-          <Box width="100%" textAlign="center">
+          {/* <Box width="100%" textAlign="center">
             <Currency amount={pledge.expected_repayed_amount} />
-          </Box>
+          </Box> */}
           <Box width="100%" textAlign="center">
             <Currency amount={pledge.total_repayed_amount} />
           </Box>

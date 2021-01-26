@@ -7,10 +7,10 @@ const user = {
   name: "Renu Paruthi",
   uninvested: 24000,
   invested: 126000,
-  APY: 14.6,
+  APY: 14.62,
   lendings: [
     {
-      amount: 4000,
+      amount: 4010,
       borrower: "NADENDLA BHANU PRASAD",
       loan_amount: 40000,
       maturity: 1590962400,
