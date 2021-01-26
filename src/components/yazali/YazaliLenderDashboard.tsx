@@ -32,13 +32,22 @@ import React, { useEffect, useState } from "react"
 import { Currency } from "../common/Currency"
 import AppBar from "./AppBar"
 
+interface Repayment {
+  date: number
+  amount: number
+}
+
 interface Investment {
   amount: number
   borrower: string
   invested_at?: number
-  maturity_at?: number
+  maturity?: number
   loan_amount: number
+  total_repayed_amount: number
+  expected_repayed_amount: number
+  APR: number
 }
+
 interface User {
   invested: number
   uninvested: number
@@ -46,52 +55,35 @@ interface User {
   lendings: Investment[]
 }
 
-const PledgeInvestments = (props: { investments: Investment[] }) => {
-  const n_rows = 3
+export const PledgeInvestments = (props: { investments: Investment[] }) => {
+  const cols = [
+    "Name",
+    "Amount Lent",
+    "Total Exposure",
+    // "Expected Repayment",
+    "Total Repaid",
+    "Maturity Date",
+    "APR",
+  ]
+
   return (
     <Stack spacing="15px">
       <Box>
         <Heading size="md">Investments</Heading>
-        <Text>More granular details are coming soon.</Text>
       </Box>
 
-      <Grid templateColumns={"repeat(" + n_rows + ", 1fr)"} gap={3}>
-        <Box
-          verticalAlign="center"
-          width="100%"
-          textAlign="center"
-          bg="gray.100"
-        >
-          Name
-        </Box>
-        <Box width="100%" textAlign="center" bg="gray.100">
-          Amount
-        </Box>
-        <Box width="100%" textAlign="center" bg="gray.100">
-          Total Exposure
-        </Box>
-        {/* 
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Investment Date
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        ROI
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Tenor (in months)
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Maturity Date
-      </Box>
-      <Box width="100%" textAlign="center" bg="gray.100">
-        Maturity Amount
-      </Box> */}
+      <Grid templateColumns={"repeat(" + cols.length + ", 1fr)"} gap={3}>
+        {cols.map((c) => (
+          <Box width="100%" textAlign="center" bg="gray.100" key={"col" + c}>
+            {c}
+          </Box>
+        ))}
       </Grid>
 
       {props.investments.map((pledge, idx) => (
         <Grid
           key={"inv_" + idx}
-          templateColumns={"repeat(" + n_rows + ", 1fr)"}
+          templateColumns={"repeat(" + cols.length + ", 1fr)"}
           gap={3}
         >
           <Box verticalAlign="center" width="100%" textAlign="center">
@@ -104,20 +96,19 @@ const PledgeInvestments = (props: { investments: Investment[] }) => {
             {dec_to_perc(pledge.amount / (pledge.loan_amount * 1.25))} %
           </Box>
           {/* <Box width="100%" textAlign="center">
-          2020-12-1
-        </Box>
-        <Box width="100%" textAlign="center">
-          10
-        </Box>
-        <Box width="100%" textAlign="center">
-          5
-        </Box>
-        <Box width="100%" textAlign="center">
-          2021-3-1
-        </Box>
-        <Box width="100%" textAlign="center">
-          <Currency amount={pledge.amount + 10} />
-        </Box> */}
+            <Currency amount={pledge.expected_repayed_amount} />
+          </Box> */}
+          <Box width="100%" textAlign="center">
+            <Currency amount={pledge.total_repayed_amount} />
+          </Box>
+          <Box width="100%" textAlign="center">
+            {pledge.maturity &&
+              new Date(pledge.maturity * 1000).toLocaleDateString()}
+            {!pledge.maturity && new Date("03/01/2021").toLocaleDateString()}
+          </Box>
+          <Box width="100%" textAlign="center">
+            {dec_to_perc(pledge.APR)} %
+          </Box>
         </Grid>
       ))}
     </Stack>
@@ -154,37 +145,11 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
     </Box>
   </Flex>
 )
-const LenderDashboard = (props: { lenderId: string }) => {
-  const initUser: User = {
-    invested: 0,
-    uninvested: 0,
-    name: "",
-    lendings: [],
-  }
-  const [user, setLender] = useState(initUser)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchAPY = async () => {
-      const url = "/api/yazali/lender"
-      const user = await fetchJSON({
-        url,
-        payload: { lenderId: props.lenderId },
-      })
-      setLender(user)
-      setLoading(false)
-    }
-    try {
-      console.log("fetching...")
-      fetchAPY()
-    } catch (error) {
-      console.log(
-        error,
-        "Cannot query Notion backend to fetch actual APY for user."
-      )
-    }
-  }, [])
-
+interface YazaliDashboardProps {
+  user: User
+  loading?: boolean
+}
+export const YazaliDashboard = ({ user, loading }: YazaliDashboardProps) => {
   const totalAsset = user.invested + user.uninvested
   const percInvested = dec_to_perc(user.invested / totalAsset, 0)
   const percUninvested = dec_to_perc(user.uninvested / totalAsset, 0)
@@ -255,7 +220,7 @@ const LenderDashboard = (props: { lenderId: string }) => {
                 </Center>
               </Wrap>
             </>
-            <Box maxW="xl">
+            <Box minW="xl">
               <PledgeInvestments investments={user.lendings} />
             </Box>
           </Stack>
@@ -263,6 +228,42 @@ const LenderDashboard = (props: { lenderId: string }) => {
       )}
     </>
   )
+}
+
+const LenderDashboard = (props: { lenderId: string }) => {
+  const initUser: User = {
+    invested: 0,
+    uninvested: 0,
+    name: "",
+    lendings: [],
+  }
+  const [user, setLender] = useState(initUser)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchLender = async (cached?: boolean) => {
+      const url =
+        "http://localhost:8081/" +
+        (cached ? "cached_" : "") +
+        "lender/" +
+        props.lenderId
+      const user = await fetchJSON({ url })
+      console.log(user)
+      if (user.lendings) {
+        setLender(user)
+        setLoading(false)
+      }
+    }
+    try {
+      console.log("fetching...")
+      fetchLender(true)
+      fetchLender()
+    } catch (error) {
+      console.log(error, "Cannot query Notion backend for user.")
+    }
+  }, [])
+
+  return <YazaliDashboard user={user} loading={loading} />
 }
 
 export default LenderDashboard

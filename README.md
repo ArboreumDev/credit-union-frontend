@@ -66,3 +66,7 @@ To automatically create seeds from the current db state:
 `hasura seeds create user_seed --from-table user`
 `hasura seeds create loan_request_seeds --from-table loan_requests`
 etc.
+
+## Deploy
+
+[Deployment Readme](production/README.md)
