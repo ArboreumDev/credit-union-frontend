@@ -247,7 +247,6 @@ const LenderDashboard = (props: { lenderId: string }) => {
         (cached ? "cached_" : "") +
         "lender/" +
         props.lenderId
-      console.log(url)
       const user = await fetchJSON({ url })
       console.log(user)
       if (user.lendings) {
