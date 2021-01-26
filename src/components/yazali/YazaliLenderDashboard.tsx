@@ -70,7 +70,6 @@ export const PledgeInvestments = (props: { investments: Investment[] }) => {
     <Stack spacing="15px">
       <Box>
         <Heading size="md">Investments</Heading>
-        <Text>More granular details are coming soon.</Text>
       </Box>
 
       <Grid templateColumns={"repeat(" + cols.length + ", 1fr)"} gap={3}>
@@ -242,18 +241,23 @@ const LenderDashboard = (props: { lenderId: string }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchLender = async () => {
-      const url = "/api/yazali/lender"
-      const user = await fetchJSON({
-        url,
-        payload: { lenderId: props.lenderId },
-      })
+    const fetchLender = async (cached?: boolean) => {
+      const url =
+        "http://localhost:8081/" +
+        (cached ? "cached_" : "") +
+        "lender/" +
+        props.lenderId
+      console.log(url)
+      const user = await fetchJSON({ url })
       console.log(user)
-      setLender(user)
-      setLoading(false)
+      if (user.lendings) {
+        setLender(user)
+        setLoading(false)
+      }
     }
     try {
       console.log("fetching...")
+      fetchLender(true)
       fetchLender()
     } catch (error) {
       console.log(error, "Cannot query Notion backend for user.")

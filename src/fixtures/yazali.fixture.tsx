@@ -1,4 +1,4 @@
-import {
+import LenderDashboard, {
   YazaliDashboard,
   PledgeInvestments,
 } from "components/yazali/YazaliLenderDashboard"
@@ -168,4 +168,5 @@ const user = {
 export default {
   dashboard: <YazaliDashboard user={user} />,
   pledgesTable: <PledgeInvestments investments={user.lendings} />,
+  // dashboardLive: <LenderDashboard lenderId={"19b15f38-eaa8-48f6-9bba-ac1d95b6c0f7"}/>
 }
