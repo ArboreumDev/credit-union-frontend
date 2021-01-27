@@ -1,0 +1,58 @@
+--- # Full repayment of one loan
+users:
+  - name: a b
+    email: amitabh@mail.com
+    user_type: borrower
+  - name: d p
+    email: deepika@mail.com
+    user_type: lender
+  - name: s k
+    email: salman@mail.com
+    user_type: lender
+actions:
+  - action_type: ADJUST_BALANCES
+    payload:
+      userEmail: salman@mail.com
+      balanceDelta: "20000"
+  - action_type: ADJUST_BALANCES
+    payload:
+      userEmail: deepika@mail.com
+      balanceDelta: "150000"
+  - action_type: CONFIRM_LOAN
+    payload:
+      amount: 50000
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+      supporters:
+        - email: salman@mail.com
+          pledge_amount: 10000
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "5800"
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "8800"
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "10000"
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "10000"
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "10412"
+      loan_id: lr1
+      userEmail: amitabh@mail.com
+  - action_type: REPAY_LOAN
+    payload:
+      amount: "7693"
+      loan_id: lr1
+      userEmail: amitabh@mail.com

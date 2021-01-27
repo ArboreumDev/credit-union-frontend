@@ -35,7 +35,6 @@ export const NewPledgeRequest = ({ pledgeRequest, availableFunds }: Params) => {
   )
 
   useEffect(() => {
-    console.log("here", availableFunds, pledgeAmount)
     setPledgeDisabled(availableFunds < pledgeAmount)
   }, [pledgeAmount])
 

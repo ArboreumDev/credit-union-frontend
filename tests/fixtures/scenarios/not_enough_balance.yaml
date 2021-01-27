@@ -1,0 +1,25 @@
+--- # System doesn't have balance to fund loan
+users:
+  - email: l1
+    user_type: lender
+  - email: s1
+    user_type: lender
+  - email: b1
+    user_type: borrower
+actions:
+  - action_type: ADJUST_BALANCES
+    payload:
+      userEmail: s1
+      balanceDelta: 5000
+  - action_type: CONFIRM_LOAN
+    payload:
+      userEmail: b1
+      loan_id: lr1
+      amount: 20000
+      supporters:
+        - email: s1
+          pledge_amount: 5000
+  - action_type: REPAY_LOAN
+    payload:
+      loan_id: lr1
+      amount: 5000

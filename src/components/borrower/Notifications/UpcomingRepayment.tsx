@@ -15,7 +15,7 @@ export default function UpcomingRepayment() {
         Upcoming Repayment!
       </AlertTitle>
       <AlertDescription maxWidth="sm">
-        Your installment is expected by 30 November, 2020. If not received, this
+        Your repayment is expected by 31st January, 2021. If not received, this
         amount will be deducted from your salary.
       </AlertDescription>
     </Alert>

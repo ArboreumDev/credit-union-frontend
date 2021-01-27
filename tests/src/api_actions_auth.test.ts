@@ -25,7 +25,7 @@ describe("Create new user", () => {
     }
     const res: CreateUserMutation = (await runAction(
       CreateUser.Name,
-      undefined,
+      { user: { email: payload.user.email } },
       payload,
       dbClient
     )) as CreateUserMutation

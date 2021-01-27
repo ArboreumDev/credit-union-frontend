@@ -13,7 +13,6 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/core"
-import { USER_DEMOGRAPHIC, NO_ROI } from "lib/constant"
 import { CreateUser } from "lib/gql_api_actions"
 import { UserType } from "lib/types"
 import { useRouter } from "next/dist/client/router"
@@ -45,11 +44,9 @@ export default function Onboarding({ user, userType }: Params) {
     CreateUser.fetch({
       user: {
         name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
-        email: user.email,
         user_type: userType,
         phone: data.phone,
         onboarded: true,
-        demographic_info: USER_DEMOGRAPHIC,
       },
     })
       .then((res) => {
