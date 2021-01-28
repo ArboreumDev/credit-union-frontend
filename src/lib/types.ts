@@ -194,7 +194,7 @@ export type LoanScheduleSummary = {
   supporter_view?: any
   corpus_view?: any
   apr: APR
-  full_single_repay?: number
+  full_single_repay: number
 }
 
 // =========== End of risk module types ========
