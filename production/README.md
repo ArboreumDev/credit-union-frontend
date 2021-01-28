@@ -31,6 +31,51 @@ python production/setup_vercel.py
 vercel --prod
 ```
 
+# Hasura + PG
+
+## Postgres init
+
+Postgres is hosted on the AWS RDS server.
+
+To create a new db, login to the server using a tool like `pgcli`
+
+```
+pgcli postgres://postgres:<pwd>@arboreum-sf2.cvdulo7qnwp6.us-west-1.rds.amazonaws.com
+```
+
+Create DB
+
+```
+create database test_prod_1;
+```
+
+## Hasura init
+
+1. In `production/docker-compose.yml`, update `HASURA_GRAPHQL_DATABASE_URL` with your db string
+
+2. Launch hasura on the machine
+
+```
+cd production
+docker-compose up
+```
+
+3. use production config for migrations
+
+```
+cd hasura
+mv config.production.yaml config.yaml
+```
+
+4. Run new migrations
+
+```
+yarn migrate
+yarn metadata
+```
+
+Run step 4 on every update to production schema.
+
 # Steps to run a fresh production hasura
 
 - Create pg db
