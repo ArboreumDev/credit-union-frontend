@@ -6,7 +6,7 @@ import {
   SystemUpdate,
   LoanRequestInfo,
 } from "lib/types"
-import { BORROWER1, SUPPORTER2 } from "../../fixtures/basic_network"
+import { BORROWER1, SUPPORTER2, SUPPORTER3 } from "../../fixtures/basic_network"
 import { addAndConfirmSupporter } from "../common/test_helpers"
 import { dbClient, sdk } from "../common/utils"
 
@@ -18,6 +18,7 @@ beforeAll(async () => {
   await sdk.ResetDB()
   await sdk.CreateUser({ user: BORROWER1 })
   await sdk.CreateUser({ user: SUPPORTER2 })
+  await sdk.CreateUser({ user: SUPPORTER3 })
 
   const { loanRequest } = await dbClient.createLoanRequest(
     BORROWER1.id,
@@ -25,6 +26,12 @@ beforeAll(async () => {
     purpose
   )
   requestId = loanRequest.request_id
+  await addAndConfirmSupporter(
+    dbClient,
+    requestId,
+    SUPPORTER2.id,
+    (amount * MIN_SUPPORT_RATIO) / 2
+  )
 })
 
 afterAll(async () => {
@@ -39,7 +46,7 @@ describe("Loan Request Flow", () => {
     const loan = res.loans.loan_offers[requestId]
     expect(loan.request_id).toBe(requestId)
     expect(loan.terms).toHaveProperty("corpus_share")
-    expect(loan.terms.corpus_share).toBe(1)
+    expect(loan.terms.corpus_share).toBe(1 - MIN_SUPPORT_RATIO / 2)
     expect(loan).toHaveProperty("terms.borrower_apr")
   })
 
@@ -60,8 +67,8 @@ describe("Loan Request Flow", () => {
     await addAndConfirmSupporter(
       dbClient,
       requestId,
-      SUPPORTER2.id,
-      amount * MIN_SUPPORT_RATIO
+      SUPPORTER3.id,
+      (amount * MIN_SUPPORT_RATIO) / 2
     )
     const { loanRequest } = await sdk.GetLoanRequest({
       requestId: requestId,
