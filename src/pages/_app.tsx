@@ -2,48 +2,13 @@ import { ChakraProvider } from "@chakra-ui/core"
 import { AppProps, NextWebVitalsMetric } from "next/app"
 import Head from "next/head"
 import * as React from "react"
-import {
-  ANALYTICS_WEBSITE_IDS,
-  LAST_REDIRECT_PAGE,
-  LogEventTypes,
-} from "../lib/constant"
+import { LAST_REDIRECT_PAGE, LogEventTypes } from "../lib/constant"
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS>
       <Head>
         <title>Arboreum Sandbox</title>
-        <meta name="description" content="Invest. Borrow."></meta>
-        {typeof window !== "undefined" &&
-          window.location.hostname == "app.arboreum.dev" && (
-            <>
-              <script
-                async
-                defer
-                data-website-id={ANALYTICS_WEBSITE_IDS.production}
-                src="https://analytics.arboreum.dev/umami.js"
-              />
-            </>
-          )}
-        {typeof window !== "undefined" && (
-          <>
-            <script
-              dangerouslySetInnerHTML={{
-                __html:
-                  `
-        lastRedirect = localStorage.getItem('` +
-                  LAST_REDIRECT_PAGE +
-                  `');
-        currentPage = location.pathname;
-        if (currentPage==="/" && lastRedirect && lastRedirect != currentPage && lastRedirect === "/dashboard") {
-          console.log('redirect',currentPage, lastRedirect)
-          window.location.href = lastRedirect
-        }
-        `,
-              }}
-            />
-          </>
-        )}
       </Head>
 
       <div>

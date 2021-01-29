@@ -1,9 +1,9 @@
 version: "3.6"
 services:
   graphql-engine:
-    image: hasura/graphql-engine:v1.3.2
+    image: hasura/graphql-engine:v1.3.3
     ports:
-      - "8080:8080"
+      - "8075:8080"
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:arbor3umpg@arboreum-sf.cvdulo7qnwp6.us-west-1.rds.amazonaws.com:5432/pilot_db_9_16_2020
@@ -13,4 +13,4 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       ## uncomment next line to set an admin secret
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_ADMIN_SECRET: arbo_secret_hasura_gs
