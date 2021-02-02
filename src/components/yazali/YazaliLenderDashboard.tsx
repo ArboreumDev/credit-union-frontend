@@ -242,12 +242,11 @@ const LenderDashboard = (props: { lenderId: string }) => {
 
   useEffect(() => {
     const fetchLender = async (cached?: boolean) => {
-      const url =
-        "http://localhost:8081/" +
-        (cached ? "cached_" : "") +
-        "lender/" +
-        props.lenderId
-      const user = await fetchJSON({ url })
+      const url = "/api/ylender"
+      const user = await fetchJSON({
+        url,
+        payload: { lenderId: props.lenderId, cached },
+      })
       console.log(user)
       if (user.lendings) {
         setLender(user)
