@@ -1,6 +1,12 @@
-actions: []
+actions:
+  - name: getBalance
+    definition:
+      kind: ""
+      handler: https://chainmock.gauravparuthi.repl.co/dummy
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: AddResult
+    - name: BalanceResult
   scalars: []

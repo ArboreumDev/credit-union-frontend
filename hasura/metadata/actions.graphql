@@ -1,2 +1,17 @@
+type Query {
+  getBalance (
+    userId: ID!
+  ): BalanceResult
+}
 
+
+
+
+type AddResult {
+  sum : Int
+}
+
+type BalanceResult {
+  balance : Float
+}
 
