@@ -11,12 +11,18 @@ actions:
     definition:
       kind: ""
       handler: "{{ACTION_BASE_URL}}/bank/account/info"
+  - name: transfer
+    definition:
+      kind: synchronous
+      handler: "{{ACTION_BASE_URL}}/bank/transfer"
 custom_types:
   enums: []
   input_objects:
     - name: SampleInput
+    - name: TransferInput
   objects:
     - name: SampleOutput
     - name: FundAccountResponse
     - name: AccountResponse
+    - name: TransferOutput
   scalars: []

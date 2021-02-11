@@ -20,11 +20,26 @@ type Query {
 }
 
 
+type Mutation {
+  transfer (
+    sender: String!
+    receiver: String!
+    amount: Float!
+  ): TransferOutput
+}
+
+
 
 
 input SampleInput {
   username : String!
   password : String!
+}
+
+input TransferInput {
+  sender : String!
+  receiver : String!
+  amount : Float!
 }
 
 type SampleOutput {
@@ -39,5 +54,9 @@ type FundAccountResponse {
 type AccountResponse {
   balance : Float
   email : String
+}
+
+type TransferOutput {
+  success : Boolean!
 }
 
