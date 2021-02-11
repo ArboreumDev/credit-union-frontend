@@ -6,3 +6,4 @@ actions:
   kind: synchronous
   handler_webhook_baseurl: http://localhost:3000
 show_update_notification: false
+ACTION_BASE_URL2: http://app.arbo.link:3001

@@ -1,18 +1,26 @@
 type Query {
-  getBalance (
-    userId: String!
-  ): BalanceResult
+  createAccount (
+    email: String!
+  ): CreateAccountResult
+}
+
+
+type Query {
+  fundAccount (
+    email: String!
+    amount: Float!
+  ): FundAccountResponse
 }
 
 
 
-
-type AddResult {
-  sum : Int
-}
-
-type BalanceResult {
+type CreateAccountResult {
   balance : Float
-  userId : String
+  email : String
+}
+
+type FundAccountResponse {
+  balance : Float
+  email : String
 }
 

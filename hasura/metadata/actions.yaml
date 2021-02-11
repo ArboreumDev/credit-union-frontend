@@ -1,12 +1,16 @@
 actions:
-  - name: getBalance
+  - name: createAccount
     definition:
       kind: ""
-      handler: http://app.arbo.link:3001/bank/dummy
+      handler: http://app.arbo.link:3001/bank/account/new
+  - name: fundAccount
+    definition:
+      kind: ""
+      handler: http://app.arbo.link:3001/bank/account/fund
 custom_types:
   enums: []
   input_objects: []
   objects:
-    - name: AddResult
-    - name: BalanceResult
+    - name: CreateAccountResult
+    - name: FundAccountResponse
   scalars: []
