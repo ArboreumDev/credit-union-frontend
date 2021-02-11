@@ -1,6 +1,6 @@
 type Query {
   getBalance (
-    userId: ID!
+    userId: String!
   ): BalanceResult
 }
 
@@ -13,5 +13,6 @@ type AddResult {
 
 type BalanceResult {
   balance : Float
+  userId : String
 }
 

@@ -2,7 +2,7 @@ actions:
   - name: getBalance
     definition:
       kind: ""
-      handler: https://chainmock.gauravparuthi.repl.co/dummy
+      handler: http://app.arbo.link:3001/bank/dummy
 custom_types:
   enums: []
   input_objects: []
