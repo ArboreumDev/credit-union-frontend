@@ -1,2 +1,36 @@
+type Query {
+  createAccount (
+    email: String!
+  ): AccountResponse
+}
 
+
+type Query {
+  fundAccount (
+    email: String!
+    amount: Float!
+  ): AccountResponse
+}
+
+
+
+
+input SampleInput {
+  username : String!
+  password : String!
+}
+
+type SampleOutput {
+  accessToken : String!
+}
+
+type FundAccountResponse {
+  balance : Float
+  email : String
+}
+
+type AccountResponse {
+  balance : Float
+  email : String
+}
 

@@ -1,6 +1,18 @@
-actions: []
+actions:
+  - name: createAccount
+    definition:
+      kind: ""
+      handler: http://app.arbo.link:3001/bank/account/new
+  - name: fundAccount
+    definition:
+      kind: ""
+      handler: http://app.arbo.link:3001/bank/account/fund
 custom_types:
   enums: []
-  input_objects: []
-  objects: []
+  input_objects:
+    - name: SampleInput
+  objects:
+    - name: SampleOutput
+    - name: FundAccountResponse
+    - name: AccountResponse
   scalars: []
