@@ -13,6 +13,13 @@ type Query {
 }
 
 
+type Query {
+  getAccount (
+    email: String!
+  ): AccountResponse
+}
+
+
 
 
 input SampleInput {

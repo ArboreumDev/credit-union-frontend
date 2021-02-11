@@ -2,11 +2,15 @@ actions:
   - name: createAccount
     definition:
       kind: ""
-      handler: http://app.arbo.link:3001/bank/account/new
+      handler: "{{ACTION_BASE_URL}}/bank/account/new"
   - name: fundAccount
     definition:
       kind: ""
-      handler: http://app.arbo.link:3001/bank/account/fund
+      handler: "{{ACTION_BASE_URL}}/bank/account/fund"
+  - name: getAccount
+    definition:
+      kind: ""
+      handler: "{{ACTION_BASE_URL}}/bank/account/info"
 custom_types:
   enums: []
   input_objects:
