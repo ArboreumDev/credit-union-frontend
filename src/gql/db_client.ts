@@ -196,6 +196,9 @@ export default class DbClient {
     )) as SystemUpdate
     const realizedLoan: LoanInfo = updated.loans.loans[request_id]
 
+    // create a virtual account for the loan
+    await this.sdk.CreateAccount({ accountId: request_id })
+
     // change balances & TODO corpus_shares
     await this.updatePortfolios(updated.accounts.updates)
 
