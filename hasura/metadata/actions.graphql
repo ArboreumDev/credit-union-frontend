@@ -5,7 +5,7 @@ type Mutation {
 }
 
 
-type Query {
+type Mutation {
   createAccount (
     email: String!
   ): AccountResponse
