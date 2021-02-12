@@ -1,4 +1,8 @@
 actions:
+  - name: batchTransfer
+    definition:
+      kind: synchronous
+      handler: "{{ACTION_BASE_URL}}/bank/batchtransfer"
   - name: createAccount
     definition:
       kind: ""
@@ -20,6 +24,7 @@ custom_types:
   input_objects:
     - name: SampleInput
     - name: TransferInput
+    - name: TransferInfo
   objects:
     - name: SampleOutput
     - name: FundAccountResponse
