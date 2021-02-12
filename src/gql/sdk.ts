@@ -3887,6 +3887,7 @@ export type ChangeUserCashBalanceMutation = { __typename?: "mutation_root" } & {
 
 export type CreateUserMutationVariables = Exact<{
   user: User_Insert_Input
+  accountId: Scalars["String"]
 }>
 
 export type CreateUserMutation = { __typename?: "mutation_root" } & {
@@ -3902,6 +3903,12 @@ export type CreateUserMutation = { __typename?: "mutation_root" } & {
       | "phone"
       | "demographic_info"
       | "user_number"
+    >
+  >
+  account?: Maybe<
+    { __typename?: "AccountResponse" } & Pick<
+      AccountResponse,
+      "email" | "balance"
     >
   >
 }
@@ -4426,7 +4433,7 @@ export const ChangeUserCashBalanceDocument = gql`
   }
 `
 export const CreateUserDocument = gql`
-  mutation CreateUser($user: user_insert_input!) {
+  mutation CreateUser($user: user_insert_input!, $accountId: String!) {
     insert_user_one(
       object: $user
       on_conflict: {
@@ -4443,6 +4450,10 @@ export const CreateUserDocument = gql`
       phone
       demographic_info
       user_number
+    }
+    account: createAccount(email: $accountId) {
+      email
+      balance
     }
   }
 `

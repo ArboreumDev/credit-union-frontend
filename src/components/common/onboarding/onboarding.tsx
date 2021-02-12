@@ -48,6 +48,7 @@ export default function Onboarding({ user, userType }: Params) {
         phone: data.phone,
         onboarded: true,
       },
+      accountId: user.email,
     })
       .then((res) => {
         router.push("/dashboard")

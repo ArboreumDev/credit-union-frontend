@@ -1,4 +1,4 @@
-mutation CreateUser($user: user_insert_input!) {
+mutation CreateUser($user: user_insert_input!, $accountId: String! ) {
   insert_user_one(
     object: $user
     on_conflict: { constraint: user_email_key, update_columns: [name, phone, onboarded] }
@@ -12,5 +12,9 @@ mutation CreateUser($user: user_insert_input!) {
     phone
     demographic_info
     user_number
+  }
+  account: createAccount (email: $accountId) {
+    email
+    balance
   }
 }
