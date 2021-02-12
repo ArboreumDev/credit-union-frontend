@@ -5,7 +5,7 @@ actions:
       handler: "{{ACTION_BASE_URL}}/bank/account/new"
   - name: fundAccount
     definition:
-      kind: ""
+      kind: synchronous
       handler: "{{ACTION_BASE_URL}}/bank/account/fund"
   - name: getAccount
     definition:
