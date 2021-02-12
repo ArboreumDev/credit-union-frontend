@@ -110,3 +110,13 @@
           table:
             schema: public
             name: supporters
+  remote_relationships:
+    - definition:
+        remote_field:
+          account:
+            arguments:
+              aid: $email
+        hasura_fields:
+          - email
+        remote_schema: bank
+      name: bank
