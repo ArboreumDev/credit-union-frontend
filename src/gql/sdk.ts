@@ -13,11 +13,18 @@ export type Scalars = {
   Int: number
   Float: number
   float8: any
+  json: any
   jsonb: any
   loan_request_status: any
   timestamptz: any
   user_t: any
   uuid: any
+}
+
+export type AccountResponse = {
+  __typename?: "AccountResponse"
+  balance?: Maybe<Scalars["Float"]>
+  email?: Maybe<Scalars["String"]>
 }
 
 /** expression to compare columns of type Boolean. All fields are combined with logical 'AND'. */
@@ -46,6 +53,12 @@ export type Float_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars["Float"]>>
 }
 
+export type FundAccountResponse = {
+  __typename?: "FundAccountResponse"
+  balance?: Maybe<Scalars["Float"]>
+  email?: Maybe<Scalars["String"]>
+}
+
 /** expression to compare columns of type Int. All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: Maybe<Scalars["Int"]>
@@ -57,6 +70,16 @@ export type Int_Comparison_Exp = {
   _lte?: Maybe<Scalars["Int"]>
   _neq?: Maybe<Scalars["Int"]>
   _nin?: Maybe<Array<Scalars["Int"]>>
+}
+
+export type SampleInput = {
+  password: Scalars["String"]
+  username: Scalars["String"]
+}
+
+export type SampleOutput = {
+  __typename?: "SampleOutput"
+  accessToken: Scalars["String"]
 }
 
 /** expression to compare columns of type String. All fields are combined with logical 'AND'. */
@@ -76,6 +99,23 @@ export type String_Comparison_Exp = {
   _nlike?: Maybe<Scalars["String"]>
   _nsimilar?: Maybe<Scalars["String"]>
   _similar?: Maybe<Scalars["String"]>
+}
+
+export type TransferInfo = {
+  amount: Scalars["Float"]
+  receiver: Scalars["String"]
+  sender: Scalars["String"]
+}
+
+export type TransferInput = {
+  amount: Scalars["Float"]
+  receiver: Scalars["String"]
+  sender: Scalars["String"]
+}
+
+export type TransferOutput = {
+  __typename?: "TransferOutput"
+  success: Scalars["Boolean"]
 }
 
 /** columns and relationships of "action_type" */
@@ -482,6 +522,19 @@ export type Float8_Comparison_Exp = {
   _lte?: Maybe<Scalars["float8"]>
   _neq?: Maybe<Scalars["float8"]>
   _nin?: Maybe<Array<Scalars["float8"]>>
+}
+
+/** expression to compare columns of type json. All fields are combined with logical 'AND'. */
+export type Json_Comparison_Exp = {
+  _eq?: Maybe<Scalars["json"]>
+  _gt?: Maybe<Scalars["json"]>
+  _gte?: Maybe<Scalars["json"]>
+  _in?: Maybe<Array<Scalars["json"]>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _lt?: Maybe<Scalars["json"]>
+  _lte?: Maybe<Scalars["json"]>
+  _neq?: Maybe<Scalars["json"]>
+  _nin?: Maybe<Array<Scalars["json"]>>
 }
 
 /** expression to compare columns of type jsonb. All fields are combined with logical 'AND'. */
@@ -1268,6 +1321,10 @@ export type Loan_Requests_Variance_Order_By = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: "mutation_root"
+  /** perform the action: "batchTransfer" */
+  batchTransfer?: Maybe<TransferOutput>
+  /** perform the action: "createAccount" */
+  createAccount?: Maybe<AccountResponse>
   /** delete data from the table: "action_type" */
   delete_action_type?: Maybe<Action_Type_Mutation_Response>
   /** delete single row from the table: "action_type" */
@@ -1300,6 +1357,8 @@ export type Mutation_Root = {
   delete_user?: Maybe<User_Mutation_Response>
   /** delete single row from the table: "user" */
   delete_user_by_pk?: Maybe<User>
+  /** perform the action: "fundAccount" */
+  fundAccount?: Maybe<AccountResponse>
   /** insert data into the table: "action_type" */
   insert_action_type?: Maybe<Action_Type_Mutation_Response>
   /** insert a single row into the table: "action_type" */
@@ -1332,6 +1391,8 @@ export type Mutation_Root = {
   insert_user?: Maybe<User_Mutation_Response>
   /** insert a single row into the table: "user" */
   insert_user_one?: Maybe<User>
+  /** perform the action: "transfer" */
+  transfer?: Maybe<TransferOutput>
   /** update data of the table: "action_type" */
   update_action_type?: Maybe<Action_Type_Mutation_Response>
   /** update single row of the table: "action_type" */
@@ -1364,6 +1425,16 @@ export type Mutation_Root = {
   update_user?: Maybe<User_Mutation_Response>
   /** update single row of the table: "user" */
   update_user_by_pk?: Maybe<User>
+}
+
+/** mutation root */
+export type Mutation_RootBatchTransferArgs = {
+  transferInfo: Array<Maybe<TransferInfo>>
+}
+
+/** mutation root */
+export type Mutation_RootCreateAccountArgs = {
+  email: Scalars["String"]
 }
 
 /** mutation root */
@@ -1446,6 +1517,12 @@ export type Mutation_RootDelete_UserArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** mutation root */
+export type Mutation_RootFundAccountArgs = {
+  amount: Scalars["Float"]
+  email: Scalars["String"]
 }
 
 /** mutation root */
@@ -1542,6 +1619,11 @@ export type Mutation_RootInsert_UserArgs = {
 export type Mutation_RootInsert_User_OneArgs = {
   object: User_Insert_Input
   on_conflict?: Maybe<User_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootTransferArgs = {
+  transferInfo: TransferInfo
 }
 
 /** mutation root */
@@ -1741,6 +1823,8 @@ export type Query_Root = {
   events_aggregate: Events_Aggregate
   /** fetch data from the table: "events" using primary key columns */
   events_by_pk?: Maybe<Events>
+  /** perform the action: "getAccount" */
+  getAccount?: Maybe<AccountResponse>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -1823,6 +1907,11 @@ export type Query_RootEvents_AggregateArgs = {
 /** query root */
 export type Query_RootEvents_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** query root */
+export type Query_RootGetAccountArgs = {
+  email: Scalars["String"]
 }
 
 /** query root */
@@ -2472,6 +2561,8 @@ export type Subscription_Root = {
   events_aggregate: Events_Aggregate
   /** fetch data from the table: "events" using primary key columns */
   events_by_pk?: Maybe<Events>
+  /** perform the action: "getAccount" */
+  getAccount?: Maybe<AccountResponse>
   /** fetch data from the table: "loan_participants" */
   loan_participants: Array<Loan_Participants>
   /** fetch aggregated fields from the table: "loan_participants" */
@@ -2554,6 +2645,11 @@ export type Subscription_RootEvents_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootEvents_By_PkArgs = {
   id: Scalars["uuid"]
+}
+
+/** subscription root */
+export type Subscription_RootGetAccountArgs = {
+  email: Scalars["String"]
 }
 
 /** subscription root */
