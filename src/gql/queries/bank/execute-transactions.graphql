@@ -1,0 +1,5 @@
+mutation ExecuteTransactions ($transactions: [TransferInfo]!) {
+  batchTransfer(transferInfo: $transactions) {
+    success
+  }
+}

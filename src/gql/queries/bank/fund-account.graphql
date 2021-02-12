@@ -1,0 +1,6 @@
+mutation FundAccount ($email: String!, $amount: Float!) {
+    fundAccount (email: $email, amount: $amount) {
+        email
+        balance
+    }
+}

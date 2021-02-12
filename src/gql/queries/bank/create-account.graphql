@@ -1,0 +1,6 @@
+mutation CreateAccount ($accountId: String!) {
+    createAccount (email: $accountId) {
+        email
+        balance
+    }
+}
