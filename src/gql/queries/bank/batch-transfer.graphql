@@ -1,4 +1,4 @@
-mutation ExecuteTransactions ($transactions: [TransferInfo]!) {
+mutation BatchTransfer ($transactions: [TransferInfo]!) {
   batchTransfer(transferInfo: $transactions) {
     success
   }

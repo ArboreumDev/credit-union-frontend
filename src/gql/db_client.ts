@@ -23,8 +23,10 @@ import {
   LoanOffer,
   LoanRequestStatus,
   SystemUpdate,
+  AccountsUpdate,
   UserType,
   LoanState,
+  BankTransfer,
 } from "../lib/types"
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
@@ -102,6 +104,7 @@ export default class DbClient {
           onboarded: false,
           name,
         },
+        accountId: email,
       })
       userId = u.insert_user_one.id
     } else userId = user.id
@@ -197,10 +200,10 @@ export default class DbClient {
     const realizedLoan: LoanInfo = updated.loans.loans[request_id]
 
     // create a virtual account for the loan
-    await this.sdk.CreateAccount({ accountId: request_id })
+    await this.sdk.CreateAccount({ accountId: "loan-" + request_id })
 
     // change balances & TODO corpus_shares
-    await this.updatePortfolios(updated.accounts.updates)
+    await this.updatePortfolios(updated.accounts)
 
     // store newly returned LoanInfo on loan-request.loan
     await this.sdk.UpdateLoanRequestWithLoanData({
@@ -225,7 +228,7 @@ export default class DbClient {
       loan_id,
       amount
     )) as SystemUpdate
-    await this.updatePortfolios(accounts.updates)
+    await this.updatePortfolios(accounts)
     // update loan-accounts
     await this.sdk.UpdateLoanBalance({
       requestId: loan_id,
@@ -254,9 +257,26 @@ export default class DbClient {
     return loanRequest
   }
 
-  updatePortfolios = async (updates: Array<PortfolioUpdate>) => {
-    await this.updateAllRoIs(updates)
-    const updateMutation = generateUpdateAsSingleTransaction(updates)
+  updatePortfolios = async (accounts: AccountsUpdate) => {
+    const userLookup = await this.allUsers
+    const id2email = (id: string) => {
+      const email = userLookup.filter((x) => x.id == id).map((x) => x.email)[0]
+      // if no email is used, then the identifier is a loan -> use request_id
+      return email || id
+    }
+    // console.log(userId2ToBankAccount(Object.values(userLookup))
+    // console.log(Object.values(userLookup)[0].id)
+    // console.log(userId2ToBankAccount(Object.values(userLookup)[0].id))
+    const transactions = accounts.transactions.map((tx) => {
+      return {
+        sender: id2email(tx.sender),
+        receiver: id2email(tx.receiver),
+        amount: tx.amount,
+      } as BankTransfer
+    })
+    await this.sdk.BatchTransfer({ transactions })
+    await this.updateAllRoIs(accounts.updates)
+    const updateMutation = generateUpdateAsSingleTransaction(accounts.updates)
     const data = await this.gqlClient.request(updateMutation)
     return data
   }

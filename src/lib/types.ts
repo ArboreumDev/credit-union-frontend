@@ -249,8 +249,21 @@ export type PortfolioUpdate = {
 
 export type AccountsUpdate = {
   updates: any //PortfolioUpdate[]
-  transactions?: any
+  transactions: Transaction[]
   escrow_deltas: any
+}
+
+export type Transaction = {
+  sender: string
+  receiver: string
+  amount: number
+  purpose?: string
+}
+
+export type BankTransfer = {
+  sender: string
+  receiver: string
+  amount: number
 }
 
 export type LoansUpdate = {
