@@ -148,6 +148,10 @@ export class ChangeBalance extends Action {
   }
 
   async run() {
+    await this.dbClient.sdk.FundAccount({
+      email: this.user.email,
+      amount: parseFloat(this.payload.delta),
+    })
     await this.dbClient.sdk.ChangeUserCashBalance({
       userId: this.user.id,
       delta: this.payload.delta,
