@@ -70,7 +70,7 @@ describe("Scenario unit tests", () => {
       scenario.actions[scenario.actions.length - 1].payload.amount,
     ])
     generate_yaml = await scenarioToYAML(dbClient)
-  })
+  }, 7000)
 
   test("from generated", async () => {
     const scenario = await Scenario.fromYAML(generate_yaml, dbClient)
@@ -81,5 +81,5 @@ describe("Scenario unit tests", () => {
     // This won't be equal because generated json has much more info (action.id, demographic info, loan_ids are UUIDs )
     // uncomment to compare
     // expect(await scenarioToJSON(dbClient)).toStrictEqual(simple)
-  })
+  }, 10000)
 })

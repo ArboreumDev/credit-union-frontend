@@ -228,27 +228,24 @@ describe("Loan Request Flow: confirm loan offer", () => {
     )
     // escrow is again nonzero, as second payment is now being withheld
     expect(updated_request.balance).toBeGreaterThan(0)
-  })
+  }, 10000)
 
   test("make full repayment", async () => {
     const data = await sdk.GetLoanRequest({ requestId })
     let loan = data.loanRequest.loan
-    let ideal_repayment = loan.schedule.next_borrower_payment
-    let updated_request
-    while (loan.state.repayments.length < loan.terms.tenor) {
-      await sdk.ChangeUserCashBalance({
-        userId: BORROWER1.id,
-        delta: ideal_repayment,
-      })
-      updated_request = await dbClient.make_repayment(
-        requestId,
-        ideal_repayment
-      )
-      ideal_repayment = updated_request.loan.schedule.next_borrower_payment
-      loan = updated_request.loan
-    }
+    const ideal_repayment = loan.schedule.full_single_repay
+    await sdk.ChangeUserCashBalance({
+      userId: BORROWER1.id,
+      delta: ideal_repayment,
+    })
+    const updated_request = await dbClient.make_repayment(
+      requestId,
+      ideal_repayment
+    )
+    loan = updated_request.loan
+    // console.log(updated_request)
     expect(updated_request.status).toBe(LoanRequestStatus.settled)
-  })
+  }, 10000)
 
   test.skip("make defaulting repayments", async () => {
     // # TODO make a new loan
