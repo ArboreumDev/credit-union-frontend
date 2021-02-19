@@ -111,6 +111,7 @@ export class Fixtures {
       },
       supporter_view: null,
       next_borrower_payment: 15799.51,
+      full_single_repay: 94797,
       apr: {
         corpus: 0.17,
         supporter: 0.16,

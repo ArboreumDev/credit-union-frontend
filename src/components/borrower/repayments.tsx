@@ -35,6 +35,10 @@ export function RepaymentsForm({ user }: Props) {
     user.loans_to_repay[0].loan.schedule.next_borrower_payment
   )
 
+  const fullRepay = Math.ceil(
+    user.loans_to_repay[0].loan.schedule.full_single_repay
+  )
+
   return (
     <Box maxW="lg">
       <form onSubmit={handleSubmit(onSubmit)} method="post">
@@ -43,6 +47,7 @@ export function RepaymentsForm({ user }: Props) {
           <AmountInputWithHelper
             helpers={{
               Next: suggestedNextBorrowerPayment,
+              All: fullRepay,
             }}
             passRef={register({ required: true })}
             setValue={setValue}

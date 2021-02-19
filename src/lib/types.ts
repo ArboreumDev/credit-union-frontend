@@ -183,6 +183,27 @@ export type BorrowerView = {
   borrower_collateral: PaidRemain
 }
 
+export type SupporterView = {
+  total_receipts: PaidRemain
+  supporter_principal: PaidRemain
+  supporter_interest: PaidRemain
+  receipts_in_escrow: PaidRemain
+  receipts_rtrn_from_brw: PaidRemain
+  cash_unencumbered: PaidRemain
+  cash_rtrn_from_brw: PaidRemain
+  ptfl_unencumbered: PaidRemain
+  ptfl_rtrn_from_brw: PaidRemain
+  principal_released: PaidRemain
+  interest_released: PaidRemain
+  total_released: PaidRemain
+}
+
+export type CorpusView = {
+  total_receipts: PaidRemain
+  principal: PaidRemain
+  interest: PaidRemain
+}
+
 export type APR = {
   corpus: number
   supporter: number
@@ -191,9 +212,10 @@ export type APR = {
 export type LoanScheduleSummary = {
   borrower_view: BorrowerView
   next_borrower_payment: number
-  supporter_view?: any
-  corpus_view?: any
+  supporter_view: SupporterView
+  corpus_view: CorpusView
   apr: APR
+  full_single_repay: number
 }
 
 // =========== End of risk module types ========
