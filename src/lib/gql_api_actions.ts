@@ -12,6 +12,9 @@ import {
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
+import { rupeeCircleClient } from "../gql/wallet/rupeecircle_client"
+// import RupeeCircleClient from "../gql/wallet/rupeecircle_client"
+import FormData from "form-data"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -81,6 +84,23 @@ export class CreateUser extends Action {
 
   static fetch(payload: typeof CreateUser.InputType) {
     return fetcherMutate(CreateUser.Name, payload)
+  }
+}
+
+export class RegisterUser extends Action {
+  static Name = "RegisterUser"
+  static InputType: any //CreateUserMutationVariables
+  minAuthLevel = AUTH_TYPE.ANY
+
+  async run() {
+    const formdata = new FormData()
+    formdata.append("user_name", "julius")
+    // console.log(rupeeCircleClient)
+    return await rupeeCircleClient.registerLender(formdata)
+  }
+
+  static fetch(payload: typeof RegisterUser.InputType) {
+    return fetcherMutate(RegisterUser.Name, payload)
   }
 }
 
@@ -267,6 +287,7 @@ export class MakeRepayment extends Action {
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
+  [RegisterUser.Name]: RegisterUser,
   [CreateLoan.Name]: CreateLoan,
   [AddSupporter.Name]: AddSupporter,
   [ChangeBalance.Name]: ChangeBalance,
