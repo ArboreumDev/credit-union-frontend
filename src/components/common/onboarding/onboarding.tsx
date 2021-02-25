@@ -13,7 +13,7 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/core"
-import { CreateUser } from "lib/gql_api_actions"
+import { CreateUser, RegisterUser } from "lib/gql_api_actions"
 import { UserType } from "lib/types"
 import { useRouter } from "next/dist/client/router"
 import Head from "next/head"
@@ -41,17 +41,35 @@ export default function Onboarding({ user, userType }: Params) {
   const router = useRouter()
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
-    CreateUser.fetch({
+    console.log("to be submitted ", data)
+    RegisterUser.fetch({
       user: {
-        name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
-        user_type: userType,
-        phone: data.phone,
-        onboarded: true,
+        name: "julius",
       },
     })
       .then((res) => {
-        router.push("/dashboard")
+        console.log("result of registiering with RC", res)
+        console.log("TODO save registration status in DB")
+        return CreateUser.fetch({
+          user: {
+            name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
+            user_type: userType,
+            phone: data.phone,
+            onboarded: true,
+          },
+        })
+      })
+      .catch((err2) => {
+        // TODO handle what to do when not able to connect to RC
+        console.error(err2)
+        const msg = "err connecting to RC"
+        alert(msg)
+        return false
+      })
+      .then((res2) => {
+        if (res2) {
+          router.push("/dashboard")
+        }
       })
       .catch((err) => console.error(err))
   }
