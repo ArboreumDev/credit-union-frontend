@@ -25,6 +25,7 @@ type FormData = {
   firstname: string
   lastname: string
   phone: string
+  test: File
 }
 
 interface Params {
@@ -109,6 +110,12 @@ export default function Onboarding({ user, userType }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
+            <Input
+              type="file"
+              name="test"
+              placeholder="Pan card"
+              ref={register({ required: false })}
+            />
 
             {userType == UserType.Lender && (
               <Stack>
