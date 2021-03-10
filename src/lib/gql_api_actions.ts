@@ -69,7 +69,6 @@ export class CreateUser extends Action {
 
   async run() {
     const user = this.payload.user
-
     user.email = this.session.user.email
 
     // set default init values
@@ -87,6 +86,12 @@ export class CreateUser extends Action {
   }
 }
 
+// RCInput = {
+//   user: {
+//     name: "julius",
+//     kycFiles: Any
+//   }
+// }
 export class RegisterUser extends Action {
   static Name = "RegisterUser"
   static InputType: any //CreateUserMutationVariables
@@ -94,8 +99,9 @@ export class RegisterUser extends Action {
 
   async run() {
     const formdata = new FormData()
-    formdata.append("user_name", "julius")
-    // console.log(rupeeCircleClient)
+    console.log("trying to sending out", this.payload.user.kycFiles)
+    formdata.append("user_name", this.payload.user.name)
+    formdata.append("kyc_files", this.payload.user.kycFiles, "somename")
     return await rupeeCircleClient.registerLender(formdata)
   }
 

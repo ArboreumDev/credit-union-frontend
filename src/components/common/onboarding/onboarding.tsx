@@ -25,7 +25,7 @@ type FormData = {
   firstname: string
   lastname: string
   phone: string
-  test: File
+  kycFile: File
 }
 
 interface Params {
@@ -44,31 +44,34 @@ export default function Onboarding({ user, userType }: Params) {
     console.log("to be submitted ", data)
     RegisterUser.fetch({
       user: {
-        name: "julius",
+        name: data.firstname,
+        kycFiles: data.kycFile[0],
       },
     })
       .then((res) => {
         console.log("result of registiering with RC", res)
         console.log("TODO save registration status in DB")
-        return CreateUser.fetch({
-          user: {
-            name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
-            user_type: userType,
-            phone: data.phone,
-            onboarded: true,
-          },
-        })
+        return Promise.resolve()
+        //   return CreateUser.fetch({
+        //     user: {
+        //       name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
+        //       user_type: userType,
+        //       phone: data.phone,
+        //       onboarded: true,
+        //     },
+        //   })
       })
       .catch((err2) => {
         // TODO handle what to do when not able to connect to RC
-        console.error(err2)
+        console.error("err2", err2)
         const msg = "err connecting to RC"
         alert(msg)
         return false
       })
       .then((res2) => {
+        console.log("res2", res2)
         if (res2) {
-          router.push("/dashboard")
+          // router.push("/dashboard")
         }
       })
       .catch((err) => console.error(err))
@@ -109,13 +112,13 @@ export default function Onboarding({ user, userType }: Params) {
               placeholder="First Name"
               name="firstname"
               size="lg"
-              ref={register({ required: true })}
+              ref={register({ required: false })}
             />
             <Input
               placeholder="Last Name"
               name="lastname"
               size="lg"
-              ref={register({ required: true })}
+              ref={register({ required: false })}
             />
             <InputGroup>
               <InputLeftAddon>+91</InputLeftAddon>
@@ -125,14 +128,14 @@ export default function Onboarding({ user, userType }: Params) {
                 borderLeftRadius="0"
                 placeholder="Phone"
                 size="lg"
-                ref={register({ required: true })}
+                ref={register({ required: false })}
               />
             </InputGroup>
             <Input
               type="file"
-              name="test"
+              name="kycFile"
               placeholder="Pan card"
-              ref={register({ required: false })}
+              ref={register({ required: true })}
             />
 
             {userType == UserType.Lender && (
@@ -150,13 +153,13 @@ export default function Onboarding({ user, userType }: Params) {
               <div>
                 <Box>
                   <UploadingDropzone
-                    endpoint="/api/upload"
+                    endpoint="/api/kyc"
                     s3Key={"user_uploads/" + user.email}
                   >
                     <p>Drop KYC documents here: </p>
                     <UnorderedList>
-                      <ListItem>Passport</ListItem>
-                      <ListItem>Aadhar Card</ListItem>
+                      {/* <ListItem>Passport</ListItem> */}
+                      {/* <ListItem>Aadhar Card</ListItem> */}
                       <ListItem>PAN Card</ListItem>
                     </UnorderedList>
                   </UploadingDropzone>

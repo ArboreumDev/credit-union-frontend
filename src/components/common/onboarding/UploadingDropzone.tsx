@@ -17,7 +17,6 @@ interface Props {
 }
 export function UploadingDropzone({ s3Key, children, endpoint }: Props) {
   const [files, setFiles] = useState<FileStatus>({})
-
   const onFileDrop = async (data: UploadRequest) => {
     setFiles({ ...files, [data.file_name]: { done: false } })
     try {
