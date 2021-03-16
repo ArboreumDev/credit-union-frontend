@@ -25,6 +25,8 @@ type FormData = {
   firstname: string
   lastname: string
   phone: string
+  ifsc: string
+  accountNumber: string
 }
 
 interface Params {
@@ -47,6 +49,17 @@ export default function Onboarding({ user, userType }: Params) {
         user_type: userType,
         phone: data.phone,
         onboarded: true,
+        account_details: {
+          bankDetails: {
+            accountNumber: data.accountNumber,
+            branchCode: data.ifsc,
+          },
+          rcAccount: {
+            investor_id: "",
+            accountNumber: "",
+            branchCode: "FIXED",
+          },
+        },
       },
     })
       .then((res) => {
@@ -109,6 +122,18 @@ export default function Onboarding({ user, userType }: Params) {
                 ref={register({ required: true })}
               />
             </InputGroup>
+            <Input
+              placeholder="Bank Account Number, e.g. "
+              name="accountNumber"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Input
+              placeholder="Ifsc"
+              name="ifsc"
+              size="lg"
+              ref={register({ required: true })}
+            />
 
             {userType == UserType.Lender && (
               <Stack>
