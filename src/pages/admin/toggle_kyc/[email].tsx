@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     userId: user.id,
     kycApproved: !user.kyc_approved,
   })
+  // TODO send email to user
 
   return { props: { session } }
 }

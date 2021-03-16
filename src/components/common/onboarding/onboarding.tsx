@@ -1,6 +1,11 @@
 import {
   Box,
+  FormLabel,
+  Select,
   Button,
+  HStack,
+  Radio,
+  RadioGroup,
   Center,
   Container,
   Heading,
@@ -27,6 +32,15 @@ type FormData = {
   phone: string
   ifsc: string
   accountNumber: string
+  bankName: string
+  accountType: string
+  address: string
+  zipCode: string
+  gender: string
+  employmentType: string
+  income: string
+  fatherFirstName: string
+  fatherLastName: string
 }
 
 interface Params {
@@ -51,8 +65,10 @@ export default function Onboarding({ user, userType }: Params) {
         onboarded: true,
         account_details: {
           bankDetails: {
+            bankName: data.bankName,
             accountNumber: data.accountNumber,
             branchCode: data.ifsc,
+            accountType: data.accountType,
           },
           rcAccount: {
             investor_id: "",
@@ -60,10 +76,20 @@ export default function Onboarding({ user, userType }: Params) {
             branchCode: "FIXED",
           },
         },
+        demographic_info: {
+          address: data.address,
+          zipCode: data.zipCode,
+          gender: data.gender,
+          income: data.income,
+          father: {
+            firstName: data.fatherFirstName,
+            lastName: data.fatherFirstName,
+          },
+        },
       },
     })
       .then((res) => {
-        router.push("/dashboard")
+        // router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
@@ -111,6 +137,35 @@ export default function Onboarding({ user, userType }: Params) {
               size="lg"
               ref={register({ required: true })}
             />
+            <FormLabel>Date of birth:</FormLabel>
+            <Input
+              placeholder="Date of birth"
+              type="date"
+              name="dob"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Select
+              placeholder="Select gender"
+              name="gender"
+              ref={register({ required: true })}
+            >
+              <option>MALE</option>
+              <option>FEMALE</option>
+              <option>OTHER</option>
+            </Select>
+            <Input
+              placeholder="Address"
+              name="address"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Input
+              placeholder=" ZipCode (PIN), e.g. 400042 "
+              name="zipCode"
+              size="lg"
+              ref={register({ required: true })}
+            />
             <InputGroup>
               <InputLeftAddon>+91</InputLeftAddon>
               <Input
@@ -123,7 +178,7 @@ export default function Onboarding({ user, userType }: Params) {
               />
             </InputGroup>
             <Input
-              placeholder="Bank Account Number, e.g. "
+              placeholder="Bank Account Number"
               name="accountNumber"
               size="lg"
               ref={register({ required: true })}
@@ -134,17 +189,54 @@ export default function Onboarding({ user, userType }: Params) {
               size="lg"
               ref={register({ required: true })}
             />
+            <Input
+              placeholder="Bank Name"
+              name="bankName"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Select
+              placeholder="Select account type"
+              name="accountType"
+              ref={register({ required: true })}
+            >
+              <option>CURRENT</option>
+              <option>SAVINGS</option>
+            </Select>
 
-            {/* {userType == UserType.Lender && (
-              <Stack>
-                <Input placeholder="PAN Card Number" name="pancard" size="lg" />
-                <Input
-                  placeholder="Aadhar Card Number"
-                  name="aadhar"
-                  size="lg"
-                />
-              </Stack>
-            )} */}
+            <Input
+              placeholder="Father First Name"
+              name="fatherFirstName"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Input
+              placeholder="Father Last Name"
+              name="fatherLastName"
+              size="lg"
+              ref={register({ required: true })}
+            />
+            <Select
+              placeholder="Select annual income category"
+              name="income"
+              ref={register({ required: true })}
+            >
+              <option>0-500000</option>
+              <option>500000-1000000</option>
+              <option>1000000-2000000</option>
+              <option>2000000-1000000000</option>
+            </Select>
+            <Select
+              placeholder="Select employment type"
+              name="employmentType"
+              ref={register({ required: true })}
+            >
+              <option>SELF_EMPLOYED</option>
+              <option>SALARIED</option>
+              <option>RETIRED</option>
+              <option>OTHER</option>
+            </Select>
+
             {userType == UserType.Lender && (
               <Box>
                 <UploadingDropzone
@@ -153,10 +245,9 @@ export default function Onboarding({ user, userType }: Params) {
                 >
                   <p>Drop photos (jpeg, png) of your KYC documents here: </p>
                   <UnorderedList>
-                    <ListItem>Aadhar Card (All pages) </ListItem>
+                    <ListItem>Aadhar Card (xml download) </ListItem>
                     <ListItem>PAN Card</ListItem>
-                    <ListItem>Photo of your face</ListItem>
-                    <ListItem>Bank Statement</ListItem>
+                    <ListItem>Photo of face</ListItem>
                   </UnorderedList>
                 </UploadingDropzone>
               </Box>
