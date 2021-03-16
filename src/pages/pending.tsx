@@ -9,13 +9,7 @@ import Onboarding from "../components/common/onboarding/onboarding"
 
 const PendingReview = () => {
   const { user } = useUser()
-  const [userType, setUserType] = useState(null)
   const router = useRouter()
-
-  useEffect(() => {
-    const user_type = localStorage.getItem(USER_TYPE_KEY)
-    if (user_type) setUserType(user_type)
-  })
 
   if (!user) return <Logo />
 

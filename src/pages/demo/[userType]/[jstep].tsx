@@ -1,6 +1,7 @@
 import { useEventListener } from "@chakra-ui/core"
 import LandingPage from "components/common/landing"
 import Onboarding from "components/common/onboarding/onboarding"
+import PendingReview from "pages/pending"
 import { Fixtures } from "lib/demo/fixtures"
 import { UserType } from "lib/types"
 import { useRouter } from "next/router"
@@ -39,6 +40,8 @@ export const lJourneySequence = [
     "Onboarding",
     <Onboarding user={Fixtures.Lender} userType={UserType.Lender} />
   ),
+  new JStep("Pending", <PendingReview />),
+
   new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
   new JStep(
     "Lender Dashboard with Assets",
