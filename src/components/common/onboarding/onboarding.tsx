@@ -135,7 +135,7 @@ export default function Onboarding({ user, userType }: Params) {
               ref={register({ required: true })}
             />
 
-            {userType == UserType.Lender && (
+            {/* {userType == UserType.Lender && (
               <Stack>
                 <Input placeholder="PAN Card Number" name="pancard" size="lg" />
                 <Input
@@ -144,6 +144,22 @@ export default function Onboarding({ user, userType }: Params) {
                   size="lg"
                 />
               </Stack>
+            )} */}
+            {userType == UserType.Lender && (
+              <Box>
+                <UploadingDropzone
+                  endpoint="/api/upload"
+                  s3Key={"lenderKYC/" + user.email}
+                >
+                  <p>Drop photos (jpeg, png) of your KYC documents here: </p>
+                  <UnorderedList>
+                    <ListItem>Aadhar Card (All pages) </ListItem>
+                    <ListItem>PAN Card</ListItem>
+                    <ListItem>Photo of your face</ListItem>
+                    <ListItem>Bank Statement</ListItem>
+                  </UnorderedList>
+                </UploadingDropzone>
+              </Box>
             )}
 
             {userType == UserType.Borrower && (
