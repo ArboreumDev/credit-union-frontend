@@ -45,7 +45,7 @@ export default function Hello(props: {
   return (
     <Container>
       <Stack>
-        <a href="/admin/reset_db">Reset DB</a>
+        {/* <a href="/admin/reset_db">Reset DB</a> */}
         <Box>
           <Heading>Users</Heading>
           {users.map((user) => (
