@@ -75,6 +75,7 @@ export default function Onboarding({ user, userType }: Params) {
   const router = useRouter()
   const [progress, setProgress] = useState(0)
   const [tabIndex, setTabIndex] = useState(0)
+  const [isSubmitting, setSubmitting] = useState(false)
   const [tabState, setTabstate] = useState({ 0: "", 1: "", 2: "", 3: "" })
   const toast = useToast()
   const tabFields = {
@@ -142,7 +143,7 @@ export default function Onboarding({ user, userType }: Params) {
 
   const onSubmit = (data: FormData) => {
     console.log(data)
-    console.log(Object(data).keys())
+    setSubmitting(true)
     CreateUser.fetch({
       user: {
         name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
@@ -426,7 +427,9 @@ export default function Onboarding({ user, userType }: Params) {
                           </Stack>
                         </Box>
                         <Center>
-                          <Button type="submit">Submit</Button>
+                          <Button isLoading={isSubmitting} type="submit">
+                            Submit
+                          </Button>
                         </Center>
                       </Stack>
                     </TabPanel>
