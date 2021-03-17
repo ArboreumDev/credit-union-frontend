@@ -15,7 +15,7 @@ Using the latest insomnia collection please do:
 1. select request: `decentro/pennyDrop`
 2. fill request with ifsc, account number & unique reference id
 3. compare names from result
-4. if OK. save screenshot of result (entire screen) to our googledocs folder
+4. if OK. save screenshot of result (entire screen) to our googledocs folder (google drive /KYC)
 
 ### 2) Validate Pan-card
 
