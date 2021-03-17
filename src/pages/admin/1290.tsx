@@ -56,16 +56,16 @@ export default function Hello(props: {
           ))}
         </Box>
         <hr />
-        <Box>
+        {/* <Box>
           Set company name:{" "}
           <Input
             onChange={(ev) =>
               localStorage.setItem(COMPANY_NAME, ev.target.value)
             }
           ></Input>
-        </Box>
+        </Box> */}
       </Stack>
-      <Box>
+      {/* <Box>
         Scenario:
         <TEdit
           code={props.scenario}
@@ -73,7 +73,7 @@ export default function Hello(props: {
             fetchJSON({ url: "/api/admin/set_scenario", payload: { yaml } })
           }
         />
-      </Box>
+      </Box> */}
     </Container>
   )
 }
