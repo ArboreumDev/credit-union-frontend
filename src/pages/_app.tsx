@@ -8,7 +8,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS>
       <Head>
-        <title>Arboreum Sandbox</title>
+        <title>Arboreum</title>
       </Head>
 
       <div>
