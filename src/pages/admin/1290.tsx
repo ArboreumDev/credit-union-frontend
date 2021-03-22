@@ -49,6 +49,7 @@ export default function Hello(props: {
   return (
     <Container>
       <Stack>
+        {/* this helps when debugging */}
         {/* <a href="/admin/reset_db">Reset DB</a> */}
         <Box>
           <Heading>Users</Heading>
@@ -60,6 +61,7 @@ export default function Hello(props: {
           ))}
         </Box>
         <hr />
+        {/* // this helps when doing a demo */}
         {/* <Box>
           Set company name:{" "}
           <Input
@@ -67,17 +69,17 @@ export default function Hello(props: {
               localStorage.setItem(COMPANY_NAME, ev.target.value)
             }
           ></Input>
-        </Box> */}
-      </Stack>
-      {/* <Box>
+        </Box>*/}
+        {/* <Box>
         Scenario:
         <TEdit
-          code={props.scenario}
-          onSubmit={(yaml: string) =>
-            fetchJSON({ url: "/api/admin/set_scenario", payload: { yaml } })
-          }
+        code={props.scenario}
+        onSubmit={(yaml: string) =>
+          fetchJSON({ url: "/api/admin/set_scenario", payload: { yaml } })
+        }
         />
       </Box> */}
+      </Stack>
     </Container>
   )
 }
