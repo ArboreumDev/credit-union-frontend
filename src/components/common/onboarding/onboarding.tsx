@@ -126,16 +126,6 @@ export default function Onboarding({ user, userType }: Params) {
     return allOk
   }
 
-  const checkAllFieldsAllTabs = async () => {
-    // somehow there is weirdness accessing state here
-    // the last check always overwrites the first ones
-    // await checkFields(false, 0)
-    // await checkFields(false, 1)
-    // await checkFields(false, 2)
-    // await checkFields(false, 3)
-    // return true
-  }
-
   const handleTabsChange = (index) => {
     setTabIndex(index)
     setProgress(index * 25)
@@ -181,12 +171,6 @@ export default function Onboarding({ user, userType }: Params) {
       })
       .catch((err) => console.error(err))
   }
-
-  // const onSubmit2 = () => {
-  //   if (checkAllFields(false)) {
-  //     handleSubmit(onSubmit)
-  //   }
-  // }
 
   return (
     <Box padding={4}>
