@@ -6,11 +6,12 @@ services:
       - "8075:8080"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:arbor3umpg@arboreum-sf.cvdulo7qnwp6.us-west-1.rds.amazonaws.com:5432/pilot_db_9_16_2020
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:arbor3umpg2@arboreum-sf2.cvdulo7qnwp6.us-west-1.rds.amazonaws.com:5432/prod_db
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       ## uncomment next line to set an admin secret
-      HASURA_GRAPHQL_ADMIN_SECRET: arbo_secret_hasura_gs
+      # HASURA_GRAPHQL_ADMIN_SECRET: arbo_secret_hasura_gs
+      HASURA_GRAPHQL_ADMIN_SECRET: 41dgE7roC0ePLA3Cv8iuP2JY0QhPIhQfOw6tc1yiMmrTjmm2ig
