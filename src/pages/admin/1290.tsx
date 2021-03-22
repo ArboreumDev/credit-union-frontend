@@ -14,6 +14,8 @@ import { scenarioToYAML } from "lib/scenario"
 import { GetServerSideProps } from "next"
 import { useState } from "react"
 import { GetAllUsersQuery } from "../../gql/sdk"
+import { Session } from "lib/types"
+import { getSession } from "next-auth/client"
 
 export function TEdit(props: { code: any; onSubmit: any }) {
   const [code, setState] = useState(props.code)
@@ -35,12 +37,14 @@ export function TEdit(props: { code: any; onSubmit: any }) {
 export default function Hello(props: {
   allUsers: GetAllUsersQuery["user"]
   scenario: any
+  authorized: boolean
 }) {
   // Only use code like this when UI needs to refresh
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
   const users = props.allUsers
+  if (!props.authorized) return <div>Not authorized</div>
 
   return (
     <Container>
@@ -81,9 +85,15 @@ export default function Hello(props: {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO after JWT is implemented
   // check for session and if the user is one of the admin users
+  const session = (await getSession(context)) as Session
+
+  // TODO: Add admin authorization check
+  if (session.user.email !== process.env.ADMIN_EMAIL) {
+    return { props: { authorized: false } }
+  }
 
   const dbClient = new DbClient()
   const allUsers = await dbClient.allUsers
   const scenario = await scenarioToYAML(dbClient)
-  return { props: { allUsers, scenario } }
+  return { props: { authorized: true, allUsers, scenario } }
 }
