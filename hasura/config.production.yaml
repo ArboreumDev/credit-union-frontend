@@ -1,6 +1,7 @@
 version: 2
 endpoint: http://app.arbo.link:8075/
-admin_secret: arbo_secret_hasura_gs
+# admin_secret: arbo_secret_hasura_gs
+admin_secret: 41dgE7roC0ePLA3Cv8iuP2JY0QhPIhQfOw6tc1yiMmrTjmm2ig
 metadata_directory: metadata
 actions:
   kind: synchronous
