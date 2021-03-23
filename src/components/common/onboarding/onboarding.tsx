@@ -367,6 +367,7 @@ export default function Onboarding({ user, userType }: Params) {
                               <Link
                                 href="https://resident.uidai.gov.in/offline-kyc"
                                 color="teal.500"
+                                isExternal
                               >
                                 {" "}
                                 here{" "}
@@ -375,6 +376,7 @@ export default function Onboarding({ user, userType }: Params) {
                               <Link
                                 href="https://eaadhaar.uidai.gov.in/#/"
                                 color="teal.500"
+                                isExternal
                               >
                                 {" "}
                                 here{" "}
