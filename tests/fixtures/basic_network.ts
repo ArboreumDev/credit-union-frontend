@@ -31,6 +31,19 @@ export const LENDER1: User = {
   },
   user_number: 1,
   balance: 1000,
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "INDV-22134",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
 }
 
 export const LENDER2: User = {
@@ -52,7 +65,19 @@ export const LENDER2: User = {
     },
     aadharPassword: "123",
   },
-
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "INDV-22135",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
   user_number: 2,
   balance: 200,
 }
@@ -78,6 +103,19 @@ export const BORROWER1: User = {
   },
   user_number: 3,
   balance: 10,
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
 }
 
 export const USERS = [LENDER1, LENDER2, BORROWER1].map((x) =>
@@ -105,6 +143,19 @@ export const SUPPORTER1: User = {
   },
   user_number: 4,
   balance: 200,
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "INDV-22136",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
   // if wanted we can also amend the user object like this to specify their reputation directly
   recommendationRisksByRecommenderId: {
     data: [{ risk_params: DEFAULT_RECOMMENDATION_RISK_PARAMS }],
@@ -133,6 +184,19 @@ export const SUPPORTER2: User = {
 
   user_number: 5,
   balance: 400,
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "INDV-22137",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
   // if wanted we can also amend the user object like this to specify their reputation directly
   recommendationRisksByRecommenderId: {
     data: [
@@ -168,6 +232,19 @@ export const SUPPORTER3: User = {
 
   user_number: 6,
   balance: 400,
+  account_details: {
+    bankDetails: {
+      bankName: "TESTBANK",
+      accountNumber: "123",
+      branchCode: "ifsc-code",
+      accountType: "CURRENT",
+    },
+    rcAccount: {
+      investor_id: "INV-22348",
+      accountNumber: "",
+      branchCode: "FIXED",
+    },
+  },
   // if wanted we can also amend the user object like this to specify their reputation directly
   recommendationRisksByRecommenderId: {
     data: [
