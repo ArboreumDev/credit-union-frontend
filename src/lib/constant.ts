@@ -50,3 +50,5 @@ export const NO_ROI: RoI = {
   apr_on_pledges: {},
   apr_on_loans: {},
 }
+
+export const ADMIN_EMAIL = "dev@arboreum.dev"

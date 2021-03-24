@@ -8,7 +8,7 @@ import {
 
 global.fetch = require("node-fetch")
 
-describe("Decentro tests", () => {
+describe.skip("Decentro tests", () => {
   test.skip("do kyc on image", async () => {
     const path = require("path")
     const file = readFileSync(path.resolve(__dirname, "pan_mock.jpg"))

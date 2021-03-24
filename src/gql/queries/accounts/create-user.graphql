@@ -11,6 +11,7 @@ mutation CreateUser($user: user_insert_input!) {
     roi
     phone
     demographic_info
+    account_details
     user_number
   }
 }

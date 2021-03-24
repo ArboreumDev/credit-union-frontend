@@ -10,7 +10,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Scenario unit tests", () => {
+describe.skip("Scenario unit tests", () => {
   test("create scenario", async () => {
     const scenario = new Scenario(simple.users, [], dbClient)
     simple.actions.map((a) => scenario.addAction(a as Action))
@@ -57,7 +57,7 @@ describe("Scenario unit tests", () => {
   })
 })
 
-describe("Scenario unit tests", () => {
+describe.skip("Scenario unit tests", () => {
   let generate_yaml
   test("simple scenario", async () => {
     const scenario = Scenario.fromJSON(simple as System, dbClient)

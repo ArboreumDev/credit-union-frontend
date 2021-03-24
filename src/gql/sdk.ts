@@ -3081,6 +3081,7 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "user" */
 export type User = {
   __typename?: "user"
+  account_details?: Maybe<Scalars["jsonb"]>
   balance?: Maybe<Scalars["float8"]>
   corpus_share?: Maybe<Scalars["float8"]>
   created_at: Scalars["timestamptz"]
@@ -3121,6 +3122,11 @@ export type User = {
   updated_at: Scalars["timestamptz"]
   user_number: Scalars["Int"]
   user_type: Scalars["user_t"]
+}
+
+/** columns and relationships of "user" */
+export type UserAccount_DetailsArgs = {
+  path?: Maybe<Scalars["String"]>
 }
 
 /** columns and relationships of "user" */
@@ -3287,6 +3293,7 @@ export type User_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type User_Append_Input = {
+  account_details?: Maybe<Scalars["jsonb"]>
   demographic_info?: Maybe<Scalars["jsonb"]>
   roi?: Maybe<Scalars["jsonb"]>
 }
@@ -3321,6 +3328,7 @@ export type User_Bool_Exp = {
   _and?: Maybe<Array<Maybe<User_Bool_Exp>>>
   _not?: Maybe<User_Bool_Exp>
   _or?: Maybe<Array<Maybe<User_Bool_Exp>>>
+  account_details?: Maybe<Jsonb_Comparison_Exp>
   balance?: Maybe<Float8_Comparison_Exp>
   corpus_share?: Maybe<Float8_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
@@ -3357,18 +3365,21 @@ export enum User_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type User_Delete_At_Path_Input = {
+  account_details?: Maybe<Array<Maybe<Scalars["String"]>>>
   demographic_info?: Maybe<Array<Maybe<Scalars["String"]>>>
   roi?: Maybe<Array<Maybe<Scalars["String"]>>>
 }
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type User_Delete_Elem_Input = {
+  account_details?: Maybe<Scalars["Int"]>
   demographic_info?: Maybe<Scalars["Int"]>
   roi?: Maybe<Scalars["Int"]>
 }
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type User_Delete_Key_Input = {
+  account_details?: Maybe<Scalars["String"]>
   demographic_info?: Maybe<Scalars["String"]>
   roi?: Maybe<Scalars["String"]>
 }
@@ -3384,6 +3395,7 @@ export type User_Inc_Input = {
 
 /** input type for inserting data into table "user" */
 export type User_Insert_Input = {
+  account_details?: Maybe<Scalars["jsonb"]>
   balance?: Maybe<Scalars["float8"]>
   corpus_share?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -3494,6 +3506,7 @@ export type User_On_Conflict = {
 
 /** ordering options when selecting data from "user" */
 export type User_Order_By = {
+  account_details?: Maybe<Order_By>
   balance?: Maybe<Order_By>
   corpus_share?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
@@ -3525,12 +3538,15 @@ export type User_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type User_Prepend_Input = {
+  account_details?: Maybe<Scalars["jsonb"]>
   demographic_info?: Maybe<Scalars["jsonb"]>
   roi?: Maybe<Scalars["jsonb"]>
 }
 
 /** select columns of table "user" */
 export enum User_Select_Column {
+  /** column name */
+  AccountDetails = "account_details",
   /** column name */
   Balance = "balance",
   /** column name */
@@ -3567,6 +3583,7 @@ export enum User_Select_Column {
 
 /** input type for updating data in table "user" */
 export type User_Set_Input = {
+  account_details?: Maybe<Scalars["jsonb"]>
   balance?: Maybe<Scalars["float8"]>
   corpus_share?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
@@ -3676,6 +3693,8 @@ export type User_T_Comparison_Exp = {
 
 /** update columns of table "user" */
 export enum User_Update_Column {
+  /** column name */
+  AccountDetails = "account_details",
   /** column name */
   Balance = "balance",
   /** column name */
@@ -3805,6 +3824,7 @@ export type CreateUserMutation = { __typename?: "mutation_root" } & {
       | "roi"
       | "phone"
       | "demographic_info"
+      | "account_details"
       | "user_number"
     >
   >
@@ -4346,6 +4366,7 @@ export const CreateUserDocument = gql`
       roi
       phone
       demographic_info
+      account_details
       user_number
     }
   }

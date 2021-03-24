@@ -19,7 +19,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Basic loan request flow for an accepted loan", () => {
+describe.skip("Basic loan request flow for an accepted loan", () => {
   const amount = 100
   const pledgeAmount1 = amount / 2
   const pledgeAmount2 = amount / 4

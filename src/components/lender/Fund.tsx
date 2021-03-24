@@ -33,7 +33,8 @@ export function AddFundsForm({ user }: Props) {
 
   return (
     <Box>
-      <form onSubmit={handleSubmit(onSubmit)} method="post">
+      <Text>Coming soon!</Text>
+      {/* <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Text>How much money would you like to invest?</Text>
           <AmountInput passRef={register({ required: true })} />
@@ -51,10 +52,10 @@ export function AddFundsForm({ user }: Props) {
 
           <Box h="30px" />
           <Center>
-            <Button type="submit">Submit</Button>
+            <Button disabled type="submit">Submit</Button>
           </Center>
         </Stack>
-      </form>
+      </form> */}
     </Box>
   )
 }

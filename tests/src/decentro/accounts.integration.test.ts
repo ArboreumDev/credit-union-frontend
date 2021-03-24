@@ -12,7 +12,7 @@ export const decentro = new DecentroClient(
   "KDTtCWDkcIfVKEEZlYCNMljnFM8SwM0L"
 )
 
-describe("Decentro tests", () => {
+describe.skip("Decentro tests", () => {
   test.skip("create account", async () => {
     const req = {
       type: "virtual",

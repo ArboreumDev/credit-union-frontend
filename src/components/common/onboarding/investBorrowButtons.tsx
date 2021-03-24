@@ -22,6 +22,7 @@ const InvestBorrowButtons = (props: { needSignin?: boolean }) => {
         Invest
       </Button>
       <Button
+        disabled
         onClick={() => {
           onclick(UserType.Borrower)
         }}

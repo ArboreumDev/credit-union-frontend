@@ -38,7 +38,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Loan Request Flow", () => {
+describe.skip("Loan Request Flow", () => {
   test("the swarmai module can respond to loan requests", async () => {
     const res: SystemUpdate = await dbClient.calculateLoanRequestOffer(
       requestId

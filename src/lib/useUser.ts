@@ -10,6 +10,7 @@ function getRedirectLocation(session: Session, currentPage: string) {
   console.log(session)
   const user = session.user
   if (!user.user_type || !user.onboarded) return "/onboarding"
+  if (!user.kyc_approved) return "/pending"
   if (user.user_type) {
     if (currentPage === "/profile" || currentPage.includes("/dashboard"))
       return currentPage

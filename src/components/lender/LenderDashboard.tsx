@@ -82,7 +82,7 @@ const LenderDashboard = ({ user }: Props) => {
       <Stack>
         <Wrap w="100%">
           {Asset("Invested", lender.invested)}
-          {Asset("Pledged", lender.pledged)}
+          {/* {Asset("Pledged", lender.pledged)} */}
           {Asset("Uninvested", lender.uninvested)}
         </Wrap>
       </Stack>
@@ -101,7 +101,7 @@ const LenderDashboard = ({ user }: Props) => {
             <Center minW={320} maxW="sm">
               <Stack w="100%" spacing={6}>
                 {AllocatedAsset("Invested", lender.percInvested, "teal.500")}
-                {AllocatedAsset("Pledged", lender.percPledged, "green.500")}
+                {/* {AllocatedAsset("Pledged", lender.percPledged, "green.500")} */}
                 {AllocatedAsset(
                   "Uninvested",
                   lender.percUninvested,
@@ -120,7 +120,7 @@ const LenderDashboard = ({ user }: Props) => {
         </Wrap>
       </Stack>
 
-      {user.pledges?.length > 0 && (
+      {/* {user.pledges?.length > 0 && (
         <Box maxW="sm">
           <PledgeInvestments pledges={user.pledges} />
         </Box>
@@ -130,7 +130,7 @@ const LenderDashboard = ({ user }: Props) => {
         <Box maxW="xl">
           <InvestedLoans loans={user.active_loans} roi={user.roi} />
         </Box>
-      )}
+      )} */}
     </Stack>
   )
 }

@@ -13,7 +13,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Loan Request Flow", () => {
+describe.skip("Loan Request Flow", () => {
   const amount = 100
   let requestId: string
 
