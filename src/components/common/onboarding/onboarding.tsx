@@ -48,7 +48,6 @@ type FormData = {
   accountType: string
   address: string
   zipCode: string
-  gender: string
   employmentType: string
   income: string
   fatherFirstName: string
@@ -79,15 +78,7 @@ export default function Onboarding({ user, userType }: Params) {
   const [tabState, setTabstate] = useState({ 0: "", 1: "", 2: "", 3: "" })
   const toast = useToast()
   const tabFields = {
-    0: [
-      "address",
-      "zipCode",
-      "phone",
-      "gender",
-      "dob",
-      "lastname",
-      "firstname",
-    ],
+    0: ["address", "zipCode", "phone", "lastname", "firstname"],
     1: ["accountNumber", "ifsc", "bankName", "accountType"],
     2: ["fatherLastName", "fatherFirstName", "employmentType", "income"],
     3: ["aadhaarPassword"],
@@ -154,9 +145,10 @@ export default function Onboarding({ user, userType }: Params) {
           },
         },
         demographic_info: {
+          dob: "",
+          gender: "",
           address: data.address,
           zipCode: data.zipCode,
-          gender: data.gender,
           income: data.income,
           father: {
             firstName: data.fatherFirstName,
@@ -167,7 +159,7 @@ export default function Onboarding({ user, userType }: Params) {
       },
     })
       .then((res) => {
-        // router.push("/dashboard")
+        router.push("/dashboard")
       })
       .catch((err) => console.error(err))
   }
@@ -245,23 +237,6 @@ export default function Onboarding({ user, userType }: Params) {
                           size="lg"
                           ref={register({ required: true })}
                         />
-                        <FormLabel>Date of birth:</FormLabel>
-                        <Input
-                          placeholder="Date of birth"
-                          type="date"
-                          name="dob"
-                          size="lg"
-                          ref={register({ required: true })}
-                        />
-                        <Select
-                          placeholder="Select gender"
-                          name="gender"
-                          ref={register({ required: true })}
-                        >
-                          <option>MALE</option>
-                          <option>FEMALE</option>
-                          <option>OTHER</option>
-                        </Select>
                         <Input
                           placeholder="Address"
                           name="address"
