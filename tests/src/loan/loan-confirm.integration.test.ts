@@ -51,7 +51,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe("Loan Request Flow: confirm loan offer", () => {
+describe.skip("Loan Request Flow: confirm loan offer", () => {
   test("sets loans status to live/active", async () => {
     const data = await dbClient.acceptLoanOffer(requestId, "latestOffer")
 
