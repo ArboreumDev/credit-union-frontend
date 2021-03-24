@@ -23,6 +23,7 @@ export const LENDER1: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
@@ -59,6 +60,7 @@ export const LENDER2: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
@@ -95,6 +97,7 @@ export const BORROWER1: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
@@ -135,6 +138,7 @@ export const SUPPORTER1: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
@@ -175,6 +179,7 @@ export const SUPPORTER2: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
@@ -223,6 +228,7 @@ export const SUPPORTER3: User = {
     address: "somePlace 8",
     zipCode: 40000,
     gender: "MALE",
+    dob: "",
     father: {
       firstName: "dad",
       lastName: "DY",
