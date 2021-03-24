@@ -43,6 +43,7 @@ type FormData = {
   lastname: string
   phone: string
   ifsc: string
+  pan: string
   accountNumber: string
   bankName: string
   accountType: string
@@ -78,7 +79,7 @@ export default function Onboarding({ user, userType }: Params) {
   const [tabState, setTabstate] = useState({ 0: "", 1: "", 2: "", 3: "" })
   const toast = useToast()
   const tabFields = {
-    0: ["address", "zipCode", "phone", "lastname", "firstname"],
+    0: ["address", "zipCode", "phone", "lastname", "firstname", "pan"],
     1: ["accountNumber", "ifsc", "bankName", "accountType"],
     2: ["fatherLastName", "fatherFirstName", "employmentType", "income"],
     3: ["aadhaarPassword"],
@@ -145,6 +146,7 @@ export default function Onboarding({ user, userType }: Params) {
           },
         },
         demographic_info: {
+          pan: data.pan,
           dob: "",
           gender: "",
           address: data.address,
@@ -224,6 +226,7 @@ export default function Onboarding({ user, userType }: Params) {
                             ref={register({ required: true })}
                           />
                         </InputGroup>
+
                         <Input
                           placeholder="First Name"
                           name="firstname"
@@ -234,6 +237,12 @@ export default function Onboarding({ user, userType }: Params) {
                         <Input
                           placeholder="Last Name"
                           name="lastname"
+                          size="lg"
+                          ref={register({ required: true })}
+                        />
+                        <Input
+                          name="pan"
+                          placeholder="PAN number"
                           size="lg"
                           ref={register({ required: true })}
                         />
