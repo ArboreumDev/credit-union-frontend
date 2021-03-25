@@ -151,7 +151,7 @@ export default function Onboarding({ user, userType }: Params) {
           gender: "",
           address: data.address,
           zipCode: data.zipCode,
-          income: data.income,
+          income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
             firstName: data.fatherFirstName,
             lastName: data.fatherFirstName,
