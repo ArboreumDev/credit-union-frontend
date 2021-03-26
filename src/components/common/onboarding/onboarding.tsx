@@ -151,7 +151,7 @@ export default function Onboarding({ user, userType }: Params) {
           gender: "",
           address: data.address,
           zipCode: data.zipCode,
-          income: data.income,
+          income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
             firstName: data.fatherFirstName,
             lastName: data.fatherFirstName,
@@ -303,6 +303,26 @@ export default function Onboarding({ user, userType }: Params) {
                     </TabPanel>
                     <TabPanel>
                       <Stack spacing={3}>
+                        <Select
+                          placeholder="Select annual income category"
+                          name="income"
+                          ref={register({ required: true })}
+                        >
+                          <option>0 - 5,00,000</option>
+                          <option>5,00,000 - 10,00,000</option>
+                          <option>10,00,000 - 20,00,000</option>
+                          <option>20,00,000 - 1,00,00,00,000</option>
+                        </Select>
+                        <Select
+                          placeholder="Select employment type"
+                          name="employmentType"
+                          ref={register({ required: true })}
+                        >
+                          <option>SELF_EMPLOYED</option>
+                          <option>SALARIED</option>
+                          <option>RETIRED</option>
+                          <option>OTHER</option>
+                        </Select>
                         <Input
                           placeholder="Father First Name"
                           name="fatherFirstName"
@@ -315,26 +335,6 @@ export default function Onboarding({ user, userType }: Params) {
                           size="lg"
                           ref={register({ required: true })}
                         />
-                        <Select
-                          placeholder="Select annual income category"
-                          name="income"
-                          ref={register({ required: true })}
-                        >
-                          <option>0-500000</option>
-                          <option>500000-1000000</option>
-                          <option>1000000-2000000</option>
-                          <option>2000000-1000000000</option>
-                        </Select>
-                        <Select
-                          placeholder="Select employment type"
-                          name="employmentType"
-                          ref={register({ required: true })}
-                        >
-                          <option>SELF_EMPLOYED</option>
-                          <option>SALARIED</option>
-                          <option>RETIRED</option>
-                          <option>OTHER</option>
-                        </Select>
                         <Center>
                           <Button onClick={() => checkFields(true)}>
                             Next
@@ -349,7 +349,7 @@ export default function Onboarding({ user, userType }: Params) {
                             <Text>
                               Please follow the instructions
                               <Link
-                                href="https://resident.uidai.gov.in/offline-kyc"
+                                href="https://eaadhaar.uidai.gov.in/#/"
                                 color="teal.500"
                                 isExternal
                               >
@@ -358,7 +358,7 @@ export default function Onboarding({ user, userType }: Params) {
                               </Link>
                               or
                               <Link
-                                href="https://eaadhaar.uidai.gov.in/#/"
+                                href="https://resident.uidai.gov.in/offline-kyc"
                                 color="teal.500"
                                 isExternal
                               >
@@ -369,7 +369,8 @@ export default function Onboarding({ user, userType }: Params) {
                               card, then drop it together with the other photos
                               in the dropzone below. In order to verify it, we
                               will also need the password used to encrypt the
-                              file.
+                              file. Each document you upload should be less than
+                              1MB.
                             </Text>
                             <Input
                               placeholder="aahaar file password"
@@ -390,7 +391,7 @@ export default function Onboarding({ user, userType }: Params) {
                                 </ListItem>
                                 <ListItem>PAN Card (pdf/jpg/jpeg/png)</ListItem>
                                 <ListItem>
-                                  Photo of face (pdf/jpg/jpeg/png)
+                                  Passport Photo (pdf/jpg/jpeg/png)
                                 </ListItem>
                               </UnorderedList>
                             </UploadingDropzone>
