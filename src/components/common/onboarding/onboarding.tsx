@@ -323,19 +323,19 @@ export default function Onboarding({ user, userType }: Params) {
                           <option>RETIRED</option>
                           <option>OTHER</option>
                         </Select>
+                        <Input
+                          placeholder="Father First Name"
+                          name="fatherFirstName"
+                          size="lg"
+                          ref={register({ required: true })}
+                        />
+                        <Input
+                          placeholder="Father Last Name"
+                          name="fatherLastName"
+                          size="lg"
+                          ref={register({ required: true })}
+                        />
                         <Center>
-                          <Input
-                            placeholder="Father First Name"
-                            name="fatherFirstName"
-                            size="lg"
-                            ref={register({ required: true })}
-                          />
-                          <Input
-                            placeholder="Father Last Name"
-                            name="fatherLastName"
-                            size="lg"
-                            ref={register({ required: true })}
-                          />
                           <Button onClick={() => checkFields(true)}>
                             Next
                           </Button>
@@ -369,7 +369,7 @@ export default function Onboarding({ user, userType }: Params) {
                               card, then drop it together with the other photos
                               in the dropzone below. In order to verify it, we
                               will also need the password used to encrypt the
-                              file. All documents you upload should be less than
+                              file. Each document you upload should be less than
                               1MB.
                             </Text>
                             <Input
