@@ -9,6 +9,7 @@ import {
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 import { dbClient, sdk } from "./common/utils"
+import { circle } from "../src/circle/accounts.integration.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -30,6 +31,7 @@ describe("Create new user", () => {
       dbClient
     )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
+    expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
   })
 })
 

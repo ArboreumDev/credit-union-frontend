@@ -12,6 +12,8 @@ import {
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
+import CircleClient, { circle } from "gql/wallet/circle_client"
+import { useReducer } from "react"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -76,7 +78,27 @@ export class CreateUser extends Action {
       user.demographic_info = USER_DEMOGRAPHIC
     }
 
-    return await this.dbClient.sdk.CreateUser(this.payload)
+    const ret = await this.dbClient.sdk.CreateUser(this.payload)
+
+    // create a digital account with circle, with user.id as idempotencyKey (has to be uuid-format)
+    const req = {
+      idempotencyKey: ret.insert_user_one.id,
+      description: "virtual account",
+    }
+    const { walletId, entityId } = await circle.createAccount(req)
+    const newDetails = {
+      ...user.account_details,
+      circle: { walletId, entityId },
+    }
+    // update db with circle data
+    const data = await this.dbClient.sdk.UpdateAccountDetails({
+      userId: ret.insert_user_one.id,
+      accountDetails: newDetails,
+    })
+    // update value to be returned
+    ret.insert_user_one.account_details = data.user.account_details
+
+    return ret
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
