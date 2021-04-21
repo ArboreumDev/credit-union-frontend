@@ -3846,6 +3846,7 @@ export type GetAllUsersQuery = { __typename?: "query_root" } & {
       | "corpus_share"
       | "kyc_approved"
       | "demographic_info"
+      | "account_details"
     >
   >
 }
@@ -3940,6 +3941,15 @@ export type ApproveKycMutationVariables = Exact<{
 
 export type ApproveKycMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "kyc_approved">>
+}
+
+export type UpdateAccountDetailsMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  accountDetails: Scalars["jsonb"]
+}>
+
+export type UpdateAccountDetailsMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "account_details">>
 }
 
 export type UpdateUserRoiMutationVariables = Exact<{
@@ -4384,6 +4394,7 @@ export const GetAllUsersDocument = gql`
       corpus_share
       kyc_approved
       demographic_info
+      account_details
     }
   }
 `
@@ -4477,6 +4488,17 @@ export const ApproveKycDocument = gql`
     ) {
       id
       kyc_approved
+    }
+  }
+`
+export const UpdateAccountDetailsDocument = gql`
+  mutation UpdateAccountDetails($userId: uuid!, $accountDetails: jsonb!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { account_details: $accountDetails }
+    ) {
+      id
+      account_details
     }
   }
 `
@@ -4840,6 +4862,16 @@ export function getSdk(
     ): Promise<ApproveKycMutation> {
       return withWrapper(() =>
         client.request<ApproveKycMutation>(print(ApproveKycDocument), variables)
+      )
+    },
+    UpdateAccountDetails(
+      variables: UpdateAccountDetailsMutationVariables
+    ): Promise<UpdateAccountDetailsMutation> {
+      return withWrapper(() =>
+        client.request<UpdateAccountDetailsMutation>(
+          print(UpdateAccountDetailsDocument),
+          variables
+        )
       )
     },
     UpdateUserRoi(
