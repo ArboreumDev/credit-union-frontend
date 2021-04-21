@@ -34,7 +34,8 @@ export default class CircleClient extends Bank {
 
   async createAccount(params: { idempotencyKey: string; description: string }) {
     const endpoint = "v1/wallets"
-    return this.fetcher.post(endpoint, params)
+    const { data } = await this.fetcher.post(endpoint, params)
+    return data
     // returns:
     // {
 
@@ -68,3 +69,5 @@ export default class CircleClient extends Bank {
     // } }
   }
 }
+
+export const circle = new CircleClient(CIRCLE_BASE_URL)

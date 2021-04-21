@@ -9,21 +9,20 @@ describe("Circle tests", () => {
   const idemKey = uuidv4()
   let walletId
 
-  test("create account", async () => {
+  test("create account and get balance", async () => {
     const req = {
       idempotencyKey: idemKey,
       description: "lender-wallet",
     }
-    const { data } = await circle.createAccount(req)
-    walletId = data.walletId
+    const { walletId, entityId } = await circle.createAccount(req)
     expect(walletId).toBeTruthy
-    expect(data.entity).toBeTruthy
+    expect(entityId).toBeTruthy
 
     // using the same key will not create a different wallet
     const res2 = await circle.createAccount(req)
-    expect(res2.data.walletId).toBe(walletId)
-  })
-  test("get balance", async () => {
+    expect(res2.walletId).toBe(walletId)
+
+    // check doesnt have any balance
     const balances = await circle.getBalance(walletId)
     expect(balances).toStrictEqual([])
   })
