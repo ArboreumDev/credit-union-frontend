@@ -32,6 +32,8 @@ describe("Create new user", () => {
     )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
     expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.ethAddress).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.algoAddress).toBeTruthy
   })
 })
 

@@ -80,24 +80,37 @@ export class CreateUser extends Action {
 
     const ret = await this.dbClient.sdk.CreateUser(this.payload)
 
-    // create a digital account with circle, with user.id as idempotencyKey (has to be uuid-format)
+    // circle setup
+    // Note these three calls could maybe be combined into one
+    // 1) create a digital account with circle, with user.id as idempotencyKey (has to be uuid-format)
     const req = {
       idempotencyKey: ret.insert_user_one.id,
       description: "virtual account",
     }
     const { walletId, entityId } = await circle.createAccount(req)
+    // 2) create a deposit address for eth & algo
+    const ethAddress = await circle.createAddress(
+      walletId,
+      req.idempotencyKey,
+      "ETH"
+    )
+    const algoAddress = await circle.createAddress(
+      walletId,
+      req.idempotencyKey,
+      "ALGO"
+    )
+    // 3) update db with circle data
     const newDetails = {
       ...user.account_details,
-      circle: { walletId, entityId },
+      circle: { walletId, entityId, ethAddress, algoAddress },
     }
-    // update db with circle data
     const data = await this.dbClient.sdk.UpdateAccountDetails({
       userId: ret.insert_user_one.id,
       accountDetails: newDetails,
     })
+
     // update value to be returned
     ret.insert_user_one.account_details = data.user.account_details
-
     return ret
   }
 

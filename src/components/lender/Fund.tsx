@@ -1,5 +1,21 @@
-import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
+import {
+  Box,
+  Button,
+  Center,
+  Stack,
+  Text,
+  Flex,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Input,
+  Divider,
+  useClipboard,
+} from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
+import Address from "components/common/Address"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
@@ -33,7 +49,67 @@ export function AddFundsForm({ user }: Props) {
 
   return (
     <Box>
-      <Text>Coming soon!</Text>
+      <Text>Choose which method you want to use to fund your account</Text>
+      <Accordion allowToggle>
+        <AccordionItem>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                USDC on Ethereum
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <Box>
+              <Text>
+                Fund your account by sending ETH into this deposit address
+              </Text>
+              <Address address={"" + user.account_details.circle.ethAddress} />
+              <i>
+                Note that we might afterwards move the money out of that account
+                to a different address - It will still be reflected in your
+                overall account balance though
+              </i>
+            </Box>
+          </AccordionPanel>
+        </AccordionItem>
+
+        <AccordionItem>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                USDC on Algorand
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <Text>
+              Fund your account by sending ETH into this deposit address
+            </Text>
+            <Address address={user.account_details.circle.algoAddress} />
+            <i>
+              Note that we might afterwards move the money out of that account
+              to a different address - It will still be reflected in your
+              overall account balance though
+            </i>
+          </AccordionPanel>
+        </AccordionItem>
+
+        <AccordionItem>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                Card Payment (coming soon!)
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>coming soon!</AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+
       {/* <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Text>How much money would you like to invest?</Text>
