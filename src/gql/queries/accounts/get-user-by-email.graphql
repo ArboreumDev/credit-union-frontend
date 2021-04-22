@@ -12,6 +12,7 @@ query GetUserByEmail($email: String!) {
     demographic_info
     onboarded
     roi
+    account_details
     loan_requests {
       request_id
       confirmation_date
