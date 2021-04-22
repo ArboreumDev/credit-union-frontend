@@ -68,6 +68,29 @@ export default class CircleClient extends Bank {
     //        "balances":[ {"amount":"3.14", "currency":"USD" } ]
     // } }
   }
+
+  /**
+   * Create Address
+   * @param walletId (contains form data and encrypted Address details)
+   * @param idempotencyKey
+   * @param currency USD only (so far)
+   * @param chain one of ETH/ALGO (SOL/XLM)
+   */
+  async createAddress(
+    walletId: string,
+    idempotencyKey: string,
+    chain = "ETH",
+    currency = "USD"
+  ) {
+    const url = `/v1/wallets/${walletId}/addresses`
+    const payload = {
+      idempotencyKey,
+      currency,
+      chain,
+    }
+    const { data } = await this.fetcher.post(url, payload)
+    return data.address
+  }
 }
 
 export const circle = new CircleClient(CIRCLE_BASE_URL)
