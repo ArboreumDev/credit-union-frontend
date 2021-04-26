@@ -34,6 +34,9 @@ describe("Create new user", () => {
     expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
     expect(res.insert_user_one.account_details.circle.ethAddress).toBeTruthy
     expect(res.insert_user_one.account_details.circle.algoAddress).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.algoAddress).not.toBe(
+      res.insert_user_one.account_details.circle.ethAddress
+    )
   })
 })
 

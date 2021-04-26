@@ -14,6 +14,7 @@ import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
 import CircleClient, { circle } from "gql/wallet/circle_client"
 import { useReducer } from "react"
+import { uuidv4 } from "../lib/scenario"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -94,11 +95,7 @@ export class CreateUser extends Action {
       req.idempotencyKey,
       "ETH"
     )
-    const algoAddress = await circle.createAddress(
-      walletId,
-      req.idempotencyKey,
-      "ALGO"
-    )
+    const algoAddress = await circle.createAddress(walletId, uuidv4(), "ALGO")
     // 3) update db with circle data
     const newDetails = {
       ...user.account_details,
