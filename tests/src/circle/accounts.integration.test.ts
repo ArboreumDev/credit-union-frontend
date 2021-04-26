@@ -29,12 +29,15 @@ describe("Circle tests", () => {
     test("check balance", async () => {
       // check doesnt have any balance
       const balances = await circle.getBalance(walletId)
-      expect(balances).toStrictEqual([])
+      expect(balances).toBe(0)
     })
 
     test("create an on-chain deposit address ", async () => {
       const address1 = await circle.createAddress(walletId, idemKey, "ETH")
       expect(address1).toBeTruthy
+      const address2 = await circle.createAddress(walletId, uuidv4(), "ALGO")
+      expect(address2).toBeTruthy
+      expect(address1).not.toBe(address2)
     })
   })
 })

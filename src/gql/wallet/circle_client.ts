@@ -57,7 +57,11 @@ export default class CircleClient extends Bank {
   async getBalance(walletId: string) {
     const endpoint = `/v1/wallets/${walletId}`
     const { data } = await this.fetcher.get(endpoint, {})
-    return data.balances
+    const balances = data.balances
+    const usdBalance = data.balances.length
+      ? data.balances.filter((x) => x.currency === "USD").map((x) => x.amount)
+      : 0
+    return usdBalance
     // returns
     // {
     //     "data":{
