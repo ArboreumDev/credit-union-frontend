@@ -1,29 +1,36 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { Session } from "lib/types"
-import DbClient from "gql/db_client"
+import { Session } from "../../../lib/types"
+import DbClient from "../../../gql/db_client"
+import CircleClient, { circle } from "../../../gql/wallet/circle_client"
 
 const dbClient = new DbClient()
 
 const options = {
-  database: process.env.DATABASE_URL,
   // Configure one or more authentication providers
   providers: [
-    Providers.Email({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: encodeURIComponent(process.env.EMAIL_SERVER_PASSWORD),
-        },
+    Providers.Credentials({
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: "Arboreum",
+      credentials: {
+        username: { label: "Email", type: "text", placeholder: "" },
+        // password: { label: "Password", type: "password" }
       },
-      from: process.env.EMAIL_FROM,
+      authorize: async (credentials) => {
+        const user = {
+          id: 1,
+          name: "",
+          email: credentials.username,
+        }
+
+        if (user) {
+          // Any user object returned here will be saved in the JSON Web Token
+          return Promise.resolve(user)
+        } else {
+          return Promise.resolve(null)
+        }
+      },
     }),
-    // Providers.Google({
-    //   clientId: process.env.GOOGLE_CLIENT_ID,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    // }),
   ],
   callbacks: {
     session: async (session) => {
@@ -31,6 +38,17 @@ const options = {
       const _user = await dbClient.getUserByEmail(s.user.email)
 
       if (_user) s = { ...s, user: _user }
+
+      // if user is kyc'ed & has circle, fetch balance from circle
+      if (
+        s.user.kyc_approved &&
+        s.user.account_details.circle &&
+        s.user.account_details.circle.walletId
+      ) {
+        s.user.balance = await circle.getBalance(
+          s.user.account_details.circle.walletId
+        )
+      }
 
       return Promise.resolve(s)
     },
