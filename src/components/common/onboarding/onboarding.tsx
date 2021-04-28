@@ -57,6 +57,16 @@ type FormData = {
   aadharPassword: string
 }
 
+interface Address {
+  city: string
+  district: string
+  // TODO: use enum with two-letter codes of accepted coutries here
+  coutry: string
+  line1: string
+  line2: string
+  postalCode: string
+}
+
 interface Params {
   user: {
     email: string
@@ -137,8 +147,18 @@ export default function Onboarding({ user, userType }: Params) {
           bankDetails: {
             bankName: data.bankName,
             accountNumber: data.accountNumber,
+            routingNumber: "",
             branchCode: data.ifsc,
             accountType: data.accountType,
+            iban: "DE31100400480532013000",
+            bankAddress: {
+              city: "Berlin",
+              country: "DE",
+              line1: "",
+              line2: "",
+              district: "",
+              postalCode: "12050",
+            },
           },
           rcAccount: {
             investor_id: "",
@@ -150,8 +170,13 @@ export default function Onboarding({ user, userType }: Params) {
           pan: data.pan,
           dob: "",
           gender: "",
-          address: data.address,
-          zipCode: data.zipCode,
+          address: {
+            line1: data.address,
+            line2: "",
+            postalCode: data.zipCode,
+            district: "",
+            country: "",
+          },
           income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
             firstName: data.fatherFirstName,
