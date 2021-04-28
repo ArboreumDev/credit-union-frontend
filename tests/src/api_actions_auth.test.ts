@@ -20,7 +20,7 @@ describe("Create new user", () => {
     await sdk.ResetDB()
   })
 
-  test("new user", async () => {
+  test.only("new user", async () => {
     const payload: typeof CreateUser.InputType = {
       user: BORROWER1,
     }
@@ -37,6 +37,8 @@ describe("Create new user", () => {
     expect(res.insert_user_one.account_details.circle.algoAddress).not.toBe(
       res.insert_user_one.account_details.circle.ethAddress
     )
+    expect(res.insert_user_one.account_details.circle.trackingRef).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.accountId).toBeTruthy
   })
 })
 

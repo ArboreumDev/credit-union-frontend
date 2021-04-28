@@ -12,9 +12,10 @@ import {
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
-import CircleClient, { circle } from "gql/wallet/circle_client"
-import { useReducer } from "react"
-import { uuidv4 } from "../lib/scenario"
+import CircleClient, {
+  circle,
+  CreateWireAccountPayload,
+} from "gql/wallet/circle_client"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -79,31 +80,19 @@ export class CreateUser extends Action {
       user.demographic_info = USER_DEMOGRAPHIC
     }
 
+    // create user entry our DB
     const ret = await this.dbClient.sdk.CreateUser(this.payload)
 
-    // circle setup
-    // Note these three calls could maybe be combined into one
-    // 1) create a digital account with circle, with user.id as idempotencyKey (has to be uuid-format)
-    const req = {
-      idempotencyKey: ret.insert_user_one.id,
-      description: "virtual account",
-    }
-    const { walletId, entityId } = await circle.createAccount(req)
-    // 2) create a deposit address for eth & algo
-    const ethAddress = await circle.createAddress(
-      walletId,
-      req.idempotencyKey,
-      "ETH"
-    )
-    const algoAddress = await circle.createAddress(walletId, uuidv4(), "ALGO")
-    // 3) update db with circle data
-    const newDetails = {
-      ...user.account_details,
-      circle: { walletId, entityId, ethAddress, algoAddress },
-    }
+    // circle setup using userId as idempotencyKey
+    const circleData = await circle.setupUser(ret.insert_user_one.id, user)
+
+    // update db with circle data
     const data = await this.dbClient.sdk.UpdateAccountDetails({
       userId: ret.insert_user_one.id,
-      accountDetails: newDetails,
+      accountDetails: {
+        ...user.account_details,
+        circle: circleData,
+      },
     })
 
     // update value to be returned
