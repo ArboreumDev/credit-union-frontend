@@ -1,5 +1,10 @@
-import CircleClient, { CIRCLE_BASE_URL } from "gql/wallet/circle_client"
+import CircleClient, {
+  CIRCLE_BASE_URL,
+  CreateWireAccountPayload,
+} from "gql/wallet/circle_client"
 import { uuidv4 } from "../../../src/lib/scenario"
+import { exampleCards } from "../../fixtures/exampleCards"
+import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 
 global.fetch = require("node-fetch")
 
@@ -38,6 +43,17 @@ describe("Circle tests", () => {
       const address2 = await circle.createAddress(walletId, uuidv4(), "ALGO")
       expect(address2).toBeTruthy
       expect(address1).not.toBe(address2)
+    })
+
+    test("register wire Account", async () => {
+      const wire = exampleWireAccounts[1]
+      const data = await circle.createWireAccount({
+        idempotencyKey: uuidv4(),
+        ...wire.formData,
+      } as CreateWireAccountPayload)
+      console.log(data)
+      expect(data.trackingRef).toBeTruthy
+      expect(data.accountId).toBeTruthy
     })
   })
 })
