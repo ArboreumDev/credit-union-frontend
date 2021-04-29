@@ -67,6 +67,16 @@ interface Address {
   postalCode: string
 }
 
+export interface BankDetails {
+  bankName: string
+  accountNumber: string
+  branchCode: string
+  routingNumber: string
+  accountType: string
+  iban: string
+  bankAddress: Address
+}
+
 interface Params {
   user: {
     email: string

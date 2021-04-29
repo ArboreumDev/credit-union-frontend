@@ -7,6 +7,8 @@ import {
   RoI,
 } from "../types"
 import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
+import { exampleWireAccounts } from "../../../tests/fixtures/exampleWireAccounts"
+import { exampleCircleAccounts } from "../../../tests/fixtures/exampleCircleAccounts"
 
 const ROI1: RoI = {
   total_apr: {
@@ -36,18 +38,9 @@ export class Fixtures {
     loans_to_repay: [],
     roi: NO_ROI,
     account_details: {
-      circle: {
-        walletId: "1000088128",
-        entityId: "1259386a-7aa3-4ebd-be70-9c7b9c017bf9",
-        ethAddress: "0x86c19a96fae6e2c615f7ad87f498f304409e3b7a",
-        algoAddress:
-          "OAQJOCLUKGJF3BR5GJWFDZ5IC43OLVCF56ODGUCZ6LJXGQG2HHFMIHPREM",
-      },
+      circle: { ...exampleCircleAccounts[0] },
       bankDetails: {
-        bankName: "someBank",
-        accountNumber: "10002349234",
-        branchCode: "IFSC10001000",
-        accountType: "CURRENT",
+        ...exampleWireAccounts[0].bankDetails,
       },
     },
   }
@@ -155,7 +148,10 @@ export class Fixtures {
         loan: Fixtures.LoanReqInfo,
       },
     ],
-    account_details: {},
+    account_details: {
+      circle: { ...exampleCircleAccounts[1] },
+      bankDetails: { ...exampleWireAccounts[1].bankDetails },
+    },
   }
 
   static BorrowerKYCConfirmed: User = {
