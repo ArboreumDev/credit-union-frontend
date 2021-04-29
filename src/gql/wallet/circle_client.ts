@@ -193,6 +193,17 @@ export default class CircleClient extends Bank {
       },
     } as CreateWireAccountPayload
     const { accountId, trackingRef } = await this.createWireAccount(bankReq)
+    console.log(accountId)
+
+    // 0.5) get target-bank acccount to which deposits from the above account shall be sent
+    const {
+      beneficiary,
+      beneficiaryBank,
+    } = await this.getWireAccountInstructions(accountId)
+    const wireDepositAccount = {
+      owner: beneficiary.name,
+      bankDetails: instructionsToBankDetails(beneficiaryBank),
+    } as BankAccountDetails
 
     // 1) create a digital account with circle, with user.id as idempotencyKey (has to be uuid-format)
     const req = {
@@ -217,7 +228,8 @@ export default class CircleClient extends Bank {
       entityId,
       ethAddress,
       algoAddress,
-    }
+      wireDepositAccount,
+    } as CircleAccountInfo
   }
 }
 

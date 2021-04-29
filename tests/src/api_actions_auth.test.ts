@@ -39,6 +39,8 @@ describe("Create new user", () => {
     )
     expect(res.insert_user_one.account_details.circle.trackingRef).toBeTruthy
     expect(res.insert_user_one.account_details.circle.accountId).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.wireDepositAccount)
+      .toBeTruthy
   })
 })
 
