@@ -7,8 +7,12 @@ import {
   RoI,
 } from "../types"
 import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
-import { exampleWireAccounts } from "../../../tests/fixtures/exampleWireAccounts"
+import {
+  exampleWireAccounts,
+  exampleDepositAccounts,
+} from "../../../tests/fixtures/exampleWireAccounts"
 import { exampleCircleAccounts } from "../../../tests/fixtures/exampleCircleAccounts"
+import { CircleAccountInfo } from "gql/wallet/circle_client"
 
 const ROI1: RoI = {
   total_apr: {
@@ -38,7 +42,10 @@ export class Fixtures {
     loans_to_repay: [],
     roi: NO_ROI,
     account_details: {
-      circle: { ...exampleCircleAccounts[0] },
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[0],
+      } as CircleAccountInfo,
       bankDetails: {
         ...exampleWireAccounts[0].bankDetails,
       },
@@ -149,7 +156,10 @@ export class Fixtures {
       },
     ],
     account_details: {
-      circle: { ...exampleCircleAccounts[1] },
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[1],
+      } as CircleAccountInfo,
       bankDetails: { ...exampleWireAccounts[1].bankDetails },
     },
   }

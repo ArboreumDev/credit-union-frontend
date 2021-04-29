@@ -16,6 +16,7 @@ describe("Circle tests", () => {
 
   describe("setup", () => {
     let walletId
+    let accountId: string
 
     test("create account and get balance", async () => {
       const req = {

@@ -38,6 +38,7 @@ import { useState } from "react"
 import { ST } from "next/dist/next-server/lib/utils"
 import { getEffectiveTypeParameterDeclarations } from "typescript"
 import { uuidv4 } from "../../../lib/scenario"
+import { BankDetails, Address } from "../../../gql/wallet/circle_client"
 
 type FormData = {
   firstname: string
@@ -55,26 +56,6 @@ type FormData = {
   fatherFirstName: string
   fatherLastName: string
   aadharPassword: string
-}
-
-interface Address {
-  city: string
-  district: string
-  // TODO: use enum with two-letter codes of accepted coutries here
-  coutry: string
-  line1: string
-  line2: string
-  postalCode: string
-}
-
-export interface BankDetails {
-  bankName: string
-  accountNumber: string
-  branchCode: string
-  routingNumber: string
-  accountType: string
-  iban: string
-  bankAddress: Address
 }
 
 interface Params {
@@ -169,7 +150,7 @@ export default function Onboarding({ user, userType }: Params) {
               district: "",
               postalCode: "12050",
             },
-          },
+          } as bankDetails,
           rcAccount: {
             investor_id: "",
             accountNumber: "",
@@ -186,7 +167,7 @@ export default function Onboarding({ user, userType }: Params) {
             postalCode: data.zipCode,
             district: "",
             country: "",
-          },
+          } as Address,
           income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
             firstName: data.fatherFirstName,

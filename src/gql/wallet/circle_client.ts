@@ -36,6 +36,42 @@ export interface CreateWireAccountPayload {
     postalCode?: string
   }
 }
+export interface Address {
+  city: string
+  district: string
+  // TODO: use enum with two-letter codes of accepted coutries here
+  country: string
+  line1: string
+  line2: string
+  postalCode: string
+}
+
+export interface BankDetails {
+  bankName: string
+  accountNumber?: string
+  branchCode?: string
+  routingNumber?: string
+  accountType?: string
+  iban?: string
+  swiftCode?: string
+  bankAddress: Address
+}
+
+export interface BankAccountDetails {
+  owner: string
+  billingAddress?: Address
+  bankDetails: BankDetails
+}
+
+export interface CircleAccountInfo {
+  accountId: string
+  trackingRef: string
+  walletId: string
+  entityId: string
+  ethAddress: string
+  algoAddress: string
+  wireDepositAccount: BankAccountDetails
+}
 
 // sandbox
 const CIRCLE_API_KEY =

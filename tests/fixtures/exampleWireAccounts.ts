@@ -1,3 +1,5 @@
+import { BankAccountDetails } from "gql/wallet/circle_client"
+
 export const exampleWireAccounts = [
   {
     title: "US Bank Account",
@@ -78,4 +80,25 @@ export const exampleWireAccounts = [
       },
     },
   },
+]
+export const exampleDepositAccounts = [
+  {
+    owner: "CIRCLE INTERNET FINANCIAL INC",
+    bankDetails: {
+      bankName: "CRYPTO BANK",
+      swiftCode: "CRYPTO99",
+      routingNumber: "999999999",
+      accountNumber: "1000000001",
+      iban: "",
+      branchCode: "",
+      bankAddress: {
+        line1: "1 MONEY STREET",
+        line2: "",
+        city: "NEW YORK",
+        country: "US",
+        district: "",
+        postalCode: "1001",
+      },
+    },
+  } as BankAccountDetails,
 ]
