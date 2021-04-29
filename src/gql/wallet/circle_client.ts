@@ -1,4 +1,5 @@
 import { Fetcher } from "lib/api"
+import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
 import { CreateUserMutationVariables, User_Insert_Input } from "../sdk"
 import { uuidv4 } from "../../lib/scenario"
@@ -152,11 +153,24 @@ export default class CircleClient extends Bank {
       accountId: data.id,
     }
   }
+
+  /**
+   * Get Wire Account Instructions
+   * @param {String} accountId
+   */
+  async getWireAccountInstructions(accountId: string) {
+    const url = `/v1/banks/wires/${accountId}/instructions`
+    const { data } = await this.fetcher.get(url, {})
+    return data
+  }
+
   /**
    * Does all steps to setup user with circle account
-   * 1) register bankaccount to allow wire deposits & withdrawals
+   * 1.1) register bankaccount to allow accept wire deposits from & to make wire-withdrawals to
+   * 1.2) query instructions where to wire deposits to
    * 2) create virtual wallet on circle backend
    * 3) create deposit address on wallet for USDC from ETH & Algo
+   * 4) query deposit wire account
    * TODO how to deal with partial success?
    * @param userId  used as idempotencyKey
    * @param user all user data collected during signup (see onboarding)

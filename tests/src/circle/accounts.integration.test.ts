@@ -5,6 +5,7 @@ import CircleClient, {
 import { uuidv4 } from "../../../src/lib/scenario"
 import { exampleCards } from "../../fixtures/exampleCards"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
+import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 
 global.fetch = require("node-fetch")
 
@@ -49,11 +50,31 @@ describe("Circle tests", () => {
       const wire = exampleWireAccounts[1]
       const data = await circle.createWireAccount({
         idempotencyKey: uuidv4(),
-        ...wire.formData,
+        accountNumber: wire.bankDetails.accountNumber,
+        routingNumber: wire.bankDetails.routingNumber,
+        iban: wire.bankDetails.iban,
+        billingDetails: {
+          name: wire.name,
+          ...wire.billingAddress,
+        },
+        bankAddress: {
+          bankName: wire.bankDetails.bankName,
+          ...wire.bankDetails.bankAddress,
+        },
       } as CreateWireAccountPayload)
       console.log(data)
+      accountId = data.accountId
       expect(data.trackingRef).toBeTruthy
-      expect(data.accountId).toBeTruthy
+      expect(accountId).toBeTruthy
+    })
+
+    test("get deposit instructions", async () => {
+      const {
+        beneficiary,
+        beneficiaryBank,
+      } = await circle.getWireAccountInstructions(accountId)
+      const bankDetails = instructionsToBankDetails(beneficiaryBank)
+      expect(bankDetails).toBeTruthy
     })
   })
 })
