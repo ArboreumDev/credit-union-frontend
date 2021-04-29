@@ -16,11 +16,13 @@ import {
 } from "@chakra-ui/core"
 import AmountInput from "components/common/AmountInput"
 import Address from "components/common/Address"
+import BankAccount from "components/common/BankAccount"
 import { ChangeBalance } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { User_Constraint } from "gql/sdk"
 
 type FormData = {
   amount: number
@@ -101,12 +103,36 @@ export function AddFundsForm({ user }: Props) {
           <h2>
             <AccordionButton>
               <Box flex="1" textAlign="left">
-                Card Payment (coming soon!)
+                Bank Transfer
               </Box>
               <AccordionIcon />
             </AccordionButton>
           </h2>
-          <AccordionPanel pb={4}>coming soon!</AccordionPanel>
+          <AccordionPanel pb={4}>
+            Make a wire-transfer from this account:
+            <BankAccount
+              account={user.account_details.bankDetails}
+              owner={user.name}
+            />
+            to this bank account:
+            <BankAccount
+              account={
+                user.account_details.circle.wireDepositAccount.bankDetails
+              }
+              owner={user.account_details.circle.wireDepositAccount.owner}
+              ownerDescription="Beneficiary"
+            />
+            using this <b> {user.account_details.circle.trackingRef}</b> as
+            reference code.
+            <Box bg="pink.100">
+              <p>
+                <i>
+                  Note: Funds sent from other accounts or without the correct
+                  reference code are at risk to be lost or credited incorrectly!
+                </i>
+              </p>
+            </Box>
+          </AccordionPanel>
         </AccordionItem>
       </Accordion>
 
