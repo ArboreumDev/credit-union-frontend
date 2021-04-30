@@ -48,6 +48,12 @@ const options = {
         s.user.balance = await circle.getBalance(
           s.user.account_details.circle.walletId
         )
+        // process new deposits if there are any & send them to the users account
+        const deposits = await circle.processDeposits(
+          s.user.account_details.circle.accountId,
+          s.user.account_details.circle.walletId
+        )
+        s.user.account_details.circle.deposits = deposits
       }
 
       return Promise.resolve(s)
