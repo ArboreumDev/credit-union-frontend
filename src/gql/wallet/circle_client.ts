@@ -88,6 +88,7 @@ const nullIfEmpty = (prop: string | undefined) => {
 
 export default class CircleClient extends Bank {
   private fetcher: Fetcher
+  private masterWalletId: string
 
   constructor(
     baseURL: string
@@ -104,13 +105,25 @@ export default class CircleClient extends Bank {
     )
   }
 
+  async init() {
+    const { data } = await this.fetcher.get("/v1/configuration", {})
+    this.masterWalletId = data.payments.masterWalletId
+  }
+
+  async masterBalance() {
+    if (!this.initialized) await this.init()
+    return this.getBalance(this.masterWalletId)
+  }
+
+  get initialized() {
+    return this.masterWalletId !== undefined
+  }
+
   async createAccount(params: { idempotencyKey: string; description: string }) {
     const endpoint = "v1/wallets"
     const { data } = await this.fetcher.post(endpoint, params)
     return data
-    // returns:
     // {
-
     //     "data":{
     //     "walletId":"434000"
     //     "entityId":"fc988ed5-c129-4f70-a064-e5beb7eb8e32"
@@ -133,7 +146,7 @@ export default class CircleClient extends Bank {
     const usdBalance = data.balances.length
       ? data.balances.filter((x) => x.currency === "USD").map((x) => x.amount)
       : 0
-    return usdBalance
+    return parseFloat(usdBalance)
     // returns
     // {
     //     "data":{
