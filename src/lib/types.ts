@@ -310,3 +310,51 @@ export interface CreateTransferPayload {
     currency: string
   }
 }
+
+export interface Payment {
+  id: string
+  type: string
+  merchantId: string
+  merchantWalletId: string
+  source: {
+    id: string
+    type: string
+  }
+  description: string
+  amount: {
+    amount: string
+    currency: string
+  }
+  fees: {
+    amount: string
+    currency: string
+  }
+  status: string
+  refunds: any
+  createDate: string
+  updateDate: string
+}
+
+export interface Transfer {
+  id: string
+  source: {
+    type: string
+    id: string
+  }
+  destination: {
+    type: string
+    id: string
+  }
+  amount: {
+    amount: string
+    currency: string
+  }
+  status: string
+  createDate: string
+}
+
+export type DepositInfo = {
+  pending: Array<Payment>
+  settled: Array<Payment>
+  total: number
+}
