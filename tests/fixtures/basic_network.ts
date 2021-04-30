@@ -13,7 +13,7 @@ type EdgeTuple = [string, string, number]
 export const LENDER1: User = {
   id: "170dca39-f591-4ad4-b5fd-d1ba4fe55954",
   phone: "1234",
-  name: "rick",
+  name: "rick sanchez",
   email: "rick@galaxy.io",
   user_type: "lender",
   demographic_info: {
@@ -24,7 +24,8 @@ export const LENDER1: User = {
       line1: "somePlace 8",
       line2: "",
       postalCode: "40000",
-      district: "",
+      city: "Berlin",
+      district: "MA",
       country: "US",
     },
     gender: "MALE",
