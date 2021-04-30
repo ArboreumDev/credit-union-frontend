@@ -150,7 +150,7 @@ export default function Onboarding({ user, userType }: Params) {
               district: "",
               postalCode: "12050",
             },
-          } as bankDetails,
+          } as BankDetails,
           rcAccount: {
             investor_id: "",
             accountNumber: "",
