@@ -353,7 +353,7 @@ export default class CircleClient extends Bank {
     const idempotencyKey = idemKey || uuidv4()
     const payload = {
       idempotencyKey,
-      source: { type: "wallet", id: this.masterWalletId },
+      source: { type: "wallet", id: fromWallet },
       destination: { type: "wallet", id: toWallet } as WalletDestination,
       amount: {
         amount: "" + amount,

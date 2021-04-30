@@ -18,6 +18,10 @@ describe("Circle tests", () => {
     let walletId
     let accountId: string
 
+    test("circle client knows master wallet id", async () => {
+      expect(circle.initialized).toBeTruthy
+    })
+
     test("create account and get balance", async () => {
       const req = {
         idempotencyKey: idemKey,
