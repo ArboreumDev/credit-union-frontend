@@ -16,7 +16,7 @@ describe("Circle tests", () => {
   test("circle client knows master wallet id", async () => {
     expect(circle.initialized).toBeTruthy
   })
-  describe("transfers", () => {
+  describe("basic transfers", () => {
     const w1 = exampleCircleAccounts[0].walletId
     const w2 = exampleCircleAccounts[1].walletId
     const idem1 = uuidv4()
@@ -74,5 +74,15 @@ describe("Circle tests", () => {
       expect(after1).toBe(before1 - 1)
       expect(after2).toBe(before2 + 1)
     }, 8000)
+  })
+  describe("process Deposits", () => {
+    const user1 = exampleCircleAccounts[0]
+    test("completed deposits are transfered to user accounts", async () => {
+      const deposits = await circle.processDeposits(
+        user1.accountId,
+        user1.walletId
+      )
+      expect(deposits.total).toBe(2)
+    })
   })
 })

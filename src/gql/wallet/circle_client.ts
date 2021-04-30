@@ -1,5 +1,11 @@
 import { Fetcher } from "lib/api"
-import { CreateTransferPayload, WalletDestination } from "lib/types"
+import {
+  CreateTransferPayload,
+  WalletDestination,
+  Payment,
+  Transfer,
+  DepositInfo,
+} from "lib/types"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
 import { CreateUserMutationVariables, User_Insert_Input } from "../sdk"
@@ -72,6 +78,7 @@ export interface CircleAccountInfo {
   ethAddress: string
   algoAddress: string
   wireDepositAccount: BankAccountDetails
+  deposits?: DepositInfo
 }
 
 // sandbox
@@ -293,14 +300,14 @@ export default class CircleClient extends Bank {
    * @param {String} pageSize
    */
   async getTransfers(
-    walletId: string,
-    sourceWalletId: string,
-    destinationWalletId: string,
-    from: string,
-    to: string,
-    pageBefore: string,
-    pageAfter: string,
-    pageSize: string
+    walletId = "",
+    sourceWalletId = "",
+    destinationWalletId = "",
+    from = "",
+    to = "",
+    pageBefore = "",
+    pageAfter = "",
+    pageSize = ""
   ) {
     const queryParams = {
       walletId: nullIfEmpty(walletId),
@@ -383,6 +390,91 @@ export default class CircleClient extends Bank {
 
     const { data } = await this.fetcher.get(url, {})
     return data
+  }
+
+  /**
+   * Get payments
+   * @param {String} settlementId
+   * @param {String} from
+   * @param {String} to
+   * @param {String} pageBefore
+   * @param {String} pageAfter
+   * @param {String} pageSize
+   */
+  async getPayments(
+    settlementId = "",
+    from = "",
+    to = "",
+    pageBefore = "",
+    pageAfter = "",
+    pageSize = ""
+  ) {
+    const queryParams = {
+      settlementId: nullIfEmpty(settlementId),
+      from: nullIfEmpty(from),
+      to: nullIfEmpty(to),
+      pageBefore: nullIfEmpty(pageBefore),
+      pageAfter: nullIfEmpty(pageAfter),
+      pageSize: nullIfEmpty(pageSize),
+    }
+
+    const url = "/v1/payments"
+
+    const { data } = await this.fetcher.get(url, { params: queryParams })
+    return data
+  }
+
+  /**
+   * fetch all payments and check whether there a deposits from the user
+   * check all (recent) payments into the masterAccount and use their source-id to transfer funds into the
+   * relevant user account
+   * @param accountId the wire account a user can make deposits from
+   * @param targetWalletId the wallet where deposits should be credited to
+   * @returns a summary of deposits that ...
+   * - have either arrived and have yet to settle (pending)
+   * - have settled and will now be credited to the user wallet (intiated)
+   */
+  async processDeposits(accountId: string, targetWalletId: string) {
+    // 1) get latest transfers & payments
+    const transfers = await this.getTransfers()
+    const payments = await this.getPayments()
+
+    // 2) check whether there are payments from the account that havent been transfered yet, but should be
+    const completedDeposits = payments.filter(
+      (p: Payment) => p.status === "paid" && p.source.id === accountId
+    )
+    const transferedDeposits = transfers.map((t: Transfer) => t.id)
+    console.log(transferedDeposits)
+
+    // 3) initiate new transfer using the paymentId as idemKey
+    const deposits = {
+      pending: payments.filter(
+        (p: Payment) => p.status === "pending" && p.source.id === accountId
+      ),
+      settled: [],
+      total: 0,
+    } as DepositInfo
+    await Promise.all(
+      completedDeposits.map(async (d: Payment) => {
+        if (!transferedDeposits.includes(d.id)) {
+          console.log(
+            "initiating new transfer to ",
+            targetWalletId,
+            d.amount.amount,
+            "based on payment",
+            d.id
+          )
+          await circle.fundFromMasterWallet(
+            targetWalletId,
+            parseFloat(d.amount.amount),
+            d.id
+          )
+        }
+        deposits.settled.push(d)
+      })
+    )
+    deposits.total = deposits.pending.length + deposits.settled.length
+    return deposits
   }
 }
 
