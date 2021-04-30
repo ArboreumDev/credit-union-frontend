@@ -433,6 +433,9 @@ export default class CircleClient extends Bank {
    * @returns a summary of deposits that ...
    * - have either arrived and have yet to settle (pending)
    * - have settled and will now be credited to the user wallet (intiated)
+   // REFACTOR NOTE: while passing in the paymentId as idemKey prevents duplication, we still tell their api
+   // to do it....if we want to prevent that, we have to store the transferId of newly initiated transfers
+   // (maybe in the user.account_details? or should we do another tx-table?)
    */
   async processDeposits(accountId: string, targetWalletId: string) {
     // 1) get latest transfers & payments
@@ -457,13 +460,7 @@ export default class CircleClient extends Bank {
     await Promise.all(
       completedDeposits.map(async (d: Payment) => {
         if (!transferedDeposits.includes(d.id)) {
-          console.log(
-            "initiating new transfer to ",
-            targetWalletId,
-            d.amount.amount,
-            "based on payment",
-            d.id
-          )
+          // console.log( "initiating new transfer to ", targetWalletId, d.amount.amount, "based on payment", d.id)
           await circle.fundFromMasterWallet(
             targetWalletId,
             parseFloat(d.amount.amount),
