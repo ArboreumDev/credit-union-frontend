@@ -1,4 +1,5 @@
 import { Fetcher } from "lib/api"
+import { CreateTransferPayload, WalletDestination } from "lib/types"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
 import { CreateUserMutationVariables, User_Insert_Input } from "../sdk"
@@ -266,6 +267,109 @@ export default class CircleClient extends Bank {
       algoAddress,
       wireDepositAccount,
     } as CircleAccountInfo
+  }
+
+  /**
+   * Get transfers
+   * @param {String} sourceWalletId
+   * @param {String} destinationWalletId
+   * @param {String} from
+   * @param {String} to
+   * @param {String} pageBefore
+   * @param {String} pageAfter
+   * @param {String} pageSize
+   */
+  async getTransfers(
+    walletId: string,
+    sourceWalletId: string,
+    destinationWalletId: string,
+    from: string,
+    to: string,
+    pageBefore: string,
+    pageAfter: string,
+    pageSize: string
+  ) {
+    const queryParams = {
+      walletId: nullIfEmpty(walletId),
+      sourceWalletId: nullIfEmpty(sourceWalletId),
+      destinationWalletId: nullIfEmpty(destinationWalletId),
+      from: nullIfEmpty(from),
+      to: nullIfEmpty(to),
+      pageBefore: nullIfEmpty(pageBefore),
+      pageAfter: nullIfEmpty(pageAfter),
+      pageSize: nullIfEmpty(pageSize),
+    }
+
+    const url = "/v1/transfers"
+
+    const { data } = await this.fetcher.get(url, { params: queryParams })
+    return data
+  }
+
+  /**
+   * helper to fund accounts from masterWallet
+   * @param toWallet
+   * @param amount
+   * @param idemKey
+   * @returns
+   */
+  async fundFromMasterWallet(
+    toWallet: string,
+    amount: number,
+    idemKey: string
+  ) {
+    if (!this.initialized) await this.init()
+    if (!idemKey)
+      throw "idemKey can not be zero when funding from master wallet"
+    return this.walletTransfer(this.masterWalletId, toWallet, amount, idemKey)
+  }
+
+  /**
+   * helper to make an internal transfer between two wallets
+   * @param fromWallet
+   * @param toWallet
+   * @param idemKey
+   */
+  async walletTransfer(
+    fromWallet: string,
+    toWallet: string,
+    amount: number,
+    idemKey = ""
+  ) {
+    if (!this.initialized) await this.init()
+    const idempotencyKey = idemKey || uuidv4()
+    const payload = {
+      idempotencyKey,
+      source: { type: "wallet", id: this.masterWalletId },
+      destination: { type: "wallet", id: toWallet } as WalletDestination,
+      amount: {
+        amount: "" + amount,
+        currency: "USD",
+      },
+    } as CreateTransferPayload
+    return this.internalCreateTransfer(payload)
+  }
+
+  /**
+   * Should not be called directly, instead use helpers to construct the payload correctly
+   * Create Transfer
+   * @param {*} payload (contains form data and encrypted transfer details)
+   */
+  async internalCreateTransfer(payload: CreateTransferPayload) {
+    const url = "/v1/transfers"
+    const { data } = await this.fetcher.post(url, payload)
+    return data
+  }
+
+  /**
+   * Get Transfer
+   * @param {String} transferId
+   */
+  async getTransferById(transferId: string) {
+    const url = `/v1/transfers/${transferId}`
+
+    const { data } = await this.fetcher.get(url, {})
+    return data
   }
 }
 

@@ -285,3 +285,28 @@ export type SystemUpdate = {
   loans: LoansUpdate
   accounts: AccountsUpdate
 }
+
+export interface BlockchainDestination {
+  type: string
+  address: string
+  chain: string
+  addressTag?: string
+}
+
+export interface WalletDestination {
+  type: string
+  id: string
+}
+
+export interface CreateTransferPayload {
+  idempotencyKey: string
+  source: {
+    type: string // "wallet" | "blockchain"
+    id: string
+  }
+  destination: BlockchainDestination | WalletDestination
+  amount: {
+    amount: string
+    currency: string
+  }
+}
