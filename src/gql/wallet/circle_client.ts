@@ -438,40 +438,34 @@ export default class CircleClient extends Bank {
    // (maybe in the user.account_details? or should we do another tx-table?)
    */
   async processDeposits(accountId: string, targetWalletId: string) {
-    // 1) get latest transfers & payments
-    const transfers = await this.getTransfers()
+    // 1) get payments
     const payments = await this.getPayments()
 
-    // 2) check whether there are payments from the account that havent been transfered yet, but should be
+    // 2) initiate transfers for all payments using the paymentId as idemKey (will not be executed twice)
+    // NOTE: if we want to avoid that we have to inteliggently use the dates on the payments & transfers
     const completedDeposits = payments.filter(
       (p: Payment) => p.status === "paid" && p.source.id === accountId
     )
-    const transferedDeposits = transfers.map((t: Transfer) => t.id)
-    console.log(transferedDeposits)
-
-    // 3) initiate new transfer using the paymentId as idemKey
-    const deposits = {
-      pending: payments.filter(
-        (p: Payment) => p.status === "pending" && p.source.id === accountId
-      ),
-      settled: [],
-      total: 0,
-    } as DepositInfo
+    const settled = []
     await Promise.all(
+      // e.g. here we could check success and store the last-updated on deposits info
       completedDeposits.map(async (d: Payment) => {
-        if (!transferedDeposits.includes(d.id)) {
-          // console.log( "initiating new transfer to ", targetWalletId, d.amount.amount, "based on payment", d.id)
-          await circle.fundFromMasterWallet(
-            targetWalletId,
-            parseFloat(d.amount.amount),
-            d.id
-          )
-        }
-        deposits.settled.push(d)
+        await circle.fundFromMasterWallet(
+          targetWalletId,
+          parseFloat(d.amount.amount),
+          d.id
+        )
+        settled.push(d)
       })
     )
-    deposits.total = deposits.pending.length + deposits.settled.length
-    return deposits
+    const pending = payments.filter(
+      (p: Payment) => p.status === "pending" && p.source.id === accountId
+    )
+    return {
+      settled,
+      pending,
+      total: pending.length + settled.length,
+    } as DepositInfo
   }
 }
 
