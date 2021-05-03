@@ -77,7 +77,28 @@ describe("Circle tests", () => {
       expect(after1).toBe(before1 - 1)
       expect(after2).toBe(before2 + 1)
     }, 8000)
+
+    test("from wallet to external ethereum blockchain address", async () => {
+      const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
+      const before = await circle.getBalance(w1)
+
+      await circle.walletToBlockchainTransfer(w1, "ETH", sampleEthAddress1, 1)
+
+      expect(await circle.getBalance(w1)).toBe(before - 1)
+    })
+
+    test("from wallet to external algorand blockchain address", async () => {
+      const sampleAlgoAddress1 =
+        "FEIYSKZZKP6LIZW7FTQSLTIHZTYTPI2MEW3R3BBSWWCRPJNJWWCMH2YWOY"
+      const before = await circle.getBalance(w1)
+      console.log(before)
+
+      await circle.walletToBlockchainTransfer(w1, "ALGO", sampleAlgoAddress1, 1)
+
+      expect(await circle.getBalance(w1)).toBe(before - 1)
+    })
   })
+
   describe("process Deposits", () => {
     const user1 = exampleCircleAccounts[0]
     test("completed deposits are transfered to user accounts", async () => {
@@ -88,10 +109,12 @@ describe("Circle tests", () => {
       expect(deposits.total).toBe(2)
     })
   })
+
   describe("withdrawals", () => {
     const user1 = exampleCircleAccounts[0]
     let withdrawalId
     test("creating a wire withdrawal", async () => {
+      const before = await circle.getBalance(user1.walletId)
       const userData = {
         sourceWalletId: user1.walletId,
         targetAccountid: user1.accountId,
@@ -107,7 +130,10 @@ describe("Circle tests", () => {
       expect(sourceWalletId).toBe(userData.sourceWalletId)
       expect(status).toBe("pending")
       expect(amount.amount).toBe("1.10")
+      const after = await circle.getBalance(w2)
+      expect(after).toBe(before - 1.1)
     })
+
     test("get payouts", async () => {
       const payout = await circle.getPayoutById(withdrawalId)
       console.log(payout)

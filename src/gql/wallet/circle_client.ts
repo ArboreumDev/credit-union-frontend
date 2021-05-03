@@ -2,6 +2,7 @@ import { Fetcher } from "lib/api"
 import {
   CreateTransferPayload,
   WalletDestination,
+  BlockchainDestination,
   Payment,
   Transfer,
   DepositInfo,
@@ -369,6 +370,37 @@ export default class CircleClient extends Bank {
       idempotencyKey,
       source: { type: "wallet", id: fromWallet },
       destination: { type: "wallet", id: toWallet } as WalletDestination,
+      amount: {
+        amount: "" + amount,
+        currency: "USD",
+      },
+    } as CreateTransferPayload
+    return this.internalCreateTransfer(payload)
+  }
+
+  /**
+   * helper to make an internal transfer between two wallets
+   * @param fromWallet
+   * @param toWallet
+   * @param idemKey
+   */
+  async walletToBlockchainTransfer(
+    fromWallet: string,
+    targetChain: string, // ETH or ALGO
+    targetAddress: string,
+    amount: number,
+    idemKey = ""
+  ) {
+    if (!this.initialized) await this.init()
+    const idempotencyKey = idemKey || uuidv4()
+    const payload = {
+      idempotencyKey,
+      source: { type: "wallet", id: fromWallet },
+      destination: {
+        type: "blockchain",
+        address: targetAddress,
+        chain: targetChain,
+      } as BlockchainDestination,
       amount: {
         amount: "" + amount,
         currency: "USD",
