@@ -358,3 +358,22 @@ export type DepositInfo = {
   settled: Array<Payment>
   total: number
 }
+
+export interface CreatePayoutPayload {
+  idempotencyKey: string
+  source?: {
+    id: string
+    type: string
+  }
+  destination: {
+    id: string
+    type: string // wire | ach
+  }
+  amount: {
+    amount: string
+    currency: string // USD
+  }
+  metadata: {
+    beneficiaryEmail: string
+  }
+}

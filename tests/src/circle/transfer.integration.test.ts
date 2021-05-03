@@ -1,4 +1,7 @@
-import CircleClient, { CIRCLE_BASE_URL } from "gql/wallet/circle_client"
+import CircleClient, {
+  CIRCLE_BASE_URL,
+  WithdrawalUserData,
+} from "gql/wallet/circle_client"
 import { uuidv4 } from "../../../src/lib/scenario"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { exampleCircleAccounts } from "../../fixtures/exampleCircleAccounts"
@@ -83,6 +86,36 @@ describe("Circle tests", () => {
         user1.walletId
       )
       expect(deposits.total).toBe(2)
+    })
+  })
+  describe("withdrawals", () => {
+    const user1 = exampleCircleAccounts[0]
+    let withdrawalId
+    test("creating a wire withdrawal", async () => {
+      const userData = {
+        sourceWalletId: user1.walletId,
+        targetAccountid: user1.accountId,
+        email: "circle1@test.mail",
+      } as WithdrawalUserData
+      const {
+        id,
+        status,
+        amount,
+        sourceWalletId,
+      } = await circle.createWireWithdrawal(userData, uuidv4(), 1.1)
+      withdrawalId = id
+      expect(sourceWalletId).toBe(userData.sourceWalletId)
+      expect(status).toBe("pending")
+      expect(amount.amount).toBe("1.10")
+    })
+    test("get payouts", async () => {
+      const payout = await circle.getPayoutById(withdrawalId)
+      console.log(payout)
+      expect(payout).toBeTruthy
+
+      const payouts = await circle.getPayouts("", user1.accountId)
+      console.log(payouts)
+      expect(payouts.map((x) => x.id)).toContain(withdrawalId)
     })
   })
 })

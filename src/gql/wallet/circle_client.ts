@@ -5,6 +5,7 @@ import {
   Payment,
   Transfer,
   DepositInfo,
+  CreatePayoutPayload,
 } from "lib/types"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
@@ -79,6 +80,12 @@ export interface CircleAccountInfo {
   algoAddress: string
   wireDepositAccount: BankAccountDetails
   deposits?: DepositInfo
+}
+
+export interface WithdrawalUserData {
+  sourceWalletId: string
+  targetAccountid: string
+  email: string
 }
 
 // sandbox
@@ -466,6 +473,94 @@ export default class CircleClient extends Bank {
       pending,
       total: pending.length + settled.length,
     } as DepositInfo
+  }
+
+  /**
+   * Get payouts
+   * @param {String} source
+   * @param {String} destination
+   * @param {String} from
+   * @param {String} to
+   * @param {String} pageBefore
+   * @param {String} pageAfter
+   * @param {String} pageSize
+   */
+  async getPayouts(
+    source = "",
+    destination = "",
+    from = "",
+    to = "",
+    pageBefore = "",
+    pageAfter = "",
+    pageSize = ""
+  ) {
+    const queryParams = {
+      source: nullIfEmpty(source),
+      destination: nullIfEmpty(destination),
+      from: nullIfEmpty(from),
+      to: nullIfEmpty(to),
+      pageBefore: nullIfEmpty(pageBefore),
+      pageAfter: nullIfEmpty(pageAfter),
+      pageSize: nullIfEmpty(pageSize),
+    }
+
+    const url = "/v1/payouts"
+
+    const { data } = await this.fetcher.get(url, { params: queryParams })
+    return data
+  }
+
+  /**
+   * Get Payout
+   * @param {String} payoutId
+   */
+  async getPayoutById(payoutId: string) {
+    const url = `/v1/payouts/${payoutId}`
+
+    const { data } = await this.fetcher.get(url, {})
+    return data
+  }
+
+  /**
+   *  helper-function to be called when creating a withdrawal
+   * @param user
+   * @param idemKey
+   * @param amount
+   * @returns
+   */
+  async createWireWithdrawal(
+    user: WithdrawalUserData,
+    idemKey: string,
+    amount: number
+  ) {
+    return this.internalCreatePayout({
+      idempotencyKey: idemKey,
+      source: {
+        type: "wallet",
+        id: user.sourceWalletId,
+      },
+      destination: {
+        type: "wire",
+        id: user.targetAccountid,
+      },
+      amount: {
+        amount: "" + amount,
+        currency: "USD",
+      },
+      metadata: {
+        beneficiaryEmail: user.email,
+      },
+    } as CreatePayoutPayload)
+  }
+
+  /**
+   * Create Payout
+   * @param {*} payload
+   */
+  async internalCreatePayout(payload: CreatePayoutPayload) {
+    const url = "/v1/payouts"
+    const { data } = await this.fetcher.post(url, payload)
+    return data
   }
 }
 
