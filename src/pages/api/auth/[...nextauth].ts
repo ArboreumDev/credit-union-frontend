@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { Session } from "../../../lib/types"
 import DbClient from "../../../gql/db_client"
-import CircleClient, { circle } from "../../../gql/wallet/circle_client"
+import { circleClient } from "../../../gql/wallet/circle_client"
 
 const dbClient = new DbClient()
 
@@ -45,11 +45,11 @@ const options = {
         s.user.account_details.circle &&
         s.user.account_details.circle.walletId
       ) {
-        s.user.balance = await circle.getBalance(
+        s.user.balance = await circleClient.getBalance(
           s.user.account_details.circle.walletId
         )
         // process new deposits if there are any & send them to the users account
-        const deposits = await circle.processDeposits(
+        const deposits = await circleClient.processDeposits(
           s.user.account_details.circle.accountId,
           s.user.account_details.circle.walletId
         )

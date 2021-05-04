@@ -25,7 +25,7 @@ export const ReviewWithdrawal = ({ handleConfirm, details }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button isFullWidth={false} size="sm" mr={3} onClick={onOpen}>
+      <Button colorScheme="teal" onClick={onOpen}>
         Review Withdrawal
       </Button>
 
@@ -50,7 +50,12 @@ export const ReviewWithdrawal = ({ handleConfirm, details }: Props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="gray" mr={3} onClick={onClose}>
+            <Button
+              variant="outline"
+              colorScheme="teal"
+              mr={3}
+              onClick={onClose}
+            >
               Back
             </Button>
             <Button

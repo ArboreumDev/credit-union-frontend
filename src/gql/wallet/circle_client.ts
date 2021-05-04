@@ -596,3 +596,5 @@ export default class CircleClient extends Bank {
     return data
   }
 }
+
+export const circleClient = new CircleClient(CIRCLE_BASE_URL)

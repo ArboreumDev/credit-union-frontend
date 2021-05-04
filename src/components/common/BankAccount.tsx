@@ -11,7 +11,6 @@ interface Params {
 }
 
 const BankAccount = ({ account, owner, ownerDescription }: Params) => {
-  console.log("acc is", account)
   // display all of those fields that are not empty
   const keys = [
     "iban",

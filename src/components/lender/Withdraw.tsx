@@ -38,14 +38,14 @@ export function WithdrawFundsForm({ user }: Props) {
   const {
     formState,
     register,
+    trigger,
     setValue,
     watch,
     handleSubmit,
     errors,
-    getValues,
     reset,
+    getValues,
   } = useForm<FormData>()
-  // const [nSup, supCount] = useState(1)
 
   const watchTarget = watch("target", false)
   const watchAddress = watch("address", false)
@@ -56,14 +56,15 @@ export function WithdrawFundsForm({ user }: Props) {
 
   const onSubmit = (formData: FormData) => {
     console.log("making a tx", formData)
-    // clearFormData()
     Withdraw.fetch({
       target: formData.target,
-      amount: -formData.amount,
+      address: formData.address,
+      amount: formData.amount,
     })
       .then(async (res) => {
-        console.log("res", res, res.data)
-        console.log("d", res.data)
+        console.log("res", res)
+        reset({ amount: 0, address: "", target: undefined })
+        // setConfirmed(false)
         // router.push("/dashboard")
         toast({
           title: "Confirmed.",
@@ -75,10 +76,10 @@ export function WithdrawFundsForm({ user }: Props) {
       })
       .catch((err) => console.error(err))
   }
-  const clearFormData = () => {
-    setConfirmed(false)
-    reset({ address: "", amount: 0 })
-  }
+  // const clearFormData = () => {
+  //   setConfirmed(false)
+  //   // reset({ address: "", amount: 0 })
+  // }
 
   return (
     <Box>
@@ -86,7 +87,7 @@ export function WithdrawFundsForm({ user }: Props) {
         <Stack spacing={3}>
           <Text>Choose where you want to withdraw to:</Text>
           <Select
-            placeholder="withdrawal type"
+            placeholder="choose withdrawal type"
             disabled={confirmed}
             ref={register({ required: true })}
             name="target"
@@ -140,6 +141,7 @@ export function WithdrawFundsForm({ user }: Props) {
           {((watchTarget && watchAddress) ||
             getValues("target") === "BANK") && (
             <Box flex={1}>
+              <Text>Withdrawal amount: </Text>
               <InputGroup>
                 <InputLeftAddon>$</InputLeftAddon>
                 <Input
@@ -149,13 +151,19 @@ export function WithdrawFundsForm({ user }: Props) {
                   name="amount"
                   type="string"
                   ref={register({ required: true, max: user.balance, min: 1 })}
-                  onChange={() => console.log("TODO check balance")}
+                  onChange={() => trigger("amount")}
                 />
               </InputGroup>
-              <Text>
+              <Text as="i">
                 {" "}
                 Minimum: $1, Available Balance: {Math.round(user.balance)}{" "}
               </Text>
+              {errors.amount && (
+                <Text color="tomato">
+                  {" "}
+                  Your balance is too low to withdraw that amount.
+                </Text>
+              )}
             </Box>
           )}
 
@@ -163,7 +171,7 @@ export function WithdrawFundsForm({ user }: Props) {
             <Center flex={0.4} padding="2">
               <ReviewWithdrawal
                 details={{
-                  targetAddress: getValues("target"),
+                  targetAddress: getValues("address"),
                   amount: "" + getValues("amount"),
                 }}
                 handleConfirm={() => setConfirmed(true)}
@@ -178,7 +186,7 @@ export function WithdrawFundsForm({ user }: Props) {
                   Edit Withdrawal
                 </Button>
                 <Button type="submit" colorScheme="teal">
-                  Confirm Withdraw!
+                  Confirm Withdrawal!
                 </Button>
               </Flex>
             </Center>
