@@ -31,8 +31,6 @@ interface Props {
   user: User
 }
 
-// type target = "Ethereum" | "Algorand" | "Bank Account"
-
 export function WithdrawFundsForm({ user }: Props) {
   const router = useRouter()
   const {
@@ -64,8 +62,6 @@ export function WithdrawFundsForm({ user }: Props) {
       .then(async (res) => {
         console.log("res", res)
         reset({ amount: 0, address: "", target: undefined })
-        // setConfirmed(false)
-        // router.push("/dashboard")
         toast({
           title: "Confirmed.",
           description: "Your withdrawal is being processed.",
@@ -76,10 +72,6 @@ export function WithdrawFundsForm({ user }: Props) {
       })
       .catch((err) => console.error(err))
   }
-  // const clearFormData = () => {
-  //   setConfirmed(false)
-  //   // reset({ address: "", amount: 0 })
-  // }
 
   return (
     <Box>
