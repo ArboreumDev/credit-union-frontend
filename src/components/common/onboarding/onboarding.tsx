@@ -165,8 +165,9 @@ export default function Onboarding({ user, userType }: Params) {
             line1: data.address,
             line2: "",
             postalCode: data.zipCode,
-            district: "",
-            country: "",
+            district: "MA",
+            country: "US",
+            city: "Boston",
           } as Address,
           income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
