@@ -4,12 +4,16 @@ import {
   AddSupporter,
   CreateLoan,
   CreateUser,
+  Withdraw,
+  WithdrawPayload,
   runAction,
 } from "lib/gql_api_actions"
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
-import { dbClient, sdk } from "./common/utils"
-import { circle } from "../src/circle/accounts.integration.test"
+import { Fixtures } from "lib/demo/fixtures"
+import { exampleCircleAccounts } from "../fixtures/exampleCircleAccounts"
+import { dbClient, sdk, circleClient } from "./common/utils"
+import { sampleEthAddress1 } from "../src/circle/transfer.integration.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -20,7 +24,7 @@ describe("Create new user", () => {
     await sdk.ResetDB()
   })
 
-  test.only("new user", async () => {
+  test("new user", async () => {
     const payload: typeof CreateUser.InputType = {
       user: BORROWER1,
     }
@@ -28,7 +32,8 @@ describe("Create new user", () => {
       CreateUser.Name,
       { user: { email: payload.user.email } },
       payload,
-      dbClient
+      dbClient,
+      circleClient
     )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
     expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
@@ -41,6 +46,39 @@ describe("Create new user", () => {
     expect(res.insert_user_one.account_details.circle.accountId).toBeTruthy
     expect(res.insert_user_one.account_details.circle.wireDepositAccount)
       .toBeTruthy
+  })
+})
+
+describe.only("Create Withdrawal", () => {
+  const userData = Fixtures.Lender
+  afterAll(async () => {
+    await sdk.ResetDB()
+  })
+
+  test("crypto withdrawal", async () => {
+    const payload: WithdrawPayload = {
+      target: "ETH",
+      address: sampleEthAddress1,
+      amount: 1,
+    }
+    const { id, status, source, destination, amount } = await runAction(
+      Withdraw.Name,
+      { user: userData },
+      payload,
+      dbClient,
+      circleClient
+    )
+    console.log("res", id, status, source, destination, amount)
+    expect(parseFloat(amount.amount)).toBe(1)
+    expect(status).toBe("pending")
+    expect(destination.chain).toBe("ETH")
+    expect(destination.address).toBe(sampleEthAddress1)
+    expect(destination.type).toBe("blockchain")
+    expect(source.id).toBe(userData.account_details.circle.walletId)
+  })
+
+  test.skip("wire withdrawal", async () => {
+    console.log("pass")
   })
 })
 
@@ -69,7 +107,8 @@ describe("Create new loan | user is Authorized", () => {
       CreateLoan.Name,
       session,
       payload,
-      dbClient
+      dbClient,
+      circleClient
     )) as typeof CreateLoan.ReturnType
     expect(res.loanRequest.amount === payload.request.amount)
     loanRequestId = res.loanRequest.request_id

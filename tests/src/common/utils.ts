@@ -1,6 +1,7 @@
 import DbClient from "gql/db_client"
 import { initializeGQL } from "gql/graphql_client"
 import SwarmAIClient from "gql/swarmai_client"
+import CircleClient, { CIRCLE_BASE_URL } from "gql/wallet/circle_client"
 
 global.fetch = require("node-fetch")
 
@@ -14,3 +15,4 @@ const swarmAIClient = new SwarmAIClient("http://0.0.0.0:3001")
 
 export const dbClient = new DbClient(client, swarmAIClient)
 export const sdk = dbClient.sdk
+export const circleClient = new CircleClient(CIRCLE_BASE_URL)

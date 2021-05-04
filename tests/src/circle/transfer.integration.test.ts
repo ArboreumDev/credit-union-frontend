@@ -10,6 +10,7 @@ import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 global.fetch = require("node-fetch")
 
 export const circle = new CircleClient(CIRCLE_BASE_URL)
+export const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -79,7 +80,6 @@ describe("Circle tests", () => {
     }, 8000)
 
     test("from wallet to external ethereum blockchain address", async () => {
-      const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
       const before = await circle.getBalance(w1)
 
       await circle.walletToBlockchainTransfer(w1, "ETH", sampleEthAddress1, 1)
@@ -91,7 +91,6 @@ describe("Circle tests", () => {
       const sampleAlgoAddress1 =
         "FEIYSKZZKP6LIZW7FTQSLTIHZTYTPI2MEW3R3BBSWWCRPJNJWWCMH2YWOY"
       const before = await circle.getBalance(w1)
-      console.log(before)
 
       await circle.walletToBlockchainTransfer(w1, "ALGO", sampleAlgoAddress1, 1)
 

@@ -1,4 +1,5 @@
 import {
+  useToast,
   Flex,
   Input,
   InputGroup,
@@ -14,7 +15,7 @@ import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import BankAccount from "components/common/BankAccount"
 import FormData from "form-data"
 import { ReviewWithdrawal } from "./ReviewWithdrawal"
-import { ChangeBalance } from "lib/gql_api_actions"
+import { Withdraw, Target } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -23,7 +24,7 @@ import { useForm } from "react-hook-form"
 type FormData = {
   amount: number
   address: string
-  target: string
+  target: Target
 }
 
 interface Props {
@@ -49,20 +50,30 @@ export function WithdrawFundsForm({ user }: Props) {
   const watchTarget = watch("target", false)
   const watchAddress = watch("address", false)
   const watchAmount = watch("amount", false)
+  const toast = useToast()
 
   const [confirmed, setConfirmed] = useState(false)
 
   const onSubmit = (formData: FormData) => {
     console.log("making a tx", formData)
     // clearFormData()
-    // ChangeBalance.fetch({
-    //   userId: user.id,
-    //   delta: -formData.amount,
-    // })
-    //   .then(async (res) => {
-    //     router.push("/dashboard")
-    //   })
-    //   .catch((err) => console.error(err))
+    Withdraw.fetch({
+      target: formData.target,
+      amount: -formData.amount,
+    })
+      .then(async (res) => {
+        console.log("res", res, res.data)
+        console.log("d", res.data)
+        // router.push("/dashboard")
+        toast({
+          title: "Confirmed.",
+          description: "Your withdrawal is being processed.",
+          status: "success",
+          duration: null,
+          isClosable: true,
+        })
+      })
+      .catch((err) => console.error(err))
   }
   const clearFormData = () => {
     setConfirmed(false)

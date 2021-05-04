@@ -90,6 +90,7 @@ export interface WithdrawalUserData {
 }
 
 // sandbox
+// TODO make this a param to the client
 const CIRCLE_API_KEY =
   "QVBJX0tFWTo1NWE2MDdjZDNjYjNjZjk0N2Q4MmU0MWFkNTEyYzIyYTo1NmEyY2NmZDAwYzIwNmY0ZWZhYTVkMzI3MTA4NmM3Yw"
 export const CIRCLE_BASE_URL = "https://api-sandbox.circle.com/"
@@ -595,5 +596,3 @@ export default class CircleClient extends Bank {
     return data
   }
 }
-
-export const circle = new CircleClient(CIRCLE_BASE_URL)
