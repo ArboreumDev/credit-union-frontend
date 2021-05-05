@@ -19,7 +19,7 @@ import { Withdraw, Target } from "lib/gql_api_actions"
 import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 
 type FormData = {
   amount: number
@@ -37,17 +37,31 @@ export function WithdrawFundsForm({ user }: Props) {
     formState,
     register,
     trigger,
-    setValue,
-    watch,
     handleSubmit,
     errors,
     reset,
+    control,
     getValues,
   } = useForm<FormData>()
 
-  const watchTarget = watch("target", false)
-  const watchAddress = watch("address", false)
-  const watchAmount = watch("amount", false)
+  const watched = useWatch({
+    control,
+    name: ["target", "address", "amount"],
+    defaultValue: { target: "", address: "", amount: "" },
+  })
+
+  const readyForReview = () => {
+    console.log("w", watched)
+    return (
+      !errors.amount &&
+      !errors.address &&
+      watched.address &&
+      watched.target &&
+      watched.amount &&
+      !confirmed
+    )
+  }
+
   const toast = useToast()
 
   const [confirmed, setConfirmed] = useState(false)
@@ -90,7 +104,7 @@ export function WithdrawFundsForm({ user }: Props) {
             <option value="BANK">Bank Account</option>
           </Select>
 
-          {getValues("target") === "ETH" && (
+          {watched.target === "ETH" && (
             <>
               <Text>Target Address: </Text>
               <Input
@@ -103,7 +117,7 @@ export function WithdrawFundsForm({ user }: Props) {
             </>
           )}
 
-          {getValues("target") === "ALGO" && (
+          {watched.target === "ALGO" && (
             <>
               <Text>Target Address: </Text>
               <Input
@@ -120,7 +134,7 @@ export function WithdrawFundsForm({ user }: Props) {
               </i>
             </>
           )}
-          {getValues("target") === "BANK" && (
+          {watched.target === "BANK" && (
             <Box>
               <Text>Your Withdrawal will be credited to this account: </Text>
               <BankAccount
@@ -130,7 +144,8 @@ export function WithdrawFundsForm({ user }: Props) {
               />
             </Box>
           )}
-          {((watchTarget && watchAddress) ||
+
+          {((watched.target && watched.address) ||
             getValues("target") === "BANK") && (
             <Box flex={1}>
               <Text>Withdrawal amount: </Text>
@@ -159,7 +174,7 @@ export function WithdrawFundsForm({ user }: Props) {
             </Box>
           )}
 
-          {!confirmed && watchAddress && watchTarget && watchAmount && (
+          {readyForReview() && (
             <Center flex={0.4} padding="2">
               <ReviewWithdrawal
                 details={{
