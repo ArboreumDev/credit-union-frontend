@@ -7,6 +7,7 @@ import {
   Transfer,
   DepositInfo,
   CreatePayoutPayload,
+  UserTransaction,
 } from "lib/types"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
@@ -490,7 +491,7 @@ export default class CircleClient extends Bank {
     await Promise.all(
       // e.g. here we could check success and store the last-updated on deposits info
       completedDeposits.map(async (d: Payment) => {
-        await circle.fundFromMasterWallet(
+        await this.fundFromMasterWallet(
           targetWalletId,
           parseFloat(d.amount.amount),
           d.id
@@ -506,6 +507,57 @@ export default class CircleClient extends Bank {
       pending,
       total: pending.length + settled.length,
     } as DepositInfo
+  }
+
+  async getHistory(walletId: string) {
+    // get Transfers caused by
+    // - deposits from fiat)
+    // - deposits from blockchain addresses
+    // - withdrawals to blockchain addresses
+
+    // helper function
+    const getTransferPurpose = (t) => {
+      // withdrawal to blockchain address
+      if (t.source.id === walletId && t.destination.type === "blockchain")
+        return "Withdrawal"
+      // wire deposit
+      if (
+        t.source.id === this.masterWalletId &&
+        t.destination.type === "wallet" &&
+        t.destination.id === walletId
+      )
+        return "BankDeposit"
+      // blockchain deposit
+      if (
+        t.destination.type === "wallet" &&
+        t.destination.id === walletId &&
+        t.source.type === "blockchain"
+      )
+        return "Deposit"
+      return "Pledge"
+    }
+    const transfers = (await this.getTransfers(walletId)).map((t) => {
+      const type = getTransferPurpose(t)
+      return {
+        type: type === "BankDeposit" ? "Deposit" : type,
+        amount: t.amount.amount,
+        status: t.status,
+        destination:
+          t.destination.type === "blockchain" ? t.destination.chain : "Wallet",
+        source:
+          type === "BankDeposit"
+            ? "Bank"
+            : t.source.type === "blockchain"
+            ? t.destination.chain
+            : "Wallet",
+        createDate: t.createDate,
+        details: { ...t },
+      } as UserTransaction
+    })
+
+    // TODO also get wire-withdrawals
+
+    return transfers
   }
 
   /**

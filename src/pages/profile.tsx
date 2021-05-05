@@ -12,6 +12,7 @@ import {
 import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/Withdraw"
+import FundsHistory from "components/common/FundsHistory"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
@@ -83,6 +84,10 @@ export const Profile = ({ user }: Props) => {
       <Box h="20px" />
       <Divider />
       <LogoutButton />
+      <Divider />
+      <Box minW="xl">
+        <FundsHistory transfers={user.account_details.circle.history} />
+      </Box>
     </Stack>
   )
 }

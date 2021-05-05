@@ -52,33 +52,34 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       )
     ),
     new TabComponent(
+      // TODO so much boilerplate
       "Funds",
       (
         <Accordion allowToggle>
           <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  <Heading size="sm">Deposit</Heading>
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {" "}
+                <Heading size="sm">Deposit</Heading>{" "}
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
             <AccordionPanel pb={4}>
-              <AddFundsForm user={user} />
+              {" "}
+              <AddFundsForm user={user} />{" "}
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  <Heading size="sm">Withdraw</Heading>
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {" "}
+                <Heading size="sm">Withdraw</Heading>{" "}
+              </Box>{" "}
+              <AccordionIcon />
+            </AccordionButton>
             <AccordionPanel pb={4}>
-              <WithdrawFundsForm user={user} />
+              {" "}
+              <WithdrawFundsForm user={user} />{" "}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>

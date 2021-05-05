@@ -377,3 +377,16 @@ export interface CreatePayoutPayload {
     beneficiaryEmail: string
   }
 }
+
+type TxType = "Deposit" | "Withdrawal" | "Investment" | "Pledge" | "Repayment"
+type Medium = "BANK" | "ETH" | "ALGO" | "Wallet"
+
+export type UserTransaction = {
+  type: TxType
+  amount: string
+  createDate: string
+  status: string
+  destination: Medium
+  source: Medium
+  details: any
+}

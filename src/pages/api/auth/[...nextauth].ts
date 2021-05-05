@@ -49,11 +49,13 @@ const options = {
           s.user.account_details.circle.walletId
         )
         // process new deposits if there are any & send them to the users account
-        const deposits = await circleClient.processDeposits(
+        await circleClient.processDeposits(
           s.user.account_details.circle.accountId,
           s.user.account_details.circle.walletId
         )
-        s.user.account_details.circle.deposits = deposits
+        s.user.account_details.circle.history = await circleClient.getHistory(
+          s.user.account_details.circle.walletId
+        )
       }
 
       return Promise.resolve(s)
