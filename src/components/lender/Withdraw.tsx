@@ -20,6 +20,7 @@ import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm, useWatch } from "react-hook-form"
+import { isAddress } from "lib/ethereum"
 
 type FormData = {
   amount: number
@@ -38,6 +39,8 @@ export function WithdrawFundsForm({ user }: Props) {
     register,
     trigger,
     handleSubmit,
+    setError,
+    clearErrors,
     errors,
     reset,
     control,
@@ -62,6 +65,25 @@ export function WithdrawFundsForm({ user }: Props) {
     )
   }
 
+  const verifyTargetAddress = () => {
+    if (watched.target === "ETH") {
+      console.log("cheek eth")
+      if (!isAddress(watched.address)) {
+        setError("address", {
+          type: "manual",
+          message: "This is not a valid ethereum address!",
+        })
+        console.log("no ok")
+      } else {
+        console.log("ok")
+        clearErrors("address")
+      }
+    }
+    if (watched.target === "ALGO") {
+      //TODO
+    }
+  }
+
   const toast = useToast()
 
   const [confirmed, setConfirmed] = useState(false)
@@ -84,7 +106,16 @@ export function WithdrawFundsForm({ user }: Props) {
           isClosable: true,
         })
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error(err)
+        toast({
+          title: "Error.",
+          description: "Your withdrawal could not be processed.",
+          status: "error",
+          duration: null,
+          isClosable: true,
+        })
+      })
   }
 
   return (
@@ -112,8 +143,12 @@ export function WithdrawFundsForm({ user }: Props) {
                 name="address"
                 disabled={confirmed}
                 ref={register({ required: true })}
-                placeholder={"paste your ethereum-address here"}
+                placeholder="paste your ethereum-address here"
+                onChange={verifyTargetAddress}
               ></Input>
+              {errors.address && (
+                <Text color="tomato">{errors.address.message}</Text>
+              )}
             </>
           )}
 
@@ -145,7 +180,7 @@ export function WithdrawFundsForm({ user }: Props) {
             </Box>
           )}
 
-          {((watched.target && watched.address) ||
+          {((watched.target && watched.address && !errors.address) ||
             getValues("target") === "BANK") && (
             <Box flex={1}>
               <Text>Withdrawal amount: </Text>
