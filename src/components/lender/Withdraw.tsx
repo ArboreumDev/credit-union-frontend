@@ -122,9 +122,9 @@ export function WithdrawFundsForm({ user }: Props) {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
-          <Text>Choose where you want to withdraw to:</Text>
+          <Text>How do you want to withdraw?</Text>
           <Select
-            placeholder="choose withdrawal type"
+            placeholder={"choose withdrawal type"}
             disabled={confirmed}
             ref={register({ required: true })}
             name="target"
@@ -142,6 +142,7 @@ export function WithdrawFundsForm({ user }: Props) {
                 // TODO run validation whether it is a valid address here
                 name="address"
                 disabled={confirmed}
+                isInvalid={errors.address}
                 ref={register({ required: true })}
                 placeholder={`paste your ${watched.target}-address here`}
                 onChange={verifyTargetAddress}

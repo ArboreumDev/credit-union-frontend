@@ -48,13 +48,13 @@ export const Profile = ({ user }: Props) => {
         <Text>{user.email}</Text>
         <Text>{user.phone}</Text>
       </Stack>
-      {user.user_type === UserType.Lender && (
+      {/* {user.user_type === UserType.Lender && (
         <Stack>
           <Divider />
           <Heading size="sm">Withdraw</Heading>
           <WithdrawFundsForm user={user} />
         </Stack>
-      )}
+      )} */}
       <Divider />
       {/* 
       {user.user_type === UserType.Borrower && (
