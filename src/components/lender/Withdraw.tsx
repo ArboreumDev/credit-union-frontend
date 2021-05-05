@@ -20,7 +20,8 @@ import { User } from "lib/types"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm, useWatch } from "react-hook-form"
-import { isAddress } from "lib/ethereum"
+import { isEthAddress } from "lib/ethereum"
+import { isAlgorandAddress } from "lib/algorand"
 
 type FormData = {
   amount: number
@@ -55,6 +56,10 @@ export function WithdrawFundsForm({ user }: Props) {
 
   const readyForReview = () => {
     console.log("w", watched)
+    console.log("algtest", isAlgorandAddress("sdf"))
+    const algoAddress =
+      "OAQJOCLUKGJF3BR5GJWFDZ5IC43OLVCF56ODGUCZ6LJXGQG2HHFMIHPREM"
+    console.log("algtest 2", isAlgorandAddress(algoAddress))
     return (
       !errors.amount &&
       !errors.address &&
@@ -66,21 +71,16 @@ export function WithdrawFundsForm({ user }: Props) {
   }
 
   const verifyTargetAddress = () => {
-    if (watched.target === "ETH") {
-      console.log("cheek eth")
-      if (!isAddress(watched.address)) {
-        setError("address", {
-          type: "manual",
-          message: "This is not a valid ethereum address!",
-        })
-        console.log("no ok")
-      } else {
-        console.log("ok")
-        clearErrors("address")
-      }
-    }
-    if (watched.target === "ALGO") {
-      //TODO
+    if (
+      (watched.target === "ETH" && !isEthAddress(watched.address)) ||
+      (watched.target === "ALGO" && !isAlgorandAddress(watched.address))
+    ) {
+      setError("address", {
+        type: "manual",
+        message: `This is not a valid ${watched.target} address!`,
+      })
+    } else {
+      clearErrors("address")
     }
   }
 
@@ -135,7 +135,7 @@ export function WithdrawFundsForm({ user }: Props) {
             <option value="BANK">Bank Account</option>
           </Select>
 
-          {watched.target === "ETH" && (
+          {watched.target && (
             <>
               <Text>Target Address: </Text>
               <Input
@@ -143,32 +143,22 @@ export function WithdrawFundsForm({ user }: Props) {
                 name="address"
                 disabled={confirmed}
                 ref={register({ required: true })}
-                placeholder="paste your ethereum-address here"
+                placeholder={`paste your ${watched.target}-address here`}
                 onChange={verifyTargetAddress}
               ></Input>
               {errors.address && (
                 <Text color="tomato">{errors.address.message}</Text>
               )}
+              {watched.target === "ALGO" && (
+                <i>
+                  Note: Please make sure that you have added USDC as an asset to
+                  accept transactions for your Algorand Address (see
+                  instructions here(LINK) on)
+                </i>
+              )}
             </>
           )}
 
-          {watched.target === "ALGO" && (
-            <>
-              <Text>Target Address: </Text>
-              <Input
-                name="address"
-                disabled={confirmed}
-                ref={register({ required: true })}
-                placeholder={"paste your algorand-address here"}
-                onChange={() => console.log("TODO check if is valid address")}
-              />
-              <i>
-                Note: Please make sure that you have added USDC as an asset to
-                accept transactions for your Algorand Address (see instructions
-                here(LINK) on)
-              </i>
-            </>
-          )}
           {watched.target === "BANK" && (
             <Box>
               <Text>Your Withdrawal will be credited to this account: </Text>

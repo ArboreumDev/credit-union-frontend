@@ -10,7 +10,7 @@ import { keccak256 } from "js-sha3"
  * @param {String} address the given HEX adress
  * @return {Boolean}
  */
-export const isAddress = function (address) {
+export const isEthAddress = function (address) {
   if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
     // check if it has the basic requirements of an address
     return false
