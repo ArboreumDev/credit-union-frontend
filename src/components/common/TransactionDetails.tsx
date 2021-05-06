@@ -32,10 +32,11 @@ interface Props {
 
 export const TransactionDetails = ({ tx }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const displayData = {
+  const displayData: any = {
     description: tx.type,
   }
   Object.assign(displayData, tx.details)
+  // this might be our master wallet Id, whose Id should be secret
   delete displayData.source
   displayData.source = tx.source
 

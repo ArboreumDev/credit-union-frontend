@@ -555,9 +555,19 @@ export default class CircleClient extends Bank {
       } as UserTransaction
     })
 
-    // TODO also get wire-withdrawals
+    const payouts = (await this.getPayouts(walletId)).map((p) => {
+      return {
+        type: "Withdrawal",
+        amount: p.amount.amount,
+        status: p.status,
+        destination: "Bank",
+        source: "Wallet",
+        createDate: p.createDate,
+        details: { ...p },
+      }
+    })
 
-    return transfers
+    return transfers.concat(payouts)
   }
 
   /**

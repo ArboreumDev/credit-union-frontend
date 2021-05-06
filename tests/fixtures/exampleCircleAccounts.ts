@@ -114,6 +114,27 @@ export const exampleCircleAccounts = [
           createDate: "2021-04-30T13:38:56.812Z",
         },
       },
+      {
+        type: "Withdrawal",
+        amount: "1.10",
+        status: "pending",
+        destination: "Bank",
+        source: "Wallet",
+        createDate: "2021-05-06T10:35:51.199Z",
+        details: {
+          id: "f8581421-39c2-4d64-9ea8-717dea0a9f77",
+          amount: { amount: "1.10", currency: "USD" },
+          status: "pending",
+          sourceWalletId: "1000088128",
+          destination: {
+            type: "wire",
+            id: "547df812-d4c9-4d25-8d52-e7970ab0d962",
+            name: "Commerzbank GF-B48 ****3000",
+          },
+          createDate: "2021-05-06T10:35:51.199Z",
+          updateDate: "2021-05-06T10:35:51.274Z",
+        },
+      },
     ],
   },
   {

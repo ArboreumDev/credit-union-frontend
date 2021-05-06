@@ -133,7 +133,7 @@ describe("Circle tests", () => {
     })
   })
 
-  describe.only("process Deposits", () => {
+  describe("process Deposits", () => {
     const user1 = exampleCircleAccounts[0]
     test("completed deposits are transfered to user accounts", async () => {
       const deposits = await circle.processDeposits(
@@ -178,18 +178,26 @@ describe("Circle tests", () => {
       expect(sourceWalletId).toBe(userData.sourceWalletId)
       expect(status).toBe("pending")
       expect(amount.amount).toBe("1.10")
-      const after = await circle.getBalance(w2)
+      const after = await circle.getBalance(user1.walletId)
       expect(after).toBe(before - 1.1)
     })
 
     test("get payouts", async () => {
       const payout = await circle.getPayoutById(withdrawalId)
-      console.log(payout)
       expect(payout).toBeTruthy
 
       const payouts = await circle.getPayouts("", user1.accountId)
-      console.log(payouts)
       expect(payouts.map((x) => x.id)).toContain(withdrawalId)
+    })
+    test("withdrawal shows up in history", async () => {
+      const history = await circle.getHistory(user1.walletId)
+      const tx: UserTransaction = history.filter(
+        (t) => t.details.id === withdrawalId
+      )[0]
+      expect(tx).toBeTruthy
+      expect(tx.destination).toBe("Bank")
+      expect(tx.type).toBe("Withdrawal")
+      console.log(tx)
     })
   })
 })
