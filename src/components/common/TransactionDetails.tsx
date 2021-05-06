@@ -21,35 +21,57 @@ import {
   StatLabel,
   StatNumber,
   Tooltip,
+  Link,
 } from "@chakra-ui/core"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { UserTransaction } from "lib/types"
 import { Row, Table, TextColumn } from "./Table"
-import { JsonToTable } from "react-json-to-table"
 
 interface Props {
   tx: UserTransaction
 }
 
+const etherscanBaseUrl = "https://etherscan.io/tx/"
+const algoExplorerBaseUrl = "https://algoexplorer.io/tx/"
+
 export const TransactionDetails = ({ tx }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const displayData: any = {
-    description: tx.type,
-  }
-  Object.assign(displayData, tx.details)
-  // this might be our master wallet Id, whose Id should be secret
-  delete displayData.source
-  displayData.source = tx.source
-
   return (
     <>
       <Button onClick={onOpen}>...</Button>
-      <Modal size="full" isOpen={isOpen} onClose={onClose}>
+      <Modal size="xxl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Transaction Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <JsonToTable json={displayData} />
+            <Table>
+              <Row>{tx.type}</Row>
+              <Row>ref no: {tx.details.id}</Row>
+              <Row>Date: {tx.createDate}</Row>
+              <Row>Amount: ${tx.amount}</Row>
+              <Row>Status: ${tx.status}</Row>
+              {tx.details.destination.type === "blockchain" && (
+                <>
+                  <Row>target-chain: {tx.details.destination.chain}</Row>
+                  <Row>
+                    <Text>transaction hash: </Text>
+                    <Link
+                      href={`${
+                        tx.details.destination.chain === "ETH"
+                          ? etherscanBaseUrl
+                          : algoExplorerBaseUrl
+                      }${tx.details.transactionHash}`}
+                      isExternal
+                      color="teal.500"
+                    >
+                      {tx.details.transactionHash}
+                      <ExternalLinkIcon mx="2px" />
+                    </Link>
+                  </Row>
+                </>
+              )}
+            </Table>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="teal" mr={3} onClick={onClose}>

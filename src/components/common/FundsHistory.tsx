@@ -26,7 +26,6 @@ import { TransactionDetails } from "./TransactionDetails"
 
 interface Props {
   transfers: UserTransaction[]
-  userWalletId: string
 }
 
 const FundsHistory = ({ transfers }: Props) => {
