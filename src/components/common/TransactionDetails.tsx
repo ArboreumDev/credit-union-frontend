@@ -50,7 +50,7 @@ export const TransactionDetails = ({ tx }: Props) => {
               <Row>ref no: {tx.details.id}</Row>
               <Row>Date: {tx.createDate}</Row>
               <Row>Amount: ${tx.amount}</Row>
-              <Row>Status: ${tx.status}</Row>
+              <Row>Status: {tx.status}</Row>
               {tx.details.destination.type === "blockchain" && (
                 <>
                   <Row>target-chain: {tx.details.destination.chain}</Row>
