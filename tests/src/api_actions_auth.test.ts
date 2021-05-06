@@ -68,7 +68,6 @@ describe.only("Create Withdrawal", () => {
       dbClient,
       circleClient
     )
-    console.log("res", id, status, source, destination, amount)
     expect(parseFloat(amount.amount)).toBe(1)
     expect(status).toBe("pending")
     expect(destination.chain).toBe("ETH")

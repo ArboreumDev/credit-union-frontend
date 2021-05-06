@@ -210,7 +210,6 @@ export class Withdraw extends Action {
   }
 
   async run() {
-    console.log("thi", this.payload, this.payload)
     // how to make sure this is only called once?
     const idemKey = uuidv4()
     const circleData = this.user.account_details.circle
@@ -233,16 +232,16 @@ export class Withdraw extends Action {
         this.payload.amount,
         idemKey
       )
-      // TODO create a scenario action to stay in sync
-      // return await this.dbClient.sdk.InsertScenarioAction({
-      //   action: {
-      //     action_type: Action_Type_Enum.AdjustBalances,
-      //     payload: {
-      //       userEmail: this.user.email,
-      //       balanceDelta: - this.payload.amount,
-      //     },
-      //   },
-      // })
+      // scenario action to stay in sync
+      return await this.dbClient.sdk.InsertScenarioAction({
+        action: {
+          action_type: Action_Type_Enum.AdjustBalances,
+          payload: {
+            userEmail: this.user.email,
+            balanceDelta: -this.payload.amount,
+          },
+        },
+      })
     }
   }
 

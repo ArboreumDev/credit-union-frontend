@@ -67,7 +67,6 @@ describe("Circle tests", () => {
           ...wire.bankDetails.bankAddress,
         },
       } as CreateWireAccountPayload)
-      console.log(data)
       accountId = data.accountId
       expect(data.trackingRef).toBeTruthy
       expect(accountId).toBeTruthy

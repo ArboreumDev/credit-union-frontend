@@ -197,7 +197,6 @@ describe("Circle tests", () => {
       expect(tx).toBeTruthy
       expect(tx.destination).toBe("Bank")
       expect(tx.type).toBe("Withdrawal")
-      console.log(tx)
     })
   })
 })

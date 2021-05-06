@@ -82,6 +82,7 @@ export interface CircleAccountInfo {
   algoAddress: string
   wireDepositAccount: BankAccountDetails
   deposits?: DepositInfo
+  history: any
 }
 
 export interface WithdrawalUserData {

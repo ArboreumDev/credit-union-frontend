@@ -26,7 +26,7 @@ import {
   UserType,
   LoanState,
 } from "../lib/types"
-import DecentroClient from "./wallet/decentro_client"
+import CircleClient, { CIRCLE_BASE_URL } from "./wallet/circle_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
 
@@ -39,7 +39,7 @@ export default class DbClient {
   public sdk: Sdk
   public gqlClient: GraphQLClient
   public swarmAIClient: SwarmAIClient
-  public decentroClient: DecentroClient
+  // public circleClient: CircleClient
 
   constructor(_client?: GraphQLClient, _swarmai_client?: SwarmAIClient) {
     if (DbClient.instance) {
@@ -50,6 +50,7 @@ export default class DbClient {
       _swarmai_client ||
       new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3001")
     this.sdk = getSdk(this.gqlClient)
+    // this.circleClient = new CircleClient(process.env.CIRCLE_BASE_URL || CIRCLE_BASE_URL)
     DbClient.instance = this
   }
 

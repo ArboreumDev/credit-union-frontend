@@ -145,5 +145,6 @@ export const exampleCircleAccounts = [
     algoAddress: "X3ZMN4PAZ45MCFQL6AOWSSKDQT2OYMUUREYNRVJQS4LPJC3X7F43VZNAXM",
     trackingRef: "CIR2SHGZL3",
     deposits: {},
+    history: [],
   },
 ]
