@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/core"
 import { Transfer, Payment } from "lib/types"
 import { UserTransaction } from "lib/types"
+import { TransactionDetails } from "./TransactionDetails"
 
 interface Props {
   transfers: UserTransaction[]
@@ -73,7 +74,7 @@ const FundsHistory = ({ transfers }: Props) => {
               {transfer.status}
             </Box>
             <Box width="100%" textAlign="center">
-              <Button>...</Button>
+              <TransactionDetails tx={transfer} />
             </Box>
           </Grid>
         ))}

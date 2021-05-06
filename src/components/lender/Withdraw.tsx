@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/core"
 import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import BankAccount from "components/common/BankAccount"
-import FormData from "form-data"
+// import FormData from "form-data"
 import { ReviewWithdrawal } from "./ReviewWithdrawal"
 import { Withdraw, Target } from "lib/gql_api_actions"
 import { User } from "lib/types"
@@ -55,11 +55,6 @@ export function WithdrawFundsForm({ user }: Props) {
   })
 
   const readyForReview = () => {
-    console.log("w", watched)
-    console.log("algtest", isAlgorandAddress("sdf"))
-    const algoAddress =
-      "OAQJOCLUKGJF3BR5GJWFDZ5IC43OLVCF56ODGUCZ6LJXGQG2HHFMIHPREM"
-    console.log("algtest 2", isAlgorandAddress(algoAddress))
     return (
       !errors.amount &&
       !errors.address &&
@@ -142,7 +137,7 @@ export function WithdrawFundsForm({ user }: Props) {
                 // TODO run validation whether it is a valid address here
                 name="address"
                 disabled={confirmed}
-                isInvalid={errors.address}
+                // isInvalid={errors.address}
                 ref={register({ required: true })}
                 placeholder={`paste your ${watched.target}-address here`}
                 onChange={verifyTargetAddress}
