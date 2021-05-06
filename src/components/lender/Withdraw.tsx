@@ -82,8 +82,10 @@ export function WithdrawFundsForm({ user }: Props) {
   const toast = useToast()
 
   const [confirmed, setConfirmed] = useState(false)
+  const [processing, setProcessing] = useState(false)
 
   const onSubmit = (formData: FormData) => {
+    setProcessing(true)
     console.log("making a tx", formData)
     Withdraw.fetch({
       target: formData.target,
@@ -93,6 +95,7 @@ export function WithdrawFundsForm({ user }: Props) {
       .then(async (res) => {
         console.log("res", res)
         reset({ amount: 0, address: "", target: undefined })
+        setProcessing(false)
         toast({
           title: "Confirmed.",
           description: "Your withdrawal is being processed.",
@@ -103,6 +106,7 @@ export function WithdrawFundsForm({ user }: Props) {
       })
       .catch((err) => {
         console.error(err)
+        setProcessing(false)
         toast({
           title: "Error.",
           description: "Your withdrawal could not be processed.",
@@ -213,7 +217,7 @@ export function WithdrawFundsForm({ user }: Props) {
                 <Button bg="gray.200" onClick={() => setConfirmed(false)}>
                   Edit Withdrawal
                 </Button>
-                <Button type="submit" colorScheme="teal">
+                <Button type="submit" colorScheme="teal" isLoading={processing}>
                   Confirm Withdrawal!
                 </Button>
               </Flex>
