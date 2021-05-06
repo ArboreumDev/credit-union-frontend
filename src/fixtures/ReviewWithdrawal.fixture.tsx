@@ -1,6 +1,7 @@
 import { Details } from "components/common/Details"
 import { ReviewWithdrawal, Props } from "../components/lender/ReviewWithdrawal"
 import { TransactionDetails } from "../components/common/TransactionDetails"
+import { UserTransaction } from "lib/types"
 
 const props = {
   details: {
@@ -36,7 +37,7 @@ const transfer = {
     status: "complete",
     createDate: "2021-05-04T16:14:57.930Z",
   },
-}
+} as UserTransaction
 
 export default {
   review: <ReviewWithdrawal handleConfirm={null} details={props.details} />,
