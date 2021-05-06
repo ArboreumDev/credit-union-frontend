@@ -23,6 +23,7 @@ describe("Circle tests", () => {
   })
   describe("basic transfers", () => {
     const w1 = exampleCircleAccounts[0].walletId
+    const acc1 = exampleCircleAccounts[0].accountId
     const w2 = exampleCircleAccounts[1].walletId
     const idem1 = uuidv4()
     let transferId1
@@ -47,14 +48,12 @@ describe("Circle tests", () => {
       expect(check.status).toBe("complete")
     })
 
-    test("appear in transfer history", async () => {
-      const history = await circle.getHistory(w1)
-      const tx: UserTransaction = history.filter(
+    test("master transfers do NOT appear in transfer history", async () => {
+      const history = await circle.getHistory(w1, acc1)
+      const txs: UserTransaction = history.filter(
         (x) => x.details.id === transferId1
-      )[0]
-      expect(tx).toBeTruthy
-      expect(tx.type).toBe("Deposit")
-      expect(tx.destination).toBe("Wallet")
+      )
+      expect(txs).not.toBeTruthy
     })
 
     test("from master wallet can not be repeated with same idemKey", async () => {
@@ -103,7 +102,7 @@ describe("Circle tests", () => {
       expect(await circle.getBalance(w1)).toBe(before - 1)
 
       // and are shown in history
-      const history = await circle.getHistory(w1)
+      const history = await circle.getHistory(w1, acc1)
       const tx: UserTransaction = history.filter((x) => x.details.id === id)[0]
       expect(tx).toBeTruthy
       expect(tx.type).toBe("Withdrawal")
@@ -125,7 +124,7 @@ describe("Circle tests", () => {
       expect(await circle.getBalance(w1)).toBe(before - 1)
 
       // and are shown in history
-      const history = await circle.getHistory(w1)
+      const history = await circle.getHistory(w1, acc1)
       const tx: UserTransaction = history.filter((x) => x.details.id === id)[0]
       expect(tx).toBeTruthy
       expect(tx.type).toBe("Withdrawal")
@@ -143,17 +142,17 @@ describe("Circle tests", () => {
       // NOTE: i manually did two wire deposits so I expect those to show up
       expect(deposits.total).toBe(2)
     })
+
     test("deposits show in history", async () => {
-      const history = await circle.getHistory(user1.walletId)
+      const history = await circle.getHistory(user1.walletId, user1.accountId)
       // check for the one deposit over 300
       const txs = history.filter(
         (x: UserTransaction) =>
           x.type === "Deposit" && x.details.amount.amount === "300.00"
       )
-      console.log(txs)
       expect(txs.length).toBe(1)
-      expect(txs[0].destination).toBe("Wallet")
-      expect(txs[0].source).toBe("Bank")
+      expect(txs[0].destination).toBe("WALLET")
+      expect(txs[0].source).toBe("BANK")
       expect(txs[0].type).toBe("Deposit")
     })
   })
@@ -190,12 +189,12 @@ describe("Circle tests", () => {
       expect(payouts.map((x) => x.id)).toContain(withdrawalId)
     })
     test("withdrawal shows up in history", async () => {
-      const history = await circle.getHistory(user1.walletId)
+      const history = await circle.getHistory(user1.walletId, user1.accountId)
       const tx: UserTransaction = history.filter(
         (t) => t.details.id === withdrawalId
       )[0]
       expect(tx).toBeTruthy
-      expect(tx.destination).toBe("Bank")
+      expect(tx.destination).toBe("BANK")
       expect(tx.type).toBe("Withdrawal")
     })
   })

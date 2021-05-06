@@ -54,7 +54,8 @@ const options = {
           s.user.account_details.circle.walletId
         )
         s.user.account_details.circle.history = await circleClient.getHistory(
-          s.user.account_details.circle.walletId
+          s.user.account_details.circle.walletId,
+          s.user.account_details.circle.accountId
         )
       }
 

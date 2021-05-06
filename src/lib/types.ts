@@ -379,7 +379,7 @@ export interface CreatePayoutPayload {
 }
 
 type TxType = "Deposit" | "Withdrawal" | "Investment" | "Pledge" | "Repayment"
-type Medium = "BANK" | "ETH" | "ALGO" | "Wallet"
+type Medium = "BANK" | "ETH" | "ALGO" | "WALLET"
 
 export type UserTransaction = {
   type: TxType
