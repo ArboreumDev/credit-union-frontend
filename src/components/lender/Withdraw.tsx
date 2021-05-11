@@ -134,7 +134,8 @@ export function WithdrawFundsForm({ user }: Props) {
             <option value="BANK">Bank Account</option>
           </Select>
 
-          {watched.target && (
+          {watched.target && watched.target !== "BANK" && (
+            // get address if it is blockchain withdrawal
             <>
               <Text>Target Address: </Text>
               <Input
@@ -160,6 +161,7 @@ export function WithdrawFundsForm({ user }: Props) {
           )}
 
           {watched.target === "BANK" && (
+            // show preset withdrawal details if its a bank withdrawal
             <Box>
               <Text>Your Withdrawal will be credited to this account: </Text>
               <BankAccount
@@ -172,6 +174,7 @@ export function WithdrawFundsForm({ user }: Props) {
 
           {((watched.target && watched.address && !errors.address) ||
             getValues("target") === "BANK") && (
+            // get the witdrawal amount
             <Box flex={1}>
               <Text>Withdrawal amount: </Text>
               <InputGroup>
