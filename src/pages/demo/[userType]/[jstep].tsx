@@ -42,18 +42,38 @@ export const lJourneySequence = [
   ),
   new JStep("Pending", <PendingReview />),
 
-  new JStep("Add funds", getDashboardComponent(Fixtures.Lender, 1)),
+  new JStep(
+    "Add funds",
+    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 1)
+  ),
   new JStep(
     "Lender Dashboard with Assets",
-    getDashboardComponent(Fixtures.LenderWithInvestments)
+    getDashboardComponent(
+      Fixtures.LenderWithInvestments,
+      Fixtures.InvestOptions,
+      0
+    )
   ),
-  new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
+  new JStep(
+    "Lender Dashboard",
+    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 0)
+  ),
   new JStep(
     "Lender Dashboard with Notification",
-    getDashboardComponent(Fixtures.SupporterWithPledgeRequest)
+    getDashboardComponent(
+      Fixtures.SupporterWithPledgeRequest,
+      Fixtures.InvestOptions,
+      0
+    )
   ),
-  new JStep("Profile", getDashboardComponent(Fixtures.Lender, 1)),
-  new JStep("Repayments", getDashboardComponent(Fixtures.Lender, 2)),
+  new JStep(
+    "Profile",
+    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 1)
+  ),
+  new JStep(
+    "Repayments",
+    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 2)
+  ),
 ]
 
 const getStepMax = (userType: UserType) => {

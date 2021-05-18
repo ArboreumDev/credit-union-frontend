@@ -5,6 +5,7 @@ import {
   CalculatedRisk,
   LoanInfo,
   RoI,
+  InvestmentOptions,
 } from "../types"
 import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
 
@@ -36,6 +37,20 @@ export class Fixtures {
     loans_to_repay: [],
     roi: NO_ROI,
   }
+  static InvestOptions: InvestmentOptions = [
+    {
+      name: "Amitabh Bachann",
+      loan_requests: [
+        {
+          amount: 90000,
+          status: "initiated",
+          request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba91",
+          confirmation_date: null,
+          purpose: "Educational expense",
+        },
+      ],
+    },
+  ]
 
   static LoanReqInfo: LoanInfo = {
     request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
