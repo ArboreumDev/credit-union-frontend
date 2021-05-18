@@ -4,6 +4,16 @@
   is_enum: true
 - table:
     schema: public
+    name: creditLine
+  object_relationships:
+    - name: userByBorrower
+      using:
+        foreign_key_constraint_on: borrower
+    - name: userByInvestor
+      using:
+        foreign_key_constraint_on: investor
+- table:
+    schema: public
     name: events
   object_relationships:
     - name: user
@@ -68,6 +78,13 @@
     schema: public
     name: user
   array_relationships:
+    - name: creditLines
+      using:
+        foreign_key_constraint_on:
+          column: borrower
+          table:
+            schema: public
+            name: creditLine
     - name: events
       using:
         foreign_key_constraint_on:

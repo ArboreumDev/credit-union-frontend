@@ -1,0 +1,1 @@
+CREATE TABLE "public"."creditLine"("borrower" uuid NOT NULL, "investor" uuid NOT NULL, PRIMARY KEY ("borrower","investor") , FOREIGN KEY ("borrower") REFERENCES "public"."user"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("investor") REFERENCES "public"."user"("id") ON UPDATE restrict ON DELETE restrict);
