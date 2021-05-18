@@ -60,7 +60,6 @@ query GetUserByEmail($email: String!) {
         amount
         loan
       }
-
     }
   }
 }

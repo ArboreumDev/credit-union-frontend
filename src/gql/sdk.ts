@@ -239,6 +239,160 @@ export enum Action_Type_Update_Column {
   Value = "value",
 }
 
+/** columns and relationships of "creditLine" */
+export type CreditLine = {
+  __typename?: "creditLine"
+  borrower: Scalars["uuid"]
+  investor: Scalars["uuid"]
+  /** An object relationship */
+  userByBorrower: User
+  /** An object relationship */
+  userByInvestor: User
+}
+
+/** aggregated selection of "creditLine" */
+export type CreditLine_Aggregate = {
+  __typename?: "creditLine_aggregate"
+  aggregate?: Maybe<CreditLine_Aggregate_Fields>
+  nodes: Array<CreditLine>
+}
+
+/** aggregate fields of "creditLine" */
+export type CreditLine_Aggregate_Fields = {
+  __typename?: "creditLine_aggregate_fields"
+  count?: Maybe<Scalars["Int"]>
+  max?: Maybe<CreditLine_Max_Fields>
+  min?: Maybe<CreditLine_Min_Fields>
+}
+
+/** aggregate fields of "creditLine" */
+export type CreditLine_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<CreditLine_Select_Column>>
+  distinct?: Maybe<Scalars["Boolean"]>
+}
+
+/** order by aggregate values of table "creditLine" */
+export type CreditLine_Aggregate_Order_By = {
+  count?: Maybe<Order_By>
+  max?: Maybe<CreditLine_Max_Order_By>
+  min?: Maybe<CreditLine_Min_Order_By>
+}
+
+/** input type for inserting array relation for remote table "creditLine" */
+export type CreditLine_Arr_Rel_Insert_Input = {
+  data: Array<CreditLine_Insert_Input>
+  on_conflict?: Maybe<CreditLine_On_Conflict>
+}
+
+/** Boolean expression to filter rows from the table "creditLine". All fields are combined with a logical 'AND'. */
+export type CreditLine_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<CreditLine_Bool_Exp>>>
+  _not?: Maybe<CreditLine_Bool_Exp>
+  _or?: Maybe<Array<Maybe<CreditLine_Bool_Exp>>>
+  borrower?: Maybe<Uuid_Comparison_Exp>
+  investor?: Maybe<Uuid_Comparison_Exp>
+  userByBorrower?: Maybe<User_Bool_Exp>
+  userByInvestor?: Maybe<User_Bool_Exp>
+}
+
+/** unique or primary key constraints on table "creditLine" */
+export enum CreditLine_Constraint {
+  /** unique or primary key constraint */
+  CreditLinePkey = "creditLine_pkey",
+}
+
+/** input type for inserting data into table "creditLine" */
+export type CreditLine_Insert_Input = {
+  borrower?: Maybe<Scalars["uuid"]>
+  investor?: Maybe<Scalars["uuid"]>
+  userByBorrower?: Maybe<User_Obj_Rel_Insert_Input>
+  userByInvestor?: Maybe<User_Obj_Rel_Insert_Input>
+}
+
+/** aggregate max on columns */
+export type CreditLine_Max_Fields = {
+  __typename?: "creditLine_max_fields"
+  borrower?: Maybe<Scalars["uuid"]>
+  investor?: Maybe<Scalars["uuid"]>
+}
+
+/** order by max() on columns of table "creditLine" */
+export type CreditLine_Max_Order_By = {
+  borrower?: Maybe<Order_By>
+  investor?: Maybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type CreditLine_Min_Fields = {
+  __typename?: "creditLine_min_fields"
+  borrower?: Maybe<Scalars["uuid"]>
+  investor?: Maybe<Scalars["uuid"]>
+}
+
+/** order by min() on columns of table "creditLine" */
+export type CreditLine_Min_Order_By = {
+  borrower?: Maybe<Order_By>
+  investor?: Maybe<Order_By>
+}
+
+/** response of any mutation on the table "creditLine" */
+export type CreditLine_Mutation_Response = {
+  __typename?: "creditLine_mutation_response"
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"]
+  /** data of the affected rows by the mutation */
+  returning: Array<CreditLine>
+}
+
+/** input type for inserting object relation for remote table "creditLine" */
+export type CreditLine_Obj_Rel_Insert_Input = {
+  data: CreditLine_Insert_Input
+  on_conflict?: Maybe<CreditLine_On_Conflict>
+}
+
+/** on conflict condition type for table "creditLine" */
+export type CreditLine_On_Conflict = {
+  constraint: CreditLine_Constraint
+  update_columns: Array<CreditLine_Update_Column>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** ordering options when selecting data from "creditLine" */
+export type CreditLine_Order_By = {
+  borrower?: Maybe<Order_By>
+  investor?: Maybe<Order_By>
+  userByBorrower?: Maybe<User_Order_By>
+  userByInvestor?: Maybe<User_Order_By>
+}
+
+/** primary key columns input for table: "creditLine" */
+export type CreditLine_Pk_Columns_Input = {
+  borrower: Scalars["uuid"]
+  investor: Scalars["uuid"]
+}
+
+/** select columns of table "creditLine" */
+export enum CreditLine_Select_Column {
+  /** column name */
+  Borrower = "borrower",
+  /** column name */
+  Investor = "investor",
+}
+
+/** input type for updating data in table "creditLine" */
+export type CreditLine_Set_Input = {
+  borrower?: Maybe<Scalars["uuid"]>
+  investor?: Maybe<Scalars["uuid"]>
+}
+
+/** update columns of table "creditLine" */
+export enum CreditLine_Update_Column {
+  /** column name */
+  Borrower = "borrower",
+  /** column name */
+  Investor = "investor",
+}
+
 /** columns and relationships of "events" */
 export type Events = {
   __typename?: "events"
@@ -1272,6 +1426,10 @@ export type Mutation_Root = {
   delete_action_type?: Maybe<Action_Type_Mutation_Response>
   /** delete single row from the table: "action_type" */
   delete_action_type_by_pk?: Maybe<Action_Type>
+  /** delete data from the table: "creditLine" */
+  delete_creditLine?: Maybe<CreditLine_Mutation_Response>
+  /** delete single row from the table: "creditLine" */
+  delete_creditLine_by_pk?: Maybe<CreditLine>
   /** delete data from the table: "events" */
   delete_events?: Maybe<Events_Mutation_Response>
   /** delete single row from the table: "events" */
@@ -1304,6 +1462,10 @@ export type Mutation_Root = {
   insert_action_type?: Maybe<Action_Type_Mutation_Response>
   /** insert a single row into the table: "action_type" */
   insert_action_type_one?: Maybe<Action_Type>
+  /** insert data into the table: "creditLine" */
+  insert_creditLine?: Maybe<CreditLine_Mutation_Response>
+  /** insert a single row into the table: "creditLine" */
+  insert_creditLine_one?: Maybe<CreditLine>
   /** insert data into the table: "events" */
   insert_events?: Maybe<Events_Mutation_Response>
   /** insert a single row into the table: "events" */
@@ -1336,6 +1498,10 @@ export type Mutation_Root = {
   update_action_type?: Maybe<Action_Type_Mutation_Response>
   /** update single row of the table: "action_type" */
   update_action_type_by_pk?: Maybe<Action_Type>
+  /** update data of the table: "creditLine" */
+  update_creditLine?: Maybe<CreditLine_Mutation_Response>
+  /** update single row of the table: "creditLine" */
+  update_creditLine_by_pk?: Maybe<CreditLine>
   /** update data of the table: "events" */
   update_events?: Maybe<Events_Mutation_Response>
   /** update single row of the table: "events" */
@@ -1374,6 +1540,17 @@ export type Mutation_RootDelete_Action_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Action_Type_By_PkArgs = {
   value: Scalars["String"]
+}
+
+/** mutation root */
+export type Mutation_RootDelete_CreditLineArgs = {
+  where: CreditLine_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_CreditLine_By_PkArgs = {
+  borrower: Scalars["uuid"]
+  investor: Scalars["uuid"]
 }
 
 /** mutation root */
@@ -1458,6 +1635,18 @@ export type Mutation_RootInsert_Action_TypeArgs = {
 export type Mutation_RootInsert_Action_Type_OneArgs = {
   object: Action_Type_Insert_Input
   on_conflict?: Maybe<Action_Type_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_CreditLineArgs = {
+  objects: Array<CreditLine_Insert_Input>
+  on_conflict?: Maybe<CreditLine_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_CreditLine_OneArgs = {
+  object: CreditLine_Insert_Input
+  on_conflict?: Maybe<CreditLine_On_Conflict>
 }
 
 /** mutation root */
@@ -1554,6 +1743,18 @@ export type Mutation_RootUpdate_Action_TypeArgs = {
 export type Mutation_RootUpdate_Action_Type_By_PkArgs = {
   _set?: Maybe<Action_Type_Set_Input>
   pk_columns: Action_Type_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_CreditLineArgs = {
+  _set?: Maybe<CreditLine_Set_Input>
+  where: CreditLine_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_CreditLine_By_PkArgs = {
+  _set?: Maybe<CreditLine_Set_Input>
+  pk_columns: CreditLine_Pk_Columns_Input
 }
 
 /** mutation root */
@@ -1735,6 +1936,12 @@ export type Query_Root = {
   action_type_aggregate: Action_Type_Aggregate
   /** fetch data from the table: "action_type" using primary key columns */
   action_type_by_pk?: Maybe<Action_Type>
+  /** fetch data from the table: "creditLine" */
+  creditLine: Array<CreditLine>
+  /** fetch aggregated fields from the table: "creditLine" */
+  creditLine_aggregate: CreditLine_Aggregate
+  /** fetch data from the table: "creditLine" using primary key columns */
+  creditLine_by_pk?: Maybe<CreditLine>
   /** fetch data from the table: "events" */
   events: Array<Events>
   /** fetch aggregated fields from the table: "events" */
@@ -1800,6 +2007,30 @@ export type Query_RootAction_Type_AggregateArgs = {
 /** query root */
 export type Query_RootAction_Type_By_PkArgs = {
   value: Scalars["String"]
+}
+
+/** query root */
+export type Query_RootCreditLineArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootCreditLine_AggregateArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** query root */
+export type Query_RootCreditLine_By_PkArgs = {
+  borrower: Scalars["uuid"]
+  investor: Scalars["uuid"]
 }
 
 /** query root */
@@ -2466,6 +2697,12 @@ export type Subscription_Root = {
   action_type_aggregate: Action_Type_Aggregate
   /** fetch data from the table: "action_type" using primary key columns */
   action_type_by_pk?: Maybe<Action_Type>
+  /** fetch data from the table: "creditLine" */
+  creditLine: Array<CreditLine>
+  /** fetch aggregated fields from the table: "creditLine" */
+  creditLine_aggregate: CreditLine_Aggregate
+  /** fetch data from the table: "creditLine" using primary key columns */
+  creditLine_by_pk?: Maybe<CreditLine>
   /** fetch data from the table: "events" */
   events: Array<Events>
   /** fetch aggregated fields from the table: "events" */
@@ -2531,6 +2768,30 @@ export type Subscription_RootAction_Type_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootAction_Type_By_PkArgs = {
   value: Scalars["String"]
+}
+
+/** subscription root */
+export type Subscription_RootCreditLineArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootCreditLine_AggregateArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** subscription root */
+export type Subscription_RootCreditLine_By_PkArgs = {
+  borrower: Scalars["uuid"]
+  investor: Scalars["uuid"]
 }
 
 /** subscription root */
@@ -3085,6 +3346,10 @@ export type User = {
   balance?: Maybe<Scalars["float8"]>
   corpus_share?: Maybe<Scalars["float8"]>
   created_at: Scalars["timestamptz"]
+  /** An array relationship */
+  creditLines: Array<CreditLine>
+  /** An aggregated array relationship */
+  creditLines_aggregate: CreditLine_Aggregate
   demographic_info?: Maybe<Scalars["jsonb"]>
   email: Scalars["String"]
   /** An array relationship */
@@ -3127,6 +3392,24 @@ export type User = {
 /** columns and relationships of "user" */
 export type UserAccount_DetailsArgs = {
   path?: Maybe<Scalars["String"]>
+}
+
+/** columns and relationships of "user" */
+export type UserCreditLinesArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserCreditLines_AggregateArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
 }
 
 /** columns and relationships of "user" */
@@ -3332,6 +3615,7 @@ export type User_Bool_Exp = {
   balance?: Maybe<Float8_Comparison_Exp>
   corpus_share?: Maybe<Float8_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
+  creditLines?: Maybe<CreditLine_Bool_Exp>
   demographic_info?: Maybe<Jsonb_Comparison_Exp>
   email?: Maybe<String_Comparison_Exp>
   events?: Maybe<Events_Bool_Exp>
@@ -3399,6 +3683,7 @@ export type User_Insert_Input = {
   balance?: Maybe<Scalars["float8"]>
   corpus_share?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
+  creditLines?: Maybe<CreditLine_Arr_Rel_Insert_Input>
   demographic_info?: Maybe<Scalars["jsonb"]>
   email?: Maybe<Scalars["String"]>
   events?: Maybe<Events_Arr_Rel_Insert_Input>
@@ -3510,6 +3795,7 @@ export type User_Order_By = {
   balance?: Maybe<Order_By>
   corpus_share?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
+  creditLines_aggregate?: Maybe<CreditLine_Aggregate_Order_By>
   demographic_info?: Maybe<Order_By>
   email?: Maybe<Order_By>
   events_aggregate?: Maybe<Events_Aggregate_Order_By>
@@ -4011,6 +4297,21 @@ export type CreateLoanRequestMutation = { __typename?: "mutation_root" } & {
       Loan_Requests,
       "request_id" | "amount" | "purpose" | "status" | "risk_calc_result"
     >
+  >
+}
+
+export type GetBorrowersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetBorrowersQuery = { __typename?: "query_root" } & {
+  borrowers: Array<
+    { __typename?: "user" } & Pick<User, "name"> & {
+        loan_requests: Array<
+          { __typename?: "loan_requests" } & Pick<
+            Loan_Requests,
+            "amount" | "status" | "request_id" | "confirmation_date" | "purpose"
+          >
+        >
+      }
   >
 }
 
@@ -4544,6 +4845,27 @@ export const CreateLoanRequestDocument = gql`
     }
   }
 `
+export const GetBorrowersDocument = gql`
+  query GetBorrowers {
+    borrowers: user(
+      where: {
+        _and: [
+          { user_type: { _eq: "borrower" } }
+          { kyc_approved: { _eq: true } }
+        ]
+      }
+    ) {
+      name
+      loan_requests {
+        amount
+        status
+        request_id
+        confirmation_date
+        purpose
+      }
+    }
+  }
+`
 export const GetCorpusRecommendationRisksDocument = gql`
   query GetCorpusRecommendationRisks($userIds: [uuid!]) {
     recommendation_risk(
@@ -4898,6 +5220,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<CreateLoanRequestMutation>(
           print(CreateLoanRequestDocument),
+          variables
+        )
+      )
+    },
+    GetBorrowers(
+      variables?: GetBorrowersQueryVariables
+    ): Promise<GetBorrowersQuery> {
+      return withWrapper(() =>
+        client.request<GetBorrowersQuery>(
+          print(GetBorrowersDocument),
           variables
         )
       )
