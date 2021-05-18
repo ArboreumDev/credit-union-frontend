@@ -1,13 +1,15 @@
-import { Box, Text } from "@chakra-ui/core"
+import { Box, Text, Divider } from "@chakra-ui/core"
 import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
-import { User } from "../../lib/types"
+import { User, InvestmentOptions } from "../../lib/types"
 import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
+import InvestmentOverview from "./InvestmentOverview"
 import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 
 interface Props {
   user: User
+  options: InvestmentOptions
   initPanelIdx?: number
 }
 
@@ -16,7 +18,7 @@ export const lenderTabMap = {
   account: 2,
 }
 
-const LenderHome = ({ user, initPanelIdx }: Props) => {
+const LenderHome = ({ user, initPanelIdx, options }: Props) => {
   const tabs = [
     new TabComponent(
       "Dashboard",
@@ -38,6 +40,8 @@ const LenderHome = ({ user, initPanelIdx }: Props) => {
       (
         <Box maxW="lg">
           <AddFundsForm user={user} />
+          <Divider />
+          <InvestmentOverview user={user} options={options} />
         </Box>
       )
     ),

@@ -40,5 +40,10 @@ export default function useUser() {
     }
   }, [session])
 
-  return { user: session ? session.user : undefined, mutate }
+  return {
+    user: session ? session.user : undefined,
+    mutate,
+    options:
+      session?.user?.user_type === "lender" ? session.options : undefined,
+  }
 }
