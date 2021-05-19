@@ -1,7 +1,4 @@
-import {
-  InvestmentOverview,
-  InvestmentCards,
-} from "components/lender/InvestmentOverview"
+import { InvestmentCards } from "components/lender/InvestmentOverview"
 
 import { Fixtures } from "lib/demo/fixtures"
 
@@ -46,7 +43,5 @@ lenderWithApproval.approvedBorrowers = [
 
 const components = {
   cards: <InvestmentCards borrowers={borrowers} lender={lenderWithApproval} />,
-  //   cards: <InvestmentOverview user={user} />,
-  // dashboardLive: <LenderDashboard lenderId={"19b15f38-eaa8-48f6-9bba-ac1d95b6c0f7"}/>
 }
 export default components

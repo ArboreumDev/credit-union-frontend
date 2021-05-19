@@ -29,8 +29,11 @@ export const bJourneySequence = [
     getDashboardComponent(Fixtures.BorrowerLoanNeedsConfirmation)
   ),
   new JStep("Loan is live", getDashboardComponent(Fixtures.BorrowerLoanLive)),
-  new JStep("Profile", getDashboardComponent(Fixtures.BorrowerLoanLive, 1)),
-  new JStep("Repayments", getDashboardComponent(Fixtures.BorrowerLoanLive, 2)),
+  new JStep("Profile", getDashboardComponent(Fixtures.BorrowerLoanLive, [], 1)),
+  new JStep(
+    "Repayments",
+    getDashboardComponent(Fixtures.BorrowerLoanLive, [], 2)
+  ),
 ]
 
 export const lJourneySequence = [
