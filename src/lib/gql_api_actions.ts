@@ -8,6 +8,7 @@ import {
   UpdateLoanRequestWithOfferMutation,
   UpdateSupporterMutationVariables,
   Action_Type_Enum,
+  ApproveBorrowerMutationVariables,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
@@ -264,6 +265,53 @@ export class MakeRepayment extends Action {
   }
 }
 
+export class SetBorrowerApproval extends Action {
+  static Name = "SetBorrowerApproval"
+  static InputType: {
+    borrowerId: string
+    approved: boolean
+  }
+  static ReturnType: boolean
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type === UserType.Lender
+  }
+
+  async run() {
+    console.log("runnning")
+    const creditLine = {
+      borrower_id: this.payload.borrowerId,
+      investor_id: this.user.id,
+    }
+    console.log("c", creditLine)
+
+    // add borrower entry
+    if (this.payload.approved) {
+      await this.dbClient.sdk.ApproveBorrower({ creditLine })
+    } else {
+      await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+    }
+    return true
+
+    // TODO
+    // return await this.dbClient.sdk.InsertScenarioAction({
+    //   action: {
+    //     action_type: Action_Type_Enum.RepayLoan,
+    //     payload: {
+    //       userEmail: this.user.email,
+    //       loan_id: userLoanId,
+    //       amount: this.payload.amount,
+    //     },
+    //   },
+    // })
+  }
+
+  static fetch(payload: typeof SetBorrowerApproval.InputType) {
+    return fetcherMutate(SetBorrowerApproval.Name, payload)
+  }
+}
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
@@ -273,6 +321,7 @@ export const ACTIONS = {
   [AcceptRejectPledge.Name]: AcceptRejectPledge,
   [AcceptLoanOffer.Name]: AcceptLoanOffer,
   [MakeRepayment.Name]: MakeRepayment,
+  [SetBorrowerApproval.Name]: SetBorrowerApproval,
 }
 
 export async function runAction(

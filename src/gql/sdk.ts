@@ -4315,6 +4315,19 @@ export type AddSupporterMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type ApproveBorrowerMutationVariables = Exact<{
+  creditLine: CreditLine_Insert_Input
+}>
+
+export type ApproveBorrowerMutation = { __typename?: "mutation_root" } & {
+  insert_creditLine_one?: Maybe<
+    { __typename?: "creditLine" } & Pick<
+      CreditLine,
+      "borrower_id" | "investor_id"
+    >
+  >
+}
+
 export type CreateLoanRequestMutationVariables = Exact<{
   request: Loan_Requests_Insert_Input
 }>
@@ -4478,6 +4491,22 @@ export type GetLoansByBorrowerAndStatusQuery = { __typename?: "query_root" } & {
     { __typename?: "loan_requests" } & Pick<
       Loan_Requests,
       "request_id" | "amount" | "status" | "risk_calc_result"
+    >
+  >
+}
+
+export type RemoveBorrowerApprovalMutationVariables = Exact<{
+  borrower_id: Scalars["uuid"]
+  investor_id: Scalars["uuid"]
+}>
+
+export type RemoveBorrowerApprovalMutation = {
+  __typename?: "mutation_root"
+} & {
+  delete_creditLine_by_pk?: Maybe<
+    { __typename?: "creditLine" } & Pick<
+      CreditLine,
+      "borrower_id" | "investor_id"
     >
   >
 }
@@ -4865,6 +4894,14 @@ export const AddSupporterDocument = gql`
     }
   }
 `
+export const ApproveBorrowerDocument = gql`
+  mutation ApproveBorrower($creditLine: creditLine_insert_input!) {
+    insert_creditLine_one(object: $creditLine) {
+      borrower_id
+      investor_id
+    }
+  }
+`
 export const CreateLoanRequestDocument = gql`
   mutation CreateLoanRequest($request: loan_requests_insert_input!) {
     loanRequest: insert_loan_requests_one(object: $request) {
@@ -5015,6 +5052,17 @@ export const GetLoansByBorrowerAndStatusDocument = gql`
       amount
       status
       risk_calc_result
+    }
+  }
+`
+export const RemoveBorrowerApprovalDocument = gql`
+  mutation RemoveBorrowerApproval($borrower_id: uuid!, $investor_id: uuid!) {
+    delete_creditLine_by_pk(
+      borrower_id: $borrower_id
+      investor_id: $investor_id
+    ) {
+      borrower_id
+      investor_id
     }
   }
 `
@@ -5246,6 +5294,16 @@ export function getSdk(
         )
       )
     },
+    ApproveBorrower(
+      variables: ApproveBorrowerMutationVariables
+    ): Promise<ApproveBorrowerMutation> {
+      return withWrapper(() =>
+        client.request<ApproveBorrowerMutation>(
+          print(ApproveBorrowerDocument),
+          variables
+        )
+      )
+    },
     CreateLoanRequest(
       variables: CreateLoanRequestMutationVariables
     ): Promise<CreateLoanRequestMutation> {
@@ -5332,6 +5390,16 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetLoansByBorrowerAndStatusQuery>(
           print(GetLoansByBorrowerAndStatusDocument),
+          variables
+        )
+      )
+    },
+    RemoveBorrowerApproval(
+      variables: RemoveBorrowerApprovalMutationVariables
+    ): Promise<RemoveBorrowerApprovalMutation> {
+      return withWrapper(() =>
+        client.request<RemoveBorrowerApprovalMutation>(
+          print(RemoveBorrowerApprovalDocument),
           variables
         )
       )
