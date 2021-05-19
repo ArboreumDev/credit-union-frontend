@@ -35,7 +35,7 @@ describe("Create new user", () => {
   })
 })
 
-describe.only("Create new loan | user is Authorized", () => {
+describe("Create new loan | user is Authorized", () => {
   let loanRequestId: string
 
   beforeAll(async () => {
@@ -46,7 +46,7 @@ describe.only("Create new loan | user is Authorized", () => {
   afterAll(async () => {
     await sdk.ResetDB()
   })
-  test.skip("new loan", async () => {
+  test("new loan", async () => {
     const session = getMockSession(BORROWER1)
 
     const payload: typeof CreateLoan.InputType = {
@@ -65,7 +65,7 @@ describe.only("Create new loan | user is Authorized", () => {
     expect(res.loanRequest.amount === payload.request.amount)
     loanRequestId = res.loanRequest.request_id
   })
-  test.skip("add supporter", async () => {
+  test("add supporter", async () => {
     const session = getMockSession(BORROWER1)
     const payload: typeof AddSupporter.InputType = {
       requestId: loanRequestId,

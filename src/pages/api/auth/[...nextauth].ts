@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { Session } from "lib/types"
+import { Session, UserType } from "lib/types"
 import DbClient from "gql/db_client"
 
 const dbClient = new DbClient()
