@@ -4635,6 +4635,12 @@ export type DeleteAllUsersMutation = { __typename?: "mutation_root" } & {
 export type ResetDbMutationVariables = Exact<{ [key: string]: never }>
 
 export type ResetDbMutation = { __typename?: "mutation_root" } & {
+  delete_creditLine?: Maybe<
+    { __typename?: "creditLine_mutation_response" } & Pick<
+      CreditLine_Mutation_Response,
+      "affected_rows"
+    >
+  >
   delete_supporters?: Maybe<
     { __typename?: "supporters_mutation_response" } & Pick<
       Supporters_Mutation_Response,
@@ -5171,6 +5177,9 @@ export const DeleteAllUsersDocument = gql`
 `
 export const ResetDbDocument = gql`
   mutation ResetDB {
+    delete_creditLine(where: {}) {
+      affected_rows
+    }
     delete_supporters(where: {}) {
       affected_rows
     }

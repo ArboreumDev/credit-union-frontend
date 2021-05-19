@@ -275,17 +275,14 @@ export class SetBorrowerApproval extends Action {
   minAuthLevel = AUTH_TYPE.USER
 
   isUserAllowed() {
-    return super.isUserAllowed() && this.user.user_type === UserType.Lender
+    return super.isUserAllowed() //&& this.user.user_type === UserType.Lender
   }
 
   async run() {
-    console.log("runnning")
     const creditLine = {
       borrower_id: this.payload.borrowerId,
       investor_id: this.user.id,
     }
-    console.log("c", creditLine)
-
     // add borrower entry
     if (this.payload.approved) {
       await this.dbClient.sdk.ApproveBorrower({ creditLine })

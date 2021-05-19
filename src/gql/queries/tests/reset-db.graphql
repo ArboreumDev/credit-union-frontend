@@ -1,4 +1,7 @@
 mutation ResetDB {
+  delete_creditLine(where: {}) {
+    affected_rows
+  }
   delete_supporters(where: {}) {
     affected_rows
   }
