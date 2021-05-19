@@ -33,7 +33,7 @@ export function AddFundsForm({ user }: Props) {
 
   return (
     <Box>
-      <Text>Coming soon!</Text>
+      {/* <Text>Coming soon!</Text> */}
       {/* <form onSubmit={handleSubmit(onSubmit)} method="post">
         <Stack spacing={3}>
           <Text>How much money would you like to invest?</Text>
