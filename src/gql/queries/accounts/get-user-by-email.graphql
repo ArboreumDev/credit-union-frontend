@@ -12,6 +12,9 @@ query GetUserByEmail($email: String!) {
     demographic_info
     onboarded
     roi
+    approvedBorrowers: creditLineByInvestor {
+      borrower_id
+    }
     loan_requests {
       request_id
       confirmation_date

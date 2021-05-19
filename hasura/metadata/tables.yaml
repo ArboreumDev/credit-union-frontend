@@ -8,10 +8,10 @@
   object_relationships:
     - name: userByBorrower
       using:
-        foreign_key_constraint_on: borrower
+        foreign_key_constraint_on: borrower_id
     - name: userByInvestor
       using:
-        foreign_key_constraint_on: investor
+        foreign_key_constraint_on: investor_id
 - table:
     schema: public
     name: events
@@ -78,10 +78,17 @@
     schema: public
     name: user
   array_relationships:
-    - name: creditLines
+    - name: creditLineByBorrower
       using:
         foreign_key_constraint_on:
-          column: borrower
+          column: borrower_id
+          table:
+            schema: public
+            name: creditLine
+    - name: creditLineByInvestor
+      using:
+        foreign_key_constraint_on:
+          column: investor_id
           table:
             schema: public
             name: creditLine

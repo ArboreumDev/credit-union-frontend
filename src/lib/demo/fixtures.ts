@@ -33,6 +33,7 @@ export class Fixtures {
     loan_requests: [],
     pledge_requests: [],
     pledges: [],
+    approvedBorrowers: [],
     active_loans: [],
     loans_to_repay: [],
     roi: NO_ROI,
@@ -40,6 +41,7 @@ export class Fixtures {
   static InvestOptions: InvestmentOptions = [
     {
       name: "Amitabh Bachann",
+      id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
       loan_requests: [
         {
           amount: 90000,
@@ -145,6 +147,7 @@ export class Fixtures {
     created_at: "2020-08-29T04:12:17.878911+00:00",
     kyc_approved: false,
     loan_requests: [],
+    approvedBorrowers: [],
     pledge_requests: [],
     pledges: [],
     active_loans: [],
