@@ -1,0 +1,20 @@
+query GetBorrowers {
+  borrowers: user(
+    where: {
+      _and: [
+        {user_type: {_eq: "borrower"}}
+        {kyc_approved: {_eq: true}}	
+      ]
+    }
+  ) {
+    name
+    id
+    loan_requests {
+      amount
+      status
+      request_id
+      confirmation_date
+      purpose
+    }
+  }
+}
