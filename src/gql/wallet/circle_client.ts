@@ -8,6 +8,9 @@ import {
   DepositInfo,
   CreatePayoutPayload,
   UserTransaction,
+  CircleTransfer,
+  CirclePayment,
+  CirclePayout,
 } from "lib/types"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
@@ -121,7 +124,7 @@ const getTransferPurpose = (t, walletId) => {
   return "Pledge"
 }
 
-export const paymentToUserTransaction = (payment) => {
+export const paymentToUserTransaction = (payment: CirclePayment) => {
   return {
     type: "Deposit",
     amount: payment.amount.amount,
@@ -133,7 +136,7 @@ export const paymentToUserTransaction = (payment) => {
   } as UserTransaction
 }
 
-export const payoutToUserTransaction = (payout) => {
+export const payoutToUserTransaction = (payout: CirclePayout) => {
   return {
     type: "Withdrawal",
     amount: payout.amount.amount,
@@ -145,7 +148,10 @@ export const payoutToUserTransaction = (payout) => {
   } as UserTransaction
 }
 
-export const transferToUserTransaction = (t, walletId) => {
+export const transferToUserTransaction = (
+  t: CircleTransfer,
+  walletId: string
+) => {
   const type = getTransferPurpose(t, walletId)
   return {
     type: type,

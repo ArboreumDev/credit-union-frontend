@@ -390,3 +390,76 @@ export type UserTransaction = {
   source: Medium
   details: any
 }
+
+type Amount = {
+  amount: string
+  currency: string
+}
+
+type PaymentSource = {
+  id: string
+  type: string
+}
+
+export type CirclePayment = {
+  id: string
+  type: string
+  merchantId: string
+  merchantWalletId: string
+  amount: Amount
+  source: PaymentSource
+  description: string
+  status: string
+  cancel?: any
+  refunds: any[]
+  createDate: string
+  updateDate: string
+}
+
+export type PayoutDestination = {
+  type: string
+  id: string
+  name: string
+}
+type CircleRiskEvaluation = {
+  decision: string
+  reason: string
+}
+
+export type CirclePayout = {
+  id: string
+  sourceWalletId: string
+  destination: PayoutDestination
+  amount: Amount
+  fees: Amount
+  status: string
+  trackingRef: string
+  errorCode: string
+  riskEvaluation: CircleRiskEvaluation
+  return: any
+  createDate: string
+  updateDate: string
+}
+
+type TransferSource = {
+  type: string
+  id: string
+}
+
+type TransferDestination = {
+  type: string
+  address: string
+  addressTag: string
+  chain: string
+}
+export type CircleTransfer = {
+  id: string
+  source: TransferSource
+  destination: TransferDestination
+
+  amount: Amount
+  transactionHash: string
+  status: string
+  errorCode: string
+  createDate: string
+}
