@@ -444,6 +444,7 @@ export type CirclePayout = {
 type TransferSource = {
   type: string
   id: string
+  chain?: string
 }
 
 type TransferDestination = {
