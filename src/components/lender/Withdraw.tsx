@@ -11,13 +11,10 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
-import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 import BankAccount from "components/common/BankAccount"
-// import FormData from "form-data"
 import { ReviewWithdrawal } from "./ReviewWithdrawal"
 import { Withdraw, Target } from "lib/gql_api_actions"
 import { User } from "lib/types"
-import { useRouter } from "next/router"
 import { useState } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { isEthAddress } from "lib/ethereum"
@@ -34,9 +31,7 @@ interface Props {
 }
 
 export function WithdrawFundsForm({ user }: Props) {
-  const router = useRouter()
   const {
-    formState,
     register,
     trigger,
     handleSubmit,
@@ -45,6 +40,7 @@ export function WithdrawFundsForm({ user }: Props) {
     errors,
     reset,
     control,
+    setValue,
     getValues,
   } = useForm<FormData>()
 
@@ -86,7 +82,6 @@ export function WithdrawFundsForm({ user }: Props) {
 
   const onSubmit = (formData: FormData) => {
     setProcessing(true)
-    console.log("making a tx", formData)
     Withdraw.fetch({
       target: formData.target,
       address: formData.address,
@@ -127,7 +122,7 @@ export function WithdrawFundsForm({ user }: Props) {
             disabled={confirmed}
             ref={register({ required: true })}
             name="target"
-            // onChange={() => clearFormData()}
+            onChange={() => setValue("address", "")}
           >
             <option value="ETH">USDC on Ethereum</option>
             <option value="ALGO">USDC on Algorand</option>
@@ -139,7 +134,6 @@ export function WithdrawFundsForm({ user }: Props) {
             <>
               <Text>Target Address: </Text>
               <Input
-                // TODO run validation whether it is a valid address here
                 name="address"
                 disabled={confirmed}
                 // isInvalid={errors.address}
