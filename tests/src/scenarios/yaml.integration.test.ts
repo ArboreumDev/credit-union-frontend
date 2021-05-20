@@ -1,5 +1,5 @@
 import { Action, Scenario, System } from "lib/scenario"
-import { dbClient, sdk, circleClient } from "../common/utils"
+import { dbClient, sdk } from "../common/utils"
 import yaml from "js-yaml"
 import fs from "fs"
 
@@ -7,7 +7,7 @@ jest.setTimeout(30000)
 
 const execScenario = async (path) => {
   const json = yaml.load(fs.readFileSync(path, "utf8"))
-  const scenario = Scenario.fromJSON(json as System, dbClient, circleClient)
+  const scenario = Scenario.fromJSON(json as System, dbClient)
   await scenario.initUsers()
   await scenario.executeAll()
   return scenario

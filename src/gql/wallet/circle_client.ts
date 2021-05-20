@@ -95,12 +95,6 @@ export interface WithdrawalUserData {
   email: string
 }
 
-// sandbox
-// TODO make this a param to the client
-const CIRCLE_API_KEY =
-  "QVBJX0tFWTo1NWE2MDdjZDNjYjNjZjk0N2Q4MmU0MWFkNTEyYzIyYTo1NmEyY2NmZDAwYzIwNmY0ZWZhYTVkMzI3MTA4NmM3Yw"
-export const CIRCLE_BASE_URL = "https://api-sandbox.circle.com/"
-
 const nullIfEmpty = (prop: string | undefined) => {
   if (prop !== undefined && prop.trim() === "") {
     return undefined
@@ -168,16 +162,13 @@ export default class CircleClient extends Bank {
   private fetcher: Fetcher
   private masterWalletId: string
 
-  constructor(
-    baseURL: string
-    // api_secret: string,
-  ) {
+  constructor(baseURL: string, api_secret: string) {
     super()
     this.fetcher = new Fetcher(
       {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${CIRCLE_API_KEY}`,
+        Authorization: `Bearer ${api_secret}`,
       },
       baseURL
     )
@@ -198,7 +189,7 @@ export default class CircleClient extends Bank {
   }
 
   async createAccount(params: { idempotencyKey: string; description: string }) {
-    const endpoint = "v1/wallets"
+    const endpoint = "/v1/wallets"
     const { data } = await this.fetcher.post(endpoint, params)
     return data
     // {
@@ -321,7 +312,6 @@ export default class CircleClient extends Bank {
       },
     } as CreateWireAccountPayload
     const { accountId, trackingRef } = await this.createWireAccount(bankReq)
-    console.log(accountId)
 
     // 0.5) get target-bank acccount to which deposits from the above account shall be sent
     const {
@@ -685,4 +675,4 @@ export default class CircleClient extends Bank {
   }
 }
 
-export const circleClient = new CircleClient(CIRCLE_BASE_URL)
+// export const circleClient = new CircleClient(CIRCLE_BASE_URL, Ci)

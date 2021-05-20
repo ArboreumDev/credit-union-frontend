@@ -12,9 +12,6 @@ import {
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
-import CircleClient, {
-  CreateWireAccountPayload,
-} from "gql/wallet/circle_client"
 import { uuidv4 } from "./scenario"
 
 export const ACTION_ERRORS = {
@@ -44,7 +41,6 @@ export abstract class Action {
   constructor(
     protected session: Session,
     protected dbClient: DbClient,
-    protected circleClient: CircleClient,
     protected payload: any
   ) {}
   abstract minAuthLevel: AUTH_TYPE
@@ -85,7 +81,7 @@ export class CreateUser extends Action {
     const ret = await this.dbClient.sdk.CreateUser(this.payload)
 
     // circle setup using userId as idempotencyKey
-    const circleData = await this.circleClient.setupUser(
+    const circleData = await this.dbClient.circleClient.setupUser(
       ret.insert_user_one.id,
       user
     )
@@ -214,7 +210,7 @@ export class Withdraw extends Action {
     const idemKey = uuidv4()
     const circleData = this.user.account_details.circle
     if (this.payload.target === "BANK") {
-      return this.circleClient.createWireWithdrawal(
+      return this.dbClient.circleClient.createWireWithdrawal(
         {
           sourceWalletId: circleData.walletId,
           targetAccountid: circleData.accountId,
@@ -225,7 +221,7 @@ export class Withdraw extends Action {
       )
     } else {
       // target is ETH or ALGO
-      return this.circleClient.walletToBlockchainTransfer(
+      return this.dbClient.circleClient.walletToBlockchainTransfer(
         circleData.walletId,
         this.payload.target,
         this.payload.address,
@@ -362,16 +358,10 @@ export async function runAction(
   actionType: string,
   session: Session,
   payload: any,
-  dbClient: DbClient,
-  circleClient: CircleClient
+  dbClient: DbClient
 ) {
   if (actionType in ACTIONS) {
-    const action = new ACTIONS[actionType](
-      session,
-      dbClient,
-      circleClient,
-      payload
-    )
+    const action = new ACTIONS[actionType](session, dbClient, payload)
     if (action.isUserAllowed()) return await action.run()
     else throw ACTION_ERRORS.Unauthorized
   } else throw ACTION_ERRORS.Invalid

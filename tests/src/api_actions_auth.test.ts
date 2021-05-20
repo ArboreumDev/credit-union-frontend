@@ -12,7 +12,7 @@ import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 import { Fixtures } from "lib/demo/fixtures"
 import { exampleCircleAccounts } from "../fixtures/exampleCircleAccounts"
-import { dbClient, sdk, circleClient } from "./common/utils"
+import { dbClient, sdk } from "./common/utils"
 import { sampleEthAddress1 } from "../src/circle/transfer.integration.test"
 
 beforeAll(async () => {
@@ -32,8 +32,7 @@ describe("Create new user", () => {
       CreateUser.Name,
       { user: { email: payload.user.email } },
       payload,
-      dbClient,
-      circleClient
+      dbClient
     )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
     expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
@@ -49,7 +48,7 @@ describe("Create new user", () => {
   })
 })
 
-describe.only("Create Withdrawal", () => {
+describe("Create Withdrawal", () => {
   const userData = Fixtures.Lender
   afterAll(async () => {
     await sdk.ResetDB()
@@ -65,8 +64,7 @@ describe.only("Create Withdrawal", () => {
       Withdraw.Name,
       { user: userData },
       payload,
-      dbClient,
-      circleClient
+      dbClient
     )
     expect(parseFloat(amount.amount)).toBe(1)
     expect(status).toBe("pending")
@@ -106,8 +104,7 @@ describe("Create new loan | user is Authorized", () => {
       CreateLoan.Name,
       session,
       payload,
-      dbClient,
-      circleClient
+      dbClient
     )) as typeof CreateLoan.ReturnType
     expect(res.loanRequest.amount === payload.request.amount)
     loanRequestId = res.loanRequest.request_id

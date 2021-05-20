@@ -1,15 +1,13 @@
 import CircleClient, {
-  CIRCLE_BASE_URL,
   CreateWireAccountPayload,
 } from "gql/wallet/circle_client"
 import { uuidv4 } from "../../../src/lib/scenario"
 import { exampleCards } from "../../fixtures/exampleCards"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
+import { circle } from "../common/utils"
 
 global.fetch = require("node-fetch")
-
-export const circle = new CircleClient(CIRCLE_BASE_URL)
 
 describe("Circle tests", () => {
   const idemKey = uuidv4()

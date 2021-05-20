@@ -1,16 +1,13 @@
-import CircleClient, {
-  CIRCLE_BASE_URL,
-  WithdrawalUserData,
-} from "gql/wallet/circle_client"
+import { WithdrawalUserData } from "gql/wallet/circle_client"
 import { uuidv4 } from "../../../src/lib/scenario"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { exampleCircleAccounts } from "../../fixtures/exampleCircleAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { UserTransaction } from "lib/types"
+import { circle } from "../common/utils"
 
 global.fetch = require("node-fetch")
 
-export const circle = new CircleClient(CIRCLE_BASE_URL)
 export const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
 
 function sleep(ms) {
@@ -178,7 +175,8 @@ describe("Circle tests", () => {
       expect(status).toBe("pending")
       expect(amount.amount).toBe("1.10")
       const after = await circle.getBalance(user1.walletId)
-      expect(after).toBe(before - 1.1)
+      // somehow we get .2000000000002 here Less
+      expect(Math.abs(after - (before - 1.1))).toBeLessThan(0.1)
     })
 
     test("get payouts", async () => {

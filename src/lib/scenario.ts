@@ -11,7 +11,6 @@ import {
 } from "./gql_api_actions"
 import { LoanRequestStatus, SupporterStatus } from "./types"
 import yaml from "js-yaml"
-import CircleClient from "gql/wallet/circle_client"
 
 export interface System {
   users: User[]
@@ -54,27 +53,13 @@ export class Scenario {
   constructor(
     public users: User[],
     public actions: Action[],
-    private dbClient: DbClient,
-    private circleClient: CircleClient
+    private dbClient: DbClient
   ) {}
-  static fromYAML(
-    scenario: string,
-    dbClient: DbClient,
-    circleClient: CircleClient
-  ) {
-    return this.fromJSON(yaml.load(scenario), dbClient, circleClient)
+  static fromYAML(scenario: string, dbClient: DbClient) {
+    return this.fromJSON(yaml.load(scenario), dbClient)
   }
-  static fromJSON(
-    scenario: System,
-    dbClient: DbClient,
-    circleClient: CircleClient
-  ) {
-    return new Scenario(
-      scenario.users,
-      scenario.actions,
-      dbClient,
-      circleClient
-    )
+  static fromJSON(scenario: System, dbClient: DbClient) {
+    return new Scenario(scenario.users, scenario.actions, dbClient)
   }
 
   async initUsers() {
@@ -101,13 +86,7 @@ export class Scenario {
   }
 
   _runAction(cls, user, payload: any) {
-    return runAction(
-      cls.Name,
-      this.getSession(user),
-      payload,
-      this.dbClient,
-      this.circleClient
-    )
+    return runAction(cls.Name, this.getSession(user), payload, this.dbClient)
   }
 
   async adjustBalances({ userEmail, balanceDelta }) {
