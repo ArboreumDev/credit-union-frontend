@@ -35,7 +35,6 @@ const Address = ({ address, size = "short" }: Props) => {
   return (
     <>
       <Flex mb={2}>
-        {/* <Input value={value} isReadOnly placeholder="Welcome" /> */}
         <Text>{displayAddress}</Text>
         <Button onClick={onCopy} ml={2}>
           {hasCopied ? "Copied" : "Copy"}
