@@ -2,6 +2,7 @@ import { Details } from "components/common/Details"
 import { ReviewWithdrawal, Props } from "../components/lender/ReviewWithdrawal"
 import { TransactionDetails } from "../components/common/TransactionDetails"
 import { UserTransaction } from "lib/types"
+import { transferToUserTransaction } from "../gql/wallet/circle_client"
 
 const props = {
   details: {
@@ -10,7 +11,7 @@ const props = {
   },
 } as Props
 
-const transfer = {
+const rawTransfer = {
   type: "Withdrawal",
   amount: "1.00",
   status: "complete",
@@ -37,7 +38,8 @@ const transfer = {
     status: "complete",
     createDate: "2021-05-04T16:14:57.930Z",
   },
-} as UserTransaction
+}
+const transfer: UserTransaction = transferToUserTransaction(rawTransfer)
 
 export default {
   review: <ReviewWithdrawal handleConfirm={null} details={props.details} />,

@@ -105,6 +105,59 @@ const nullIfEmpty = (prop: string | undefined) => {
   return prop
 }
 
+// helper function
+const getTransferPurpose = (t, walletId) => {
+  // withdrawal to blockchain address
+  if (t.source.id === walletId && t.destination.type === "blockchain")
+    return "Withdrawal"
+  if (
+    t.destination.type === "wallet" &&
+    t.destination.id === walletId &&
+    t.source.type === "blockchain"
+  )
+    return "Deposit"
+
+  // TODO once those come from other wallets, we will have investments/pledges...
+  return "Pledge"
+}
+
+export const paymentToUserTransaction = (payment) => {
+  return {
+    type: "Deposit",
+    amount: payment.amount.amount,
+    status: payment.status,
+    source: "BANK",
+    destination: "WALLET",
+    createDate: payment.createDate,
+    details: { ...payment },
+  } as UserTransaction
+}
+
+export const payoutToUserTransaction = (payout) => {
+  return {
+    type: "Withdrawal",
+    amount: payout.amount.amount,
+    status: payout.status,
+    destination: "BANK",
+    source: "WALLET",
+    createDate: payout.createDate,
+    details: { ...payout },
+  } as UserTransaction
+}
+
+export const transferToUserTransaction = (t, walletId) => {
+  const type = getTransferPurpose(t, walletId)
+  return {
+    type: type,
+    amount: t.amount.amount,
+    status: t.status,
+    destination: type === "Deposit" ? "WALLET" : t.destination.chain,
+    source: type === "Deposit" ? t.source.chain : "WALLET",
+    createDate: t.createDate,
+    details: { ...t },
+  } as UserTransaction
+}
+
 export default class CircleClient extends Bank {
   private fetcher: Fetcher
   private masterWalletId: string
@@ -518,65 +571,21 @@ export default class CircleClient extends Bank {
     // 3) withdrawals to blockchain addresses
     // 4) withdrawals to bank accounts
 
-    // helper function
-    const getTransferPurpose = (t) => {
-      // withdrawal to blockchain address
-      if (t.source.id === walletId && t.destination.type === "blockchain")
-        return "Withdrawal"
-      if (
-        t.destination.type === "wallet" &&
-        t.destination.id === walletId &&
-        t.source.type === "blockchain"
-      )
-        return "Deposit"
-
-      // TODO once those come from other wallets, we will have investments/pledges...
-      return "Pledge"
-    }
     // 1) fiat deposits
     const deposits = (await this.getPayments())
       .filter((p) => p.source.id === accountId)
-      .map((p) => {
-        return {
-          type: "Deposit",
-          amount: p.amount.amount,
-          status: p.status,
-          source: "BANK",
-          destination: "WALLET",
-          createDate: p.createDate,
-          details: { ...p },
-        } as UserTransaction
-      })
+      .map((p) => paymentToUserTransaction(p))
 
     // 2-3) deposits & withdrawals from/to blockchains
     const payoutsBlockchain = (await this.getTransfers(walletId))
       // ignore transfers from our masterWallet
       .filter((t) => t.source.id !== this.masterWalletId)
-      .map((t) => {
-        const type = getTransferPurpose(t)
-        return {
-          type: type,
-          amount: t.amount.amount,
-          status: t.status,
-          destination: type === "Deposit" ? "WALLET" : t.destination.chain,
-          source: type === "Deposit" ? t.source.chain : "WALLET",
-          createDate: t.createDate,
-          details: { ...t },
-        } as UserTransaction
-      })
+      .map((t) => transferToUserTransaction(t, walletId))
 
     // 4) withdrawals from wallet to wire account
-    const payoutsWire = (await this.getPayouts(walletId)).map((p) => {
-      return {
-        type: "Withdrawal",
-        amount: p.amount.amount,
-        status: p.status,
-        destination: "BANK",
-        source: "WALLET",
-        createDate: p.createDate,
-        details: { ...p },
-      }
-    })
+    const payoutsWire = (await this.getPayouts(walletId)).map((p) =>
+      payoutToUserTransaction(p)
+    )
 
     return payoutsWire.concat(payoutsBlockchain).concat(deposits)
   }
