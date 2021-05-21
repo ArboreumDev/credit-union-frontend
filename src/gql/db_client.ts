@@ -82,7 +82,8 @@ export default class DbClient {
       },
     })
     // potentially do other stuff here (notify us...)
-    return { loanRequest }
+    // this will fail because swarmai cant handle requests without supporters
+    return this.calculateAndUpdateLoanOffer(loanRequest.request_id)
   }
   addSupporter = async (
     requestId: string,

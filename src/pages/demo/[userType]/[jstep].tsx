@@ -48,10 +48,10 @@ export const lJourneySequence = [
     getDashboardComponent(Fixtures.LenderWithInvestments)
   ),
   new JStep("Lender Dashboard", getDashboardComponent(Fixtures.Lender)),
-  new JStep(
-    "Lender Dashboard with Notification",
-    getDashboardComponent(Fixtures.SupporterWithPledgeRequest)
-  ),
+  // new JStep(
+  //   "Lender Dashboard with Notification",
+  //   getDashboardComponent(Fixtures.SupporterWithPledgeRequest)
+  // ),
   new JStep("Profile", getDashboardComponent(Fixtures.Lender, 1)),
   new JStep("Repayments", getDashboardComponent(Fixtures.Lender, 2)),
 ]
