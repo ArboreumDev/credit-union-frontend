@@ -11,59 +11,7 @@
         foreign_key_constraint_on: user_id
 - table:
     schema: public
-    name: loan_participants
-  object_relationships:
-    - name: loan_request
-      using:
-        foreign_key_constraint_on: loan_id
-    - name: user
-      using:
-        foreign_key_constraint_on: lender_id
-- table:
-    schema: public
-    name: loan_requests
-  object_relationships:
-    - name: user
-      using:
-        foreign_key_constraint_on: borrower_id
-  array_relationships:
-    - name: loan_participants
-      using:
-        foreign_key_constraint_on:
-          column: loan_id
-          table:
-            schema: public
-            name: loan_participants
-    - name: supporters
-      using:
-        foreign_key_constraint_on:
-          column: request_id
-          table:
-            schema: public
-            name: supporters
-- table:
-    schema: public
-    name: recommendation_risk
-  object_relationships:
-    - name: user
-      using:
-        foreign_key_constraint_on: agent_id
-    - name: userByNeighborId
-      using:
-        foreign_key_constraint_on: recommender_id
-- table:
-    schema: public
     name: scenario_actions
-- table:
-    schema: public
-    name: supporters
-  object_relationships:
-    - name: loan_request
-      using:
-        foreign_key_constraint_on: request_id
-    - name: user
-      using:
-        foreign_key_constraint_on: supporter_id
 - table:
     schema: public
     name: user
@@ -75,38 +23,7 @@
           table:
             schema: public
             name: events
-    - name: loan_participants
-      using:
-        foreign_key_constraint_on:
-          column: lender_id
-          table:
-            schema: public
-            name: loan_participants
-    - name: loan_requests
-      using:
-        foreign_key_constraint_on:
-          column: borrower_id
-          table:
-            schema: public
-            name: loan_requests
-    - name: recommendation_risks
-      using:
-        foreign_key_constraint_on:
-          column: agent_id
-          table:
-            schema: public
-            name: recommendation_risk
-    - name: recommendationRisksByRecommenderId
-      using:
-        foreign_key_constraint_on:
-          column: recommender_id
-          table:
-            schema: public
-            name: recommendation_risk
-    - name: supporters
-      using:
-        foreign_key_constraint_on:
-          column: supporter_id
-          table:
-            schema: public
-            name: supporters
+- table:
+    schema: public
+    name: user_type
+  is_enum: true
