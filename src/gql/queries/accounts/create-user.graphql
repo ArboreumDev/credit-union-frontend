@@ -1,17 +1,16 @@
 mutation CreateUser($user: user_insert_input!) {
   insert_user_one(
     object: $user
-    on_conflict: { constraint: user_email_key, update_columns: [name, phone, onboarded] }
+    on_conflict: { constraint: user_email_key, update_columns: [first_name, phone, onboarded] }
   ) {
     id
+    user_type
+    last_name
     created_at
     email
-    user_type
-    name
-    roi
+    first_name
     phone
     demographic_info
     account_details
-    user_number
   }
 }

@@ -1,14 +1,17 @@
 mutation ResetDB {
-  delete_supporters(where: {}) {
+  delete_update_log(where: {}) {
     affected_rows
   }
-  delete_recommendation_risk(where: {}) {
+  delete_loan(where: {}) {
     affected_rows
   }
-  delete_loan_participants(where: {}) {
+  delete_repayment(where: {}) {
     affected_rows
   }
-  delete_loan_requests(where: {}) {
+  delete_lender_amount(where: {}) {
+    affected_rows
+  }
+  delete_loan_request(where: {}) {
     affected_rows
   }
   delete_events(where: {}) {

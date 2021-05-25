@@ -1,83 +1,68 @@
 query GetUserByEmail($email: String!) {
   user(where: { email: { _eq: $email } }) {
     id
-    name
     email
+    first_name
+    last_name
+    demographic_info
+    kyc_approved
+    onboarded
     phone
     user_type
     balance
-    corpus_share
     created_at
-    kyc_approved
-    demographic_info
-    onboarded
-    roi
-    loan_requests {
-      request_id
-      confirmation_date
-      payback_status
-      purpose
-      risk_calc_result
-      balance
-      loan
-      status
-      created_at
-      amount
-      purpose
-      supporters {
-        pledge_amount
-        status
-        user {
-          id
-          name
-          email
-        }
-      }
-    }
-    loans_to_repay: loan_requests( where: {status: {_in: ["live"]}}) {
-      request_id
-      status
-      loan
-    }
-    pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
-      ...pledgeFields
-    }
-    pledges: supporters(
-      where: { 
-        _and: {
-          status: {_eq: "confirmed" }
-          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
-        }
-      }
-    ) {
-      ...pledgeFields
-    }
-    active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
-      loan_id
-      lender_amount
-      loan_request {
-        status
-        amount
-        loan
-      }
+    # loan_request {
+    #   request_id
+    #   state
+    #   purpose
+    #   amount
+    #   loan_id
+    #   created_at
+    # }
+    # loans_to_repay: loan_requests( where: {status: {_in: ["LIVE"]}}) {
+    #   request_id
+    #   status
+    #   loan
+    # }
+    # pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
+    #   ...pledgeFields
+    # }
+    # pledges: supporters(
+    #   where: { 
+    #     _and: {
+    #       status: {_eq: "confirmed" }
+    #       loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
+    #     }
+    #   }
+    # ) {
+    #   ...pledgeFields
+    # }
+    # active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
+    #   loan_id
+    #   lender_amount
+    #   loan_request {
+    #     status
+    #     amount
+    #     loan
+    #   }
 
-    }
+    # }
   }
 }
 
-fragment pledgeFields on supporters {
-  request_id
-  pledge_amount
-  participation_request_time
-  loan_request {
-    purpose
-    amount
-    status
-    user {
-      email
-      name
-    }
-    risk_calc_result
-    loan
-  }
-}
+# fragment pledgeFields on supporters {
+#   request_id
+#   pledge_amount
+#   participation_request_time
+#   loan_request {
+#     purpose
+#     amount
+#     status
+#     user {
+#       email
+#       name
+#     }
+#     risk_calc_result
+#     loan
+#   }
+# }

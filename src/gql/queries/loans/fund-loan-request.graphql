@@ -1,0 +1,30 @@
+mutation FundLoanRequest (
+  $requestId: uuid!, 
+  $loan: loan_insert_input!, 
+  $lenderAmounts: [lender_amount_insert_input!]!
+) {
+  loanRequest: update_loan_request_by_pk(
+    pk_columns: {request_id: $requestId}
+    _set: {
+      state: "FULFILLED"
+    }
+  ) {
+    state
+    amount
+  }
+  newLoan: insert_loan_one(object: $loan) {
+    loan_id
+    next_payment_amount
+    next_payment_due_date
+    tenor
+    apr
+    penalty_apr
+    state
+  }
+  amountsLent: insert_lender_amount(objects: $lenderAmounts) {
+    returning {
+      lender_id
+      amount_lent
+    }
+  }
+}

@@ -1,8 +1,0 @@
-mutation AddSupporter($supporter: supporters_insert_input!) {
-  insert_supporters_one(object: $supporter) {
-    status
-    supporter_id
-    pledge_amount
-    info
-  }
-}
