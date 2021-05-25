@@ -1,0 +1,1 @@
+CREATE TABLE "public"."lender_amount"("loan_id" uuid NOT NULL, "lender_id" uuid NOT NULL, "amount_lent" float8 NOT NULL, PRIMARY KEY ("loan_id","lender_id") , FOREIGN KEY ("loan_id") REFERENCES "public"."loan"("loan_id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("lender_id") REFERENCES "public"."user"("id") ON UPDATE restrict ON DELETE restrict);
