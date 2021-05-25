@@ -122,6 +122,24 @@ export enum Action_Type_Constraint {
   ActionTypePkey = "action_type_pkey",
 }
 
+export enum Action_Type_Enum {
+  /** Change balance for users */
+  AdjustBalances = "ADJUST_BALANCES",
+  /** Adds supporters, generates the loan offer, and then accepts it */
+  ConfirmLoan = "CONFIRM_LOAN",
+  /** Make repayment */
+  RepayLoan = "REPAY_LOAN",
+}
+
+/** expression to compare columns of type action_type_enum. All fields are combined with logical 'AND'. */
+export type Action_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Action_Type_Enum>
+  _in?: Maybe<Array<Action_Type_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Action_Type_Enum>
+  _nin?: Maybe<Array<Action_Type_Enum>>
+}
+
 /** input type for inserting data into table "action_type" */
 export type Action_Type_Insert_Input = {
   comment?: Maybe<Scalars["String"]>
@@ -3270,7 +3288,7 @@ export type Repayment_Variance_Order_By = {
 /** columns and relationships of "scenario_actions" */
 export type Scenario_Actions = {
   __typename?: "scenario_actions"
-  action_type: Scalars["String"]
+  action_type: Action_Type_Enum
   id: Scalars["Int"]
   payload: Scalars["jsonb"]
 }
@@ -3351,7 +3369,7 @@ export type Scenario_Actions_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
   _not?: Maybe<Scenario_Actions_Bool_Exp>
   _or?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
-  action_type?: Maybe<String_Comparison_Exp>
+  action_type?: Maybe<Action_Type_Enum_Comparison_Exp>
   id?: Maybe<Int_Comparison_Exp>
   payload?: Maybe<Jsonb_Comparison_Exp>
 }
@@ -3384,7 +3402,7 @@ export type Scenario_Actions_Inc_Input = {
 
 /** input type for inserting data into table "scenario_actions" */
 export type Scenario_Actions_Insert_Input = {
-  action_type?: Maybe<Scalars["String"]>
+  action_type?: Maybe<Action_Type_Enum>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }
@@ -3392,26 +3410,22 @@ export type Scenario_Actions_Insert_Input = {
 /** aggregate max on columns */
 export type Scenario_Actions_Max_Fields = {
   __typename?: "scenario_actions_max_fields"
-  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by max() on columns of table "scenario_actions" */
 export type Scenario_Actions_Max_Order_By = {
-  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
 export type Scenario_Actions_Min_Fields = {
   __typename?: "scenario_actions_min_fields"
-  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by min() on columns of table "scenario_actions" */
 export type Scenario_Actions_Min_Order_By = {
-  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
@@ -3466,7 +3480,7 @@ export enum Scenario_Actions_Select_Column {
 
 /** input type for updating data in table "scenario_actions" */
 export type Scenario_Actions_Set_Input = {
-  action_type?: Maybe<Scalars["String"]>
+  action_type?: Maybe<Action_Type_Enum>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }

@@ -1,12 +1,11 @@
 import DbClient from "gql/db_client"
 import {
-  AddSupporterMutation,
-  ChangeUserCashBalanceMutationVariables,
+  CreateLoanRequestMutation,
   CreateLoanRequestMutationVariables,
+  CreateUserMutation,
   CreateUserMutationVariables,
-  StartLoanMutation,
-  UpdateLoanRequestWithOfferMutation,
-  UpdateSupporterMutationVariables,
+  FundLoanRequestMutation,
+  FundLoanRequestMutationVariables,
   Action_Type_Enum,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
@@ -69,9 +68,6 @@ export class CreateUser extends Action {
 
     user.email = this.session.user.email
 
-    // set default init values
-    user.roi = NO_ROI
-
     if (!user.demographic_info) {
       user.demographic_info = USER_DEMOGRAPHIC
     }
@@ -87,7 +83,7 @@ export class CreateUser extends Action {
 export class CreateLoan extends Action {
   static Name = "CreateLoan"
   static InputType: CreateLoanRequestMutationVariables
-  static ReturnType: UpdateLoanRequestWithOfferMutation
+  static ReturnType: CreateLoanRequestMutation
 
   minAuthLevel = AUTH_TYPE.USER
 
@@ -109,126 +105,31 @@ export class CreateLoan extends Action {
   }
 }
 
-export class AddSupporter extends Action {
-  static Name = "AddSupporter"
+export class FundLoanRequest extends Action {
+  static Name = "FundLoan"
   static InputType: {
     requestId: string
-    email: string
-    amount: number
-    name: string
-    info: any
   }
-  static ReturnType: AddSupporterMutation
-
+  static ReturnType: FundLoanRequestMutation
   minAuthLevel = AUTH_TYPE.USER
 
   async run() {
-    const _p = this.payload as typeof AddSupporter.InputType
-    return await this.dbClient.addSupporter(
-      _p.requestId,
-      _p.email,
-      _p.amount,
-      _p.name,
-      _p.info
+    return await this.dbClient.fundLoanRequest(
+      this.payload.requestId,
+      this.user.id
     )
   }
 
-  static fetch(payload: typeof AddSupporter.InputType) {
-    return fetcherMutate(AddSupporter.Name, payload)
-  }
-}
-
-export class ChangeBalance extends Action {
-  static Name = "ChangeBalance"
-  static InputType: ChangeUserCashBalanceMutationVariables
-  minAuthLevel = AUTH_TYPE.USER
-
   isUserAllowed() {
-    return super.isUserAllowed() && this.user.user_type == UserType.Lender
-  }
-
-  async run() {
-    await this.dbClient.sdk.ChangeUserCashBalance({
-      userId: this.user.id,
-      delta: this.payload.delta,
-    })
-    return await this.dbClient.sdk.InsertScenarioAction({
-      action: {
-        action_type: Action_Type_Enum.AdjustBalances,
-        payload: {
-          userEmail: this.user.email,
-          balanceDelta: this.payload.delta,
-        },
-      },
-    })
-  }
-
-  static fetch(payload: typeof ChangeBalance.InputType) {
-    return fetcherMutate(ChangeBalance.Name, payload)
-  }
-}
-
-export class AcceptRejectPledge extends Action {
-  static Name = "AcceptRejectPledge"
-  static InputType: UpdateSupporterMutationVariables
-  minAuthLevel = AUTH_TYPE.USER
-
-  isUserAllowed() {
-    return super.isUserAllowed() && this.user.user_type == UserType.Lender
-  }
-
-  async run() {
-    return await this.dbClient.updateSupporter(
-      this.payload.request_id,
-      this.user.id,
-      this.payload.status, // see types.SupporterStatus
-      this.payload.pledge_amount
+    return (
+      super.isUserAllowed() &&
+      this.payload &&
+      this.user.user_type === UserType.Lender
     )
   }
 
-  static fetch(payload: typeof AcceptRejectPledge.InputType) {
-    return fetcherMutate(AcceptRejectPledge.Name, payload)
-  }
-}
-
-export class AcceptLoanOffer extends Action {
-  static Name = "AcceptLoan"
-  static InputType: {
-    request_id: string
-  }
-  static ReturnType: StartLoanMutation
-  minAuthLevel = AUTH_TYPE.USER
-
-  isUserAllowed() {
-    const userHasLoan = this.user.loan_requests
-      .map((lr) => lr.request_id)
-      .includes(this.payload.request_id)
-    return super.isUserAllowed() && userHasLoan
-  }
-
-  async run() {
-    const {
-      update_loan_requests_by_pk: loan,
-    } = await this.dbClient.acceptLoanOffer(this.payload.request_id)
-
-    return await this.dbClient.sdk.InsertScenarioAction({
-      action: {
-        action_type: Action_Type_Enum.ConfirmLoan,
-        payload: {
-          userEmail: this.user.email,
-          loan_id: this.payload.request_id,
-          amount: loan.amount,
-          supporters: loan.supporters.map((s) => ({
-            email: s.user.email,
-            pledge_amount: s.pledge_amount,
-          })),
-        },
-      },
-    })
-  }
-
-  static fetch(payload: typeof AcceptLoanOffer.InputType) {
-    return fetcherMutate(AcceptLoanOffer.Name, payload)
+  static fetch(payload: typeof FundLoanRequest.InputType) {
+    return fetcherMutate(FundLoanRequest.Name, payload)
   }
 }
 
@@ -236,27 +137,27 @@ export class MakeRepayment extends Action {
   static Name = "MakeRepayment"
   static InputType: {
     amount: number
+    loanId: string
   }
-  static ReturnType: StartLoanMutation
+  static ReturnType: any //StartLoanMutation
   minAuthLevel = AUTH_TYPE.USER
 
   async run() {
-    const userLoanId = this.user.loans_to_repay[0].request_id
-    await this.dbClient.sdk.ChangeUserCashBalance({
-      userId: this.user.id,
-      delta: this.payload.amount,
-    })
-    await this.dbClient.make_repayment(userLoanId, this.payload.amount)
-    return await this.dbClient.sdk.InsertScenarioAction({
-      action: {
-        action_type: Action_Type_Enum.RepayLoan,
-        payload: {
-          userEmail: this.user.email,
-          loan_id: userLoanId,
-          amount: this.payload.amount,
-        },
-      },
-    })
+    return await this.dbClient.make_repayment(
+      this.payload.loanId,
+      this.payload.amount
+    )
+    // TODO add scenario action
+    // return await this.dbClient.sdk.InsertScenarioAction({
+    //   action: {
+    //     action_type: Action_Type_Enum.RepayLoan,
+    //     payload: {
+    //       userEmail: this.user.email,
+    //       loan_id: this.payload.loanId,
+    //       amount: this.payload.amount,
+    //     },
+    //   },
+    // })
   }
 
   static fetch(payload: typeof MakeRepayment.InputType) {
@@ -264,14 +165,138 @@ export class MakeRepayment extends Action {
   }
 }
 
+// export class AddSupporter extends Action {
+//   static Name = "AddSupporter"
+//   static InputType: {
+//     requestId: string
+//     email: string
+//     amount: number
+//     name: string
+//     info: any
+//   }
+//   static ReturnType: AddSupporterMutation
+
+//   minAuthLevel = AUTH_TYPE.USER
+
+//   async run() {
+//     const _p = this.payload as typeof AddSupporter.InputType
+//     return await this.dbClient.addSupporter(
+//       _p.requestId,
+//       _p.email,
+//       _p.amount,
+//       _p.name,
+//       _p.info
+//     )
+//   }
+
+//   static fetch(payload: typeof AddSupporter.InputType) {
+//     return fetcherMutate(AddSupporter.Name, payload)
+//   }
+// }
+
+// export class ChangeBalance extends Action {
+//   static Name = "ChangeBalance"
+//   static InputType: ChangeUserCashBalanceMutationVariables
+//   minAuthLevel = AUTH_TYPE.USER
+
+//   isUserAllowed() {
+//     return super.isUserAllowed() && this.user.user_type == UserType.Lender
+//   }
+
+//   async run() {
+//     await this.dbClient.sdk.ChangeUserCashBalance({
+//       userId: this.user.id,
+//       delta: this.payload.delta,
+//     })
+//     return await this.dbClient.sdk.InsertScenarioAction({
+//       action: {
+//         action_type: Action_Type_Enum.AdjustBalances,
+//         payload: {
+//           userEmail: this.user.email,
+//           balanceDelta: this.payload.delta,
+//         },
+//       },
+//     })
+//   }
+
+//   static fetch(payload: typeof ChangeBalance.InputType) {
+//     return fetcherMutate(ChangeBalance.Name, payload)
+//   }
+// }
+
+// export class AcceptRejectPledge extends Action {
+//   static Name = "AcceptRejectPledge"
+//   static InputType: UpdateSupporterMutationVariables
+//   minAuthLevel = AUTH_TYPE.USER
+
+//   isUserAllowed() {
+//     return super.isUserAllowed() && this.user.user_type == UserType.Lender
+//   }
+
+//   async run() {
+//     return await this.dbClient.updateSupporter(
+//       this.payload.request_id,
+//       this.user.id,
+//       this.payload.status, // see types.SupporterStatus
+//       this.payload.pledge_amount
+//     )
+//   }
+
+//   static fetch(payload: typeof AcceptRejectPledge.InputType) {
+//     return fetcherMutate(AcceptRejectPledge.Name, payload)
+//   }
+// }
+
+// export class AcceptLoanOffer extends Action {
+//   static Name = "AcceptLoan"
+//   static InputType: {
+//     request_id: string
+//   }
+//   static ReturnType: StartLoanMutation
+//   minAuthLevel = AUTH_TYPE.USER
+
+//   isUserAllowed() {
+//     const userHasLoan = this.user.loan_requests
+//       .map((lr) => lr.request_id)
+//       .includes(this.payload.request_id)
+//     return super.isUserAllowed() && userHasLoan
+//   }
+
+//   async run() {
+//     const {
+//       update_loan_requests_by_pk: loan,
+//     } = await this.dbClient.acceptLoanOffer(this.payload.request_id)
+
+//     return await this.dbClient.sdk.InsertScenarioAction({
+//       action: {
+//         action_type: Action_Type_Enum.ConfirmLoan,
+//         payload: {
+//           userEmail: this.user.email,
+//           loan_id: this.payload.request_id,
+//           amount: loan.amount,
+//           supporters: loan.supporters.map((s) => ({
+//             email: s.user.email,
+//             pledge_amount: s.pledge_amount,
+//           })),
+//         },
+//       },
+//     })
+//   }
+
+//   static fetch(payload: typeof AcceptLoanOffer.InputType) {
+//     return fetcherMutate(AcceptLoanOffer.Name, payload)
+//   }
+// }
+
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
-  [AddSupporter.Name]: AddSupporter,
-  [ChangeBalance.Name]: ChangeBalance,
-  [AcceptRejectPledge.Name]: AcceptRejectPledge,
-  [AcceptLoanOffer.Name]: AcceptLoanOffer,
+  [FundLoanRequest.Name]: FundLoanRequest,
+  // [AddSupporter.Name]: AddSupporter,
+  // [ChangeBalance.Name]: ChangeBalance,
+  // [AcceptRejectPledge.Name]: AcceptRejectPledge,
+  // [AcceptLoanOffer.Name]: AcceptLoanOffer,
   [MakeRepayment.Name]: MakeRepayment,
 }
 

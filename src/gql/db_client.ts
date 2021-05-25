@@ -84,6 +84,19 @@ export default class DbClient {
     // potentially do other stuff here (notify us...)
     return { loanRequest }
   }
+
+  /**
+   * Finalize table entry in loan_request-table
+   * create a new row in loan-table
+   * mark lender as participant in loan_amounts-table
+   * inititate fund transfer
+   * @param requestId
+   * @param lenderId
+   */
+  fundLoanRequest = async (requestId: string, lenderId: string) => {
+    console.log("placeholder")
+  }
+
   addSupporter = async (
     requestId: string,
     email: string,
