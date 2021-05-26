@@ -2,9 +2,6 @@ mutation ResetDB {
   delete_update_log(where: {}) {
     affected_rows
   }
-  delete_loan(where: {}) {
-    affected_rows
-  }
   delete_repayment(where: {}) {
     affected_rows
   }
@@ -12,6 +9,9 @@ mutation ResetDB {
     affected_rows
   }
   delete_loan_request(where: {}) {
+    affected_rows
+  }
+  delete_loan(where: {}) {
     affected_rows
   }
   delete_events(where: {}) {
