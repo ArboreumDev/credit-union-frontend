@@ -148,17 +148,6 @@ export const SUPPORTER1: User = {
       branchCode: "FIXED",
     },
   },
-  // if wanted we can also amend the user object like this to specify their reputation directly
-  recommendationRisksByRecommenderId: {
-    data: [
-      {
-        risk_params: {
-          beta_params: [19, 10],
-          kumr_params: [4, 5],
-        } as RiskParams,
-      },
-    ],
-  },
 }
 
 export const SUPPORTER3: User = {

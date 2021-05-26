@@ -5,10 +5,10 @@ mutation CreateUser($user: user_insert_input!) {
   ) {
     id
     user_type
+    first_name
     last_name
     created_at
     email
-    first_name
     phone
     demographic_info
     account_details

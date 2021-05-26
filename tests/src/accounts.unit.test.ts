@@ -54,19 +54,8 @@ describe("Adding users and connections", () => {
       const allUsers = await dbClient.allUsers
       expect(allUsers.filter((x) => x.id === LENDER1.id)[0].balance).toBe(1042)
     })
-    test.todo("batch updates to multiple accounts", async () => {
-      console.log("pass")
-    })
-
-    test.todo("batch updates fail if one update is invalid", async () => {
-      console.log("pass")
-    })
-
-    test.todo(
-      "multiple updates to the same account are taken together",
-      async () => {
-        console.log("pass")
-      }
-    )
+    test.todo("batch updates to multiple accounts")
+    test.todo("batch updates fail if one update is invalid")
+    test.todo("multiple updates to the same account are taken together")
   })
 })

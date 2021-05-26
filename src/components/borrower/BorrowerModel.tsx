@@ -6,6 +6,7 @@ import BLoanRequestInitiated from "components/borrower/LoanRequests/LoanRequestI
 import ApplicationSubmitted from "components/borrower/Notifications/ApplicationSubmitted"
 import { LoanRequest, LoanRequestStatus, User } from "../../lib/types"
 import UpcomingRepayment from "./Notifications/UpcomingRepayment"
+import { Loan_Request_State_Enum } from "../../gql/sdk"
 
 export default class BorrowerModel {
   constructor(public user: User) {}

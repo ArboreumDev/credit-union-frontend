@@ -24,24 +24,6 @@ type Network = { [index: string]: any }
 // }
 
 // =========== HELPERS TO CREATE THE INITIAL NETWORK SETUP FROM FIXTURES =====================
-/**
- * adds default recommendation risk to the user unless that user already has it defined
- * @param user
- * @param riskParams
- */
-export const addRecommendationRiskToUser = (
-  user: User,
-  riskParams: RiskParams
-) => {
-  if (user.recommendationRisksByRecommenderId) return user
-  return {
-    ...user,
-    recommendationRisksByRecommenderId: {
-      data: [{ risk_params: riskParams }],
-    },
-  }
-}
-
 /** will insert all users and the basic connections into the db
  * @param users a dict of users to be added to the DB (see fixtures to see the format)
  * @returns added_users {user_number: added_user_object}

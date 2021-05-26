@@ -1,7 +1,6 @@
 import { CreateUserMutation } from "gql/sdk"
 import {
   ACTION_ERRORS,
-  AddSupporter,
   CreateLoan,
   CreateUser,
   runAction,
@@ -62,29 +61,6 @@ describe("Create new loan | user is Authorized", () => {
     )) as typeof CreateLoan.ReturnType
     expect(res.loanRequest.amount === payload.request.amount)
     loanRequestId = res.loanRequest.request_id
-  })
-  test("add supporter", async () => {
-    const session = getMockSession(BORROWER1)
-    const payload: typeof AddSupporter.InputType = {
-      requestId: loanRequestId,
-      amount: 20,
-      email: SUPPORTER1.email,
-      info: {
-        supporter_relation: "manager",
-        known_since: "Aug 2013",
-      },
-    }
-    const res: typeof AddSupporter.ReturnType = (await runAction(
-      AddSupporter.Name,
-      session,
-      payload,
-      dbClient
-    )) as typeof AddSupporter.ReturnType
-    expect(res.insert_supporters_one.pledge_amount === payload.amount)
-    expect(
-      res.insert_supporters_one.info.supporter_relation ===
-        payload.info.supporter_relation
-    )
   })
 })
 
