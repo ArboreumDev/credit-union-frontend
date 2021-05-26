@@ -1,0 +1,12 @@
+query GetLoan($loanId: uuid!) {
+  loan: loan_by_pk(loan_id: $loanId) {
+    loan_id
+    state
+    principal_remaining
+    repayments {
+        date
+        repaid_principal
+        repaid_interest
+    }
+  }
+}

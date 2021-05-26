@@ -1,0 +1,24 @@
+mutation RegisterRepayment (
+  $loanId: uuid!, 
+  $repayment: repayment_insert_input!, 
+  $newLoanState: loan_state_enum,
+  $newPrincipalRemaining: float8, 
+  $updateLog: update_log_insert_input!
+) {
+  loan: update_loan_by_pk(
+    pk_columns: {loan_id: $loanId}
+    _set: {
+      state: $newLoanState
+      principal_remaining: $newPrincipalRemaining
+    }
+  ) {
+    state
+    principal_remaining
+  }
+  repayment: insert_repayment_one(object: $repayment) {
+    repayment_id
+  }
+  updateLogEntry: insert_update_log_one(object: $updateLog) {
+    update_id
+  }
+}

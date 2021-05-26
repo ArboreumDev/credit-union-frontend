@@ -7,6 +7,7 @@ import {
   FundLoanRequestMutation,
   FundLoanRequestMutationVariables,
   Action_Type_Enum,
+  RegisterRepaymentMutation,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
@@ -139,11 +140,11 @@ export class MakeRepayment extends Action {
     amount: number
     loanId: string
   }
-  static ReturnType: any //StartLoanMutation
+  static ReturnType: RegisterRepaymentMutation
   minAuthLevel = AUTH_TYPE.USER
 
   async run() {
-    return await this.dbClient.make_repayment(
+    return await this.dbClient.makeRepayment(
       this.payload.loanId,
       this.payload.amount
     )

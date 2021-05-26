@@ -4,6 +4,7 @@ import {
   Sdk,
   Loan_State_Enum,
   Action_Type_Enum,
+  Update_Type_Enum,
 } from "../../src/gql/sdk"
 
 import {
@@ -143,40 +144,48 @@ export default class DbClient {
     })
   }
 
-  make_repayment = async (loan_id: string, amount: number) => {
-    const systemState = (await this.getSystemSummary()) as Scenario
-    const { loans, accounts } = (await this.swarmAIClient.make_repayment(
-      systemState,
-      loan_id,
-      amount
-    )) as SystemUpdate
-    await this.updatePortfolios(accounts.updates)
-    // update loan-accounts
-    await this.sdk.UpdateLoanBalance({
-      requestId: loan_id,
-      delta: accounts.escrow_deltas[loan_id],
-    })
-    const loan: LoanInfo = loans.loans[loan_id]
-    let newStatus = LoanRequestStatus.active
-    const noOutstandingDebt =
-      loan.schedule.borrower_view.total_payments.remain <= 1 &&
-      loan.schedule.borrower_view.corpus_principal.remain <= 1 &&
-      loan.schedule.borrower_view.supporter_principal.remain <= 1 &&
-      loan.schedule.borrower_view.supporter_interest.remain <= 1 &&
-      loan.schedule.borrower_view.corpus_interest.remain <= 1
-    if (noOutstandingDebt) {
-      newStatus = LoanRequestStatus.settled
-    } else if (loan.state.repayments.length >= loan.terms.tenor) {
-      newStatus = LoanRequestStatus.defaulted
+  /**
+   * execute payment on ledger provider
+   * register in repayments_table
+   * update loan-table entry
+   * create update-log entry
+   * @param loanId
+   * @param amount
+   * @returns
+   */
+  makeRepayment = async (loanId: string, amount: number) => {
+    // TODO try execturing payment of 'amount' on circle
+    const { loan } = await this.sdk.GetLoan({ loanId })
+    // TODO get new loan state & split how the amount was used to repay
+    const update = {
+      newState: {
+        newPrincipalRemaining: loan.principal_remaining - amount,
+        newLoanState:
+          loan.principal_remaining - amount > 0
+            ? Loan_State_Enum.Live
+            : Loan_State_Enum.Repaid,
+      },
+      paymentInfo: {
+        repaidPrincipal: amount,
+      },
     }
-    const { loanRequest } = await this.sdk.UpdateLoanRequestWithLoanData({
-      requestId: loan_id,
-      loanData: loan,
-      status: newStatus,
+    const repaymentId = uuidv4()
+    return this.sdk.RegisterRepayment({
+      loanId,
+      repayment: {
+        repayment_id: repaymentId,
+        loan_id: loanId,
+        repaid_principal: update.paymentInfo.repaidPrincipal,
+      },
+      ...update,
+      updateLog: {
+        type: Update_Type_Enum.Repayment,
+        loan_id: loanId,
+        new_principal_remain: update.newState.newPrincipalRemaining,
+        new_state: update.newState.newLoanState,
+        repayment_id: repaymentId,
+      },
     })
-
-    // TODO show transactions in transaction table
-    return loanRequest
   }
 
   get allUsers() {

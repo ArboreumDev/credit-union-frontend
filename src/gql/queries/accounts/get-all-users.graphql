@@ -1,0 +1,22 @@
+query GetAllUsers {
+  user {
+    id
+    email
+    first_name
+    last_name
+    user_type
+    balance
+    kyc_approved
+    onboarded
+    demographic_info
+    loan_requests {
+      amount
+      purpose
+      state
+    }
+    loans {
+      state
+      principal
+    }
+  }
+}
