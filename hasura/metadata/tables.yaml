@@ -4,15 +4,59 @@
 - table:
     schema: public
     name: events
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
     schema: public
     name: lender_amount
+  object_relationships:
+    - name: lenderInfo
+      using:
+        foreign_key_constraint_on: lender_id
+    - name: loan
+      using:
+        foreign_key_constraint_on: loan_id
 - table:
     schema: public
     name: loan
+  object_relationships:
+    - name: borrowerInfo
+      using:
+        foreign_key_constraint_on: borrower
+    - name: loanRequest
+      using:
+        foreign_key_constraint_on: loan_request
+  array_relationships:
+    - name: lender_amounts
+      using:
+        foreign_key_constraint_on:
+          column: loan_id
+          table:
+            schema: public
+            name: lender_amount
+    - name: repayments
+      using:
+        foreign_key_constraint_on:
+          column: loan_id
+          table:
+            schema: public
+            name: repayment
+    - name: update_logs
+      using:
+        foreign_key_constraint_on:
+          column: loan_id
+          table:
+            schema: public
+            name: update_log
 - table:
     schema: public
     name: loan_request
+  object_relationships:
+    - name: borrowerInfo
+      using:
+        foreign_key_constraint_on: borrower_id
 - table:
     schema: public
     name: loan_request_state
@@ -22,6 +66,10 @@
 - table:
     schema: public
     name: repayment
+  object_relationships:
+    - name: loan
+      using:
+        foreign_key_constraint_on: loan_id
 - table:
     schema: public
     name: scenario_actions
@@ -34,6 +82,28 @@
 - table:
     schema: public
     name: user
+  array_relationships:
+    - name: lender_amounts
+      using:
+        foreign_key_constraint_on:
+          column: lender_id
+          table:
+            schema: public
+            name: lender_amount
+    - name: loan_requests
+      using:
+        foreign_key_constraint_on:
+          column: borrower_id
+          table:
+            schema: public
+            name: loan_request
+    - name: loans
+      using:
+        foreign_key_constraint_on:
+          column: borrower
+          table:
+            schema: public
+            name: loan
 - table:
     schema: public
     name: user_type

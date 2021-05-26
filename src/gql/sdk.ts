@@ -122,24 +122,6 @@ export enum Action_Type_Constraint {
   ActionTypePkey = "action_type_pkey",
 }
 
-export enum Action_Type_Enum {
-  /** Change balance for users */
-  AdjustBalances = "ADJUST_BALANCES",
-  /** Adds supporters, generates the loan offer, and then accepts it */
-  ConfirmLoan = "CONFIRM_LOAN",
-  /** Make repayment */
-  RepayLoan = "REPAY_LOAN",
-}
-
-/** expression to compare columns of type action_type_enum. All fields are combined with logical 'AND'. */
-export type Action_Type_Enum_Comparison_Exp = {
-  _eq?: Maybe<Action_Type_Enum>
-  _in?: Maybe<Array<Action_Type_Enum>>
-  _is_null?: Maybe<Scalars["Boolean"]>
-  _neq?: Maybe<Action_Type_Enum>
-  _nin?: Maybe<Array<Action_Type_Enum>>
-}
-
 /** input type for inserting data into table "action_type" */
 export type Action_Type_Insert_Input = {
   comment?: Maybe<Scalars["String"]>
@@ -512,7 +494,11 @@ export type Jsonb_Comparison_Exp = {
 export type Lender_Amount = {
   __typename?: "lender_amount"
   amount_lent: Scalars["float8"]
+  /** An object relationship */
+  lenderInfo: User
   lender_id: Scalars["uuid"]
+  /** An object relationship */
+  loan: Loan
   loan_id: Scalars["uuid"]
 }
 
@@ -583,7 +569,9 @@ export type Lender_Amount_Bool_Exp = {
   _not?: Maybe<Lender_Amount_Bool_Exp>
   _or?: Maybe<Array<Maybe<Lender_Amount_Bool_Exp>>>
   amount_lent?: Maybe<Float8_Comparison_Exp>
+  lenderInfo?: Maybe<User_Bool_Exp>
   lender_id?: Maybe<Uuid_Comparison_Exp>
+  loan?: Maybe<Loan_Bool_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
 }
 
@@ -601,7 +589,9 @@ export type Lender_Amount_Inc_Input = {
 /** input type for inserting data into table "lender_amount" */
 export type Lender_Amount_Insert_Input = {
   amount_lent?: Maybe<Scalars["float8"]>
+  lenderInfo?: Maybe<User_Obj_Rel_Insert_Input>
   lender_id?: Maybe<Scalars["uuid"]>
+  loan?: Maybe<Loan_Obj_Rel_Insert_Input>
   loan_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -660,7 +650,9 @@ export type Lender_Amount_On_Conflict = {
 /** ordering options when selecting data from "lender_amount" */
 export type Lender_Amount_Order_By = {
   amount_lent?: Maybe<Order_By>
+  lenderInfo?: Maybe<User_Order_By>
   lender_id?: Maybe<Order_By>
+  loan?: Maybe<Loan_Order_By>
   loan_id?: Maybe<Order_By>
 }
 
@@ -779,18 +771,88 @@ export type Loan = {
   __typename?: "loan"
   apr: Scalars["float8"]
   borrower: Scalars["uuid"]
+  /** An object relationship */
+  borrowerInfo: User
   compounding_frequency: Scalars["numeric"]
   interest_accrued: Scalars["float8"]
   interest_paid: Scalars["float8"]
+  /** An array relationship */
+  lender_amounts: Array<Lender_Amount>
+  /** An aggregated array relationship */
+  lender_amounts_aggregate: Lender_Amount_Aggregate
+  /** An object relationship */
+  loanRequest: Loan_Request
   loan_id: Scalars["uuid"]
   loan_request: Scalars["uuid"]
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
+  next_payment_due_date?: Maybe<Scalars["timestamptz"]>
   penalty_apr: Scalars["float8"]
   principal: Scalars["float8"]
   principal_remaining: Scalars["float8"]
+  /** An array relationship */
+  repayments: Array<Repayment>
+  /** An aggregated array relationship */
+  repayments_aggregate: Repayment_Aggregate
   state: Scalars["String"]
   tenor: Scalars["numeric"]
+  /** An array relationship */
+  update_logs: Array<Update_Log>
+  /** An aggregated array relationship */
+  update_logs_aggregate: Update_Log_Aggregate
+}
+
+/** columns and relationships of "loan" */
+export type LoanLender_AmountsArgs = {
+  distinct_on?: Maybe<Array<Lender_Amount_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Lender_Amount_Order_By>>
+  where?: Maybe<Lender_Amount_Bool_Exp>
+}
+
+/** columns and relationships of "loan" */
+export type LoanLender_Amounts_AggregateArgs = {
+  distinct_on?: Maybe<Array<Lender_Amount_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Lender_Amount_Order_By>>
+  where?: Maybe<Lender_Amount_Bool_Exp>
+}
+
+/** columns and relationships of "loan" */
+export type LoanRepaymentsArgs = {
+  distinct_on?: Maybe<Array<Repayment_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Repayment_Order_By>>
+  where?: Maybe<Repayment_Bool_Exp>
+}
+
+/** columns and relationships of "loan" */
+export type LoanRepayments_AggregateArgs = {
+  distinct_on?: Maybe<Array<Repayment_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Repayment_Order_By>>
+  where?: Maybe<Repayment_Bool_Exp>
+}
+
+/** columns and relationships of "loan" */
+export type LoanUpdate_LogsArgs = {
+  distinct_on?: Maybe<Array<Update_Log_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Update_Log_Order_By>>
+  where?: Maybe<Update_Log_Bool_Exp>
+}
+
+/** columns and relationships of "loan" */
+export type LoanUpdate_Logs_AggregateArgs = {
+  distinct_on?: Maybe<Array<Update_Log_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<Update_Log_Order_By>>
+  where?: Maybe<Update_Log_Bool_Exp>
 }
 
 /** aggregated selection of "loan" */
@@ -851,7 +913,6 @@ export type Loan_Avg_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -865,7 +926,6 @@ export type Loan_Avg_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -879,18 +939,23 @@ export type Loan_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Loan_Bool_Exp>>>
   apr?: Maybe<Float8_Comparison_Exp>
   borrower?: Maybe<Uuid_Comparison_Exp>
+  borrowerInfo?: Maybe<User_Bool_Exp>
   compounding_frequency?: Maybe<Numeric_Comparison_Exp>
   interest_accrued?: Maybe<Float8_Comparison_Exp>
   interest_paid?: Maybe<Float8_Comparison_Exp>
+  lender_amounts?: Maybe<Lender_Amount_Bool_Exp>
+  loanRequest?: Maybe<Loan_Request_Bool_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   loan_request?: Maybe<Uuid_Comparison_Exp>
   next_payment_amount?: Maybe<Float8_Comparison_Exp>
-  next_payment_due_date?: Maybe<Float8_Comparison_Exp>
+  next_payment_due_date?: Maybe<Timestamptz_Comparison_Exp>
   penalty_apr?: Maybe<Float8_Comparison_Exp>
   principal?: Maybe<Float8_Comparison_Exp>
   principal_remaining?: Maybe<Float8_Comparison_Exp>
+  repayments?: Maybe<Repayment_Bool_Exp>
   state?: Maybe<String_Comparison_Exp>
   tenor?: Maybe<Numeric_Comparison_Exp>
+  update_logs?: Maybe<Update_Log_Bool_Exp>
 }
 
 /** unique or primary key constraints on table "loan" */
@@ -906,7 +971,6 @@ export type Loan_Inc_Input = {
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
@@ -917,18 +981,23 @@ export type Loan_Inc_Input = {
 export type Loan_Insert_Input = {
   apr?: Maybe<Scalars["float8"]>
   borrower?: Maybe<Scalars["uuid"]>
+  borrowerInfo?: Maybe<User_Obj_Rel_Insert_Input>
   compounding_frequency?: Maybe<Scalars["numeric"]>
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
+  lender_amounts?: Maybe<Lender_Amount_Arr_Rel_Insert_Input>
+  loanRequest?: Maybe<Loan_Request_Obj_Rel_Insert_Input>
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Scalars["uuid"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
+  next_payment_due_date?: Maybe<Scalars["timestamptz"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
+  repayments?: Maybe<Repayment_Arr_Rel_Insert_Input>
   state?: Maybe<Scalars["String"]>
   tenor?: Maybe<Scalars["numeric"]>
+  update_logs?: Maybe<Update_Log_Arr_Rel_Insert_Input>
 }
 
 /** aggregate max on columns */
@@ -942,7 +1011,7 @@ export type Loan_Max_Fields = {
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Scalars["uuid"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
+  next_payment_due_date?: Maybe<Scalars["timestamptz"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
@@ -979,7 +1048,7 @@ export type Loan_Min_Fields = {
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Scalars["uuid"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
+  next_payment_due_date?: Maybe<Scalars["timestamptz"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
@@ -1031,9 +1100,12 @@ export type Loan_On_Conflict = {
 export type Loan_Order_By = {
   apr?: Maybe<Order_By>
   borrower?: Maybe<Order_By>
+  borrowerInfo?: Maybe<User_Order_By>
   compounding_frequency?: Maybe<Order_By>
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
+  lender_amounts_aggregate?: Maybe<Lender_Amount_Aggregate_Order_By>
+  loanRequest?: Maybe<Loan_Request_Order_By>
   loan_id?: Maybe<Order_By>
   loan_request?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
@@ -1041,8 +1113,10 @@ export type Loan_Order_By = {
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
+  repayments_aggregate?: Maybe<Repayment_Aggregate_Order_By>
   state?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
+  update_logs_aggregate?: Maybe<Update_Log_Aggregate_Order_By>
 }
 
 /** primary key columns input for table: "loan" */
@@ -1057,6 +1131,7 @@ export type Loan_Request = {
   /** An object relationship */
   borrowerInfo: User
   borrower_id: Scalars["uuid"]
+  created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id: Scalars["uuid"]
   state: Scalars["String"]
@@ -1131,6 +1206,7 @@ export type Loan_Request_Bool_Exp = {
   amount?: Maybe<Float8_Comparison_Exp>
   borrowerInfo?: Maybe<User_Bool_Exp>
   borrower_id?: Maybe<Uuid_Comparison_Exp>
+  created_at?: Maybe<Timestamptz_Comparison_Exp>
   purpose?: Maybe<String_Comparison_Exp>
   request_id?: Maybe<Uuid_Comparison_Exp>
   state?: Maybe<String_Comparison_Exp>
@@ -1152,6 +1228,7 @@ export type Loan_Request_Insert_Input = {
   amount?: Maybe<Scalars["float8"]>
   borrowerInfo?: Maybe<User_Obj_Rel_Insert_Input>
   borrower_id?: Maybe<Scalars["uuid"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
   state?: Maybe<Scalars["String"]>
@@ -1162,6 +1239,7 @@ export type Loan_Request_Max_Fields = {
   __typename?: "loan_request_max_fields"
   amount?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
   state?: Maybe<Scalars["String"]>
@@ -1171,6 +1249,7 @@ export type Loan_Request_Max_Fields = {
 export type Loan_Request_Max_Order_By = {
   amount?: Maybe<Order_By>
   borrower_id?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   purpose?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   state?: Maybe<Order_By>
@@ -1181,6 +1260,7 @@ export type Loan_Request_Min_Fields = {
   __typename?: "loan_request_min_fields"
   amount?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
   state?: Maybe<Scalars["String"]>
@@ -1190,6 +1270,7 @@ export type Loan_Request_Min_Fields = {
 export type Loan_Request_Min_Order_By = {
   amount?: Maybe<Order_By>
   borrower_id?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   purpose?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   state?: Maybe<Order_By>
@@ -1222,6 +1303,7 @@ export type Loan_Request_Order_By = {
   amount?: Maybe<Order_By>
   borrowerInfo?: Maybe<User_Order_By>
   borrower_id?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   purpose?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
   state?: Maybe<Order_By>
@@ -1239,6 +1321,8 @@ export enum Loan_Request_Select_Column {
   /** column name */
   BorrowerId = "borrower_id",
   /** column name */
+  CreatedAt = "created_at",
+  /** column name */
   Purpose = "purpose",
   /** column name */
   RequestId = "request_id",
@@ -1250,6 +1334,7 @@ export enum Loan_Request_Select_Column {
 export type Loan_Request_Set_Input = {
   amount?: Maybe<Scalars["float8"]>
   borrower_id?: Maybe<Scalars["uuid"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
   state?: Maybe<Scalars["String"]>
@@ -1449,6 +1534,8 @@ export enum Loan_Request_Update_Column {
   /** column name */
   BorrowerId = "borrower_id",
   /** column name */
+  CreatedAt = "created_at",
+  /** column name */
   Purpose = "purpose",
   /** column name */
   RequestId = "request_id",
@@ -1531,7 +1618,7 @@ export type Loan_Set_Input = {
   loan_id?: Maybe<Scalars["uuid"]>
   loan_request?: Maybe<Scalars["uuid"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
+  next_payment_due_date?: Maybe<Scalars["timestamptz"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
@@ -1690,7 +1777,6 @@ export type Loan_Stddev_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1704,7 +1790,6 @@ export type Loan_Stddev_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1719,7 +1804,6 @@ export type Loan_Stddev_Pop_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1733,7 +1817,6 @@ export type Loan_Stddev_Pop_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1748,7 +1831,6 @@ export type Loan_Stddev_Samp_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1762,7 +1844,6 @@ export type Loan_Stddev_Samp_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1777,7 +1858,6 @@ export type Loan_Sum_Fields = {
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   next_payment_amount?: Maybe<Scalars["float8"]>
-  next_payment_due_date?: Maybe<Scalars["float8"]>
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
@@ -1791,7 +1871,6 @@ export type Loan_Sum_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1838,7 +1917,6 @@ export type Loan_Var_Pop_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1852,7 +1930,6 @@ export type Loan_Var_Pop_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1867,7 +1944,6 @@ export type Loan_Var_Samp_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1881,7 +1957,6 @@ export type Loan_Var_Samp_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -1896,7 +1971,6 @@ export type Loan_Variance_Fields = {
   interest_accrued?: Maybe<Scalars["Float"]>
   interest_paid?: Maybe<Scalars["Float"]>
   next_payment_amount?: Maybe<Scalars["Float"]>
-  next_payment_due_date?: Maybe<Scalars["Float"]>
   penalty_apr?: Maybe<Scalars["Float"]>
   principal?: Maybe<Scalars["Float"]>
   principal_remaining?: Maybe<Scalars["Float"]>
@@ -1910,7 +1984,6 @@ export type Loan_Variance_Order_By = {
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   next_payment_amount?: Maybe<Order_By>
-  next_payment_due_date?: Maybe<Order_By>
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
@@ -2981,6 +3054,8 @@ export type Query_RootUser_Type_By_PkArgs = {
 export type Repayment = {
   __typename?: "repayment"
   date: Scalars["date"]
+  /** An object relationship */
+  loan: Loan
   loan_id: Scalars["uuid"]
   repaid_interest: Scalars["float8"]
   repaid_principal: Scalars["float8"]
@@ -3056,6 +3131,7 @@ export type Repayment_Bool_Exp = {
   _not?: Maybe<Repayment_Bool_Exp>
   _or?: Maybe<Array<Maybe<Repayment_Bool_Exp>>>
   date?: Maybe<Date_Comparison_Exp>
+  loan?: Maybe<Loan_Bool_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   repaid_interest?: Maybe<Float8_Comparison_Exp>
   repaid_principal?: Maybe<Float8_Comparison_Exp>
@@ -3077,6 +3153,7 @@ export type Repayment_Inc_Input = {
 /** input type for inserting data into table "repayment" */
 export type Repayment_Insert_Input = {
   date?: Maybe<Scalars["date"]>
+  loan?: Maybe<Loan_Obj_Rel_Insert_Input>
   loan_id?: Maybe<Scalars["uuid"]>
   repaid_interest?: Maybe<Scalars["float8"]>
   repaid_principal?: Maybe<Scalars["float8"]>
@@ -3146,6 +3223,7 @@ export type Repayment_On_Conflict = {
 /** ordering options when selecting data from "repayment" */
 export type Repayment_Order_By = {
   date?: Maybe<Order_By>
+  loan?: Maybe<Loan_Order_By>
   loan_id?: Maybe<Order_By>
   repaid_interest?: Maybe<Order_By>
   repaid_principal?: Maybe<Order_By>
@@ -3288,7 +3366,7 @@ export type Repayment_Variance_Order_By = {
 /** columns and relationships of "scenario_actions" */
 export type Scenario_Actions = {
   __typename?: "scenario_actions"
-  action_type: Action_Type_Enum
+  action_type: Scalars["String"]
   id: Scalars["Int"]
   payload: Scalars["jsonb"]
 }
@@ -3369,7 +3447,7 @@ export type Scenario_Actions_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
   _not?: Maybe<Scenario_Actions_Bool_Exp>
   _or?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
-  action_type?: Maybe<Action_Type_Enum_Comparison_Exp>
+  action_type?: Maybe<String_Comparison_Exp>
   id?: Maybe<Int_Comparison_Exp>
   payload?: Maybe<Jsonb_Comparison_Exp>
 }
@@ -3402,7 +3480,7 @@ export type Scenario_Actions_Inc_Input = {
 
 /** input type for inserting data into table "scenario_actions" */
 export type Scenario_Actions_Insert_Input = {
-  action_type?: Maybe<Action_Type_Enum>
+  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }
@@ -3410,22 +3488,26 @@ export type Scenario_Actions_Insert_Input = {
 /** aggregate max on columns */
 export type Scenario_Actions_Max_Fields = {
   __typename?: "scenario_actions_max_fields"
+  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by max() on columns of table "scenario_actions" */
 export type Scenario_Actions_Max_Order_By = {
+  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
 export type Scenario_Actions_Min_Fields = {
   __typename?: "scenario_actions_min_fields"
+  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by min() on columns of table "scenario_actions" */
 export type Scenario_Actions_Min_Order_By = {
+  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
@@ -3480,7 +3562,7 @@ export enum Scenario_Actions_Select_Column {
 
 /** input type for updating data in table "scenario_actions" */
 export type Scenario_Actions_Set_Input = {
-  action_type?: Maybe<Action_Type_Enum>
+  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }
