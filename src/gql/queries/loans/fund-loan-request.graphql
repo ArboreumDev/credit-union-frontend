@@ -14,6 +14,8 @@ mutation FundLoanRequest (
   }
   newLoan: insert_loan_one(object: $loan) {
     loan_id
+    principal
+    principal_remaining
     next_payment_amount
     next_payment_due_date
     tenor

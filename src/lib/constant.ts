@@ -31,6 +31,12 @@ export enum LogEventTypes {
   FPPush = "fp_push",
 }
 
+export const COMPOUNDING_FREQ = {
+  monthly: 30,
+  weekly: 51,
+  daily: 1,
+}
+
 export const SLACK_WEBHOOK_URL =
   "https://hooks.slack.com/services/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"
 

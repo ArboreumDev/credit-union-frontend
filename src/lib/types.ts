@@ -228,14 +228,10 @@ export enum EDGE_STATUS {
   historic = "historic",
 }
 
-// TODO even though I adjusted the codegen config, I cant get it to generate those for me...
-export enum LoanRequestStatus {
-  initiated = "initiated",
-  // awaiting_guarantor_confirmation="awaiting_guarantor_confirmation",
-  awaiting_borrower_confirmation = "awaiting_borrower_confirmation",
-  active = "live",
-  settled = "settled",
-  defaulted = "defaulted",
+export const COMPOUNDING_FREQ = {
+  monthly: 30,
+  weekly: 51,
+  daily: 1,
 }
 
 export enum SupporterStatus {

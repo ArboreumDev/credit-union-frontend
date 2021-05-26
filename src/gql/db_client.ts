@@ -40,6 +40,7 @@ import {
   DEFAULT_APR,
   DEFAULT_LOAN_TENOR,
   DEFAULT_PENALTY_APR,
+  COMPOUNDING_FREQ,
 } from "lib/constant"
 
 /**
@@ -109,6 +110,11 @@ export default class DbClient {
     const newLoanId = uuidv4()
 
     // TODO actually fund request with amount, using loanId as reference
+    // for now, just change the lender balance
+    await this.sdk.ChangeUserCashBalance({
+      userId: lenderId,
+      delta: -loanRequest.amount,
+    })
 
     // TODO get what needs to be repaid
     const schedule = {
@@ -127,6 +133,7 @@ export default class DbClient {
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,
         principal: loanRequest.amount,
+        compounding_frequency: COMPOUNDING_FREQ.monthly,
         apr: DEFAULT_APR,
         penalty_apr: DEFAULT_PENALTY_APR,
         tenor: DEFAULT_LOAN_TENOR,
