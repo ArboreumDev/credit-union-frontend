@@ -4101,12 +4101,12 @@ export type Update_Log = {
   __typename?: "update_log"
   date: Scalars["timestamptz"]
   loan_id: Scalars["uuid"]
-  new_interest_accrued: Scalars["float8"]
-  new_next_payment_amount: Scalars["float8"]
-  new_next_payment_due_date: Scalars["date"]
-  new_penalty_accrued: Scalars["float8"]
-  new_principal_remain: Scalars["float8"]
-  new_state: Scalars["String"]
+  new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_next_payment_amount?: Maybe<Scalars["float8"]>
+  new_next_payment_due_date?: Maybe<Scalars["date"]>
+  new_penalty_accrued?: Maybe<Scalars["float8"]>
+  new_principal_remain?: Maybe<Scalars["float8"]>
+  new_state?: Maybe<Scalars["String"]>
   repayment_id: Scalars["uuid"]
   type: Update_Type_Enum
   update_id: Scalars["uuid"]
@@ -5563,6 +5563,12 @@ export type GetLoanQuery = { __typename?: "query_root" } & {
             "date" | "repaid_principal" | "repaid_interest"
           >
         >
+        lender_amounts: Array<
+          { __typename?: "lender_amount" } & Pick<
+            Lender_Amount,
+            "lender_id" | "amount_lent"
+          >
+        >
       }
   >
 }
@@ -5580,7 +5586,10 @@ export type RegisterRepaymentMutation = { __typename?: "mutation_root" } & {
     { __typename?: "loan" } & Pick<Loan, "state" | "principal_remaining">
   >
   repayment?: Maybe<
-    { __typename?: "repayment" } & Pick<Repayment, "repayment_id">
+    { __typename?: "repayment" } & Pick<
+      Repayment,
+      "repayment_id" | "loan_id" | "repaid_principal"
+    >
   >
   updateLogEntry?: Maybe<
     { __typename?: "update_log" } & Pick<Update_Log, "update_id">
@@ -5607,12 +5616,6 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
       "affected_rows"
     >
   >
-  delete_loan?: Maybe<
-    { __typename?: "loan_mutation_response" } & Pick<
-      Loan_Mutation_Response,
-      "affected_rows"
-    >
-  >
   delete_repayment?: Maybe<
     { __typename?: "repayment_mutation_response" } & Pick<
       Repayment_Mutation_Response,
@@ -5628,6 +5631,12 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
   delete_loan_request?: Maybe<
     { __typename?: "loan_request_mutation_response" } & Pick<
       Loan_Request_Mutation_Response,
+      "affected_rows"
+    >
+  >
+  delete_loan?: Maybe<
+    { __typename?: "loan_mutation_response" } & Pick<
+      Loan_Mutation_Response,
       "affected_rows"
     >
   >
@@ -5663,6 +5672,23 @@ export type ResetLoansMutation = { __typename?: "mutation_root" } & {
   delete_loan?: Maybe<
     { __typename?: "loan_mutation_response" } & Pick<
       Loan_Mutation_Response,
+      "affected_rows"
+    >
+  >
+}
+
+export type ResetRepaymentsMutationVariables = Exact<{ [key: string]: never }>
+
+export type ResetRepaymentsMutation = { __typename?: "mutation_root" } & {
+  delete_repayment?: Maybe<
+    { __typename?: "repayment_mutation_response" } & Pick<
+      Repayment_Mutation_Response,
+      "affected_rows"
+    >
+  >
+  delete_update_log?: Maybe<
+    { __typename?: "update_log_mutation_response" } & Pick<
+      Update_Log_Mutation_Response,
       "affected_rows"
     >
   >
@@ -5875,6 +5901,10 @@ export const GetLoanDocument = gql`
         repaid_principal
         repaid_interest
       }
+      lender_amounts {
+        lender_id
+        amount_lent
+      }
     }
   }
 `
@@ -5898,6 +5928,8 @@ export const RegisterRepaymentDocument = gql`
     }
     repayment: insert_repayment_one(object: $repayment) {
       repayment_id
+      loan_id
+      repaid_principal
     }
     updateLogEntry: insert_update_log_one(object: $updateLog) {
       update_id
@@ -5916,9 +5948,6 @@ export const ResetDbDocument = gql`
     delete_update_log(where: {}) {
       affected_rows
     }
-    delete_loan(where: {}) {
-      affected_rows
-    }
     delete_repayment(where: {}) {
       affected_rows
     }
@@ -5926,6 +5955,9 @@ export const ResetDbDocument = gql`
       affected_rows
     }
     delete_loan_request(where: {}) {
+      affected_rows
+    }
+    delete_loan(where: {}) {
       affected_rows
     }
     delete_events(where: {}) {
@@ -5945,6 +5977,16 @@ export const ResetLoansDocument = gql`
       affected_rows
     }
     delete_loan(where: {}) {
+      affected_rows
+    }
+  }
+`
+export const ResetRepaymentsDocument = gql`
+  mutation ResetRepayments {
+    delete_repayment(where: {}) {
+      affected_rows
+    }
+    delete_update_log(where: { type: { _eq: REPAYMENT } }) {
       affected_rows
     }
   }
@@ -6111,6 +6153,16 @@ export function getSdk(
     ): Promise<ResetLoansMutation> {
       return withWrapper(() =>
         client.request<ResetLoansMutation>(print(ResetLoansDocument), variables)
+      )
+    },
+    ResetRepayments(
+      variables?: ResetRepaymentsMutationVariables
+    ): Promise<ResetRepaymentsMutation> {
+      return withWrapper(() =>
+        client.request<ResetRepaymentsMutation>(
+          print(ResetRepaymentsDocument),
+          variables
+        )
       )
     },
     ResetRequests(

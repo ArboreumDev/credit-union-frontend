@@ -5,6 +5,7 @@ import {
   Loan_State_Enum,
   Action_Type_Enum,
   Update_Type_Enum,
+  GetLoanQuery,
 } from "../../src/gql/sdk"
 
 import {
@@ -42,6 +43,7 @@ import {
   DEFAULT_PENALTY_APR,
   COMPOUNDING_FREQ,
 } from "lib/constant"
+import { dbClient } from "../../tests/src/common/utils"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -161,9 +163,18 @@ export default class DbClient {
    * @returns
    */
   makeRepayment = async (loanId: string, amount: number) => {
+    const { loan }: GetLoanQuery = await this.sdk.GetLoan({ loanId })
+
     // TODO try execturing payment of 'amount' on circle
-    const { loan } = await this.sdk.GetLoan({ loanId })
-    // TODO get new loan state & split how the amount was used to repay
+    // TODO proportional to how the lenders funded it
+    // dummy: pay back everything to the first lender
+    await dbClient.sdk.ChangeUserCashBalance({
+      userId: loan.lender_amounts[0].lender_id,
+      delta: amount,
+    })
+
+    // TODO get a real update on how the loan state has changed & and how how the amount was used to repay principal vs interest
+    // dummy:
     const update = {
       newState: {
         newPrincipalRemaining: loan.principal_remaining - amount,
@@ -174,22 +185,32 @@ export default class DbClient {
       },
       paymentInfo: {
         repaidPrincipal: amount,
+        repaidInterest: 0,
       },
     }
+    // dummy-end
+
+    // prepare db input
+    const loanStateHasChanged = update.newState.newLoanState !== loan.state
     const repaymentId = uuidv4()
+
     return this.sdk.RegisterRepayment({
       loanId,
       repayment: {
         repayment_id: repaymentId,
         loan_id: loanId,
         repaid_principal: update.paymentInfo.repaidPrincipal,
+        repaid_interest: update.paymentInfo.repaidInterest,
+        date: new Date().toUTCString(),
       },
-      ...update,
+      ...update.newState,
       updateLog: {
         type: Update_Type_Enum.Repayment,
         loan_id: loanId,
         new_principal_remain: update.newState.newPrincipalRemaining,
-        new_state: update.newState.newLoanState,
+        ...(loanStateHasChanged
+          ? { new_state: update.newState.newLoanState }
+          : {}),
         repayment_id: repaymentId,
       },
     })

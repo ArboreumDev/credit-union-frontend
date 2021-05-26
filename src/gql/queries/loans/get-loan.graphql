@@ -8,5 +8,9 @@ query GetLoan($loanId: uuid!) {
         repaid_principal
         repaid_interest
     }
+    lender_amounts {
+      lender_id
+      amount_lent
+    }
   }
 }

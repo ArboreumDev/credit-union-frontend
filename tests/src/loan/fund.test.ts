@@ -7,20 +7,10 @@ import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
 import DbClient from "gql/db_client"
 import borrower from "components/dashboard/borrower"
-
-const createLoanRequest = async (
-  borrowerId: string,
-  _dbClient: DbClient = dbClient,
-  amount = 1000,
-  purpose = "test case"
-) => {
-  const { loanRequest } = await _dbClient.createLoanRequest(
-    borrowerId,
-    amount,
-    purpose
-  )
-  return loanRequest.request_id
-}
+import {
+  createLoanRequest,
+  createFundedLoan,
+} from "../../src/common/test_helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -46,7 +36,7 @@ describe("Fund Loan Success Flows", () => {
   })
 
   afterEach(async () => {
-    //   await sdk.ResetLoans()
+    await sdk.ResetLoans()
     await sdk.ResetRequests()
   })
 
@@ -59,12 +49,14 @@ describe("Fund Loan Success Flows", () => {
     } = await dbClient.fundLoanRequest(requestId, LENDER1.id)
 
     expect(loanRequest.state).toBe(Loan_Request_State_Enum.Fulfilled)
+
     expect(newLoan.principal).toBe(loanAmount)
+    expect(newLoan.state).toBe(Loan_State_Enum.Live)
     expect(newLoan.principal_remaining).toBe(loanAmount)
+
     expect(amountsLent.returning[0].lender_id).toBe(LENDER1.id)
     expect(amountsLent.returning[0].amount_lent).toBe(loanAmount)
 
-    //TODO
     const balanceAfter = (await dbClient.getUserByEmail(LENDER1.email)).balance
     expect(balanceAfter).toBe(balanceBefore - loanAmount)
   })

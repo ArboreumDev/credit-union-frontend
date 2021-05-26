@@ -31,6 +31,7 @@ describe("Loan Request Success Flow", () => {
   test.todo("borrower creates a loan request after a completed loan")
   test.todo("borrower creates a loan request after a withdrawn loan-request")
 })
+
 describe("Loan Request Creation fails, if...", () => {
   test.todo("...creator is incorrect user type")
   test.todo("...borrower already has an active loan")
