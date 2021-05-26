@@ -15,6 +15,8 @@ export const DEFAULT_COMPANY_NAME = "XCorp"
 // Hardcoded loan vars. TODO: move to swarmai?
 export const MIN_SUPPORT_RATIO = 0.2 // this will be pilot-specific -> refactor to pilot.env file
 export const DEFAULT_LOAN_TENOR = 6 // in months
+export const DEFAULT_APR = 0.12
+export const DEFAULT_PENALTY_APR = 0.12
 export const DEFAULT_RISK_FREE_INTEREST_RATE = 0.5
 export const DEFAULT_RECOMMENDATION_RISK_PARAMS: RiskParams = {
   beta_params: [5, 2],
