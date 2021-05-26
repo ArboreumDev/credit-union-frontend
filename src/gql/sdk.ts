@@ -122,6 +122,24 @@ export enum Action_Type_Constraint {
   ActionTypePkey = "action_type_pkey",
 }
 
+export enum Action_Type_Enum {
+  /** Change balance for users */
+  AdjustBalances = "ADJUST_BALANCES",
+  /** Adds supporters, generates the loan offer, and then accepts it */
+  ConfirmLoan = "CONFIRM_LOAN",
+  /** Make repayment */
+  RepayLoan = "REPAY_LOAN",
+}
+
+/** expression to compare columns of type action_type_enum. All fields are combined with logical 'AND'. */
+export type Action_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Action_Type_Enum>
+  _in?: Maybe<Array<Action_Type_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Action_Type_Enum>
+  _nin?: Maybe<Array<Action_Type_Enum>>
+}
+
 /** input type for inserting data into table "action_type" */
 export type Action_Type_Insert_Input = {
   comment?: Maybe<Scalars["String"]>
@@ -793,7 +811,7 @@ export type Loan = {
   repayments: Array<Repayment>
   /** An aggregated array relationship */
   repayments_aggregate: Repayment_Aggregate
-  state: Scalars["String"]
+  state: Loan_State_Enum
   tenor: Scalars["numeric"]
   /** An array relationship */
   update_logs: Array<Update_Log>
@@ -953,7 +971,7 @@ export type Loan_Bool_Exp = {
   principal?: Maybe<Float8_Comparison_Exp>
   principal_remaining?: Maybe<Float8_Comparison_Exp>
   repayments?: Maybe<Repayment_Bool_Exp>
-  state?: Maybe<String_Comparison_Exp>
+  state?: Maybe<Loan_State_Enum_Comparison_Exp>
   tenor?: Maybe<Numeric_Comparison_Exp>
   update_logs?: Maybe<Update_Log_Bool_Exp>
 }
@@ -995,7 +1013,7 @@ export type Loan_Insert_Input = {
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
   repayments?: Maybe<Repayment_Arr_Rel_Insert_Input>
-  state?: Maybe<Scalars["String"]>
+  state?: Maybe<Loan_State_Enum>
   tenor?: Maybe<Scalars["numeric"]>
   update_logs?: Maybe<Update_Log_Arr_Rel_Insert_Input>
 }
@@ -1015,7 +1033,6 @@ export type Loan_Max_Fields = {
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
-  state?: Maybe<Scalars["String"]>
   tenor?: Maybe<Scalars["numeric"]>
 }
 
@@ -1033,7 +1050,6 @@ export type Loan_Max_Order_By = {
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
-  state?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
 }
 
@@ -1052,7 +1068,6 @@ export type Loan_Min_Fields = {
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
-  state?: Maybe<Scalars["String"]>
   tenor?: Maybe<Scalars["numeric"]>
 }
 
@@ -1070,7 +1085,6 @@ export type Loan_Min_Order_By = {
   penalty_apr?: Maybe<Order_By>
   principal?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
-  state?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
 }
 
@@ -1134,7 +1148,7 @@ export type Loan_Request = {
   created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id: Scalars["uuid"]
-  state: Scalars["String"]
+  state: Loan_Request_State_Enum
 }
 
 /** aggregated selection of "loan_request" */
@@ -1209,7 +1223,7 @@ export type Loan_Request_Bool_Exp = {
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   purpose?: Maybe<String_Comparison_Exp>
   request_id?: Maybe<Uuid_Comparison_Exp>
-  state?: Maybe<String_Comparison_Exp>
+  state?: Maybe<Loan_Request_State_Enum_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "loan_request" */
@@ -1231,7 +1245,7 @@ export type Loan_Request_Insert_Input = {
   created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
-  state?: Maybe<Scalars["String"]>
+  state?: Maybe<Loan_Request_State_Enum>
 }
 
 /** aggregate max on columns */
@@ -1242,7 +1256,6 @@ export type Loan_Request_Max_Fields = {
   created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
-  state?: Maybe<Scalars["String"]>
 }
 
 /** order by max() on columns of table "loan_request" */
@@ -1252,7 +1265,6 @@ export type Loan_Request_Max_Order_By = {
   created_at?: Maybe<Order_By>
   purpose?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
-  state?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
@@ -1263,7 +1275,6 @@ export type Loan_Request_Min_Fields = {
   created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
-  state?: Maybe<Scalars["String"]>
 }
 
 /** order by min() on columns of table "loan_request" */
@@ -1273,7 +1284,6 @@ export type Loan_Request_Min_Order_By = {
   created_at?: Maybe<Order_By>
   purpose?: Maybe<Order_By>
   request_id?: Maybe<Order_By>
-  state?: Maybe<Order_By>
 }
 
 /** response of any mutation on the table "loan_request" */
@@ -1337,7 +1347,7 @@ export type Loan_Request_Set_Input = {
   created_at?: Maybe<Scalars["timestamptz"]>
   purpose?: Maybe<Scalars["String"]>
   request_id?: Maybe<Scalars["uuid"]>
-  state?: Maybe<Scalars["String"]>
+  state?: Maybe<Loan_Request_State_Enum>
 }
 
 /** columns and relationships of "loan_request_state" */
@@ -1394,6 +1404,28 @@ export type Loan_Request_State_Bool_Exp = {
 export enum Loan_Request_State_Constraint {
   /** unique or primary key constraint */
   LoanRequestStatePkey = "loan_request_state_pkey",
+}
+
+export enum Loan_Request_State_Enum {
+  /** is waiting for lender/s to be funded */
+  Active = "ACTIVE",
+  /** final state: no longer waiting for lender/s to be funded */
+  Expired = "EXPIRED",
+  /** final state: has been accepted and money was given to borrower */
+  Fulfilled = "FULFILLED",
+  /** final state: will not be funded */
+  Rejected = "REJECTED",
+  /** inactive */
+  Withdrawn = "WITHDRAWN",
+}
+
+/** expression to compare columns of type loan_request_state_enum. All fields are combined with logical 'AND'. */
+export type Loan_Request_State_Enum_Comparison_Exp = {
+  _eq?: Maybe<Loan_Request_State_Enum>
+  _in?: Maybe<Array<Loan_Request_State_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Loan_Request_State_Enum>
+  _nin?: Maybe<Array<Loan_Request_State_Enum>>
 }
 
 /** input type for inserting data into table "loan_request_state" */
@@ -1622,7 +1654,7 @@ export type Loan_Set_Input = {
   penalty_apr?: Maybe<Scalars["float8"]>
   principal?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
-  state?: Maybe<Scalars["String"]>
+  state?: Maybe<Loan_State_Enum>
   tenor?: Maybe<Scalars["numeric"]>
 }
 
@@ -1680,6 +1712,24 @@ export type Loan_State_Bool_Exp = {
 export enum Loan_State_Constraint {
   /** unique or primary key constraint */
   LoanStatePkey = "loan_state_pkey",
+}
+
+export enum Loan_State_Enum {
+  /** final state: will not be repaid */
+  Default = "DEFAULT",
+  /** is currently being repaid */
+  Live = "LIVE",
+  /** final state: fully repaid */
+  Repaid = "REPAID",
+}
+
+/** expression to compare columns of type loan_state_enum. All fields are combined with logical 'AND'. */
+export type Loan_State_Enum_Comparison_Exp = {
+  _eq?: Maybe<Loan_State_Enum>
+  _in?: Maybe<Array<Loan_State_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Loan_State_Enum>
+  _nin?: Maybe<Array<Loan_State_Enum>>
 }
 
 /** input type for inserting data into table "loan_state" */
@@ -3366,7 +3416,7 @@ export type Repayment_Variance_Order_By = {
 /** columns and relationships of "scenario_actions" */
 export type Scenario_Actions = {
   __typename?: "scenario_actions"
-  action_type: Scalars["String"]
+  action_type: Action_Type_Enum
   id: Scalars["Int"]
   payload: Scalars["jsonb"]
 }
@@ -3447,7 +3497,7 @@ export type Scenario_Actions_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
   _not?: Maybe<Scenario_Actions_Bool_Exp>
   _or?: Maybe<Array<Maybe<Scenario_Actions_Bool_Exp>>>
-  action_type?: Maybe<String_Comparison_Exp>
+  action_type?: Maybe<Action_Type_Enum_Comparison_Exp>
   id?: Maybe<Int_Comparison_Exp>
   payload?: Maybe<Jsonb_Comparison_Exp>
 }
@@ -3480,7 +3530,7 @@ export type Scenario_Actions_Inc_Input = {
 
 /** input type for inserting data into table "scenario_actions" */
 export type Scenario_Actions_Insert_Input = {
-  action_type?: Maybe<Scalars["String"]>
+  action_type?: Maybe<Action_Type_Enum>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }
@@ -3488,26 +3538,22 @@ export type Scenario_Actions_Insert_Input = {
 /** aggregate max on columns */
 export type Scenario_Actions_Max_Fields = {
   __typename?: "scenario_actions_max_fields"
-  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by max() on columns of table "scenario_actions" */
 export type Scenario_Actions_Max_Order_By = {
-  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
 export type Scenario_Actions_Min_Fields = {
   __typename?: "scenario_actions_min_fields"
-  action_type?: Maybe<Scalars["String"]>
   id?: Maybe<Scalars["Int"]>
 }
 
 /** order by min() on columns of table "scenario_actions" */
 export type Scenario_Actions_Min_Order_By = {
-  action_type?: Maybe<Order_By>
   id?: Maybe<Order_By>
 }
 
@@ -3562,7 +3608,7 @@ export enum Scenario_Actions_Select_Column {
 
 /** input type for updating data in table "scenario_actions" */
 export type Scenario_Actions_Set_Input = {
-  action_type?: Maybe<Scalars["String"]>
+  action_type?: Maybe<Action_Type_Enum>
   id?: Maybe<Scalars["Int"]>
   payload?: Maybe<Scalars["jsonb"]>
 }
@@ -4062,7 +4108,7 @@ export type Update_Log = {
   new_principal_remain: Scalars["float8"]
   new_state: Scalars["String"]
   repayment_id: Scalars["uuid"]
-  type: Scalars["String"]
+  type: Update_Type_Enum
   update_id: Scalars["uuid"]
 }
 
@@ -4147,7 +4193,7 @@ export type Update_Log_Bool_Exp = {
   new_principal_remain?: Maybe<Float8_Comparison_Exp>
   new_state?: Maybe<String_Comparison_Exp>
   repayment_id?: Maybe<Uuid_Comparison_Exp>
-  type?: Maybe<String_Comparison_Exp>
+  type?: Maybe<Update_Type_Enum_Comparison_Exp>
   update_id?: Maybe<Uuid_Comparison_Exp>
 }
 
@@ -4176,7 +4222,7 @@ export type Update_Log_Insert_Input = {
   new_principal_remain?: Maybe<Scalars["float8"]>
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
-  type?: Maybe<Scalars["String"]>
+  type?: Maybe<Update_Type_Enum>
   update_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -4192,7 +4238,6 @@ export type Update_Log_Max_Fields = {
   new_principal_remain?: Maybe<Scalars["float8"]>
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
-  type?: Maybe<Scalars["String"]>
   update_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -4207,7 +4252,6 @@ export type Update_Log_Max_Order_By = {
   new_principal_remain?: Maybe<Order_By>
   new_state?: Maybe<Order_By>
   repayment_id?: Maybe<Order_By>
-  type?: Maybe<Order_By>
   update_id?: Maybe<Order_By>
 }
 
@@ -4223,7 +4267,6 @@ export type Update_Log_Min_Fields = {
   new_principal_remain?: Maybe<Scalars["float8"]>
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
-  type?: Maybe<Scalars["String"]>
   update_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -4238,7 +4281,6 @@ export type Update_Log_Min_Order_By = {
   new_principal_remain?: Maybe<Order_By>
   new_state?: Maybe<Order_By>
   repayment_id?: Maybe<Order_By>
-  type?: Maybe<Order_By>
   update_id?: Maybe<Order_By>
 }
 
@@ -4321,7 +4363,7 @@ export type Update_Log_Set_Input = {
   new_principal_remain?: Maybe<Scalars["float8"]>
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
-  type?: Maybe<Scalars["String"]>
+  type?: Maybe<Update_Type_Enum>
   update_id?: Maybe<Scalars["uuid"]>
 }
 
@@ -4524,6 +4566,26 @@ export type Update_Type_Bool_Exp = {
 export enum Update_Type_Constraint {
   /** unique or primary key constraint */
   UpdateTypePkey = "update_type_pkey",
+}
+
+export enum Update_Type_Enum {
+  /** whenever the compoungind period ends */
+  Compound = "COMPOUND",
+  /** when the loan is set to default */
+  Default = "DEFAULT",
+  /** when a penalty condition was true */
+  Penalty = "PENALTY",
+  /** when a repayment is made */
+  Repayment = "REPAYMENT",
+}
+
+/** expression to compare columns of type update_type_enum. All fields are combined with logical 'AND'. */
+export type Update_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Update_Type_Enum>
+  _in?: Maybe<Array<Update_Type_Enum>>
+  _is_null?: Maybe<Scalars["Boolean"]>
+  _neq?: Maybe<Update_Type_Enum>
+  _nin?: Maybe<Array<Update_Type_Enum>>
 }
 
 /** input type for inserting data into table "update_type" */
@@ -5295,6 +5357,35 @@ export type CreateUserMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type GetAllUsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllUsersQuery = { __typename?: "query_root" } & {
+  user: Array<
+    { __typename?: "user" } & Pick<
+      User,
+      | "id"
+      | "email"
+      | "first_name"
+      | "last_name"
+      | "user_type"
+      | "balance"
+      | "kyc_approved"
+      | "onboarded"
+      | "demographic_info"
+    > & {
+        loan_requests: Array<
+          { __typename?: "loan_request" } & Pick<
+            Loan_Request,
+            "amount" | "purpose" | "state"
+          >
+        >
+        loans: Array<
+          { __typename?: "loan" } & Pick<Loan, "state" | "principal">
+        >
+      }
+  >
+}
+
 export type GetUserByEmailQueryVariables = Exact<{
   email: Scalars["String"]
 }>
@@ -5445,6 +5536,46 @@ export type GetLoanRequestsQuery = { __typename?: "query_root" } & {
   >
 }
 
+export type GetLoanQueryVariables = Exact<{
+  loanId: Scalars["uuid"]
+}>
+
+export type GetLoanQuery = { __typename?: "query_root" } & {
+  loan?: Maybe<
+    { __typename?: "loan" } & Pick<
+      Loan,
+      "loan_id" | "state" | "principal_remaining"
+    > & {
+        repayments: Array<
+          { __typename?: "repayment" } & Pick<
+            Repayment,
+            "date" | "repaid_principal" | "repaid_interest"
+          >
+        >
+      }
+  >
+}
+
+export type RegisterRepaymentMutationVariables = Exact<{
+  loanId: Scalars["uuid"]
+  repayment: Repayment_Insert_Input
+  newLoanState?: Maybe<Loan_State_Enum>
+  newPrincipalRemaining?: Maybe<Scalars["float8"]>
+  updateLog: Update_Log_Insert_Input
+}>
+
+export type RegisterRepaymentMutation = { __typename?: "mutation_root" } & {
+  loan?: Maybe<
+    { __typename?: "loan" } & Pick<Loan, "state" | "principal_remaining">
+  >
+  repayment?: Maybe<
+    { __typename?: "repayment" } & Pick<Repayment, "repayment_id">
+  >
+  updateLogEntry?: Maybe<
+    { __typename?: "update_log" } & Pick<Update_Log, "update_id">
+  >
+}
+
 export type DeleteAllUsersMutationVariables = Exact<{ [key: string]: never }>
 
 export type DeleteAllUsersMutation = { __typename?: "mutation_root" } & {
@@ -5530,6 +5661,30 @@ export const CreateUserDocument = gql`
     }
   }
 `
+export const GetAllUsersDocument = gql`
+  query GetAllUsers {
+    user {
+      id
+      email
+      first_name
+      last_name
+      user_type
+      balance
+      kyc_approved
+      onboarded
+      demographic_info
+      loan_requests {
+        amount
+        purpose
+        state
+      }
+      loans {
+        state
+        principal
+      }
+    }
+  }
+`
 export const GetUserByEmailDocument = gql`
   query GetUserByEmail($email: String!) {
     user(where: { email: { _eq: $email } }) {
@@ -5608,7 +5763,7 @@ export const FundLoanRequestDocument = gql`
   ) {
     loanRequest: update_loan_request_by_pk(
       pk_columns: { request_id: $requestId }
-      _set: { state: "FULFILLED" }
+      _set: { state: FULFILLED }
     ) {
       state
       amount
@@ -5655,6 +5810,46 @@ export const GetLoanRequestsDocument = gql`
         id
         demographic_info
       }
+    }
+  }
+`
+export const GetLoanDocument = gql`
+  query GetLoan($loanId: uuid!) {
+    loan: loan_by_pk(loan_id: $loanId) {
+      loan_id
+      state
+      principal_remaining
+      repayments {
+        date
+        repaid_principal
+        repaid_interest
+      }
+    }
+  }
+`
+export const RegisterRepaymentDocument = gql`
+  mutation RegisterRepayment(
+    $loanId: uuid!
+    $repayment: repayment_insert_input!
+    $newLoanState: loan_state_enum
+    $newPrincipalRemaining: float8
+    $updateLog: update_log_insert_input!
+  ) {
+    loan: update_loan_by_pk(
+      pk_columns: { loan_id: $loanId }
+      _set: {
+        state: $newLoanState
+        principal_remaining: $newPrincipalRemaining
+      }
+    ) {
+      state
+      principal_remaining
+    }
+    repayment: insert_repayment_one(object: $repayment) {
+      repayment_id
+    }
+    updateLogEntry: insert_update_log_one(object: $updateLog) {
+      update_id
     }
   }
 `
@@ -5707,6 +5902,13 @@ export function getSdk(
     ): Promise<CreateUserMutation> {
       return withWrapper(() =>
         client.request<CreateUserMutation>(print(CreateUserDocument), variables)
+      )
+    },
+    GetAllUsers(
+      variables?: GetAllUsersQueryVariables
+    ): Promise<GetAllUsersQuery> {
+      return withWrapper(() =>
+        client.request<GetAllUsersQuery>(print(GetAllUsersDocument), variables)
       )
     },
     GetUserByEmail(
@@ -5792,6 +5994,21 @@ export function getSdk(
       return withWrapper(() =>
         client.request<GetLoanRequestsQuery>(
           print(GetLoanRequestsDocument),
+          variables
+        )
+      )
+    },
+    GetLoan(variables: GetLoanQueryVariables): Promise<GetLoanQuery> {
+      return withWrapper(() =>
+        client.request<GetLoanQuery>(print(GetLoanDocument), variables)
+      )
+    },
+    RegisterRepayment(
+      variables: RegisterRepaymentMutationVariables
+    ): Promise<RegisterRepaymentMutation> {
+      return withWrapper(() =>
+        client.request<RegisterRepaymentMutation>(
+          print(RegisterRepaymentDocument),
           variables
         )
       )

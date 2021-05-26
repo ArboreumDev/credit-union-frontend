@@ -6,7 +6,7 @@ mutation FundLoanRequest (
   loanRequest: update_loan_request_by_pk(
     pk_columns: {request_id: $requestId}
     _set: {
-      state: "FULFILLED"
+      state: FULFILLED
     }
   ) {
     state

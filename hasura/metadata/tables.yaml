@@ -1,6 +1,7 @@
 - table:
     schema: public
     name: action_type
+  is_enum: true
 - table:
     schema: public
     name: events
@@ -60,9 +61,11 @@
 - table:
     schema: public
     name: loan_request_state
+  is_enum: true
 - table:
     schema: public
     name: loan_state
+  is_enum: true
 - table:
     schema: public
     name: repayment
@@ -79,6 +82,7 @@
 - table:
     schema: public
     name: update_type
+  is_enum: true
 - table:
     schema: public
     name: user
@@ -107,3 +111,4 @@
 - table:
     schema: public
     name: user_type
+  is_enum: true
