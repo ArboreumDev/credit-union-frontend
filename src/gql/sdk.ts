@@ -5491,6 +5491,8 @@ export type FundLoanRequestMutation = { __typename?: "mutation_root" } & {
     { __typename?: "loan" } & Pick<
       Loan,
       | "loan_id"
+      | "principal"
+      | "principal_remaining"
       | "next_payment_amount"
       | "next_payment_due_date"
       | "tenor"
@@ -5649,6 +5651,34 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type ResetLoansMutationVariables = Exact<{ [key: string]: never }>
+
+export type ResetLoansMutation = { __typename?: "mutation_root" } & {
+  delete_lender_amount?: Maybe<
+    { __typename?: "lender_amount_mutation_response" } & Pick<
+      Lender_Amount_Mutation_Response,
+      "affected_rows"
+    >
+  >
+  delete_loan?: Maybe<
+    { __typename?: "loan_mutation_response" } & Pick<
+      Loan_Mutation_Response,
+      "affected_rows"
+    >
+  >
+}
+
+export type ResetRequestsMutationVariables = Exact<{ [key: string]: never }>
+
+export type ResetRequestsMutation = { __typename?: "mutation_root" } & {
+  delete_loan_request?: Maybe<
+    { __typename?: "loan_request_mutation_response" } & Pick<
+      Loan_Request_Mutation_Response,
+      "affected_rows"
+    >
+  >
+}
+
 export const ChangeUserCashBalanceDocument = gql`
   mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
     user: update_user_by_pk(
@@ -5789,6 +5819,8 @@ export const FundLoanRequestDocument = gql`
     }
     newLoan: insert_loan_one(object: $loan) {
       loan_id
+      principal
+      principal_remaining
       next_payment_amount
       next_payment_due_date
       tenor
@@ -5903,6 +5935,23 @@ export const ResetDbDocument = gql`
       affected_rows
     }
     delete_scenario_actions(where: {}) {
+      affected_rows
+    }
+  }
+`
+export const ResetLoansDocument = gql`
+  mutation ResetLoans {
+    delete_lender_amount(where: {}) {
+      affected_rows
+    }
+    delete_loan(where: {}) {
+      affected_rows
+    }
+  }
+`
+export const ResetRequestsDocument = gql`
+  mutation ResetRequests {
+    delete_loan_request(where: {}) {
       affected_rows
     }
   }
@@ -6055,6 +6104,23 @@ export function getSdk(
     ResetDB(variables?: ResetDbMutationVariables): Promise<ResetDbMutation> {
       return withWrapper(() =>
         client.request<ResetDbMutation>(print(ResetDbDocument), variables)
+      )
+    },
+    ResetLoans(
+      variables?: ResetLoansMutationVariables
+    ): Promise<ResetLoansMutation> {
+      return withWrapper(() =>
+        client.request<ResetLoansMutation>(print(ResetLoansDocument), variables)
+      )
+    },
+    ResetRequests(
+      variables?: ResetRequestsMutationVariables
+    ): Promise<ResetRequestsMutation> {
+      return withWrapper(() =>
+        client.request<ResetRequestsMutation>(
+          print(ResetRequestsDocument),
+          variables
+        )
       )
     },
   }

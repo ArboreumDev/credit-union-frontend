@@ -1,0 +1,8 @@
+mutation ResetLoans {
+  delete_lender_amount(where: {}) {
+    affected_rows
+  }
+  delete_loan(where: {}) {
+    affected_rows
+  }
+}
