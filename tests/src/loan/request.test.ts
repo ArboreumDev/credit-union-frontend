@@ -1,8 +1,7 @@
 import { MIN_SUPPORT_RATIO } from "lib/constant"
-import { LoanRequestStatus } from "lib/types"
+import { Loan_Request_State_Enum } from "../../../src/gql/sdk"
 import { BORROWER1, SUPPORTER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
-import { addAndConfirmSupporter } from "../common/test_helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -13,36 +12,27 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
-describe.skip("Loan Request Flow", () => {
+describe("Loan Request Success Flow", () => {
   const amount = 100
   let requestId: string
 
-  test("New loan request", async () => {
+  test("Create new loan request", async () => {
     const purpose = "go see the movies"
     const { loanRequest } = await dbClient.createLoanRequest(
       BORROWER1.id,
       amount,
       purpose
     )
-
     requestId = loanRequest.request_id
     expect(loanRequest.amount).toBe(amount)
     expect(loanRequest.purpose).toBe(purpose)
-    expect(loanRequest.status).toBe(LoanRequestStatus.initiated)
-    expect(loanRequest.risk_calc_result).toBeUndefined
+    expect(loanRequest.state).toBe(Loan_Request_State_Enum.Active)
   })
-
-  test("When a supporter confirms and the total support amount is below 20%, no loan offer is made", async () => {
-    await sdk.CreateUser({ user: SUPPORTER1 })
-    await addAndConfirmSupporter(
-      dbClient,
-      requestId,
-      SUPPORTER1.id,
-      (amount * MIN_SUPPORT_RATIO) / 2
-    )
-    const { loanRequest } = await sdk.GetLoanRequest({
-      requestId: requestId,
-    })
-    expect(loanRequest.risk_calc_result).toBeUndefined
-  })
+  test.todo("borrower creates a loan request after a completed loan")
+  test.todo("borrower creates a loan request after a withdrawn loan-request")
+})
+describe("Loan Request Creation fails, if...", () => {
+  test.todo("...creator is incorrect user type")
+  test.todo("...borrower already has an active loan")
+  test.todo("...borrower already has an active request")
 })
