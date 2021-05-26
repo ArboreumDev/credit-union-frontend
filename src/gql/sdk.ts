@@ -5336,6 +5336,15 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars["uuid"]>>
 }
 
+export type ChangeUserCashBalanceMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  delta: Scalars["float8"]
+}>
+
+export type ChangeUserCashBalanceMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
+}
+
 export type CreateUserMutationVariables = Exact<{
   user: User_Insert_Input
 }>
@@ -5640,6 +5649,16 @@ export type ResetDbMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export const ChangeUserCashBalanceDocument = gql`
+  mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _inc: { balance: $delta }
+    ) {
+      balance
+    }
+  }
+`
 export const CreateUserDocument = gql`
   mutation CreateUser($user: user_insert_input!) {
     insert_user_one(
@@ -5897,6 +5916,16 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper
 ) {
   return {
+    ChangeUserCashBalance(
+      variables: ChangeUserCashBalanceMutationVariables
+    ): Promise<ChangeUserCashBalanceMutation> {
+      return withWrapper(() =>
+        client.request<ChangeUserCashBalanceMutation>(
+          print(ChangeUserCashBalanceDocument),
+          variables
+        )
+      )
+    },
     CreateUser(
       variables: CreateUserMutationVariables
     ): Promise<CreateUserMutation> {

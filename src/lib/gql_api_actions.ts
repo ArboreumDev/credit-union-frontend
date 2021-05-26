@@ -8,6 +8,7 @@ import {
   FundLoanRequestMutationVariables,
   Action_Type_Enum,
   RegisterRepaymentMutation,
+  ChangeUserCashBalanceMutationVariables,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
@@ -166,6 +167,36 @@ export class MakeRepayment extends Action {
   }
 }
 
+export class ChangeBalance extends Action {
+  static Name = "ChangeBalance"
+  static InputType: ChangeUserCashBalanceMutationVariables
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() && this.user.user_type == UserType.Lender
+  }
+
+  async run() {
+    return await this.dbClient.sdk.ChangeUserCashBalance({
+      userId: this.user.id,
+      delta: this.payload.delta,
+    })
+    // return await this.dbClient.sdk.InsertScenarioAction({
+    //   action: {
+    //     action_type: Action_Type_Enum.AdjustBalances,
+    //     payload: {
+    //       userEmail: this.user.email,
+    //       balanceDelta: this.payload.delta,
+    //     },
+    //   },
+    // })
+  }
+
+  static fetch(payload: typeof ChangeBalance.InputType) {
+    return fetcherMutate(ChangeBalance.Name, payload)
+  }
+}
+
 // export class AddSupporter extends Action {
 //   static Name = "AddSupporter"
 //   static InputType: {
@@ -295,7 +326,7 @@ export const ACTIONS = {
   [CreateLoan.Name]: CreateLoan,
   [FundLoanRequest.Name]: FundLoanRequest,
   // [AddSupporter.Name]: AddSupporter,
-  // [ChangeBalance.Name]: ChangeBalance,
+  [ChangeBalance.Name]: ChangeBalance,
   // [AcceptRejectPledge.Name]: AcceptRejectPledge,
   // [AcceptLoanOffer.Name]: AcceptLoanOffer,
   [MakeRepayment.Name]: MakeRepayment,
