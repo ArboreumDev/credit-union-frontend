@@ -3,11 +3,17 @@ import dynamic from "next/dynamic"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import AppBar from "../../components/common/nav/AppBar"
-import { User, UserType } from "../../lib/types"
+import { User, UserType, InvestmentOptions } from "../../lib/types"
 
-const getLenderHome = (user: User, initPanelIdx?: number) => {
+const getLenderHome = (
+  user: User,
+  options: InvestmentOptions,
+  initPanelIdx?: number
+) => {
   const LenderHome = dynamic(() => import("components/lender/LenderHome"))
-  return <LenderHome user={user} initPanelIdx={initPanelIdx} />
+  return (
+    <LenderHome user={user} initPanelIdx={initPanelIdx} options={options} />
+  )
 }
 
 const getBorrowerHome = (user: User, initPanelIdx?: number) => {
@@ -21,16 +27,20 @@ const lenderTabMap = {
   repay: 2,
 }
 
-export const getDashboardComponent = (user: User, idx?: number) => (
+export const getDashboardComponent = (
+  user: User,
+  options?: InvestmentOptions,
+  idx?: number
+) => (
   <>
     <AppBar />
-    {user.user_type === UserType.Lender && getLenderHome(user, idx)}
+    {user.user_type === UserType.Lender && getLenderHome(user, options, idx)}
     {user.user_type === UserType.Borrower && getBorrowerHome(user, idx)}
   </>
 )
 
 const Dashboard = () => {
-  const { user } = useUser()
+  const { user, options } = useUser()
   const router = useRouter()
   const { route } = router.query
 
@@ -46,7 +56,7 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      {getDashboardComponent(user, initPanelIdx)}
+      {getDashboardComponent(user, options, initPanelIdx)}
     </div>
   )
 }

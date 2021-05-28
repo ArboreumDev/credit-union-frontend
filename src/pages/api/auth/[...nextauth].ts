@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { Session } from "lib/types"
+import { Session, UserType } from "lib/types"
 import DbClient from "gql/db_client"
 
 const dbClient = new DbClient()
@@ -31,6 +31,10 @@ const options = {
       const _user = await dbClient.getUserByEmail(s.user.email)
 
       if (_user) s = { ...s, user: _user }
+      if (_user?.user_type === UserType.Lender) {
+        const { borrowers } = await dbClient.sdk.GetBorrowers()
+        s = { ...s, options: borrowers }
+      }
 
       return Promise.resolve(s)
     },

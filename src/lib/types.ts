@@ -1,10 +1,11 @@
-import { GetUserByEmailQuery } from "../gql/sdk"
+import { GetUserByEmailQuery, GetBorrowersQuery } from "../gql/sdk"
 import { LogEventTypes } from "./constant"
 
 export type Session = {
   user: User
   accessToken: string
   expires: string
+  options?: InvestmentOptions
 }
 
 export enum UserType {
@@ -12,6 +13,8 @@ export enum UserType {
   Lender = "lender",
 }
 
+export type InvestmentOptions = GetBorrowersQuery["borrowers"]
+export type InvestmentOptionInfo = GetBorrowersQuery["borrowers"][0]
 export type User = GetUserByEmailQuery["user"][0]
 export type LoanRequest = User["loan_requests"][0]
 export type PledgeRequest = User["pledge_requests"][0]

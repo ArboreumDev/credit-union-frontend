@@ -1,9 +1,11 @@
+import { notDeepEqual } from "assert"
 import { CreateUserMutation } from "gql/sdk"
 import {
   ACTION_ERRORS,
   CreateLoan,
   CreateUser,
   runAction,
+  SetBorrowerApproval,
 } from "lib/gql_api_actions"
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
@@ -61,6 +63,45 @@ describe("Create new loan | user is Authorized", () => {
     )) as typeof CreateLoan.ReturnType
     expect(res.loanRequest.amount === payload.request.amount)
     loanRequestId = res.loanRequest.request_id
+  })
+  test("set borrower approval", async () => {
+    const userBefore = await dbClient.getUserByEmail(SUPPORTER1.email)
+    expect(
+      userBefore.approvedBorrowers.map((b) => b.borrower_id)
+    ).not.toContain(BORROWER1.id)
+
+    const payload: typeof SetBorrowerApproval.InputType = {
+      borrowerId: BORROWER1.id,
+      approved: true,
+    }
+    const session = getMockSession(SUPPORTER1)
+
+    // set approved
+    const res: typeof SetBorrowerApproval.ReturnType = (await runAction(
+      SetBorrowerApproval.Name,
+      session,
+      payload,
+      dbClient
+    )) as typeof SetBorrowerApproval.ReturnType
+    expect(res).toBeTruthy
+    let userAfter = await dbClient.getUserByEmail(SUPPORTER1.email)
+    expect(userAfter.approvedBorrowers.map((b) => b.borrower_id)).toContain(
+      BORROWER1.id
+    )
+
+    // remove approval
+    payload.approved = false
+    const res2: typeof SetBorrowerApproval.ReturnType = (await runAction(
+      SetBorrowerApproval.Name,
+      session,
+      payload,
+      dbClient
+    )) as typeof SetBorrowerApproval.ReturnType
+    expect(res).toBeTruthy
+    userAfter = await dbClient.getUserByEmail(SUPPORTER1.email)
+    expect(userAfter.approvedBorrowers.map((b) => b.borrower_id)).not.toContain(
+      BORROWER1.id
+    )
   })
 })
 

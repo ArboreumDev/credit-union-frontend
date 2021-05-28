@@ -5,6 +5,7 @@ import {
   CalculatedRisk,
   LoanInfo,
   RoI,
+  InvestmentOptions,
 } from "../types"
 import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
 
@@ -32,10 +33,26 @@ export class Fixtures {
     loan_requests: [],
     pledge_requests: [],
     pledges: [],
+    approvedBorrowers: [],
     active_loans: [],
     loans_to_repay: [],
     roi: NO_ROI,
   }
+  static InvestOptions: InvestmentOptions = [
+    {
+      name: "Amitabh Bachann",
+      id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
+      loan_requests: [
+        {
+          amount: 90000,
+          status: "initiated",
+          request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba91",
+          confirmation_date: null,
+          purpose: "Educational expense",
+        },
+      ],
+    },
+  ]
 
   static LoanReqInfo: LoanInfo = {
     request_id: "44c6d2cb-062c-4dac-a88f-0df0f32bba96",
@@ -130,6 +147,7 @@ export class Fixtures {
     created_at: "2020-08-29T04:12:17.878911+00:00",
     kyc_approved: false,
     loan_requests: [],
+    approvedBorrowers: [],
     pledge_requests: [],
     pledges: [],
     active_loans: [],
