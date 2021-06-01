@@ -1,59 +1,22 @@
 import { dec_to_perc } from "lib/currency"
-import {
-  LoanInfo,
-  LoanRequest,
-  LoanRequestStatus,
-  SupporterStatus,
-} from "lib/types"
-
+import { LoanInfo, Loan, SupporterStatus } from "lib/types"
+import { Loan_Request_State_Enum, Loan_State_Enum } from "../../../gql/sdk"
 export default class LoanModel {
-  constructor(public _loan: LoanRequest) {}
+  constructor(public _loan: Loan) {}
 
   get amount() {
-    return this._loan.amount
+    return this._loan.principal
   }
   get purpose() {
-    return this._loan.purpose
-  }
-
-  get confirmedSupporters() {
-    return this._loan.supporters.filter(
-      (x) => x.status == SupporterStatus.confirmed
-    )
-  }
-
-  get calculatedRisk() {
-    return this._loan.risk_calc_result
+    return this._loan.loanRequest.purpose
   }
 
   get loanInfo() {
-    if (
-      [LoanRequestStatus.active, LoanRequestStatus.settled].includes(
-        this._loan.status
-      )
-    ) {
-      return this._loan.loan as LoanInfo
-    } else {
-      return this.calculatedRisk.latestOffer as LoanInfo
-    }
-  }
-
-  get borrowerAPR() {
-    return this.loanInfo.terms.borrower_apr
-  }
-
-  get borrowerView() {
-    return this.loanInfo.schedule.borrower_view
+    return {}
   }
 
   get interestAmount() {
-    const corpus_interest =
-      this.borrowerView.corpus_interest.remain +
-      this.borrowerView.corpus_interest.paid
-    const supporter_interest =
-      this.borrowerView.supporter_interest.remain +
-      this.borrowerView.supporter_interest.paid
-    return corpus_interest + supporter_interest
+    return this._loan.interest_accrued
   }
 
   get percRepaid() {
@@ -62,23 +25,25 @@ export default class LoanModel {
     )
   }
   get amountRepaid() {
-    return this.borrowerView.total_payments.paid
+    const paidPrincipal =
+      this._loan.principal_overdue +
+      this._loan.principal -
+      this._loan.principal_remaining
+    return paidPrincipal + this._loan.interest_paid
   }
   get totalOutStandingDebt() {
-    return this.borrowerView.total_payments.remain
+    return this._loan.principal_remaining + this._loan.interest_accrued
   }
   get outstandingInterest() {
-    const bv = this.borrowerView
-    return bv.corpus_interest.remain + bv.supporter_interest.remain
+    return this._loan.interest_accrued
   }
-  /**
-   * Loan tenor in months
-   */
   get tenor() {
-    return this.loanInfo.terms.tenor
+    return this._loan.tenor
   }
-
   get nextPayment() {
-    return this.loanInfo.schedule.next_borrower_payment
+    return {
+      amount: this._loan.next_payment_amount,
+      date: this._loan.next_payment_due_date,
+    }
   }
 }

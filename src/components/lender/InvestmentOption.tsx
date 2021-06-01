@@ -19,24 +19,20 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/core"
-import {
-  User,
-  InvestmentOptionInfo,
-  InvestmentOptions,
-  LoanRequestStatus,
-} from "lib/types"
+import { User, InvestmentOptionInfo, InvestmentOptions } from "lib/types"
 import { Currency } from "../common/Currency"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { SetBorrowerApproval } from "lib/gql_api_actions"
 import ReviewWithdrawApproval from "./ReviewWithdrawApproval"
+import { Loan_Request_State_Enum } from "../../gql/sdk"
 
 const inactiveBorrowerPlaceholderRequest = {
   amount: 0,
   purpose: "Currently not requesting financing",
   confirmation_date: "",
-  status: "inactive",
+  state: Loan_Request_State_Enum.Withdrawn,
   request_id: "",
 }
 
@@ -61,8 +57,8 @@ const InvestmentOption = (props: {
   const activeRequest =
     props.data.loan_requests.filter(
       (x) =>
-        x.status === LoanRequestStatus.initiated ||
-        x.status === LoanRequestStatus.active
+        x.state === Loan_Request_State_Enum.Fulfilled ||
+        x.state === Loan_Request_State_Enum.Active
     )[0] || inactiveBorrowerPlaceholderRequest
 
   const handleApprove = () => {
@@ -80,11 +76,15 @@ const InvestmentOption = (props: {
     setloading(false)
   }
 
-  const statusToBadgeColor = (status: string) => {
-    switch (status) {
-      case "live":
+  const statusToBadgeColor = (state: Loan_Request_State_Enum) => {
+    switch (state) {
+      case Loan_Request_State_Enum.Fulfilled:
+      case Loan_Request_State_Enum.Active:
         return "green"
-      case "inactive":
+      // TODO
+      // case Loan_Request_State_Enum.Rejected:
+      case Loan_Request_State_Enum.Expired:
+      case Loan_Request_State_Enum.Withdrawn:
         return "grey"
       default:
         return "teal"
@@ -97,16 +97,18 @@ const InvestmentOption = (props: {
         {/* borrower details */}
         <Box>
           <VStack>
-            <Text fontWeight="semibold">{props.data.name}</Text>
+            <Text fontWeight="semibold">
+              {props.data.first_name + " " + props.data.last_name}
+            </Text>
             <Currency type="USD" amount={activeRequest.amount} />
             <Badge
               borderRadius="full"
               px="2"
-              colorScheme={statusToBadgeColor(activeRequest.status)}
+              colorScheme={statusToBadgeColor(activeRequest.state)}
             >
-              {activeRequest.status === "initiated"
+              {activeRequest.state === Loan_Request_State_Enum.Active
                 ? "requested"
-                : activeRequest.status}
+                : activeRequest.state}
             </Badge>
           </VStack>
         </Box>
@@ -119,14 +121,14 @@ const InvestmentOption = (props: {
           </VStack>
         </Box>
 
-        {activeRequest && (
+        {/* {activeRequest && (
           <Box>
             <Text>{activeRequest.confirmation_date}</Text>
           </Box>
-        )}
+        )} */}
         {/* lender actions to extend or withdraw credit Line */}
         <Box>
-          {approved && (
+          {!approved && (
             <Button
               colorScheme="teal"
               isLoading={loading}
@@ -135,9 +137,7 @@ const InvestmentOption = (props: {
               Approve Borrower
             </Button>
           )}
-          {!approved && (
-            <ReviewWithdrawApproval handleConfirm={handleApprove} />
-          )}
+          {approved && <ReviewWithdrawApproval handleConfirm={handleApprove} />}
         </Box>
         {/* actucally a slider could make sense here as well? */}
         {/* <Switch 

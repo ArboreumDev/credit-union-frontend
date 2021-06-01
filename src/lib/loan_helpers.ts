@@ -1,6 +1,5 @@
 import { LoanInfo, PortfolioUpdate } from "./types"
-import { Loan_Participants_Insert_Input, Sdk } from "../gql/sdk"
-import { LoanRequestStatus } from "./types"
+import { Sdk, Loan_Request_State_Enum } from "../gql/sdk"
 import DbClient from "gql/db_client"
 
 function toFloat8(x: number) {
@@ -48,33 +47,33 @@ export const lenderBalanceToShareInLoan = (
   return toFloat8(proportion(lenderBalance, corpusCash, loanAmount))
 }
 
-export const createStartLoanInputVariables = (
-  request_id: string,
-  realizedLoan: LoanInfo,
-  updates: PortfolioUpdate[]
-) => {
-  // input to loan_participants: lenders only
-  const supporter_ids = realizedLoan.terms.supporters.map((x) => x.supporter_id)
-  const lenders = []
-  updates.forEach((update: PortfolioUpdate) => {
-    if (
-      update.userId !== realizedLoan.terms.borrower_info.borrower_id &&
-      !supporter_ids.includes(update.userId) &&
-      Math.abs(update.balanceDelta) !== 0
-    ) {
-      lenders.push({
-        lender_amount: -update.balanceDelta,
-        lender_id: update.userId,
-        loan_id: realizedLoan.request_id,
-      } as Loan_Participants_Insert_Input)
-    }
-  })
+// export const createStartLoanInputVariables = (
+//   request_id: string,
+//   realizedLoan: LoanInfo,
+//   updates: PortfolioUpdate[]
+// ) => {
+//   // input to loan_participants: lenders only
+//   const supporter_ids = realizedLoan.terms.supporters.map((x) => x.supporter_id)
+//   const lenders = []
+//   updates.forEach((update: PortfolioUpdate) => {
+//     if (
+//       update.userId !== realizedLoan.terms.borrower_info.borrower_id &&
+//       !supporter_ids.includes(update.userId) &&
+//       Math.abs(update.balanceDelta) !== 0
+//     ) {
+//       lenders.push({
+//         lender_amount: -update.balanceDelta,
+//         lender_id: update.userId,
+//         loan_id: realizedLoan.request_id,
+//       } //as Loan_Participants_Insert_Input)
+//     }
+//   })
 
-  return {
-    request_id,
-    lenders,
-  }
-}
+//   return {
+//     request_id,
+//     lenders,
+//   }
+// }
 
 /**
  * generates a mutation that will increase the users balance by amount and decrease share in corpus by same amount

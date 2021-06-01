@@ -97,17 +97,17 @@
     schema: public
     name: user
   array_relationships:
+    - name: approvedBorrowers
+      using:
+        foreign_key_constraint_on:
+          column: investor_id
+          table:
+            schema: public
+            name: creditLine
     - name: creditLineByBorrower
       using:
         foreign_key_constraint_on:
           column: borrower_id
-          table:
-            schema: public
-            name: creditLine
-    - name: creditLineByInvestor
-      using:
-        foreign_key_constraint_on:
-          column: investor_id
           table:
             schema: public
             name: creditLine

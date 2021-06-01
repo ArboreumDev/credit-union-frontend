@@ -11,6 +11,50 @@ query GetUserByEmail($email: String!) {
     user_type
     balance
     created_at
+    approvedBorrowers {
+      borrower_id
+    }
+    loan_requests {
+      request_id
+      amount
+      purpose
+      state
+    }
+    loans {
+      loan_id
+      principal
+      principal_remaining
+      principal_overdue
+      interest_accrued
+      interest_paid
+      state
+      tenor
+      next_payment_amount
+      next_payment_due_date
+      loanRequest {
+        purpose
+      }
+    }
+    loansToRepay: loans( where: {state: {_in: [LIVE]}}) {
+      next_payment_amount
+      next_payment_due_date
+      principal_overdue
+      principal_remaining
+      interest_accrued
+    }
+    investedLoans: lender_amounts {
+      amount_lent
+      loan {
+        loan_id
+        state
+        tenor
+        principal
+        borrowerInfo {
+          first_name
+          last_name
+        }
+      }
+    }
     # loan_request {
     #   request_id
     #   state
@@ -18,11 +62,6 @@ query GetUserByEmail($email: String!) {
     #   amount
     #   loan_id
     #   created_at
-    # }
-    # loans_to_repay: loan_requests( where: {status: {_in: ["LIVE"]}}) {
-    #   request_id
-    #   status
-    #   loan
     # }
     # pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
     #   ...pledgeFields

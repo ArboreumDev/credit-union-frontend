@@ -20,12 +20,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/core"
-import {
-  User,
-  InvestmentOptionInfo,
-  InvestmentOptions,
-  LoanRequestStatus,
-} from "lib/types"
+import { User, InvestmentOptionInfo, InvestmentOptions } from "lib/types"
 import { Currency } from "../common/Currency"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"

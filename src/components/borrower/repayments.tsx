@@ -31,12 +31,13 @@ export function RepaymentsForm({ user }: Props) {
       .catch((err) => console.error(err))
   }
 
-  const suggestedNextBorrowerPayment = Math.ceil(
-    user.loans_to_repay[0].loan.schedule.next_borrower_payment
-  )
+  const activeLoan = user.loansToRepay[0]
+  const suggestedNextBorrowerPayment = Math.ceil(activeLoan.next_payment_amount)
 
   const fullRepay = Math.ceil(
-    user.loans_to_repay[0].loan.schedule.full_single_repay
+    activeLoan.interest_accrued +
+      activeLoan.principal_overdue +
+      activeLoan.principal_remaining
   )
 
   return (

@@ -5,7 +5,6 @@ import { User, InvestmentOptions } from "../../lib/types"
 import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
 import InvestmentOverview from "./InvestmentOverview"
-import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
 
 interface Props {
   user: User
@@ -24,13 +23,6 @@ const LenderHome = ({ user, initPanelIdx, options }: Props) => {
       "Dashboard",
       (
         <Box>
-          {user.pledge_requests.map((pr, idx) => (
-            <NewPledgeRequest
-              key={idx + `_nlr`}
-              pledgeRequest={pr}
-              availableFunds={user.balance}
-            />
-          ))}
           <LenderDashboard user={user} />
         </Box>
       )

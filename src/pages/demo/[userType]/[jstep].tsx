@@ -1,4 +1,4 @@
-import { useEventListener } from "@chakra-ui/core"
+import { useEventListener, Box } from "@chakra-ui/core"
 import LandingPage from "components/common/landing"
 import Onboarding from "components/common/onboarding/onboarding"
 import PendingReview from "pages/pending"
@@ -19,21 +19,33 @@ export const bJourneySequence = [
     "Onboarding",
     <Onboarding user={Fixtures.Borrower} userType={UserType.Borrower} />
   ),
-  new JStep("KYC needs approval", getDashboardComponent(Fixtures.Borrower)),
   new JStep(
-    "Loan request initiated",
-    getDashboardComponent(Fixtures.BorrowerLoanInitiated)
+    "KYC Review Pending",
+    getDashboardComponent(Fixtures.BorrowerOnboarded)
   ),
   new JStep(
-    "Loan request needs approval",
-    getDashboardComponent(Fixtures.BorrowerLoanNeedsConfirmation)
+    "Request Loan",
+    getDashboardComponent(Fixtures.BorrowerKYCConfirmed)
   ),
-  new JStep("Loan is live", getDashboardComponent(Fixtures.BorrowerLoanLive)),
-  new JStep("Profile", getDashboardComponent(Fixtures.BorrowerLoanLive, [], 1)),
+  new JStep("Live Loan", getDashboardComponent(Fixtures.BorrowerLoanLive)),
+  new JStep("Loan Repaid", getDashboardComponent(Fixtures.BorrowerLoanRepaid)),
+  // TODO this doesnt look any different yet
   new JStep(
-    "Repayments",
-    getDashboardComponent(Fixtures.BorrowerLoanLive, [], 2)
+    "Loan Overdue",
+    getDashboardComponent(Fixtures.BorrowerLoanOverdue)
   ),
+  new JStep(
+    "Loan Defaulted",
+    getDashboardComponent(Fixtures.BorrowerLoanDefaulted)
+  ),
+  new JStep(
+    "Profile + Live Loan",
+    getDashboardComponent(Fixtures.BorrowerLoanLive, [], 1)
+  ),
+  // new JStep(
+  //   "Repayments",
+  //   getDashboardComponent(Fixtures.BorrowerLoanLive, [], 2)
+  // ),
 ]
 
 export const lJourneySequence = [
@@ -45,37 +57,54 @@ export const lJourneySequence = [
   ),
   new JStep("Pending", <PendingReview />),
 
+  new JStep("Dashboard", getDashboardComponent(Fixtures.Lender, [])),
   new JStep(
-    "Add funds",
-    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 1)
-  ),
-  new JStep(
-    "Lender Dashboard with Assets",
+    "Investment Option (available)",
     getDashboardComponent(
-      Fixtures.LenderWithInvestments,
-      Fixtures.InvestOptions,
-      0
+      Fixtures.LenderKYCApproved,
+      [Fixtures.InvestOptionAvailable],
+      1
     )
   ),
   new JStep(
-    "Lender Dashboard",
-    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 0)
-  ),
-  new JStep(
-    "Lender Dashboard with Notification",
+    "Investment Option (approved & fullfilled)",
     getDashboardComponent(
-      Fixtures.SupporterWithPledgeRequest,
-      Fixtures.InvestOptions,
-      0
+      Fixtures.LenderWithApprovedInvestmentOption,
+      [Fixtures.InvestOptionAvailable],
+      1
     )
   ),
+  new JStep(
+    "Investment Option (not approved & fulfilled)",
+    getDashboardComponent(
+      Fixtures.LenderKYCApproved,
+      [Fixtures.InvestOptionFulfilled],
+      1
+    )
+  ),
+  new JStep(
+    "Investment Option (approved & active)",
+    getDashboardComponent(
+      Fixtures.LenderWithApprovedInvestmentOption,
+      [Fixtures.InvestOptionAvailable],
+      1
+    )
+  ),
+  // new JStep(
+  //   "Lender Dashboard",
+  //   getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 0)
+  // ),
+  // new JStep(
+  //   "Lender Dashboard with Notification",
+  //   getDashboardComponent(
+  //     Fixtures.SupporterWithPledgeRequest,
+  //     Fixtures.InvestOptions,
+  //     0
+  //   )
+  // ),
   new JStep(
     "Profile",
-    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 1)
-  ),
-  new JStep(
-    "Repayments",
-    getDashboardComponent(Fixtures.Lender, Fixtures.InvestOptions, 2)
+    getDashboardComponent(Fixtures.LenderKYCApproved, [], 2)
   ),
 ]
 

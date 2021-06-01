@@ -39,11 +39,6 @@ const BLoanRequestInitiated = ({ loanRequest }: Props) => {
           </Stat>
         </StatGroup>
       </Stack>
-      <SupportersList
-        supporters={loanRequest.supporters}
-        loanRequest={loanRequest}
-      />
-      <AddSupporter loanRequest={loanRequest} />
     </Stack>
   )
 }

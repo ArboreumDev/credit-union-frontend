@@ -28,7 +28,6 @@ import {
   LoanRequestInfo,
   LoanInfo,
   LoanOffer,
-  LoanRequestStatus,
   SystemUpdate,
   UserType,
   LoanState,
@@ -36,7 +35,7 @@ import {
 import DecentroClient from "./wallet/decentro_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
-import { uuidv4 } from "lib/scenario"
+import { uuidv4 } from "lib/helpers"
 import {
   DEFAULT_APR,
   DEFAULT_LOAN_TENOR,

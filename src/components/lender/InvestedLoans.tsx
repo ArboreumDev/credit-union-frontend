@@ -1,6 +1,7 @@
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
-import { LoanRequestStatus, RoI, InvestedLoan, LoanInfo } from "../../lib/types"
+import { RoI, InvestedLoan, LoanInfo } from "../../lib/types"
 import { Currency } from "../common/Currency"
+import { Loan_State_Enum } from "../../gql/sdk"
 
 interface Props {
   loans: InvestedLoan[]
@@ -8,32 +9,31 @@ interface Props {
 }
 
 const loanStatusToText = {
-  [LoanRequestStatus.initiated]: "Processing",
-  [LoanRequestStatus.awaiting_borrower_confirmation]: "Processing",
-  [LoanRequestStatus.active]: "Active",
-  [LoanRequestStatus.settled]: "Completed",
-  [LoanRequestStatus.defaulted]: "Defaulted",
+  [Loan_State_Enum.Live]: "Live",
+  [Loan_State_Enum.Repaid]: "Repaid",
+  [Loan_State_Enum.Default]: "Defaulted",
 }
 
-const roi_to_expected = (roi: RoI, loan_id: string) => {
-  return (
-    roi.apr_on_loans.loans[loan_id].principal.remain +
-    roi.apr_on_loans.loans[loan_id].interest.remain
-  )
-}
+// const roi_to_expected = (roi: RoI, loan_id: string) => {
+//   return (
+//     roi.apr_on_loans.loans[loan_id].principal.remain +
+//     roi.apr_on_loans.loans[loan_id].interest.remain
+//   )
+// }
 
-const roi_to_paid = (roi: RoI, loan_id: string) => {
-  return (
-    roi.apr_on_loans.loans[loan_id].interest.paid +
-    roi.apr_on_loans.loans[loan_id].interest.paid
-  )
-}
+// const roi_to_paid = (roi: RoI, loan_id: string) => {
+//   return (
+//     roi.apr_on_loans.loans[loan_id].interest.paid +
+//     roi.apr_on_loans.loans[loan_id].interest.paid
+//   )
+// }
 
 const get_exposure = (roi: RoI, loan: LoanInfo) => {
-  const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
-  const expectedByUser =
-    roi.apr_on_loans.loans[loan.request_id].principal.remain
-  return expectedByUser ? expectedByUser / totalOutstanding : 0
+  return 100
+  // const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
+  // const expectedByUser =
+  // roi.apr_on_loans.loans[loan.request_id].principal.remain
+  // return expectedByUser ? expectedByUser / totalOutstanding : 0
 }
 
 const InvestedLoans = ({ loans, roi }: Props) => (

@@ -5000,16 +5000,16 @@ export enum Update_Type_Update_Column {
 export type User = {
   __typename?: "user"
   account_details?: Maybe<Scalars["jsonb"]>
+  /** An array relationship */
+  approvedBorrowers: Array<CreditLine>
+  /** An aggregated array relationship */
+  approvedBorrowers_aggregate: CreditLine_Aggregate
   balance?: Maybe<Scalars["float8"]>
   created_at: Scalars["timestamptz"]
   /** An array relationship */
   creditLineByBorrower: Array<CreditLine>
   /** An aggregated array relationship */
   creditLineByBorrower_aggregate: CreditLine_Aggregate
-  /** An array relationship */
-  creditLineByInvestor: Array<CreditLine>
-  /** An aggregated array relationship */
-  creditLineByInvestor_aggregate: CreditLine_Aggregate
   demographic_info?: Maybe<Scalars["jsonb"]>
   email: Scalars["String"]
   /** An array relationship */
@@ -5044,6 +5044,24 @@ export type UserAccount_DetailsArgs = {
 }
 
 /** columns and relationships of "user" */
+export type UserApprovedBorrowersArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
+export type UserApprovedBorrowers_AggregateArgs = {
+  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
+  limit?: Maybe<Scalars["Int"]>
+  offset?: Maybe<Scalars["Int"]>
+  order_by?: Maybe<Array<CreditLine_Order_By>>
+  where?: Maybe<CreditLine_Bool_Exp>
+}
+
+/** columns and relationships of "user" */
 export type UserCreditLineByBorrowerArgs = {
   distinct_on?: Maybe<Array<CreditLine_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
@@ -5054,24 +5072,6 @@ export type UserCreditLineByBorrowerArgs = {
 
 /** columns and relationships of "user" */
 export type UserCreditLineByBorrower_AggregateArgs = {
-  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<CreditLine_Order_By>>
-  where?: Maybe<CreditLine_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserCreditLineByInvestorArgs = {
-  distinct_on?: Maybe<Array<CreditLine_Select_Column>>
-  limit?: Maybe<Scalars["Int"]>
-  offset?: Maybe<Scalars["Int"]>
-  order_by?: Maybe<Array<CreditLine_Order_By>>
-  where?: Maybe<CreditLine_Bool_Exp>
-}
-
-/** columns and relationships of "user" */
-export type UserCreditLineByInvestor_AggregateArgs = {
   distinct_on?: Maybe<Array<CreditLine_Select_Column>>
   limit?: Maybe<Scalars["Int"]>
   offset?: Maybe<Scalars["Int"]>
@@ -5229,10 +5229,10 @@ export type User_Bool_Exp = {
   _not?: Maybe<User_Bool_Exp>
   _or?: Maybe<Array<Maybe<User_Bool_Exp>>>
   account_details?: Maybe<Jsonb_Comparison_Exp>
+  approvedBorrowers?: Maybe<CreditLine_Bool_Exp>
   balance?: Maybe<Float8_Comparison_Exp>
   created_at?: Maybe<Timestamptz_Comparison_Exp>
   creditLineByBorrower?: Maybe<CreditLine_Bool_Exp>
-  creditLineByInvestor?: Maybe<CreditLine_Bool_Exp>
   demographic_info?: Maybe<Jsonb_Comparison_Exp>
   email?: Maybe<String_Comparison_Exp>
   events?: Maybe<Events_Bool_Exp>
@@ -5283,10 +5283,10 @@ export type User_Inc_Input = {
 /** input type for inserting data into table "user" */
 export type User_Insert_Input = {
   account_details?: Maybe<Scalars["jsonb"]>
+  approvedBorrowers?: Maybe<CreditLine_Arr_Rel_Insert_Input>
   balance?: Maybe<Scalars["float8"]>
   created_at?: Maybe<Scalars["timestamptz"]>
   creditLineByBorrower?: Maybe<CreditLine_Arr_Rel_Insert_Input>
-  creditLineByInvestor?: Maybe<CreditLine_Arr_Rel_Insert_Input>
   demographic_info?: Maybe<Scalars["jsonb"]>
   email?: Maybe<Scalars["String"]>
   events?: Maybe<Events_Arr_Rel_Insert_Input>
@@ -5378,10 +5378,10 @@ export type User_On_Conflict = {
 /** ordering options when selecting data from "user" */
 export type User_Order_By = {
   account_details?: Maybe<Order_By>
+  approvedBorrowers_aggregate?: Maybe<CreditLine_Aggregate_Order_By>
   balance?: Maybe<Order_By>
   created_at?: Maybe<Order_By>
   creditLineByBorrower_aggregate?: Maybe<CreditLine_Aggregate_Order_By>
-  creditLineByInvestor_aggregate?: Maybe<CreditLine_Aggregate_Order_By>
   demographic_info?: Maybe<Order_By>
   email?: Maybe<Order_By>
   events_aggregate?: Maybe<Events_Aggregate_Order_By>
@@ -5810,7 +5810,63 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
       | "user_type"
       | "balance"
       | "created_at"
-    >
+    > & {
+        approvedBorrowers: Array<
+          { __typename?: "creditLine" } & Pick<CreditLine, "borrower_id">
+        >
+        loan_requests: Array<
+          { __typename?: "loan_request" } & Pick<
+            Loan_Request,
+            "request_id" | "amount" | "purpose" | "state"
+          >
+        >
+        loans: Array<
+          { __typename?: "loan" } & Pick<
+            Loan,
+            | "loan_id"
+            | "principal"
+            | "principal_remaining"
+            | "principal_overdue"
+            | "interest_accrued"
+            | "interest_paid"
+            | "state"
+            | "tenor"
+            | "next_payment_amount"
+            | "next_payment_due_date"
+          > & {
+              loanRequest: { __typename?: "loan_request" } & Pick<
+                Loan_Request,
+                "purpose"
+              >
+            }
+        >
+        loansToRepay: Array<
+          { __typename?: "loan" } & Pick<
+            Loan,
+            | "next_payment_amount"
+            | "next_payment_due_date"
+            | "principal_overdue"
+            | "principal_remaining"
+            | "interest_accrued"
+          >
+        >
+        investedLoans: Array<
+          { __typename?: "lender_amount" } & Pick<
+            Lender_Amount,
+            "amount_lent"
+          > & {
+              loan: { __typename?: "loan" } & Pick<
+                Loan,
+                "loan_id" | "state" | "tenor" | "principal"
+              > & {
+                  borrowerInfo: { __typename?: "user" } & Pick<
+                    User,
+                    "first_name" | "last_name"
+                  >
+                }
+            }
+        >
+      }
   >
 }
 
@@ -6220,6 +6276,50 @@ export const GetUserByEmailDocument = gql`
       user_type
       balance
       created_at
+      approvedBorrowers {
+        borrower_id
+      }
+      loan_requests {
+        request_id
+        amount
+        purpose
+        state
+      }
+      loans {
+        loan_id
+        principal
+        principal_remaining
+        principal_overdue
+        interest_accrued
+        interest_paid
+        state
+        tenor
+        next_payment_amount
+        next_payment_due_date
+        loanRequest {
+          purpose
+        }
+      }
+      loansToRepay: loans(where: { state: { _in: [LIVE] } }) {
+        next_payment_amount
+        next_payment_due_date
+        principal_overdue
+        principal_remaining
+        interest_accrued
+      }
+      investedLoans: lender_amounts {
+        amount_lent
+        loan {
+          loan_id
+          state
+          tenor
+          principal
+          borrowerInfo {
+            first_name
+            last_name
+          }
+        }
+      }
     }
   }
 `
