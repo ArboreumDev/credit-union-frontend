@@ -128,7 +128,8 @@ export default function Onboarding({ user, userType }: Params) {
     setSubmitting(true)
     CreateUser.fetch({
       user: {
-        name: data.firstname + " " + data.lastname, // TODO: #154 Change DB to have separate first and last names
+        first_name: data.firstname,
+        last_name: data.lastname,
         user_type: userType,
         phone: data.phone,
         onboarded: true,

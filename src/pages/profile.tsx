@@ -44,7 +44,7 @@ export const Profile = ({ user }: Props) => {
     <Stack spacing={6}>
       <Stack>
         <Heading size="sm">Profile</Heading>
-        <Text>{user.name}</Text>
+        <Text>{user.first_name + " " + user.last_name}</Text>
         <Text>{user.email}</Text>
         <Text>{user.phone}</Text>
       </Stack>

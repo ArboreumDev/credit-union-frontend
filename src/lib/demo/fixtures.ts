@@ -4,6 +4,7 @@ import {
   InvestmentOptions,
   InvestmentOptionInfo,
   InvestedLoan,
+  LoanRepayInfo,
 } from "../types"
 import { Loan_Request_State_Enum, Loan_State_Enum } from "gql/sdk"
 
@@ -122,7 +123,8 @@ export class Fixtures {
   //   status: Loan_Request_State_Enum.Active,
   // }
 
-  static LoanLiveRepayInfo = {
+  static LoanLiveRepayInfo: LoanRepayInfo = {
+    loan_id: "5576df66-ef1c-4e82-ad21-70943dcecaf6",
     principal_remaining: 90000,
     principal_overdue: 0,
     interest_accrued: 100,
@@ -130,32 +132,35 @@ export class Fixtures {
     next_payment_due_date: "2021-08-29T04:12:17.878911+00:00",
   }
 
-  static LoanPartiallyRepaidRepayInfo = {
+  static LoanPartiallyRepaidRepayInfo: LoanRepayInfo = {
+    loan_id: "5576df66-ef1c-4e82-ad21-70943dcecaf6",
     principal_remaining: 60000,
+    principal_overdue: 0,
     interest_accrued: 200,
-    interest_paid: 100,
     next_payment_amount: 1300,
   }
 
-  static LoanOverdueRepayInfo = {
+  static LoanOverdueRepayInfo: LoanRepayInfo = {
+    loan_id: "5576df66-ef1c-4e82-ad21-70943dcecaf6",
     principal_remaining: 62000,
     principal_overdue: 2000,
     interest_accrued: 220,
-    interest_paid: 100,
     next_payment_amount: 1320,
   }
 
-  static LoanRepaidRepayInfo = {
+  static LoanRepaidRepayInfo: LoanRepayInfo = {
+    loan_id: "5576df66-ef1c-4e82-ad21-70943dcecaf6",
     principal_remaining: 0,
+    principal_overdue: 0,
     interest_accrued: 0,
-    interest_paid: 930,
     next_payment_amount: 0,
   }
 
-  static LoanDefaultRepayInfo = {
+  static LoanDefaultRepayInf: LoanRepayInfo = {
+    loan_id: "5576df66-ef1c-4e82-ad21-70943dcecaf6",
     principal_remaining: 30000,
+    principal_overdue: 25000,
     interest_accrued: 3000,
-    interest_paid: 930,
     next_payment_amount: 0,
   }
 
@@ -173,16 +178,19 @@ export class Fixtures {
 
   static LoanPartiallyRepaid = {
     ...Fixtures.LoanLive,
+    interest_paid: 200,
     ...Fixtures.LoanPartiallyRepaidRepayInfo,
   }
 
   static LoanOverdue = {
     ...Fixtures.LoanLive,
+    interest_paid: 210,
     ...Fixtures.LoanOverdueRepayInfo,
   }
 
   static LoanRepaid = {
     ...Fixtures.LoanLive,
+    interest_paid: 400,
     ...Fixtures.LoanRepaidRepayInfo,
     state: Loan_State_Enum.Repaid,
   }
@@ -191,8 +199,8 @@ export class Fixtures {
     // this is just a guess how that loan would look like:
     ...Fixtures.LoanPartiallyRepaid,
     state: Loan_State_Enum.Default,
-    principal_overdue: 3000,
     next_payment_amount: 0,
+    interest_paid: 350,
   }
 
   static InvestedLoanLive: InvestedLoan = {

@@ -24,6 +24,7 @@ export function RepaymentsForm({ user }: Props) {
     console.log(formData)
     MakeRepayment.fetch({
       amount: formData.amount,
+      loanId: user.loansToRepay[0].loan_id,
     })
       .then((res) => {
         router.push("/dashboard")

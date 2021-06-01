@@ -10,7 +10,7 @@ import {
 import DbClient from "gql/db_client"
 import { fetchJSON } from "lib/api"
 import { COMPANY_NAME } from "lib/constant"
-import { scenarioToYAML } from "lib/scenario"
+// import { scenarioToYAML } from "lib/scenario"
 import { GetServerSideProps } from "next"
 import { useState } from "react"
 import { GetAllUsersQuery } from "../../gql/sdk"
@@ -55,7 +55,7 @@ export default function Hello(props: {
           <Heading>Users</Heading>
           {users.map((user) => (
             <p key={user.id}>
-              {user.name} | KYC={"" + user.kyc_approved} |{" "}
+              {user.first_name} | KYC={"" + user.kyc_approved} |{" "}
               <a href={"/admin/toggle_kyc/" + user.email}>toggle kyc </a>
             </p>
           ))}
@@ -96,6 +96,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const dbClient = new DbClient()
   const allUsers = await dbClient.allUsers
-  const scenario = await scenarioToYAML(dbClient)
+  // const scenario = await scenarioToYAML(dbClient)
+  const scenario = {}
   return { props: { authorized: true, allUsers, scenario } }
 }

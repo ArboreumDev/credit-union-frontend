@@ -12,33 +12,33 @@
 // import { LoanRequestStatus, SupporterStatus } from "./types"
 // import yaml from "js-yaml"
 
-// export interface System {
-//   ,
-//   users: User[]
-//   actions: Action[]
-// }
+export interface System {
+  //   ,
+  users: User[]
+  actions: Action[]
+}
 
-// export interface User {
-//   name?: string
-//   email: string
-//   user_type: string
-// }
-// export interface DemographicInfo {
-//   education_years?: null
-//   income?: null
-//   credit_score?: null
-// }
-// export enum ActionType {
-//   ADJUST_BALANCES = "ADJUST_BALANCES",
-//   NEW_LOAN = "NEW_LOAN",
-//   CONFIRM_LOAN = "CONFIRM_LOAN",
-//   REPAY_LOAN = "REPAY_LOAN",
-// }
+export interface User {
+  name?: string
+  email: string
+  user_type: string
+}
+export interface DemographicInfo {
+  education_years?: null
+  income?: null
+  credit_score?: null
+}
+export enum ActionType {
+  ADJUST_BALANCES = "ADJUST_BALANCES",
+  NEW_LOAN = "NEW_LOAN",
+  CONFIRM_LOAN = "CONFIRM_LOAN",
+  REPAY_LOAN = "REPAY_LOAN",
+}
 
-// export interface Action {
-//   action_type: ActionType
-//   payload: any
-// }
+export interface Action {
+  action_type: ActionType
+  payload: any
+}
 
 // // from stack overflow
 // export function uuidv4() {

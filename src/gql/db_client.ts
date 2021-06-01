@@ -13,10 +13,7 @@ import {
   LogEventTypes as LogEventType,
   MIN_SUPPORT_RATIO,
 } from "../lib/constant"
-import {
-  createStartLoanInputVariables,
-  generateUpdateAsSingleTransaction,
-} from "../lib/loan_helpers"
+import { generateUpdateAsSingleTransaction } from "../lib/loan_helpers"
 import {
   BorrowerInfo,
   DemographicInfo,

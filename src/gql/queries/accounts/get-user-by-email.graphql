@@ -36,6 +36,7 @@ query GetUserByEmail($email: String!) {
       }
     }
     loansToRepay: loans( where: {state: {_in: [LIVE]}}) {
+      loan_id
       next_payment_amount
       next_payment_due_date
       principal_overdue

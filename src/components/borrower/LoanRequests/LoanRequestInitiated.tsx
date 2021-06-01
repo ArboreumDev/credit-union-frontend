@@ -10,8 +10,6 @@ import {
 import { LoanRequest, SupporterStatus } from "lib/types"
 import { CgFileDocument } from "react-icons/cg"
 import { Currency } from "../../common/Currency"
-import AddSupporter from "../CreateLoan/AddSupporter"
-import SupportersList from "../CreateLoan/SupportersList"
 
 interface Props {
   loanRequest: LoanRequest

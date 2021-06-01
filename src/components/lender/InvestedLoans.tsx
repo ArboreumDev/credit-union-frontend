@@ -1,11 +1,10 @@
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
-import { RoI, InvestedLoan, LoanInfo } from "../../lib/types"
+import { InvestedLoan, LoanInfo } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import { Loan_State_Enum } from "../../gql/sdk"
 
 interface Props {
   loans: InvestedLoan[]
-  roi: RoI
 }
 
 const loanStatusToText = {
@@ -28,7 +27,7 @@ const loanStatusToText = {
 //   )
 // }
 
-const get_exposure = (roi: RoI, loan: LoanInfo) => {
+const get_exposure = (loan: InvestedLoan) => {
   return 100
   // const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
   // const expectedByUser =
@@ -36,7 +35,7 @@ const get_exposure = (roi: RoI, loan: LoanInfo) => {
   // return expectedByUser ? expectedByUser / totalOutstanding : 0
 }
 
-const InvestedLoans = ({ loans, roi }: Props) => (
+const InvestedLoans = ({ loans }: Props) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Loans</Heading>
@@ -53,36 +52,25 @@ const InvestedLoans = ({ loans, roi }: Props) => (
       <Box flex="1">Earned Interest</Box>
       <Box flex="1">Expected Interest</Box>
     </Flex>
-    {loans.map((loan) => (
-      <Flex key={loan.loan_id}>
+    {loans.map((l) => (
+      <Flex key={l.loan.loan_id}>
         <Box verticalAlign="center" flex="1">
-          <Currency amount={loan.loan_request.amount} />
+          <Currency amount={l.amount_lent} />
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{loanStatusToText[loan.loan_request.status]}</Text>
+          <Text>{loanStatusToText[l.loan.state]}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>
-            {Math.round(
-              100 * get_exposure(roi, loan.loan_request.loan as LoanInfo)
-            ) + "%"}
-          </Text>
+          <Text>{Math.round(100 * get_exposure(l)) + "%"}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
           <Text>{"July 2021"}</Text>
         </Box>
         <Box flex="1">
-          <Currency
-            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || 0}
-          />
+          <Currency amount={4444} />
         </Box>
         <Box flex="1">
-          <Currency
-            amount={
-              Math.abs(roi.apr_on_loans.loans[loan.loan_id]?.interest.remain) ||
-              0
-            }
-          />
+          <Currency amount={5555} />
         </Box>
       </Flex>
     ))}

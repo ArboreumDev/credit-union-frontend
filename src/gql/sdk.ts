@@ -5843,6 +5843,7 @@ export type GetUserByEmailQuery = { __typename?: "query_root" } & {
         loansToRepay: Array<
           { __typename?: "loan" } & Pick<
             Loan,
+            | "loan_id"
             | "next_payment_amount"
             | "next_payment_due_date"
             | "principal_overdue"
@@ -6301,6 +6302,7 @@ export const GetUserByEmailDocument = gql`
         }
       }
       loansToRepay: loans(where: { state: { _in: [LIVE] } }) {
+        loan_id
         next_payment_amount
         next_payment_due_date
         principal_overdue
