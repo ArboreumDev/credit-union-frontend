@@ -1,5 +1,5 @@
-mutation ApproveBorrower ($creditLine: creditLine_insert_input!) {
-  insert_creditLine_one (object: $creditLine) {
+mutation ApproveBorrower ($creditLine: credit_line_insert_input!) {
+  insert_credit_line_one (object: $creditLine) {
     borrower_id
     investor_id
   }

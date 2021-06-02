@@ -2,7 +2,7 @@ mutation ResetDB {
   delete_update_log(where: {}) {
     affected_rows
   }
-  delete_creditLine(where: {}) {
+  delete_credit_line(where: {}) {
     affected_rows
   }
   delete_repayment(where: {}) {

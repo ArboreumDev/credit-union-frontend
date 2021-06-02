@@ -4,7 +4,7 @@
   is_enum: true
 - table:
     schema: public
-    name: creditLine
+    name: credit_line
   object_relationships:
     - name: userByBorrower
       using:
@@ -103,14 +103,14 @@
           column: investor_id
           table:
             schema: public
-            name: creditLine
+            name: credit_line
     - name: creditLineByBorrower
       using:
         foreign_key_constraint_on:
           column: borrower_id
           table:
             schema: public
-            name: creditLine
+            name: credit_line
     - name: events
       using:
         foreign_key_constraint_on:
