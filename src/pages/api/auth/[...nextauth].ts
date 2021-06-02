@@ -37,8 +37,8 @@ const options = {
 
       if (_user) s = { ...s, user: _user }
       if (_user?.user_type === UserType.Lender) {
-        // const { borrowers } = await dbClient.sdk.GetBorrowers()
-        // s = { ...s, options: borrowers }
+        const { borrowers } = await dbClient.sdk.GetBorrowers()
+        s = { ...s, options: borrowers }
       }
 
       return Promise.resolve(s)
