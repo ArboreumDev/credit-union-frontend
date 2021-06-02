@@ -95,7 +95,9 @@ export default class BorrowerModel {
         {!this.hasLoanReq && !this.ongoingLoan && (
           <CreateLoanForm user={this.user} />
         )}
-        {/* {this.hasLoanReq && TODO show active LoanReqquest} */}
+        {this.hasLoanReq && (
+          <BLoanRequestInitiated loanRequest={this.activeRequest} />
+        )}
         {this.ongoingLoan && <BActiveLoan loan={this.ongoingLoan} />}
       </Container>
     )

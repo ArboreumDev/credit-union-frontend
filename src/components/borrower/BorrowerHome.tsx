@@ -12,6 +12,7 @@ interface Props {
 
 const BorrowerHome = ({ user, initPanelIdx }: Props) => {
   const borrower = new BorrowerModel(user)
+  console.log("model is", borrower.mainComponent)
   const tabs = [
     new TabComponent(
       "Dashboard",
