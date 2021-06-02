@@ -8,28 +8,7 @@ import {
   GetLoanQuery,
 } from "../../src/gql/sdk"
 
-import {
-  DEFAULT_RECOMMENDATION_RISK_PARAMS,
-  LogEventTypes as LogEventType,
-  MIN_SUPPORT_RATIO,
-} from "../lib/constant"
-import { generateUpdateAsSingleTransaction } from "../lib/loan_helpers"
-import {
-  BorrowerInfo,
-  DemographicInfo,
-  PortfolioUpdate,
-  Scenario,
-  SupporterInfo,
-  SupporterStatus,
-  UserInfo,
-  LoanRequestInfo,
-  LoanInfo,
-  LoanOffer,
-  SystemUpdate,
-  UserType,
-  LoanState,
-} from "../lib/types"
-import DecentroClient from "./wallet/decentro_client"
+import { LogEventTypes as LogEventType } from "../lib/constant"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
 import { uuidv4 } from "lib/helpers"
@@ -39,7 +18,7 @@ import {
   DEFAULT_PENALTY_APR,
   COMPOUNDING_FREQ,
 } from "lib/constant"
-import { dbClient } from "../../tests/src/common/utils"
+// import { dbClient } from "../../tests/src/common/utils"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -50,7 +29,6 @@ export default class DbClient {
   public sdk: Sdk
   public gqlClient: GraphQLClient
   public swarmAIClient: SwarmAIClient
-  public decentroClient: DecentroClient
 
   constructor(_client?: GraphQLClient, _swarmai_client?: SwarmAIClient) {
     if (DbClient.instance) {
