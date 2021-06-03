@@ -5,6 +5,7 @@ import { exampleCircleAccounts } from "../../fixtures/exampleCircleAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { UserTransaction } from "lib/types"
 import { circle } from "../common/utils"
+import { time } from "console"
 
 global.fetch = require("node-fetch")
 
@@ -118,7 +119,7 @@ describe("Circle tests", () => {
         sampleAlgoAddress1,
         1
       )
-      sleep(1000)
+      sleep(2000)
 
       expect(await circle.getBalance(w1)).toBe(before - 1)
 
@@ -128,31 +129,6 @@ describe("Circle tests", () => {
       expect(tx).toBeTruthy
       expect(tx.type).toBe("Withdrawal")
       expect(tx.destination).toBe("ALGO")
-    })
-  })
-
-  describe("process Deposits", () => {
-    const user1 = exampleCircleAccounts[0]
-    test("completed deposits are transfered to user accounts", async () => {
-      const deposits = await circle.processDeposits(
-        user1.accountId,
-        user1.walletId
-      )
-      // NOTE: i manually did four wire deposits so I expect those to show up
-      expect(deposits.total).toBe(4)
-    })
-
-    test("deposits show in history", async () => {
-      const history = await circle.getHistory(user1.walletId, user1.accountId)
-      // check for the one deposit over 300
-      const txs = history.filter(
-        (x: UserTransaction) =>
-          x.type === "Deposit" && x.details.amount.amount === "300.00"
-      )
-      expect(txs.length).toBe(1)
-      expect(txs[0].destination).toBe("WALLET")
-      expect(txs[0].source).toBe("BANK")
-      expect(txs[0].type).toBe("Deposit")
     })
   })
 
@@ -176,9 +152,16 @@ describe("Circle tests", () => {
       expect(sourceWalletId).toBe(userData.sourceWalletId)
       expect(status).toBe("pending")
       expect(amount.amount).toBe("1.10")
+
       const after = await circle.getBalance(user1.walletId)
-      // somehow we get .2000000000002 here Less
-      expect(Math.abs(after - (before - 1.1))).toBeLessThan(0.1)
+      const updatedPayout = await circle.getPayoutById(id)
+      if (updatedPayout.status === "pending") {
+        // somehow we get .2000000000002 here Less
+        expect(Math.abs(after - (before - 1.1))).toBeLessThan(0.1)
+      } else {
+        console.log("unexpected status: ", updatedPayout)
+        expect(false).toBeTruthy
+      }
     })
 
     test("get payouts", async () => {
@@ -196,6 +179,33 @@ describe("Circle tests", () => {
       expect(tx).toBeTruthy
       expect(tx.destination).toBe("BANK")
       expect(tx.type).toBe("Withdrawal")
+    })
+  })
+
+  describe("process Deposits", () => {
+    // TODO in other order these tests were flaky, reversing the order here solved it
+    // maybe we can find a more robust solution
+    const user1 = exampleCircleAccounts[0]
+    test("completed deposits are transfered to user accounts", async () => {
+      const deposits = await circle.processDeposits(
+        user1.accountId,
+        user1.walletId
+      )
+      // NOTE: i manually did four wire deposits so I expect those to show up
+      expect(deposits.total).toBe(4)
+    })
+
+    test("deposits show in history", async () => {
+      const history = await circle.getHistory(user1.walletId, user1.accountId)
+      // check for the one deposit over 300
+      const txs = history.filter(
+        (x: UserTransaction) =>
+          x.type === "Deposit" && x.details.amount.amount === "300.00"
+      )
+      expect(txs.length).toBe(1)
+      expect(txs[0].destination).toBe("WALLET")
+      expect(txs[0].source).toBe("BANK")
+      expect(txs[0].type).toBe("Deposit")
     })
   })
 })
