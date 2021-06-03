@@ -285,3 +285,182 @@ export type SystemUpdate = {
   loans: LoansUpdate
   accounts: AccountsUpdate
 }
+
+export interface BlockchainDestination {
+  type: string
+  address: string
+  chain: string
+  addressTag?: string
+}
+
+export interface WalletDestination {
+  type: string
+  id: string
+}
+
+export interface CreateTransferPayload {
+  idempotencyKey: string
+  source: {
+    type: string // "wallet" | "blockchain"
+    id: string
+  }
+  destination: BlockchainDestination | WalletDestination
+  amount: {
+    amount: string
+    currency: string
+  }
+}
+
+export interface Payment {
+  id: string
+  type: string
+  merchantId: string
+  merchantWalletId: string
+  source: {
+    id: string
+    type: string
+  }
+  description: string
+  amount: {
+    amount: string
+    currency: string
+  }
+  fees: {
+    amount: string
+    currency: string
+  }
+  status: string
+  refunds: any
+  createDate: string
+  updateDate: string
+}
+
+export interface Transfer {
+  id: string
+  source: {
+    type: string
+    id: string
+  }
+  destination: {
+    type: string
+    id: string
+  }
+  amount: {
+    amount: string
+    currency: string
+  }
+  status: string
+  createDate: string
+}
+
+export type DepositInfo = {
+  pending: Array<Payment>
+  settled: Array<Payment>
+  total: number
+}
+
+export interface CreatePayoutPayload {
+  idempotencyKey: string
+  source?: {
+    id: string
+    type: string
+  }
+  destination: {
+    id: string
+    type: string // wire | ach
+  }
+  amount: {
+    amount: string
+    currency: string // USD
+  }
+  metadata: {
+    beneficiaryEmail: string
+  }
+}
+
+type TxType = "Deposit" | "Withdrawal" | "Investment" | "Pledge" | "Repayment"
+type Medium = "BANK" | "ETH" | "ALGO" | "WALLET"
+
+export type UserTransaction = {
+  type: TxType
+  amount: string
+  createDate: string
+  status: string
+  destination: Medium
+  source: Medium
+  details: any
+}
+
+type Amount = {
+  amount: string
+  currency: string
+}
+
+type PaymentSource = {
+  id: string
+  type: string
+}
+
+export type CirclePayment = {
+  id: string
+  type: string
+  merchantId: string
+  merchantWalletId: string
+  amount: Amount
+  source: PaymentSource
+  description: string
+  status: string
+  cancel?: any
+  refunds: any[]
+  createDate: string
+  updateDate: string
+}
+
+export type PayoutDestination = {
+  type: string
+  id: string
+  name: string
+}
+type CircleRiskEvaluation = {
+  decision: string
+  reason: string
+}
+
+export type CirclePayout = {
+  id: string
+  sourceWalletId: string
+  destination: PayoutDestination
+  amount: Amount
+  fees: Amount
+  status: string
+  trackingRef: string
+  errorCode: string
+  riskEvaluation: CircleRiskEvaluation
+  return: any
+  createDate: string
+  updateDate: string
+}
+
+type TransferSource = {
+  type: string
+  id: string
+  chain?: string
+}
+
+type TransferDestination = {
+  type: string
+  address: string
+  addressTag: string
+  chain: string
+}
+export type CircleTransfer = {
+  id: string
+  source: TransferSource
+  destination: TransferDestination
+
+  amount: Amount
+  transactionHash: string
+  status: string
+  errorCode: string
+  createDate: string
+}

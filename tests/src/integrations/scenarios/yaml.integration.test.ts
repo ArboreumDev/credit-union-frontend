@@ -21,6 +21,7 @@ afterAll(async () => {
   await sdk.ResetDB()
 })
 
+// Runnning those will take a looong time, only do when you know what you want to test
 describe.skip("run all scenarios from files ", () => {
   test("simple scenario", async () => {
     const scenario = await execScenario("tests/fixtures/scenarios/simple.yaml")

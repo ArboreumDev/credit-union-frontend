@@ -18,5 +18,6 @@ query GetAllUsers {
       state
       principal
     }
+    account_details
   }
 }

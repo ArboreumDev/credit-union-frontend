@@ -7,6 +7,12 @@ import {
   LoanRepayInfo,
 } from "../types"
 import { Loan_Request_State_Enum, Loan_State_Enum } from "gql/sdk"
+import {
+  exampleWireAccounts,
+  exampleDepositAccounts,
+} from "../../../tests/fixtures/exampleWireAccounts"
+import { exampleCircleAccounts } from "../../../tests/fixtures/exampleCircleAccounts"
+import { CircleAccountInfo } from "gql/wallet/circle_client"
 
 export class Fixtures {
   static Lender: User = {
@@ -25,6 +31,15 @@ export class Fixtures {
     investedLoans: [],
     loans: [],
     loansToRepay: [],
+    account_details: {
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[0],
+      } as CircleAccountInfo,
+      bankDetails: {
+        ...exampleWireAccounts[0].bankDetails,
+      },
+    },
   }
 
   static LenderOnboarded: User = {
@@ -84,6 +99,13 @@ export class Fixtures {
     loan_requests: [],
     loans: [],
     loansToRepay: [],
+    account_details: {
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[1],
+      } as CircleAccountInfo,
+      bankDetails: { ...exampleWireAccounts[1].bankDetails },
+    },
   }
 
   // TODO: think about when and how to make borrowers wait for kyc-appoval

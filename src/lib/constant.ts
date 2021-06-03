@@ -45,6 +45,14 @@ export const USER_DEMOGRAPHIC = {
   education_years: 3,
   income: 300,
   credit_score: 600,
+  address: {
+    line1: "moon crater",
+    line2: "",
+    postalCode: "010100",
+    district: "MA",
+    country: "US",
+    city: "Boston",
+  },
 }
 
 export const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
@@ -60,3 +68,22 @@ export const NO_ROI: RoI = {
 }
 
 export const ADMIN_EMAIL = "dev@arboreum.dev"
+
+export const DUMMY_ACCOUNT = {
+  bankDetails: {
+    bankName: "MoonBank",
+    accountNumber: "12323423424",
+    routingNumber: "123123123",
+    branchCode: "sdfsdf",
+    accountType: "CURRENT",
+    iban: "DE31100400480532013000",
+    bankAddress: {
+      city: "Berlin",
+      country: "DE",
+      line1: "",
+      line2: "",
+      district: "",
+      postalCode: "12050",
+    },
+  },
+}
