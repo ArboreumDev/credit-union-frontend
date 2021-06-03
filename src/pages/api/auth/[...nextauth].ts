@@ -7,10 +7,11 @@ const dbClient = new DbClient()
 
 const options = {
   database: process.env.DATABASE_URL,
+  session: { jwt: true },
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Arboreum",
+      name: "email",
       credentials: {
         username: { label: "Email", type: "text", placeholder: "" },
         // password: { label: "Password", type: "password" }
