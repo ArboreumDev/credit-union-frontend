@@ -221,6 +221,72 @@ export default class DbClient {
     })()
   }
 
+  /**
+   * - get all latest deposists into our circle masterwallet.
+   * - credit the correct investor-wallet (identified by the source-id of the deposit)
+   * NOTE:by default and without pagination managemnt from our side, it will only fetch the last 1000 or so
+   * so for now we assume that we call this function daily and that we have <1000 deposits a day
+   */
+  processDeposits = async () => {
+    // go over all deposits
+    console.log("todo")
+  }
+
+  /**
+   * - for each loan-wallets (loan.status live), fetch all latest transfers
+   * - figure out the new adjusted terms of the loan (taking the array of repayments as input)
+   * - forward the money to lenders (assuming only one lender for now)
+   *    -> for each transfer create a 'forwarding-Tx' using the ID of the transfer as idemKey of the forwardingTx
+   *    -> always forward entire amount to lender unless that would be overpaying (NOTE: prevent overpaying here, keep whats left in wallet!)
+   *     NOTE: that way only new transfers will actually be executed
+   * - update the DB with new loan-state-info (outstanding payemnts, next_due_date, repaid_x....)
+   * - TODO notify users if the new-state differs from old (e.g. new tx, new-loan-state...)
+   */
+  processRepayments = async (loanId = "all") => {
+    console.log("todo")
+  }
+
+  /**
+   * go through all requests that are live and check if
+   * - there is a lender that has approved the borrower AND who has sufficient balance
+   * -> fund loan
+   * NOTE: lets asssume we do this every 12h or every 24h
+   */
+  processOpenRequests = async (approvedByLender = "all") => {
+    console.log("todo")
+  }
+
+  /**
+   * balance increases can come from
+   * - 1) repayments
+   * - 2) deposits via master wallet (triggered by us)
+   * - 3) direct deposits from external crypto accounts (see below)
+   * TODO: notify User
+   */
+  processBalanceIncrease = async (lender = "all") => {
+    // can by caused by a crypto-deposit, which will go directly into a lender Wallet
+    // ?? when to trigger that?
+    // processOpenRequests will ultimately have the same consequences, so
+    console.log("todo")
+  }
+
+  /**
+   * direct deposit into lender account
+   * get transfer where lender wallet is target_id, see if they originate from a blockchain
+   * BUT: how do we know that a transfer is newly credited? => maybe if its date is no older than 24?
+   * @param lender
+   */
+  processDirectDeposits = async (lender = "all") => {
+    console.log("todo")
+  }
+
+  /**
+   * lets do a smart combination of the above functions
+   */
+  reconcile = async () => {
+    console.log("todo")
+  }
+
   logEvent = async (
     eventType: LogEventType,
     eventData?: any,
