@@ -160,7 +160,7 @@ export function WithdrawFundsForm({ user }: Props) {
               <Text>Your Withdrawal will be credited to this account: </Text>
               <BankAccount
                 account={user.account_details.bankDetails}
-                owner={user.name}
+                owner={`{$user.first_name} ${user.last_name}`}
                 ownerDescription="Beneficiary"
               />
             </Box>

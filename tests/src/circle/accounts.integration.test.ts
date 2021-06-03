@@ -1,8 +1,7 @@
 import CircleClient, {
   CreateWireAccountPayload,
 } from "gql/wallet/circle_client"
-import { uuidv4 } from "../../../src/lib/scenario"
-import { exampleCards } from "../../fixtures/exampleCards"
+import { uuidv4 } from "lib/helpers"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { circle } from "../common/utils"

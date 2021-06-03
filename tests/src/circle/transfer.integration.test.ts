@@ -1,5 +1,5 @@
 import { WithdrawalUserData } from "gql/wallet/circle_client"
-import { uuidv4 } from "../../../src/lib/scenario"
+import { uuidv4 } from "lib/helpers"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { exampleCircleAccounts } from "../../fixtures/exampleCircleAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
@@ -95,6 +95,7 @@ describe("Circle tests", () => {
         sampleEthAddress1,
         1
       )
+      sleep(1000)
 
       expect(await circle.getBalance(w1)).toBe(before - 1)
 
@@ -117,6 +118,7 @@ describe("Circle tests", () => {
         sampleAlgoAddress1,
         1
       )
+      sleep(1000)
 
       expect(await circle.getBalance(w1)).toBe(before - 1)
 
@@ -136,8 +138,8 @@ describe("Circle tests", () => {
         user1.accountId,
         user1.walletId
       )
-      // NOTE: i manually did two wire deposits so I expect those to show up
-      expect(deposits.total).toBe(2)
+      // NOTE: i manually did four wire deposits so I expect those to show up
+      expect(deposits.total).toBe(4)
     })
 
     test("deposits show in history", async () => {

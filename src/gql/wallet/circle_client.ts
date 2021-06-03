@@ -15,7 +15,7 @@ import {
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { Bank } from "./bank"
 import { CreateUserMutationVariables, User_Insert_Input } from "../sdk"
-import { uuidv4 } from "../../lib/scenario"
+import { uuidv4 } from "lib/helpers"
 import AmountInput from "components/common/AmountInput"
 
 export enum CurrencyCode {
