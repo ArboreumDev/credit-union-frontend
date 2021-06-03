@@ -90,7 +90,6 @@ export default function Onboarding({ user, userType }: Params) {
     advanceTabs: boolean,
     tIndex: number = tabIndex
   ) => {
-    console.log("checking_for ", tIndex)
     const values = getValues()
     let allOk = true
     tabFields[tIndex].forEach((name) => {

@@ -59,7 +59,6 @@ export default class BorrowerModel {
     const tmp =
       this.hasActiveLoan &&
       this.loans.filter((ln) => Loan_State_Enum.Live === ln.state)[0]
-    console.log("tm", tmp)
     return tmp
   }
 

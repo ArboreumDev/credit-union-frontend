@@ -303,7 +303,7 @@ export default class CircleClient extends Bank {
       routingNumber: "",
       iban: user.account_details.bankDetails.iban,
       billingDetails: {
-        name: user.name,
+        name: `{$user.first_name} ${user.last_name}`,
         ...user.demographic_info.address,
       },
       bankAddress: {
