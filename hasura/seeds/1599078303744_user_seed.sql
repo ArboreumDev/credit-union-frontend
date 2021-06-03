@@ -7,8 +7,8 @@ INSERT INTO public."user" (id, created_at, updated_at, first_name, last_name, em
   ('230cff88-a594-4922-90cd-05938de5bdd5', '2020-09-01 18:05:33.10771+00', '2020-09-02 20:38:30.446776+00', 'Salman','Khan', 'salman@mail.com', 'lender', 70000,'{"father":{"lastName":"fatherLast","firstName":"fatherFirst"},"gender":"MALE","income":"2000000-1000000000","address":"somePlace 3000","zipCode":"40453","aadharPassword":"123"}' , '12312',  true, true, '{"rcAccount":{"branchCode":"FIXED","investor_id":"","accountNumber":""},"bankDetails":{"bankName":"example","branchCode":"123","accountType":"CURRENT","accountNumber":"1xxx"}}');
 
 -- Add Loan Request for amitabh bacchan
-INSERT INTO public.loan_request (borrower_id, created_at, amount, request_id, purpose) VALUES 
-  ('8653118e-7a00-4c4f-be53-0b2e04485db0', '2020-10-13 01:04:07.2256+00', 90000, '44c6d2cb-062c-4dac-a88f-0df0f32bba96', 'Educational expense');
+-- INSERT INTO public.loan_request (borrower_id, created_at, amount, request_id, purpose) VALUES 
+--   ('8653118e-7a00-4c4f-be53-0b2e04485db0', '2020-10-13 01:04:07.2256+00', 90000, '44c6d2cb-062c-4dac-a88f-0df0f32bba96', 'Educational expense');
 
 -- INSERT INTO public.supporters (request_id, supporter_id, pledge_amount, status, invest_in_corpus, participation_request_time, guarantee_division, info) VALUES 
 --   ('44c6d2cb-062c-4dac-a88f-0df0f32bba96', '230cff88-a594-4922-90cd-05938de5bdd0', 20000, 'unknown', true, '2020-10-13 01:04:37.41869+00', '{}', '{"name": "gp", "email": "gp@arboreum.dev", "amount": "2000", "known_since": "Aug 2011", "supporter_relation": "Manager"}'),

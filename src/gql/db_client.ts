@@ -142,7 +142,7 @@ export default class DbClient {
     // TODO try execturing payment of 'amount' on circle
     // TODO proportional to how the lenders funded it
     // dummy: pay back everything to the first lender
-    await dbClient.sdk.ChangeUserCashBalance({
+    await this.sdk.ChangeUserCashBalance({
       userId: loan.lender_amounts[0].lender_id,
       delta: amount,
     })
