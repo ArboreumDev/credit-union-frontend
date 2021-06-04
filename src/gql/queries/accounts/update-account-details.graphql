@@ -1,0 +1,9 @@
+mutation UpdateAccountDetails($userId: uuid!, $accountDetails: jsonb!) {
+  user: update_user_by_pk(
+    pk_columns: { id: $userId }
+    _set: { account_details: $accountDetails }
+  ) {
+    id
+    account_details
+  }
+}

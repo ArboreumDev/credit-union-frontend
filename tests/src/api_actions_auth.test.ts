@@ -4,11 +4,16 @@ import {
   AddSupporter,
   CreateLoan,
   CreateUser,
+  Withdraw,
+  WithdrawPayload,
   runAction,
 } from "lib/gql_api_actions"
 import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
+import { Fixtures } from "lib/demo/fixtures"
+import { exampleCircleAccounts } from "../fixtures/exampleCircleAccounts"
 import { dbClient, sdk } from "./common/utils"
+import { sampleEthAddress1 } from "../src/circle/transfer.integration.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -30,6 +35,47 @@ describe("Create new user", () => {
       dbClient
     )) as CreateUserMutation
     expect(res.insert_user_one.email === payload.user.email)
+    expect(res.insert_user_one.account_details.circle.walletId).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.ethAddress).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.algoAddress).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.algoAddress).not.toBe(
+      res.insert_user_one.account_details.circle.ethAddress
+    )
+    expect(res.insert_user_one.account_details.circle.trackingRef).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.accountId).toBeTruthy
+    expect(res.insert_user_one.account_details.circle.wireDepositAccount)
+      .toBeTruthy
+  })
+})
+
+describe("Create Withdrawal", () => {
+  const userData = Fixtures.Lender
+  afterAll(async () => {
+    await sdk.ResetDB()
+  })
+
+  test("crypto withdrawal", async () => {
+    const payload: WithdrawPayload = {
+      target: "ETH",
+      address: sampleEthAddress1,
+      amount: 1,
+    }
+    const { id, status, source, destination, amount } = await runAction(
+      Withdraw.Name,
+      { user: userData },
+      payload,
+      dbClient
+    )
+    expect(parseFloat(amount.amount)).toBe(1)
+    expect(status).toBe("pending")
+    expect(destination.chain).toBe("ETH")
+    expect(destination.address).toBe(sampleEthAddress1)
+    expect(destination.type).toBe("blockchain")
+    expect(source.id).toBe(userData.account_details.circle.walletId)
+  })
+
+  test.skip("wire withdrawal", async () => {
+    console.log("pass")
   })
 })
 

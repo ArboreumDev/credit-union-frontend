@@ -10,5 +10,6 @@ query GetAllUsers {
     corpus_share
     kyc_approved
     demographic_info
+    account_details
   }
 }

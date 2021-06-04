@@ -12,6 +12,7 @@ import {
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
+import { uuidv4 } from "./scenario"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -76,7 +77,27 @@ export class CreateUser extends Action {
       user.demographic_info = USER_DEMOGRAPHIC
     }
 
-    return await this.dbClient.sdk.CreateUser(this.payload)
+    // create user entry our DB
+    const ret = await this.dbClient.sdk.CreateUser(this.payload)
+
+    // circle setup using userId as idempotencyKey
+    const circleData = await this.dbClient.circleClient.setupUser(
+      ret.insert_user_one.id,
+      user
+    )
+
+    // update db with circle data
+    const data = await this.dbClient.sdk.UpdateAccountDetails({
+      userId: ret.insert_user_one.id,
+      accountDetails: {
+        ...user.account_details,
+        circle: circleData,
+      },
+    })
+
+    // update value to be returned
+    ret.insert_user_one.account_details = data.user.account_details
+    return ret
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
@@ -165,6 +186,63 @@ export class ChangeBalance extends Action {
 
   static fetch(payload: typeof ChangeBalance.InputType) {
     return fetcherMutate(ChangeBalance.Name, payload)
+  }
+}
+
+export type Target = "ETH" | "ALGO" | "BANK" | undefined
+export interface WithdrawPayload {
+  target: Target
+  address: string
+  amount: number
+}
+
+export class Withdraw extends Action {
+  static Name = "Withdraw"
+  static InputType: WithdrawPayload
+  minAuthLevel = AUTH_TYPE.USER
+
+  isUserAllowed() {
+    return super.isUserAllowed() // && this.user.user_type == UserType.Lender
+  }
+
+  async run() {
+    // how to make sure this is only called once?
+    const idemKey = uuidv4()
+    const circleData = this.user.account_details.circle
+    if (this.payload.target === "BANK") {
+      return this.dbClient.circleClient.createWireWithdrawal(
+        {
+          sourceWalletId: circleData.walletId,
+          targetAccountid: circleData.accountId,
+          email: this.user.email,
+        },
+        idemKey,
+        this.payload.amount
+      )
+    } else {
+      // target is ETH or ALGO
+      return this.dbClient.circleClient.walletToBlockchainTransfer(
+        circleData.walletId,
+        this.payload.target,
+        this.payload.address,
+        this.payload.amount,
+        idemKey
+      )
+      // scenario action to stay in sync
+      return await this.dbClient.sdk.InsertScenarioAction({
+        action: {
+          action_type: Action_Type_Enum.AdjustBalances,
+          payload: {
+            userEmail: this.user.email,
+            balanceDelta: -this.payload.amount,
+          },
+        },
+      })
+    }
+  }
+
+  static fetch(payload: typeof Withdraw.InputType) {
+    return fetcherMutate(Withdraw.Name, payload)
   }
 }
 
@@ -273,6 +351,7 @@ export const ACTIONS = {
   [AcceptRejectPledge.Name]: AcceptRejectPledge,
   [AcceptLoanOffer.Name]: AcceptLoanOffer,
   [MakeRepayment.Name]: MakeRepayment,
+  [Withdraw.Name]: Withdraw,
 }
 
 export async function runAction(

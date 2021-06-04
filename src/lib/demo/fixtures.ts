@@ -7,6 +7,12 @@ import {
   RoI,
 } from "../types"
 import { NO_ROI, ZERO_PAID_REMAIN } from "../constant"
+import {
+  exampleWireAccounts,
+  exampleDepositAccounts,
+} from "../../../tests/fixtures/exampleWireAccounts"
+import { exampleCircleAccounts } from "../../../tests/fixtures/exampleCircleAccounts"
+import { CircleAccountInfo } from "gql/wallet/circle_client"
 
 const ROI1: RoI = {
   total_apr: {
@@ -35,6 +41,15 @@ export class Fixtures {
     active_loans: [],
     loans_to_repay: [],
     roi: NO_ROI,
+    account_details: {
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[0],
+      } as CircleAccountInfo,
+      bankDetails: {
+        ...exampleWireAccounts[0].bankDetails,
+      },
+    },
   }
 
   static LoanReqInfo: LoanInfo = {
@@ -140,6 +155,13 @@ export class Fixtures {
         loan: Fixtures.LoanReqInfo,
       },
     ],
+    account_details: {
+      circle: {
+        wireDepositAccount: { ...exampleDepositAccounts[0] },
+        ...exampleCircleAccounts[1],
+      } as CircleAccountInfo,
+      bankDetails: { ...exampleWireAccounts[1].bankDetails },
+    },
   }
 
   static BorrowerKYCConfirmed: User = {

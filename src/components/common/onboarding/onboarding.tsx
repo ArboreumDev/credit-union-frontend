@@ -37,6 +37,7 @@ import UploadingDropzone from "./UploadingDropzone"
 import { useState } from "react"
 import { ST } from "next/dist/next-server/lib/utils"
 import { getEffectiveTypeParameterDeclarations } from "typescript"
+import { BankDetails, Address } from "../../../gql/wallet/circle_client"
 
 type FormData = {
   firstname: string
@@ -136,9 +137,19 @@ export default function Onboarding({ user, userType }: Params) {
           bankDetails: {
             bankName: data.bankName,
             accountNumber: data.accountNumber,
+            routingNumber: "",
             branchCode: data.ifsc,
             accountType: data.accountType,
-          },
+            iban: "DE31100400480532013000",
+            bankAddress: {
+              city: "Berlin",
+              country: "DE",
+              line1: "",
+              line2: "",
+              district: "",
+              postalCode: "12050",
+            },
+          } as BankDetails,
           rcAccount: {
             investor_id: "",
             accountNumber: "",
@@ -149,8 +160,14 @@ export default function Onboarding({ user, userType }: Params) {
           pan: data.pan,
           dob: "",
           gender: "",
-          address: data.address,
-          zipCode: data.zipCode,
+          address: {
+            line1: data.address,
+            line2: "",
+            postalCode: data.zipCode,
+            district: "MA",
+            country: "US",
+            city: "Boston",
+          } as Address,
           income: data.income, //.toString().replace(/,/g,'') to match RC categories
           father: {
             firstName: data.fatherFirstName,
