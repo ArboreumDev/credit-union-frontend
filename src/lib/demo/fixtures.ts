@@ -11,12 +11,13 @@ import {
   exampleWireAccounts,
   exampleDepositAccounts,
 } from "../../../tests/fixtures/exampleWireAccounts"
-import { exampleCircleAccounts } from "../../../tests/fixtures/exampleCircleAccounts"
+import { CircleFixtures } from "../../../tests/fixtures/exampleCircleAccounts"
 import { CircleAccountInfo } from "gql/wallet/circle_client"
+import { BORROWER1, LENDER1 } from "../../../tests/fixtures/basic_network"
 
 export class Fixtures {
   static Lender: User = {
-    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
+    id: "370dca39-f591-4ad4-b5fd-d1ba4fe55954",
     first_name: "Deepika Padukone",
     last_name: "",
     email: "deepika@mail.com",
@@ -33,9 +34,8 @@ export class Fixtures {
     loansToRepay: [],
     account_details: {
       circle: {
-        wireDepositAccount: { ...exampleDepositAccounts[0] },
-        ...exampleCircleAccounts[0],
-      } as CircleAccountInfo,
+        ...CircleFixtures.accounts.sampleWithHistory,
+      },
       bankDetails: {
         ...exampleWireAccounts[0].bankDetails,
       },
@@ -55,7 +55,7 @@ export class Fixtures {
   static InvestOptionAvailable: InvestmentOptionInfo = {
     first_name: "Amitabh",
     last_name: "Bachann",
-    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
+    id: BORROWER1.id,
     loan_requests: [
       {
         amount: 90000,
@@ -85,7 +85,7 @@ export class Fixtures {
   // static InvestOptions: InvestmentOptions = [ Fixtures.InvestOptionAvailable ]
 
   static Borrower: User = {
-    id: "3576df66-ef1c-4e82-ad21-70943dcecaf6",
+    id: BORROWER1.id,
     first_name: "Amitabh",
     last_name: "Bachchan",
     email: "bigb@mail.com",
@@ -101,8 +101,7 @@ export class Fixtures {
     loansToRepay: [],
     account_details: {
       circle: {
-        wireDepositAccount: { ...exampleDepositAccounts[0] },
-        ...exampleCircleAccounts[1],
+        ...CircleFixtures.accounts[BORROWER1.id],
       } as CircleAccountInfo,
       bankDetails: { ...exampleWireAccounts[1].bankDetails },
     },

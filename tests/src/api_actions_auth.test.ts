@@ -9,10 +9,16 @@ import {
   runAction,
   SetBorrowerApproval,
 } from "lib/gql_api_actions"
-import { BORROWER1, LENDER1, SUPPORTER1 } from "../fixtures/basic_network"
+import {
+  BORROWER1,
+  LENDER1,
+  SUPPORTER1,
+  LENDER2,
+  SUPPORTER2,
+  SUPPORTER3,
+} from "../fixtures/basic_network"
 import { getMockSession } from "../fixtures/session"
 import { Fixtures } from "lib/demo/fixtures"
-import { exampleCircleAccounts } from "../fixtures/exampleCircleAccounts"
 import { dbClient, sdk } from "./common/utils"
 import { sampleEthAddress1 } from "../src/circle/transfer.integration.test"
 
@@ -22,7 +28,7 @@ beforeAll(async () => {
 
 describe("Create new user", () => {
   afterAll(async () => {
-    await sdk.ResetDB()
+    // await sdk.ResetDB()
   })
 
   test("new user", async () => {

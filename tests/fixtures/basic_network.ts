@@ -1,18 +1,20 @@
 import { User_Insert_Input } from "../../src/gql/sdk"
 import { EDGE_STATUS, UserType, RiskParams } from "../../src/lib/types"
 import { DEFAULT_RECOMMENDATION_RISK_PARAMS } from "../../src/lib/constant"
+import { CircleFixtures } from "./exampleCircleAccounts"
 
 type User = User_Insert_Input
 type EdgeTuple = [string, string, number]
 
 // REFACTOR to user-input type
 export const LENDER1: User = {
-  id: "170dca39-f591-4ad4-b5fd-d1ba4fe55954",
+  id: CircleFixtures.registeredUserIds[1],
   phone: "1234",
   first_name: "rick",
   last_name: "sanchez",
   email: "rick@galaxy.io",
   user_type: "lender",
+  kyc_approved: true,
   demographic_info: {
     education_years: 50,
     income: 400000.0,
@@ -51,21 +53,18 @@ export const LENDER1: User = {
         postalCode: "01234",
       },
     },
-    rcAccount: {
-      investor_id: "INDV-22134",
-      accountNumber: "",
-      branchCode: "FIXED",
-    },
+    circle: CircleFixtures.accounts[CircleFixtures.registeredUserIds[1]],
   },
 }
 
 export const LENDER2: User = {
-  id: "270dca39-f591-4ad4-b5fd-d1ba4fe55954",
+  id: CircleFixtures.registeredUserIds[2],
   first_name: "summer",
   last_name: "smith",
   phone: "1234",
   email: "summer@highschool.io",
   user_type: "lender",
+  kyc_approved: true,
   demographic_info: {
     education_years: 5,
     income: 400.0,
@@ -74,7 +73,8 @@ export const LENDER2: User = {
       line1: "somePlace 8",
       line2: "",
       postalCode: "40000",
-      district: "",
+      district: "MA",
+      city: "Boston",
       country: "US",
     },
     gender: "MALE",
@@ -92,32 +92,29 @@ export const LENDER2: User = {
       branchCode: "ifsc-code",
       routingNumber: "",
       accountType: "CURRENT",
-      iban: "DE41100400480532013000",
+      iban: "BE71096123456769",
       bankAddress: {
-        city: "Boston",
-        country: "DE",
+        city: "Brussels",
+        country: "BE",
         line1: "",
         line2: "",
         district: "MA",
         postalCode: "01234",
       },
     },
-    rcAccount: {
-      investor_id: "INDV-22135",
-      accountNumber: "",
-      branchCode: "FIXED",
-    },
+    circle: CircleFixtures.accounts[CircleFixtures.registeredUserIds[2]],
   },
   balance: 200,
 }
 
 export const BORROWER1: User = {
-  id: "370dca39-f591-4ad4-b5fd-d1ba4fe55954",
+  id: CircleFixtures.registeredUserIds[0],
   phone: "1234",
   first_name: "morty",
   last_name: "smith",
   email: "morty@galaxy.io",
   user_type: "borrower",
+  kyc_approved: true,
   demographic_info: {
     education_years: 3,
     income: 300,
@@ -146,7 +143,7 @@ export const BORROWER1: User = {
       branchCode: "ifsc-code",
       routingNumber: "",
       accountType: "CURRENT",
-      iban: "DE31100400480532013000",
+      iban: "DE89370400440532013000",
       bankAddress: {
         city: "Kassel",
         country: "DE",
@@ -156,11 +153,7 @@ export const BORROWER1: User = {
         postalCode: "01234",
       },
     },
-    rcAccount: {
-      investor_id: "",
-      accountNumber: "",
-      branchCode: "FIXED",
-    },
+    circle: CircleFixtures.accounts[CircleFixtures.registeredUserIds[0]],
   },
 }
 
@@ -178,7 +171,8 @@ export const SUPPORTER1: User = {
       line1: "somePlace 8",
       line2: "",
       postalCode: "40000",
-      district: "",
+      city: "Boston",
+      district: "MA",
       country: "US",
     },
     gender: "MALE",
@@ -197,10 +191,10 @@ export const SUPPORTER1: User = {
       branchCode: "ifsc-code",
       routingNumber: "",
       accountType: "CURRENT",
-      iban: "DE61100400480532013000",
+      iban: "AT483200000012345864",
       bankAddress: {
-        city: "Boston",
-        country: "DE",
+        city: "Vienna",
+        country: "AT",
         line1: "",
         line2: "",
         district: "MA",
@@ -216,11 +210,12 @@ export const SUPPORTER1: User = {
 }
 
 export const SUPPORTER2: User = {
-  id: "980dca39-f591-4ad4-b5fd-d1ba4fe55954",
+  id: "988dca39-f591-4ad4-b5fd-d1ba4fe55954",
   first_name: "birdperson",
   email: "birdperson@galaxy.io",
   phone: "4321",
   user_type: "lender",
+  kyc_approved: true,
   demographic_info: {
     education_years: 10,
     income: 600.0,
@@ -229,7 +224,8 @@ export const SUPPORTER2: User = {
       line1: "somePlace 8",
       line2: "",
       postalCode: "40000",
-      district: "",
+      city: "Boston",
+      district: "MA",
       country: "US",
     },
     gender: "MALE",
@@ -248,10 +244,10 @@ export const SUPPORTER2: User = {
       branchCode: "ifsc-code",
       routingNumber: "",
       accountType: "CURRENT",
-      iban: "DE41100400480532013000",
+      iban: "FI1410093000123458",
       bankAddress: {
-        city: "Boston",
-        country: "DE",
+        city: "Helsinki",
+        country: "FI",
         line1: "",
         line2: "",
         district: "MA",
@@ -273,6 +269,7 @@ export const SUPPORTER3: User = {
   email: "scrunchy@galaxy.io",
   phone: "4321scrunch",
   user_type: "lender",
+  kyc_approved: true,
   demographic_info: {
     education_years: 1,
     income: 100.0,
@@ -280,8 +277,9 @@ export const SUPPORTER3: User = {
     address: {
       line1: "somePlace 8",
       line2: "",
+      city: "Boston",
       postalCode: "40000",
-      district: "",
+      district: "MA",
       country: "US",
     },
     gender: "MALE",
@@ -300,10 +298,10 @@ export const SUPPORTER3: User = {
       branchCode: "ifsc-code",
       routingNumber: "",
       accountType: "CURRENT",
-      iban: "DE41100400480532013000",
+      iban: "EE471000001020145685",
       bankAddress: {
-        city: "Boston",
-        country: "DE",
+        city: "Tallin",
+        country: "EE",
         line1: "",
         line2: "",
         district: "MA",

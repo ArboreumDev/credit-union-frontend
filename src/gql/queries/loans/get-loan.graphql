@@ -2,14 +2,28 @@ query GetLoan($loanId: uuid!) {
   loan: loan_by_pk(loan_id: $loanId) {
     loan_id
     state
+    tenor
+    created_at
+    apr
+    penalty_apr
+    principal
+    principal_overdue
     principal_remaining
+    interest_paid
+    interest_accrued
+    compounding_frequency
+    wallet_id
     repayments {
+        repayment_id
         date
         repaid_principal
         repaid_interest
     }
     lender_amounts {
       lender_id
+      lenderInfo {
+        account_details
+      }
       amount_lent
     }
   }

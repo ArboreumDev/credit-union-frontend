@@ -1,0 +1,16 @@
+query GetUpdates {
+	updates: update_log (
+    where: {}
+    ) {
+    update_id
+    type
+    updated_at
+    new_principal_remain
+    new_interest_paid
+    new_interest_accrued
+    repayment_id
+    new_next_payment_amount
+    new_next_payment_due_date
+    new_state 
+    }
+  }

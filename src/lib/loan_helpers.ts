@@ -1,9 +1,94 @@
-import { LoanInfo, PortfolioUpdate } from "./types"
-import { Sdk, Loan_Request_State_Enum } from "../gql/sdk"
-import DbClient from "gql/db_client"
+import { LoanTerms, PortfolioUpdate, LoanState } from "./types"
+import {
+  Loan_State_Enum,
+  Update_Log_Insert_Input,
+  Update_Type_Enum,
+} from "../gql/sdk"
 
 function toFloat8(x: number) {
   return parseFloat(x.toFixed(8))
+}
+
+export const loanAndNewStateToUpdate = (
+  loan,
+  latestLoanState,
+  type: Update_Type_Enum,
+  newLoanState,
+  repaymentId = ""
+) => {
+  const update = {
+    type,
+    loan_id: loan.loan_id,
+  } as Update_Log_Insert_Input
+  // replace only those that have changed
+  if (repaymentId) update.repayment_id = repaymentId
+  if (loan.principal_remaining !== latestLoanState.principal_remaining)
+    update.new_principal_remain = latestLoanState.principal_remaining
+  if (loan.principal_overdue !== latestLoanState.principal_overdue)
+    update.new_principal_overdue = latestLoanState.principal_overdue
+  if (loan.interest_accrued !== latestLoanState.interest_accrued)
+    update.new_interest_accrued = latestLoanState.interest_accrued
+  if (loan.interest_paid !== latestLoanState.interest_paid)
+    update.new_interest_paid = latestLoanState.interest_paid
+  if (loan.next_payment_amount !== latestLoanState.next_payment_amount)
+    update.new_next_payment_amount = latestLoanState.next_payment_amount
+  if (loan.next_payment_due_date !== latestLoanState.next_payment_due_date)
+    update.new_next_payment_due_date = latestLoanState.next_payment_due_date
+  if (loan.penalty_accrued !== latestLoanState.penalty_accrued)
+    update.new_penalty_accrued = latestLoanState.penalty_accrued
+  if (loan.state !== newLoanState) update.new_state = newLoanState
+  return update
+}
+
+export const loanToTerms = (loan) => {
+  return {
+    apr: loan.apr,
+    penalty_apr: loan.penalty_apr,
+    principal: loan.principal,
+    tenor: loan.tenor,
+    compounding_frequency: loan.compounding_frequency,
+    start_date: loan.created_at,
+  } as LoanTerms
+}
+
+export const loanStateToUpdateInput = (l: LoanState) => {
+  return {
+    new_principal_remain: l.principal_remaining,
+    new_principal_overdue: l.principal_overdue,
+    new_interest_accrued: l.interest_accrued,
+    new_interest_paid: l.interest_paid,
+    new_next_payment_amount: l.next_payment_amount,
+    new_next_payment_due_date: l.next_payment_due_date,
+  }
+}
+
+export const loanStateToLoanInput = (l: LoanState) => {
+  return {
+    newPrincipalRemaining: l.principal_remaining,
+    newPrincipalOverdue: l.principal_overdue,
+    newInterestAccrued: l.interest_accrued,
+    newInterestPaid: l.interest_paid,
+    newNextPaymentAmount: l.next_payment_amount,
+    newNextPaymentDueDate: l.next_payment_due_date,
+  }
+}
+
+export const getTotalPaid = (principal, loan) => {
+  return principal - loan.principal_remaining + loan.interest_paid
+}
+
+export const getTotalOutstanding = (loan) => {
+  return (
+    loan.principal_remaining + loan.interest_accrued + loan.principal_overdue
+  )
+}
+
+export const getLoanState = (loan) => {
+  const newLoanState =
+    loan.principal_remaining - getTotalOutstanding(loan) > 0
+      ? Loan_State_Enum.Live
+      : Loan_State_Enum.Repaid
+  return newLoanState
 }
 
 /**

@@ -1,6 +1,5 @@
-import { MIN_SUPPORT_RATIO } from "lib/constant"
 import { Loan_Request_State_Enum } from "../../../src/gql/sdk"
-import { BORROWER1, SUPPORTER1 } from "../../fixtures/basic_network"
+import { BORROWER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
 
 beforeAll(async () => {

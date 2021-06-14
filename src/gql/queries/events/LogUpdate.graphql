@@ -1,0 +1,6 @@
+mutation LogUpdate ($update: update_log_insert_input!) {
+  insert_update_log_one (object: $update) {
+   update_id
+   type 
+  }
+}

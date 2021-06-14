@@ -1,0 +1,11 @@
+query GetLoanState ($loanId: uuid!) {
+  loan: loan_by_pk(loan_id: $loanId) {
+    state
+    principal_remaining
+    principal_overdue
+    interest_accrued
+    interest_paid
+    next_payment_amount
+    next_payment_due_date
+  }
+}

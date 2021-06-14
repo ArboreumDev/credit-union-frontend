@@ -1,0 +1,13 @@
+mutation UpdateUserBalance(
+    $userId: uuid!, 
+    $newBalance: float8,
+    ) {
+  user: update_user_by_pk(
+    pk_columns: { id: $userId }
+    _set: { 
+        balance: $newBalance
+    }
+  ) {
+      balance
+  }
+}

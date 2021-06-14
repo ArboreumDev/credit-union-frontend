@@ -150,6 +150,7 @@ export class SetBorrowerApproval extends Action {
     // add borrower entry
     if (this.payload.approved) {
       await this.dbClient.sdk.ApproveBorrower({ creditLine })
+      await this.dbClient.processOpenRequests(this.user.id)
     } else {
       await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
     }

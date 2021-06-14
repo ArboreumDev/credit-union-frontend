@@ -1,6 +1,6 @@
 import lender from "components/dashboard/lender"
 import DbClient from "gql/db_client"
-import { SupporterStatus } from "../../../src/lib/types"
+import { uuidv4 } from "lib/helpers"
 
 export const getUserPortfolio = (userList) => {
   const ret = {}
@@ -38,11 +38,14 @@ export const createFundedLoan = async (
     amount,
     purpose
   )
-  if (Math.abs(doLenderDeposit))
-    await dbClient.sdk.ChangeUserCashBalance({
-      userId: lenderId,
-      delta: doLenderDeposit,
-    })
+  if (Math.abs(doLenderDeposit)) {
+    const { user } = await dbClient.sdk.GetAccountDetails({ id: lenderId })
+    await dbClient.circleClient.fundFromMasterWallet(
+      user.account_details.circle.walletId,
+      amount,
+      uuidv4()
+    )
+  }
   const { newLoan } = await dbClient.fundLoanRequest(requestId, lenderId)
-  return newLoan.loan_id
+  return { loanId: newLoan.loan_id, walletId: newLoan.wallet_id }
 }

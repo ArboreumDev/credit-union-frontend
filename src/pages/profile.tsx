@@ -86,7 +86,7 @@ export const Profile = ({ user }: Props) => {
       <LogoutButton />
       <Divider />
       <Box minW="xl">
-        <FundsHistory transfers={user.account_details.circle.history} />
+        {/* <FundsHistory transfers={user.account_details.circle.history} /> */}
       </Box>
     </Stack>
   )

@@ -5,9 +5,9 @@ name: Node CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, algorandMaster ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, algorandMaster ]
 
 jobs:
   build:

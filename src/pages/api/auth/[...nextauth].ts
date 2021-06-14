@@ -6,8 +6,8 @@ import DbClient from "gql/db_client"
 const dbClient = new DbClient()
 
 const options = {
-  // database: process.env.DATABASE_URL,
-  // session: { jwt: true },
+  database: process.env.DATABASE_URL,
+  session: { jwt: true },
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -48,9 +48,7 @@ const options = {
         s.user.account_details.circle &&
         s.user.account_details.circle.walletId
       ) {
-        s.user.balance = await dbClient.circleClient.getBalance(
-          s.user.account_details.circle.walletId
-        )
+        s.user.balance = await dbClient.getCircleBalance(s.user.id)
         // process new deposits if there are any & send them to the users account
         await dbClient.circleClient.processDeposits(
           s.user.account_details.circle.accountId,

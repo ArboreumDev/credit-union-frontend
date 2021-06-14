@@ -1,9 +1,9 @@
-import { Loan_Request_State_Enum, Loan_State_Enum } from "../../../src/gql/sdk"
+import { Loan_State_Enum } from "../../../src/gql/sdk"
 import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
-import DbClient from "gql/db_client"
-import borrower from "components/dashboard/borrower"
 import { createFundedLoan } from "../../src/common/test_helpers"
+import { uuidv4 } from "lib/helpers"
+import { sleep } from "../circle/transfer.integration.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -21,7 +21,7 @@ describe("Repay Loan Success Flows", () => {
   let loanId: string
 
   beforeEach(async () => {
-    loanId = await createFundedLoan(
+    const res = await createFundedLoan(
       BORROWER1.id,
       dbClient,
       LENDER1.id,
@@ -29,6 +29,7 @@ describe("Repay Loan Success Flows", () => {
       loanAmount,
       "repay tests"
     )
+    loanId = res.loanId
   })
 
   afterEach(async () => {
@@ -37,22 +38,45 @@ describe("Repay Loan Success Flows", () => {
   })
 
   test("Repay an existing loan ", async () => {
-    const balanceBefore = (await dbClient.getUserByEmail(LENDER1.email)).balance
-    const { loan, repayment, updateLogEntry } = await dbClient.makeRepayment(
-      loanId,
-      loanAmount
+    // preconditions
+    const updateBefore = await sdk.GetUpdates()
+    const balanceBefore = await dbClient.circleClient.getBalance(
+      LENDER1.account_details.circle.walletId
+    )
+    const { loan } = await sdk.GetLoan({ loanId })
+    expect(loan.repayments.length).toBe(0)
+
+    // make a repayment into the loan-wallet from master wallet
+    const data = await dbClient.circleClient.fundFromMasterWallet(
+      loan.wallet_id,
+      loanAmount,
+      uuidv4()
+    )
+    await sleep(3000)
+    expect((await dbClient.circleClient.getTransferById(data.id)).status).toBe(
+      "complete"
     )
 
-    expect(loan.state).toBe(Loan_State_Enum.Repaid)
-    expect(loan.principal_remaining).toBe(0)
+    // trigger it to be processed
+    await dbClient.processRepayments()
 
-    expect(repayment.repayment_id).toBeTruthy
-    expect(repayment.loan_id).toBe(loanId)
-    expect(repayment.repaid_principal).toBe(loanAmount)
+    // verify
+    const after = await sdk.GetLoan({ loanId })
+    expect(after.loan.state).toBe(Loan_State_Enum.Repaid)
+    expect(after.loan.principal_remaining).toBe(0)
 
-    const balanceAfter = (await dbClient.getUserByEmail(LENDER1.email)).balance
+    expect(after.loan.repayments.length).toBe(1)
+    expect(after.loan.repayments[0].repaid_principal).toBe(loanAmount)
+
+    const balanceAfter = await dbClient.circleClient.getBalance(
+      LENDER1.account_details.circle.walletId
+    )
     expect(balanceAfter).toBe(balanceBefore + loanAmount)
-  })
+
+    const updateAfter = await sdk.GetUpdates()
+    expect(updateBefore.updates.length).toBe(updateAfter.updates.length - 1)
+  }, 9000)
+
   test.todo("borrower creates a loan request after a completed loan")
   test.todo("borrower creates a loan request after a withdrawn loan-request")
 })

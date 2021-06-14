@@ -1,4 +1,11 @@
-import { GetUserByEmailQuery, GetBorrowersQuery } from "../gql/sdk"
+import {
+  GetUserByEmailQuery,
+  GetBorrowersQuery,
+  GetAllUsersQuery,
+  FundLoanRequestMutation,
+  GetLiveLoansQuery,
+  GetLoanStateQuery,
+} from "../gql/sdk"
 import { LogEventTypes } from "./constant"
 
 export type Session = {
@@ -20,6 +27,24 @@ export type LoanRequest = User["loan_requests"][0]
 export type Loan = User["loans"][0]
 export type LoanRepayInfo = User["loansToRepay"][0]
 export type InvestedLoan = User["investedLoans"][0]
+export type UserBaseInfo = GetAllUsersQuery["user"][0]
+export type FundedLoan = FundLoanRequestMutation
+export type LiveLoan = GetLiveLoansQuery["loans"][0]
+export type LoanState = GetLoanStateQuery["loan"]
+
+export type Repayment = {
+  amount: number
+  date: string
+}
+
+export type LoanTerms = {
+  principal: number
+  tenor: number
+  penalty_apr: number
+  apr: number
+  compounding_frequency: number
+  start_date: string
+}
 
 // TODO @djudjuu
 export type CalculatedRisk = {
@@ -134,16 +159,16 @@ export type LoanRequestInfo = {
   risk_params?: RiskParams
 }
 
-export type LoanState = {
-  request_id: string
-  borrower_collateral: number
-  supporter_cash_encumbered: number
-  supporter_portfolio_encumbered: number
-  repayments: number[]
-  escrow: number
-  // loan_schedule?: any
-  // desired_irr?: number
-}
+// export type LoanState = {
+//   request_id: string
+//   borrower_collateral: number
+//   supporter_cash_encumbered: number
+//   supporter_portfolio_encumbered: number
+//   repayments: number[]
+//   escrow: number
+//   // loan_schedule?: any
+//   // desired_irr?: number
+// }
 
 export type LoanInfo = {
   request_id: string

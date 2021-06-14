@@ -946,6 +946,7 @@ export type Loan = {
   /** An object relationship */
   borrowerInfo: User
   compounding_frequency: Scalars["numeric"]
+  created_at?: Maybe<Scalars["timestamptz"]>
   interest_accrued: Scalars["float8"]
   interest_paid: Scalars["float8"]
   /** An array relationship */
@@ -972,6 +973,7 @@ export type Loan = {
   update_logs: Array<Update_Log>
   /** An aggregated array relationship */
   update_logs_aggregate: Update_Log_Aggregate
+  wallet_id: Scalars["String"]
 }
 
 /** columns and relationships of "loan" */
@@ -1116,6 +1118,7 @@ export type Loan_Bool_Exp = {
   borrower?: Maybe<Uuid_Comparison_Exp>
   borrowerInfo?: Maybe<User_Bool_Exp>
   compounding_frequency?: Maybe<Numeric_Comparison_Exp>
+  created_at?: Maybe<Timestamptz_Comparison_Exp>
   interest_accrued?: Maybe<Float8_Comparison_Exp>
   interest_paid?: Maybe<Float8_Comparison_Exp>
   lender_amounts?: Maybe<Lender_Amount_Bool_Exp>
@@ -1132,12 +1135,15 @@ export type Loan_Bool_Exp = {
   state?: Maybe<Loan_State_Enum_Comparison_Exp>
   tenor?: Maybe<Numeric_Comparison_Exp>
   update_logs?: Maybe<Update_Log_Bool_Exp>
+  wallet_id?: Maybe<String_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "loan" */
 export enum Loan_Constraint {
   /** unique or primary key constraint */
   LoanPkey = "loan_pkey",
+  /** unique or primary key constraint */
+  LoanWalletIdKey = "loan_walletId_key",
 }
 
 /** input type for incrementing integer column in table "loan" */
@@ -1160,6 +1166,7 @@ export type Loan_Insert_Input = {
   borrower?: Maybe<Scalars["uuid"]>
   borrowerInfo?: Maybe<User_Obj_Rel_Insert_Input>
   compounding_frequency?: Maybe<Scalars["numeric"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   lender_amounts?: Maybe<Lender_Amount_Arr_Rel_Insert_Input>
@@ -1176,6 +1183,7 @@ export type Loan_Insert_Input = {
   state?: Maybe<Loan_State_Enum>
   tenor?: Maybe<Scalars["numeric"]>
   update_logs?: Maybe<Update_Log_Arr_Rel_Insert_Input>
+  wallet_id?: Maybe<Scalars["String"]>
 }
 
 /** aggregate max on columns */
@@ -1184,6 +1192,7 @@ export type Loan_Max_Fields = {
   apr?: Maybe<Scalars["float8"]>
   borrower?: Maybe<Scalars["uuid"]>
   compounding_frequency?: Maybe<Scalars["numeric"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   loan_id?: Maybe<Scalars["uuid"]>
@@ -1195,6 +1204,7 @@ export type Loan_Max_Fields = {
   principal_overdue?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
   tenor?: Maybe<Scalars["numeric"]>
+  wallet_id?: Maybe<Scalars["String"]>
 }
 
 /** order by max() on columns of table "loan" */
@@ -1202,6 +1212,7 @@ export type Loan_Max_Order_By = {
   apr?: Maybe<Order_By>
   borrower?: Maybe<Order_By>
   compounding_frequency?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
@@ -1213,6 +1224,7 @@ export type Loan_Max_Order_By = {
   principal_overdue?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
+  wallet_id?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
@@ -1221,6 +1233,7 @@ export type Loan_Min_Fields = {
   apr?: Maybe<Scalars["float8"]>
   borrower?: Maybe<Scalars["uuid"]>
   compounding_frequency?: Maybe<Scalars["numeric"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   loan_id?: Maybe<Scalars["uuid"]>
@@ -1232,6 +1245,7 @@ export type Loan_Min_Fields = {
   principal_overdue?: Maybe<Scalars["float8"]>
   principal_remaining?: Maybe<Scalars["float8"]>
   tenor?: Maybe<Scalars["numeric"]>
+  wallet_id?: Maybe<Scalars["String"]>
 }
 
 /** order by min() on columns of table "loan" */
@@ -1239,6 +1253,7 @@ export type Loan_Min_Order_By = {
   apr?: Maybe<Order_By>
   borrower?: Maybe<Order_By>
   compounding_frequency?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
@@ -1250,6 +1265,7 @@ export type Loan_Min_Order_By = {
   principal_overdue?: Maybe<Order_By>
   principal_remaining?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
+  wallet_id?: Maybe<Order_By>
 }
 
 /** response of any mutation on the table "loan" */
@@ -1280,6 +1296,7 @@ export type Loan_Order_By = {
   borrower?: Maybe<Order_By>
   borrowerInfo?: Maybe<User_Order_By>
   compounding_frequency?: Maybe<Order_By>
+  created_at?: Maybe<Order_By>
   interest_accrued?: Maybe<Order_By>
   interest_paid?: Maybe<Order_By>
   lender_amounts_aggregate?: Maybe<Lender_Amount_Aggregate_Order_By>
@@ -1296,6 +1313,7 @@ export type Loan_Order_By = {
   state?: Maybe<Order_By>
   tenor?: Maybe<Order_By>
   update_logs_aggregate?: Maybe<Update_Log_Aggregate_Order_By>
+  wallet_id?: Maybe<Order_By>
 }
 
 /** primary key columns input for table: "loan" */
@@ -1782,6 +1800,8 @@ export enum Loan_Select_Column {
   /** column name */
   CompoundingFrequency = "compounding_frequency",
   /** column name */
+  CreatedAt = "created_at",
+  /** column name */
   InterestAccrued = "interest_accrued",
   /** column name */
   InterestPaid = "interest_paid",
@@ -1805,6 +1825,8 @@ export enum Loan_Select_Column {
   State = "state",
   /** column name */
   Tenor = "tenor",
+  /** column name */
+  WalletId = "wallet_id",
 }
 
 /** input type for updating data in table "loan" */
@@ -1812,6 +1834,7 @@ export type Loan_Set_Input = {
   apr?: Maybe<Scalars["float8"]>
   borrower?: Maybe<Scalars["uuid"]>
   compounding_frequency?: Maybe<Scalars["numeric"]>
+  created_at?: Maybe<Scalars["timestamptz"]>
   interest_accrued?: Maybe<Scalars["float8"]>
   interest_paid?: Maybe<Scalars["float8"]>
   loan_id?: Maybe<Scalars["uuid"]>
@@ -1824,6 +1847,7 @@ export type Loan_Set_Input = {
   principal_remaining?: Maybe<Scalars["float8"]>
   state?: Maybe<Loan_State_Enum>
   tenor?: Maybe<Scalars["numeric"]>
+  wallet_id?: Maybe<Scalars["String"]>
 }
 
 /** columns and relationships of "loan_state" */
@@ -2112,6 +2136,8 @@ export enum Loan_Update_Column {
   /** column name */
   CompoundingFrequency = "compounding_frequency",
   /** column name */
+  CreatedAt = "created_at",
+  /** column name */
   InterestAccrued = "interest_accrued",
   /** column name */
   InterestPaid = "interest_paid",
@@ -2135,6 +2161,8 @@ export enum Loan_Update_Column {
   State = "state",
   /** column name */
   Tenor = "tenor",
+  /** column name */
+  WalletId = "wallet_id",
 }
 
 /** aggregate var_pop on columns */
@@ -4393,15 +4421,17 @@ export type Update_Log = {
   date: Scalars["timestamptz"]
   loan_id: Scalars["uuid"]
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_next_payment_due_date?: Maybe<Scalars["date"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
   new_principal_overdue?: Maybe<Scalars["float8"]>
   new_principal_remain?: Maybe<Scalars["float8"]>
   new_state?: Maybe<Scalars["String"]>
-  repayment_id: Scalars["uuid"]
+  repayment_id?: Maybe<Scalars["uuid"]>
   type: Update_Type_Enum
   update_id: Scalars["uuid"]
+  updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** aggregated selection of "update_log" */
@@ -4458,6 +4488,7 @@ export type Update_Log_Arr_Rel_Insert_Input = {
 export type Update_Log_Avg_Fields = {
   __typename?: "update_log_avg_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4467,6 +4498,7 @@ export type Update_Log_Avg_Fields = {
 /** order by avg() on columns of table "update_log" */
 export type Update_Log_Avg_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4481,6 +4513,7 @@ export type Update_Log_Bool_Exp = {
   date?: Maybe<Timestamptz_Comparison_Exp>
   loan_id?: Maybe<Uuid_Comparison_Exp>
   new_interest_accrued?: Maybe<Float8_Comparison_Exp>
+  new_interest_paid?: Maybe<Float8_Comparison_Exp>
   new_next_payment_amount?: Maybe<Float8_Comparison_Exp>
   new_next_payment_due_date?: Maybe<Date_Comparison_Exp>
   new_penalty_accrued?: Maybe<Float8_Comparison_Exp>
@@ -4490,6 +4523,7 @@ export type Update_Log_Bool_Exp = {
   repayment_id?: Maybe<Uuid_Comparison_Exp>
   type?: Maybe<Update_Type_Enum_Comparison_Exp>
   update_id?: Maybe<Uuid_Comparison_Exp>
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "update_log" */
@@ -4501,6 +4535,7 @@ export enum Update_Log_Constraint {
 /** input type for incrementing integer column in table "update_log" */
 export type Update_Log_Inc_Input = {
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
   new_principal_overdue?: Maybe<Scalars["float8"]>
@@ -4512,6 +4547,7 @@ export type Update_Log_Insert_Input = {
   date?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_next_payment_due_date?: Maybe<Scalars["date"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
@@ -4521,6 +4557,7 @@ export type Update_Log_Insert_Input = {
   repayment_id?: Maybe<Scalars["uuid"]>
   type?: Maybe<Update_Type_Enum>
   update_id?: Maybe<Scalars["uuid"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** aggregate max on columns */
@@ -4529,6 +4566,7 @@ export type Update_Log_Max_Fields = {
   date?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_next_payment_due_date?: Maybe<Scalars["date"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
@@ -4537,6 +4575,7 @@ export type Update_Log_Max_Fields = {
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
   update_id?: Maybe<Scalars["uuid"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by max() on columns of table "update_log" */
@@ -4544,6 +4583,7 @@ export type Update_Log_Max_Order_By = {
   date?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_next_payment_due_date?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
@@ -4552,6 +4592,7 @@ export type Update_Log_Max_Order_By = {
   new_state?: Maybe<Order_By>
   repayment_id?: Maybe<Order_By>
   update_id?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
 }
 
 /** aggregate min on columns */
@@ -4560,6 +4601,7 @@ export type Update_Log_Min_Fields = {
   date?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_next_payment_due_date?: Maybe<Scalars["date"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
@@ -4568,6 +4610,7 @@ export type Update_Log_Min_Fields = {
   new_state?: Maybe<Scalars["String"]>
   repayment_id?: Maybe<Scalars["uuid"]>
   update_id?: Maybe<Scalars["uuid"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** order by min() on columns of table "update_log" */
@@ -4575,6 +4618,7 @@ export type Update_Log_Min_Order_By = {
   date?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_next_payment_due_date?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
@@ -4583,6 +4627,7 @@ export type Update_Log_Min_Order_By = {
   new_state?: Maybe<Order_By>
   repayment_id?: Maybe<Order_By>
   update_id?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
 }
 
 /** response of any mutation on the table "update_log" */
@@ -4612,6 +4657,7 @@ export type Update_Log_Order_By = {
   date?: Maybe<Order_By>
   loan_id?: Maybe<Order_By>
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_next_payment_due_date?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
@@ -4621,6 +4667,7 @@ export type Update_Log_Order_By = {
   repayment_id?: Maybe<Order_By>
   type?: Maybe<Order_By>
   update_id?: Maybe<Order_By>
+  updated_at?: Maybe<Order_By>
 }
 
 /** primary key columns input for table: "update_log" */
@@ -4637,6 +4684,8 @@ export enum Update_Log_Select_Column {
   /** column name */
   NewInterestAccrued = "new_interest_accrued",
   /** column name */
+  NewInterestPaid = "new_interest_paid",
+  /** column name */
   NewNextPaymentAmount = "new_next_payment_amount",
   /** column name */
   NewNextPaymentDueDate = "new_next_payment_due_date",
@@ -4654,6 +4703,8 @@ export enum Update_Log_Select_Column {
   Type = "type",
   /** column name */
   UpdateId = "update_id",
+  /** column name */
+  UpdatedAt = "updated_at",
 }
 
 /** input type for updating data in table "update_log" */
@@ -4661,6 +4712,7 @@ export type Update_Log_Set_Input = {
   date?: Maybe<Scalars["timestamptz"]>
   loan_id?: Maybe<Scalars["uuid"]>
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_next_payment_due_date?: Maybe<Scalars["date"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
@@ -4670,12 +4722,14 @@ export type Update_Log_Set_Input = {
   repayment_id?: Maybe<Scalars["uuid"]>
   type?: Maybe<Update_Type_Enum>
   update_id?: Maybe<Scalars["uuid"]>
+  updated_at?: Maybe<Scalars["timestamptz"]>
 }
 
 /** aggregate stddev on columns */
 export type Update_Log_Stddev_Fields = {
   __typename?: "update_log_stddev_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4685,6 +4739,7 @@ export type Update_Log_Stddev_Fields = {
 /** order by stddev() on columns of table "update_log" */
 export type Update_Log_Stddev_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4695,6 +4750,7 @@ export type Update_Log_Stddev_Order_By = {
 export type Update_Log_Stddev_Pop_Fields = {
   __typename?: "update_log_stddev_pop_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4704,6 +4760,7 @@ export type Update_Log_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "update_log" */
 export type Update_Log_Stddev_Pop_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4714,6 +4771,7 @@ export type Update_Log_Stddev_Pop_Order_By = {
 export type Update_Log_Stddev_Samp_Fields = {
   __typename?: "update_log_stddev_samp_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4723,6 +4781,7 @@ export type Update_Log_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "update_log" */
 export type Update_Log_Stddev_Samp_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4733,6 +4792,7 @@ export type Update_Log_Stddev_Samp_Order_By = {
 export type Update_Log_Sum_Fields = {
   __typename?: "update_log_sum_fields"
   new_interest_accrued?: Maybe<Scalars["float8"]>
+  new_interest_paid?: Maybe<Scalars["float8"]>
   new_next_payment_amount?: Maybe<Scalars["float8"]>
   new_penalty_accrued?: Maybe<Scalars["float8"]>
   new_principal_overdue?: Maybe<Scalars["float8"]>
@@ -4742,6 +4802,7 @@ export type Update_Log_Sum_Fields = {
 /** order by sum() on columns of table "update_log" */
 export type Update_Log_Sum_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4757,6 +4818,8 @@ export enum Update_Log_Update_Column {
   /** column name */
   NewInterestAccrued = "new_interest_accrued",
   /** column name */
+  NewInterestPaid = "new_interest_paid",
+  /** column name */
   NewNextPaymentAmount = "new_next_payment_amount",
   /** column name */
   NewNextPaymentDueDate = "new_next_payment_due_date",
@@ -4774,12 +4837,15 @@ export enum Update_Log_Update_Column {
   Type = "type",
   /** column name */
   UpdateId = "update_id",
+  /** column name */
+  UpdatedAt = "updated_at",
 }
 
 /** aggregate var_pop on columns */
 export type Update_Log_Var_Pop_Fields = {
   __typename?: "update_log_var_pop_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4789,6 +4855,7 @@ export type Update_Log_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "update_log" */
 export type Update_Log_Var_Pop_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4799,6 +4866,7 @@ export type Update_Log_Var_Pop_Order_By = {
 export type Update_Log_Var_Samp_Fields = {
   __typename?: "update_log_var_samp_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4808,6 +4876,7 @@ export type Update_Log_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "update_log" */
 export type Update_Log_Var_Samp_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -4818,6 +4887,7 @@ export type Update_Log_Var_Samp_Order_By = {
 export type Update_Log_Variance_Fields = {
   __typename?: "update_log_variance_fields"
   new_interest_accrued?: Maybe<Scalars["Float"]>
+  new_interest_paid?: Maybe<Scalars["Float"]>
   new_next_payment_amount?: Maybe<Scalars["Float"]>
   new_penalty_accrued?: Maybe<Scalars["Float"]>
   new_principal_overdue?: Maybe<Scalars["Float"]>
@@ -4827,6 +4897,7 @@ export type Update_Log_Variance_Fields = {
 /** order by variance() on columns of table "update_log" */
 export type Update_Log_Variance_Order_By = {
   new_interest_accrued?: Maybe<Order_By>
+  new_interest_paid?: Maybe<Order_By>
   new_next_payment_amount?: Maybe<Order_By>
   new_penalty_accrued?: Maybe<Order_By>
   new_principal_overdue?: Maybe<Order_By>
@@ -5762,6 +5833,16 @@ export type CreateUserMutation = { __typename?: "mutation_root" } & {
   >
 }
 
+export type GetAccountDetailsQueryVariables = Exact<{
+  id: Scalars["uuid"]
+}>
+
+export type GetAccountDetailsQuery = { __typename?: "query_root" } & {
+  user?: Maybe<
+    { __typename?: "user" } & Pick<User, "account_details" | "kyc_approved">
+  >
+}
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetAllUsersQuery = { __typename?: "query_root" } & {
@@ -5891,6 +5972,25 @@ export type UpdateAccountDetailsMutation = { __typename?: "mutation_root" } & {
   user?: Maybe<{ __typename?: "user" } & Pick<User, "id" | "account_details">>
 }
 
+export type UpdateUserBalanceMutationVariables = Exact<{
+  userId: Scalars["uuid"]
+  newBalance?: Maybe<Scalars["float8"]>
+}>
+
+export type UpdateUserBalanceMutation = { __typename?: "mutation_root" } & {
+  user?: Maybe<{ __typename?: "user" } & Pick<User, "balance">>
+}
+
+export type LogUpdateMutationVariables = Exact<{
+  update: Update_Log_Insert_Input
+}>
+
+export type LogUpdateMutation = { __typename?: "mutation_root" } & {
+  insert_update_log_one?: Maybe<
+    { __typename?: "update_log" } & Pick<Update_Log, "update_id" | "type">
+  >
+}
+
 export type GetAllActionsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetAllActionsQuery = { __typename?: "query_root" } & {
@@ -5898,6 +5998,26 @@ export type GetAllActionsQuery = { __typename?: "query_root" } & {
     { __typename?: "scenario_actions" } & Pick<
       Scenario_Actions,
       "id" | "action_type" | "payload"
+    >
+  >
+}
+
+export type GetUpdatesQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetUpdatesQuery = { __typename?: "query_root" } & {
+  updates: Array<
+    { __typename?: "update_log" } & Pick<
+      Update_Log,
+      | "update_id"
+      | "type"
+      | "updated_at"
+      | "new_principal_remain"
+      | "new_interest_paid"
+      | "new_interest_accrued"
+      | "repayment_id"
+      | "new_next_payment_amount"
+      | "new_next_payment_due_date"
+      | "new_state"
     >
   >
 }
@@ -5968,6 +6088,7 @@ export type FundLoanRequestMutation = { __typename?: "mutation_root" } & {
     { __typename?: "loan" } & Pick<
       Loan,
       | "loan_id"
+      | "wallet_id"
       | "principal"
       | "principal_remaining"
       | "next_payment_amount"
@@ -6000,6 +6121,45 @@ export type GetBorrowersQuery = { __typename?: "query_root" } & {
             Loan_Request,
             "amount" | "state" | "request_id" | "purpose"
           >
+        >
+      }
+  >
+}
+
+export type GetLiveLoansQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetLiveLoansQuery = { __typename?: "query_root" } & {
+  loans: Array<
+    { __typename?: "loan" } & Pick<
+      Loan,
+      | "loan_id"
+      | "wallet_id"
+      | "state"
+      | "principal"
+      | "principal_remaining"
+      | "principal_overdue"
+      | "interest_accrued"
+      | "tenor"
+      | "apr"
+      | "penalty_apr"
+      | "compounding_frequency"
+      | "created_at"
+    > & {
+        repayments: Array<
+          { __typename?: "repayment" } & Pick<
+            Repayment,
+            "date" | "repaid_principal" | "repaid_interest"
+          >
+        >
+        lender_amounts: Array<
+          { __typename?: "lender_amount" } & Pick<
+            Lender_Amount,
+            "lender_id" | "amount_lent"
+          >
+        >
+        borrowerInfo: { __typename?: "user" } & Pick<
+          User,
+          "id" | "first_name" | "last_name"
         >
       }
   >
@@ -6039,6 +6199,25 @@ export type GetLoanRequestsQuery = { __typename?: "query_root" } & {
   >
 }
 
+export type GetLoanStateQueryVariables = Exact<{
+  loanId: Scalars["uuid"]
+}>
+
+export type GetLoanStateQuery = { __typename?: "query_root" } & {
+  loan?: Maybe<
+    { __typename?: "loan" } & Pick<
+      Loan,
+      | "state"
+      | "principal_remaining"
+      | "principal_overdue"
+      | "interest_accrued"
+      | "interest_paid"
+      | "next_payment_amount"
+      | "next_payment_due_date"
+    >
+  >
+}
+
 export type GetLoanQueryVariables = Exact<{
   loanId: Scalars["uuid"]
 }>
@@ -6047,20 +6226,57 @@ export type GetLoanQuery = { __typename?: "query_root" } & {
   loan?: Maybe<
     { __typename?: "loan" } & Pick<
       Loan,
-      "loan_id" | "state" | "principal_remaining"
+      | "loan_id"
+      | "state"
+      | "tenor"
+      | "created_at"
+      | "apr"
+      | "penalty_apr"
+      | "principal"
+      | "principal_overdue"
+      | "principal_remaining"
+      | "interest_paid"
+      | "interest_accrued"
+      | "compounding_frequency"
+      | "wallet_id"
     > & {
         repayments: Array<
           { __typename?: "repayment" } & Pick<
             Repayment,
-            "date" | "repaid_principal" | "repaid_interest"
+            "repayment_id" | "date" | "repaid_principal" | "repaid_interest"
           >
         >
         lender_amounts: Array<
           { __typename?: "lender_amount" } & Pick<
             Lender_Amount,
             "lender_id" | "amount_lent"
-          >
+          > & {
+              lenderInfo: { __typename?: "user" } & Pick<
+                User,
+                "account_details"
+              >
+            }
         >
+      }
+  >
+}
+
+export type GetOpenRequestsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetOpenRequestsQuery = { __typename?: "query_root" } & {
+  activeRequests: Array<
+    { __typename?: "loan_request" } & Pick<
+      Loan_Request,
+      "request_id" | "purpose" | "amount"
+    > & {
+        creditors: { __typename?: "user" } & {
+          approved: Array<
+            { __typename?: "credit_line" } & Pick<
+              Credit_Line,
+              "investor_id"
+            > & { account: { __typename?: "user" } & Pick<User, "balance"> }
+          >
+        }
       }
   >
 }
@@ -6070,6 +6286,11 @@ export type RegisterRepaymentMutationVariables = Exact<{
   repayment: Repayment_Insert_Input
   newLoanState?: Maybe<Loan_State_Enum>
   newPrincipalRemaining?: Maybe<Scalars["float8"]>
+  newPrincipalOverdue?: Maybe<Scalars["float8"]>
+  newInterestAccrued?: Maybe<Scalars["float8"]>
+  newInterestPaid?: Maybe<Scalars["float8"]>
+  newNextPaymentAmount?: Maybe<Scalars["float8"]>
+  newNextPaymentDueDate?: Maybe<Scalars["timestamptz"]>
   updateLog: Update_Log_Insert_Input
 }>
 
@@ -6102,6 +6323,21 @@ export type RemoveBorrowerApprovalMutation = {
       "borrower_id" | "investor_id"
     >
   >
+}
+
+export type UpdateLoanMutationVariables = Exact<{
+  loanId: Scalars["uuid"]
+  newLoanState?: Maybe<Loan_State_Enum>
+  newPrincipalRemaining?: Maybe<Scalars["float8"]>
+  newPrincipalOverdue?: Maybe<Scalars["float8"]>
+  newInterestAccrued?: Maybe<Scalars["float8"]>
+  newInterestPaid?: Maybe<Scalars["float8"]>
+  newNextPaymentAmount?: Maybe<Scalars["float8"]>
+  newNextPaymentDueDate?: Maybe<Scalars["timestamptz"]>
+}>
+
+export type UpdateLoanMutation = { __typename?: "mutation_root" } & {
+  loan?: Maybe<{ __typename?: "loan" } & Pick<Loan, "state">>
 }
 
 export type DeleteAllUsersMutationVariables = Exact<{ [key: string]: never }>
@@ -6250,6 +6486,14 @@ export const CreateUserDocument = gql`
     }
   }
 `
+export const GetAccountDetailsDocument = gql`
+  query GetAccountDetails($id: uuid!) {
+    user: user_by_pk(id: $id) {
+      account_details
+      kyc_approved
+    }
+  }
+`
 export const GetAllUsersDocument = gql`
   query GetAllUsers {
     user {
@@ -6360,12 +6604,46 @@ export const UpdateAccountDetailsDocument = gql`
     }
   }
 `
+export const UpdateUserBalanceDocument = gql`
+  mutation UpdateUserBalance($userId: uuid!, $newBalance: float8) {
+    user: update_user_by_pk(
+      pk_columns: { id: $userId }
+      _set: { balance: $newBalance }
+    ) {
+      balance
+    }
+  }
+`
+export const LogUpdateDocument = gql`
+  mutation LogUpdate($update: update_log_insert_input!) {
+    insert_update_log_one(object: $update) {
+      update_id
+      type
+    }
+  }
+`
 export const GetAllActionsDocument = gql`
   query GetAllActions {
     scenario_actions {
       id
       action_type
       payload
+    }
+  }
+`
+export const GetUpdatesDocument = gql`
+  query GetUpdates {
+    updates: update_log(where: {}) {
+      update_id
+      type
+      updated_at
+      new_principal_remain
+      new_interest_paid
+      new_interest_accrued
+      repayment_id
+      new_next_payment_amount
+      new_next_payment_due_date
+      new_state
     }
   }
 `
@@ -6425,6 +6703,7 @@ export const FundLoanRequestDocument = gql`
     }
     newLoan: insert_loan_one(object: $loan) {
       loan_id
+      wallet_id
       principal
       principal_remaining
       next_payment_amount
@@ -6464,6 +6743,38 @@ export const GetBorrowersDocument = gql`
     }
   }
 `
+export const GetLiveLoansDocument = gql`
+  query GetLiveLoans {
+    loans: loan(where: { state: { _eq: LIVE } }) {
+      loan_id
+      wallet_id
+      state
+      principal
+      principal_remaining
+      principal_overdue
+      interest_accrued
+      repayments {
+        date
+        repaid_principal
+        repaid_interest
+      }
+      lender_amounts {
+        lender_id
+        amount_lent
+      }
+      tenor
+      apr
+      penalty_apr
+      compounding_frequency
+      created_at
+      borrowerInfo {
+        id
+        first_name
+        last_name
+      }
+    }
+  }
+`
 export const GetLoanRequestDocument = gql`
   query GetLoanRequest($requestId: uuid!) {
     loanRequest: loan_request_by_pk(request_id: $requestId) {
@@ -6492,20 +6803,64 @@ export const GetLoanRequestsDocument = gql`
     }
   }
 `
+export const GetLoanStateDocument = gql`
+  query GetLoanState($loanId: uuid!) {
+    loan: loan_by_pk(loan_id: $loanId) {
+      state
+      principal_remaining
+      principal_overdue
+      interest_accrued
+      interest_paid
+      next_payment_amount
+      next_payment_due_date
+    }
+  }
+`
 export const GetLoanDocument = gql`
   query GetLoan($loanId: uuid!) {
     loan: loan_by_pk(loan_id: $loanId) {
       loan_id
       state
+      tenor
+      created_at
+      apr
+      penalty_apr
+      principal
+      principal_overdue
       principal_remaining
+      interest_paid
+      interest_accrued
+      compounding_frequency
+      wallet_id
       repayments {
+        repayment_id
         date
         repaid_principal
         repaid_interest
       }
       lender_amounts {
         lender_id
+        lenderInfo {
+          account_details
+        }
         amount_lent
+      }
+    }
+  }
+`
+export const GetOpenRequestsDocument = gql`
+  query GetOpenRequests {
+    activeRequests: loan_request(where: { state: { _eq: ACTIVE } }) {
+      request_id
+      purpose
+      amount
+      creditors: borrowerInfo {
+        approved: creditLineByBorrower {
+          investor_id
+          account: userByInvestor {
+            balance
+          }
+        }
       }
     }
   }
@@ -6516,6 +6871,11 @@ export const RegisterRepaymentDocument = gql`
     $repayment: repayment_insert_input!
     $newLoanState: loan_state_enum
     $newPrincipalRemaining: float8
+    $newPrincipalOverdue: float8
+    $newInterestAccrued: float8
+    $newInterestPaid: float8
+    $newNextPaymentAmount: float8
+    $newNextPaymentDueDate: timestamptz
     $updateLog: update_log_insert_input!
   ) {
     loan: update_loan_by_pk(
@@ -6523,6 +6883,11 @@ export const RegisterRepaymentDocument = gql`
       _set: {
         state: $newLoanState
         principal_remaining: $newPrincipalRemaining
+        principal_overdue: $newPrincipalOverdue
+        interest_accrued: $newInterestAccrued
+        interest_paid: $newInterestPaid
+        next_payment_amount: $newNextPaymentAmount
+        next_payment_due_date: $newNextPaymentDueDate
       }
     ) {
       state
@@ -6546,6 +6911,33 @@ export const RemoveBorrowerApprovalDocument = gql`
     ) {
       borrower_id
       investor_id
+    }
+  }
+`
+export const UpdateLoanDocument = gql`
+  mutation UpdateLoan(
+    $loanId: uuid!
+    $newLoanState: loan_state_enum
+    $newPrincipalRemaining: float8
+    $newPrincipalOverdue: float8
+    $newInterestAccrued: float8
+    $newInterestPaid: float8
+    $newNextPaymentAmount: float8
+    $newNextPaymentDueDate: timestamptz
+  ) {
+    loan: update_loan_by_pk(
+      pk_columns: { loan_id: $loanId }
+      _set: {
+        state: $newLoanState
+        principal_remaining: $newPrincipalRemaining
+        principal_overdue: $newPrincipalOverdue
+        interest_accrued: $newInterestAccrued
+        interest_paid: $newInterestPaid
+        next_payment_amount: $newNextPaymentAmount
+        next_payment_due_date: $newNextPaymentDueDate
+      }
+    ) {
+      state
     }
   }
 `
@@ -6640,6 +7032,16 @@ export function getSdk(
         client.request<CreateUserMutation>(print(CreateUserDocument), variables)
       )
     },
+    GetAccountDetails(
+      variables: GetAccountDetailsQueryVariables
+    ): Promise<GetAccountDetailsQuery> {
+      return withWrapper(() =>
+        client.request<GetAccountDetailsQuery>(
+          print(GetAccountDetailsDocument),
+          variables
+        )
+      )
+    },
     GetAllUsers(
       variables?: GetAllUsersQueryVariables
     ): Promise<GetAllUsersQuery> {
@@ -6674,6 +7076,23 @@ export function getSdk(
         )
       )
     },
+    UpdateUserBalance(
+      variables: UpdateUserBalanceMutationVariables
+    ): Promise<UpdateUserBalanceMutation> {
+      return withWrapper(() =>
+        client.request<UpdateUserBalanceMutation>(
+          print(UpdateUserBalanceDocument),
+          variables
+        )
+      )
+    },
+    LogUpdate(
+      variables: LogUpdateMutationVariables
+    ): Promise<LogUpdateMutation> {
+      return withWrapper(() =>
+        client.request<LogUpdateMutation>(print(LogUpdateDocument), variables)
+      )
+    },
     GetAllActions(
       variables?: GetAllActionsQueryVariables
     ): Promise<GetAllActionsQuery> {
@@ -6682,6 +7101,11 @@ export function getSdk(
           print(GetAllActionsDocument),
           variables
         )
+      )
+    },
+    GetUpdates(variables?: GetUpdatesQueryVariables): Promise<GetUpdatesQuery> {
+      return withWrapper(() =>
+        client.request<GetUpdatesQuery>(print(GetUpdatesDocument), variables)
       )
     },
     InsertEvent(
@@ -6744,6 +7168,16 @@ export function getSdk(
         )
       )
     },
+    GetLiveLoans(
+      variables?: GetLiveLoansQueryVariables
+    ): Promise<GetLiveLoansQuery> {
+      return withWrapper(() =>
+        client.request<GetLiveLoansQuery>(
+          print(GetLiveLoansDocument),
+          variables
+        )
+      )
+    },
     GetLoanRequest(
       variables: GetLoanRequestQueryVariables
     ): Promise<GetLoanRequestQuery> {
@@ -6764,9 +7198,29 @@ export function getSdk(
         )
       )
     },
+    GetLoanState(
+      variables: GetLoanStateQueryVariables
+    ): Promise<GetLoanStateQuery> {
+      return withWrapper(() =>
+        client.request<GetLoanStateQuery>(
+          print(GetLoanStateDocument),
+          variables
+        )
+      )
+    },
     GetLoan(variables: GetLoanQueryVariables): Promise<GetLoanQuery> {
       return withWrapper(() =>
         client.request<GetLoanQuery>(print(GetLoanDocument), variables)
+      )
+    },
+    GetOpenRequests(
+      variables?: GetOpenRequestsQueryVariables
+    ): Promise<GetOpenRequestsQuery> {
+      return withWrapper(() =>
+        client.request<GetOpenRequestsQuery>(
+          print(GetOpenRequestsDocument),
+          variables
+        )
       )
     },
     RegisterRepayment(
@@ -6787,6 +7241,13 @@ export function getSdk(
           print(RemoveBorrowerApprovalDocument),
           variables
         )
+      )
+    },
+    UpdateLoan(
+      variables: UpdateLoanMutationVariables
+    ): Promise<UpdateLoanMutation> {
+      return withWrapper(() =>
+        client.request<UpdateLoanMutation>(print(UpdateLoanDocument), variables)
       )
     },
     DeleteAllUsers(

@@ -1,7 +1,7 @@
 import { WithdrawalUserData } from "gql/wallet/circle_client"
 import { uuidv4 } from "lib/helpers"
 import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
-import { exampleCircleAccounts } from "../../fixtures/exampleCircleAccounts"
+import { CircleFixtures } from "../../fixtures/exampleCircleAccounts"
 import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { UserTransaction } from "lib/types"
 import { circle } from "../common/utils"
@@ -9,20 +9,23 @@ import { time } from "console"
 
 global.fetch = require("node-fetch")
 
+const userIds = CircleFixtures.registeredUserIds
+
 export const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
 
-function sleep(ms) {
+export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-describe("Circle tests", () => {
+describe.skip("Circle tests", () => {
   test("circle client knows master wallet id", async () => {
     expect(circle.initialized).toBeTruthy
   })
   describe("basic transfers", () => {
-    const w1 = exampleCircleAccounts[0].walletId
-    const acc1 = exampleCircleAccounts[0].accountId
-    const w2 = exampleCircleAccounts[1].walletId
+    const w1 = CircleFixtures.accounts[userIds[0]].walletId
+    const acc1 = CircleFixtures.accounts[userIds[0]].accountId
+    const w2 = CircleFixtures.accounts[userIds[1]].walletId
+
     const idem1 = uuidv4()
     let transferId1
 
@@ -132,10 +135,16 @@ describe("Circle tests", () => {
       expect(tx.type).toBe("Withdrawal")
       expect(tx.destination).toBe("ALGO")
     })
+    test("get transfers by destination wallet", async () => {
+      const txs = await circle.getTransfers("", "", w1)
+      const receivers = txs.map((t) => t.destination.id)
+      const sameAsFirst = receivers.filter((d) => d === receivers[0])
+      expect(sameAsFirst.length).toBe(receivers.length)
+    })
   })
 
   describe("withdrawals", () => {
-    const user1 = exampleCircleAccounts[0]
+    const user1 = CircleFixtures.accounts[userIds[0]]
     let withdrawalId
     test("creating a wire withdrawal", async () => {
       const before = await circle.getBalance(user1.walletId)
@@ -187,7 +196,7 @@ describe("Circle tests", () => {
   describe("process Deposits", () => {
     // TODO in other order these tests were flaky, reversing the order here solved it
     // maybe we can find a more robust solution
-    const user1 = exampleCircleAccounts[0]
+    const user1 = CircleFixtures.accounts[userIds[0]]
     test("completed deposits are transfered to user accounts", async () => {
       const deposits = await circle.processDeposits(
         user1.accountId,
