@@ -20,14 +20,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // TODO: Add admin authorization check
   // INTERMEDIATE SOLUTION:
-  const session = (await getSession(context)) as Session
-  if (session.user.email !== ADMIN_EMAIL) {
-    return { props: { success: false } }
-  }
+  // const session = (await getSession(context)) as Session
+  // if (session.user.email !== ADMIN_EMAIL) {
+  // return { props: { success: false } }
+  // }
 
-  const sdk = new DbClient().sdk
+  // const sdk = new DbClient().sdk
   // if (process.env.ENVIRONMENT === "preview")
-  await sdk.ResetDB()
+  // await sdk.ResetDB()
 
   return { props: {} }
 }

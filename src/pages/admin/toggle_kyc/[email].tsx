@@ -19,15 +19,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: { success: false } }
   }
 
-  const { email } = context.query
+  // const { email } = context.query
 
-  const dbClient = new DbClient()
-  const user = await dbClient.getUserByEmail(email as string)
-  console.log(email, user)
-  dbClient.sdk.ApproveKYC({
-    userId: user.id,
-    kycApproved: !user.kyc_approved,
-  })
+  // const dbClient = new DbClient()
+  // const user = await dbClient.getUserByEmail(email as string)
+  // console.log(email, user)
+  // dbClient.sdk.ApproveKYC({
+  //   userId: user.id,
+  //   kycApproved: !user.kyc_approved,
+  // })
   // TODO send email to user
 
   return { props: { success: true } }

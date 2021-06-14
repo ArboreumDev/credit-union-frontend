@@ -4,6 +4,7 @@ import {
   Container,
   Heading,
   Input,
+  Text,
   Stack,
   Textarea,
 } from "@chakra-ui/core"
@@ -35,7 +36,7 @@ export function TEdit(props: { code: any; onSubmit: any }) {
 }
 
 export default function Hello(props: {
-  allUsers: GetAllUsersQuery["user"]
+  // allUsers: GetAllUsersQuery["user"]
   scenario: any
   authorized: boolean
 }) {
@@ -43,15 +44,16 @@ export default function Hello(props: {
   // const { data, error } = useSWR(GET_USERS, fetcher, {initialData});
   // if (error) return <div>failed to load</div>;
   // if (!data) return <div>loading...</div>;
-  const users = props.allUsers
-  if (!props.authorized) return <div>Not authorized</div>
+  // const users = props.allUsers
+  // if (!props.authorized) return <div>Not authorized</div>
 
   return (
     <Container>
       <Stack>
+        <Text> TODO: rebuild this</Text>
         {/* this helps when debugging */}
         {/* <a href="/admin/reset_db">Reset DB</a> */}
-        <Box>
+        {/* <Box>
           <Heading>Users</Heading>
           {users.map((user) => (
             <p key={user.id}>
@@ -60,7 +62,7 @@ export default function Hello(props: {
             </p>
           ))}
         </Box>
-        <hr />
+        <hr /> */}
         {/* // this helps when doing a demo */}
         {/* <Box>
           Set company name:{" "}
@@ -94,9 +96,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: { authorized: false } }
   }
 
-  const dbClient = new DbClient()
-  const allUsers = await dbClient.allUsers
+  // const dbClient = new DbClient()
+  // const allUsers = await dbClient.allUsers
   // const scenario = await scenarioToYAML(dbClient)
-  const scenario = {}
-  return { props: { authorized: true, allUsers, scenario } }
+  // const scenario = {}
+  // return { props: { authorized: true, allUsers, scenario } }
+  return { props: { authorized: true, scenario: {} } }
 }

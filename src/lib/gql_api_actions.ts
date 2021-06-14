@@ -249,44 +249,44 @@ export class FundLoanRequest extends Action {
   }
 }
 
-export class MakeRepayment extends Action {
-  static Name = "MakeRepayment"
-  static InputType: {
-    amount: number
-    loanId: string
-  }
-  static ReturnType: RegisterRepaymentMutation
-  minAuthLevel = AUTH_TYPE.USER
+// NOTE: I dont think we need this anymore
+// export class MakeRepayment extends Action {
+//   static Name = "MakeRepayment"
+//   static InputType: {
+//     amount: number
+//     loanId: string
+//   }
+//   static ReturnType: RegisterRepaymentMutation
+//   minAuthLevel = AUTH_TYPE.USER
 
-  async run() {
-    return await this.dbClient.makeRepayment(
-      this.payload.loanId,
-      this.payload.amount
-    )
-    // TODO add scenario action
-    // return await this.dbClient.sdk.InsertScenarioAction({
-    //   action: {
-    //     action_type: Action_Type_Enum.RepayLoan,
-    //     payload: {
-    //       userEmail: this.user.email,
-    //       loan_id: this.payload.loanId,
-    //       amount: this.payload.amount,
-    //     },
-    //   },
-    // })
-  }
-
-  static fetch(payload: typeof MakeRepayment.InputType) {
-    return fetcherMutate(MakeRepayment.Name, payload)
-  }
-}
+//   async run() {
+//     return await this.dbClient.makeRepayment(
+//       this.payload.loanId,
+//       this.payload.amount
+//     )
+//     // TODO add scenario action
+//     // return await this.dbClient.sdk.InsertScenarioAction({
+//     //   action: {
+//     //     action_type: Action_Type_Enum.RepayLoan,
+//     //     payload: {
+//     //       userEmail: this.user.email,
+//     //       loan_id: this.payload.loanId,
+//     //       amount: this.payload.amount,
+//     //     },
+//     //   },
+//     // })
+//   }
+// static fetch(payload: typeof MakeRepayment.InputType) {
+//   return fetcherMutate(MakeRepayment.Name, payload)
+// }
+// }
 
 // TODO Add dynamic type validation
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
   [FundLoanRequest.Name]: FundLoanRequest,
-  [MakeRepayment.Name]: MakeRepayment,
+  // [MakeRepayment.Name]: MakeRepayment,
   [SetBorrowerApproval.Name]: SetBorrowerApproval,
   [Withdraw.Name]: Withdraw,
 }

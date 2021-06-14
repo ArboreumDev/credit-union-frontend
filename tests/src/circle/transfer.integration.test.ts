@@ -1,11 +1,8 @@
 import { WithdrawalUserData } from "gql/wallet/circle_client"
 import { uuidv4 } from "lib/helpers"
-import { exampleWireAccounts } from "../../fixtures/exampleWireAccounts"
 import { CircleFixtures } from "../../fixtures/exampleCircleAccounts"
-import { instructionsToBankDetails } from "lib/bankAccountHelpers"
 import { UserTransaction } from "lib/types"
 import { circle } from "../common/utils"
-import { time } from "console"
 
 global.fetch = require("node-fetch")
 
