@@ -92,7 +92,7 @@ describe("Create new loan | user is Authorized", () => {
   beforeAll(async () => {
     // add users
     await sdk.CreateUser({ user: BORROWER1 })
-    await sdk.CreateUser({ user: SUPPORTER1 })
+    await sdk.CreateUser({ user: LENDER2 })
   })
   afterAll(async () => {
     await sdk.ResetDB()
@@ -117,7 +117,8 @@ describe("Create new loan | user is Authorized", () => {
     loanRequestId = res.loanRequest.request_id
   })
   test("set borrower approval", async () => {
-    const userBefore = await dbClient.getUserByEmail(SUPPORTER1.email)
+    const userBefore = await dbClient.getUserByEmail(LENDER2.email)
+    console.log(userBefore)
     expect(
       userBefore.approvedBorrowers.map((b) => b.borrower_id)
     ).not.toContain(BORROWER1.id)
@@ -126,7 +127,7 @@ describe("Create new loan | user is Authorized", () => {
       borrowerId: BORROWER1.id,
       approved: true,
     }
-    const session = getMockSession(SUPPORTER1)
+    const session = getMockSession(LENDER2)
 
     // set approved
     const res: typeof SetBorrowerApproval.ReturnType = (await runAction(
@@ -136,21 +137,21 @@ describe("Create new loan | user is Authorized", () => {
       dbClient
     )) as typeof SetBorrowerApproval.ReturnType
     expect(res).toBeTruthy
-    let userAfter = await dbClient.getUserByEmail(SUPPORTER1.email)
+    let userAfter = await dbClient.getUserByEmail(LENDER2.email)
     expect(userAfter.approvedBorrowers.map((b) => b.borrower_id)).toContain(
       BORROWER1.id
     )
 
     // remove approval
     payload.approved = false
-    const res2: typeof SetBorrowerApproval.ReturnType = (await runAction(
+    const res2 = (await runAction(
       SetBorrowerApproval.Name,
       session,
       payload,
       dbClient
     )) as typeof SetBorrowerApproval.ReturnType
-    expect(res).toBeTruthy
-    userAfter = await dbClient.getUserByEmail(SUPPORTER1.email)
+    expect(res2).toBeTruthy
+    userAfter = await dbClient.getUserByEmail(LENDER2.email)
     expect(userAfter.approvedBorrowers.map((b) => b.borrower_id)).not.toContain(
       BORROWER1.id
     )

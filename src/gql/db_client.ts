@@ -442,14 +442,16 @@ export default class DbClient {
   updateAccountBalances = async () => {
     const { user } = await this.sdk.GetAllUsers()
     await Promise.all(
-      user.map(async (u) => {
-        await this.sdk.UpdateUserBalance({
-          userId: u.id,
-          newBalance: await this.circleClient.getBalance(
-            u.account_details.circle.wallet_id
-          ),
+      user
+        .filter((u) => u.kyc_approved && u.account_details?.circle?.walletId)
+        .map(async (u) => {
+          await this.sdk.UpdateUserBalance({
+            userId: u.id,
+            newBalance: await this.circleClient.getBalance(
+              u.account_details.circle.walletId
+            ),
+          })
         })
-      })
     )
   }
 

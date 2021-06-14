@@ -163,6 +163,7 @@ export const SUPPORTER1: User = {
   email: "noob@galaxy.io",
   phone: "1234",
   user_type: "lender",
+  kyc_approved: true,
   demographic_info: {
     education_years: 10,
     income: 400.0,
