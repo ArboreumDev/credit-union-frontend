@@ -118,7 +118,6 @@ describe("Create new loan | user is Authorized", () => {
   })
   test("set borrower approval", async () => {
     const userBefore = await dbClient.getUserByEmail(LENDER2.email)
-    console.log(userBefore)
     expect(
       userBefore.approvedBorrowers.map((b) => b.borrower_id)
     ).not.toContain(BORROWER1.id)
