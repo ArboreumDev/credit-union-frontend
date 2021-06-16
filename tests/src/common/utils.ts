@@ -11,8 +11,8 @@ const TEST_ADMIN_SECRET = "myadminsecretkey"
 const client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
 
 // init swarmai client
-// const swarmAIClient = new SwarmAIClient("http://0.0.0.0:3001")
-const swarmAIClient = new SwarmAIClient("http://localhost:3002")
+const swarmAIClient = new SwarmAIClient("http://0.0.0.0:3001")
+// const swarmAIClient = new SwarmAIClient("http://localhost:3002")
 
 // init circle client
 const TEST_CIRCLE_BASE_URL = "https://api-sandbox.circle.com"
