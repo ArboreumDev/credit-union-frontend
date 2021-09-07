@@ -13,7 +13,7 @@ import { UserBaseInfo, Repayment } from "../lib/types"
 import CircleClient from "./wallet/circle_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
-import { uuidv4 } from "lib/helpers"
+import { unixTimestampToDateString, uuidv4 } from "lib/helpers"
 import {
   loanStateToLoanInput,
   loanStateToUpdateInput,
@@ -23,6 +23,7 @@ import {
   loanToTerms,
   loanAndNewStateToUpdate,
 } from "lib/loan_helpers"
+import { LoanState } from "./types"
 import { UpdateRequestType } from "pages/api/reconcile"
 import {
   DEFAULT_APR,
@@ -133,10 +134,10 @@ export default class DbClient {
 
     // TODO actually fund request with amount, using loanId as reference
     // for now, just change the lender balance
-    // await this.sdk.ChangeUserCashBalance({
-    //   userId: lenderId,
-    //   delta: -loanRequest.amount,
-    // })
+    await this.sdk.ChangeUserCashBalance({
+      userId: lenderId,
+      delta: -loanRequest.amount,
+    })
     const data = await this.doCircleTransfer(
       lenderId,
       loanRequest.borrowerInfo.id,
@@ -385,16 +386,23 @@ export default class DbClient {
     const { loans } = await this.sdk.GetLiveLoans()
     await Promise.all(
       loans.map(async (loan) => {
-        const latestLoanState = await this.swarmAIClient.getLoanState(
+        const latestLoanStateRaw = await this.swarmAIClient.getLoanState(
           loanToTerms(loan),
           loan.repayments.map((r) => {
             return {
               amount: r.repaid_interest + r.repaid_principal,
-              date: r.date,
+              date: dateStringToUnixTimestamp(r.date),
             }
           }) // as processed repayments
         )
+        const latestLoanState = {
+          ...latestLoanStateRaw,
+          next_payment_due_date: unixTimestampToDateString(
+            latestLoanStateRaw.next_payment_due_date
+          ),
+        } as LoanState
         const newLoanState = getLoanState(latestLoanState)
+
         await this.sdk.UpdateLoan({
           loanId: loan.loan_id,
           ...loanStateToLoanInput(latestLoanState),

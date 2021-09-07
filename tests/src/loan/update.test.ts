@@ -5,6 +5,7 @@ import {
   createLoanRequest,
 } from "../../src/common/test_helpers"
 import { Loan_Request_State_Enum } from "gql/sdk"
+import { uuidv4 } from "lib/helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -37,10 +38,18 @@ describe("Update Requests", () => {
     const requestBefore = await sdk.GetLoanRequest({ requestId })
     expect(requestBefore.loanRequest.state).toBe(Loan_Request_State_Enum.Active)
 
-    await sdk.ChangeUserCashBalance({
-      userId: LENDER1.id,
-      delta: loanAmount,
-    })
+    // fund the lender from the master wallet
+    // await sdk.ChangeUserCashBalance({
+    //   userId: LENDER1.id,
+    //   delta: loanAmount,
+    // })
+    const { user } = await dbClient.sdk.GetAccountDetails({ id: LENDER1.id })
+    await dbClient.circleClient.fundFromMasterWallet(
+      user.account_details.circle.walletId,
+      loanAmount,
+      uuidv4()
+    )
+
     await sdk.ApproveBorrower({
       creditLine: { borrower_id: BORROWER1.id, investor_id: LENDER1.id },
     })

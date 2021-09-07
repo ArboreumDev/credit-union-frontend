@@ -14,3 +14,7 @@ export function sleep(ms) {
 export function dateStringToUnixTimestamp(date) {
   return Math.round(new Date(date).getTime() / 1000)
 }
+
+export function unixTimestampToDateString(timestamp) {
+  return new Date(timestamp * 1000).toUTCString()
+}
