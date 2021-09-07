@@ -30,7 +30,7 @@ import {
   DEFAULT_PENALTY_APR,
   COMPOUNDING_FREQ,
 } from "lib/constant"
-import { sleep } from "lib/helpers"
+import { sleep, dateStringToUnixTimestamp } from "lib/helpers"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -306,7 +306,7 @@ export default class DbClient {
       .map((t) => {
         return {
           amount: parseFloat(t.amount.amount),
-          date: t.createDate,
+          date: dateStringToUnixTimestamp(t.createDate),
         } as Repayment
       })
     const latestLoanState = await this.swarmAIClient.getLoanState(

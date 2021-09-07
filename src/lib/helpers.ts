@@ -10,3 +10,7 @@ export function uuidv4() {
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export function dateStringToUnixTimestamp(date) {
+  return Math.round(new Date(date).getTime() / 1000)
+}

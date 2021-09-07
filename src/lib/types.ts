@@ -34,7 +34,7 @@ export type LoanState = GetLoanStateQuery["loan"]
 
 export type Repayment = {
   amount: number
-  date: string
+  date: int
 }
 
 export type LoanTerms = {
