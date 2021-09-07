@@ -30,7 +30,7 @@ import {
   DEFAULT_PENALTY_APR,
   COMPOUNDING_FREQ,
 } from "lib/constant"
-import { sleep } from "../../tests/src/circle/transfer.integration.test"
+import { sleep } from "lib/helpers"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -54,7 +54,7 @@ export default class DbClient {
     this.gqlClient = _client || initializeGQL()
     this.swarmAIClient =
       _swarmai_client ||
-      new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3001")
+      new SwarmAIClient(process.env.SWARMAI_URL || "http://localhost:3002")
     this.circleClient =
       _circleClient ||
       new CircleClient(process.env.CIRCLE_BASE_URL, process.env.CIRCLE_API_KEY)
@@ -173,7 +173,7 @@ export default class DbClient {
         state: Loan_State_Enum.Live,
         principal: loanRequest.amount,
         // HARDCODED for now
-        compounding_frequency: COMPOUNDING_FREQ.monthly,
+        compounding_frequency: COMPOUNDING_FREQ.daily,
         apr: DEFAULT_APR,
         penalty_apr: DEFAULT_PENALTY_APR,
         tenor: DEFAULT_LOAN_TENOR,

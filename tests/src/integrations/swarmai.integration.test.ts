@@ -40,14 +40,14 @@ describe("Update Loans", () => {
       loanToTerms(loan),
       []
     )
-    // create a utc timezone datetime 31 days in the future
+    // create a utc timezone datetime 2 comp-freq in the future
     const date = new Date()
-    date.setDate(date.getDate() + loan.compounding_frequency + 1)
+    date.setDate(date.getDate() + loan.compounding_frequency + 2)
 
     const loanAfter = await dbClient.swarmAIClient.getLoanState(
       loanToTerms(loan),
       [],
-      date.toISOString()
+      date.getTime() / 1000
     )
     expect(loanAfter.interest_accrued).toBeGreaterThan(
       loanBefore.interest_accrued

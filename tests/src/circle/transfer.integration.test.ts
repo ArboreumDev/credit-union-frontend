@@ -1,18 +1,14 @@
 import { WithdrawalUserData } from "gql/wallet/circle_client"
-import { uuidv4 } from "lib/helpers"
+import { uuidv4, sleep } from "lib/helpers"
 import { CircleFixtures } from "../../fixtures/exampleCircleAccounts"
 import { UserTransaction } from "lib/types"
-import { circle } from "../common/utils"
+import { circleClient as circle } from "../common/utils"
 
 global.fetch = require("node-fetch")
 
 const userIds = CircleFixtures.registeredUserIds
 
 export const sampleEthAddress1 = "0x2Db98f725Ce52ddAf5dC8c87d3b32b258DE8117b"
-
-export function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 describe.skip("Circle tests", () => {
   test("circle client knows master wallet id", async () => {

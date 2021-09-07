@@ -20,7 +20,7 @@ import {
 import { getMockSession } from "../fixtures/session"
 import { Fixtures } from "lib/demo/fixtures"
 import { dbClient, sdk } from "./common/utils"
-import { sampleEthAddress1 } from "../src/circle/transfer.integration.test"
+import { sampleEthAddress1 } from "./circle/transfer.integration.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()

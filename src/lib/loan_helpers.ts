@@ -47,7 +47,7 @@ export const loanToTerms = (loan) => {
     principal: loan.principal,
     tenor: loan.tenor,
     compounding_frequency: loan.compounding_frequency,
-    start_date: loan.created_at,
+    start_date: Math.round(new Date(loan.created_at).getTime() / 1000),
   } as LoanTerms
 }
 

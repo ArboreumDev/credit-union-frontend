@@ -30,13 +30,14 @@ export default class SwarmAIClient {
   async getLoanState(
     loanTerms,
     repayments: Array<Repayment>,
-    currentDateTimeUTC = ""
+    currentDateTimestampUTC = 0
   ): Promise<LoanState> {
     const payload = {
       loan: {
         terms: loanTerms,
         repayments,
-        current_datetime_utc: currentDateTimeUTC || new Date().toUTCString(),
+        current_datetime_utc:
+          currentDateTimestampUTC || Math.round(Date.now() / 1000),
       },
     }
     return this.fetch("/loan/bullet", payload)

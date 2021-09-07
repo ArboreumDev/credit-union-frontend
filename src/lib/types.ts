@@ -43,7 +43,7 @@ export type LoanTerms = {
   penalty_apr: number
   apr: number
   compounding_frequency: number
-  start_date: string
+  start_date: number // unix timestamp
 }
 
 export type JWTToken = {

@@ -2,8 +2,7 @@ import { Loan_State_Enum } from "../../../src/gql/sdk"
 import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
 import { createFundedLoan } from "../../src/common/test_helpers"
-import { uuidv4 } from "lib/helpers"
-import { sleep } from "../circle/transfer.integration.test"
+import { uuidv4, sleep } from "lib/helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()

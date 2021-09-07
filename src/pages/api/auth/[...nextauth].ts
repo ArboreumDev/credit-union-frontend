@@ -6,8 +6,8 @@ import DbClient from "gql/db_client"
 const dbClient = new DbClient()
 
 const options = {
-  database: process.env.DATABASE_URL,
-  session: { jwt: true },
+  // database: process.env.DATABASE_URL,
+  // session: { jwt: true },
   providers: [
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
