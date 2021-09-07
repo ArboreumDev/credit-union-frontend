@@ -48,9 +48,7 @@ const options = {
         s.user.account_details.circle &&
         s.user.account_details.circle.walletId
       ) {
-        s.user.balance = await dbClient.circleClient.getBalance(
-          s.user.account_details.circle.walletId
-        )
+        s.user.balance = await dbClient.getCircleBalance(s.user.id)
         // process new deposits if there are any & send them to the users account
         await dbClient.circleClient.processDeposits(
           s.user.account_details.circle.accountId,

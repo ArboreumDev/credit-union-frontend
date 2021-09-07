@@ -1,57 +1,15 @@
-import {
-  Box,
-  Select,
-  Button,
-  Center,
-  Stack,
-  Text,
-  Flex,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Input,
-  Divider,
-  useClipboard,
-} from "@chakra-ui/core"
-import AmountInput from "components/common/AmountInput"
+import { Box, Select, Text } from "@chakra-ui/core"
 import Address from "components/common/Address"
 import BankAccount from "components/common/BankAccount"
-import { ChangeBalance } from "lib/gql_api_actions"
-import { User } from "lib/types"
-import { useRouter } from "next/router"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { User_Constraint } from "gql/sdk"
-
-type FormData = {
-  amount: number
-}
+import { User } from "lib/types"
 
 interface Props {
   user: User
 }
 
-type Method = "BANK" | "ALGO" | "ETH"
-
 export function AddFundsForm({ user }: Props) {
-  const router = useRouter()
-  const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [nSup, supCount] = useState(1)
   const [method, setMethod] = useState(undefined)
-
-  const onSubmit = (formData: FormData) => {
-    console.log(formData)
-    ChangeBalance.fetch({
-      userId: user.id,
-      delta: formData.amount,
-    })
-      .then((res) => {
-        router.push("/dashboard")
-      })
-      .catch((err) => console.error(err))
-  }
 
   return (
     <Box>

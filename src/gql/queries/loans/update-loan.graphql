@@ -1,0 +1,26 @@
+mutation UpdateLoan(
+    $loanId: uuid!, 
+    $newLoanState: loan_state_enum,
+    $newPrincipalRemaining: float8, 
+    $newPrincipalOverdue: float8, 
+    $newInterestAccrued: float8, 
+    $newInterestPaid: float8, 
+    $newNextPaymentAmount: float8, 
+    $newNextPaymentDueDate: timestamptz, 
+    ) {
+  loan: update_loan_by_pk(
+    pk_columns: { loan_id: $loanId }
+    _set: { 
+        state: $newLoanState
+        principal_remaining: $newPrincipalRemaining
+        principal_overdue: $newPrincipalOverdue
+        interest_accrued: $newInterestAccrued
+        interest_paid: $newInterestPaid
+        next_payment_amount: $newNextPaymentAmount
+        next_payment_due_date: $newNextPaymentDueDate
+    }
+  ) {
+      state
+  }
+}
+

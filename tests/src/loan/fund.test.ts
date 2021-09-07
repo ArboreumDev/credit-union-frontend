@@ -1,16 +1,8 @@
-import {
-  Loan_Request_State_Enum,
-  Loan_State_Enum,
-  FundLoanRequestMutation,
-} from "../../../src/gql/sdk"
+import { Loan_Request_State_Enum, Loan_State_Enum } from "../../../src/gql/sdk"
 import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
-import DbClient from "gql/db_client"
-import borrower from "components/dashboard/borrower"
-import {
-  createLoanRequest,
-  createFundedLoan,
-} from "../../src/common/test_helpers"
+import { createLoanRequest } from "../../src/common/test_helpers"
+import { uuidv4 } from "lib/helpers"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -23,16 +15,18 @@ afterAll(async () => {
 })
 
 describe("Fund Loan Success Flows", () => {
-  const lenderDeposit = 2000
-  const loanAmount = 1000
+  const lenderDeposit = 11
+  const loanAmount = 10
   let requestId: string
 
   beforeEach(async () => {
     requestId = await createLoanRequest(BORROWER1.id, dbClient, loanAmount)
-    await sdk.ChangeUserCashBalance({
-      userId: LENDER1.id,
-      delta: lenderDeposit,
-    })
+    const { user } = await sdk.GetAccountDetails({ id: LENDER1.id })
+    await dbClient.circleClient.fundFromMasterWallet(
+      user.account_details.circle.walletId,
+      lenderDeposit,
+      uuidv4()
+    )
   })
 
   afterEach(async () => {
@@ -41,7 +35,7 @@ describe("Fund Loan Success Flows", () => {
   })
 
   test("Fund an existing loan request", async () => {
-    const balanceBefore = (await dbClient.getUserByEmail(LENDER1.email)).balance
+    const balanceBefore = await dbClient.getCircleBalance(LENDER1.id)
     const {
       newLoan,
       amountsLent,
@@ -57,7 +51,7 @@ describe("Fund Loan Success Flows", () => {
     expect(amountsLent.returning[0].lender_id).toBe(LENDER1.id)
     expect(amountsLent.returning[0].amount_lent).toBe(loanAmount)
 
-    const balanceAfter = (await dbClient.getUserByEmail(LENDER1.email)).balance
+    const balanceAfter = await dbClient.getCircleBalance(LENDER1.id)
     expect(balanceAfter).toBe(balanceBefore - loanAmount)
   })
   test.todo("borrower creates a loan request after a completed loan")
