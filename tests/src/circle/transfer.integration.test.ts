@@ -136,7 +136,7 @@ describe.skip("Circle tests", () => {
     })
   })
 
-  describe("withdrawals", () => {
+  describe.skip("withdrawals", () => {
     const user1 = CircleFixtures.accounts[userIds[0]]
     let withdrawalId
     test("creating a wire withdrawal", async () => {
