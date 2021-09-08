@@ -1,7 +1,6 @@
 import {
   Modal,
   ModalOverlay,
-  Divider,
   ModalContent,
   ModalHeader,
   ModalFooter,
@@ -9,23 +8,12 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
-  Box,
-  Center,
   Text,
-  HStack,
-  VStack,
-  Flex,
-  Progress,
-  Stack,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Tooltip,
   Link,
 } from "@chakra-ui/core"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { UserTransaction } from "lib/types"
-import { Row, Table, TextColumn } from "./Table"
+import { Row, Table } from "./Table"
 
 interface Props {
   tx: UserTransaction
@@ -34,7 +22,7 @@ interface Props {
 const etherscanBaseUrl = "https://etherscan.io/tx/"
 const algoExplorerBaseUrl = "https://algoexplorer.io/tx/"
 
-export const TransactionDetails = ({ tx }: Props) => {
+const TransactionDetails = ({ tx }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -83,3 +71,5 @@ export const TransactionDetails = ({ tx }: Props) => {
     </>
   )
 }
+
+export default TransactionDetails

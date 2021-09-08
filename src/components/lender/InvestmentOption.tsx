@@ -1,24 +1,4 @@
-import {
-  Divider,
-  Switch,
-  Box,
-  Button,
-  Badge,
-  Center,
-  Stack,
-  Text,
-  Link,
-  HStack,
-  VStack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from "@chakra-ui/core"
+import { Box, Button, Badge, HStack, Text, VStack } from "@chakra-ui/core"
 import { User, InvestmentOptionInfo, InvestmentOptions } from "lib/types"
 import { Currency } from "../common/Currency"
 import { useRouter } from "next/router"
