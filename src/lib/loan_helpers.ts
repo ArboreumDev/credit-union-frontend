@@ -86,7 +86,7 @@ export const getTotalOutstanding = (loan) => {
 
 export const getLoanState = (loan) => {
   const newLoanState =
-    loan.principal_remaining - getTotalOutstanding(loan) > 0
+    getTotalOutstanding(loan) > 0
       ? Loan_State_Enum.Live
       : Loan_State_Enum.Repaid
   return newLoanState
