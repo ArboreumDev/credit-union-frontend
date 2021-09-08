@@ -54,7 +54,7 @@ export function WithdrawFundsForm({ user }: Props) {
     return (
       !errors.amount &&
       !errors.address &&
-      watched.address &&
+      (watched.address || (!watched.address && watched.target === "BANK")) &&
       watched.target &&
       watched.amount &&
       !confirmed
