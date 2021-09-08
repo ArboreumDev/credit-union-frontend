@@ -530,6 +530,7 @@ export default class CircleClient extends Bank {
    // REFACTOR NOTE: while passing in the paymentId as idemKey prevents duplication, we still tell their api
    // to do it....if we want to prevent that, we have to store the transferId of newly initiated transfers
    // (maybe in the user.account_details? or should we do another tx-table?)
+    // TODO when we allow fiat-repayments, deposits from borrowers need to be transfered to the respective loan-account
    */
   async processDeposits(accountId: string, targetWalletId: string) {
     // 1) get payments

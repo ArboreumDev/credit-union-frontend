@@ -134,10 +134,6 @@ export default class DbClient {
 
     // TODO actually fund request with amount, using loanId as reference
     // for now, just change the lender balance
-    await this.sdk.ChangeUserCashBalance({
-      userId: lenderId,
-      delta: -loanRequest.amount,
-    })
     const data = await this.doCircleTransfer(
       lenderId,
       loanRequest.borrowerInfo.id,
@@ -292,7 +288,9 @@ export default class DbClient {
 
   /*
    * - figure out the new adjusted terms of the loan (taking the array of repayments as input)
+   * - call loan-api to learn the current outstanding amount
    * - if there is money on the loan, forward the money to lenders (capping to max outstanding amount)
+   * - create a repayment entry & update the loan-table
    * - TODO notify users if the new-state differs from old (e.g. new tx, new-loan-state...)
    */
   processLoanRepayments = async (loanId: string) => {
@@ -371,6 +369,7 @@ export default class DbClient {
         })
       } else {
         console.log("payment is not yet complete, status: ", status)
+        // TODO what do we do here? how can we be sure that the payment will be registered?
       }
     } else {
       console.log("no payment outstanding, latest loan state matches db-state")
@@ -384,6 +383,7 @@ export default class DbClient {
 
   doCompoundingUpdates = async () => {
     const { loans } = await this.sdk.GetLiveLoans()
+    console.log("liveloans ", loans)
     await Promise.all(
       loans.map(async (loan) => {
         const latestLoanStateRaw = await this.swarmAIClient.getLoanState(
@@ -395,6 +395,7 @@ export default class DbClient {
             }
           }) // as processed repayments
         )
+        console.log("got ", latestLoanStateRaw)
         const latestLoanState = {
           ...latestLoanStateRaw,
           next_payment_due_date: unixTimestampToDateString(
@@ -437,6 +438,7 @@ export default class DbClient {
         const possibleInvestors = request.creditors.approved.filter(
           (c) => c.account.balance > request.amount
         )
+        console.log("pos", possibleInvestors)
         if (possibleInvestors.length > 0) {
           await this.fundLoanRequest(
             request.request_id,
@@ -447,6 +449,9 @@ export default class DbClient {
     )
   }
 
+  /**
+   * update our local balances in the user table with the balances from the circle
+   */
   updateAccountBalances = async () => {
     const { user } = await this.sdk.GetAllUsers()
     await Promise.all(
@@ -491,7 +496,20 @@ export default class DbClient {
    * lets do a smart combination of the above functions
    */
   reconcile = async () => {
-    console.log("todo")
+    // create transfers into user accounts for deposits made into our master account
+    // TODO when we allow fiat-repayments, deposits from borrowers need to be transfered to the respective loan-account
+    await this.processDeposits()
+
+    // update loan data (outstanding amounts) for all loans
+    await this.doCompoundingUpdates()
+
+    // send money from loan-wallets to lenders (fetches loan-state again), create repayments
+    await this.processRepayments()
+
+    // see if as a result of the updated balances, new loans can be funded
+    await this.processOpenRequests()
+
+    await this.updateAccountBalances() // < we should never rely on our local table...if so we should pull right before
   }
 
   logEvent = async (
