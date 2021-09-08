@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/core"
 import { Transfer, Payment } from "lib/types"
 import { UserTransaction } from "lib/types"
-import { TransactionDetails } from "./TransactionDetails"
+import TransactionDetails from "./TransactionDetails"
 
 interface Props {
   transfers: UserTransaction[]
