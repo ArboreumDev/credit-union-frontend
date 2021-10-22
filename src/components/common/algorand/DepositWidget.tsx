@@ -28,6 +28,9 @@ export const DepositWidget = ({ buttonText, toAddress }: Props) => {
       const allAddresses = await getAllAccountAddr()
       console.log('all add', allAddresses)
       setUserAddresses(allAddresses)
+      if (allAddresses.length) {
+        setFromAddress(allAddresses[0])
+      }
     }
     loadAddresses()
   }, [])
@@ -50,6 +53,7 @@ export const DepositWidget = ({ buttonText, toAddress }: Props) => {
     setLoading(false);
   }, [amount]);
 
+  // TODO the result of the transaction needs to be displayed in a better way: toast, banner under the top bar, ...
   return (
     <div>
       <Select 

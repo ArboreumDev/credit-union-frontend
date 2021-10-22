@@ -1,4 +1,4 @@
-import { Box, Select, Text } from "@chakra-ui/core"
+import { Box, Select, Text, Divider} from "@chakra-ui/core"
 import Address from "components/common/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
@@ -22,7 +22,6 @@ export function AddFundsForm({ user }: Props) {
       <Text>How do you want to fund your account?</Text>
       <Select
         placeholder="please choose a deposit method"
-        // name="target"
         onChange={(e) => setMethod(e.target.value)}
       >
         <option value="ETH">USDC from Ethereum</option>
@@ -45,17 +44,20 @@ export function AddFundsForm({ user }: Props) {
             size="long"
             address={ "" +  user.account_details.circle.algoAddress }
           />
-          <Text>OR</Text>
 
           {(method === "ALGO" && typeof AlgoSigner !== 'undefined') && (
-            // <Connect buttonText="connectToAlgorand" />
-            <DepositWidget 
-              // amount={400}
-              buttonText="Deposit with AlgoSigner"
-              toAddress={user.account_details.circle.algoAddress}
-            />
+            <Box>
+              <Text><b>OR</b></Text>
+              <Text>Create a deposit with the AlgoSigner-Extension</Text>
+              <DepositWidget 
+                // amount={400}
+                buttonText="Deposit with AlgoSigner"
+                toAddress={user.account_details.circle.algoAddress}
+              />
+            </Box>
           )}
           <Text>
+            <Divider />
             <i>
               Note that we might afterwards move the money out of that account to
               a different address - It will still be reflected in your overall
