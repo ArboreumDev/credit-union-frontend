@@ -3,6 +3,10 @@ import Address from "components/common/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
+import {DepositWidget} from "components/common/algorand/DepositWidget"
+import {Connect} from "components/common/algorand/Connect"
+// /* global AlgoSigner */
+declare const AlgoSigner: any;
 
 interface Props {
   user: User
@@ -10,6 +14,8 @@ interface Props {
 
 export function AddFundsForm({ user }: Props) {
   const [method, setMethod] = useState(undefined)
+
+  console.log("algosigner", typeof AlgoSigner)
 
   return (
     <Box>
@@ -23,23 +29,39 @@ export function AddFundsForm({ user }: Props) {
         <option value="ALGO">USDC from Algorand</option>
         <option value="BANK">Bank Wire Transfer</option>
       </Select>
-      {(method === "ETH" || method === "ALGO") && (
+      {method === "ETH"  && (
         <Box>
           <Text>Fund your account by sending USDC to this deposit address</Text>
           <Address
             size="long"
-            address={
-              "" +
-              (method === "ETH"
-                ? user.account_details.circle.ethAddress
-                : user.account_details.circle.algoAddress)
-            }
+            address={ "" +  user.account_details.circle.ethAddress }
           />
-          <i>
-            Note that we might afterwards move the money out of that account to
-            a different address - It will still be reflected in your overall
-            account balance though
-          </i>
+        </Box>
+      )}
+      {method === "ALGO"  && (
+        <Box>
+          <Text>Fund your account by sending USDC to this deposit address</Text>
+          <Address
+            size="long"
+            address={ "" +  user.account_details.circle.algoAddress }
+          />
+          <Text>OR</Text>
+
+          {(method === "ALGO" && typeof AlgoSigner !== 'undefined') && (
+            // <Connect buttonText="connectToAlgorand" />
+            <DepositWidget 
+              // amount={400}
+              buttonText="Deposit with AlgoSigner"
+              toAddress={user.account_details.circle.algoAddress}
+            />
+          )}
+          <Text>
+            <i>
+              Note that we might afterwards move the money out of that account to
+              a different address - It will still be reflected in your overall
+              account balance though
+            </i>
+          </Text>
         </Box>
       )}
 
