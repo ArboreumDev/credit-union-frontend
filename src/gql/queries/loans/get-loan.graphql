@@ -1,6 +1,7 @@
 query GetLoan($loanId: uuid!) {
   loan: loan_by_pk(loan_id: $loanId) {
     loan_id
+    asset_id
     state
     tenor
     created_at
