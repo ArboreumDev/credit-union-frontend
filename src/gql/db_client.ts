@@ -238,6 +238,7 @@ export default class DbClient {
     return {
       status: data.status,
       repaidAmount: parseFloat(data.amount.amount),
+      txHash: data.transactionHash
     }
   }
 
@@ -328,6 +329,7 @@ export default class DbClient {
         return {
           amount: parseFloat(t.amount.amount),
           date: dateStringToUnixTimestamp(t.createDate),
+          txHash: t.transactionHash
         } as Repayment
       })
     const latestLoanState = await this.swarmAIClient.getLoanState(
@@ -343,13 +345,14 @@ export default class DbClient {
       // make a payment
       // TODO is just taking the latest transfer here a dangerous assumption?
       // it means we rely on circle always returning them sorted!
-      const repaymentIdemKey = latestTransfers[latestTransfers.length - 1].id
+      const latestTransfer = latestTransfers[latestTransfers.length - 1]
+      const repaymentIdemKey = latestTransfer.id
       const loanWalletBalance = await this.circleClient.getBalance(
         loan.wallet_id
       )
       const maxToRepay = getTotalOutstanding(loan)
       const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
-      const { status, repaidAmount } = await this.forwardRepayment(
+      const { status, repaidAmount, txHash } = await this.forwardRepayment(
         loan.loan_id,
         amountToRepay,
         repaymentIdemKey
@@ -368,6 +371,21 @@ export default class DbClient {
             repaidInterest: 0,
           },
         }
+        // log repayment on loan-asset
+        // - create object to be stored in the transaction note-field
+        const dataToBeLogged = {
+          newLoanState: update.newState.newLoanState,
+          ...update.paymentInfo,
+          txHashes: {
+            toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
+            toLenders: [txHash] // from the loan-account to the lenders (by us)
+            // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
+            // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
+            // txHash from the latest repayment)
+          }
+        }
+        const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
+
         return this.sdk.RegisterRepayment({
           loanId,
           repayment: {
@@ -376,6 +394,7 @@ export default class DbClient {
             repaid_principal: update.paymentInfo.repaidPrincipal,
             repaid_interest: update.paymentInfo.repaidInterest,
             date: new Date().toUTCString(),
+            algorand_tx_id: txId
           },
           ...update.newState,
           updateLog: {

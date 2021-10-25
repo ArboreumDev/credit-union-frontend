@@ -61,7 +61,6 @@ export default class AlgoClient {
   }
 
   /**
-   * @param assetName name of the token to be created
    * @param loanParams basic data on the loan to be tokenized, will be stored in token-metadata
    * @returns the txId & the assetId of the created token
    */
@@ -69,11 +68,23 @@ export default class AlgoClient {
     loanParams: any
   ): Promise<NewAssetResponse> {
     const payload = {
-      assetName: "LoanAsset",
+      assetName: "LoanAsset", // TODO give it an appropriate name
       loanParams
 
     }
     return this.fetcher.post(`/v1/log/new`, payload)
+  }
+
+  /**
+   * @param assetId of the token to be logged with
+   * @param data to be attached in the notefield of the tx
+   * @returns the txId 
+   */
+  async logRepayment(
+    assetId: any,
+    data: any
+  ): Promise<NewAssetResponse> {
+    return this.fetcher.post(`/v1/log/${assetId}`, {data})
   }
 
 

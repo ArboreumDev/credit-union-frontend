@@ -11,6 +11,7 @@ import {requestToTokenMetadataParams} from "lib/loan_helpers"
 import { uuidv4 } from "lib/helpers"
 // import { createFundedLoan } from "../../src/common/test_helpers"
 // import { loanToTerms } from "lib/loan_helpers"
+const ALGORAND_BLOCK_TIMEOUT = 10000
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -26,6 +27,7 @@ describe("Tokenize Loan", () => {
   const lenderDeposit = 2000
   const loanAmount = 1000
   let loanId: string
+  let created_assetId: number
 
   test("Loan can be tokenized", async () =>{
     const purpose = "go see the movies"
@@ -46,7 +48,13 @@ describe("Tokenize Loan", () => {
 
     const loanParams = requestToTokenMetadataParams(newLoanId, loanRequest, terms)
     const {assetId, txId} = await algoClient.tokenizeLoan(loanParams)
+    created_assetId = assetId
     expect(assetId).toBeTruthy
     expect(txId).toBeTruthy
-  }, 10000 )
+  }, ALGORAND_BLOCK_TIMEOUT )
+
+  test("Repayment gets logged on nft", async () => {
+    const {txId} = await algoClient.logRepayment(created_assetId, {data: '42'})
+    expect(txId).toBeTruthy
+  }, ALGORAND_BLOCK_TIMEOUT)
 })
