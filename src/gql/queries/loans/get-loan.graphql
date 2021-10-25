@@ -19,6 +19,7 @@ query GetLoan($loanId: uuid!) {
         date
         repaid_principal
         repaid_interest
+        algorand_tx_id
     }
     lender_amounts {
       lender_id

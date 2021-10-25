@@ -29,6 +29,7 @@ mutation RegisterRepayment (
     repayment_id
     loan_id
     repaid_principal
+    algorand_tx_id
   }
   updateLogEntry: insert_update_log_one(object: $updateLog) {
     update_id

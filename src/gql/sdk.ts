@@ -3568,6 +3568,7 @@ export type Query_RootUser_Type_By_PkArgs = {
 /** columns and relationships of "repayment" */
 export type Repayment = {
   __typename?: 'repayment';
+  algorand_tx_id?: Maybe<Scalars['String']>;
   date: Scalars['date'];
   /** An object relationship */
   loan: Loan;
@@ -3646,6 +3647,7 @@ export type Repayment_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Repayment_Bool_Exp>>>;
   _not?: Maybe<Repayment_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Repayment_Bool_Exp>>>;
+  algorand_tx_id?: Maybe<String_Comparison_Exp>;
   date?: Maybe<Date_Comparison_Exp>;
   loan?: Maybe<Loan_Bool_Exp>;
   loan_id?: Maybe<Uuid_Comparison_Exp>;
@@ -3668,6 +3670,7 @@ export type Repayment_Inc_Input = {
 
 /** input type for inserting data into table "repayment" */
 export type Repayment_Insert_Input = {
+  algorand_tx_id?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['date']>;
   loan?: Maybe<Loan_Obj_Rel_Insert_Input>;
   loan_id?: Maybe<Scalars['uuid']>;
@@ -3679,6 +3682,7 @@ export type Repayment_Insert_Input = {
 /** aggregate max on columns */
 export type Repayment_Max_Fields = {
   __typename?: 'repayment_max_fields';
+  algorand_tx_id?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['date']>;
   loan_id?: Maybe<Scalars['uuid']>;
   repaid_interest?: Maybe<Scalars['float8']>;
@@ -3688,6 +3692,7 @@ export type Repayment_Max_Fields = {
 
 /** order by max() on columns of table "repayment" */
 export type Repayment_Max_Order_By = {
+  algorand_tx_id?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
   loan_id?: Maybe<Order_By>;
   repaid_interest?: Maybe<Order_By>;
@@ -3698,6 +3703,7 @@ export type Repayment_Max_Order_By = {
 /** aggregate min on columns */
 export type Repayment_Min_Fields = {
   __typename?: 'repayment_min_fields';
+  algorand_tx_id?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['date']>;
   loan_id?: Maybe<Scalars['uuid']>;
   repaid_interest?: Maybe<Scalars['float8']>;
@@ -3707,6 +3713,7 @@ export type Repayment_Min_Fields = {
 
 /** order by min() on columns of table "repayment" */
 export type Repayment_Min_Order_By = {
+  algorand_tx_id?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
   loan_id?: Maybe<Order_By>;
   repaid_interest?: Maybe<Order_By>;
@@ -3738,6 +3745,7 @@ export type Repayment_On_Conflict = {
 
 /** ordering options when selecting data from "repayment" */
 export type Repayment_Order_By = {
+  algorand_tx_id?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
   loan?: Maybe<Loan_Order_By>;
   loan_id?: Maybe<Order_By>;
@@ -3754,6 +3762,8 @@ export type Repayment_Pk_Columns_Input = {
 /** select columns of table "repayment" */
 export enum Repayment_Select_Column {
   /** column name */
+  AlgorandTxId = 'algorand_tx_id',
+  /** column name */
   Date = 'date',
   /** column name */
   LoanId = 'loan_id',
@@ -3767,6 +3777,7 @@ export enum Repayment_Select_Column {
 
 /** input type for updating data in table "repayment" */
 export type Repayment_Set_Input = {
+  algorand_tx_id?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['date']>;
   loan_id?: Maybe<Scalars['uuid']>;
   repaid_interest?: Maybe<Scalars['float8']>;
@@ -3828,6 +3839,8 @@ export type Repayment_Sum_Order_By = {
 
 /** update columns of table "repayment" */
 export enum Repayment_Update_Column {
+  /** column name */
+  AlgorandTxId = 'algorand_tx_id',
   /** column name */
   Date = 'date',
   /** column name */
@@ -6394,7 +6407,7 @@ export type GetLoanQuery = (
     & Pick<Loan, 'loan_id' | 'asset_id' | 'state' | 'tenor' | 'created_at' | 'apr' | 'penalty_apr' | 'principal' | 'principal_overdue' | 'principal_remaining' | 'interest_paid' | 'interest_accrued' | 'compounding_frequency' | 'wallet_id'>
     & { repayments: Array<(
       { __typename?: 'repayment' }
-      & Pick<Repayment, 'repayment_id' | 'date' | 'repaid_principal' | 'repaid_interest'>
+      & Pick<Repayment, 'repayment_id' | 'date' | 'repaid_principal' | 'repaid_interest' | 'algorand_tx_id'>
     )>, lender_amounts: Array<(
       { __typename?: 'lender_amount' }
       & Pick<Lender_Amount, 'lender_id' | 'amount_lent'>
@@ -6449,7 +6462,7 @@ export type RegisterRepaymentMutation = (
     & Pick<Loan, 'state' | 'principal_remaining'>
   )>, repayment?: Maybe<(
     { __typename?: 'repayment' }
-    & Pick<Repayment, 'repayment_id' | 'loan_id' | 'repaid_principal'>
+    & Pick<Repayment, 'repayment_id' | 'loan_id' | 'repaid_principal' | 'algorand_tx_id'>
   )>, updateLogEntry?: Maybe<(
     { __typename?: 'update_log' }
     & Pick<Update_Log, 'update_id'>
@@ -6942,6 +6955,7 @@ export const GetLoanDocument = gql`
       date
       repaid_principal
       repaid_interest
+      algorand_tx_id
     }
     lender_amounts {
       lender_id
@@ -6983,6 +6997,7 @@ export const RegisterRepaymentDocument = gql`
     repayment_id
     loan_id
     repaid_principal
+    algorand_tx_id
   }
   updateLogEntry: insert_update_log_one(object: $updateLog) {
     update_id
