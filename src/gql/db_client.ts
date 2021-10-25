@@ -22,6 +22,7 @@ import {
   getTotalPaid,
   loanToTerms,
   loanAndNewStateToUpdate,
+  requestToTokenMetadataParams
 } from "lib/loan_helpers"
 import { LoanState } from "./types"
 import { UpdateRequestType } from "pages/api/reconcile"
@@ -32,6 +33,7 @@ import {
   COMPOUNDING_FREQ,
 } from "lib/constant"
 import { sleep, dateStringToUnixTimestamp } from "lib/helpers"
+import AlgoClient from "gql/algo_client"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -43,11 +45,13 @@ export default class DbClient {
   public gqlClient: GraphQLClient
   public swarmAIClient: SwarmAIClient
   public circleClient: CircleClient
+  public algoClient: AlgoClient
 
   constructor(
     _client?: GraphQLClient,
     _swarmai_client?: SwarmAIClient,
-    _circleClient?: CircleClient
+    _circleClient?: CircleClient,
+    _algoClient?: AlgoClient
   ) {
     if (DbClient.instance) {
       return DbClient.instance
@@ -60,7 +64,11 @@ export default class DbClient {
       _circleClient ||
       new CircleClient(process.env.CIRCLE_BASE_URL, process.env.CIRCLE_API_KEY)
     this.sdk = getSdk(this.gqlClient)
+    this.algoClient =
+      _algoClient ||
+      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1")
     DbClient.instance = this
+ 
   }
 
   getUserByEmail = async (email: string) => {
@@ -161,10 +169,24 @@ export default class DbClient {
       description: "loan account",
     })
 
+    // TODO tokenize loan
+    const terms = {
+      apr: DEFAULT_APR,
+      principal: loanRequest.amount,
+      tenorInDays: DEFAULT_LOAN_TENOR,
+      startDate: Math.floor( Date.now() / 1000),
+      compounding_frequency: "daily", // TODO
+    }
+
+    const loanParams = requestToTokenMetadataParams(newLoanId, loanRequest, terms)
+    const {assetId} = this.algoClient.tokenizeLoan(loanParams)
+    // TODO store assetID of loanNFT on loan
+
     return await this.sdk.FundLoanRequest({
       requestId,
       loan: {
         loan_id: newLoanId,
+        asset_id: assetId,
         wallet_id: walletId,
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,

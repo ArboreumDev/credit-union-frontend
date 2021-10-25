@@ -1,0 +1,40 @@
+import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
+import { sdk, algoClient } from "../common/utils"
+import { createFundedLoan } from "../common/test_helpers"
+// import { loanToTerms } from "lib/loan_helpers"
+
+beforeAll(async () => {
+  await sdk.ResetDB()
+  await sdk.CreateUser({ user: BORROWER1 })
+  await sdk.CreateUser({ user: LENDER1 })
+})
+
+afterAll(async () => {
+  await sdk.ResetDB()
+})
+
+describe.skip("Tokenize Loan", () => {
+  const lenderDeposit = 2000
+  const loanAmount = 1000
+  let loanId: string
+
+
+//   beforeEach(async () => {
+//     const res = await createFundedLoan(
+//       BORROWER1.id,
+//       dbClient,
+//       LENDER1.id,
+//       lenderDeposit,
+//       loanAmount,
+//       "repay tests"
+//     )
+//     loanId = res.loanId
+//   })
+
+//   afterEach(async () => {
+//     await sdk.ResetLoans()
+//     await sdk.ResetRepayments()
+//   })
+  test.todo("When a loan is created, we create a borrower profile")
+  test.todo("When a loan is funded an asset is minted and the assetId stored on the loan")
+})

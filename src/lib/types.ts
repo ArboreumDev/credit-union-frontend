@@ -5,6 +5,7 @@ import {
   FundLoanRequestMutation,
   GetLiveLoansQuery,
   GetLoanStateQuery,
+  GetLoanRequestQuery,
 } from "../gql/sdk"
 import { LogEventTypes } from "./constant"
 
@@ -31,6 +32,7 @@ export type UserBaseInfo = GetAllUsersQuery["user"][0]
 export type FundedLoan = FundLoanRequestMutation
 export type LiveLoan = GetLiveLoansQuery["loans"][0]
 export type LoanState = GetLoanStateQuery["loan"]
+export type LoanRequestInfoType = GetLoanRequestQuery["loanRequest"]
 
 export type Repayment = {
   amount: number

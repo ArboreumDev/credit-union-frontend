@@ -1,8 +1,10 @@
-import { LoanTerms, PortfolioUpdate, LoanState } from "./types"
+import { LoanTerms, LoanState, LoanRequestInfoType } from "./types"
 import {
   Loan_State_Enum,
   Update_Log_Insert_Input,
   Update_Type_Enum,
+  Loan_Request,
+  Loan_Request_Constraint
 } from "../gql/sdk"
 import { unixTimestampToDateString } from "lib/helpers"
 
@@ -211,4 +213,18 @@ const generateUserBalanceUpdate = (
           corpus_share
         },`
   )
+}
+
+export const requestToTokenMetadataParams = (
+    newLoanId: string,
+    loanRequest: LoanRequestInfoType,
+    terms: Object
+  ) => {
+  return {
+    loanId: newLoanId,
+    borrowerInfo: loanRequest.borrowerInfo.toString(),
+    ...terms,
+    // TODO what could/should go here?
+    data: ""
+  }
 }

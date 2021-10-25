@@ -47,13 +47,14 @@ describe("Fund Loan Success Flows", () => {
     expect(newLoan.principal).toBe(loanAmount)
     expect(newLoan.state).toBe(Loan_State_Enum.Live)
     expect(newLoan.principal_remaining).toBe(loanAmount)
+    expect(newLoan.asset_id).toBeTruthy
 
     expect(amountsLent.returning[0].lender_id).toBe(LENDER1.id)
     expect(amountsLent.returning[0].amount_lent).toBe(loanAmount)
 
     const balanceAfter = await dbClient.getCircleBalance(LENDER1.id)
     expect(balanceAfter).toBe(balanceBefore - loanAmount)
-  })
+  }, 10000)
   test.todo("borrower creates a loan request after a completed loan")
   test.todo("borrower creates a loan request after a withdrawn loan-request")
 })

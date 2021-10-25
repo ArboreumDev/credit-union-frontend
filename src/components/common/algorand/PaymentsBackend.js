@@ -2,7 +2,7 @@
 /* global AlgoSigner */
 // use this if needed in a typescript file:
 // declare const AlgoSigner
-import {algoTxClient} from "./AlgoTxClient"
+import {algoTxClient} from "../../../gql/algo_client"
 // const CHAIN_NAME = process.env.ALGORAND_CHAIN
 const CHAIN_NAME = "TestNet"
 const USDC_ASSET_ID = 105 //process.env.USDC_ASSET_ID
