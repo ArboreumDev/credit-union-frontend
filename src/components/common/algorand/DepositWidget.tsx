@@ -1,7 +1,7 @@
 import { Box, Button, Spinner, Input, Select } from "@chakra-ui/core"
 import { useCallback, useState, useEffect } from 'react';
 // import {executeUSDCDeposit, getDefaultAccountAddr} from "./PaymentsAlgoBuilder"
-import { executeUSDCDeposit, getDefaultAccountAddr, optInToAsset, getAllAccountAddr } from "./PaymentsBackend"
+import { executeUSDCDeposit, getDefaultAccountAddr, optInToAsset, getAllAccountAddr } from "../../../lib/PaymentsBackend"
 
 interface Props {
     buttonText: string,
@@ -45,8 +45,12 @@ export const DepositWidget = ({ buttonText, toAddress }: Props) => {
       console.log('resp', response)
 
       // const response = await executeUSDCDeposit( fromAddress, toAddress, amount, setLoading);
+      if (response.status) {
+        setResult(`Success: see your tx here: https://testnet.algoexplorer.io/tx/${response.txId}. Please note that it will
+        take some time until we show the deposit as available in your balance`)
 
-      setResult(response.toString());
+      }
+
     } else {
       setResult('No accounts found in wallet');
     }

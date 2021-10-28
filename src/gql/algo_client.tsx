@@ -5,7 +5,7 @@ export enum AlgorandErrors {
   // NOT_ENOUGH_BALANCE_IN_SYSTEM = "NOT_ENOUGH_BALANCE_IN_SYSTEM",
 }
 
-const ALGO_BACKEND_URL = process.env.ALGO_BACKEND_URL
+const ALGO_BACKEND_URL = process.env.NEXT_PUBLIC_ALGO_BACKEND_URL
 console.log('alg from env', ALGO_BACKEND_URL) // TODO WHY?
 
 export type NewAssetResponse = {
@@ -16,13 +16,21 @@ export type NewAssetResponse = {
 export default class AlgoClient {
   private fetcher: Fetcher
 
-  constructor(baseURL: string) {
+  constructor(baseURL: string, secret: string = "") {
     const headers = {
       "Content-Type": "application/json",
       // "Authorization": `Bearer ${process.env.ALGO_BACKEND_SECRET}`
-      "Authorization": 'Bearer sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw=' // TODO load from env
+      "Authorization": `Bearer ${secret}`
     }
     this.fetcher = new Fetcher(headers, baseURL)
+    // TODO see if algo-backend is live
+    // this.fetcher.get("", {}).then((res) => {
+    //   console.log('res', res)
+    //   if (!res) {
+    //     console.log('algo backend not found')
+    //     // throw "Algo Backend not reachable"
+    //   }
+    // })
   }
 
   // async fetch(endpoint: string, payload: any) {
@@ -72,7 +80,7 @@ export default class AlgoClient {
       loanParams
 
     }
-    return this.fetcher.post(`/v1/log/new`, payload)
+    return this.fetcher.post(`/log/new`, payload)
   }
 
   /**
@@ -84,11 +92,52 @@ export default class AlgoClient {
     assetId: any,
     data: any
   ): Promise<NewAssetResponse> {
-    return this.fetcher.post(`/v1/log/${assetId}`, {data})
+    return this.fetcher.post(`/log/${assetId}`, {data})
+  }
+
+  async getCreditProfileOptInTx(
+    userAddress: string,
+  ): Promise<string> {
+    return this.fetcher.get(`/tx/optIn/profile/${userAddress}`, {})
+  }
+
+  async checkOptInStatus(
+    userAddress: string,
+  ): Promise<boolean> {
+    return this.fetcher.get(`/profile/optIn/status/${userAddress}`, {})
   }
 
 
+  async createNewProfile(
+    activeLoan: number,
+    loanState: string,
+    userAddress: string,
+  ): Promise<string> {
+    const payload = { activeLoan, loanState, userAddress }
+    return this.fetcher.post(`/profile/new/`, payload)
+  }
 
+  /**
+   * 
+   * @param activeLoan the assetId of the nft where all loan data is logged
+   * @param loanState new loan state
+   * @param userAddress where the local storage should be modified
+   * @returns 
+   */
+  async updateProfile(
+    activeLoan: number,
+    loanState: string,
+    userAddress: string,
+  ): Promise<string> {
+    const payload = { activeLoan, loanState, userAddress }
+    return this.fetcher.post(`/profile/update/${userAddress}`, payload)
+  }
 }
 
+// use this client when we only want to fetch transactions
 export const algoTxClient = new AlgoClient(ALGO_BACKEND_URL)
+
+// use this client when we want to trigger the master account to do things
+ // TODO load from env
+const BACKEND_SECRET = 'sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw='
+export const algoActionClient = new AlgoClient(ALGO_BACKEND_URL, BACKEND_SECRET)

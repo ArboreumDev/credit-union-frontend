@@ -24,6 +24,7 @@ export enum UserType {
 export type InvestmentOptions = GetBorrowersQuery["borrowers"]
 export type InvestmentOptionInfo = GetBorrowersQuery["borrowers"][0]
 export type User = GetUserByEmailQuery["user"][0]
+export type AccountDetails = GetUserByEmailQuery["user"][0]['account_details']
 export type LoanRequest = User["loan_requests"][0]
 export type Loan = User["loans"][0]
 export type LoanRepayInfo = User["loansToRepay"][0]

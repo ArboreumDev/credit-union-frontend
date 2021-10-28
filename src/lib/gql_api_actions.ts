@@ -10,11 +10,14 @@ import {
   RegisterRepaymentMutation,
   ChangeUserCashBalanceMutationVariables,
   ApproveBorrowerMutationVariables,
+  UpdateAccountDetailsMutation,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
 import { uuidv4 } from "lib/helpers"
+import { algoClient } from "../../tests/src/common/utils"
+import { Link } from "@chakra-ui/layout"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -102,6 +105,51 @@ export class CreateUser extends Action {
   static fetch(payload: typeof CreateUser.InputType) {
     return fetcherMutate(CreateUser.Name, payload)
   }
+}
+
+export interface LinkAlgoAccountInput {
+  address: string
+}
+
+export class LinkAlgoAccount extends Action {
+  static Name = "LinkAlgoAccount"
+  static InputType: LinkAlgoAccountInput
+  static ReturnType: UpdateAccountDetailsMutation
+
+  minAuthLevel = AUTH_TYPE.USER
+
+  async run() {
+    return await this.dbClient.sdk.UpdateAccountDetails({
+      userId: this.user.id, accountDetails: {
+        ...this.user.account_details,
+        algorand: {
+          address: this.payload.address
+        }
+      }
+    })
+  }
+
+  // TODO make sure the user is passing the address they have just signed from 
+  // if they just passed another one (who has also opted in to our app), we would write info from the 
+  // wrong loan into someone else profile
+  // isUserAllowed() {
+  //   return (
+  //     super.isUserAllowed() &&
+  //     this.payload &&
+  //     this.payload.request &&
+  //     this.payload.request.borrower_id == this.user.id
+  //   )
+  // }
+
+  static fetch(payload: typeof LinkAlgoAccount.InputType) {
+    return fetcherMutate(LinkAlgoAccount.Name, payload)
+  }
+
+}
+
+export type CreateLoanPayload = {
+  loanInput: typeof CreateLoan.InputType
+  userAddress: string
 }
 
 export class CreateLoan extends Action {
@@ -285,6 +333,7 @@ export class FundLoanRequest extends Action {
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
+  [LinkAlgoAccount.Name]: LinkAlgoAccount,
   [FundLoanRequest.Name]: FundLoanRequest,
   // [MakeRepayment.Name]: MakeRepayment,
   [SetBorrowerApproval.Name]: SetBorrowerApproval,

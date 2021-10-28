@@ -6362,7 +6362,7 @@ export type GetLoanRequestQuery = (
     & Pick<Loan_Request, 'request_id' | 'purpose' | 'amount' | 'state'>
     & { borrowerInfo: (
       { __typename?: 'user' }
-      & Pick<User, 'id' | 'email' | 'demographic_info'>
+      & Pick<User, 'id' | 'email' | 'demographic_info' | 'account_details'>
     ) }
   )> }
 );
@@ -6405,7 +6405,10 @@ export type GetLoanQuery = (
   & { loan?: Maybe<(
     { __typename?: 'loan' }
     & Pick<Loan, 'loan_id' | 'asset_id' | 'state' | 'tenor' | 'created_at' | 'apr' | 'penalty_apr' | 'principal' | 'principal_overdue' | 'principal_remaining' | 'interest_paid' | 'interest_accrued' | 'compounding_frequency' | 'wallet_id'>
-    & { repayments: Array<(
+    & { borrowerInfo: (
+      { __typename?: 'user' }
+      & Pick<User, 'account_details'>
+    ), repayments: Array<(
       { __typename?: 'repayment' }
       & Pick<Repayment, 'repayment_id' | 'date' | 'repaid_principal' | 'repaid_interest' | 'algorand_tx_id'>
     )>, lender_amounts: Array<(
@@ -6903,6 +6906,7 @@ export const GetLoanRequestDocument = gql`
       id
       email
       demographic_info
+      account_details
     }
   }
 }
@@ -6949,6 +6953,9 @@ export const GetLoanDocument = gql`
     interest_paid
     interest_accrued
     compounding_frequency
+    borrowerInfo {
+      account_details
+    }
     wallet_id
     repayments {
       repayment_id

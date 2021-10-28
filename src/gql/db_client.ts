@@ -9,7 +9,7 @@ import {
 } from "../../src/gql/sdk"
 
 import { LogEventTypes as LogEventType } from "../lib/constant"
-import { UserBaseInfo, Repayment } from "../lib/types"
+import { UserBaseInfo, Repayment, LoanState } from "../lib/types"
 import CircleClient from "./wallet/circle_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
@@ -24,7 +24,6 @@ import {
   loanAndNewStateToUpdate,
   requestToTokenMetadataParams
 } from "lib/loan_helpers"
-import { LoanState } from "./types"
 import { UpdateRequestType } from "pages/api/reconcile"
 import {
   DEFAULT_APR,
@@ -66,7 +65,7 @@ export default class DbClient {
     this.sdk = getSdk(this.gqlClient)
     this.algoClient =
       _algoClient ||
-      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1")
+      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw")
     DbClient.instance = this
  
   }
@@ -169,7 +168,7 @@ export default class DbClient {
       description: "loan account",
     })
 
-    // TODO tokenize loan
+    // tokenize loan
     const terms = {
       apr: DEFAULT_APR,
       principal: loanRequest.amount,
@@ -177,10 +176,14 @@ export default class DbClient {
       startDate: Math.floor( Date.now() / 1000),
       compounding_frequency: "daily", // TODO
     }
-
     const loanParams = requestToTokenMetadataParams(newLoanId, loanRequest, terms)
-    const {assetId} = this.algoClient.tokenizeLoan(loanParams)
-    // TODO store assetID of loanNFT on loan
+    const {assetId} = await this.algoClient.tokenizeLoan(loanParams)
+
+    // TODO store loan on borrower Profile
+    if (loanRequest.borrowerInfo.account_details.algorand?.address) {
+        // const {txId} = await this.algoClient.createNewProfile(assetId, "live", loanRequest.borrowerInfo.account_details.algorand.address)
+        // console.log('res', txId)
+    }
 
     return await this.sdk.FundLoanRequest({
       requestId,
@@ -190,14 +193,15 @@ export default class DbClient {
         wallet_id: walletId,
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,
-        principal: loanRequest.amount,
+        principal: terms.principal,
         // HARDCODED for now
+        // TODO input start_date as well
         compounding_frequency: COMPOUNDING_FREQ.daily,
-        apr: DEFAULT_APR,
+        apr: terms.apr,
         penalty_apr: DEFAULT_PENALTY_APR,
-        tenor: DEFAULT_LOAN_TENOR,
+        tenor: terms.tenorInDays,
         // -end
-        principal_remaining: loanRequest.amount,
+        principal_remaining: terms.principal,
         loan_request: loanRequest.request_id,
         ...schedule,
       },
@@ -329,7 +333,7 @@ export default class DbClient {
         return {
           amount: parseFloat(t.amount.amount),
           date: dateStringToUnixTimestamp(t.createDate),
-          txHash: t.transactionHash
+          // txHash: t.transactionHash
         } as Repayment
       })
     const latestLoanState = await this.swarmAIClient.getLoanState(
@@ -346,6 +350,7 @@ export default class DbClient {
       // TODO is just taking the latest transfer here a dangerous assumption?
       // it means we rely on circle always returning them sorted!
       const latestTransfer = latestTransfers[latestTransfers.length - 1]
+      console.log('late', latestTransfer)
       const repaymentIdemKey = latestTransfer.id
       const loanWalletBalance = await this.circleClient.getBalance(
         loan.wallet_id
@@ -384,7 +389,17 @@ export default class DbClient {
             // txHash from the latest repayment)
           }
         }
+        console.log('logged:', dataToBeLogged)
         const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
+
+        // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
+        if (
+          update.newState.newLoanState === Loan_State_Enum.Repaid &&
+          loan.borrowerInfo.account_details.algorand?.address
+          ) {
+            // NOTE: currently not implemented on the smart-contract
+            // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
+        }
 
         return this.sdk.RegisterRepayment({
           loanId,

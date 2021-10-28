@@ -14,7 +14,8 @@ const client = initializeGQL(TEST_API_URL, TEST_ADMIN_SECRET)
 // init swarmai client
 // const swarmAIClient = new SwarmAIClient("http://0.0.0.0:3001")
 const swarmAIClient = new SwarmAIClient("http://localhost:3002")
-export const algoClient = new AlgoClient("http://localhost:8001")
+const BACKEND_SECRET = 'sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw='
+export const algoActionClient = new AlgoClient("http://localhost:8001/v1", BACKEND_SECRET)
 
 // init circle client
 const TEST_CIRCLE_BASE_URL = "https://api-sandbox.circle.com"
@@ -25,6 +26,6 @@ export const circleClient = new CircleClient(
   TEST_CIRCLE_BASE_URL,
   TEST_CIRCLE_API_KEY
 )
-export const dbClient = new DbClient(client, swarmAIClient, circleClient, algoClient)
+export const dbClient = new DbClient(client, swarmAIClient, circleClient, algoActionClient)
 export const circle = dbClient.circleClient
 export const sdk = dbClient.sdk

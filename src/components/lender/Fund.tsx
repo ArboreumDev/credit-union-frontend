@@ -4,7 +4,6 @@ import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
 import {DepositWidget} from "components/common/algorand/DepositWidget"
-import {Connect} from "components/common/algorand/Connect"
 // /* global AlgoSigner */
 declare const AlgoSigner: any;
 

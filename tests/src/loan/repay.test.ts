@@ -3,6 +3,7 @@ import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
 import { createFundedLoan } from "../../src/common/test_helpers"
 import { uuidv4, sleep } from "lib/helpers"
+import { ALGORAND_BLOCK_TIMEOUT } from "./fund.test"
 
 beforeAll(async () => {
   await sdk.ResetDB()
@@ -37,7 +38,7 @@ describe("Repay Loan Success Flows", () => {
   })
 
   // this will currentl fail due to an error in the bulletLoan class => swarmai #229
-  test.skip("Repay an existing loan ", async () => {
+  test("Repay an existing loan ", async () => {
     // preconditions
     const updateBefore = await sdk.GetUpdates()
     const balanceBefore = await dbClient.circleClient.getBalance(
@@ -47,6 +48,7 @@ describe("Repay Loan Success Flows", () => {
     expect(loan.repayments.length).toBe(0)
 
     // make a repayment into the loan-wallet from master wallet
+    await sleep(3000)
     const data = await dbClient.circleClient.fundFromMasterWallet(
       loan.wallet_id,
       loanAmount,
@@ -67,6 +69,7 @@ describe("Repay Loan Success Flows", () => {
 
     expect(after.loan.repayments.length).toBe(1)
     expect(after.loan.repayments[0].repaid_principal).toBe(loanAmount)
+    expect(after.loan.repayments[0].algorand_tx_id).toBeTruthy
 
     const balanceAfter = await dbClient.circleClient.getBalance(
       LENDER1.account_details.circle.walletId
@@ -75,7 +78,7 @@ describe("Repay Loan Success Flows", () => {
 
     const updateAfter = await sdk.GetUpdates()
     expect(updateBefore.updates.length).toBe(updateAfter.updates.length - 1)
-  }, 9000)
+  }, 9000 + ALGORAND_BLOCK_TIMEOUT)
 
   test.todo("borrower creates a loan request after a completed loan")
   test.todo("borrower creates a loan request after a withdrawn loan-request")

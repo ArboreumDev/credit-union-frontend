@@ -13,6 +13,9 @@ query GetLoan($loanId: uuid!) {
     interest_paid
     interest_accrued
     compounding_frequency
+    borrowerInfo {
+      account_details
+    }
     wallet_id
     repayments {
         repayment_id

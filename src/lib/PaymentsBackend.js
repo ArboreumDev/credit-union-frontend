@@ -2,10 +2,12 @@
 /* global AlgoSigner */
 // use this if needed in a typescript file:
 // declare const AlgoSigner
-import {algoTxClient} from "../../../gql/algo_client"
+import {algoTxClient} from "../gql/algo_client"
 // const CHAIN_NAME = process.env.ALGORAND_CHAIN
-const CHAIN_NAME = "TestNet"
-const USDC_ASSET_ID = 105 //process.env.USDC_ASSET_ID
+// const CHAIN_NAME = "TestNet"
+const CHAIN_NAME = "local"
+// const USDC_ASSET_ID = 105 //process.env.USDC_ASSET_ID
+const USDC_ASSET_ID = process.env.USDC_ASSET_ID
 const CONFIRMED_ROUND = 'confirmed-round';
 
 
@@ -38,12 +40,14 @@ export async function getAllAccountAddr() {
     (await AlgoSigner.accounts({
       ledger: CHAIN_NAME,
     })) ?? [];
+  console.log('wa', walletAccounts)
   return walletAccounts.map(a => a.address)
 }
 
 
 // =========== tx building & execution with backend & pure AlgoSigner ================
-const sendSignedTx = async (signedTxBlob, ledgerName = CHAIN_NAME) => {
+// TODO implement all this in typescript!
+const sendSignedTx = async (signedTx, ledgerName = CHAIN_NAME) => {
   const {txId} = await AlgoSigner.send({ledger: ledgerName, tx: signedTx.blob})
   return {txId: txId, status: txId ? true: false}
 }
@@ -51,7 +55,9 @@ const sendSignedTx = async (signedTxBlob, ledgerName = CHAIN_NAME) => {
  export async function executeUSDCDeposit(fromAddress, toAddress, amount) {
    // TODO throw good errors
   const unsignedTx = await algoTxClient.getUSDCDepositTx(fromAddress, toAddress, amount)
+  console.log('unsign', unsignedTx)
   const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
+  console.log('sign', signedTxs)
   return sendSignedTx(signedTxs[0])
 }
 
@@ -64,6 +70,14 @@ export async function optInToAsset(fromAddress, assetId) {
     const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
     return sendSignedTx(signedTxs[0])
 }
+
+export async function optInToProfileContract(fromAddress) { 
+    const unsignedTx = await algoTxClient.getCreditProfileOptInTx(fromAddress)
+    console.log('uns', unsignedTx)
+    const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
+    return sendSignedTx(signedTxs[0])
+}
+
 
 
 // =========== tx building & execution with algobuilder/web ================
