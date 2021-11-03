@@ -178,11 +178,14 @@ export default class DbClient {
     }
     const loanParams = requestToTokenMetadataParams(newLoanId, loanRequest, terms)
     const {assetId} = await this.algoClient.tokenizeLoan(loanParams)
+    console.log('new asset ', assetId)
 
     // TODO store loan on borrower Profile
     if (loanRequest.borrowerInfo.account_details.algorand?.address) {
-        // const {txId} = await this.algoClient.createNewProfile(assetId, "live", loanRequest.borrowerInfo.account_details.algorand.address)
-        // console.log('res', txId)
+        const txId = await this.algoClient.createNewProfile(assetId, "live", loanRequest.borrowerInfo.account_details.algorand.address)
+        console.log('profile created with:', txId)
+    } else {
+      console.log('borrower has not opted in to our app, so no profile will be created')
     }
 
     return await this.sdk.FundLoanRequest({
