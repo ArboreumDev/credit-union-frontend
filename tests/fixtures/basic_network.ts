@@ -154,6 +154,10 @@ export const BORROWER1: User = {
       },
     },
     circle: CircleFixtures.accounts[CircleFixtures.registeredUserIds[0]],
+    // THIS WOULD BE THERE IF THE USER HAS OPTED IN TO OUR CREDIT PROFILE APP
+    // algorand: {
+    //   address: "SOMEADDRESS"
+    // }
   },
 }
 

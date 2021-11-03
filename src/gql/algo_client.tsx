@@ -17,6 +17,7 @@ export default class AlgoClient {
   private fetcher: Fetcher
 
   constructor(baseURL: string, secret: string = "") {
+    console.log('got base', baseURL)
     const headers = {
       "Content-Type": "application/json",
       // "Authorization": `Bearer ${process.env.ALGO_BACKEND_SECRET}`
@@ -131,6 +132,10 @@ export default class AlgoClient {
   ): Promise<string> {
     const payload = { activeLoan, loanState, userAddress }
     return this.fetcher.post(`/profile/update/${userAddress}`, payload)
+  }
+
+  async optInSampleBorrower() {
+  return this.fetcher.get("/test/optIn/new", {})
   }
 }
 
