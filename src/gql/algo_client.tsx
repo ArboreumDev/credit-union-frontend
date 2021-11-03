@@ -134,6 +134,10 @@ export default class AlgoClient {
     return this.fetcher.post(`/profile/update/${userAddress}`, payload)
   }
 
+  async getLocalState(address: string) {
+  return this.fetcher.get(`/state/local/now/${address}`, {})
+  }
+
   async optInSampleBorrower() {
   return this.fetcher.get("/test/optIn/new", {})
   }

@@ -21,10 +21,12 @@ describe("Repay Loan Success Flows", () => {
   const lenderDeposit = 2000
   const loanAmount = 1000
   let loanId: string
+  let borrowerAlgoAddress: string
 
   beforeEach(async () => {
     // optin borrower to our smart-contract
-    await optInTestAccount(dbClient, BORROWER1.email)
+    const {user} = await optInTestAccount(dbClient, BORROWER1.email)
+    borrowerAlgoAddress = user.account_details.algorand.address
 
     const res = await createFundedLoan(
       BORROWER1.id,
@@ -54,36 +56,43 @@ describe("Repay Loan Success Flows", () => {
     expect(loan.repayments.length).toBe(0)
 
     // make a repayment into the loan-wallet from master wallet
-    // await sleep(3000)
-    // const data = await dbClient.circleClient.fundFromMasterWallet(
-    //   loan.wallet_id,
-    //   loanAmount,
-    //   uuidv4()
-    // )
-    // await sleep(3000)
-    // expect((await dbClient.circleClient.getTransferById(data.id)).status).toBe(
-    //   "complete"
-    // )
+    await sleep(3000)
+    const data = await dbClient.circleClient.fundFromMasterWallet(
+      loan.wallet_id,
+      loanAmount,
+      uuidv4()
+    )
+    await sleep(3000)
+    expect((await dbClient.circleClient.getTransferById(data.id)).status).toBe(
+      "complete"
+    )
 
     // // trigger it to be processed
-    // await dbClient.processRepayments()
+    await dbClient.processRepayments()
 
     // // verify
-    // const after = await sdk.GetLoan({ loanId })
-    // expect(after.loan.state).toBe(Loan_State_Enum.Repaid)
-    // expect(after.loan.principal_remaining).toBe(0)
+    const after = await sdk.GetLoan({ loanId })
+    expect(after.loan.state).toBe(Loan_State_Enum.Repaid)
+    expect(after.loan.principal_remaining).toBe(0)
 
-    // expect(after.loan.repayments.length).toBe(1)
-    // expect(after.loan.repayments[0].repaid_principal).toBe(loanAmount)
-    // expect(after.loan.repayments[0].algorand_tx_id).toBeTruthy
+    expect(after.loan.repayments.length).toBe(1)
+    expect(after.loan.repayments[0].repaid_principal).toBe(loanAmount)
+    expect(after.loan.repayments[0].algorand_tx_id).toBeTruthy
 
-    // const balanceAfter = await dbClient.circleClient.getBalance(
-    //   LENDER1.account_details.circle.walletId
-    // )
-    // expect(balanceAfter).toBe(balanceBefore + loanAmount)
+    const balanceAfter = await dbClient.circleClient.getBalance(
+      LENDER1.account_details.circle.walletId
+    )
+    expect(balanceAfter).toBe(balanceBefore + loanAmount)
 
-    // const updateAfter = await sdk.GetUpdates()
-    // expect(updateBefore.updates.length).toBe(updateAfter.updates.length - 1)
+    const updateAfter = await sdk.GetUpdates()
+    expect(updateBefore.updates.length).toBe(updateAfter.updates.length - 1)
+    
+    // verify the profile has been updated too:
+    const res = await dbClient.algoClient.getLocalState(borrowerAlgoAddress)
+    expect(res.state.credit).toBeTruthy
+    const state = JSON.parse(res.state.credit)
+    expect(state.loanState).toBe('repaid')
+ 
   }, 9000 + ALGORAND_BLOCK_TIMEOUT + 9000)
 
   test.todo("borrower creates a loan request after a completed loan")
