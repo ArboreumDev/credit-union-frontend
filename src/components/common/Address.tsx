@@ -1,17 +1,7 @@
 import {
-  Box,
   Button,
-  Center,
-  Stack,
+  HStack,
   Text,
-  Flex,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Input,
-  Divider,
   useClipboard,
 } from "@chakra-ui/core"
 
@@ -34,12 +24,12 @@ const Address = ({ address, size = "short" }: Props) => {
 
   return (
     <>
-      <Flex mb={2}>
+      <HStack>
         <Text>{displayAddress}</Text>
         <Button onClick={onCopy} ml={2}>
           {hasCopied ? "Copied" : "Copy"}
         </Button>
-      </Flex>
+      </HStack>
     </>
   )
 }

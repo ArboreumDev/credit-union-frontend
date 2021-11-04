@@ -123,7 +123,8 @@ export class LinkAlgoAccount extends Action {
       userId: this.user.id, accountDetails: {
         ...this.user.account_details,
         algorand: {
-          address: this.payload.address
+          ...this.user.account_details.algorand,
+          optedIn: this.payload.address
         }
       }
     })

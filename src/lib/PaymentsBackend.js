@@ -40,7 +40,6 @@ export async function getAllAccountAddr() {
     (await AlgoSigner.accounts({
       ledger: CHAIN_NAME,
     })) ?? [];
-  console.log('wa', walletAccounts)
   return walletAccounts.map(a => a.address)
 }
 
@@ -55,27 +54,32 @@ const sendSignedTx = async (signedTx, ledgerName = CHAIN_NAME) => {
  export async function executeUSDCDeposit(fromAddress, toAddress, amount) {
    // TODO throw good errors
   const unsignedTx = await algoTxClient.getUSDCDepositTx(fromAddress, toAddress, amount)
-  console.log('unsign', unsignedTx)
   const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
-  console.log('sign', signedTxs)
   return sendSignedTx(signedTxs[0])
 }
 
 
-// export async function optInToSmartContract(fromAddress, assetId) { }
-
 export async function optInToAsset(fromAddress, assetId) { 
+  if (await algoTxClient.isOptedInToAsset(fromAddress, assetId)) {
+    console.log('is already opted in')
+    return true
+  } else {
     // NOTE: assuming client is already connected / access granted
     const unsignedTx = await algoTxClient.getAssetOptInTx(assetId, fromAddress)
     const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
     return sendSignedTx(signedTxs[0])
+  }
 }
 
 export async function optInToProfileContract(fromAddress) { 
+  if (await algoTxClient.isOptedInToProfileApp(fromAddress)) {
+    console.log('is already opted in')
+    return true
+  } else {
     const unsignedTx = await algoTxClient.getCreditProfileOptInTx(fromAddress)
-    console.log('uns', unsignedTx)
     const signedTxs = await AlgoSigner.signTxn([{txn: unsignedTx.blob}])
     return sendSignedTx(signedTxs[0])
+  }
 }
 
 

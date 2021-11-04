@@ -1,6 +1,7 @@
 import { accountErrors } from "@algo-builder/web/build/errors/errors-list";
 import {
   Box,
+  useToast,
   Button,
   Select,
   Divider,
@@ -21,11 +22,13 @@ import {
   StatNumber,
   Tooltip,
   Wrap,
+  useClipboard,
 } from "@chakra-ui/core"
 import { useCallback, useState, useEffect } from 'react';
 import { optInToProfileContract, getAllAccountAddr } from "../../../lib/PaymentsBackend"
 import { LinkAlgoAccount } from "lib/gql_api_actions"
 import { AccountDetails } from "lib/types"
+import Address from "../Address";
 
 declare const AlgoSigner: any;
 
@@ -46,7 +49,11 @@ export const AlgoProfile = ({ account }: Props) => {
   const [result, setResult] = useState('')
   const [algoSignerInstalled, setAlgoSignerInstalled] = useState(false)
   const [fromAddress, setFromAddress] = useState('');
+  const [isConnecting, setIsConnecting] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
+  const { hasCopied, onCopy } = useClipboard(account.algorand?.optedIn || "no address linked")
+
+  const toast = useToast()
 
   useEffect( () => {
     if (typeof AlgoSigner !== 'undefined') {
@@ -64,14 +71,25 @@ export const AlgoProfile = ({ account }: Props) => {
     setUserAddresses(allAddresses)
     if (allAddresses.length) {
     setFromAddress(allAddresses[0])
+    // TODO we could also run a check whether any one of those addresses is already opted in
     }
   }
 
   const linkAccount = async () => {
-      const {status} = await optInToProfileContract(fromAddress)
+      setIsConnecting(true)
+      const status = await optInToProfileContract(fromAddress)
       if (status) {
         const res = await LinkAlgoAccount.fetch({ address: fromAddress })
+        setIsConnecting(false)
+        toast({
+          title: "Success! Your account is linked.",
+          description: "Note that it can take a few seconds until the change will be displayed.",
+          status: "success",
+          duration: 10000,
+          isClosable: true,
+        })
         console.log('resLink', res)
+        // TODO can this go wrong?
     }
   }
 
@@ -79,8 +97,15 @@ export const AlgoProfile = ({ account }: Props) => {
     <div>
         <Stack direction="column">
 
-            <Text>Algorand Address: {account.algorand?.address || "Not connected"} </Text>
-            { !account.algorand?.address && (
+            <HStack>
+                <Text> Algorand Address: </Text>
+                { account.algorand?.optedIn ? 
+                    <Address address={account.algorand.optedIn} size="short"/>
+                    : <p> Not Connected </p>
+                }
+                {/* <Text>Algorand Address: {account.algorand?.optedIn || "Not connected"} </Text> */}
+            </HStack>
+            { !account.algorand?.optedIn && (
                 <>
                 {!algoSignerInstalled && (
                     <Box backgroundColor="red.100">
@@ -111,9 +136,12 @@ export const AlgoProfile = ({ account }: Props) => {
                             <Button width="50px" onClick={connect}>Reload</Button>
                         </Stack>
                         <Button width="300px" onClick={linkAccount}>
-                            <Tooltip label="This will create and ask you to sign a transaction that opts you into our Algorand Credit-Score Application.">
-                                Link Address to Credit Profile
-                            </Tooltip>
+                            {isConnecting 
+                                ? <Spinner /> 
+                                : <Tooltip label="This will create and ask you to sign a transaction that opts you into our Algorand Credit-Score Application.">
+                                    Link Address to Credit Profile
+                                </Tooltip>
+                            }
                         </Button>
                         </>
                     )}

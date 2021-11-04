@@ -102,12 +102,18 @@ export default class AlgoClient {
     return this.fetcher.get(`/tx/optIn/profile/${userAddress}`, {})
   }
 
-  async checkOptInStatus(
+  async isOptedInToAsset(
     userAddress: string,
+    assetId: number,
   ): Promise<boolean> {
-    return this.fetcher.get(`/profile/optIn/status/${userAddress}`, {})
+    return this.fetcher.get(`/state/optIn/asset/${assetId}/${userAddress}`, {})
   }
 
+  async isOptedInToProfileApp(
+    userAddress: string,
+  ): Promise<boolean> {
+    return this.fetcher.get(`/state/optIn/profile/${userAddress}`, {})
+  }
 
   async createNewProfile(
     activeLoan: number,
