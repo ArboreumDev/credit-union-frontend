@@ -14,15 +14,16 @@ const BorrowerHome = ({ user, initPanelIdx }: Props) => {
   const borrower = new BorrowerModel(user)
   console.log("model is", borrower.mainComponent)
   const tabs = [
-    new TabComponent(
-      "Dashboard",
-      (
-        <>
-          {borrower.notification}
-          {borrower.mainComponent}
-        </>
-      )
-    ),
+    // NOTE: comment this out for most basic experience
+    // new TabComponent(
+    //   "Dashboard",
+    //   (
+    //     <>
+    //       {borrower.notification}
+    //       {borrower.mainComponent}
+    //     </>
+    //   )
+    // ),
     new TabComponent(
       "Account",
       (

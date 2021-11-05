@@ -70,8 +70,8 @@ export const AlgoProfile = ({ account }: Props) => {
     console.log('all add', allAddresses)
     setUserAddresses(allAddresses)
     if (allAddresses.length) {
-    setFromAddress(allAddresses[0])
-    // TODO we could also run a check whether any one of those addresses is already opted in
+       setFromAddress(allAddresses[0])
+       // TODO we could also run a check whether any one of those addresses is already opted in
     }
   }
 
@@ -89,7 +89,6 @@ export const AlgoProfile = ({ account }: Props) => {
           isClosable: true,
         })
         console.log('resLink', res)
-        // TODO can this go wrong?
     }
   }
 
