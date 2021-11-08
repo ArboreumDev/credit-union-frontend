@@ -1,6 +1,7 @@
 import {
   Button,
   HStack,
+  VStack,
   Text,
   useClipboard,
 } from "@chakra-ui/core"
@@ -10,9 +11,10 @@ type size = "short" | "long"
 interface Props {
   address: string
   size?: size
+  name?: string
 }
 
-const Address = ({ address, size = "short" }: Props) => {
+const Address = ({ address, size = "short", name = "" }: Props) => {
   const { hasCopied, onCopy } = useClipboard(address)
   let displayAddress = address.substr(0, 9)
 
@@ -26,6 +28,7 @@ const Address = ({ address, size = "short" }: Props) => {
     <>
       <HStack>
         <Text>{displayAddress}</Text>
+        <Text>({name})</Text>
         <Button onClick={onCopy} ml={2}>
           {hasCopied ? "Copied" : "Copy"}
         </Button>

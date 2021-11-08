@@ -28,7 +28,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { optInToProfileContract, getAllAccountAddr } from "../../../lib/PaymentsBackend"
 import { LinkAlgoAccount } from "lib/gql_api_actions"
 import { AccountDetails } from "lib/types"
-import Address from "../Address";
+import Address from "./Address";
 
 declare const AlgoSigner: any;
 
