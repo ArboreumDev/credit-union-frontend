@@ -1,3 +1,6 @@
+import {SuggestedParams} from "algosdk/dist/types"
+import Link from 'next/link'
+
 /**
  * utility function to wait on a transaction to be confirmed
  * the timeout parameter indicates how many rounds do you wish to check pending transactions for
@@ -50,3 +53,38 @@ export async function waitForConfirmation(algodclient, txId, timeout) {
     /* eslint-enable no-await-in-loop */
     throw new Error(`Transaction not confirmed after ${timeout} rounds!`);
   }
+
+
+const TESTNET_ALGOD_URL = 'https://api.testnet.algoexplorer.io'
+const MAINNET_ALGOD_URL = 'https://api.algoexplorer.io'
+
+const APP_INDEX_TESTNET = parseInt(process.env.PUBLIC_APP_INDEX_TESTNET || '43122678')
+const APP_INDEX_MAINNET = parseInt(process.env.PUBLIC_APP_INDEX_MAINNET || '405851709')
+
+export const dummyParams: SuggestedParams = {
+  fee: 0,
+  firstRound: 0,
+  lastRound: 0,
+  genesisHash: "",
+  genesisID:"" 
+}
+
+// type NetName = "TestNet" | "MainNet" | "Local"
+
+const netConfig = (net: string) => {
+  console.log('net', net)
+  if (net === "MainNet") {
+    return {
+      appId: APP_INDEX_MAINNET,
+      algodAddress: MAINNET_ALGOD_URL
+    }
+  } else  {
+    return {
+      appId: APP_INDEX_TESTNET,
+      algodAddress: TESTNET_ALGOD_URL
+    }
+  } 
+}
+const ALGORAND_CHAIN = process.env.PUBLIC_APP_ALGORAND_CHAIN
+
+export const algorandConfig = netConfig(ALGORAND_CHAIN)

@@ -1,34 +1,28 @@
-import { accountErrors } from "@algo-builder/web/build/errors/errors-list";
 import {
   Box,
   useToast,
   Button,
   Select,
-  Divider,
-  Grid,
-  Heading,
   HStack,
   Text,
-  VStack,
   Spinner,
-  Center,
-  AlertIcon,
-  AlertTitle,
-  Flex,
-  Progress,
   Stack,
-  Stat,
-  StatLabel,
-  StatNumber,
   Tooltip,
-  Wrap,
   useClipboard,
 } from "@chakra-ui/core"
 import { useCallback, useState, useEffect } from 'react';
 import { optInToProfileContract, getAllAccountAddr } from "../../../lib/PaymentsBackend"
 import { LinkAlgoAccount } from "lib/gql_api_actions"
 import { AccountDetails } from "lib/types"
-import Address from "./Address";
+import {algorandConfig, dummyParams} from "lib/algo_utils";
+import {Accounts} from "lib/algo_types";
+import MyAlgoConnect from '@randlabs/myalgo-connect'; 
+// import dynamic from 'next/dynamic'
+import algosdk from "algosdk";  
+import Address from "./Address"
+import {SuggestedParams} from "algosdk/dist/types"
+
+
 
 declare const AlgoSigner: any;
 
@@ -51,35 +45,60 @@ export const AlgoProfile = ({ account }: Props) => {
   const [fromAddress, setFromAddress] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
+  const [fromAccount, setFromAccount] = useState({name: "", address: ""});
+  const [isOptedIn, setIsOptedIn] = useState(account.algorand?.optedIn ? true : false );
+  const [params, setParams] = useState(dummyParams);
+
   const { hasCopied, onCopy } = useClipboard(account.algorand?.optedIn || "no address linked")
 
   const toast = useToast()
 
-  useEffect( () => {
-    if (typeof AlgoSigner !== 'undefined') {
-        setAlgoSignerInstalled(true)
-    }
-  }, [])
+    useEffect( () => {
+        const checkOptInStatus = async () => {
+        // const algodClient = new algosdk.Algodv2("", config.algodAddress, '');
+        // attempt to connect to purestake
+        const algodClient = new algosdk.Algodv2("", algorandConfig.algodAddress, '');
+        const accountInfo = await algodClient.accountInformation(fromAccount.address).do();
+        console.log(accountInfo)
+        if (accountInfo['apps-local-state'].filter((a: any) => a.id == algorandConfig.appId).length > 0) {
+            console.log('is opted in')
+            setIsOptedIn(true)
+            await LinkAlgoAccount.fetch({ address: fromAccount.address, name: fromAccount.name })
+        } else {
+            setIsOptedIn(false)
+        }
+        const params = await algodClient.getTransactionParams().do();
+        setParams(params)
+        }
+        if (fromAccount.address) {
+            checkOptInStatus()
+        }
+    }, [fromAccount, fromAddress, userAddresses])
 
 
   /**
    * load addresses from AlgoSigner so that user can choose which one to link to their account
    */
   const connect = async () => {
-    const allAddresses = await getAllAccountAddr()
-    console.log('all add', allAddresses)
-    setUserAddresses(allAddresses)
-    if (allAddresses.length) {
-       setFromAddress(allAddresses[0])
-       // TODO we could also run a check whether any one of those addresses is already opted in
+    const algodClient = new algosdk.Algodv2("", algorandConfig.algodAddress, '');
+    const algoConnect = new MyAlgoConnect()
+    try {
+      const accounts = await algoConnect.connect({ shouldSelectOneAccount: false });
+      if (accounts.length > 0) {
+          setUserAddresses(accounts)
+          setFromAccount(accounts[0])
+          setFromAddress(accounts[0].address)
+        }
+    } catch (err) {
+      console.error(err);
     }
   }
 
   const linkAccount = async () => {
-      setIsConnecting(true)
-      const status = await optInToProfileContract(fromAddress)
+      const status = false
+    //   const status = await optInToProfileContract(fromAddress)
       if (status) {
-        const res = await LinkAlgoAccount.fetch({ address: fromAddress })
+        const res = await LinkAlgoAccount.fetch({ address: fromAccount.address, name: fromAccount.name })
         setIsConnecting(false)
         toast({
           title: "Success! Your account is linked.",
@@ -99,24 +118,19 @@ export const AlgoProfile = ({ account }: Props) => {
             <HStack>
                 <Text> Algorand Address: </Text>
                 { account.algorand?.optedIn ? 
-                    <Address address={account.algorand.optedIn} size="short"/>
+                    <Address 
+                    address={account.algorand.optedIn.address}
+                    size="short"
+                    name={account.algorand.optedIn.name}
+                    />
                     : <p> Not Connected </p>
                 }
-                {/* <Text>Algorand Address: {account.algorand?.optedIn || "Not connected"} </Text> */}
             </HStack>
             { !account.algorand?.optedIn && (
-                <>
-                {!algoSignerInstalled && (
-                    <Box backgroundColor="red.100">
-                        You need to install the AlgoSigner extension to connect your algorand account. Unfortunately, 
-                        It is currenlty only available on the chrome browser.
-                    </Box>
-                )}
-                {algoSignerInstalled && (
                     <>
                     {userAddresses.length === 0 && (
                         <Button width="250px" onClick={connect}>
-                            Connect AlgoSigner
+                            Connect AlgorandWallet
                         </Button>
                     )}
                     {userAddresses.length > 0 && (
@@ -128,8 +142,8 @@ export const AlgoProfile = ({ account }: Props) => {
                                 onChange={(e)=> {setFromAddress(e.target.value)}}
                                 placeholder={"select account"}
                             >
-                                {userAddresses.map((s) => (
-                                    <option key={s} value={s}> {s} </option>
+                                {userAddresses.map((a: Accounts) => (
+                                    <option key={a.address} value={a.address}> {a.name}: ({a.address})  </option>
                                 ))}
                             </Select>
                             <Button width="50px" onClick={connect}>Reload</Button>
@@ -143,8 +157,6 @@ export const AlgoProfile = ({ account }: Props) => {
                             }
                         </Button>
                         </>
-                    )}
-                    </>
                 )}
                 </>
             )}

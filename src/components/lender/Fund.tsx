@@ -1,5 +1,5 @@
 import { Box, Select, Text, Divider} from "@chakra-ui/core"
-import Address from "components/common/Address"
+import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"

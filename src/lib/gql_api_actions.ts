@@ -110,6 +110,7 @@ export class CreateUser extends Action {
 
 export interface LinkAlgoAccountInput {
   address: string
+  name: string
 }
 
 export class LinkAlgoAccount extends Action {
@@ -125,7 +126,10 @@ export class LinkAlgoAccount extends Action {
         ...this.user.account_details,
         algorand: {
           ...this.user.account_details.algorand,
-          optedIn: this.payload.address
+          optedIn: {
+            address: this.payload.address,
+            name: this.payload.name
+          }
         }
       }
     })

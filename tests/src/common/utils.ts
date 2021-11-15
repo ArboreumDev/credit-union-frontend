@@ -29,3 +29,4 @@ export const circleClient = new CircleClient(
 export const dbClient = new DbClient(client, swarmAIClient, circleClient, algoActionClient)
 export const circle = dbClient.circleClient
 export const sdk = dbClient.sdk
+export const algoClient = dbClient.algoClient
