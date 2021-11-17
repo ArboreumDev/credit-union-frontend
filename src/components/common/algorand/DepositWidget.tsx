@@ -1,7 +1,158 @@
-import { Box, Button, Spinner, Input, Select } from "@chakra-ui/core"
+import { 
+  Box, Button, Spinner, Input, Select, Modal,   ModalOverlay,  useDisclosure,
+  ModalContent,   ModalHeader,   ModalFooter,   ModalBody,   ModalCloseButton, 
+  useToast,
+} from "@chakra-ui/core"
 import { useCallback, useState, useEffect } from 'react';
 // import {executeUSDCDeposit, getDefaultAccountAddr} from "./PaymentsAlgoBuilder"
-import { executeUSDCDeposit, getDefaultAccountAddr, optInToAsset, getAllAccountAddr } from "../../../lib/PaymentsBackend"
+import { executeUSDCDeposit} from "../../../lib/PaymentsBackend"
+import {Accounts} from "lib/algo_types";
+import MyAlgoConnect from '@randlabs/myalgo-connect'; 
+// import dynamic from 'next/dynamic'
+import algosdk from "algosdk";  
+import Address from "./Address"
+import {SuggestedParams} from "algosdk/dist/types"
+import {algorandConfig, dummyParams, waitForConfirmation} from "lib/algo_utils";
+// import {algoTxClient} from "../../../gql/algo_client"
+
+interface DepositAlgoConnectProps {
+    toAddress: string
+}
+
+/*
+ * Modal to TODO
+ * @param toAddress target address where usdc should be sent
+ */
+export const DepositWithAlgoConnect = ({ toAddress }: DepositAlgoConnectProps) => {
+  const [fromAccount, setFromAccount] = useState({name: "", address: ""});
+  const [params, setParams] = useState(dummyParams);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [amount, setAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [isDepositing, setIsDepositing] = useState(false);
+
+  const toast = useToast()
+
+  // const [fromAddress, setFromAddress] = useState('');
+  // const [userAddresses, setUserAddresses] = useState([]);
+  // const { hasCopied, onCopy } = useClipboard(account.algorand?.optedIn || "no address linked")
+   
+  useEffect(()=>{
+    console.log('effect done')
+  }, [])
+
+  const connect = async () => {
+    const algoConnect = new MyAlgoConnect()
+    try {
+      const accounts = await algoConnect.connect({ shouldSelectOneAccount: false });
+      if (accounts.length > 0) {
+        setFromAccount(accounts[0])
+        await fetchTxParams()
+      } else {
+        console.log('whoops?')
+      }
+      
+    } catch (err) {
+      console.log('err')
+      console.error(err);
+    }
+  }
+  
+  const fetchTxParams = async () => {
+    const algodClient = new algosdk.Algodv2("", algorandConfig.algodAddress, '');
+    const params = await algodClient.getTransactionParams().do();
+    setParams(params)
+  }
+
+  const executeTx = useCallback(async () => {
+    console.log('trying to send create, sign and send deposit tx')
+    setIsDepositing(true)
+    const algodClient = new algosdk.Algodv2("", algorandConfig.algodAddress, '');
+    const myAlgoConnect = new MyAlgoConnect();
+
+    const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        suggestedParams: {
+            ...params,
+        },
+        from: fromAccount.address,
+        to: toAddress,
+        assetIndex: algorandConfig.usdc_asset_id,
+        amount: amount,
+        // note:  // TODO figure out how to pass note
+    });
+    
+    const signedTxn = await myAlgoConnect.signTransaction(txn.toByte());
+    try {
+        const {txId} = await algodClient.sendRawTransaction(signedTxn.blob).do();
+        const txResponse = await waitForConfirmation(algodClient, txId, 10)
+        console.log('res', txResponse)
+        if (txResponse['confirmed-round']) {
+            setIsDepositing(false)
+            // TODO use success-components from tusker-pilot
+            toast({
+                title: "Success! Your deposit has been made.",
+                description: "Note that it can take a bit until it will be available to lend out.",
+                status: "success",
+                duration: 10000,
+                isClosable: true,
+            })
+        }
+    } catch (err) {
+        console.log('err', err)
+        setIsDepositing(false)
+        toast({
+            title: "Failure! Could not send signed transaction.",
+            description: "Please contact support",
+            status: "error",
+            duration: 10000,
+            isClosable: true,
+        })
+    }
+  }, [amount]);
+
+
+  return (
+    <>
+      <Button onClick={onOpen}>Deposit from myAlgoWallet</Button>
+
+      <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Deposit USDC</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {!fromAccount.address ? 
+              <Button onClick={connect}>Connect myAlgoWallet</Button>
+              : (
+                <>
+                  <Input
+                    type="number"
+                    placeholder={`<enter deposit amount>`}
+                    onChange={(e) => setAmount(parseInt(e.target.value))}
+                  />
+                  <Button
+                    colorScheme="teal"
+                    disabled={amount <=0 }
+                    onClick={executeTx}
+                  >
+                    {loading ?  <Spinner /> : (
+                      "Complete Deposit"
+                    )}
+                  </Button>
+                </>
+              )
+            }
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="ghost" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
 
 interface Props {
     buttonText: string,
@@ -25,11 +176,23 @@ export const DepositWidget = ({ buttonText, toAddress }: Props) => {
   useEffect( () => {
     // this will also connect the AlgoSigner (grant our app access)
     const loadAddresses = async () => {
-      const allAddresses = await getAllAccountAddr()
-      console.log('all add', allAddresses)
-      setUserAddresses(allAddresses)
-      if (allAddresses.length) {
-        setFromAddress(allAddresses[0])
+      const algoConnect = new MyAlgoConnect()
+      try {
+        const accounts = await algoConnect.connect({ shouldSelectOneAccount: false });
+        if (accounts.length > 0) {
+            console.log('yes', accounts)
+            setUserAddresses(accounts)
+            console.log('acc0', accounts[0])
+            setFromAccount(accounts[0])
+            setFromAddress(accounts[0].address)
+          } else {
+            console.log('no', accounts)
+          }
+          console.log('acc is', accounts, accounts.length > 0)
+      
+      } catch (err) {
+        console.log('err')
+        console.error(err);
       }
     }
     loadAddresses()

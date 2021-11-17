@@ -60,6 +60,8 @@ const MAINNET_ALGOD_URL = 'https://api.algoexplorer.io'
 
 const APP_INDEX_TESTNET = parseInt(process.env.PUBLIC_APP_INDEX_TESTNET || '43122678')
 const APP_INDEX_MAINNET = parseInt(process.env.PUBLIC_APP_INDEX_MAINNET || '405851709')
+export const TESTNET_USDC_ASSET_ID = parseInt(process.env.TESTNET_USDC_ASSET_ID)
+export const MAINNET_USDC_ASSET_ID = parseInt(process.env.MAINNET_USDC_ASSET_ID)
 
 export const dummyParams: SuggestedParams = {
   fee: 0,
@@ -76,12 +78,14 @@ const netConfig = (net: string) => {
   if (net === "MainNet") {
     return {
       appId: APP_INDEX_MAINNET,
-      algodAddress: MAINNET_ALGOD_URL
+      algodAddress: MAINNET_ALGOD_URL,
+      usdc_asset_id: MAINNET_USDC_ASSET_ID
     }
   } else  {
     return {
       appId: APP_INDEX_TESTNET,
-      algodAddress: TESTNET_ALGOD_URL
+      algodAddress: TESTNET_ALGOD_URL,
+      usdc_asset_id: TESTNET_USDC_ASSET_ID
     }
   } 
 }

@@ -27,7 +27,7 @@ const Address = ({ address, size = "short", name = "" }: Props) => {
   return (
     <>
       <HStack>
-        <Text>{displayAddress} ({name}) </Text>
+        <Text>{displayAddress} {name ? `(${name})` : ""} </Text>
         <Button onClick={onCopy} >
           {hasCopied ? "Copied" : "Copy"}
         </Button>

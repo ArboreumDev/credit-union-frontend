@@ -7,7 +7,7 @@ import {algoTxClient} from "../gql/algo_client"
 // const CHAIN_NAME = "TestNet"
 const CHAIN_NAME = "local"
 // const USDC_ASSET_ID = 105 //process.env.USDC_ASSET_ID
-const USDC_ASSET_ID = process.env.USDC_ASSET_ID
+export const USDC_ASSET_ID = parseInt(process.env.USDC_ASSET_ID)
 const CONFIRMED_ROUND = 'confirmed-round';
 
 

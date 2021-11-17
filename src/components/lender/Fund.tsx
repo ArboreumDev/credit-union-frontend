@@ -3,7 +3,7 @@ import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
-import {DepositWidget} from "components/common/algorand/DepositWidget"
+import {DepositWidget, DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
 // /* global AlgoSigner */
 declare const AlgoSigner: any;
 
@@ -43,20 +43,10 @@ export function AddFundsForm({ user }: Props) {
             size="long"
             address={ "" +  user.account_details.circle.algoAddress }
           />
-
-          {(method === "ALGO" && typeof AlgoSigner !== 'undefined') && (
-            <Box>
-              <Text><b>OR</b></Text>
-              <Text>Create a deposit with the AlgoSigner-Extension</Text>
-              <DepositWidget 
-                // amount={400}
-                buttonText="Deposit with AlgoSigner"
-                toAddress={user.account_details.circle.algoAddress}
-              />
-            </Box>
-          )}
+          <Text><b>OR</b></Text>
+          <DepositWithAlgoConnect toAddress={user.account_details.circle.algoAddress}/>
           <Text>
-            <Divider />
+          <Divider />
             <i>
               Note that we might afterwards move the money out of that account to
               a different address - It will still be reflected in your overall
