@@ -3,9 +3,7 @@ import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
-import {DepositWidget, DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
-// /* global AlgoSigner */
-declare const AlgoSigner: any;
+import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
 
 interface Props {
   user: User
@@ -13,8 +11,6 @@ interface Props {
 
 export function AddFundsForm({ user }: Props) {
   const [method, setMethod] = useState(undefined)
-
-  console.log("algosigner", typeof AlgoSigner)
 
   return (
     <Box>
