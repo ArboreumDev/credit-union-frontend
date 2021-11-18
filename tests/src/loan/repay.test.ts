@@ -2,7 +2,7 @@ import { Loan_State_Enum } from "../../../src/gql/sdk"
 import { BORROWER1, LENDER1 } from "../../fixtures/basic_network"
 import { dbClient, sdk } from "../common/utils"
 import { createFundedLoan, optInTestAccount } from "../../src/common/test_helpers"
-import { uuidv4, sleep } from "lib/helpers"
+import { uuidv4, sleep, dateStringToUnixTimestamp } from "lib/helpers"
 
 // import { ALGORAND_BLOCK_TIMEOUT } from "./fund.test"
 const ALGORAND_BLOCK_TIMEOUT  = 12000
@@ -18,8 +18,8 @@ afterAll(async () => {
 })
 
 describe("Repay Loan Success Flows", () => {
-  const lenderDeposit = 2000
-  const loanAmount = 1000
+  const lenderDeposit = 200
+  const loanAmount = 100
   let loanId: string
   let borrowerAlgoAddress: string
 
@@ -68,7 +68,10 @@ describe("Repay Loan Success Flows", () => {
     )
 
     // // trigger it to be processed
-    await dbClient.processRepayments()
+    // await dbClient.processRepayments()
+    // advance current datetime to be later than loan creation (because backend cant handle it otherwise)
+    const laterDate = dateStringToUnixTimestamp(loan.created_at) + 60 * 60 * 24 * 2
+    await dbClient.processLoanRepayments(loanId, laterDate)
 
     // // verify
     const after = await sdk.GetLoan({ loanId })

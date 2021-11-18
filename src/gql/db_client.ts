@@ -323,7 +323,10 @@ export default class DbClient {
    * - create a repayment entry & update the loan-table
    * - TODO notify users if the new-state differs from old (e.g. new tx, new-loan-state...)
    */
-  processLoanRepayments = async (loanId: string) => {
+  processLoanRepayments = async (
+    loanId: string,
+    currentDateTimestampUTC: number = 0
+    ) => {
     const { loan } = await this.sdk.GetLoan({ loanId })
     const latestTransfers = await this.circleClient.getTransfers(
       "",
@@ -339,100 +342,105 @@ export default class DbClient {
           // txHash: t.transactionHash
         } as Repayment
       })
-    const latestLoanState = await this.swarmAIClient.getLoanState(
-      loanToTerms(loan),
-      repayments
-    )
-
-    const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
-    const forwardedToLenders = getTotalPaid(loan.principal, loan)
-    const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
-
-    if (amountToBeForwardedToLenders) {
-      // make a payment
-      // TODO is just taking the latest transfer here a dangerous assumption?
-      // it means we rely on circle always returning them sorted!
-      const latestTransfer = latestTransfers[latestTransfers.length - 1]
-      console.log('late', latestTransfer)
-      const repaymentIdemKey = latestTransfer.id
-      const loanWalletBalance = await this.circleClient.getBalance(
-        loan.wallet_id
-      )
-      const maxToRepay = getTotalOutstanding(loan)
-      const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
-      const { status, repaidAmount, txHash } = await this.forwardRepayment(
-        loan.loan_id,
-        amountToRepay,
-        repaymentIdemKey
-      )
-      if (status == "complete") {
-        // update loan entry in db & create repayment entry
-        const update = {
-          newState: {
-            ...loanStateToLoanInput(latestLoanState),
-            // should this maybe happen in the backend too? (once we nail down the states!!)
-            newLoanState: getLoanState(latestLoanState),
-          },
-          paymentInfo: {
-            // TODO how the amount was used to repay principal vs interest?
-            repaidPrincipal: repaidAmount,
-            repaidInterest: 0,
-          },
-        }
-        // log repayment on loan-asset
-        // - create object to be stored in the transaction note-field
-        const dataToBeLogged = {
-          newLoanState: update.newState.newLoanState,
-          ...update.paymentInfo,
-          txHashes: {
-            toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
-            toLenders: [txHash] // from the loan-account to the lenders (by us)
-            // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
-            // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
-            // txHash from the latest repayment)
-          }
-        }
-        console.log('logged:', dataToBeLogged)
-        const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
-
-        // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
-        if (
-          update.newState.newLoanState === Loan_State_Enum.Repaid &&
-          loan.borrowerInfo.account_details.algorand?.address
-          ) {
-            // NOTE: currently not implemented on the smart-contract
-            // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
-        }
-
-        return this.sdk.RegisterRepayment({
-          loanId,
-          repayment: {
-            repayment_id: repaymentIdemKey,
-            loan_id: loanId,
-            repaid_principal: update.paymentInfo.repaidPrincipal,
-            repaid_interest: update.paymentInfo.repaidInterest,
-            date: new Date().toUTCString(),
-            algorand_tx_id: txId
-          },
-          ...update.newState,
-          updateLog: {
-            type: Update_Type_Enum.Repayment,
-            loan_id: loanId,
-            ...loanStateToUpdateInput(latestLoanState),
-            // only add new state to update if there was a change
-            ...(update.newState.newLoanState !== loan.state
-              ? { new_state: update.newState.newLoanState }
-              : {}),
-            repayment_id: repaymentIdemKey,
-          },
-        })
-      } else {
-        console.log("payment is not yet complete, status: ", status)
-        // TODO what do we do here? how can we be sure that the payment will be registered?
-      }
-    } else {
-      console.log("no payment outstanding, latest loan state matches db-state")
-    }
+      try {
+        const latestLoanState = await this.swarmAIClient.getLoanState(
+          loanToTerms(loan),
+          repayments,
+          currentDateTimestampUTC
+        )
+        const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
+        const forwardedToLenders = getTotalPaid(loan.principal, loan)
+        const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
+        
+        if (amountToBeForwardedToLenders) {
+        // make a payment
+          // TODO is just taking the latest transfer here a dangerous assumption?
+          // it means we rely on circle always returning them sorted!
+          const latestTransfer = latestTransfers[latestTransfers.length - 1]
+          console.log('late', latestTransfer)
+          const repaymentIdemKey = latestTransfer.id
+          const loanWalletBalance = await this.circleClient.getBalance(
+            loan.wallet_id
+          )
+          const maxToRepay = getTotalOutstanding(loan)
+          const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
+          const { status, repaidAmount, txHash } = await this.forwardRepayment(
+            loan.loan_id,
+            amountToRepay,
+            repaymentIdemKey
+          )
+          if (status == "complete") {
+            // update loan entry in db & create repayment entry
+            const update = {
+              newState: {
+                ...loanStateToLoanInput(latestLoanState),
+                // should this maybe happen in the backend too? (once we nail down the states!!)
+                newLoanState: getLoanState(latestLoanState),
+              },
+              paymentInfo: {
+                // TODO how the amount was used to repay principal vs interest?
+                repaidPrincipal: repaidAmount,
+                repaidInterest: 0,
+              },
+            }
+            // log repayment on loan-asset
+            // - create object to be stored in the transaction note-field
+            const dataToBeLogged = {
+              newLoanState: update.newState.newLoanState,
+              ...update.paymentInfo,
+              txHashes: {
+                toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
+                toLenders: [txHash] // from the loan-account to the lenders (by us)
+                // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
+                // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
+                // txHash from the latest repayment)
+              }
+            }
+            console.log('logged:', dataToBeLogged)
+            const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
+            
+            // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
+            if (
+              update.newState.newLoanState === Loan_State_Enum.Repaid &&
+              loan.borrowerInfo.account_details.algorand?.address
+            ) {
+              // NOTE: currently not implemented on the smart-contract
+              // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
+              }
+              
+              return this.sdk.RegisterRepayment({
+                loanId,
+                repayment: {
+                  repayment_id: repaymentIdemKey,
+                  loan_id: loanId,
+                  repaid_principal: update.paymentInfo.repaidPrincipal,
+                  repaid_interest: update.paymentInfo.repaidInterest,
+                  date: new Date().toUTCString(),
+                  algorand_tx_id: txId
+                },
+                ...update.newState,
+                updateLog: {
+                  type: Update_Type_Enum.Repayment,
+                  loan_id: loanId,
+                  ...loanStateToUpdateInput(latestLoanState),
+                  // only add new state to update if there was a change
+                  ...(update.newState.newLoanState !== loan.state
+                    ? { new_state: update.newState.newLoanState }
+                    : {}),
+                    repayment_id: repaymentIdemKey,
+                  },
+                })
+              } else {
+                    console.log("payment is not yet complete, status: ", status)
+                    // TODO what do we do here? how can we be sure that the payment will be registered?
+                  }
+                } else {
+                    console.log("no payment outstanding, latest loan state matches db-state")
+                  }
+                } catch (error) {
+                  console.log('couldnt query loan state', error)
+                  return {}
+            }
   }
 
   /**
