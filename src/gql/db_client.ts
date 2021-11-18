@@ -406,41 +406,40 @@ export default class DbClient {
             ) {
               // NOTE: currently not implemented on the smart-contract
               // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
-              }
-              
-              return this.sdk.RegisterRepayment({
-                loanId,
-                repayment: {
-                  repayment_id: repaymentIdemKey,
-                  loan_id: loanId,
-                  repaid_principal: update.paymentInfo.repaidPrincipal,
-                  repaid_interest: update.paymentInfo.repaidInterest,
-                  date: new Date().toUTCString(),
-                  algorand_tx_id: txId
-                },
-                ...update.newState,
-                updateLog: {
-                  type: Update_Type_Enum.Repayment,
-                  loan_id: loanId,
-                  ...loanStateToUpdateInput(latestLoanState),
-                  // only add new state to update if there was a change
-                  ...(update.newState.newLoanState !== loan.state
-                    ? { new_state: update.newState.newLoanState }
-                    : {}),
-                    repayment_id: repaymentIdemKey,
-                  },
-                })
-              } else {
-                    console.log("payment is not yet complete, status: ", status)
-                    // TODO what do we do here? how can we be sure that the payment will be registered?
-                  }
-                } else {
-                    console.log("no payment outstanding, latest loan state matches db-state")
-                  }
-                } catch (error) {
-                  console.log('couldnt query loan state', error)
-                  return {}
             }
+            return this.sdk.RegisterRepayment({
+              loanId,
+              repayment: {
+                repayment_id: repaymentIdemKey,
+                loan_id: loanId,
+                repaid_principal: update.paymentInfo.repaidPrincipal,
+                repaid_interest: update.paymentInfo.repaidInterest,
+                date: new Date().toUTCString(),
+                algorand_tx_id: txId
+              },
+              ...update.newState,
+              updateLog: {
+                type: Update_Type_Enum.Repayment,
+                loan_id: loanId,
+                ...loanStateToUpdateInput(latestLoanState),
+                // only add new state to update if there was a change
+                ...(update.newState.newLoanState !== loan.state
+                  ? { new_state: update.newState.newLoanState }
+                  : {}),
+                  repayment_id: repaymentIdemKey,
+                },
+            })
+          } else {
+            console.log("payment is not yet complete, status: ", status)
+            // TODO what do we do here? how can we be sure that the payment will be registered?
+          }
+        } else {
+            console.log("no payment outstanding, latest loan state matches db-state")
+          }
+      } catch (error) {
+        console.log('couldnt query loan state', error)
+        return {}
+    }
   }
 
   /**
