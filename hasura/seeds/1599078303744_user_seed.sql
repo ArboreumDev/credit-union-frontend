@@ -8,7 +8,7 @@ INSERT INTO public."user" (id, created_at, updated_at, first_name, last_name, em
 
 -- Add Loan Request for amitabh bacchan
 INSERT INTO public.loan_request (borrower_id, created_at, amount, request_id, purpose) VALUES 
-  ('370dca39-f591-4ad4-b5fd-d1ba4fe55954', '2020-10-13 01:04:07.2256+00', 90000, '44c6d2cb-062c-4dac-a88f-0df0f32bba96', 'Educational expense');
+  ('370dca39-f591-4ad4-b5fd-d1ba4fe55954', '2020-10-13 01:04:07.2256+00', 900, '44c6d2cb-062c-4dac-a88f-0df0f32bba96', 'Educational expense');
 
 -- INSERT INTO public.supporters (request_id, supporter_id, pledge_amount, status, invest_in_corpus, participation_request_time, guarantee_division, info) VALUES 
 --   ('44c6d2cb-062c-4dac-a88f-0df0f32bba96', '230cff88-a594-4922-90cd-05938de5bdd0', 20000, 'unknown', true, '2020-10-13 01:04:37.41869+00', '{}', '{"name": "gp", "email": "gp@arboreum.dev", "amount": "2000", "known_since": "Aug 2011", "supporter_relation": "Manager"}'),

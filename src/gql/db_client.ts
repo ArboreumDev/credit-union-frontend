@@ -565,17 +565,22 @@ export default class DbClient {
     // create transfers into user accounts for deposits made into our master account
     // TODO when we allow fiat-repayments, deposits from borrowers need to be transfered to the respective loan-account
     await this.processDeposits()
+    console.log('processed deposits')
 
     // update loan data (outstanding amounts) for all loans
     await this.doCompoundingUpdates()
+    console.log('processed compounding updates')
 
     // send money from loan-wallets to lenders (fetches loan-state again), create repayments
     await this.processRepayments()
+    console.log('processed repayments')
 
     // see if as a result of the updated balances, new loans can be funded
     await this.processOpenRequests()
+    console.log('processed open requests')
 
     await this.updateAccountBalances() // < we should never rely on our local table...if so we should pull right before
+    console.log('updating local balances')
   }
 
   logEvent = async (

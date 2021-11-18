@@ -12,21 +12,21 @@ import { Loan_Request_State_Enum, Loan_State_Enum } from "../../gql/sdk"
 export default class BorrowerModel {
   constructor(public user: User) {}
 
-  // static generateLoanComponent = (loanRequest: LoanRequest, loan: Loan) => {
-  //   return {
-  //     [Loan_Request_State_Enum.Active]: (
-  //       <BLoanRequestInitiated loanRequest={loanRequest} />
-  //     ),
-  //     // [Loan_Request_State_Enum.Fulfilled]: <BActiveLoan loanRequest={loanRequest} />,
-  //     // TODO
-  //     // [Loan_Request_State_Enum.???]: (
-  //     //   <BLoanNeedsConfirmation loanRequest={loanRequest} />
-  //     // ),
-  //     // [Loan_Request_State_Enum.Rejected]: TODO,
-  //     // [Loan_Request_State_Enum.Expired]: TODO,
-  //     // [Loan_Request_State_Enum.Withdrawn]: TODO,
-  //   }[loanRequest.state]
-  // }
+  static generateLoanComponent = (loanRequest: LoanRequest, loan: Loan) => {
+    return {
+      [Loan_Request_State_Enum.Active]: (
+        <BLoanRequestInitiated loanRequest={loanRequest} />
+      ),
+      [Loan_Request_State_Enum.Fulfilled]: <BActiveLoan loanRequest={loanRequest} loan={loan}/>,
+      // TODO
+      // [Loan_Request_State_Enum.???]: (
+      //   <BLoanNeedsConfirmation loanRequest={loanRequest} />
+      // ),
+      // [Loan_Request_State_Enum.Rejected]: TODO,
+      // [Loan_Request_State_Enum.Expired]: TODO,
+      // [Loan_Request_State_Enum.Withdrawn]: TODO,
+    }[loanRequest.state]
+  }
 
   get loanRequests() {
     return this.user.loan_requests

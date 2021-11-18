@@ -43,22 +43,22 @@ const options = {
       }
 
       // if user is kyc'ed & has circle, fetch balance from circle
-      // if (
-      //   s.user.kyc_approved &&
-      //   s.user.account_details.circle &&
-      //   s.user.account_details.circle.walletId
-      // ) {
-      //   s.user.balance = await dbClient.getCircleBalance(s.user.id)
-      //   // process new deposits if there are any & send them to the users account
-      //   await dbClient.circleClient.processDeposits(
-      //     s.user.account_details.circle.accountId,
-      //     s.user.account_details.circle.walletId
-      //   )
-      //   s.user.account_details.circle.history = await dbClient.circleClient.getHistory(
-      //     s.user.account_details.circle.walletId,
-      //     s.user.account_details.circle.accountId
-      //   )
-      // }
+      if (
+        s.user.kyc_approved &&
+        s.user.account_details.circle &&
+        s.user.account_details.circle.walletId
+      ) {
+        s.user.balance = await dbClient.getCircleBalance(s.user.id)
+        // process new deposits if there are any & send them to the users account
+        await dbClient.circleClient.processDeposits(
+          s.user.account_details.circle.accountId,
+          s.user.account_details.circle.walletId
+        )
+        s.user.account_details.circle.history = await dbClient.circleClient.getHistory(
+          s.user.account_details.circle.walletId,
+          s.user.account_details.circle.accountId
+        )
+      }
 
       return Promise.resolve(s)
     },
