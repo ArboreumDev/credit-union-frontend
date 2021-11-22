@@ -234,7 +234,7 @@ export default class DbClient {
 
     // TODO proportional to how the lenders funded it (for now: everything to first lender)
     await this.circleClient.walletTransfer(
-      loan.wallet_id,
+      loan.wallet_info.id,
       loan.lender_amounts[0].lenderInfo.account_details.circle.walletId,
       amount,
       idemKey
@@ -331,7 +331,7 @@ export default class DbClient {
     const latestTransfers = await this.circleClient.getTransfers(
       "",
       "",
-      loan.wallet_id
+      loan.wallet_info.id
     )
     const repayments = latestTransfers
       .filter((t) => t.status == "complete")
@@ -360,7 +360,7 @@ export default class DbClient {
           console.log('late', latestTransfer)
           const repaymentIdemKey = latestTransfer.id
           const loanWalletBalance = await this.circleClient.getBalance(
-            loan.wallet_id
+            loan.wallet_info.id
           )
           const maxToRepay = getTotalOutstanding(loan)
           const amountToRepay = Math.min(maxToRepay, loanWalletBalance)

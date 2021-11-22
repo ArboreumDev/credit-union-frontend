@@ -47,7 +47,7 @@ export const createFundedLoan = async (
     )
   }
   const { newLoan } = await dbClient.fundLoanRequest(requestId, lenderId)
-  return { loanId: newLoan.loan_id, walletId: newLoan.wallet_id }
+  return { loanId: newLoan.loan_id, walletId: newLoan.wallet_info.id }
 }
 
 /**

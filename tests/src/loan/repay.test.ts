@@ -58,7 +58,7 @@ describe("Repay Loan Success Flows", () => {
     // make a repayment into the loan-wallet from master wallet
     await sleep(3000)
     const data = await dbClient.circleClient.fundFromMasterWallet(
-      loan.wallet_id,
+      loan.wallet_info.id,
       loanAmount,
       uuidv4()
     )

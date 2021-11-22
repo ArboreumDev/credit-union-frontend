@@ -16,7 +16,7 @@ query GetLoan($loanId: uuid!) {
     borrowerInfo {
       account_details
     }
-    wallet_id
+    wallet_info
     repayments {
         repayment_id
         date
