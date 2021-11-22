@@ -23,6 +23,7 @@ query GetUserByEmail($email: String!) {
     }
     loans {
       loan_id
+      wallet_info
       principal
       principal_remaining
       principal_overdue
@@ -38,6 +39,7 @@ query GetUserByEmail($email: String!) {
     }
     loansToRepay: loans( where: {state: {_in: [LIVE]}}) {
       loan_id
+      wallet_info
       next_payment_amount
       next_payment_due_date
       principal_overdue

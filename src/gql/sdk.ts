@@ -6169,14 +6169,14 @@ export type GetUserByEmailQuery = (
       & Pick<Loan_Request, 'request_id' | 'amount' | 'purpose' | 'state'>
     )>, loans: Array<(
       { __typename?: 'loan' }
-      & Pick<Loan, 'loan_id' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
+      & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
       & { loanRequest: (
         { __typename?: 'loan_request' }
         & Pick<Loan_Request, 'purpose'>
       ) }
     )>, loansToRepay: Array<(
       { __typename?: 'loan' }
-      & Pick<Loan, 'loan_id' | 'next_payment_amount' | 'next_payment_due_date' | 'principal_overdue' | 'principal_remaining' | 'interest_accrued'>
+      & Pick<Loan, 'loan_id' | 'wallet_info' | 'next_payment_amount' | 'next_payment_due_date' | 'principal_overdue' | 'principal_remaining' | 'interest_accrued'>
     )>, investedLoans: Array<(
       { __typename?: 'lender_amount' }
       & Pick<Lender_Amount, 'amount_lent'>
@@ -6711,6 +6711,7 @@ export const GetUserByEmailDocument = gql`
     }
     loans {
       loan_id
+      wallet_info
       principal
       principal_remaining
       principal_overdue
@@ -6726,6 +6727,7 @@ export const GetUserByEmailDocument = gql`
     }
     loansToRepay: loans(where: {state: {_in: [LIVE]}}) {
       loan_id
+      wallet_info
       next_payment_amount
       next_payment_due_date
       principal_overdue

@@ -168,6 +168,9 @@ export default class DbClient {
       description: "loan account",
     })
 
+    const algoAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ALGO")
+    const ethAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ETH")
+
     // tokenize loan
     const terms = {
       apr: DEFAULT_APR,
@@ -193,7 +196,11 @@ export default class DbClient {
       loan: {
         loan_id: newLoanId,
         asset_id: assetId,
-        wallet_id: walletId,
+        wallet_info: {
+          id: walletId,
+          ethAddress,
+          algoAddress
+        },
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,
         principal: terms.principal,
@@ -446,7 +453,6 @@ export default class DbClient {
    * update all live loan Terms with the latest state from the swarmAI-api
    * @param loanId
    */
-
   doCompoundingUpdates = async () => {
     const { loans } = await this.sdk.GetLiveLoans()
     console.log("liveloans ", loans)
@@ -504,7 +510,7 @@ export default class DbClient {
         const possibleInvestors = request.creditors.approved.filter(
           (c) => c.account.balance > request.amount
         )
-        console.log("pos", possibleInvestors)
+        console.log("possible investors", possibleInvestors)
         if (possibleInvestors.length > 0) {
           await this.fundLoanRequest(
             request.request_id,
