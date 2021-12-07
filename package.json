@@ -20,6 +20,7 @@
     "@chakra-ui/icons": "^1.0.0-rc.8",
     "@chakra-ui/theme": "^1.0.0-rc.3",
     "@use-it/event-listener": "^0.1.6",
+    "@veriff/js-sdk": "^1.2.3",
     "aws-sdk": "^2.805.0",
     "chart.js": "^2.9.4",
     "dataloader": "^2.0.0",
