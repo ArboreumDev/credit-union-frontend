@@ -11,11 +11,9 @@ interface Props {
 }
 
 const TabHome = ({ tabs, initPanelIdx }: Props) => {
-  const [tabIndex, setTabIndex] = useState(initPanelIdx)
-
   return (
     <Box margin={[0, 1, 2, 3]} padding={[2, 3, 4, 5]}>
-      <Tabs onChange={(index) => setTabIndex(index)} index={tabIndex}>
+      <Tabs defaultIndex={initPanelIdx}>
         <TabList marginBottom={3}>
           {tabs.map((tab, idx) => (
             <Tab key={"t" + idx}>{tab.title}</Tab>
