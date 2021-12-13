@@ -9,6 +9,7 @@ import differenceInQuartersWithOptions from 'date-fns/esm/fp/differenceInQuarter
 import { useEffect, useState } from 'react'
 import FaqQuestionDisplay from 'components/common/faq/FaqQuestionDisplay'
 import FaqTOC from 'components/common/faq/FaqTOC'
+import NavButtons from 'components/common/faq/NavButtons'
 import { FAQs, FaqQuestion  } from 'components/common/faq/types'
 
 import {questions as questionObject} from "components/faq/signup"
@@ -22,15 +23,7 @@ const FAQ = () => {
     const indexToActiveQuestion = (i: number) => {
         const q =  Object.values(questions).filter(q => q.position == i)[0]
         console.log('qu', q)
-        return {
-                question: "question1",
-                title: "title1",
-                answer: "answer1",
-                tldr: "tldr1",
-                position: 0,
-                imageSrc: "",
-                readMore: [],
-        }
+        return q 
     }
 
     return (
@@ -44,6 +37,12 @@ const FAQ = () => {
             >
                 <GridItem colSpan={3}>
                     <FaqQuestionDisplay q={indexToActiveQuestion(activeQuestionIndex)}/>
+                    <NavButtons 
+                        max={Object.values(questions).length}
+                        activeQuestionIndex={activeQuestionIndex}
+                        setActiveQuestionIndex={setActiveQuestionIndex}
+                    />
+                    
                 </GridItem>
                 <GridItem colSpan={1} >
                     <FaqTOC 

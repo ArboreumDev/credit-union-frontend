@@ -1,4 +1,4 @@
-export interface ReadMore {
+export interface ReadMoreItem {
     question: string
     answer: string
     position: number
@@ -12,7 +12,7 @@ export interface FaqQuestion {
     answer: string
     imageSrc: string
     tldr: string
-    readMore : Array<ReadMore>
+    readMore : Array<ReadMoreItem>
 }
 
 export interface FAQs {
