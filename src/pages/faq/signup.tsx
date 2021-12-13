@@ -13,7 +13,6 @@ import differenceInQuartersWithOptions from 'date-fns/esm/fp/differenceInQuarter
 import { useEffect, useState } from 'react'
 import FaqQuestionDisplay from 'components/common/faq/FaqQuestionDisplay'
 import FaqTOC from 'components/common/faq/FaqTOC'
-import NavButtons from 'components/common/faq/NavButtons'
 import { FAQs, FaqQuestion  } from 'components/common/faq/types'
 
 import {questions as questionObject} from "components/faq/signup"
@@ -65,11 +64,11 @@ const SignUpJourney = () => {
                 gap={4}
             >
                 <GridItem colSpan={3}>
-                    <FaqQuestionDisplay q={indexToActiveQuestion(activeQuestionIndex)}/>
-                    <NavButtons 
-                        max={Object.values(questions).length}
+                    <FaqQuestionDisplay 
+                        q={indexToActiveQuestion(activeQuestionIndex)}
                         activeQuestionIndex={activeQuestionIndex}
                         setActiveQuestionIndex={setActiveQuestionIndex}
+                        lastQIndex={Object.values(questions).length}
                     />
                     
                 </GridItem>

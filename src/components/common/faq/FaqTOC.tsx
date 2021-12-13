@@ -26,7 +26,7 @@ const NavItem = ({q, onClick, isActive}: NavItemProps) => {
             <HStack>
                 <Text as={style}> {q.position}:</Text>
                 {/* <LinkOverlay onClick={onClick}> */}
-                    <Text as={style}>{q.question}</Text>
+                    <Text as={style}>{q.title}</Text>
                 {/* </LinkOverlay> */}
             </HStack>
         </Box>

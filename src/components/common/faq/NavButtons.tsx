@@ -7,6 +7,7 @@ interface Props {
 }
 
 const NavButtons = ({max, setActiveQuestionIndex, activeQuestionIndex}: Props) => {
+    const isLast = activeQuestionIndex === max-1
     return (
         <Center>
             <Spacer />
@@ -14,11 +15,11 @@ const NavButtons = ({max, setActiveQuestionIndex, activeQuestionIndex}: Props) =
                 <Button 
                     onClick={() => setActiveQuestionIndex(activeQuestionIndex -1)}
                     disabled={activeQuestionIndex === 0}
-                >{'<'}</Button>
+                >{'< go back'}</Button>
                 <Button 
                     onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
-                    disabled={activeQuestionIndex === max-1}
-                >{'>'}</Button>
+                    disabled={isLast}
+                >{'see next step >'}</Button>
             </Box>
             <Spacer />
         </Center>

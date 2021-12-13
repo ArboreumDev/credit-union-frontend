@@ -9,6 +9,7 @@ export interface FaqQuestion {
     title: string
     position: number
     question: string
+    caption: string
     answer: string
     imageSrc: string
     tldr: string

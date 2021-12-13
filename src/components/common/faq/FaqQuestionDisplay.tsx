@@ -8,6 +8,7 @@ import {Divider, Text,Box, HStack, VStack,   Accordion,
     Heading
 } from "@chakra-ui/core"
 import Image from 'next/image'
+import NavButtons from 'components/common/faq/NavButtons'
 // import im0 from  "../../../../public/images/algoConnectJourney/0.png"
 // import im0 from  "/images/algoConnectJourney/0.png"
 
@@ -33,16 +34,23 @@ const ReadMore = ({q}: ReadMoreProps) => (
 )
 interface Props {
     q: FaqQuestion
+    lastQIndex: number
+    setActiveQuestionIndex: any
+    activeQuestionIndex: number
 }
 
 
-const FaqQuestionDisplay  = ({q}: Props) => {
+const FaqQuestionDisplay  = ({q, lastQIndex, activeQuestionIndex, setActiveQuestionIndex}: Props) => {
     console.log('q', q)
     return ( 
         <Box>
             <VStack>
-                <Heading as='h1'> {q.title} </Heading>
-                <HStack> <b>tl;dr:</b><p>{q.tldr}</p> </HStack>
+                <Heading as='h1'> {q.question} </Heading>
+                <Text as='i'>
+                    <b>tl;dr:</b>
+
+                    {q.tldr}
+                </Text>
                 {/* next js image ocmponent */}
                 <Image 
                     // layout='fill'
@@ -50,17 +58,27 @@ const FaqQuestionDisplay  = ({q}: Props) => {
                     height={90*3}
                     src={q.imageSrc}
                 />
-                <Text as='i' fontSize='sm'> Step {q.position}: Some caption </Text>
+                <Text as='i' fontSize='sm'> Step {q.position}: {q.caption} </Text>
                 <Text>{q.answer}</Text>
                 <Divider />
-                <Heading as='h3' size='sm'> Read More: </Heading>
-                <Accordion allowToggle>
-                    {q.readMore && q.readMore
-                        .sort((a,b) => {return a.position < b.position ? -1 : 1})
-                        .map(item => (
-                            <ReadMore q={item} />
-                    ))}
-                </Accordion>
+                <NavButtons 
+                    max={lastQIndex}
+                    setActiveQuestionIndex={setActiveQuestionIndex}
+                    activeQuestionIndex={activeQuestionIndex}
+                />
+                <Divider />
+                {q.readMore && (
+                    <>
+                        <Text>Or <Text as='b'> Read More:</Text> </Text>
+                        <Accordion allowToggle>
+                            {q.readMore
+                            .sort((a,b) => {return a.position < b.position ? -1 : 1})
+                            .map(item => (
+                                <ReadMore q={item} />
+                            ))}
+                        </Accordion>
+                    </>
+                )}
             </VStack>
         </Box>
     )
