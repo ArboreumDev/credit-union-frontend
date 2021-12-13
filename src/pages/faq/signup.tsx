@@ -3,6 +3,10 @@ import {
     Heading,
     Grid,
     GridItem,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbSeparator,
   } from '@chakra-ui/core'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import differenceInQuartersWithOptions from 'date-fns/esm/fp/differenceInQuartersWithOptions/index.js'
@@ -16,7 +20,27 @@ import {questions as questionObject} from "components/faq/signup"
 // import { Logo } from "components/common/landing"
 
 
-const FAQ = () => {
+const BreadCrumb = ({goToMain, goToSignup, currentTitle}) => {
+    return (
+        <Breadcrumb>
+            <BreadcrumbItem>
+                <BreadcrumbLink href='/faq'>Faq</BreadcrumbLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem>
+                <BreadcrumbLink href='/faq/signup'>SignUp</BreadcrumbLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink href='#'>{currentTitle}</BreadcrumbLink>
+            </BreadcrumbItem>
+        </Breadcrumb>
+    )
+
+}
+
+
+const SignUpJourney = () => {
     const questions: FAQs = questionObject
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
 
@@ -29,7 +53,12 @@ const FAQ = () => {
     return (
         <Box>
             <Heading>FAQ</Heading>
-            <Grid
+            <BreadCrumb 
+                currentTitle={indexToActiveQuestion(activeQuestionIndex).title}
+                goToMain={null}
+                goToSignup={null}
+            />
+           <Grid
                 h='200px'
                 templateRows='repeat(1, 1fr)'
                 templateColumns='repeat(4, 1fr)'
@@ -44,7 +73,7 @@ const FAQ = () => {
                     />
                     
                 </GridItem>
-                <GridItem colSpan={1} >
+                <GridItem colSpan={1} backgroundColor='gray.100' >
                     <FaqTOC 
                         questions={questions}
                         activeQuestionIndex={activeQuestionIndex}
@@ -56,7 +85,7 @@ const FAQ = () => {
     )
 }
 
-export default FAQ
+export default SignUpJourney
 
 // const SignUpExplainer = () => {
 //     return (

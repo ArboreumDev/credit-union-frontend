@@ -1,5 +1,7 @@
 import { 
     Box,
+    LinkBox,
+    LinkOverlay,
     List,
     ListItem,
     ListIcon,
@@ -14,17 +16,23 @@ import { FAQs, FaqQuestion } from "./types"
 interface NavItemProps {
     q: any // TODO
     onClick: any
-    isActive: bool
+    isActive: boolean
 }
 
-const NavItem = ({q, onClick}: NavItemProps) => (
-    <Box>
-        <HStack>
-            <Text> {q.position}:</Text>
-            <Text>{q.question}</Text>
-        </HStack>
-    </Box>
-)
+const NavItem = ({q, onClick, isActive}: NavItemProps) => {
+    const style = isActive ? "u" : ''
+    return (
+        <Box onClick={onClick}>
+            <HStack>
+                <Text as={style}> {q.position}:</Text>
+                {/* <LinkOverlay onClick={onClick}> */}
+                    <Text as={style}>{q.question}</Text>
+                {/* </LinkOverlay> */}
+            </HStack>
+        </Box>
+    )
+}
+
 interface Props {
     questions: FAQs
     setActiveQuestionIndex: any
@@ -37,11 +45,11 @@ const FaqTOC = ({questions, setActiveQuestionIndex, activeQuestionIndex}: Props)
     return (
         <Box backgroundColor='gray.100'>
             { topics && topics
-                .sort((a,b) => {return a.position > b.position ? -1: 1})
+                .sort((a,b) => {return a.position > b.position ? 1: -1})
                 .map((q) => (
                     <NavItem 
                         q={q}
-                        onClick={() => {setActiveQuestionIndex(activeQuestionIndex)}}
+                        onClick={() => {setActiveQuestionIndex(q.position)}}
                         isActive={q.position==activeQuestionIndex}
                     />
             ))}

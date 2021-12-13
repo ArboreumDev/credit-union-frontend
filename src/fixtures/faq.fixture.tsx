@@ -1,6 +1,7 @@
-import FAQ from "pages/faq"
+import FAQ from "pages/faq/signup"
 import FaqQuestionDisplay from "components/common/faq/FaqQuestionDisplay"
 import FaqTOC from "components/common/faq/FaqTOC"
+import SignUpJourney from "pages/faq/signup"
 
 const fixtures = {
    q1: {
@@ -29,13 +30,13 @@ const fixtures = {
       answer: "answer2",
       tldr: "tldr2",
       position: 0,
-      imageSrc: "/public/images/algoConnectJourney/1.png",
+      imageSrc: "/images/algoConnectJourney/1.png",
       readMore: [],
    }
 }
 
 export default {
-    faq: <FAQ />,
+    faq: <SignUpJourney />,
     question: <FaqQuestionDisplay q={fixtures.q1} />,
     toc: <FaqTOC 
       questions={fixtures}
