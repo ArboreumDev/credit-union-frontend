@@ -67,7 +67,7 @@ const FaqQuestionDisplay  = ({q, lastQIndex, activeQuestionIndex, setActiveQuest
                     activeQuestionIndex={activeQuestionIndex}
                 />
                 <Divider />
-                {q.readMore && (
+                {q.readMore.length && (
                     <>
                         <Text>Or <Text as='b'> Read More:</Text> </Text>
                         <Accordion allowToggle>

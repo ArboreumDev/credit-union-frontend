@@ -76,31 +76,10 @@ Once you created the account, you will not use in practice. You will only ever u
 
 
 export const questions = {
-   q1: {
-      question: "question1",
-      title: "title1",
-      answer: "answer1",
-      tldr: "tldr1",
-      position: 7,
-      caption: "",
-      imageSrc: "/images/algoConnectJourney/0.png",
-      readMore: [
-         {
-            question: "followupquestion1",
-            answer: "follup answer1",
-            position: 0
-         },
-         {
-            question: "followupquestion2",
-            answer: "follup answer2",
-            position: 1
-         }
-      ],
-   },
    clarification: {
       title: "Wallet Setup",
-      question: "Setting up an AlgoConnect Wallet",
-      answer: "Instead of managing the keys & passwords that control your funds ourselves, we are using an external wallet software provider that has been battle tested, endorsed by the Algorand Blockchain Foundation and trusted by many other projects.",
+      question: "Setting up an Algorand Blockchain Wallet",
+      answer: "Instead of managing the keys & passwords (aka your 'wallet') that control your funds ourselves, we are using an external wallet software provider that has been battle tested, endorsed by the Algorand Blockchain Foundation and trusted by many other projects.",
       tldr: "In the following we will ask you to create an AlgoConnect Wallet. This is a digital wallet in which you can store assets & currencies from the Algorand Blockchain and that you will use to interact with our website.",
       position: 0,
       imageSrc: "/images/algoConnectJourney/0.png",
@@ -150,7 +129,7 @@ export const questions = {
    },
    mnemExplainer: {
       title: "Mnemonic Phrase Explainer",
-      question: "The Mnemonic Phrase: Your identity on the blockchain",
+      question: " Learn about the Mnemonic Phrase: Your identity on the blockchain",
       answer: "The mnemonic phrase is an easy way to back up a real big mathematical number that will be used to generate your account. You can just follow the steps to create the mnemonic phrase and learn as you go or dive deeper in our /readMore section below.",
       tldr: "You will create a random, unchangeable password that can be used to take over your account. Keep it really safe and never, ever share it!",
       position: 3,
@@ -180,25 +159,46 @@ export const questions = {
       ],
    },
    mnemGen: {
-      title: "Mnemonic Phrase Generation",
-      question: "Create an absolutely unguessable secret!",
-      answer: "answer1.",
-      tldr: "todo",
+      title: "Mnemonic Phrase Generation & Backup",
+      question: "Generate an absolutely unguessable secret!",
+      answer: `At this step your secret will have been generated and is represented by 25 words. Here you will see the actual words. Depending on whether you want to setup a
+      playmoney account or set up a real serious one, take a screenshot or note
+      them down using pen and paper. Also, make sure that nobody else can see your
+      screen while you do so! Another safe way to manage them would be to copy them and store them as a note inside your password-manager`,
+      tldr: "The secret to your account is represented as 25 words. Back them up safely!",
       position: 4,
       imageSrc: "/images/algoConnectJourney/4.png",
-      caption: "This screen shows something.",
+      caption: "Look at the words in small chunks if you note them down using pen and paper, reveal them all at once to take a screenshot or copy them to your clipboard.",
       readMore: [],
    },
    mnemVerif: {
-      title: "Mnemonic Phrase Verification",
-      question: "Make sure you got your secret correctly backed up",
-      answer: "answer1.",
-      tldr: "todo",
+      title: "Mnemonic Phrase Backup Verification",
+      question: "Make sure that your backup is correct.",
+      answer: `You will be asked to put some of the words that you backed-up in the step before. We are all lazy sometimes, but this is not the time to be it!  Once you've completed the verification you can give the account a name. This will be completely private, nobody else will see this name ever, so just choose something that you can remember easily, e.g. "TigerWallet", "LoanWallet", "TestWallet", "PlayMoney1",...`,
+      tldr: "Re-enter your passphrase to prove that you have actually made a backup.",
       position: 5,
       imageSrc: "/images/algoConnectJourney/5.png",
-      caption: "This screen shows something.",
+      caption: "Five words from your passhrase will need to be re-entered to prove that you correctly safed the words and their order.",
       readMore: [],
+   },
+   finalStep: {
+      title: "Unlock your Wallet",
+      question: "Final Confirmation: Do you want to get blockchain ready?",
+      answer: `Enter your password from the first step again to confirm that you actually want to create that wallet  Congrats! You just created your first blockchain wallet. You might think that it's a bit complicated and that there are not a lot of things you can do with it. But people thought that of e-mail addresses in 1996 too!`,
+      tldr: "Confirm the wallet creation and you're done!.",
+      position: 5,
+      imageSrc: "/images/algoConnectJourney/5.png",
+      caption: "Now take a tour of the wallet or just start using our website",
+      readMore: [
+         {
+            question: "What does Testnet/Mainnet mean? Which should I be using?",
+            answer: "TODO",
+            position: 0
+         }
+      ],
    }
+
+
 
 
 }

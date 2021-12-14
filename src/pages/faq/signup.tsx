@@ -12,6 +12,7 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import differenceInQuartersWithOptions from 'date-fns/esm/fp/differenceInQuartersWithOptions/index.js'
 import { useEffect, useState } from 'react'
 import FaqQuestionDisplay from 'components/common/faq/FaqQuestionDisplay'
+import FaqLayout from 'components/common/faq/FaqLayout'
 import FaqTOC from 'components/common/faq/FaqTOC'
 import { FAQs, FaqQuestion  } from 'components/common/faq/types'
 
@@ -19,11 +20,11 @@ import {questions as questionObject} from "components/faq/signup"
 // import { Logo } from "components/common/landing"
 
 
-const BreadCrumb = ({goToMain, goToSignup, currentTitle}) => {
+export const BreadCrumb = ({currentTitle}) => {
     return (
         <Breadcrumb>
             <BreadcrumbItem>
-                <BreadcrumbLink href='/faq'>Faq</BreadcrumbLink>
+                <BreadcrumbLink href='/faq'>FAQ</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbItem>
@@ -50,12 +51,10 @@ const SignUpJourney = () => {
     }
 
     return (
+        <FaqLayout>
         <Box>
-            <Heading>FAQ</Heading>
             <BreadCrumb 
                 currentTitle={indexToActiveQuestion(activeQuestionIndex).title}
-                goToMain={null}
-                goToSignup={null}
             />
            <Grid
                 h='200px'
@@ -81,6 +80,7 @@ const SignUpJourney = () => {
                 </GridItem>
             </Grid>
         </Box>
+        </FaqLayout>
     )
 }
 
