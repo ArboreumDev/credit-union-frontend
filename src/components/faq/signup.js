@@ -186,8 +186,8 @@ export const questions = {
       question: "Final Confirmation: Do you want to get blockchain ready?",
       answer: `Enter your password from the first step again to confirm that you actually want to create that wallet  Congrats! You just created your first blockchain wallet. You might think that it's a bit complicated and that there are not a lot of things you can do with it. But people thought that of e-mail addresses in 1996 too!`,
       tldr: "Confirm the wallet creation and you're done!.",
-      position: 5,
-      imageSrc: "/images/algoConnectJourney/5.png",
+      position: 6,
+      imageSrc: "/images/algoConnectJourney/6.png",
       caption: "Now take a tour of the wallet or just start using our website",
       readMore: [
          {
