@@ -31,6 +31,7 @@ query GetUserByEmail($email: String!) {
       interest_paid
       state
       tenor
+      created_at
       next_payment_amount
       next_payment_due_date
       loanRequest {
@@ -49,7 +50,9 @@ query GetUserByEmail($email: String!) {
     investedLoans: lender_amounts {
       amount_lent
       loan {
+        ...loanInfoFields
         loan_id
+        created_at
         state
         tenor
         principal
@@ -109,3 +112,20 @@ query GetUserByEmail($email: String!) {
 #     loan
 #   }
 # }
+
+fragment loanInfoFields on loan {
+  loan_id
+  wallet_info
+  principal
+  principal_remaining
+  principal_overdue
+  interest_accrued
+  interest_paid
+  state
+  tenor
+  next_payment_amount
+  next_payment_due_date
+  loanRequest {
+    purpose
+  }
+}

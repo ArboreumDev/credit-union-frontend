@@ -4,8 +4,9 @@ import { getSession } from "next-auth/client"
 import DbClient from "../../gql/db_client"
 import { Update_Type_Enum } from "../../gql/sdk"
 import { Session } from "../../lib/types"
+import {algoActionClient} from "gql/algo_client"
 
-const dbClient = new DbClient()
+const dbClient = new DbClient(null, null, null, algoActionClient)
 
 export type UpdateRequestType =
   | "COMPOUND"

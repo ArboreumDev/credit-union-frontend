@@ -202,14 +202,21 @@ export class SetBorrowerApproval extends Action {
       investor_id: this.user.id,
     }
     // add borrower entry
-    if (this.payload.approved) {
-      await this.dbClient.sdk.ApproveBorrower({ creditLine })
-      await this.dbClient.processOpenRequests(this.user.id)
-    } else {
-      await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+    try {
+      if (this.payload.approved) {
+        await this.dbClient.sdk.ApproveBorrower({ creditLine })
+        await this.dbClient.processOpenRequests(this.user.id)
+        return true
+      } else {
+        await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+        return true
+      }
+    } catch (err) {
+      console.log(err)
+      const msg = `error processing requests after approval: ${JSON.stringify(err)}`
+      console.log(msg)
+      throw msg
     }
-    return true
-    // TODO // return await this.dbClient.sdk.InsertScenarioAction({
   }
 
   static fetch(payload: typeof SetBorrowerApproval.InputType) {

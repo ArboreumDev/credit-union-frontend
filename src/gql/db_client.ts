@@ -50,7 +50,7 @@ export default class DbClient {
     _client?: GraphQLClient,
     _swarmai_client?: SwarmAIClient,
     _circleClient?: CircleClient,
-    _algoClient?: AlgoClient
+    _algoClient?: AlgoClient,
   ) {
     if (DbClient.instance) {
       return DbClient.instance
@@ -65,7 +65,7 @@ export default class DbClient {
     this.sdk = getSdk(this.gqlClient)
     this.algoClient =
       _algoClient ||
-      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw")
+      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "falseSecret")
     DbClient.instance = this
  
   }

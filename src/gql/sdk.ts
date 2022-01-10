@@ -6169,7 +6169,7 @@ export type GetUserByEmailQuery = (
       & Pick<Loan_Request, 'request_id' | 'amount' | 'purpose' | 'state'>
     )>, loans: Array<(
       { __typename?: 'loan' }
-      & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
+      & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'created_at' | 'next_payment_amount' | 'next_payment_due_date'>
       & { loanRequest: (
         { __typename?: 'loan_request' }
         & Pick<Loan_Request, 'purpose'>
@@ -6182,14 +6182,24 @@ export type GetUserByEmailQuery = (
       & Pick<Lender_Amount, 'amount_lent'>
       & { loan: (
         { __typename?: 'loan' }
-        & Pick<Loan, 'loan_id' | 'state' | 'tenor' | 'principal'>
+        & Pick<Loan, 'loan_id' | 'created_at' | 'state' | 'tenor' | 'principal'>
         & { borrowerInfo: (
           { __typename?: 'user' }
           & Pick<User, 'first_name' | 'last_name'>
         ) }
+        & LoanInfoFieldsFragment
       ) }
     )> }
   )> }
+);
+
+export type LoanInfoFieldsFragment = (
+  { __typename?: 'loan' }
+  & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
+  & { loanRequest: (
+    { __typename?: 'loan_request' }
+    & Pick<Loan_Request, 'purpose'>
+  ) }
 );
 
 export type ApproveKycMutationVariables = Exact<{
@@ -6626,7 +6636,24 @@ export type ResetRequestsMutation = (
   )> }
 );
 
-
+export const LoanInfoFieldsFragmentDoc = gql`
+    fragment loanInfoFields on loan {
+  loan_id
+  wallet_info
+  principal
+  principal_remaining
+  principal_overdue
+  interest_accrued
+  interest_paid
+  state
+  tenor
+  next_payment_amount
+  next_payment_due_date
+  loanRequest {
+    purpose
+  }
+}
+    `;
 export const ChangeUserCashBalanceDocument = gql`
     mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
   user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
@@ -6719,6 +6746,7 @@ export const GetUserByEmailDocument = gql`
       interest_paid
       state
       tenor
+      created_at
       next_payment_amount
       next_payment_due_date
       loanRequest {
@@ -6737,7 +6765,9 @@ export const GetUserByEmailDocument = gql`
     investedLoans: lender_amounts {
       amount_lent
       loan {
+        ...loanInfoFields
         loan_id
+        created_at
         state
         tenor
         principal
@@ -6749,7 +6779,7 @@ export const GetUserByEmailDocument = gql`
     }
   }
 }
-    `;
+    ${LoanInfoFieldsFragmentDoc}`;
 export const ApproveKycDocument = gql`
     mutation ApproveKYC($userId: uuid!, $kycApproved: Boolean!) {
   user: update_user_by_pk(
