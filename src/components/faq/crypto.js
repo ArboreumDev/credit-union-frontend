@@ -10,9 +10,9 @@ export const questions = {
       readMore: []
    },
    passwordSetup: {
-      title: "I heard Crypto is volatile. What happens if the course fluctuates",
-      question: "What happens",
-      answer: "stablecoins ....",
+      title: "I heard Crypto is volatile. What happens if the price goes up/down?",
+      question: "What happens...",
+      answer: "stablecoins!!",
       tldr: "Create a (changeable) password for AlgoConnect",
       position: 1,
       imageSrc: "",
@@ -22,7 +22,7 @@ export const questions = {
    walletCreation: {
       title: "Do I need crypto to lend on Arboreum?",
       question: "Do I need cryptocurrency to lend on arboreum?",
-      answer: "",
+      answer: "yes!",
       tldr: "",
       position: 2,
       imageSrc: "",
