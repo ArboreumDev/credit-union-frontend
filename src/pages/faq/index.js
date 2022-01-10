@@ -16,6 +16,7 @@ export default () => (
             </Text>
             <VStack>
                 <Link href="/faq/signup"><a> {'>'} Creating an Algorand Wallet?</a></Link>
+                <Link href="/faq/crypto"><a>{'>'} What is a blockchain?</a></Link>
                 <Link href="/faq/transactions"><a>{'>'} Using your wallet to sign transactions (TODO)</a></Link>
                 <Link href="/faq/transactions"><a>{'>'} Depositing & withdrawing from your account (TODO)</a></Link>
             </VStack>

@@ -52,13 +52,17 @@ const FaqQuestionDisplay  = ({q, lastQIndex, activeQuestionIndex, setActiveQuest
                     {q.tldr}
                 </Text>
                 {/* next js image ocmponent */}
-                <Image 
-                    // layout='fill'
-                    width={190*3}
-                    height={90*3}
-                    src={q.imageSrc}
-                />
-                <Text as='i' fontSize='sm'> Step {q.position}: {q.caption} </Text>
+                {q.imageSrc && (
+                    <>
+                        <Image 
+                        // layout='fill'
+                        width={190*3}
+                        height={90*3}
+                        src={q.imageSrc}
+                        />
+                        <Text as='i' fontSize='sm'> Step {q.position}: {q.caption} </Text>
+                    </>
+                )}
                 <Text>{q.answer}</Text>
                 <Divider />
                 <NavButtons 
