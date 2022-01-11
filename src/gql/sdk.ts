@@ -983,7 +983,7 @@ export type Loan = {
   update_logs: Array<Update_Log>;
   /** An aggregated array relationship */
   update_logs_aggregate: Update_Log_Aggregate;
-  wallet_id: Scalars['String'];
+  wallet_info?: Maybe<Scalars['jsonb']>;
 };
 
 
@@ -1046,6 +1046,12 @@ export type LoanUpdate_Logs_AggregateArgs = {
   where?: Maybe<Update_Log_Bool_Exp>;
 };
 
+
+/** columns and relationships of "loan" */
+export type LoanWallet_InfoArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
 /** aggregated selection of "loan" */
 export type Loan_Aggregate = {
   __typename?: 'loan_aggregate';
@@ -1089,6 +1095,11 @@ export type Loan_Aggregate_Order_By = {
   var_pop?: Maybe<Loan_Var_Pop_Order_By>;
   var_samp?: Maybe<Loan_Var_Samp_Order_By>;
   variance?: Maybe<Loan_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Loan_Append_Input = {
+  wallet_info?: Maybe<Scalars['jsonb']>;
 };
 
 /** input type for inserting array relation for remote table "loan" */
@@ -1155,16 +1166,29 @@ export type Loan_Bool_Exp = {
   state?: Maybe<Loan_State_Enum_Comparison_Exp>;
   tenor?: Maybe<Numeric_Comparison_Exp>;
   update_logs?: Maybe<Update_Log_Bool_Exp>;
-  wallet_id?: Maybe<String_Comparison_Exp>;
+  wallet_info?: Maybe<Jsonb_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "loan" */
 export enum Loan_Constraint {
   /** unique or primary key constraint */
-  LoanPkey = 'loan_pkey',
-  /** unique or primary key constraint */
-  LoanWalletIdKey = 'loan_walletId_key'
+  LoanPkey = 'loan_pkey'
 }
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Loan_Delete_At_Path_Input = {
+  wallet_info?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Loan_Delete_Elem_Input = {
+  wallet_info?: Maybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Loan_Delete_Key_Input = {
+  wallet_info?: Maybe<Scalars['String']>;
+};
 
 /** input type for incrementing integer column in table "loan" */
 export type Loan_Inc_Input = {
@@ -1205,7 +1229,7 @@ export type Loan_Insert_Input = {
   state?: Maybe<Loan_State_Enum>;
   tenor?: Maybe<Scalars['numeric']>;
   update_logs?: Maybe<Update_Log_Arr_Rel_Insert_Input>;
-  wallet_id?: Maybe<Scalars['String']>;
+  wallet_info?: Maybe<Scalars['jsonb']>;
 };
 
 /** aggregate max on columns */
@@ -1227,7 +1251,6 @@ export type Loan_Max_Fields = {
   principal_overdue?: Maybe<Scalars['float8']>;
   principal_remaining?: Maybe<Scalars['float8']>;
   tenor?: Maybe<Scalars['numeric']>;
-  wallet_id?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "loan" */
@@ -1248,7 +1271,6 @@ export type Loan_Max_Order_By = {
   principal_overdue?: Maybe<Order_By>;
   principal_remaining?: Maybe<Order_By>;
   tenor?: Maybe<Order_By>;
-  wallet_id?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -1270,7 +1292,6 @@ export type Loan_Min_Fields = {
   principal_overdue?: Maybe<Scalars['float8']>;
   principal_remaining?: Maybe<Scalars['float8']>;
   tenor?: Maybe<Scalars['numeric']>;
-  wallet_id?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "loan" */
@@ -1291,7 +1312,6 @@ export type Loan_Min_Order_By = {
   principal_overdue?: Maybe<Order_By>;
   principal_remaining?: Maybe<Order_By>;
   tenor?: Maybe<Order_By>;
-  wallet_id?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "loan" */
@@ -1340,12 +1360,17 @@ export type Loan_Order_By = {
   state?: Maybe<Order_By>;
   tenor?: Maybe<Order_By>;
   update_logs_aggregate?: Maybe<Update_Log_Aggregate_Order_By>;
-  wallet_id?: Maybe<Order_By>;
+  wallet_info?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: "loan" */
 export type Loan_Pk_Columns_Input = {
   loan_id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Loan_Prepend_Input = {
+  wallet_info?: Maybe<Scalars['jsonb']>;
 };
 
 /** columns and relationships of "loan_request" */
@@ -1857,7 +1882,7 @@ export enum Loan_Select_Column {
   /** column name */
   Tenor = 'tenor',
   /** column name */
-  WalletId = 'wallet_id'
+  WalletInfo = 'wallet_info'
 }
 
 /** input type for updating data in table "loan" */
@@ -1879,7 +1904,7 @@ export type Loan_Set_Input = {
   principal_remaining?: Maybe<Scalars['float8']>;
   state?: Maybe<Loan_State_Enum>;
   tenor?: Maybe<Scalars['numeric']>;
-  wallet_id?: Maybe<Scalars['String']>;
+  wallet_info?: Maybe<Scalars['jsonb']>;
 };
 
 /** columns and relationships of "loan_state" */
@@ -2205,7 +2230,7 @@ export enum Loan_Update_Column {
   /** column name */
   Tenor = 'tenor',
   /** column name */
-  WalletId = 'wallet_id'
+  WalletInfo = 'wallet_info'
 }
 
 /** aggregate var_pop on columns */
@@ -2911,7 +2936,12 @@ export type Mutation_RootUpdate_Lender_Amount_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_LoanArgs = {
+  _append?: Maybe<Loan_Append_Input>;
+  _delete_at_path?: Maybe<Loan_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<Loan_Delete_Elem_Input>;
+  _delete_key?: Maybe<Loan_Delete_Key_Input>;
   _inc?: Maybe<Loan_Inc_Input>;
+  _prepend?: Maybe<Loan_Prepend_Input>;
   _set?: Maybe<Loan_Set_Input>;
   where: Loan_Bool_Exp;
 };
@@ -2919,7 +2949,12 @@ export type Mutation_RootUpdate_LoanArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Loan_By_PkArgs = {
+  _append?: Maybe<Loan_Append_Input>;
+  _delete_at_path?: Maybe<Loan_Delete_At_Path_Input>;
+  _delete_elem?: Maybe<Loan_Delete_Elem_Input>;
+  _delete_key?: Maybe<Loan_Delete_Key_Input>;
   _inc?: Maybe<Loan_Inc_Input>;
+  _prepend?: Maybe<Loan_Prepend_Input>;
   _set?: Maybe<Loan_Set_Input>;
   pk_columns: Loan_Pk_Columns_Input;
 };
@@ -6134,27 +6169,37 @@ export type GetUserByEmailQuery = (
       & Pick<Loan_Request, 'request_id' | 'amount' | 'purpose' | 'state'>
     )>, loans: Array<(
       { __typename?: 'loan' }
-      & Pick<Loan, 'loan_id' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
+      & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'created_at' | 'next_payment_amount' | 'next_payment_due_date'>
       & { loanRequest: (
         { __typename?: 'loan_request' }
         & Pick<Loan_Request, 'purpose'>
       ) }
     )>, loansToRepay: Array<(
       { __typename?: 'loan' }
-      & Pick<Loan, 'loan_id' | 'next_payment_amount' | 'next_payment_due_date' | 'principal_overdue' | 'principal_remaining' | 'interest_accrued'>
+      & Pick<Loan, 'loan_id' | 'wallet_info' | 'next_payment_amount' | 'next_payment_due_date' | 'principal_overdue' | 'principal_remaining' | 'interest_accrued'>
     )>, investedLoans: Array<(
       { __typename?: 'lender_amount' }
       & Pick<Lender_Amount, 'amount_lent'>
       & { loan: (
         { __typename?: 'loan' }
-        & Pick<Loan, 'loan_id' | 'state' | 'tenor' | 'principal'>
+        & Pick<Loan, 'loan_id' | 'created_at' | 'state' | 'tenor' | 'principal'>
         & { borrowerInfo: (
           { __typename?: 'user' }
           & Pick<User, 'first_name' | 'last_name'>
         ) }
+        & LoanInfoFieldsFragment
       ) }
     )> }
   )> }
+);
+
+export type LoanInfoFieldsFragment = (
+  { __typename?: 'loan' }
+  & Pick<Loan, 'loan_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'interest_paid' | 'state' | 'tenor' | 'next_payment_amount' | 'next_payment_due_date'>
+  & { loanRequest: (
+    { __typename?: 'loan_request' }
+    & Pick<Loan_Request, 'purpose'>
+  ) }
 );
 
 export type ApproveKycMutationVariables = Exact<{
@@ -6304,7 +6349,7 @@ export type FundLoanRequestMutation = (
     & Pick<Loan_Request, 'state' | 'amount'>
   )>, newLoan?: Maybe<(
     { __typename?: 'loan' }
-    & Pick<Loan, 'loan_id' | 'asset_id' | 'wallet_id' | 'principal' | 'principal_remaining' | 'next_payment_amount' | 'next_payment_due_date' | 'tenor' | 'apr' | 'penalty_apr' | 'state'>
+    & Pick<Loan, 'loan_id' | 'asset_id' | 'wallet_info' | 'principal' | 'principal_remaining' | 'next_payment_amount' | 'next_payment_due_date' | 'tenor' | 'apr' | 'penalty_apr' | 'state'>
   )>, amountsLent?: Maybe<(
     { __typename?: 'lender_amount_mutation_response' }
     & { returning: Array<(
@@ -6336,7 +6381,7 @@ export type GetLiveLoansQuery = (
   { __typename?: 'query_root' }
   & { loans: Array<(
     { __typename?: 'loan' }
-    & Pick<Loan, 'loan_id' | 'wallet_id' | 'state' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'tenor' | 'apr' | 'penalty_apr' | 'compounding_frequency' | 'created_at'>
+    & Pick<Loan, 'loan_id' | 'wallet_info' | 'state' | 'principal' | 'principal_remaining' | 'principal_overdue' | 'interest_accrued' | 'tenor' | 'apr' | 'penalty_apr' | 'compounding_frequency' | 'created_at'>
     & { repayments: Array<(
       { __typename?: 'repayment' }
       & Pick<Repayment, 'date' | 'repaid_principal' | 'repaid_interest'>
@@ -6404,7 +6449,7 @@ export type GetLoanQuery = (
   { __typename?: 'query_root' }
   & { loan?: Maybe<(
     { __typename?: 'loan' }
-    & Pick<Loan, 'loan_id' | 'asset_id' | 'state' | 'tenor' | 'created_at' | 'apr' | 'penalty_apr' | 'principal' | 'principal_overdue' | 'principal_remaining' | 'interest_paid' | 'interest_accrued' | 'compounding_frequency' | 'wallet_id'>
+    & Pick<Loan, 'loan_id' | 'asset_id' | 'state' | 'tenor' | 'created_at' | 'apr' | 'penalty_apr' | 'principal' | 'principal_overdue' | 'principal_remaining' | 'interest_paid' | 'interest_accrued' | 'compounding_frequency' | 'wallet_info'>
     & { borrowerInfo: (
       { __typename?: 'user' }
       & Pick<User, 'account_details'>
@@ -6591,7 +6636,24 @@ export type ResetRequestsMutation = (
   )> }
 );
 
-
+export const LoanInfoFieldsFragmentDoc = gql`
+    fragment loanInfoFields on loan {
+  loan_id
+  wallet_info
+  principal
+  principal_remaining
+  principal_overdue
+  interest_accrued
+  interest_paid
+  state
+  tenor
+  next_payment_amount
+  next_payment_due_date
+  loanRequest {
+    purpose
+  }
+}
+    `;
 export const ChangeUserCashBalanceDocument = gql`
     mutation ChangeUserCashBalance($userId: uuid!, $delta: float8!) {
   user: update_user_by_pk(pk_columns: {id: $userId}, _inc: {balance: $delta}) {
@@ -6676,6 +6738,7 @@ export const GetUserByEmailDocument = gql`
     }
     loans {
       loan_id
+      wallet_info
       principal
       principal_remaining
       principal_overdue
@@ -6683,6 +6746,7 @@ export const GetUserByEmailDocument = gql`
       interest_paid
       state
       tenor
+      created_at
       next_payment_amount
       next_payment_due_date
       loanRequest {
@@ -6691,6 +6755,7 @@ export const GetUserByEmailDocument = gql`
     }
     loansToRepay: loans(where: {state: {_in: [LIVE]}}) {
       loan_id
+      wallet_info
       next_payment_amount
       next_payment_due_date
       principal_overdue
@@ -6700,7 +6765,9 @@ export const GetUserByEmailDocument = gql`
     investedLoans: lender_amounts {
       amount_lent
       loan {
+        ...loanInfoFields
         loan_id
+        created_at
         state
         tenor
         principal
@@ -6712,7 +6779,7 @@ export const GetUserByEmailDocument = gql`
     }
   }
 }
-    `;
+    ${LoanInfoFieldsFragmentDoc}`;
 export const ApproveKycDocument = gql`
     mutation ApproveKYC($userId: uuid!, $kycApproved: Boolean!) {
   user: update_user_by_pk(
@@ -6828,7 +6895,7 @@ export const FundLoanRequestDocument = gql`
   newLoan: insert_loan_one(object: $loan) {
     loan_id
     asset_id
-    wallet_id
+    wallet_info
     principal
     principal_remaining
     next_payment_amount
@@ -6867,7 +6934,7 @@ export const GetLiveLoansDocument = gql`
     query GetLiveLoans {
   loans: loan(where: {state: {_eq: LIVE}}) {
     loan_id
-    wallet_id
+    wallet_info
     state
     principal
     principal_remaining
@@ -6956,7 +7023,7 @@ export const GetLoanDocument = gql`
     borrowerInfo {
       account_details
     }
-    wallet_id
+    wallet_info
     repayments {
       repayment_id
       date

@@ -50,7 +50,7 @@ export default class DbClient {
     _client?: GraphQLClient,
     _swarmai_client?: SwarmAIClient,
     _circleClient?: CircleClient,
-    _algoClient?: AlgoClient
+    _algoClient?: AlgoClient,
   ) {
     if (DbClient.instance) {
       return DbClient.instance
@@ -65,7 +65,7 @@ export default class DbClient {
     this.sdk = getSdk(this.gqlClient)
     this.algoClient =
       _algoClient ||
-      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw")
+      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "falseSecret")
     DbClient.instance = this
  
   }
@@ -168,6 +168,9 @@ export default class DbClient {
       description: "loan account",
     })
 
+    const algoAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ALGO")
+    const ethAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ETH")
+
     // tokenize loan
     const terms = {
       apr: DEFAULT_APR,
@@ -193,7 +196,11 @@ export default class DbClient {
       loan: {
         loan_id: newLoanId,
         asset_id: assetId,
-        wallet_id: walletId,
+        wallet_info: {
+          id: walletId,
+          ethAddress,
+          algoAddress
+        },
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,
         principal: terms.principal,
@@ -234,7 +241,7 @@ export default class DbClient {
 
     // TODO proportional to how the lenders funded it (for now: everything to first lender)
     await this.circleClient.walletTransfer(
-      loan.wallet_id,
+      loan.wallet_info.id,
       loan.lender_amounts[0].lenderInfo.account_details.circle.walletId,
       amount,
       idemKey
@@ -323,12 +330,15 @@ export default class DbClient {
    * - create a repayment entry & update the loan-table
    * - TODO notify users if the new-state differs from old (e.g. new tx, new-loan-state...)
    */
-  processLoanRepayments = async (loanId: string) => {
+  processLoanRepayments = async (
+    loanId: string,
+    currentDateTimestampUTC: number = 0
+    ) => {
     const { loan } = await this.sdk.GetLoan({ loanId })
     const latestTransfers = await this.circleClient.getTransfers(
       "",
       "",
-      loan.wallet_id
+      loan.wallet_info.id
     )
     const repayments = latestTransfers
       .filter((t) => t.status == "complete")
@@ -339,99 +349,103 @@ export default class DbClient {
           // txHash: t.transactionHash
         } as Repayment
       })
-    const latestLoanState = await this.swarmAIClient.getLoanState(
-      loanToTerms(loan),
-      repayments
-    )
-
-    const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
-    const forwardedToLenders = getTotalPaid(loan.principal, loan)
-    const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
-
-    if (amountToBeForwardedToLenders) {
-      // make a payment
-      // TODO is just taking the latest transfer here a dangerous assumption?
-      // it means we rely on circle always returning them sorted!
-      const latestTransfer = latestTransfers[latestTransfers.length - 1]
-      console.log('late', latestTransfer)
-      const repaymentIdemKey = latestTransfer.id
-      const loanWalletBalance = await this.circleClient.getBalance(
-        loan.wallet_id
-      )
-      const maxToRepay = getTotalOutstanding(loan)
-      const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
-      const { status, repaidAmount, txHash } = await this.forwardRepayment(
-        loan.loan_id,
-        amountToRepay,
-        repaymentIdemKey
-      )
-      if (status == "complete") {
-        // update loan entry in db & create repayment entry
-        const update = {
-          newState: {
-            ...loanStateToLoanInput(latestLoanState),
-            // should this maybe happen in the backend too? (once we nail down the states!!)
-            newLoanState: getLoanState(latestLoanState),
-          },
-          paymentInfo: {
-            // TODO how the amount was used to repay principal vs interest?
-            repaidPrincipal: repaidAmount,
-            repaidInterest: 0,
-          },
-        }
-        // log repayment on loan-asset
-        // - create object to be stored in the transaction note-field
-        const dataToBeLogged = {
-          newLoanState: update.newState.newLoanState,
-          ...update.paymentInfo,
-          txHashes: {
-            toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
-            toLenders: [txHash] // from the loan-account to the lenders (by us)
-            // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
-            // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
-            // txHash from the latest repayment)
+      try {
+        const latestLoanState = await this.swarmAIClient.getLoanState(
+          loanToTerms(loan),
+          repayments,
+          currentDateTimestampUTC
+        )
+        const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
+        const forwardedToLenders = getTotalPaid(loan.principal, loan)
+        const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
+        
+        if (amountToBeForwardedToLenders) {
+        // make a payment
+          // TODO is just taking the latest transfer here a dangerous assumption?
+          // it means we rely on circle always returning them sorted!
+          const latestTransfer = latestTransfers[latestTransfers.length - 1]
+          console.log('late', latestTransfer)
+          const repaymentIdemKey = latestTransfer.id
+          const loanWalletBalance = await this.circleClient.getBalance(
+            loan.wallet_info.id
+          )
+          const maxToRepay = getTotalOutstanding(loan)
+          const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
+          const { status, repaidAmount, txHash } = await this.forwardRepayment(
+            loan.loan_id,
+            amountToRepay,
+            repaymentIdemKey
+          )
+          if (status == "complete") {
+            // update loan entry in db & create repayment entry
+            const update = {
+              newState: {
+                ...loanStateToLoanInput(latestLoanState),
+                // should this maybe happen in the backend too? (once we nail down the states!!)
+                newLoanState: getLoanState(latestLoanState),
+              },
+              paymentInfo: {
+                // TODO how the amount was used to repay principal vs interest?
+                repaidPrincipal: repaidAmount,
+                repaidInterest: 0,
+              },
+            }
+            // log repayment on loan-asset
+            // - create object to be stored in the transaction note-field
+            const dataToBeLogged = {
+              newLoanState: update.newState.newLoanState,
+              ...update.paymentInfo,
+              txHashes: {
+                toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
+                toLenders: [txHash] // from the loan-account to the lenders (by us)
+                // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
+                // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
+                // txHash from the latest repayment)
+              }
+            }
+            console.log('logged:', dataToBeLogged)
+            const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
+            
+            // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
+            if (
+              update.newState.newLoanState === Loan_State_Enum.Repaid &&
+              loan.borrowerInfo.account_details.algorand?.address
+            ) {
+              // NOTE: currently not implemented on the smart-contract
+              // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
+            }
+            return this.sdk.RegisterRepayment({
+              loanId,
+              repayment: {
+                repayment_id: repaymentIdemKey,
+                loan_id: loanId,
+                repaid_principal: update.paymentInfo.repaidPrincipal,
+                repaid_interest: update.paymentInfo.repaidInterest,
+                date: new Date().toUTCString(),
+                algorand_tx_id: txId
+              },
+              ...update.newState,
+              updateLog: {
+                type: Update_Type_Enum.Repayment,
+                loan_id: loanId,
+                ...loanStateToUpdateInput(latestLoanState),
+                // only add new state to update if there was a change
+                ...(update.newState.newLoanState !== loan.state
+                  ? { new_state: update.newState.newLoanState }
+                  : {}),
+                  repayment_id: repaymentIdemKey,
+                },
+            })
+          } else {
+            console.log("payment is not yet complete, status: ", status)
+            // TODO what do we do here? how can we be sure that the payment will be registered?
           }
-        }
-        console.log('logged:', dataToBeLogged)
-        const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
-
-        // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
-        if (
-          update.newState.newLoanState === Loan_State_Enum.Repaid &&
-          loan.borrowerInfo.account_details.algorand?.address
-          ) {
-            // NOTE: currently not implemented on the smart-contract
-            // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
-        }
-
-        return this.sdk.RegisterRepayment({
-          loanId,
-          repayment: {
-            repayment_id: repaymentIdemKey,
-            loan_id: loanId,
-            repaid_principal: update.paymentInfo.repaidPrincipal,
-            repaid_interest: update.paymentInfo.repaidInterest,
-            date: new Date().toUTCString(),
-            algorand_tx_id: txId
-          },
-          ...update.newState,
-          updateLog: {
-            type: Update_Type_Enum.Repayment,
-            loan_id: loanId,
-            ...loanStateToUpdateInput(latestLoanState),
-            // only add new state to update if there was a change
-            ...(update.newState.newLoanState !== loan.state
-              ? { new_state: update.newState.newLoanState }
-              : {}),
-            repayment_id: repaymentIdemKey,
-          },
-        })
-      } else {
-        console.log("payment is not yet complete, status: ", status)
-        // TODO what do we do here? how can we be sure that the payment will be registered?
-      }
-    } else {
-      console.log("no payment outstanding, latest loan state matches db-state")
+        } else {
+            console.log("no payment outstanding, latest loan state matches db-state")
+          }
+      } catch (error) {
+        console.log('couldnt query loan state', error)
+        return {}
     }
   }
 
@@ -439,7 +453,6 @@ export default class DbClient {
    * update all live loan Terms with the latest state from the swarmAI-api
    * @param loanId
    */
-
   doCompoundingUpdates = async () => {
     const { loans } = await this.sdk.GetLiveLoans()
     console.log("liveloans ", loans)
@@ -497,7 +510,7 @@ export default class DbClient {
         const possibleInvestors = request.creditors.approved.filter(
           (c) => c.account.balance > request.amount
         )
-        console.log("pos", possibleInvestors)
+        console.log("possible investors", possibleInvestors)
         if (possibleInvestors.length > 0) {
           await this.fundLoanRequest(
             request.request_id,
@@ -558,17 +571,22 @@ export default class DbClient {
     // create transfers into user accounts for deposits made into our master account
     // TODO when we allow fiat-repayments, deposits from borrowers need to be transfered to the respective loan-account
     await this.processDeposits()
+    console.log('processed deposits')
 
     // update loan data (outstanding amounts) for all loans
     await this.doCompoundingUpdates()
+    console.log('processed compounding updates')
 
     // send money from loan-wallets to lenders (fetches loan-state again), create repayments
     await this.processRepayments()
+    console.log('processed repayments')
 
     // see if as a result of the updated balances, new loans can be funded
     await this.processOpenRequests()
+    console.log('processed open requests')
 
     await this.updateAccountBalances() // < we should never rely on our local table...if so we should pull right before
+    console.log('updating local balances')
   }
 
   logEvent = async (

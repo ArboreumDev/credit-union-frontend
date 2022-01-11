@@ -40,7 +40,11 @@ export function AddFundsForm({ user }: Props) {
             address={ "" +  user.account_details.circle.algoAddress }
           />
           <Text><b>OR</b></Text>
-          <DepositWithAlgoConnect toAddress={user.account_details.circle.algoAddress}/>
+          <DepositWithAlgoConnect 
+            toAddress={user.account_details.circle.algoAddress}
+            titleText="Deposit USDC"
+            buttonText="Deposit from myAlgoWallet"
+          />
           <Text>
           <Divider />
             <i>

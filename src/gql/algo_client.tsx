@@ -154,5 +154,6 @@ export const algoTxClient = new AlgoClient(ALGO_BACKEND_URL)
 
 // use this client when we want to trigger the master account to do things
  // TODO load from env
-const BACKEND_SECRET = 'sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw='
+// const BACKEND_SECRET = 'sWUCzK7ZaT5E8zgWY95wUL1e6cNpJli5DzcwAYXsRpw='
+const BACKEND_SECRET = process.env.ALGO_BACKEND_SECRET
 export const algoActionClient = new AlgoClient(ALGO_BACKEND_URL, BACKEND_SECRET)

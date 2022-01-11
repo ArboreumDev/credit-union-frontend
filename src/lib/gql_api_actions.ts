@@ -84,19 +84,19 @@ export class CreateUser extends Action {
     const ret = await this.dbClient.sdk.CreateUser(this.payload)
 
     // circle setup using userId as idempotencyKey
-    // const circleData = await this.dbClient.circleClient.setupUser(
-    //   ret.insert_user_one.id,
-    //   user
-    // )
+    const circleData = await this.dbClient.circleClient.setupUser(
+      ret.insert_user_one.id,
+      user
+    )
 
-    // // update db with circle data
-    // const data = await this.dbClient.sdk.UpdateAccountDetails({
-    //   userId: ret.insert_user_one.id,
-    //   accountDetails: {
-    //     ...user.account_details,
-    //     circle: circleData,
-    //   },
-    // })
+    // update db with circle data
+    const data = await this.dbClient.sdk.UpdateAccountDetails({
+      userId: ret.insert_user_one.id,
+      accountDetails: {
+        ...user.account_details,
+        circle: circleData,
+      },
+    })
 
     // // update value to be returned
     // ret.insert_user_one.account_details = data.user.account_details
@@ -202,14 +202,21 @@ export class SetBorrowerApproval extends Action {
       investor_id: this.user.id,
     }
     // add borrower entry
-    if (this.payload.approved) {
-      await this.dbClient.sdk.ApproveBorrower({ creditLine })
-      await this.dbClient.processOpenRequests(this.user.id)
-    } else {
-      await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+    try {
+      if (this.payload.approved) {
+        await this.dbClient.sdk.ApproveBorrower({ creditLine })
+        await this.dbClient.processOpenRequests(this.user.id)
+        return true
+      } else {
+        await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+        return true
+      }
+    } catch (err) {
+      console.log(err)
+      const msg = `error processing requests after approval: ${JSON.stringify(err)}`
+      console.log(msg)
+      throw msg
     }
-    return true
-    // TODO // return await this.dbClient.sdk.InsertScenarioAction({
   }
 
   static fetch(payload: typeof SetBorrowerApproval.InputType) {

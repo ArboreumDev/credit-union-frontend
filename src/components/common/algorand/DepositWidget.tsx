@@ -14,16 +14,25 @@ import Address from "./Address"
 import {SuggestedParams} from "algosdk/dist/types"
 import {algorandConfig, dummyParams, waitForConfirmation} from "lib/algo_utils";
 // import {algoTxClient} from "../../../gql/algo_client"
+import { AmountInputWithHelper } from "components/common/AmountInputWithHelper"
 
+interface SuggestedAmount {
+  amount: number
+  description: string
+}
 interface DepositAlgoConnectProps {
     toAddress: string
+    buttonText: string
+    titleText: string
+    note?: string
+    suggestedAmounts?: Array<SuggestedAmount> 
 }
 
 /*
  * Modal to TODO
  * @param toAddress target address where usdc should be sent
  */
-export const DepositWithAlgoConnect = ({ toAddress }: DepositAlgoConnectProps) => {
+export const DepositWithAlgoConnect = ({ toAddress, buttonText, titleText, suggestedAmounts }: DepositAlgoConnectProps) => {
   const [fromAccount, setFromAccount] = useState({name: "", address: ""});
   const [params, setParams] = useState(dummyParams);
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -90,8 +99,8 @@ export const DepositWithAlgoConnect = ({ toAddress }: DepositAlgoConnectProps) =
             setIsDepositing(false)
             // TODO use success-components from tusker-pilot
             toast({
-                title: "Success! Your deposit has been made.",
-                description: "Note that it can take a bit until it will be available to lend out.",
+                title: "Success! Your transaction has been made.",
+                description: "Note that it can take a bit until it will be processed.",
                 status: "success",
                 duration: 10000,
                 isClosable: true,
@@ -110,24 +119,36 @@ export const DepositWithAlgoConnect = ({ toAddress }: DepositAlgoConnectProps) =
     }
   }, [amount]);
 
-
+  console.log('sugg2', suggestedAmounts)
   return (
     <>
-      <Button onClick={onOpen}>Deposit from myAlgoWallet</Button>
+      <Button onClick={onOpen}>{buttonText}</Button>
 
       <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Deposit USDC</ModalHeader>
+          <ModalHeader>{titleText} </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {!fromAccount.address ? 
               <Button onClick={connect}>Connect myAlgoWallet</Button>
               : (
                 <>
+                  {suggestedAmounts.length > 0 && (
+                    <Select 
+                      value={amount}
+                      placeholder="Choose repayment amount"
+                      onChange={(e) => setAmount(parseInt(e.target.value))}
+                    >
+                      {suggestedAmounts.map((a: SuggestedAmount) => (
+                          <option value={a.amount}> {a.description}: {a.amount}</option>
+                        ))}
+                    </Select> 
+                  )}
                   <Input
                     type="number"
-                    placeholder={`<enter deposit amount>`}
+                    value={amount}
+                    placeholder={`<or enter custom amount>`}
                     onChange={(e) => setAmount(parseInt(e.target.value))}
                   />
                   <Button
