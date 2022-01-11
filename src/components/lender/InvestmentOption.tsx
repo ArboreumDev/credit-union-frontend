@@ -1,4 +1,4 @@
-import { Box, Button, Badge, HStack, Text, VStack } from "@chakra-ui/core"
+import { Spinner, Box, Button, Badge, HStack, Text, VStack } from "@chakra-ui/core"
 import { User, InvestmentOptionInfo, InvestmentOptions } from "lib/types"
 import { Currency } from "../common/Currency"
 import { useRouter } from "next/router"
@@ -50,6 +50,7 @@ const InvestmentOption = (props: {
       .then((res) => {
         setloading(false)
         // the data on the side only updates when it is refreshed, which is confusing here, so I am manually setting this button
+        console.log(`result of ${approved ? 'granting' : 'withdrawing'} approval:`, res)
         setApproved(!approved)
       })
       .catch((err) => console.error(err))
@@ -113,8 +114,10 @@ const InvestmentOption = (props: {
               colorScheme="teal"
               isLoading={loading}
               onClick={handleApprove}
+              disabled={loading}
             >
-              Approve Borrower
+              {loading ? <Spinner /> : "Approve Borrower"} 
+              {/* why does this not work? ^^^ */}
             </Button>
           )}
           {approved && <ReviewWithdrawApproval handleConfirm={handleApprove} />}

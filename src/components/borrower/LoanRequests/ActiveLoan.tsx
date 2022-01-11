@@ -56,6 +56,7 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
 const BActiveLoan = ({ loan }: Params) => {
   const router = useRouter()
   const _loan = new LoanModel(loan)
+  console.log('loan', _loan)
   const amt = _loan.amount
   return (
     <>

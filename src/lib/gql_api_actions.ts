@@ -10,11 +10,14 @@ import {
   RegisterRepaymentMutation,
   ChangeUserCashBalanceMutationVariables,
   ApproveBorrowerMutationVariables,
+  UpdateAccountDetailsMutation,
 } from "gql/sdk"
 import { fetcherMutate } from "./api"
 import { NO_ROI, USER_DEMOGRAPHIC } from "./constant"
 import { Session, UserType } from "./types"
 import { uuidv4 } from "lib/helpers"
+import { algoClient } from "../../tests/src/common/utils"
+import { Link } from "@chakra-ui/layout"
 
 export const ACTION_ERRORS = {
   Unauthorized: "UNAUTHORIZED",
@@ -76,6 +79,7 @@ export class CreateUser extends Action {
       user.demographic_info = USER_DEMOGRAPHIC
     }
 
+    console.log('payl', this.payload.user.kyc_approved)
     // create user entry our DB
     const ret = await this.dbClient.sdk.CreateUser(this.payload)
 
@@ -94,14 +98,64 @@ export class CreateUser extends Action {
       },
     })
 
-    // update value to be returned
-    ret.insert_user_one.account_details = data.user.account_details
+    // // update value to be returned
+    // ret.insert_user_one.account_details = data.user.account_details
     return ret
   }
 
   static fetch(payload: typeof CreateUser.InputType) {
     return fetcherMutate(CreateUser.Name, payload)
   }
+}
+
+export interface LinkAlgoAccountInput {
+  address: string
+  name: string
+}
+
+export class LinkAlgoAccount extends Action {
+  static Name = "LinkAlgoAccount"
+  static InputType: LinkAlgoAccountInput
+  static ReturnType: UpdateAccountDetailsMutation
+
+  minAuthLevel = AUTH_TYPE.USER
+
+  async run() {
+    return await this.dbClient.sdk.UpdateAccountDetails({
+      userId: this.user.id, accountDetails: {
+        ...this.user.account_details,
+        algorand: {
+          ...this.user.account_details.algorand,
+          optedIn: {
+            address: this.payload.address,
+            name: this.payload.name
+          }
+        }
+      }
+    })
+  }
+
+  // TODO make sure the user is passing the address they have just signed from 
+  // if they just passed another one (who has also opted in to our app), we would write info from the 
+  // wrong loan into someone else profile
+  // isUserAllowed() {
+  //   return (
+  //     super.isUserAllowed() &&
+  //     this.payload &&
+  //     this.payload.request &&
+  //     this.payload.request.borrower_id == this.user.id
+  //   )
+  // }
+
+  static fetch(payload: typeof LinkAlgoAccount.InputType) {
+    return fetcherMutate(LinkAlgoAccount.Name, payload)
+  }
+
+}
+
+export type CreateLoanPayload = {
+  loanInput: typeof CreateLoan.InputType
+  userAddress: string
 }
 
 export class CreateLoan extends Action {
@@ -148,14 +202,21 @@ export class SetBorrowerApproval extends Action {
       investor_id: this.user.id,
     }
     // add borrower entry
-    if (this.payload.approved) {
-      await this.dbClient.sdk.ApproveBorrower({ creditLine })
-      await this.dbClient.processOpenRequests(this.user.id)
-    } else {
-      await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+    try {
+      if (this.payload.approved) {
+        await this.dbClient.sdk.ApproveBorrower({ creditLine })
+        await this.dbClient.processOpenRequests(this.user.id)
+        return true
+      } else {
+        await this.dbClient.sdk.RemoveBorrowerApproval(creditLine)
+        return true
+      }
+    } catch (err) {
+      console.log(err)
+      const msg = `error processing requests after approval: ${JSON.stringify(err)}`
+      console.log(msg)
+      throw msg
     }
-    return true
-    // TODO // return await this.dbClient.sdk.InsertScenarioAction({
   }
 
   static fetch(payload: typeof SetBorrowerApproval.InputType) {
@@ -285,6 +346,7 @@ export class FundLoanRequest extends Action {
 export const ACTIONS = {
   [CreateUser.Name]: CreateUser,
   [CreateLoan.Name]: CreateLoan,
+  [LinkAlgoAccount.Name]: LinkAlgoAccount,
   [FundLoanRequest.Name]: FundLoanRequest,
   // [MakeRepayment.Name]: MakeRepayment,
   [SetBorrowerApproval.Name]: SetBorrowerApproval,

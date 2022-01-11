@@ -1,17 +1,8 @@
 import {
-  Box,
   Button,
-  Center,
-  Stack,
+  HStack,
+  VStack,
   Text,
-  Flex,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Input,
-  Divider,
   useClipboard,
 } from "@chakra-ui/core"
 
@@ -20,9 +11,10 @@ type size = "short" | "long"
 interface Props {
   address: string
   size?: size
+  name?: string
 }
 
-const Address = ({ address, size = "short" }: Props) => {
+const Address = ({ address, size = "short", name = "" }: Props) => {
   const { hasCopied, onCopy } = useClipboard(address)
   let displayAddress = address.substr(0, 9)
 
@@ -34,12 +26,12 @@ const Address = ({ address, size = "short" }: Props) => {
 
   return (
     <>
-      <Flex mb={2}>
-        <Text>{displayAddress}</Text>
-        <Button onClick={onCopy} ml={2}>
+      <HStack>
+        <Text>{displayAddress} {name ? `(${name})` : ""} </Text>
+        <Button onClick={onCopy} >
           {hasCopied ? "Copied" : "Copy"}
         </Button>
-      </Flex>
+      </HStack>
     </>
   )
 }

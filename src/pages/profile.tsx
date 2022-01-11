@@ -13,6 +13,7 @@ import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/Withdraw"
 import FundsHistory from "components/common/FundsHistory"
+import AlgoProfile from "components/common/algorand/AlgoProfile"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
@@ -48,12 +49,15 @@ export const Profile = ({ user }: Props) => {
         <Text>{user.first_name + " " + user.last_name}</Text>
         <Text>{user.email}</Text>
         <Text>{user.phone}</Text>
+        {user.user_type === UserType.Borrower && (
+          <AlgoProfile account={user.account_details}/>
+        )}
       </Stack>
       <Divider />
       <LogoutButton />
       <Divider />
       <Box minW="xl">
-        <FundsHistory transfers={user.account_details.circle.history} />
+        <FundsHistory transfers={user.account_details.circle?.history || []} />
       </Box>
     </Stack>
   )

@@ -3,8 +3,9 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { getSession } from "next-auth/client"
 import DbClient from "../../gql/db_client"
 import { Session } from "../../lib/types"
+import {algoActionClient} from "gql/algo_client"
 
-const dbClient = new DbClient()
+const dbClient = new DbClient(null, null, null, algoActionClient)
 
 type GqlRequest = {
   actionType: string

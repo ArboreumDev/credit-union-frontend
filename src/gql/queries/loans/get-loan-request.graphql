@@ -8,6 +8,7 @@ query GetLoanRequest($requestId: uuid!) {
       id
       email
       demographic_info
+      account_details
     }
   }
 }

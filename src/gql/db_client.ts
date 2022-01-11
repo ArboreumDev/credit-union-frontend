@@ -9,7 +9,7 @@ import {
 } from "../../src/gql/sdk"
 
 import { LogEventTypes as LogEventType } from "../lib/constant"
-import { UserBaseInfo, Repayment } from "../lib/types"
+import { UserBaseInfo, Repayment, LoanState } from "../lib/types"
 import CircleClient from "./wallet/circle_client"
 import { initializeGQL } from "./graphql_client"
 import SwarmAIClient from "./swarmai_client"
@@ -22,8 +22,8 @@ import {
   getTotalPaid,
   loanToTerms,
   loanAndNewStateToUpdate,
+  requestToTokenMetadataParams
 } from "lib/loan_helpers"
-import { LoanState } from "./types"
 import { UpdateRequestType } from "pages/api/reconcile"
 import {
   DEFAULT_APR,
@@ -32,6 +32,7 @@ import {
   COMPOUNDING_FREQ,
 } from "lib/constant"
 import { sleep, dateStringToUnixTimestamp } from "lib/helpers"
+import AlgoClient from "gql/algo_client"
 
 /**
  * A class to be used in the frontend to send queries to the DB.
@@ -43,11 +44,13 @@ export default class DbClient {
   public gqlClient: GraphQLClient
   public swarmAIClient: SwarmAIClient
   public circleClient: CircleClient
+  public algoClient: AlgoClient
 
   constructor(
     _client?: GraphQLClient,
     _swarmai_client?: SwarmAIClient,
-    _circleClient?: CircleClient
+    _circleClient?: CircleClient,
+    _algoClient?: AlgoClient,
   ) {
     if (DbClient.instance) {
       return DbClient.instance
@@ -60,7 +63,11 @@ export default class DbClient {
       _circleClient ||
       new CircleClient(process.env.CIRCLE_BASE_URL, process.env.CIRCLE_API_KEY)
     this.sdk = getSdk(this.gqlClient)
+    this.algoClient =
+      _algoClient ||
+      new AlgoClient(process.env.ALGO_BACKEND_URL || "http://localhost:8001/v1", "falseSecret")
     DbClient.instance = this
+ 
   }
 
   getUserByEmail = async (email: string) => {
@@ -161,21 +168,50 @@ export default class DbClient {
       description: "loan account",
     })
 
+    const algoAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ALGO")
+    const ethAddress = await this.circleClient.createAddress(walletId, uuidv4(), "ETH")
+
+    // tokenize loan
+    const terms = {
+      apr: DEFAULT_APR,
+      principal: loanRequest.amount,
+      tenorInDays: DEFAULT_LOAN_TENOR,
+      startDate: Math.floor( Date.now() / 1000),
+      compounding_frequency: "daily", // TODO
+    }
+    const loanParams = requestToTokenMetadataParams(newLoanId, loanRequest, terms)
+    const {assetId} = await this.algoClient.tokenizeLoan(loanParams)
+    console.log('new asset ', assetId)
+
+    // TODO store loan on borrower Profile
+    if (loanRequest.borrowerInfo.account_details.algorand?.address) {
+        const txId = await this.algoClient.createNewProfile(assetId, "live", loanRequest.borrowerInfo.account_details.algorand.address)
+        console.log('profile created with:', txId)
+    } else {
+      console.log('borrower has not opted in to our app, so no profile will be created')
+    }
+
     return await this.sdk.FundLoanRequest({
       requestId,
       loan: {
         loan_id: newLoanId,
-        wallet_id: walletId,
+        asset_id: assetId,
+        wallet_info: {
+          id: walletId,
+          ethAddress,
+          algoAddress
+        },
         borrower: loanRequest.borrowerInfo.id,
         state: Loan_State_Enum.Live,
-        principal: loanRequest.amount,
+        principal: terms.principal,
         // HARDCODED for now
+        // TODO input start_date as well
         compounding_frequency: COMPOUNDING_FREQ.daily,
-        apr: DEFAULT_APR,
+        apr: terms.apr,
         penalty_apr: DEFAULT_PENALTY_APR,
-        tenor: DEFAULT_LOAN_TENOR,
+        tenor: terms.tenorInDays,
         // -end
-        principal_remaining: loanRequest.amount,
+        principal_remaining: terms.principal,
         loan_request: loanRequest.request_id,
         ...schedule,
       },
@@ -205,7 +241,7 @@ export default class DbClient {
 
     // TODO proportional to how the lenders funded it (for now: everything to first lender)
     await this.circleClient.walletTransfer(
-      loan.wallet_id,
+      loan.wallet_info.id,
       loan.lender_amounts[0].lenderInfo.account_details.circle.walletId,
       amount,
       idemKey
@@ -216,6 +252,7 @@ export default class DbClient {
     return {
       status: data.status,
       repaidAmount: parseFloat(data.amount.amount),
+      txHash: data.transactionHash
     }
   }
 
@@ -293,12 +330,15 @@ export default class DbClient {
    * - create a repayment entry & update the loan-table
    * - TODO notify users if the new-state differs from old (e.g. new tx, new-loan-state...)
    */
-  processLoanRepayments = async (loanId: string) => {
+  processLoanRepayments = async (
+    loanId: string,
+    currentDateTimestampUTC: number = 0
+    ) => {
     const { loan } = await this.sdk.GetLoan({ loanId })
     const latestTransfers = await this.circleClient.getTransfers(
       "",
       "",
-      loan.wallet_id
+      loan.wallet_info.id
     )
     const repayments = latestTransfers
       .filter((t) => t.status == "complete")
@@ -306,73 +346,106 @@ export default class DbClient {
         return {
           amount: parseFloat(t.amount.amount),
           date: dateStringToUnixTimestamp(t.createDate),
+          // txHash: t.transactionHash
         } as Repayment
       })
-    const latestLoanState = await this.swarmAIClient.getLoanState(
-      loanToTerms(loan),
-      repayments
-    )
-
-    const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
-    const forwardedToLenders = getTotalPaid(loan.principal, loan)
-    const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
-
-    if (amountToBeForwardedToLenders) {
-      // make a payment
-      // TODO is just taking the latest transfer here a dangerous assumption?
-      // it means we rely on circle always returning them sorted!
-      const repaymentIdemKey = latestTransfers[latestTransfers.length - 1].id
-      const loanWalletBalance = await this.circleClient.getBalance(
-        loan.wallet_id
-      )
-      const maxToRepay = getTotalOutstanding(loan)
-      const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
-      const { status, repaidAmount } = await this.forwardRepayment(
-        loan.loan_id,
-        amountToRepay,
-        repaymentIdemKey
-      )
-      if (status == "complete") {
-        // update loan entry in db & create repayment entry
-        const update = {
-          newState: {
-            ...loanStateToLoanInput(latestLoanState),
-            // should this maybe happen in the backend too? (once we nail down the states!!)
-            newLoanState: getLoanState(latestLoanState),
-          },
-          paymentInfo: {
-            // TODO how the amount was used to repay principal vs interest?
-            repaidPrincipal: repaidAmount,
-            repaidInterest: 0,
-          },
-        }
-        return this.sdk.RegisterRepayment({
-          loanId,
-          repayment: {
-            repayment_id: repaymentIdemKey,
-            loan_id: loanId,
-            repaid_principal: update.paymentInfo.repaidPrincipal,
-            repaid_interest: update.paymentInfo.repaidInterest,
-            date: new Date().toUTCString(),
-          },
-          ...update.newState,
-          updateLog: {
-            type: Update_Type_Enum.Repayment,
-            loan_id: loanId,
-            ...loanStateToUpdateInput(latestLoanState),
-            // only add new state to update if there was a change
-            ...(update.newState.newLoanState !== loan.state
-              ? { new_state: update.newState.newLoanState }
-              : {}),
-            repayment_id: repaymentIdemKey,
-          },
-        })
-      } else {
-        console.log("payment is not yet complete, status: ", status)
-        // TODO what do we do here? how can we be sure that the payment will be registered?
-      }
-    } else {
-      console.log("no payment outstanding, latest loan state matches db-state")
+      try {
+        const latestLoanState = await this.swarmAIClient.getLoanState(
+          loanToTerms(loan),
+          repayments,
+          currentDateTimestampUTC
+        )
+        const actuallyPaid = getTotalPaid(loan.principal, latestLoanState)
+        const forwardedToLenders = getTotalPaid(loan.principal, loan)
+        const amountToBeForwardedToLenders = actuallyPaid - forwardedToLenders
+        
+        if (amountToBeForwardedToLenders) {
+        // make a payment
+          // TODO is just taking the latest transfer here a dangerous assumption?
+          // it means we rely on circle always returning them sorted!
+          const latestTransfer = latestTransfers[latestTransfers.length - 1]
+          console.log('late', latestTransfer)
+          const repaymentIdemKey = latestTransfer.id
+          const loanWalletBalance = await this.circleClient.getBalance(
+            loan.wallet_info.id
+          )
+          const maxToRepay = getTotalOutstanding(loan)
+          const amountToRepay = Math.min(maxToRepay, loanWalletBalance)
+          const { status, repaidAmount, txHash } = await this.forwardRepayment(
+            loan.loan_id,
+            amountToRepay,
+            repaymentIdemKey
+          )
+          if (status == "complete") {
+            // update loan entry in db & create repayment entry
+            const update = {
+              newState: {
+                ...loanStateToLoanInput(latestLoanState),
+                // should this maybe happen in the backend too? (once we nail down the states!!)
+                newLoanState: getLoanState(latestLoanState),
+              },
+              paymentInfo: {
+                // TODO how the amount was used to repay principal vs interest?
+                repaidPrincipal: repaidAmount,
+                repaidInterest: 0,
+              },
+            }
+            // log repayment on loan-asset
+            // - create object to be stored in the transaction note-field
+            const dataToBeLogged = {
+              newLoanState: update.newState.newLoanState,
+              ...update.paymentInfo,
+              txHashes: {
+                toLoan: latestTransfer.txHash, // originating from somewhere into the loan-account (by borrower)
+                toLenders: [txHash] // from the loan-account to the lenders (by us)
+                // NOTE: if they do multiple repayments before we call this even once, then we the sum of the 
+                // toLoan-txs might not add up to the sum of the toLenders-txs (because we only use the 
+                // txHash from the latest repayment)
+              }
+            }
+            console.log('logged:', dataToBeLogged)
+            const {txId} = await this.algoClient.logRepayment(loan.asset_id, dataToBeLogged)
+            
+            // if repaid, & borrower has a credit profile -> mark loan as repaid on contract
+            if (
+              update.newState.newLoanState === Loan_State_Enum.Repaid &&
+              loan.borrowerInfo.account_details.algorand?.address
+            ) {
+              // NOTE: currently not implemented on the smart-contract
+              // const txId = await this.algoClient.updateProfile(loan.asset_id, 'repaid', loan.borrowerInfo.account_details.algorand.address)
+            }
+            return this.sdk.RegisterRepayment({
+              loanId,
+              repayment: {
+                repayment_id: repaymentIdemKey,
+                loan_id: loanId,
+                repaid_principal: update.paymentInfo.repaidPrincipal,
+                repaid_interest: update.paymentInfo.repaidInterest,
+                date: new Date().toUTCString(),
+                algorand_tx_id: txId
+              },
+              ...update.newState,
+              updateLog: {
+                type: Update_Type_Enum.Repayment,
+                loan_id: loanId,
+                ...loanStateToUpdateInput(latestLoanState),
+                // only add new state to update if there was a change
+                ...(update.newState.newLoanState !== loan.state
+                  ? { new_state: update.newState.newLoanState }
+                  : {}),
+                  repayment_id: repaymentIdemKey,
+                },
+            })
+          } else {
+            console.log("payment is not yet complete, status: ", status)
+            // TODO what do we do here? how can we be sure that the payment will be registered?
+          }
+        } else {
+            console.log("no payment outstanding, latest loan state matches db-state")
+          }
+      } catch (error) {
+        console.log('couldnt query loan state', error)
+        return {}
     }
   }
 
@@ -380,7 +453,6 @@ export default class DbClient {
    * update all live loan Terms with the latest state from the swarmAI-api
    * @param loanId
    */
-
   doCompoundingUpdates = async () => {
     const { loans } = await this.sdk.GetLiveLoans()
     console.log("liveloans ", loans)
@@ -438,7 +510,7 @@ export default class DbClient {
         const possibleInvestors = request.creditors.approved.filter(
           (c) => c.account.balance > request.amount
         )
-        console.log("pos", possibleInvestors)
+        console.log("possible investors", possibleInvestors)
         if (possibleInvestors.length > 0) {
           await this.fundLoanRequest(
             request.request_id,
@@ -499,17 +571,22 @@ export default class DbClient {
     // create transfers into user accounts for deposits made into our master account
     // TODO when we allow fiat-repayments, deposits from borrowers need to be transfered to the respective loan-account
     await this.processDeposits()
+    console.log('processed deposits')
 
     // update loan data (outstanding amounts) for all loans
     await this.doCompoundingUpdates()
+    console.log('processed compounding updates')
 
     // send money from loan-wallets to lenders (fetches loan-state again), create repayments
     await this.processRepayments()
+    console.log('processed repayments')
 
     // see if as a result of the updated balances, new loans can be funded
     await this.processOpenRequests()
+    console.log('processed open requests')
 
     await this.updateAccountBalances() // < we should never rely on our local table...if so we should pull right before
+    console.log('updating local balances')
   }
 
   logEvent = async (

@@ -14,7 +14,8 @@ mutation FundLoanRequest (
   }
   newLoan: insert_loan_one(object: $loan) {
     loan_id
-    wallet_id
+    asset_id
+    wallet_info
     principal
     principal_remaining
     next_payment_amount

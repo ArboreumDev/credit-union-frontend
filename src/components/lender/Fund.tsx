@@ -1,8 +1,9 @@
-import { Box, Select, Text } from "@chakra-ui/core"
-import Address from "components/common/Address"
+import { Box, Select, Text, Divider} from "@chakra-ui/core"
+import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
+import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
 
 interface Props {
   user: User
@@ -16,30 +17,42 @@ export function AddFundsForm({ user }: Props) {
       <Text>How do you want to fund your account?</Text>
       <Select
         placeholder="please choose a deposit method"
-        // name="target"
         onChange={(e) => setMethod(e.target.value)}
       >
         <option value="ETH">USDC from Ethereum</option>
         <option value="ALGO">USDC from Algorand</option>
         <option value="BANK">Bank Wire Transfer</option>
       </Select>
-      {(method === "ETH" || method === "ALGO") && (
+      {method === "ETH"  && (
         <Box>
           <Text>Fund your account by sending USDC to this deposit address</Text>
           <Address
             size="long"
-            address={
-              "" +
-              (method === "ETH"
-                ? user.account_details.circle.ethAddress
-                : user.account_details.circle.algoAddress)
-            }
+            address={ "" +  user.account_details.circle.ethAddress }
           />
-          <i>
-            Note that we might afterwards move the money out of that account to
-            a different address - It will still be reflected in your overall
-            account balance though
-          </i>
+        </Box>
+      )}
+      {method === "ALGO"  && (
+        <Box>
+          <Text>Fund your account by sending USDC to this deposit address</Text>
+          <Address
+            size="long"
+            address={ "" +  user.account_details.circle.algoAddress }
+          />
+          <Text><b>OR</b></Text>
+          <DepositWithAlgoConnect 
+            toAddress={user.account_details.circle.algoAddress}
+            titleText="Deposit USDC"
+            buttonText="Deposit from myAlgoWallet"
+          />
+          <Text>
+          <Divider />
+            <i>
+              Note that we might afterwards move the money out of that account to
+              a different address - It will still be reflected in your overall
+              account balance though
+            </i>
+          </Text>
         </Box>
       )}
 

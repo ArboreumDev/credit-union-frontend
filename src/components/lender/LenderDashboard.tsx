@@ -123,13 +123,13 @@ const LenderDashboard = ({ user }: Props) => {
         <Box maxW="sm">
           <PledgeInvestments pledges={user.pledges} />
         </Box>
-      )}
-
-      {user.active_loans?.length > 0 && (
-        <Box maxW="xl">
-          <InvestedLoans loans={user.active_loans} roi={user.roi} />
-        </Box>
       )} */}
+
+      {user.investedLoans?.length > 0 && (
+        <Box maxW="xl">
+          <InvestedLoans loans={user.investedLoans} />
+        </Box>
+      )}
     </Stack>
   )
 }

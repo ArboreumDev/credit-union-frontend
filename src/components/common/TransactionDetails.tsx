@@ -39,7 +39,7 @@ const TransactionDetails = ({ tx }: Props) => {
               <Row>Date: {tx.createDate}</Row>
               <Row>Amount: ${tx.amount}</Row>
               <Row>Status: {tx.status}</Row>
-              {tx.details.destination.type === "blockchain" && (
+              {tx.details.destination?.type === "blockchain" && (
                 <>
                   <Row>target-chain: {tx.details.destination.chain}</Row>
                   <Row>

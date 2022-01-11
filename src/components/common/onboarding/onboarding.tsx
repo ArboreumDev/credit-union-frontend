@@ -65,6 +65,57 @@ interface Params {
   userType: UserType
 }
 
+const dummyUser = {
+        // first_name: data.firstname,
+        // last_name: data.lastname,
+        // user_type: userType,
+        // phone: data.phone,
+        phone: "0123",
+        onboarded: true,
+        account_details: {
+          bankDetails: {
+            bankName: "nobank",
+            accountNumber: "111",
+            routingNumber: "",
+            branchCode: "noIFSC",
+            accountType: "CURRENT",
+            iban: "DE31100400480532013000",
+            bankAddress: {
+              city: "Berlin",
+              country: "DE",
+              line1: "someAddress",
+              line2: "",
+              district: "MA",
+              postalCode: "12050",
+            },
+          } as BankDetails,
+          rcAccount: {
+            investor_id: "",
+            accountNumber: "",
+            branchCode: "FIXED",
+          },
+        },
+        demographic_info: {
+          pan: 12345789,
+          dob: "",
+          gender: "",
+          address: {
+            line1: "someAddress",
+            line2: "",
+            postalCode: "12050",
+            district: "MA",
+            country: "US",
+            city: "Boston",
+          } as Address,
+          income: "10000000", //.toString().replace(/,/g,'') to match RC categories
+          father: {
+            firstName: "",
+            lastName: "",
+          },
+          aadharPassword: "",
+        },
+    }
+
 export default function Onboarding({ user, userType }: Params) {
   const {
     register,
@@ -123,6 +174,10 @@ export default function Onboarding({ user, userType }: Params) {
     setProgress(index * 25)
   }
 
+  /**
+   * deprecated until we decide on KYC
+   * @param data d
+   */
   const onSubmit = (data: FormData) => {
     console.log(data)
     setSubmitting(true)
@@ -150,11 +205,6 @@ export default function Onboarding({ user, userType }: Params) {
               postalCode: "12050",
             },
           } as BankDetails,
-          rcAccount: {
-            investor_id: "",
-            accountNumber: "",
-            branchCode: "FIXED",
-          },
         },
         demographic_info: {
           pan: data.pan,
@@ -183,12 +233,37 @@ export default function Onboarding({ user, userType }: Params) {
       .catch((err) => console.error(err))
   }
 
+  /**
+   * this function is used while we dont have a KYC-process
+   * @param data 
+   */
+  const minimalOnSubmit = (data: FormData) => {
+    console.log(data)
+    setSubmitting(true)
+    CreateUser.fetch({
+      user: {
+        kyc_approved: true,
+        first_name: data.firstname,
+        last_name: data.lastname,
+        user_type: userType,
+        ...dummyUser,
+
+      }
+    })
+      .then((res) => {
+        router.push("/dashboard")
+      })
+      .catch((err) => console.error(err))
+  }
+
+
+
   return (
     <Box padding={4}>
       <Head>
         <title>Onboarding</title>
       </Head>
-      <form onSubmit={handleSubmit(onSubmit)} method="post">
+      <form onSubmit={handleSubmit(minimalOnSubmit)} method="post">
         <Container maxW="400px" bg="white">
           <Stack spacing={3}>
             <Center>
@@ -428,7 +503,7 @@ export default function Onboarding({ user, userType }: Params) {
 
             {userType == UserType.Borrower && (
               <div>
-                <Box>
+                {/* <Box>
                   <UploadingDropzone
                     endpoint="/api/upload"
                     s3Key={"user_uploads/" + user.email}
@@ -451,11 +526,44 @@ export default function Onboarding({ user, userType }: Params) {
                       <ListItem>Latest Income Tax Returns</ListItem>
                       <ListItem>Bank Statement for last 6 months</ListItem>
                     </UnorderedList>
-                  </UploadingDropzone>
+                </UploadingDropzone> */}
+                <Box>
+                      <Stack spacing={3}>
+                        <InputGroup>
+                          <InputLeftElement>
+                            <Text>
+                              <AiOutlineMail />
+                            </Text>
+                          </InputLeftElement>
+                          <Input
+                            type="email"
+                            placeholder="email"
+                            disabled
+                            value={user.email}
+                          />
+                        </InputGroup>
+                        <Input
+                          placeholder="First Name"
+                          name="firstname"
+                          size="lg"
+                          ref={register({ required: true })}
+                          aria-invalid={errors.firstname ? "true" : "false"}
+                        />
+                        <Input
+                          placeholder="Last Name"
+                          name="lastname"
+                          size="lg"
+                          ref={register({ required: true })}
+                        />
+                      </Stack>
+                  <Center> 
+                    <Button isLoading={isSubmitting} type="submit">
+                      Submit
+                    </Button>
+                  </Center>
                 </Box>
               </div>
             )}
-
             <Box h={30} />
           </Stack>
         </Container>

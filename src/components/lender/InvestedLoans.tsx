@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
-import { InvestedLoan, LoanInfo } from "../../lib/types"
+import { InvestedLoan } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import { Loan_State_Enum } from "../../gql/sdk"
 
@@ -13,26 +13,13 @@ const loanStatusToText = {
   [Loan_State_Enum.Default]: "Defaulted",
 }
 
-// const roi_to_expected = (roi: RoI, loan_id: string) => {
-//   return (
-//     roi.apr_on_loans.loans[loan_id].principal.remain +
-//     roi.apr_on_loans.loans[loan_id].interest.remain
-//   )
-// }
-
-// const roi_to_paid = (roi: RoI, loan_id: string) => {
-//   return (
-//     roi.apr_on_loans.loans[loan_id].interest.paid +
-//     roi.apr_on_loans.loans[loan_id].interest.paid
-//   )
-// }
-
 const get_exposure = (loan: InvestedLoan) => {
-  return 100
-  // const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
-  // const expectedByUser =
-  // roi.apr_on_loans.loans[loan.request_id].principal.remain
-  // return expectedByUser ? expectedByUser / totalOutstanding : 0
+  return loan.amount_lent / loan.loan.principal
+}
+
+const get_end_date = (loan: InvestedLoan) => {
+  console.log('started at', loan)
+
 }
 
 const InvestedLoans = ({ loans }: Props) => (
@@ -64,13 +51,15 @@ const InvestedLoans = ({ loans }: Props) => (
           <Text>{Math.round(100 * get_exposure(l)) + "%"}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{"July 2021"}</Text>
+          <Text>{get_end_date(l)}</Text>
         </Box>
         <Box flex="1">
-          <Currency amount={4444} />
+          <Text>TODO</Text>
+          {/* <Currency amount={4444} /> */}
         </Box>
         <Box flex="1">
-          <Currency amount={5555} />
+          <Text>TODO</Text>
+          {/* <Currency amount={5555} /> */}
         </Box>
       </Flex>
     ))}

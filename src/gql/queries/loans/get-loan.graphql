@@ -1,6 +1,7 @@
 query GetLoan($loanId: uuid!) {
   loan: loan_by_pk(loan_id: $loanId) {
     loan_id
+    asset_id
     state
     tenor
     created_at
@@ -12,12 +13,16 @@ query GetLoan($loanId: uuid!) {
     interest_paid
     interest_accrued
     compounding_frequency
-    wallet_id
+    borrowerInfo {
+      account_details
+    }
+    wallet_info
     repayments {
         repayment_id
         date
         repaid_principal
         repaid_interest
+        algorand_tx_id
     }
     lender_amounts {
       lender_id

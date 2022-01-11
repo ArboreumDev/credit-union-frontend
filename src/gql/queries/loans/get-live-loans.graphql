@@ -2,7 +2,7 @@ query GetLiveLoans {
   loans: loan (where: {state: {_eq: LIVE}}) 
   {
     loan_id
-    wallet_id
+    wallet_info
     state
     principal
     principal_remaining
