@@ -6,6 +6,13 @@ Frontend that allows borrowers to apply for loans from a pool of lenders, if the
 to derisk the loan by lending at less favorable terms and taking the first loss in case of partial defaults
 [Product Demo](https://www.youtube.com/watch?v=iN3Bl4Xchwg)
 
+Check out branch [/algorandCore](https://github.com/ArboreumDev/frontend/tree/algorandCore) for our algorand-integration:
+
+- onboarding process includes creating an account on circle (to create deposit addresses for fiat, eth-USDC, & algorand-USDC)
+- allow manual deposits into user-accounts with algoConnect wallet
+
+(DEPRECATED:)
+
 ## Features
 
 - Graphql API using Hasura
