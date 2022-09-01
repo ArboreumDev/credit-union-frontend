@@ -1,12 +1,18 @@
-# Frontend
+# Credit Union as a Service
 
 React + Typescript + Next.js
+
+Frontend that allows borrowers to apply for loans from a pool of lenders, if they can bring one or more supporters willing
+to derisk the loan by lending at less favorable terms and taking the first loss in case of partial defaults
+[Product Demo](https://www.youtube.com/watch?v=iN3Bl4Xchwg)
 
 ## Features
 
 - Graphql API using Hasura
+  - auto-generating typescript classes with [graphql-codegen](https://www.youtube.com/watch?v=iN3Bl4Xchwg)
 - Auth using NextAuth
   - It creates all the necessary tables and schema for you.
+- testing with jest
 
 ## Development
 
