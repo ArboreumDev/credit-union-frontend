@@ -21,6 +21,12 @@ Check out branch [/algorandCore](https://github.com/ArboreumDev/frontend/tree/al
   - It creates all the necessary tables and schema for you.
 - testing with jest
 
+## Architecture
+
+![overview](/docs/architecture_snap.png)
+
+full diagram here [diagram](/docs/Arboreum_Architecture.pdf)
+
 ## Development
 
 1. Rename `example.env.local` to `.env.local` and fill in the necessary env vars. At least one authentication provider is needed.
