@@ -13,14 +13,22 @@ import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/Withdraw"
 import FundsHistory from "components/common/FundsHistory"
-import AlgoProfile from "components/common/algorand/AlgoProfile"
+// import AlgoProfile from "components/common/algorand/AlgoProfile"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
+import dynamic from 'next/dynamic'
+
+const AlgoProfile = dynamic(
+    () => import('components/common/algorand/AlgoProfile'),
+    { ssr: false }
+  )
+
+
 
 interface Props {
-  user: User
+  // user: User
 }
 
 const txBorrowerFixture = [
@@ -37,8 +45,8 @@ const txLenderFixture = [
   { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
-export const Profile = ({ user }: Props) => {
-  const { user: _, mutate } = useUser()
+export const Profile = ({ }: Props) => {
+  const { user, mutate } = useUser()
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -49,7 +57,7 @@ export const Profile = ({ user }: Props) => {
         <Text>{user.first_name + " " + user.last_name}</Text>
         <Text>{user.email}</Text>
         <Text>{user.phone}</Text>
-        {user.user_type === UserType.Borrower && (
+        {user.user_type && (
           <AlgoProfile account={user.account_details}/>
         )}
       </Stack>
@@ -57,7 +65,8 @@ export const Profile = ({ user }: Props) => {
       <LogoutButton />
       <Divider />
       <Box minW="xl">
-        <FundsHistory transfers={user.account_details.circle?.history || []} />
+        <div>History</div>
+        {/* <FundsHistory transfers={user.account_details.circle?.history || []} /> */}
       </Box>
     </Stack>
   )
@@ -71,7 +80,7 @@ const ProfilePage = () => {
   return (
     <div>
       <AppBar />
-      <Profile user={user} />
+      <Profile />
     </div>
   )
 }

@@ -3,14 +3,24 @@ import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { User } from "lib/types"
-import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
+// import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
+import useUser from "lib/useUser"
+import dynamic from 'next/dynamic'
+
+const DepositWithAlgoConnect = dynamic(
+    () => import('components/common/algorand/DepositWithAlgoConnect'),
+    { ssr: false }
+  )
+
+
 
 interface Props {
-  user: User
+  user?: User
 }
 
-export function AddFundsForm({ user }: Props) {
+export function AddFundsForm({}: Props) {
   const [method, setMethod] = useState(undefined)
+  const { user, options } = useUser()
 
   return (
     <Box>

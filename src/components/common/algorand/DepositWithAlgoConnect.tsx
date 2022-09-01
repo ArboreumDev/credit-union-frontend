@@ -134,7 +134,7 @@ export const DepositWithAlgoConnect = ({ toAddress, buttonText, titleText, sugge
               <Button onClick={connect}>Connect myAlgoWallet</Button>
               : (
                 <>
-                  {suggestedAmounts.length > 0 && (
+                  {suggestedAmounts?.length > 0 && (
                     <Select 
                       value={amount}
                       placeholder="Choose repayment amount"
@@ -277,3 +277,5 @@ export const DepositWidget = ({ buttonText, toAddress }: Props) => {
     </div>
   );
 };
+
+export default DepositWithAlgoConnect

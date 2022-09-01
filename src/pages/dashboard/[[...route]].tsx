@@ -1,36 +1,40 @@
 import useUser from "lib/useUser"
 import dynamic from "next/dynamic"
 import Head from "next/head"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import AppBar from "../../components/common/nav/AppBar"
+// import {tabMap} from "../../components/lender/LenderHome"
 import { User, UserType, InvestmentOptions } from "../../lib/types"
+import LenderHome from "components/lender/LenderHome"
 
 const getLenderHome = (
-  user: User,
-  options: InvestmentOptions,
-  initPanelIdx?: number
+  user?: User,
+  options?: InvestmentOptions,
+  initPanelIdx?: number,
+  setPanelIndex?: any
 ) => {
   const LenderHome = dynamic(() => import("components/lender/LenderHome"))
-  return (
-    <LenderHome user={user} initPanelIdx={initPanelIdx} options={options} />
-  )
+  return <LenderHome />
 }
 
-const getBorrowerHome = (user: User, initPanelIdx?: number) => {
+const getBorrowerHome = (user: User, initPanelIdx?: number, setPanelIndex?: any) => {
   const BorrowerHome = dynamic(() => import("components/borrower/BorrowerHome"))
   return <BorrowerHome user={user} initPanelIdx={initPanelIdx} />
 }
 
-const lenderTabMap = {
-  invest: 1,
+export const tabMap = {
+  dashboard: 0,
+  funding: 1,
+  // invest: 2,
   account: 2,
-  repay: 2,
 }
 
 export const getDashboardComponent = (
   user: User,
   options?: InvestmentOptions,
-  idx?: number
+  idx?: number,
+  // setTabIndex?: any
 ) => (
   <>
     <AppBar />
@@ -41,14 +45,15 @@ export const getDashboardComponent = (
 
 const Dashboard = () => {
   const { user, options } = useUser()
-  const router = useRouter()
-  const { route } = router.query
+  // const router = useRouter()
+  // const { route } = router.query
+  // const [tabIndex, setTabIndex] = useState(0)
 
   let initPanelIdx = 0
-  if (route) {
-    const tabIdx = route[0] in lenderTabMap ? lenderTabMap[route[0]] : 0
-    initPanelIdx = tabIdx
-  }
+  // if (route) {
+  //   const tabIdx = route[0] in tabMap ? tabMap[route[0]] : 0
+  //   initPanelIdx = tabIdx
+  // }
 
   if (!user) return <AppBar />
   return (
@@ -56,7 +61,15 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      {getDashboardComponent(user, options, initPanelIdx)}
+        <>
+          <AppBar />
+          {user.user_type === UserType.Lender && 
+          // getLenderHome()
+            <LenderHome />
+
+          }
+          {/* {user.user_type === UserType.Borrower && getBorrowerHome(user, idx)} */}
+        </>
     </div>
   )
 }

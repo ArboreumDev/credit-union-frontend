@@ -22,34 +22,36 @@ import { User, InvestmentOptions } from "../../lib/types"
 import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
 import InvestmentOverview from "./InvestmentOverview"
+import { useState } from "react"
 import WithdrawFundsForm from "components/lender/Withdraw"
+import useUser from "lib/useUser"
 
 interface Props {
-  user: User
-  options: InvestmentOptions
+  // user: User
+  // options: InvestmentOptions
   initPanelIdx?: number
+  // setPanelIndex: any
 }
 
-export const lenderTabMap = {
-  invest: 1,
-  account: 2,
-}
+const LenderHome = ({}: Props) => {
+  const [accordionIndex, setAccordionIndex] = useState([0])
+  const { user, options } = useUser()
 
-const LenderHome = ({ user, initPanelIdx, options }: Props) => {
   const tabs = [
     new TabComponent(
       "Dashboard",
       (
         <Box>
-          <LenderDashboard user={user} />
+          {/* <div>LenderDashboard</div> */}
+          <LenderDashboard />
         </Box>
       )
     ),
     new TabComponent(
       // TODO so much boilerplate -> refactor this into a component
-      "Funds",
+      "Funding",
       (
-        <Accordion allowToggle defaultIndex={2}>
+        <Accordion allowToggle allowMultiple >
           <AccordionItem>
             <AccordionButton>
               <Box flex="1" textAlign="left">
@@ -60,7 +62,8 @@ const LenderHome = ({ user, initPanelIdx, options }: Props) => {
             </AccordionButton>
             <AccordionPanel pb={4}>
               {" "}
-              <AddFundsForm user={user} />{" "}
+              <AddFundsForm />{" "}
+              {/* <div>Add funds form</div> */}
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem>
@@ -73,7 +76,8 @@ const LenderHome = ({ user, initPanelIdx, options }: Props) => {
             </AccordionButton>
             <AccordionPanel pb={4}>
               {" "}
-              <WithdrawFundsForm user={user} />{" "}
+              <WithdrawFundsForm  />{" "}
+              <div>withdraw funds form</div>
             </AccordionPanel>
           </AccordionItem>
 
@@ -87,7 +91,8 @@ const LenderHome = ({ user, initPanelIdx, options }: Props) => {
             </AccordionButton>
             <AccordionPanel pb={4}>
               {" "}
-              <InvestmentOverview user={user} options={options} />
+              {/* <InvestmentOverview  /> */}
+              <div>invest panel</div>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -97,13 +102,14 @@ const LenderHome = ({ user, initPanelIdx, options }: Props) => {
       "Account",
       (
         <Box maxW="lg">
-          <Profile user={user} />
+          <Profile />
+              {/* <div>Profile</div> */}
         </Box>
       )
     ),
   ]
 
-  return <TabHome tabs={tabs} initPanelIdx={initPanelIdx} />
+  return <TabHome tabs={tabs} />
 }
 
 export default LenderHome

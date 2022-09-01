@@ -19,6 +19,7 @@ import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
 import InvestedLoans from "./InvestedLoans"
+import useUser from "lib/useUser"
 
 interface Props {
   user: User
@@ -55,7 +56,8 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   </Flex>
 )
 
-const LenderDashboard = ({ user }: Props) => {
+const LenderDashboard = () => {
+  const { user, options } = useUser()
   const lender = new LenderModel(user)
   // console.log("roi", user.roi.apr_on_loans.loans)
 

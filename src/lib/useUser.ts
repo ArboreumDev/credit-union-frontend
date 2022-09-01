@@ -30,7 +30,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json())
 
 export default function useUser() {
   // Fast redirect from home
-  const { data, mutate } = useSWR("/api/auth/session", fetcher)
+  const { data, mutate } = useSWR("/api/auth/session", fetcher )
   const router = useRouter()
 
   if (typeof window == "undefined") return {}

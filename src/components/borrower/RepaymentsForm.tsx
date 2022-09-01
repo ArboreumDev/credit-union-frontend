@@ -3,7 +3,7 @@ import Address from "components/common/algorand/Address"
 import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
 import { LoanRepayInfo } from "lib/types"
-import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
+import {DepositWithAlgoConnect} from "components/common/algorand/DepositWithAlgoConnect"
 
 interface Props {
   loan: LoanRepayInfo

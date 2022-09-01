@@ -17,10 +17,11 @@ import { AccountDetails } from "lib/types"
 import {algorandConfig, dummyParams, waitForConfirmation} from "lib/algo_utils";
 import {Accounts} from "lib/algo_types";
 import MyAlgoConnect from '@randlabs/myalgo-connect'; 
-// import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic'
 import algosdk from "algosdk";  
 import Address from "./Address"
 import {SuggestedParams} from "algosdk/dist/types"
+import useUser from "lib/useUser"
 
 
 
@@ -40,8 +41,8 @@ interface Props {
  * @param amount amount(of ticket) in ALGOs to charge user
  */
 export const AlgoProfile = ({ account }: Props) => {
+  const { user, mutate } = useUser()
   const [result, setResult] = useState('')
-  const [algoSignerInstalled, setAlgoSignerInstalled] = useState(false)
   const [fromAddress, setFromAddress] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);

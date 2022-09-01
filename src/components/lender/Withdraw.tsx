@@ -27,10 +27,10 @@ type FormData = {
 }
 
 interface Props {
-  user: User
+  user?: User
 }
 
-export function WithdrawFundsForm({ user }: Props) {
+export function WithdrawFundsForm({ }: Props) {
   const {
     register,
     trigger,
