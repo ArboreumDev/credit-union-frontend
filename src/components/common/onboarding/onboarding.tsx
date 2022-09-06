@@ -34,6 +34,7 @@ import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { AiOutlineMail } from "react-icons/ai"
 import UploadingDropzone from "./UploadingDropzone"
+import VeriffKYC from "./VeriffKYC"
 import { useState } from "react"
 import { ST } from "next/dist/next-server/lib/utils"
 import { getEffectiveTypeParameterDeclarations } from "typescript"
@@ -196,7 +197,8 @@ export default function Onboarding({ user, userType }: Params) {
                     <Tab>Personal Info {tabState[0]}</Tab>
                     <Tab>Bank Details {tabState[1]}</Tab>
                     <Tab>Additional Info {tabState[2]}</Tab>
-                    <Tab>Documents {tabState[3]}</Tab>
+                    <Tab>KYC Verification{tabState[3]}</Tab>
+                    <Tab>Documents {tabState[4]}</Tab>
                   </TabList>
                   <Progress value={progress} />
                   <TabPanels>
@@ -340,6 +342,12 @@ export default function Onboarding({ user, userType }: Params) {
                             Next
                           </Button>
                         </Center>
+                      </Stack>
+                    </TabPanel>
+                    <TabPanel>
+                      <Stack spacing={3}>
+                        <VeriffKYC email={user.email}/>
+
                       </Stack>
                     </TabPanel>
                     <TabPanel>
