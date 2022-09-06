@@ -6,6 +6,9 @@ Frontend that allows borrowers to apply for loans from a pool of lenders, if the
 to derisk the loan by lending at less favorable terms and taking the first loss in case of partial defaults
 [Product Demo](https://www.youtube.com/watch?v=iN3Bl4Xchwg)
 
+![output](https://user-images.githubusercontent.com/1958947/188734379-b07e70a6-b28f-415b-9aee-9fe388746f95.gif)
+
+
 Check out branch [/algorandCore](https://github.com/ArboreumDev/frontend/tree/algorandCore) for our algorand-integration:
 
 - onboarding process includes creating an account on circle (to create deposit addresses for fiat, eth-USDC, & algorand-USDC)
