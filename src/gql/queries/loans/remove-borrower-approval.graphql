@@ -1,0 +1,6 @@
+mutation RemoveBorrowerApproval ($borrower_id: uuid!, $investor_id: uuid!){
+  delete_credit_line_by_pk(borrower_id: $borrower_id, investor_id: $investor_id) {
+    borrower_id
+    investor_id
+  }
+}

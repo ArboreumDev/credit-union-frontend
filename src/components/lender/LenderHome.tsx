@@ -1,57 +1,115 @@
-import { Box, Text } from "@chakra-ui/core"
+import {
+  Stack,
+  Box,
+  Text,
+  Divider,
+  Heading,
+  VStack,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Accordion,
+  AccordionButton,
+  AccordionPanel,
+  AccordionItem,
+  AccordionIcon,
+} from "@chakra-ui/core"
 import TabHome, { TabComponent } from "components/common/home/tabs"
 import { Profile } from "pages/profile"
-import { User } from "../../lib/types"
+import { User, InvestmentOptions } from "../../lib/types"
 import AddFundsForm from "./Fund"
 import LenderDashboard from "./LenderDashboard"
-import { NewPledgeRequest } from "./Notifications/NewPledgeRequest"
+import InvestmentOverview from "./InvestmentOverview"
+import { useState } from "react"
+import WithdrawFundsForm from "components/lender/Withdraw"
+import useUser from "lib/useUser"
 
 interface Props {
-  user: User
+  // user: User
+  // options: InvestmentOptions
   initPanelIdx?: number
+  // setPanelIndex: any
 }
 
-export const lenderTabMap = {
-  invest: 1,
-  account: 2,
-}
+const LenderHome = ({}: Props) => {
+  const [accordionIndex, setAccordionIndex] = useState([0])
+  const { user, options } = useUser()
 
-const LenderHome = ({ user, initPanelIdx }: Props) => {
   const tabs = [
     new TabComponent(
       "Dashboard",
       (
         <Box>
-          {user.pledge_requests.map((pr, idx) => (
-            <NewPledgeRequest
-              key={idx + `_nlr`}
-              pledgeRequest={pr}
-              availableFunds={user.balance}
-            />
-          ))}
-          <LenderDashboard user={user} />
+          {/* <div>LenderDashboard</div> */}
+          <LenderDashboard />
         </Box>
       )
     ),
     new TabComponent(
-      user.balance <= 0 ? <Text fontWeight="bold">Invest</Text> : "Invest",
+      // TODO so much boilerplate -> refactor this into a component
+      "Funding",
       (
-        <Box maxW="lg">
-          <AddFundsForm user={user} />
-        </Box>
+        <Accordion allowToggle allowMultiple >
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {" "}
+                <Heading size="sm">Deposit</Heading>{" "}
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              {" "}
+              <AddFundsForm />{" "}
+              {/* <div>Add funds form</div> */}
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {" "}
+                <Heading size="sm">Withdraw</Heading>{" "}
+              </Box>{" "}
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              {" "}
+              <WithdrawFundsForm  />{" "}
+              <div>withdraw funds form</div>
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {" "}
+                <Heading size="sm">Invest</Heading>{" "}
+              </Box>{" "}
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              {" "}
+              {/* <InvestmentOverview  /> */}
+              <div>invest panel</div>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       )
     ),
     new TabComponent(
       "Account",
       (
         <Box maxW="lg">
-          <Profile user={user} />
+          <Profile />
+              {/* <div>Profile</div> */}
         </Box>
       )
     ),
   ]
 
-  return <TabHome tabs={tabs} initPanelIdx={initPanelIdx} />
+  return <TabHome tabs={tabs} />
 }
 
 export default LenderHome

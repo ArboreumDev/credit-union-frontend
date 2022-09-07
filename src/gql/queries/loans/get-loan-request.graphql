@@ -1,29 +1,14 @@
 query GetLoanRequest($requestId: uuid!) {
-  loanRequest: loan_requests_by_pk(request_id: $requestId) {
+  loanRequest: loan_request_by_pk(request_id: $requestId) {
     request_id
-    borrower_id
     purpose
     amount
-    status
-    risk_calc_result
-    loan
-    balance
-    payback_status
-    supporters {
-      status
-      supporter_id
-      pledge_amount
-      user {
-        id
-        email
-        corpus_share
-        balance
-      }
-    }
-    user {
+    state
+    borrowerInfo {
       id
       email
       demographic_info
+      account_details
     }
   }
 }

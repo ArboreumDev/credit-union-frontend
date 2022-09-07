@@ -1,9 +1,0 @@
-mutation UpdateUserRoi($userId: uuid!, $newRoi: jsonb!) {
-  user: update_user_by_pk(
-    pk_columns: { id: $userId }
-    _set: { roi: $newRoi }
-  ) {
-    id
-    roi
-  }
-}

@@ -30,7 +30,7 @@ export async function logEvent(
   const { eventType, eventData } = payload
   log(
     `Event: ${eventType} | ${
-      session?.user?.name || "Anonymous"
+      session?.user?.first_name || "Anonymous"
     } | ${JSON.stringify(eventData)}`
   )
   return dbClient.logEvent(eventType, eventData, headers, userId)

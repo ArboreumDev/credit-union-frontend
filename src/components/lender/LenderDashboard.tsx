@@ -18,8 +18,8 @@ import DynamicDoughnut from "components/dashboard/doughnut"
 import { User } from "../../lib/types"
 import { Currency } from "../common/Currency"
 import LenderModel from "./LenderModel"
-import PledgeInvestments from "./Pledges"
 import InvestedLoans from "./InvestedLoans"
+import useUser from "lib/useUser"
 
 interface Props {
   user: User
@@ -56,7 +56,8 @@ const AllocatedAsset = (title: string, percentage: number, color?: string) => (
   </Flex>
 )
 
-const LenderDashboard = ({ user }: Props) => {
+const LenderDashboard = () => {
+  const { user, options } = useUser()
   const lender = new LenderModel(user)
   // console.log("roi", user.roi.apr_on_loans.loans)
 
@@ -93,7 +94,7 @@ const LenderDashboard = ({ user }: Props) => {
             <Center minW={280} maxW="sm">
               <Box w={160}>
                 <DynamicDoughnut
-                  amounts={[lender.invested, lender.pledged, lender.uninvested]}
+                  amounts={[lender.invested, 0, lender.uninvested]}
                 />
               </Box>
             </Center>
@@ -124,13 +125,13 @@ const LenderDashboard = ({ user }: Props) => {
         <Box maxW="sm">
           <PledgeInvestments pledges={user.pledges} />
         </Box>
-      )}
-
-      {user.active_loans?.length > 0 && (
-        <Box maxW="xl">
-          <InvestedLoans loans={user.active_loans} roi={user.roi} />
-        </Box>
       )} */}
+
+      {user.investedLoans?.length > 0 && (
+        <Box maxW="xl">
+          <InvestedLoans loans={user.investedLoans} />
+        </Box>
+      )}
     </Stack>
   )
 }

@@ -2,13 +2,22 @@ query GetAllUsers {
   user {
     id
     email
-    name
+    first_name
+    last_name
     user_type
     balance
-    roi
-    user_number
-    corpus_share
     kyc_approved
+    onboarded
     demographic_info
+    loan_requests {
+      amount
+      purpose
+      state
+    }
+    loans {
+      state
+      principal
+    }
+    account_details
   }
 }

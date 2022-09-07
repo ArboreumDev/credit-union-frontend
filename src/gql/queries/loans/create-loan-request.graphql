@@ -1,9 +1,8 @@
-mutation CreateLoanRequest($request: loan_requests_insert_input!) {
-  loanRequest: insert_loan_requests_one(object: $request) {
+mutation CreateLoanRequest($request: loan_request_insert_input!) {
+  loanRequest: insert_loan_request_one(object: $request) {
     request_id
     amount
     purpose
-    status
-    risk_calc_result
+    state
   }
 }

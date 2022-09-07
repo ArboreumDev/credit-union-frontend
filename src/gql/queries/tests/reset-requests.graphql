@@ -1,0 +1,5 @@
+mutation ResetRequests {
+  delete_loan_request(where: {}) {
+    affected_rows
+  }
+}

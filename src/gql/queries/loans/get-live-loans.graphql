@@ -1,0 +1,31 @@
+query GetLiveLoans {
+  loans: loan (where: {state: {_eq: LIVE}}) 
+  {
+    loan_id
+    wallet_info
+    state
+    principal
+    principal_remaining
+    principal_overdue
+    interest_accrued
+    repayments {
+        date
+        repaid_principal
+        repaid_interest
+    }
+    lender_amounts {
+      lender_id
+      amount_lent
+    }
+    tenor
+    apr
+    penalty_apr
+    compounding_frequency
+    created_at
+    borrowerInfo {
+      id
+      first_name
+      last_name
+    }
+  }
+}

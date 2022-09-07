@@ -1,61 +1,96 @@
-import { Box, Button, Center, Stack, Text } from "@chakra-ui/core"
-import AmountInput from "components/common/AmountInput"
-import { ChangeBalance } from "lib/gql_api_actions"
-import { User } from "lib/types"
-import { useRouter } from "next/router"
+import { Box, Select, Text, Divider} from "@chakra-ui/core"
+import Address from "components/common/algorand/Address"
+import BankAccount from "components/common/BankAccount"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { User } from "lib/types"
+// import {DepositWithAlgoConnect} from "components/common/algorand/DepositWidget"
+import useUser from "lib/useUser"
+import dynamic from 'next/dynamic'
 
-type FormData = {
-  amount: number
-}
+const DepositWithAlgoConnect = dynamic(
+    () => import('components/common/algorand/DepositWithAlgoConnect'),
+    { ssr: false }
+  )
+
+
 
 interface Props {
-  user: User
+  user?: User
 }
 
-export function AddFundsForm({ user }: Props) {
-  const router = useRouter()
-  const { register, setValue, handleSubmit, errors } = useForm<FormData>()
-  const [nSup, supCount] = useState(1)
-
-  const onSubmit = (formData: FormData) => {
-    console.log(formData)
-    ChangeBalance.fetch({
-      userId: user.id,
-      delta: formData.amount,
-    })
-      .then((res) => {
-        router.push("/dashboard")
-      })
-      .catch((err) => console.error(err))
-  }
+export function AddFundsForm({}: Props) {
+  const [method, setMethod] = useState(undefined)
+  const { user, options } = useUser()
 
   return (
     <Box>
-      <Text>Coming soon!</Text>
-      {/* <form onSubmit={handleSubmit(onSubmit)} method="post">
-        <Stack spacing={3}>
-          <Text>How much money would you like to invest?</Text>
-          <AmountInput passRef={register({ required: true })} />
+      <Text>How do you want to fund your account?</Text>
+      <Select
+        placeholder="please choose a deposit method"
+        onChange={(e) => setMethod(e.target.value)}
+      >
+        <option value="ETH">USDC from Ethereum</option>
+        <option value="ALGO">USDC from Algorand</option>
+        <option value="BANK">Bank Wire Transfer</option>
+      </Select>
+      {method === "ETH"  && (
+        <Box>
+          <Text>Fund your account by sending USDC to this deposit address</Text>
+          <Address
+            size="long"
+            address={ "" +  user.account_details.circle.ethAddress }
+          />
+        </Box>
+      )}
+      {method === "ALGO"  && (
+        <Box>
+          <Text>Fund your account by sending USDC to this deposit address</Text>
+          <Address
+            size="long"
+            address={ "" +  user.account_details.circle.algoAddress }
+          />
+          <Text><b>OR</b></Text>
+          <DepositWithAlgoConnect 
+            toAddress={user.account_details.circle.algoAddress}
+            titleText="Deposit USDC"
+            buttonText="Deposit from myAlgoWallet"
+          />
+          <Text>
+          <Divider />
+            <i>
+              Note that we might afterwards move the money out of that account to
+              a different address - It will still be reflected in your overall
+              account balance though
+            </i>
+          </Text>
+        </Box>
+      )}
 
-          <Box h="10px" />
-          <Box padding="20px">
-            <ul>
-              <li>Your funds will be invested across many loans</li>
-              <li>
-                At any point in time, you may withdraw un-invested funds from
-                your account.
-              </li>
-            </ul>
+      {method === "BANK" && (
+        <Box>
+          Make a wire-transfer from this account:
+          <BankAccount
+            account={user.account_details.bankDetails}
+            owner={user.first_name + " " + user.last_name}
+          />
+          to this bank account:
+          <BankAccount
+            account={user.account_details.circle.wireDepositAccount.bankDetails}
+            owner={user.account_details.circle.wireDepositAccount.owner}
+            ownerDescription="Beneficiary"
+          />
+          using this <b> {user.account_details.circle.trackingRef}</b> as
+          reference code.
+          <Box bg="pink.100">
+            <p>
+              <i>
+                Note: Funds sent from other accounts or without the correct
+                reference code are at risk to be lost or credited incorrectly!
+              </i>
+            </p>
           </Box>
-
-          <Box h="30px" />
-          <Center>
-            <Button disabled type="submit">Submit</Button>
-          </Center>
-        </Stack>
-      </form> */}
+        </Box>
+      )}
     </Box>
   )
 }

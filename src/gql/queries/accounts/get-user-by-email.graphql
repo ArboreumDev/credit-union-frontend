@@ -1,83 +1,131 @@
 query GetUserByEmail($email: String!) {
   user(where: { email: { _eq: $email } }) {
     id
-    name
     email
+    first_name
+    last_name
+    demographic_info
+    kyc_approved
+    onboarded
     phone
     user_type
     balance
-    corpus_share
     created_at
-    kyc_approved
-    demographic_info
-    onboarded
-    roi
+    approvedBorrowers {
+      borrower_id
+    }
+    account_details
     loan_requests {
       request_id
-      confirmation_date
-      payback_status
-      purpose
-      risk_calc_result
-      balance
-      loan
-      status
-      created_at
       amount
       purpose
-      supporters {
-        pledge_amount
-        status
-        user {
-          id
-          name
-          email
-        }
-      }
+      state
     }
-    loans_to_repay: loan_requests( where: {status: {_in: ["live"]}}) {
-      request_id
-      status
-      loan
-    }
-    pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
-      ...pledgeFields
-    }
-    pledges: supporters(
-      where: { 
-        _and: {
-          status: {_eq: "confirmed" }
-          loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
-        }
-      }
-    ) {
-      ...pledgeFields
-    }
-    active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
+    loans {
       loan_id
-      lender_amount
-      loan_request {
-        status
-        amount
-        loan
+      wallet_info
+      principal
+      principal_remaining
+      principal_overdue
+      interest_accrued
+      interest_paid
+      state
+      tenor
+      created_at
+      next_payment_amount
+      next_payment_due_date
+      loanRequest {
+        purpose
       }
-
     }
+    loansToRepay: loans( where: {state: {_in: [LIVE]}}) {
+      loan_id
+      wallet_info
+      next_payment_amount
+      next_payment_due_date
+      principal_overdue
+      principal_remaining
+      interest_accrued
+    }
+    investedLoans: lender_amounts {
+      amount_lent
+      loan {
+        ...loanInfoFields
+        loan_id
+        created_at
+        state
+        tenor
+        principal
+        borrowerInfo {
+          first_name
+          last_name
+        }
+      }
+    }
+    # loan_request {
+    #   request_id
+    #   state
+    #   purpose
+    #   amount
+    #   loan_id
+    #   created_at
+    # }
+    # pledge_requests: supporters(where: { status: { _eq: "unknown" } }) {
+    #   ...pledgeFields
+    # }
+    # pledges: supporters(
+    #   where: { 
+    #     _and: {
+    #       status: {_eq: "confirmed" }
+    #       loan_request: {status: { _in: ["initiated", "awaiting_borrower_confirmation", "live", "settled", "defaulted"] } }
+    #     }
+    #   }
+    # ) {
+    #   ...pledgeFields
+    # }
+    # active_loans: loan_participants(where: { loan_request: { status: {_in: ["live", "settled", "defaulted"] } } }) {
+    #   loan_id
+    #   lender_amount
+    #   loan_request {
+    #     status
+    #     amount
+    #     loan
+    #   }
+
+    # }
   }
 }
 
-fragment pledgeFields on supporters {
-  request_id
-  pledge_amount
-  participation_request_time
-  loan_request {
+# fragment pledgeFields on supporters {
+#   request_id
+#   pledge_amount
+#   participation_request_time
+#   loan_request {
+#     purpose
+#     amount
+#     status
+#     user {
+#       email
+#       name
+#     }
+#     risk_calc_result
+#     loan
+#   }
+# }
+
+fragment loanInfoFields on loan {
+  loan_id
+  wallet_info
+  principal
+  principal_remaining
+  principal_overdue
+  interest_accrued
+  interest_paid
+  state
+  tenor
+  next_payment_amount
+  next_payment_due_date
+  loanRequest {
     purpose
-    amount
-    status
-    user {
-      email
-      name
-    }
-    risk_calc_result
-    loan
   }
 }

@@ -1,0 +1,6 @@
+mutation ApproveBorrower ($creditLine: credit_line_insert_input!) {
+  insert_credit_line_one (object: $creditLine) {
+    borrower_id
+    investor_id
+  }
+}

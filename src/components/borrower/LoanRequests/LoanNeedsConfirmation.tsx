@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/core"
 import { Currency } from "components/common/Currency"
 import { dec_to_perc } from "lib/currency"
-import { AcceptLoanOffer } from "lib/gql_api_actions"
 import { LoanRequest } from "lib/types"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -28,7 +27,7 @@ interface Params {
 }
 
 const LoanRequestTable = ({ loanRequest }: Params) => {
-  const loan = new LoanModel(loanRequest)
+  // const loan = new LoanModel(loanRequest)
   return (
     <Stack w="100%">
       <Flex>
@@ -37,37 +36,28 @@ const LoanRequestTable = ({ loanRequest }: Params) => {
           <Currency amount={loanRequest.amount} />
         </Box>
       </Flex>
-      <Flex>
-        <Box flex={0.5}>Support</Box>
-        <Box flex={0.5} textAlign="right">
-          <p>
-            {loan.confirmedSupporters.length} out of{" "}
-            {loanRequest.supporters.length} have confirmed
-          </p>
-        </Box>
-      </Flex>
+      <Flex></Flex>
       <Flex>
         <Box flex={1}>
-          You will pay {dec_to_perc(loan.borrowerAPR)}% of the loan amount as
-          interest.{" "}
+          You will pay {dec_to_perc(0.62)}% of the loan amount as interest.{" "}
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Interest Amount</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={loan.interestAmount} />
+          <Currency amount={10000000} />
         </Box>
       </Flex>
       <Flex>
-        <Box flex={0.5}>Total due in {loan.tenor} months</Box>
+        <Box flex={0.5}>Total due in {66} months</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={loan.totalOutStandingDebt} />
+          <Currency amount={1001212120} />
         </Box>
       </Flex>
       <Flex>
         <Box flex={0.5}>Monthly Payment Due</Box>
         <Box flex={0.5} textAlign="right">
-          <Currency amount={loan.nextPayment} />
+          <Currency amount={34343} />
         </Box>
       </Flex>
     </Stack>
@@ -79,11 +69,11 @@ export default function BLoanNeedsConfirmation({ loanRequest }: Params) {
 
   const confirmLoan = () => {
     console.log("confirm loan", JSON.stringify(loanRequest))
-    AcceptLoanOffer.fetch({ request_id: loanRequest.request_id })
-      .then(async (res) => {
-        router.push("/dashboard")
-      })
-      .catch((err) => console.error(err))
+    // AcceptLoanOffer.fetch({ request_id: loanRequest.request_id })
+    //   .then(async (res) => {
+    //     router.push("/dashboard")
+    //   })
+    //   .catch((err) => console.error(err))
   }
   const rejectLoan = () => {
     console.log("reject loan", JSON.stringify(loanRequest))

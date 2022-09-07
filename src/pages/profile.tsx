@@ -12,13 +12,23 @@ import {
 import AppBar from "components/common/nav/AppBar"
 import LogoutButton from "components/common/nav/LogoutButton"
 import WithdrawFundsForm from "components/lender/Withdraw"
+import FundsHistory from "components/common/FundsHistory"
+// import AlgoProfile from "components/common/algorand/AlgoProfile"
 import { User, UserType } from "lib/types"
 import useUser from "lib/useUser"
 import Router from "next/router"
 import { CgLogOut } from "react-icons/cg"
+import dynamic from 'next/dynamic'
+
+const AlgoProfile = dynamic(
+    () => import('components/common/algorand/AlgoProfile'),
+    { ssr: false }
+  )
+
+
 
 interface Props {
-  user: User
+  // user: User
 }
 
 const txBorrowerFixture = [
@@ -35,8 +45,8 @@ const txLenderFixture = [
   { key: "02/10/2020", type: "Invested", value: "₹12,000" },
 ]
 
-export const Profile = ({ user }: Props) => {
-  const { user: _, mutate } = useUser()
+export const Profile = ({ }: Props) => {
+  const { user, mutate } = useUser()
   const transactions =
     user.user_type === UserType.Borrower ? txBorrowerFixture : txLenderFixture
 
@@ -44,45 +54,20 @@ export const Profile = ({ user }: Props) => {
     <Stack spacing={6}>
       <Stack>
         <Heading size="sm">Profile</Heading>
-        <Text>{user.name}</Text>
+        <Text>{user.first_name + " " + user.last_name}</Text>
         <Text>{user.email}</Text>
         <Text>{user.phone}</Text>
+        {user.user_type && (
+          <AlgoProfile account={user.account_details}/>
+        )}
       </Stack>
-      {/* {user.user_type === UserType.Lender && (
-        <Stack>
-          <Divider />
-          <Heading size="sm">Withdraw</Heading>
-          <WithdrawFundsForm user={user} />
-        </Stack>
-      )}
-      <Divider /> */}
-      {/* 
-      {user.user_type === UserType.Borrower && (
-        <Box>
-          <Heading as="h4" size="md">
-            Transactions (for demo)
-          </Heading>
-          <Box h="10px" />
-          <Stack>
-            {transactions.map((tx, idx) => (
-              <Flex key={idx + "row"}>
-                <Box w="200px">
-                  <Text color="gray.500">{tx.key}</Text>
-                </Box>
-                <Box flex="1">
-                  <Text align="right">{tx.type}</Text>
-                </Box>
-                <Box w="200px">
-                  <Text align="right">{tx.value}</Text>
-                </Box>
-              </Flex>
-            ))}
-          </Stack>
-        </Box>
-      )} */}
-      <Box h="20px" />
       <Divider />
       <LogoutButton />
+      <Divider />
+      <Box minW="xl">
+        <div>History</div>
+        {/* <FundsHistory transfers={user.account_details.circle?.history || []} /> */}
+      </Box>
     </Stack>
   )
 }
@@ -95,7 +80,7 @@ const ProfilePage = () => {
   return (
     <div>
       <AppBar />
-      <Profile user={user} />
+      <Profile />
     </div>
   )
 }

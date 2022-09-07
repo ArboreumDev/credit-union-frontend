@@ -1,59 +1,32 @@
 import { dec_to_perc } from "lib/currency"
-import { LoanRequestStatus, User, RoI } from "lib/types"
+import { User } from "lib/types"
+import { Loan_Request_State_Enum } from "../../gql/sdk"
 
 export default class LenderModel {
   constructor(public user: User) {}
 
   get uninvested() {
-    return this.user.balance - this.totalPledgeUnconfirmedAmount
+    return this.user.balance
   }
 
   get invested() {
-    return this.user.corpus_share
-  }
-
-  get totalPledgeUnconfirmedAmount() {
-    return this.user.pledges
-      .filter(
-        (p) =>
-          p.loan_request.status ==
-          LoanRequestStatus.awaiting_borrower_confirmation
-      )
-      .map((p) => p.pledge_amount)
-      .reduce((a, b) => a + b, 0)
-  }
-
-  get totalPledgeAndConfirmedAmount() {
-    return this.user.pledges
-      .filter((p) => p.loan_request.status === LoanRequestStatus.active)
-      .map((p) => p.pledge_amount)
-      .reduce((a, b) => a + b, 0)
-  }
-
-  get pledged() {
-    return (
-      this.totalPledgeAndConfirmedAmount + this.totalPledgeUnconfirmedAmount
-    )
+    return 1000
   }
 
   get totalAssets() {
-    return this.uninvested + this.invested + this.pledged
-  }
-
-  get roi() {
-    return this.user.roi as RoI
+    return this.uninvested + this.invested
   }
 
   get APY() {
-    return dec_to_perc(this.roi.total_apr.apr)
+    return dec_to_perc(0.14)
   }
 
   get expectedInterest() {
-    return Math.abs(this.roi.total_apr.interest.remain)
+    return 0.14
   }
 
   get earnedInterest() {
-    return this.roi.total_apr.interest.paid
+    return 1000
   }
 
   get percInvested() {
@@ -61,8 +34,5 @@ export default class LenderModel {
   }
   get percUninvested() {
     return dec_to_perc(this.uninvested / this.totalAssets)
-  }
-  get percPledged() {
-    return dec_to_perc(this.pledged / this.totalAssets)
   }
 }

@@ -1,0 +1,10 @@
+mutation ResetRepayments {
+  delete_repayment(where: {}) {
+    affected_rows
+  }
+  delete_update_log(where: {
+      type: {_eq: REPAYMENT}
+  }) {
+      affected_rows
+  }
+}

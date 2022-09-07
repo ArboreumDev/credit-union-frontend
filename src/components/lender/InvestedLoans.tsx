@@ -1,42 +1,28 @@
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/core"
-import { LoanRequestStatus, RoI, InvestedLoan, LoanInfo } from "../../lib/types"
+import { InvestedLoan } from "../../lib/types"
 import { Currency } from "../common/Currency"
+import { Loan_State_Enum } from "../../gql/sdk"
 
 interface Props {
   loans: InvestedLoan[]
-  roi: RoI
 }
 
 const loanStatusToText = {
-  [LoanRequestStatus.initiated]: "Processing",
-  [LoanRequestStatus.awaiting_borrower_confirmation]: "Processing",
-  [LoanRequestStatus.active]: "Active",
-  [LoanRequestStatus.settled]: "Completed",
-  [LoanRequestStatus.defaulted]: "Defaulted",
+  [Loan_State_Enum.Live]: "Live",
+  [Loan_State_Enum.Repaid]: "Repaid",
+  [Loan_State_Enum.Default]: "Defaulted",
 }
 
-const roi_to_expected = (roi: RoI, loan_id: string) => {
-  return (
-    roi.apr_on_loans.loans[loan_id].principal.remain +
-    roi.apr_on_loans.loans[loan_id].interest.remain
-  )
+const get_exposure = (loan: InvestedLoan) => {
+  return loan.amount_lent / loan.loan.principal
 }
 
-const roi_to_paid = (roi: RoI, loan_id: string) => {
-  return (
-    roi.apr_on_loans.loans[loan_id].interest.paid +
-    roi.apr_on_loans.loans[loan_id].interest.paid
-  )
+const get_end_date = (loan: InvestedLoan) => {
+  console.log('started at', loan)
+
 }
 
-const get_exposure = (roi: RoI, loan: LoanInfo) => {
-  const totalOutstanding = loan.schedule.borrower_view.corpus_principal.remain
-  const expectedByUser =
-    roi.apr_on_loans.loans[loan.request_id].principal.remain
-  return expectedByUser ? expectedByUser / totalOutstanding : 0
-}
-
-const InvestedLoans = ({ loans, roi }: Props) => (
+const InvestedLoans = ({ loans }: Props) => (
   <Stack spacing="15px">
     <Box>
       <Heading size="md">Loans</Heading>
@@ -53,36 +39,27 @@ const InvestedLoans = ({ loans, roi }: Props) => (
       <Box flex="1">Earned Interest</Box>
       <Box flex="1">Expected Interest</Box>
     </Flex>
-    {loans.map((loan) => (
-      <Flex key={loan.loan_id}>
+    {loans.map((l) => (
+      <Flex key={l.loan.loan_id}>
         <Box verticalAlign="center" flex="1">
-          <Currency amount={loan.loan_request.amount} />
+          <Currency amount={l.amount_lent} />
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{loanStatusToText[loan.loan_request.status]}</Text>
+          <Text>{loanStatusToText[l.loan.state]}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>
-            {Math.round(
-              100 * get_exposure(roi, loan.loan_request.loan as LoanInfo)
-            ) + "%"}
-          </Text>
+          <Text>{Math.round(100 * get_exposure(l)) + "%"}</Text>
         </Box>
         <Box verticalAlign="center" flex="1">
-          <Text>{"July 2021"}</Text>
+          <Text>{get_end_date(l)}</Text>
         </Box>
         <Box flex="1">
-          <Currency
-            amount={roi.apr_on_loans.loans[loan.loan_id]?.interest.paid || 0}
-          />
+          <Text>TODO</Text>
+          {/* <Currency amount={4444} /> */}
         </Box>
         <Box flex="1">
-          <Currency
-            amount={
-              Math.abs(roi.apr_on_loans.loans[loan.loan_id]?.interest.remain) ||
-              0
-            }
-          />
+          <Text>TODO</Text>
+          {/* <Currency amount={5555} /> */}
         </Box>
       </Flex>
     ))}

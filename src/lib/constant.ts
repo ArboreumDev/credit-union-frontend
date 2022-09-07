@@ -15,6 +15,8 @@ export const DEFAULT_COMPANY_NAME = "XCorp"
 // Hardcoded loan vars. TODO: move to swarmai?
 export const MIN_SUPPORT_RATIO = 0.2 // this will be pilot-specific -> refactor to pilot.env file
 export const DEFAULT_LOAN_TENOR = 6 // in months
+export const DEFAULT_APR = 0.12
+export const DEFAULT_PENALTY_APR = 0.12
 export const DEFAULT_RISK_FREE_INTEREST_RATE = 0.5
 export const DEFAULT_RECOMMENDATION_RISK_PARAMS: RiskParams = {
   beta_params: [5, 2],
@@ -29,6 +31,12 @@ export enum LogEventTypes {
   FPPush = "fp_push",
 }
 
+export const COMPOUNDING_FREQ = {
+  monthly: 30,
+  weekly: 51,
+  daily: 1,
+}
+
 export const SLACK_WEBHOOK_URL =
   "https://hooks.slack.com/services/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"
 
@@ -37,6 +45,14 @@ export const USER_DEMOGRAPHIC = {
   education_years: 3,
   income: 300,
   credit_score: 600,
+  address: {
+    line1: "moon crater",
+    line2: "",
+    postalCode: "010100",
+    district: "MA",
+    country: "US",
+    city: "Boston",
+  },
 }
 
 export const ZERO_PAID_REMAIN = { paid: 0, remain: 0 }
@@ -52,3 +68,22 @@ export const NO_ROI: RoI = {
 }
 
 export const ADMIN_EMAIL = "dev@arboreum.dev"
+
+export const DUMMY_ACCOUNT = {
+  bankDetails: {
+    bankName: "MoonBank",
+    accountNumber: "12323423424",
+    routingNumber: "123123123",
+    branchCode: "sdfsdf",
+    accountType: "CURRENT",
+    iban: "DE31100400480532013000",
+    bankAddress: {
+      city: "Berlin",
+      country: "DE",
+      line1: "",
+      line2: "",
+      district: "",
+      postalCode: "12050",
+    },
+  },
+}

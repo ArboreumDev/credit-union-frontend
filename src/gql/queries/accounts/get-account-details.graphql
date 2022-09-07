@@ -1,0 +1,7 @@
+query GetAccountDetails ($id: uuid!) {
+  user: user_by_pk (id: $id)
+  {
+      account_details
+      kyc_approved
+  }
+}

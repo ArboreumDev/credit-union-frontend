@@ -1,0 +1,19 @@
+query GetOpenRequests {
+	activeRequests: loan_request (
+    where: { state: {_eq: ACTIVE}}
+    ) {
+      request_id
+      
+      purpose
+      amount
+      creditors: borrowerInfo {
+        approved: creditLineByBorrower {
+          investor_id
+          account: userByInvestor {
+            balance
+
+          }
+        }
+      }
+    }
+  }

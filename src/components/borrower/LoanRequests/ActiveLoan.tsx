@@ -10,7 +10,7 @@ import {
   StatLabel,
   StatNumber,
 } from "@chakra-ui/core"
-import { LoanRequest } from "lib/types"
+import { LoanRequest, Loan } from "lib/types"
 import { useRouter } from "next/router"
 import { Currency } from "../../common/Currency"
 import { Details, KeyValueMap as KeyValueRows } from "../../common/Details"
@@ -18,7 +18,8 @@ import { Column, Row } from "../../common/Table"
 import LoanModel from "./LoanModel"
 
 interface Params {
-  loanRequest: LoanRequest
+  loan: Loan
+  loanRequest?: LoanRequest
 }
 
 const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
@@ -37,7 +38,7 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   { key: "Last Repayment Date", value: "30th October 2020" },
   {
     key: "Next Repayment Amount",
-    value: <Currency amount={loan.nextPayment} />,
+    value: <Currency amount={loan.nextPayment.amount} />,
     color: "red.500",
   },
   {
@@ -52,15 +53,16 @@ const getTableObjectFromLoanRequest = (loan: LoanModel): KeyValueRows[] => [
   },
 ]
 
-const BActiveLoan = ({ loanRequest }: Params) => {
+const BActiveLoan = ({ loan }: Params) => {
   const router = useRouter()
-  const loan = new LoanModel(loanRequest)
-  const amt = loan.amount
+  const _loan = new LoanModel(loan)
+  console.log('loan', _loan)
+  const amt = _loan.amount
   return (
     <>
       <Stack>
         <Center>
-          <Heading size="lg">Loan: {loanRequest.status}</Heading>
+          <Heading size="lg">Loan: {loan.state}</Heading>
         </Center>
 
         <Row>
@@ -75,7 +77,7 @@ const BActiveLoan = ({ loanRequest }: Params) => {
                 </Stat>
                 <Stat>
                   <StatLabel>Purpose</StatLabel>
-                  <StatNumber>{loan.purpose}</StatNumber>
+                  <StatNumber>{_loan.purpose}</StatNumber>
                 </Stat>
                 <Stat>
                   <StatLabel>Next Repayment Due In</StatLabel>
@@ -91,11 +93,11 @@ const BActiveLoan = ({ loanRequest }: Params) => {
             <Center>
               <CircularProgress
                 size="120px"
-                value={loan.percRepaid}
+                value={_loan.percRepaid}
                 color="green.400"
               >
                 <CircularProgressLabel maxW="80px" fontSize="20px">
-                  {loan.percRepaid}% Repaid
+                  {_loan.percRepaid}% Repaid
                 </CircularProgressLabel>
               </CircularProgress>
             </Center>
@@ -103,7 +105,7 @@ const BActiveLoan = ({ loanRequest }: Params) => {
         </Row>
 
         <Box h="30px" />
-        <Details rows={getTableObjectFromLoanRequest(loan)} />
+        <Details rows={getTableObjectFromLoanRequest(_loan)} />
         <Box h="30px" />
 
         <Center>

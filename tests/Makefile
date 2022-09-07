@@ -14,7 +14,7 @@ db:
 	yarn seeds
 
 reset-db:
-	yarn jest -i tests/src/api_log_handlers.test.ts
+	yarn jest -i tests/src/log_handlers.test.ts
 
 jest-test:
     # Use this to reset the DB when in dev mode
